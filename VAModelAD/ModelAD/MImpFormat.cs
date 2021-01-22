@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Class Name     : MImpFormat
  * Purpose        : Import Format Model
- * Class Used     : X_AD_ImpFormat
+ * Class Used     : X_VAF_ImportFormat
  * Chronological    Development
  * Deepak         : 03-feb-2010
   ******************************************************/
@@ -22,17 +22,17 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MImpFormat : X_AD_ImpFormat
+    public class MImpFormat : X_VAF_ImportFormat
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_ImpFormat_ID">id</param>
+        /// <param name="VAF_ImportFormat_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MImpFormat(Ctx ctx, int AD_ImpFormat_ID, Trx trxName)
-            : base(ctx, AD_ImpFormat_ID, trxName)
+        public MImpFormat(Ctx ctx, int VAF_ImportFormat_ID, Trx trxName)
+            : base(ctx, VAF_ImportFormat_ID, trxName)
         {
 
         }	//	MImpFormat
@@ -56,16 +56,16 @@ namespace VAdvantage.Model
         public MImpFormatRow[] GetRows()
         {
             List<MImpFormatRow> list = new List<MImpFormatRow>();
-            String sql = "SELECT * FROM AD_ImpFormat_Row "
-                + "WHERE AD_ImpFormat_ID=@param "
+            String sql = "SELECT * FROM VAF_ImportFormat_Row "
+                + "WHERE VAF_ImportFormat_ID=@param "
                 + "ORDER BY SeqNo";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, get_TrxName());
-                //pstmt.setInt (1, getAD_ImpFormat_ID());
-                param[0] = new SqlParameter("@param", GetAD_ImpFormat_ID());
+                //pstmt.setInt (1, getVAF_ImportFormat_ID());
+                param[0] = new SqlParameter("@param", GetVAF_ImportFormat_ID());
                 idr = DB.ExecuteReader(sql, param, Get_TrxName());
                 while (idr.Read())
                 {

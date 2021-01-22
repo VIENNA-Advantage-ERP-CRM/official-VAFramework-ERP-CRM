@@ -76,7 +76,7 @@ static X_S_ResourceAssignment()
 //static long serialVersionUID 27562514383754L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066965L;
-/** AD_Table_ID=485 */
+/** VAF_TableView_ID=485 */
 public static int Table_ID;
  // =485;
 

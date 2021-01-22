@@ -68,7 +68,7 @@ static X_I_ProductCost()
 //static long serialVersionUID 27631208066137L;
 /** Last Updated Timestamp 10/1/2012 2:42:29 PM */
 public static long updatedMS = 1349082749348L;
-/** AD_Table_ID=1000381 */
+/** VAF_TableView_ID=1000381 */
 public static int Table_ID;
  // =1000381;
 

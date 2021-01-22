@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Process_Access
+/** Generated Model for VAF_Job_Rights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Process_Access : PO
+public class X_VAF_Job_Rights : PO
 {
-public X_AD_Process_Access (Context ctx, int AD_Process_Access_ID, Trx trxName) : base (ctx, AD_Process_Access_ID, trxName)
+public X_VAF_Job_Rights (Context ctx, int VAF_Job_Rights_ID, Trx trxName) : base (ctx, VAF_Job_Rights_ID, trxName)
 {
-/** if (AD_Process_Access_ID == 0)
+/** if (VAF_Job_Rights_ID == 0)
 {
-SetAD_Process_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Job_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
 }
-public X_AD_Process_Access (Ctx ctx, int AD_Process_Access_ID, Trx trxName) : base (ctx, AD_Process_Access_ID, trxName)
+public X_VAF_Job_Rights (Ctx ctx, int VAF_Job_Rights_ID, Trx trxName) : base (ctx, VAF_Job_Rights_ID, trxName)
 {
-/** if (AD_Process_Access_ID == 0)
+/** if (VAF_Job_Rights_ID == 0)
 {
-SetAD_Process_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Job_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsReadWrite (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Process_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Job_Rights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Process_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Process_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Job_Rights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Process_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Process_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Job_Rights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Process_Access()
+static X_VAF_Job_Rights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_Process_Access()
 //static long serialVersionUID = 27562514363207L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046418L;
-/** AD_Table_ID=197 */
+/** VAF_TableView_ID=197 */
 public static int Table_ID;
  // =197;
 
-/** TableName=AD_Process_Access */
-public static String Table_Name="AD_Process_Access";
+/** TableName=VAF_Job_Rights */
+public static String Table_Name="VAF_Job_Rights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Process_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Job_Rights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID < 1) throw new ArgumentException ("AD_Process_ID is mandatory.");
-Set_ValueNoCheck ("AD_Process_ID", AD_Process_ID);
+if (VAF_Job_ID < 1) throw new ArgumentException ("VAF_Job_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Read Write.
 @param IsReadWrite Field is read / write */

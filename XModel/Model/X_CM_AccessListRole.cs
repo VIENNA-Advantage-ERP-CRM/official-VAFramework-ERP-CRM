@@ -20,7 +20,7 @@ public X_CM_AccessListRole (Context ctx, int CM_AccessListRole_ID, Trx trxName) 
 {
 /** if (CM_AccessListRole_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetCM_AccessProfile_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_CM_AccessListRole (Ctx ctx, int CM_AccessListRole_ID, Trx trxName) : ba
 {
 /** if (CM_AccessListRole_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetCM_AccessProfile_ID (0);
 }
  */
@@ -70,7 +70,7 @@ static X_CM_AccessListRole()
 //static long serialVersionUID 27562514368034L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051245L;
-/** AD_Table_ID=887 */
+/** VAF_TableView_ID=887 */
 public static int Table_ID;
  // =887;
 
@@ -113,17 +113,17 @@ StringBuilder sb = new StringBuilder ("X_CM_AccessListRole[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

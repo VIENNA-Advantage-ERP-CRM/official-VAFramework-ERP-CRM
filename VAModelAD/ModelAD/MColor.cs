@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MColor
  * Purpose        : Color Persistent Object Model
- * Class Used     : X_AD_Color
+ * Class Used     : X_VAF_Colour
  * Chronological    Development
  * Deepak           12-Feb-2010
   ******************************************************/
@@ -23,18 +23,18 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MColor : X_AD_Color
+    public class MColor : X_VAF_Colour
     { 
         /// <summary>
         /// Color Model
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Color_ID"></param>
+        /// <param name="VAF_Colour_ID"></param>
         /// <param name="trxName"></param>
-        public MColor(Ctx ctx, int AD_Color_ID, Trx trxName)
-            : base(ctx, AD_Color_ID, trxName)
+        public MColor(Ctx ctx, int VAF_Colour_ID, Trx trxName)
+            : base(ctx, VAF_Colour_ID, trxName)
         {
-            if (AD_Color_ID == 0)
+            if (VAF_Colour_ID == 0)
             {
                 SetName("-/-");
             }
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Save Special Data.
-        /// AD_Image_ID (Background)
+        /// VAF_Image_ID (Background)
         /// </summary>
         /// <param name="value"></param>
         /// <param name="index"></param>
@@ -108,17 +108,17 @@ namespace VAdvantage.Model
         /// <summary>
         ///  Get URL from Image
         /// </summary>
-        /// <param name="AD_Image_ID">image</param>
+        /// <param name="VAF_Image_ID">image</param>
         /// <returns>URL as String or null</returns>
-        private String GetURL(int AD_Image_ID)
+        private String GetURL(int VAF_Image_ID)
         {
-            if (AD_Image_ID == 0)
+            if (VAF_Image_ID == 0)
             {
                 return null;
             }
             //
             String retValue = null;
-            String sql = "SELECT ImageURL FROM AD_Image WHERE AD_Image_ID=" + AD_Image_ID;
+            String sql = "SELECT ImageURL FROM VAF_Image WHERE VAF_Image_ID=" + VAF_Image_ID;
             IDataReader idr = null;
             try
             {

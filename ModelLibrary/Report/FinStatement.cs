@@ -35,7 +35,7 @@ namespace VAdvantage.Report
         private DateTime? _DateAcct_From = null;
         private DateTime? _DateAcct_To = null;
         /**	Org Parameter					*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Account Parameter				*/
         private int _Account_ID = 0;
         /**	BPartner Parameter				*/
@@ -100,9 +100,9 @@ namespace VAdvantage.Report
                 {
                     _PA_Hierarchy_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else if (name.Equals("Account_ID"))
                 {
@@ -151,10 +151,10 @@ namespace VAdvantage.Report
                     _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Account, _Account_ID));
             }
             //	Optional Org
-            if (_AD_Org_ID != 0 && _AD_Org_ID != -1)
+            if (_VAF_Org_ID != 0 && _VAF_Org_ID != -1)
             {
                 _parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _AD_Org_ID));
+                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
             if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
@@ -282,14 +282,14 @@ namespace VAdvantage.Report
             CreateBalanceLine();
             CreateDetailLines();
 
-            int AD_PrintFormat_ID = 134;
+            int VAF_Print_Rpt_Layout_ID = 134;
             if (Ini.IsClient())
             {
-                GetProcessInfo().SetTransientObject(MPrintFormat.Get(GetCtx(), AD_PrintFormat_ID, false));
+                GetProcessInfo().SetTransientObject(MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
             }
             else
             {
-                GetProcessInfo().SetSerializableObject(MPrintFormat.Get(GetCtx(), AD_PrintFormat_ID, false));
+                GetProcessInfo().SetSerializableObject(MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
             }
 
             log.Fine((CommonFunctions.CurrentTimeMillis() - _start) + " ms");
@@ -302,10 +302,10 @@ namespace VAdvantage.Report
         private void CreateBalanceLine()
         {
             StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
-                + "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
+                + "(VAF_JInstance_ID, Fact_Acct_ID, LevelNo,"
                 + "DateAcct, Name, Description,"
                 + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
-            sb.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",0,0,")
+            sb.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",0,0,")
                 .Append(DataBase.DB.TO_DATE(_DateAcct_From, true)).Append(",")
                 .Append(DataBase.DB.TO_STRING(Msg.GetMsg(GetCtx(), "BeginningBalance"))).Append(",NULL,"
                 + "COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(AmtAcctDr-AmtAcctCr),0), COALESCE(SUM(Qty),0) "
@@ -345,10 +345,10 @@ namespace VAdvantage.Report
             decimal balnc = 0;
             decimal lastbalnc = 0;
             StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
-                + "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
+                + "(VAF_JInstance_ID, Fact_Acct_ID, LevelNo,"
                 + "DateAcct,SeqNo, Name, Description,"
                 + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
-            sb.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",Fact_Acct_ID,1,")
+            sb.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",Fact_Acct_ID,1,")
                 .Append("DateAcct,rownum,NULL,NULL,"
                 + "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty "
                 + "FROM Fact_Acct "
@@ -363,13 +363,13 @@ namespace VAdvantage.Report
             //	Set Name,Description
             String sql_select = "SELECT e.Name, fa.Description "
                 + "FROM Fact_Acct fa"
-                + " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-                + " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
+                + " INNER JOIN VAF_TableView t ON (fa.VAF_TableView_ID=t.VAF_TableView_ID)"
+                + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
                 + "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
             //	Translated Version ...
             sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")
                 .Append(sql_select).Append(") "
-                + "WHERE Fact_Acct_ID <> 0 AND AD_PInstance_ID=").Append(GetAD_PInstance_ID());
+                + "WHERE Fact_Acct_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
             //
             no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
             log.Fine("Name #" + no);
@@ -379,7 +379,7 @@ namespace VAdvantage.Report
             sb.Clear();
             DataSet ds = null;
             int _count = 0;
-            sb.Append("SELECT  levelno, seqno, dateacct, description, amtacctdr, amtacctcr, balance, name FROM T_ReportStatement WHERE AD_PInstance_ID=" + GetAD_PInstance_ID() + " order by  levelno,dateacct,name,description");
+            sb.Append("SELECT  levelno, seqno, dateacct, description, amtacctdr, amtacctcr, balance, name FROM T_ReportStatement WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID() + " order by  levelno,dateacct,name,description");
             ds = DB.ExecuteDataset(sb.ToString(), null, Get_TrxName());
             if (ds != null)
             {
@@ -391,7 +391,7 @@ namespace VAdvantage.Report
                         if (i == 0)
                         {
                             Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["balance"]);
-                            decimal begbalnc = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT balance from t_reportstatement where ad_pinstance_id=" + GetAD_PInstance_ID(), null, Get_TrxName()));
+                            decimal begbalnc = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT balance from t_reportstatement where VAF_JInstance_id=" + GetVAF_JInstance_ID(), null, Get_TrxName()));
                             //  balnc = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amtacctdr"]) - Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amtacctcr"]);
                             balnc = begbalnc;
                             lastbalnc = balnc;
@@ -414,7 +414,7 @@ namespace VAdvantage.Report
                         }
                         _count++;
                         sb.Clear();
-                        sb.Append("UPDATE T_ReportStatement  SET  Counter=" + _count + " , balance=" + lastbalnc + " WHERE ad_pinstance_id=" + GetAD_PInstance_ID() + " AND seqno=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["seqno"]));
+                        sb.Append("UPDATE T_ReportStatement  SET  Counter=" + _count + " , balance=" + lastbalnc + " WHERE VAF_JInstance_id=" + GetVAF_JInstance_ID() + " AND seqno=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["seqno"]));
                         DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
                     }
                 }
@@ -432,10 +432,10 @@ namespace VAdvantage.Report
      //private void CreateDetailLines()
      //   {
      //       StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
-     //           + "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
+     //           + "(VAF_JInstance_ID, Fact_Acct_ID, LevelNo,"
      //           + "DateAcct, Name, Description,"
      //           + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
-     //       sb.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",Fact_Acct_ID,1,")
+     //       sb.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",Fact_Acct_ID,1,")
      //           .Append("DateAcct,NULL,NULL,"
      //           + "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty "
      //           + "FROM Fact_Acct "
@@ -450,13 +450,13 @@ namespace VAdvantage.Report
      //       //	Set Name,Description
      //       String sql_select = "SELECT e.Name, fa.Description "
      //           + "FROM Fact_Acct fa"
-     //           + " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-     //           + " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
+     //           + " INNER JOIN VAF_TableView t ON (fa.VAF_TableView_ID=t.VAF_TableView_ID)"
+     //           + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
      //           + "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
      //       //	Translated Version ...
      //       sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")
      //           .Append(sql_select).Append(") "
-     //           + "WHERE Fact_Acct_ID <> 0 AND AD_PInstance_ID=").Append(GetAD_PInstance_ID());
+     //           + "WHERE Fact_Acct_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
      //       //
      //       no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
      //       log.Fine("Name #" + no);

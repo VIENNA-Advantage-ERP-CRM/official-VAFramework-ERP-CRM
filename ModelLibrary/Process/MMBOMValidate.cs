@@ -78,12 +78,12 @@ namespace VAdvantage.Process
             int counter = 0;
             DataTable dt = null;
             IDataReader idr = null;
-            int AD_Client_ID = GetCtx().GetAD_Client_ID();
+            int VAF_Client_ID = GetCtx().GetVAF_Client_ID();
             String sql = "SELECT * FROM M_Product "
                 + "WHERE IsBOM='Y' AND ";
             if (_M_Product_Category_ID == 0)
             {
-                sql += "AD_Client_ID=" + AD_Client_ID;
+                sql += "VAF_Client_ID=" + VAF_Client_ID;
             }
             else
             {

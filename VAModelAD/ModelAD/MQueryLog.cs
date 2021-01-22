@@ -1,8 +1,8 @@
 ﻿
 /********************************************************
  * Module/Class Name    : Model Classes (MQueryLog.cs)
- * Purpose              : Handle the table AD_QueryLog
- * Class Used           : X_AD_QueryLog
+ * Purpose              : Handle the table VAF_DBQueryLog
+ * Class Used           : X_VAF_DBQueryLog
  * Created By           : Mukesh Arora
  * Date                 : 05-May-09
 **********************************************************/
@@ -17,22 +17,22 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MQueryLog : X_AD_QueryLog
+    public class MQueryLog : X_VAF_DBQueryLog
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_QueryLog_ID">id</param>
+        /// <param name="VAF_DBQueryLog_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MQueryLog(Ctx ctx, int AD_QueryLog_ID, Trx trxName)
-            : base(ctx, AD_QueryLog_ID, trxName)
+        public MQueryLog(Ctx ctx, int VAF_DBQueryLog_ID, Trx trxName)
+            : base(ctx, VAF_DBQueryLog_ID, trxName)
         {
-            //super(ctx, AD_QueryLog_ID, trxName);
-            if (AD_QueryLog_ID == 0)
+            //super(ctx, VAF_DBQueryLog_ID, trxName);
+            if (VAF_DBQueryLog_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
             }
         }	//	MQueryLog
 
@@ -54,22 +54,22 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">ctx</param>
         /// <param name="AD_Session_ID">session</param>
-        /// <param name="AD_Client_ID">login client</param>
-        /// <param name="AD_Org_ID">org</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_Client_ID">login client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="WhereClause">where</param>
         /// <param name="RecordCount">count</param>
         /// <param name="Parameter">parameter</param>
         public MQueryLog(Ctx ctx, int AD_Session_ID,
-        int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount, String parameter)
+        int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, String parameter)
             : this(ctx, 0, null)
         {
             //	out of trx
             SetAD_Session_ID(AD_Session_ID);
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetWhereClause(whereClause);
             SetRecordCount(recordCount);
             SetParameter(parameter);

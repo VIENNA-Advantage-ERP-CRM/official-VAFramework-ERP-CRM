@@ -18,10 +18,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }	//	LoadBankStatement
 
         /**	Client to be imported to			*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
 
         /** Organization to be imported to			*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
 
         /** Ban Statement Loader				*/
         private int _C_BankStmtLoader_ID = 0;
@@ -54,10 +54,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
-            _AD_Client_ID = m_ctx.GetAD_Client_ID();
-            log.Info("AD_Client_ID=" + _AD_Client_ID);
-            _AD_Org_ID = m_ctx.GetAD_Org_ID();
-            log.Info("AD_Org_ID=" + _AD_Org_ID);
+            _VAF_Client_ID = m_ctx.GetVAF_Client_ID();
+            log.Info("VAF_Client_ID=" + _VAF_Client_ID);
+            _VAF_Org_ID = m_ctx.GetVAF_Org_ID();
+            log.Info("VAF_Org_ID=" + _VAF_Org_ID);
             log.Info("C_BankStatementLoader_ID=" + _C_BankStmtLoader_ID);
         }	//	prepare
 

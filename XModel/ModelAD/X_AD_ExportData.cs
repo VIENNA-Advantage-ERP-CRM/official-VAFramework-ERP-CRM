@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ExportData
+/** Generated Model for VAF_ExportData
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ExportData : PO
+public class X_VAF_ExportData : PO
 {
-public X_AD_ExportData (Context ctx, int AD_ExportData_ID, Trx trxName) : base (ctx, AD_ExportData_ID, trxName)
+public X_VAF_ExportData (Context ctx, int VAF_ExportData_ID, Trx trxName) : base (ctx, VAF_ExportData_ID, trxName)
 {
-/** if (AD_ExportData_ID == 0)
+/** if (VAF_ExportData_ID == 0)
 {
-SetAD_ExportData_ID (0);
+SetVAF_ExportData_ID (0);
 }
  */
 }
 
-public X_AD_ExportData (Ctx ctx, int AD_ExportData_ID, Trx trxName) : base (ctx, AD_ExportData_ID, trxName)
+public X_VAF_ExportData (Ctx ctx, int VAF_ExportData_ID, Trx trxName) : base (ctx, VAF_ExportData_ID, trxName)
 {
-/** if (AD_ExportData_ID == 0)
+/** if (VAF_ExportData_ID == 0)
 {
-SetAD_ExportData_ID (0);
+SetVAF_ExportData_ID (0);
 }
  */
 }
@@ -38,7 +38,7 @@ SetAD_ExportData_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExportData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -46,7 +46,7 @@ public X_AD_ExportData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExportData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -54,13 +54,13 @@ public X_AD_ExportData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ExportData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ExportData()
+static X_VAF_ExportData()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -69,12 +69,12 @@ static X_AD_ExportData()
 //static long serialVersionUID = 27577392900846L;
 /** Last Updated Timestamp 1/17/2011 6:03:04 PM */
 public static long updatedMS = 1295267584057L;
-/** AD_Table_ID=1000172 */
+/** VAF_TableView_ID=1000172 */
 public static int Table_ID;
  // =1000172;
 
-/** TableName=AD_ExportData */
-public static String Table_Name="AD_ExportData";
+/** TableName=VAF_ExportData */
+public static String Table_Name="VAF_ExportData";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -108,7 +108,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ExportData[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ExportData[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Primay Col 1.
@@ -127,34 +127,34 @@ Object ii = Get_Value("AD_ColOne_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ExportData_ID.
-@param AD_ExportData_ID AD_ExportData_ID */
-public void SetAD_ExportData_ID (int AD_ExportData_ID)
+/** Set VAF_ExportData_ID.
+@param VAF_ExportData_ID VAF_ExportData_ID */
+public void SetVAF_ExportData_ID (int VAF_ExportData_ID)
 {
-if (AD_ExportData_ID < 1) throw new ArgumentException ("AD_ExportData_ID is mandatory.");
-Set_ValueNoCheck ("AD_ExportData_ID", AD_ExportData_ID);
+if (VAF_ExportData_ID < 1) throw new ArgumentException ("VAF_ExportData_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ExportData_ID", VAF_ExportData_ID);
 }
-/** Get AD_ExportData_ID.
-@return AD_ExportData_ID */
-public int GetAD_ExportData_ID() 
+/** Get VAF_ExportData_ID.
+@return VAF_ExportData_ID */
+public int GetVAF_ExportData_ID() 
 {
-Object ii = Get_Value("AD_ExportData_ID");
+Object ii = Get_Value("VAF_ExportData_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -175,18 +175,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_ModuleInfo_ID(int AD_ModuleInfo_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_ModuleInfo_ID(int VAF_ModuleInfo_ID)
 {
-    if (AD_ModuleInfo_ID <= 0) Set_Value("AD_ModuleInfo_ID", null);
+    if (VAF_ModuleInfo_ID <= 0) Set_Value("VAF_ModuleInfo_ID", null);
     else
-        Set_Value("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+        Set_Value("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_ModuleInfo_ID()
+public int GetVAF_ModuleInfo_ID()
 {
-    Object ii = Get_Value("AD_ModuleInfo_ID");
+    Object ii = Get_Value("VAF_ModuleInfo_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

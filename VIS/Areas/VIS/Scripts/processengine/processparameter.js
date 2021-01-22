@@ -222,7 +222,7 @@
                     parent.setBusy(false);
                     return;
                 }
-                self.pi.setAD_PInstance_ID(0);
+                self.pi.setVAF_JInstance_ID(0);
                 self.pi.setPageNo(1);
                 if (!self.parent.getFileType()) {
                     self.pi.setFileType(VIS.ProcessCtl.prototype.REPORT_TYPE_PDF);
@@ -543,7 +543,7 @@
             para = {};
 
 
-            //MPInstancePara para = new MPInstancePara (Env.getCtx(), m_processInfo.getAD_PInstance_ID(), i);
+            //MPInstancePara para = new MPInstancePara (Env.getCtx(), m_processInfo.getVAF_JInstance_ID(), i);
             var mField = this.mFields[i];
             para.Name = mField.getColumnName();
             para.DisplayType = mField.getDisplayType();
@@ -552,7 +552,7 @@
             para.Result2 = result2;
             para.LoadRecursiveData = mField.getLoadRecursiveData();
             para.ShowChildOfSelected = mField.getShowChildOfSelected();
-            para.AD_Column_ID = mField.getAD_Column_ID();
+            para.VAF_Column_ID = mField.getVAF_Column_ID();
             ////	Date
             //if ((result instanceof Timestamp) || (result2 instanceof Timestamp))
             //{

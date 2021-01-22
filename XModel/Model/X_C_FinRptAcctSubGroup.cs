@@ -77,7 +77,7 @@ static X_C_FinRptAcctSubGroup()
 static long serialVersionUID = 27692114875238L;
 /** Last Updated Timestamp 9/6/2014 1:15:58 PM */
 public static long updatedMS = 1409989558449L;
-/** AD_Table_ID=1000490 */
+/** VAF_TableView_ID=1000490 */
 public static int Table_ID;
  // =1000490;
 

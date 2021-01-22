@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Menu
+    /** Generated Model for VAF_MenuConfig
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Menu : PO
+    public class X_VAF_MenuConfig : PO
     {
-        public X_AD_Menu(Context ctx, int AD_Menu_ID, Trx trxName)
-            : base(ctx, AD_Menu_ID, trxName)
+        public X_VAF_MenuConfig(Context ctx, int VAF_MenuConfig_ID, Trx trxName)
+            : base(ctx, VAF_MenuConfig_ID, trxName)
         {
-            /** if (AD_Menu_ID == 0)
+            /** if (VAF_MenuConfig_ID == 0)
             {
-            SetAD_Menu_ID (0);
+            SetVAF_MenuConfig_ID (0);
             SetEntityType (null);	// U
             SetIsReadOnly (false);	// N
             SetIsSummary (false);
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Menu(Ctx ctx, int AD_Menu_ID, Trx trxName)
-            : base(ctx, AD_Menu_ID, trxName)
+        public X_VAF_MenuConfig(Ctx ctx, int VAF_MenuConfig_ID, Trx trxName)
+            : base(ctx, VAF_MenuConfig_ID, trxName)
         {
-            /** if (AD_Menu_ID == 0)
+            /** if (VAF_MenuConfig_ID == 0)
             {
-            SetAD_Menu_ID (0);
+            SetVAF_MenuConfig_ID (0);
             SetEntityType (null);	// U
             SetIsReadOnly (false);	// N
             SetIsSummary (false);
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_MenuConfig(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_MenuConfig(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_MenuConfig(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Menu()
+        static X_VAF_MenuConfig()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,12 +81,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27562514362141L;
         /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
         public static long updatedMS = 1280389045352L;
-        /** AD_Table_ID=116 */
+        /** VAF_TableView_ID=116 */
         public static int Table_ID;
         // =116;
 
-        /** TableName=AD_Menu */
-        public static String Table_Name = "AD_Menu";
+        /** TableName=VAF_MenuConfig */
+        public static String Table_Name = "VAF_MenuConfig";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -120,53 +120,53 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Menu[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_MenuConfig[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Special Form.
-        @param AD_Form_ID Special Form */
-        public void SetAD_Form_ID(int AD_Form_ID)
+        @param VAF_Page_ID Special Form */
+        public void SetVAF_Page_ID(int VAF_Page_ID)
         {
-            if (AD_Form_ID <= 0) Set_Value("AD_Form_ID", null);
+            if (VAF_Page_ID <= 0) Set_Value("VAF_Page_ID", null);
             else
-                Set_Value("AD_Form_ID", AD_Form_ID);
+                Set_Value("VAF_Page_ID", VAF_Page_ID);
         }
         /** Get Special Form.
         @return Special Form */
-        public int GetAD_Form_ID()
+        public int GetVAF_Page_ID()
         {
-            Object ii = Get_Value("AD_Form_ID");
+            Object ii = Get_Value("VAF_Page_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Menu.
-        @param AD_Menu_ID Identifies a Menu */
-        public void SetAD_Menu_ID(int AD_Menu_ID)
+        @param VAF_MenuConfig_ID Identifies a Menu */
+        public void SetVAF_MenuConfig_ID(int VAF_MenuConfig_ID)
         {
-            if (AD_Menu_ID < 1) throw new ArgumentException("AD_Menu_ID is mandatory.");
-            Set_ValueNoCheck("AD_Menu_ID", AD_Menu_ID);
+            if (VAF_MenuConfig_ID < 1) throw new ArgumentException("VAF_MenuConfig_ID is mandatory.");
+            Set_ValueNoCheck("VAF_MenuConfig_ID", VAF_MenuConfig_ID);
         }
         /** Get Menu.
         @return Identifies a Menu */
-        public int GetAD_Menu_ID()
+        public int GetVAF_MenuConfig_ID()
         {
-            Object ii = Get_Value("AD_Menu_ID");
+            Object ii = Get_Value("VAF_MenuConfig_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Process.
-        @param AD_Process_ID Process or Report */
-        public void SetAD_Process_ID(int AD_Process_ID)
+        @param VAF_Job_ID Process or Report */
+        public void SetVAF_Job_ID(int VAF_Job_ID)
         {
-            if (AD_Process_ID <= 0) Set_Value("AD_Process_ID", null);
+            if (VAF_Job_ID <= 0) Set_Value("VAF_Job_ID", null);
             else
-                Set_Value("AD_Process_ID", AD_Process_ID);
+                Set_Value("VAF_Job_ID", VAF_Job_ID);
         }
         /** Get Process.
         @return Process or Report */
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            Object ii = Get_Value("AD_Process_ID");
+            Object ii = Get_Value("VAF_Job_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -187,18 +187,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Window.
-        @param AD_Window_ID Data entry or display window */
-        public void SetAD_Window_ID(int AD_Window_ID)
+        @param VAF_Screen_ID Data entry or display window */
+        public void SetVAF_Screen_ID(int VAF_Screen_ID)
         {
-            if (AD_Window_ID <= 0) Set_Value("AD_Window_ID", null);
+            if (VAF_Screen_ID <= 0) Set_Value("VAF_Screen_ID", null);
             else
-                Set_Value("AD_Window_ID", AD_Window_ID);
+                Set_Value("VAF_Screen_ID", VAF_Screen_ID);
         }
         /** Get Window.
         @return Data entry or display window */
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            Object ii = Get_Value("AD_Window_ID");
+            Object ii = Get_Value("VAF_Screen_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -235,8 +235,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Action AD_Reference_ID=104 */
-        public static int ACTION_AD_Reference_ID = 104;
+        /** Action VAF_Control_Ref_ID=104 */
+        public static int ACTION_VAF_Control_Ref_ID = 104;
         /** Workbench = B */
         public static String ACTION_Workbench = "B";
         /** WorkFlow = F */
@@ -295,8 +295,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
         @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */

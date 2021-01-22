@@ -492,7 +492,7 @@
 
         curEle = tabEle = null;
 
-        //if (this.curTab.getAD_Process_ID() == 0) {
+        //if (this.curTab.getVAF_Job_ID() == 0) {
         //    this.aPrint.setEnabled(false);
         //}
         //else this.aPrint.setEnabled(true);
@@ -541,13 +541,13 @@
 
             //  Confirm Error
             if (e.getIsError() && !e.getIsConfirmed()) {
-                VIS.ADialog.error(e.getAD_Message(), true, e.getInfo());
+                VIS.ADialog.error(e.getVAF_Msg_Lable(), true, e.getInfo());
                 e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
                 this.errorDisplayed = true;
             }
             //  Confirm Warning
             else if (e.getIsWarning() && !e.getIsConfirmed()) {
-                VIS.ADialog.warn(e.getAD_Message(), true, e.getInfo());
+                VIS.ADialog.warn(e.getVAF_Msg_Lable(), true, e.getInfo());
                 e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
             }
 
@@ -727,7 +727,7 @@
         var ids = this.curGC.canDeleteRecords()
 
 
-        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getAD_Client_ID(), true))
+        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getVAF_Client_ID(), true))
         if (ids.length > 0) {
             VIS.ADialog.error("CannotDelete", true, " [ " + ids.join(",") + "]");
             return;

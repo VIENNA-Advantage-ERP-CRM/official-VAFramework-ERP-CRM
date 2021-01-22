@@ -10,10 +10,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MAlertRule : X_AD_AlertRule
+    public class MAlertRule : X_VAF_AlertSetting
     {
-        public MAlertRule(Ctx ctx, int AD_AlertRule_ID, Trx trx)
-            : base(ctx, AD_AlertRule_ID, trx)
+        public MAlertRule(Ctx ctx, int VAF_AlertSetting_ID, Trx trx)
+            : base(ctx, VAF_AlertSetting_ID, trx)
         {
             
         }	//	MAlertRule
@@ -40,10 +40,10 @@ namespace VAdvantage.Model
 
         public String GetTableName()
         {
-            int AD_Table_ID = GetAD_Table_ID();
-            if (AD_Table_ID != 0)
+            int VAF_TableView_ID = GetVAF_TableView_ID();
+            if (VAF_TableView_ID != 0)
             {
-                MTable table = MTable.Get(GetCtx(), AD_Table_ID);
+                MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
                 String tableName = table.GetTableName();
                 if (!VAdvantage.Utility.Util.IsEmpty(tableName))
                     return tableName;

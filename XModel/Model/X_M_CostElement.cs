@@ -74,7 +74,7 @@ static X_M_CostElement()
 //static long serialVersionUID 27562514378958L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062169L;
-/** AD_Table_ID=770 */
+/** VAF_TableView_ID=770 */
 public static int Table_ID;
  // =770;
 
@@ -135,8 +135,8 @@ public String GetCalculateCost()
     return (String)Get_Value("CalculateCost");
 }
 
-/** CostElementType AD_Reference_ID=338 */
-public static int COSTELEMENTTYPE_AD_Reference_ID=338;
+/** CostElementType VAF_Control_Ref_ID=338 */
+public static int COSTELEMENTTYPE_VAF_Control_Ref_ID=338;
 /** Burden (M.Overhead) = B */
 public static String COSTELEMENTTYPE_BurdenMOverhead = "B";
 /** Cost Combination = C */
@@ -177,8 +177,8 @@ public String GetCostElementType()
 return (String)Get_Value("CostElementType");
 }
 
-/** CostingMethod AD_Reference_ID=122 */
-public static int COSTINGMETHOD_AD_Reference_ID=122;
+/** CostingMethod VAF_Control_Ref_ID=122 */
+public static int COSTINGMETHOD_VAF_Control_Ref_ID=122;
 /** Average PO = A */
 public static String COSTINGMETHOD_AveragePO = "A";
 /** Cost Combination = C */

@@ -80,7 +80,7 @@ static X_C_POS()
 //static long serialVersionUID 27562514373488L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056699L;
-/** AD_Table_ID=748 */
+/** VAF_TableView_ID=748 */
 public static int Table_ID;
  // =748;
 
@@ -123,8 +123,8 @@ StringBuilder sb = new StringBuilder ("X_C_POS[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** C_BPartnerCashTrx_ID AD_Reference_ID=173 */
-public static int C_BPARTNERCASHTRX_ID_AD_Reference_ID=173;
+/** C_BPartnerCashTrx_ID VAF_Control_Ref_ID=173 */
+public static int C_BPARTNERCASHTRX_ID_VAF_Control_Ref_ID=173;
 /** Set Template B.Partner.
 @param C_BPartnerCashTrx_ID Business Partner used for creating new Business Partners on the fly */
 public void SetC_BPartnerCashTrx_ID (int C_BPartnerCashTrx_ID)
@@ -327,8 +327,8 @@ public String GetPrinterName()
 return (String)Get_Value("PrinterName");
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID=190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=190;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)

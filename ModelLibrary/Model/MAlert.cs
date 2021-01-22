@@ -9,14 +9,14 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAlert : X_AD_Alert
+    public class MAlert : X_VAF_Alert
     {
-        public MAlert(Ctx ctx, int AD_Alert_ID, Trx trx)
-            : base(ctx, AD_Alert_ID, trx)
+        public MAlert(Ctx ctx, int VAF_Alert_ID, Trx trx)
+            : base(ctx, VAF_Alert_ID, trx)
         {
-            if (AD_Alert_ID == 0)
+            if (VAF_Alert_ID == 0)
             {
-                //	setAD_AlertProcessor_ID (0);
+                //	setVAF_AlertHandler_ID (0);
                 //	setName (null);
                 //	setAlertMessage (null);
                 //	setAlertSubject (null);
@@ -41,8 +41,8 @@ namespace VAdvantage.Model
         {
             if (m_rules != null && !reload)
                 return m_rules;
-            String sql = "SELECT * FROM AD_AlertRule "
-                + "WHERE isactive='Y' AND AD_Alert_ID=" + GetAD_Alert_ID();
+            String sql = "SELECT * FROM VAF_AlertSetting "
+                + "WHERE isactive='Y' AND VAF_Alert_ID=" + GetVAF_Alert_ID();
             List<MAlertRule> list = new List<MAlertRule>();
 
             DataSet ds = DB.ExecuteDataset(sql);
@@ -70,8 +70,8 @@ namespace VAdvantage.Model
         {
             if (m_recipients != null && !reload)
                 return m_recipients;
-            String sql = "SELECT * FROM AD_AlertRecipient "
-                + "WHERE AD_Alert_ID=" + GetAD_Alert_ID();
+            String sql = "SELECT * FROM VAF_AlertRecipient "
+                + "WHERE VAF_Alert_ID=" + GetVAF_Alert_ID();
             List<MAlertRecipient> list = new List<MAlertRecipient>();
             try
             {
@@ -91,45 +91,45 @@ namespace VAdvantage.Model
         }	//	getRecipients
 
 
-        public int GetFirstAD_Role_ID()
+        public int GetFirstVAF_Role_ID()
         {
             GetRecipients(false);
             foreach (MAlertRecipient element in m_recipients)
             {
-                if (element.GetAD_Role_ID() != -1)
-                    return element.GetAD_Role_ID();
+                if (element.GetVAF_Role_ID() != -1)
+                    return element.GetVAF_Role_ID();
             }
             return -1;
-        }	//	getForstAD_Role_ID
+        }	//	getForstVAF_Role_ID
 
 
-        public int GetFirstUserAD_Role_ID()
+        public int GetFirstUserVAF_Role_ID()
         {
             GetRecipients(false);
-            int AD_User_ID = GetFirstAD_User_ID();
-            if (AD_User_ID != -1)
+            int VAF_UserContact_ID = GetFirstVAF_UserContact_ID();
+            if (VAF_UserContact_ID != -1)
             {
-                MUserRoles[] urs = MUserRoles.GetOfUser(GetCtx(), AD_User_ID);
+                MUserRoles[] urs = MUserRoles.GetOfUser(GetCtx(), VAF_UserContact_ID);
                 foreach (MUserRoles element in urs)
                 {
                     if (element.IsActive())
-                        return element.GetAD_Role_ID();
+                        return element.GetVAF_Role_ID();
                 }
             }
             return -1;
-        }	//	getFirstUserAD_Role_ID
+        }	//	getFirstUserVAF_Role_ID
 
 
-        public int GetFirstAD_User_ID()
+        public int GetFirstVAF_UserContact_ID()
         {
             GetRecipients(false);
             foreach (MAlertRecipient element in m_recipients)
             {
-                if (element.GetAD_User_ID() != -1)
-                    return element.GetAD_User_ID();
+                if (element.GetVAF_UserContact_ID() != -1)
+                    return element.GetVAF_UserContact_ID();
             }
             return -1;
-        }	//	getFirstAD_User_ID
+        }	//	getFirstVAF_UserContact_ID
 
 
         public override string ToString()
@@ -154,12 +154,12 @@ namespace VAdvantage.Model
         {
             bool returnConditionValue = true;
             int errorType = 0;
-            string Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('AD_ALERTRULECONDITION') AND OWNER LIKE '" + DB.GetSchema() + "'";
+            string Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('VAF_AlertSettingCondition') AND OWNER LIKE '" + DB.GetSchema() + "'";
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
                 //Fetch All Alert Condition Against AlertID.............
-                DataSet dsAlertCondition = DB.ExecuteDataset("select ad_alertRulecondition_id from ad_alertRulecondition where ad_alertrule_ID=" + AlertRule.GetAD_AlertRule_ID() + " and isactive='Y' order by sequence,ad_alertrulecondition_id");
+                DataSet dsAlertCondition = DB.ExecuteDataset("select VAF_AlertSettingCondition_id from VAF_AlertSettingCondition where VAF_AlertSetting_ID=" + AlertRule.GetVAF_AlertSetting_ID() + " and isactive='Y' order by sequence,VAF_AlertSettingCondition_id");
                 //IF No Alert Condition Find then return true otherwise Follow further Condition............
                 if (dsAlertCondition != null && dsAlertCondition.Tables[0].Rows.Count > 0)
                 {
@@ -171,9 +171,9 @@ namespace VAdvantage.Model
                         DateTime dateValue = new DateTime();
                         bool validateResult = false;
                         errorType = 0;
-                        int alertConditionID = Convert.ToInt32(dsAlertCondition.Tables[0].Rows[i]["ad_alertRulecondition_id"]);
+                        int alertConditionID = Convert.ToInt32(dsAlertCondition.Tables[0].Rows[i]["VAF_AlertSettingCondition_id"]);
 
-                        X_AD_AlertRuleCondition alertCondition = new X_AD_AlertRuleCondition(AlertRule.GetCtx(), alertConditionID, null);
+                        X_VAF_AlertSettingCondition alertCondition = new X_VAF_AlertSettingCondition(AlertRule.GetCtx(), alertConditionID, null);
                         string sqlQuery = alertCondition.GetSqlQuery();
 
                         try
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
                             if (alertCondition.GetSqlQuery().ToLower().Trim().StartsWith("select"))
                             {
                                 //Check What is the return type of Query. if Query retrun more than one record than throw error............
-                                if (alertCondition.GetReturnValueType() == X_AD_AlertRuleCondition.RETURNVALUETYPE_Number) //Numeric Value
+                                if (alertCondition.GetReturnValueType() == X_VAF_AlertSettingCondition.RETURNVALUETYPE_Number) //Numeric Value
                                 {
                                     errorType = 1;//if error occured in following query than used in catch 
                                     if (DB.ExecuteScalar(sqlQuery) == DBNull.Value || DB.ExecuteScalar(sqlQuery) == null)
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
                                     //This function Match condition on Query Return Value and User's enterd Value based on users Selected Operator...........
                                     validateResult = EvaluateNumaricLogic(numericValue, Convert.ToDecimal(alertCondition.GetAlphaNumValue()), alertCondition.GetOperator());
                                 }
-                                else if (alertCondition.GetReturnValueType() == X_AD_AlertRuleCondition.RETURNVALUETYPE_String)//String Value
+                                else if (alertCondition.GetReturnValueType() == X_VAF_AlertSettingCondition.RETURNVALUETYPE_String)//String Value
                                 {
                                     errorType = 1;//if error occured in following query than used in catch 
                                     if (DB.ExecuteScalar(sqlQuery) == DBNull.Value || DB.ExecuteScalar(sqlQuery) == null)
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
                                     //This function Match condition on Query Return Value and User's enterd Value based on users Selected Operator...........
                                     validateResult = EvaluateStringLogic(stringValue, alertCondition.GetAlphaNumValue(), alertCondition.GetOperator());
                                 }
-                                else if (alertCondition.GetReturnValueType() == X_AD_AlertRuleCondition.RETURNVALUETYPE_Date)// Date Value
+                                else if (alertCondition.GetReturnValueType() == X_VAF_AlertSettingCondition.RETURNVALUETYPE_Date)// Date Value
                                 {
                                     // this Date Section is not implemented in Alert Return Value Type List.......................
 
@@ -224,7 +224,7 @@ namespace VAdvantage.Model
                                 //if we Find multiple condition against same alert then we have to find on the basis of And OR
                                 if (i != 0)
                                 {
-                                    if (X_AD_AlertRuleCondition.ANDOR_Or.Equals(alertCondition.GetAndOr()))
+                                    if (X_VAF_AlertSettingCondition.ANDOR_Or.Equals(alertCondition.GetAndOr()))
                                     {
                                         returnConditionValue = returnConditionValue || validateResult;
                                     }
@@ -284,19 +284,19 @@ namespace VAdvantage.Model
         }
         private bool EvaluateNumaricLogic(decimal numericValue, decimal compareValue, string operation)
         {
-            if (X_AD_AlertRuleCondition.OPERATOR_Eq.Equals(operation))
+            if (X_VAF_AlertSettingCondition.OPERATOR_Eq.Equals(operation))
                 return numericValue.CompareTo(compareValue) == 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_Gt.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_Gt.Equals(operation))
                 return numericValue.CompareTo(compareValue) > 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_GtEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_GtEq.Equals(operation))
                 return numericValue.CompareTo(compareValue) >= 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_Le.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_Le.Equals(operation))
                 return numericValue.CompareTo(compareValue) < 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_LeEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_LeEq.Equals(operation))
                 return numericValue.CompareTo(compareValue) <= 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_NotEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_NotEq.Equals(operation))
                 return numericValue.CompareTo(compareValue) != 0;
-            else if (X_AD_AlertRuleCondition.OPERATOR_Like.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_Like.Equals(operation))
                 return numericValue.CompareTo(compareValue) == 0;
             else
                 return false;
@@ -304,16 +304,16 @@ namespace VAdvantage.Model
 
         private bool EvaluateStringLogic(string Value, string compareValue, string operation)
         {
-            if (X_AD_AlertRuleCondition.OPERATOR_Eq.Equals(operation))
+            if (X_VAF_AlertSettingCondition.OPERATOR_Eq.Equals(operation))
             {
                 return Value.Equals(compareValue, StringComparison.OrdinalIgnoreCase);
             }
-            //else if (X_AD_AlertCondition.OPERATOR_Like.Equals(operation))
+            //else if (X_VAF_AlertCondition.OPERATOR_Like.Equals(operation))
             //{
 
             //    return Value.ToLower().Contains(compareValue.ToLower());
             //}
-            else if (X_AD_AlertRuleCondition.OPERATOR_NotEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_NotEq.Equals(operation))
             {
                 return Value.ToLower() != compareValue.ToLower();
             }
@@ -328,7 +328,7 @@ namespace VAdvantage.Model
         {
             value = value.Date;
             compareValue = compareValue.Date;
-            if (X_AD_AlertRuleCondition.OPERATOR_Eq.Equals(operation))
+            if (X_VAF_AlertSettingCondition.OPERATOR_Eq.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
                 }
                 return value.CompareTo(compareValue) == 0;
             }
-            else if (X_AD_AlertRuleCondition.OPERATOR_Gt.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_Gt.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -344,7 +344,7 @@ namespace VAdvantage.Model
                 }
                 return value.CompareTo(compareValue) > 0;
             }
-            else if (X_AD_AlertRuleCondition.OPERATOR_GtEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_GtEq.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -352,7 +352,7 @@ namespace VAdvantage.Model
                 }
                 return value.CompareTo(compareValue) >= 0;
             }
-            else if (X_AD_AlertRuleCondition.OPERATOR_Le.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_Le.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -360,7 +360,7 @@ namespace VAdvantage.Model
                 }
                 return value.CompareTo(compareValue) < 0;
             }
-            else if (X_AD_AlertRuleCondition.OPERATOR_LeEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_LeEq.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -368,7 +368,7 @@ namespace VAdvantage.Model
                 }
                 return value.CompareTo(compareValue) <= 0;
             }
-            else if (X_AD_AlertRuleCondition.OPERATOR_NotEq.Equals(operation))
+            else if (X_VAF_AlertSettingCondition.OPERATOR_NotEq.Equals(operation))
             {
                 if (isDynamic == true)
                 {
@@ -382,24 +382,24 @@ namespace VAdvantage.Model
         private DateTime DynamicDateLogic(string DynamicValue, int day, int month, int year)
         {
 
-            if (X_AD_AlertRuleCondition.DATEOPERATION_Today.Equals(DynamicValue))
+            if (X_VAF_AlertSettingCondition.DATEOPERATION_Today.Equals(DynamicValue))
             {
                 return System.DateTime.Now.Date;
             }
-            else if (X_AD_AlertRuleCondition.DATEOPERATION_Now.Equals(DynamicValue))
+            else if (X_VAF_AlertSettingCondition.DATEOPERATION_Now.Equals(DynamicValue))
             {
                 return System.DateTime.Now;
             }
-            else if (X_AD_AlertRuleCondition.DATEOPERATION_LastxDays.Equals(DynamicValue))
+            else if (X_VAF_AlertSettingCondition.DATEOPERATION_LastxDays.Equals(DynamicValue))
             {
                 return System.DateTime.Now.Date.AddDays(-day);
             }
-            else if (X_AD_AlertRuleCondition.DATEOPERATION_LastxMonth.Equals(DynamicValue))
+            else if (X_VAF_AlertSettingCondition.DATEOPERATION_LastxMonth.Equals(DynamicValue))
             {
                 int tempDay = (month * 31) + day;
                 return System.DateTime.Now.Date.AddDays(-tempDay);
             }
-            else if (X_AD_AlertRuleCondition.DATEOPERATION_LastxYear.Equals(DynamicValue))
+            else if (X_VAF_AlertSettingCondition.DATEOPERATION_LastxYear.Equals(DynamicValue))
             {
                 int tempDay = (year * 365) + (month * 31) + day;
                 return System.DateTime.Now.Date.AddDays(-tempDay);

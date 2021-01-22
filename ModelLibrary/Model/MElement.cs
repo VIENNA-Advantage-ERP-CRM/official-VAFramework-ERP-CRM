@@ -24,23 +24,23 @@ namespace VAdvantage.Model
     public class MElement : X_C_Element
     {
         //Cache						
-        private static CCache<int, MElement> s_cache = new CCache<int, MElement>("AD_Element", 20);
+        private static CCache<int, MElement> s_cache = new CCache<int, MElement>("VAF_ColumnDic", 20);
         // Tree Used		
-        private X_AD_Tree _tree = null;
+        private X_VAF_TreeInfo _tree = null;
 
         /// <summary>
         ///Get Accounting Element from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Element_ID">id</param>
+        /// <param name="VAF_ColumnDic_ID">id</param>
         /// <returns>MElement</returns>
-        public static MElement Get(Ctx ctx, int AD_Element_ID)
+        public static MElement Get(Ctx ctx, int VAF_ColumnDic_ID)
         {
-            int key = (int)AD_Element_ID;
+            int key = (int)VAF_ColumnDic_ID;
             MElement retValue = (MElement)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MElement(ctx, AD_Element_ID, null);
+            retValue = new MElement(ctx, VAF_ColumnDic_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
             if (C_Element_ID == 0)
             {
                 //	setName (null);
-                //	setAD_Tree_ID (0);
+                //	setVAF_TreeInfo_ID (0);
                 //	setElementType (null);	// A
                 SetIsBalancing(false);
                 SetIsNaturalAccount(false);
@@ -83,14 +83,14 @@ namespace VAdvantage.Model
         /// <param name="client">client</param>
         /// <param name="Name">name</param>
         /// <param name="ElementType">type</param>
-        /// <param name="AD_Tree_ID">tree</param>
-        public MElement(MClient client, string name, string elementType, int AD_Tree_ID)
+        /// <param name="VAF_TreeInfo_ID">tree</param>
+        public MElement(MClient client, string name, string elementType, int VAF_TreeInfo_ID)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
             SetName(name);
             SetElementType(elementType);	// A
-            SetAD_Tree_ID(AD_Tree_ID);
+            SetVAF_TreeInfo_ID(VAF_TreeInfo_ID);
             SetIsNaturalAccount(ELEMENTTYPE_Account.Equals(elementType));
         }
 
@@ -98,10 +98,10 @@ namespace VAdvantage.Model
         ///Get Tree
         /// </summary>
         /// <returns>tree</returns>
-        public X_AD_Tree GetTree()
+        public X_VAF_TreeInfo GetTree()
         {
             if (_tree == null)
-                _tree = new X_AD_Tree(GetCtx(), GetAD_Tree_ID(), Get_TrxName());
+                _tree = new X_VAF_TreeInfo(GetCtx(), GetVAF_TreeInfo_ID(), Get_TrxName());
             return _tree;
         }
 
@@ -112,20 +112,20 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             String elementType = GetElementType();
             //	Natural Account
             if (ELEMENTTYPE_UserDefined.Equals(elementType) && IsNaturalAccount())
                 SetIsNaturalAccount(false);
             //	Tree validation
-            X_AD_Tree tree = GetTree();
+            X_VAF_TreeInfo tree = GetTree();
             if (tree == null)
                 return false;
             String treeType = tree.GetTreeType();
             if (ELEMENTTYPE_UserDefined.Equals(elementType))
             {
-                if (X_AD_Tree.TREETYPE_User1.Equals(treeType) || X_AD_Tree.TREETYPE_User2.Equals(treeType))
+                if (X_VAF_TreeInfo.TREETYPE_User1.Equals(treeType) || X_VAF_TreeInfo.TREETYPE_User2.Equals(treeType))
                 {
                     ;
                 }
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (!X_AD_Tree.TREETYPE_ElementValue.Equals(treeType))
+                if (!X_VAF_TreeInfo.TREETYPE_ElementValue.Equals(treeType))
                 {
                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@TreeType@ <> @ElementType@ (A)"), false);
                     return false;

@@ -65,7 +65,7 @@ namespace VAdvantage.Model
             }
 
             // check Unique constraints basedon Org + Order + cost element + landed cost distribution
-            String sql = "SELECT COUNT(C_ExpectedCost_ID) FROM C_ExpectedCost WHERE IsActive = 'Y' AND AD_Org_ID = " + GetAD_Org_ID() +
+            String sql = "SELECT COUNT(C_ExpectedCost_ID) FROM C_ExpectedCost WHERE IsActive = 'Y' AND VAF_Org_ID = " + GetVAF_Org_ID() +
                 @" AND C_Order_ID = " + GetC_Order_ID() + @" AND M_CostElement_ID = " + GetM_CostElement_ID() +
                 @" AND LandedCostDistribution = '" + GetLandedCostDistribution() + "'";
             if (!newRecord)
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                     MExpectedCostDistribution allocation = new MExpectedCostDistribution(GetCtx(), 0, Get_Trx());
                     allocation.SetC_ExpectedCost_ID(GetC_ExpectedCost_ID());
                     allocation.SetC_OrderLine_ID(orderLines[i].GetC_OrderLine_ID());
-                    allocation.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
+                    allocation.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                     allocation.SetAmt(Env.ZERO);
                     allocation.SetBase(Env.ZERO);
                     allocation.SetQty(Env.ZERO);

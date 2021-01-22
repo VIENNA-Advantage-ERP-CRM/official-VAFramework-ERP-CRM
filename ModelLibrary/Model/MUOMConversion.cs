@@ -467,7 +467,7 @@ namespace VAdvantage.Model
                 + " INNER JOIN C_UOM uomTo ON (c.C_UOM_To_ID=uomTo.C_UOM_ID) "
                 + "WHERE c.IsActive='Y' AND c.C_UOM_ID=" + C_UOM_From_ID + " AND c.C_UOM_To_ID=" + C_UOM_To_ID		//	#1/2
                 + " AND c.M_Product_ID IS NULL"
-                + " ORDER BY c.AD_Client_ID DESC, c.AD_Org_ID DESC";
+                + " ORDER BY c.VAF_Client_ID DESC, c.VAF_Org_ID DESC";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -867,7 +867,7 @@ namespace VAdvantage.Model
                 //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
 
-                int manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
+                int manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
                     _log.SaveError("UPCUnique", "");

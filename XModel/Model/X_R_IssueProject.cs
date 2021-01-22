@@ -72,7 +72,7 @@ static X_R_IssueProject()
 //static long serialVersionUID 27562514382845L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066056L;
-/** AD_Table_ID=842 */
+/** VAF_TableView_ID=842 */
 public static int Table_ID;
  // =842;
 
@@ -237,8 +237,8 @@ public String GetStatisticsInfo()
 return (String)Get_Value("StatisticsInfo");
 }
 
-/** SystemStatus AD_Reference_ID=374 */
-public static int SYSTEMSTATUS_AD_Reference_ID=374;
+/** SystemStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
 public static String SYSTEMSTATUS_Evaluation = "E";
 /** Implementation = I */

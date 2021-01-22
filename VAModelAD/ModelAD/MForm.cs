@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Form
+ * Class Used     : X_VAF_Page
  * Chronological Development
  * Veena Pandey     29-Aug-09
  ******************************************************/
@@ -17,21 +17,21 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MForm : X_AD_Form
+    public class MForm : X_VAF_Page
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Form_ID">id</param>
+        /// <param name="VAF_Page_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MForm(Context ctx, int AD_Form_ID, Trx trxName)
-            : base(ctx, AD_Form_ID, trxName)
+        public MForm(Context ctx, int VAF_Page_ID, Trx trxName)
+            : base(ctx, VAF_Page_ID, trxName)
         {
         }
 
-        public MForm(Ctx ctx, int AD_Form_ID, Trx trxName)
-            : base(ctx, AD_Form_ID, trxName)
+        public MForm(Ctx ctx, int VAF_Page_ID, Trx trxName)
+            : base(ctx, VAF_Page_ID, trxName)
         {
         }
 
@@ -57,8 +57,8 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                int AD_Role_ID = GetCtx().GetAD_Role_ID();
-                MFormAccess pa = new MFormAccess(this, AD_Role_ID);
+                int VAF_Role_ID = GetCtx().GetVAF_Role_ID();
+                MFormAccess pa = new MFormAccess(this, VAF_Role_ID);
                 pa.Save();
             }
             return success;

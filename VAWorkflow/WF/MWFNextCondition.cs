@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_AD_WF_NextCondition
+ * Class Used     : X_VAF_WFlow_NextCondition
  * Chronological Development
  * Veena Pandey     02-May-2009
  ******************************************************/
@@ -20,7 +20,7 @@ using System.Reflection;
 
 namespace VAdvantage.WF
 {
-    public class MWFNextCondition : X_AD_WF_NextCondition
+    public class MWFNextCondition : X_VAF_WFlow_NextCondition
     {
         /**	Numeric evaluation		*/
         private bool _numeric = true;
@@ -59,7 +59,7 @@ namespace VAdvantage.WF
             return ANDOR_Or.Equals(GetAndOr());
         }
 
-        int AD_WF_Activity_ID = 0;
+        int VAF_WFlow_Task_ID = 0;
         /// <summary>
         /// Evaluate Condition
         /// </summary>
@@ -67,8 +67,8 @@ namespace VAdvantage.WF
         /// <returns>true if true</returns>
         public bool Evaluate(MWFActivity activity)
         {
-            AD_WF_Activity_ID = activity.GetAD_WF_Activity_ID();
-            if (GetAD_Column_ID() == 0)
+            VAF_WFlow_Task_ID = activity.GetVAF_WFlow_Task_ID();
+            if (GetVAF_Column_ID() == 0)
             {
                 //throw new IllegalStateException("No Column defined - " + this);
                 throw new Exception("No Column defined - " + this);
@@ -83,7 +83,7 @@ namespace VAdvantage.WF
                 throw new Exception("Could not evaluate " + po + " - " + this);
             }
             //
-            Object valueObj = po.Get_ValueOfColumn(GetAD_Column_ID());
+            Object valueObj = po.Get_ValueOfColumn(GetVAF_Column_ID());
             if (valueObj == null)
                 valueObj = "";
             String value1 = GetValue();
@@ -94,7 +94,7 @@ namespace VAdvantage.WF
                 value2 = "";
 
             // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
-            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetVAF_Control_Ref_ID().Equals(DisplayType.YesNo))
             {
                 if (value1.ToLower().Equals("y"))
                 {
@@ -126,7 +126,7 @@ namespace VAdvantage.WF
             bool result = false;
 
             //Lakhwinder
-            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
             {
                 return EvaluateAttributeCondition(po);
             }
@@ -175,9 +175,9 @@ namespace VAdvantage.WF
             //   return valueObjS.CompareTo(value1S) == 0;
 
             //specific for DMS
-            DataSet ds = DB.ExecuteDataset(@"SELECT col.ColumnName,tab.TableName FROM AD_Column col
-                                                                    INNER JOIN AD_Table tab ON (tab.AD_Table_ID=col.AD_Table_ID)
-                                                                    WHERE col.IsActive='Y' AND col.AD_Column_ID=" + GetAD_Column_ID());
+            DataSet ds = DB.ExecuteDataset(@"SELECT col.ColumnName,tab.TableName FROM VAF_Column col
+                                                                    INNER JOIN VAF_TableView tab ON (tab.VAF_TableView_ID=col.VAF_TableView_ID)
+                                                                    WHERE col.IsActive='Y' AND col.VAF_Column_ID=" + GetVAF_Column_ID());
             if (ds != null
                 && ds.Tables[0].Rows.Count > 0
                 && ds.Tables[0].Rows[0]["TableName"].ToString().Equals("VADMS_MetaData"))
@@ -468,12 +468,12 @@ namespace VAdvantage.WF
 //                                    int docID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT Doc.VADMS_Document_ID
 //                                                                FROM VADMS_Document Doc
 //                                                                INNER JOIN VADMS_MetaData MD ON (MD.VADMS_Document_ID=Doc.VADMS_Document_ID)
-//                                                                INNER JOIN AD_WF_Activity WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
-//                                                                INNER JOIN AD_WF_Node NODE ON (NODE.AD_WF_Node_ID=WA.AD_WF_Node_ID)
-//                                                                INNER JOIN AD_WF_NodeNext NN ON (NN.AD_WF_Node_ID=NODE.AD_WF_Node_ID)
-//                                                                INNER JOIN AD_WF_NextCondition NC ON (NC.AD_WF_NodeNext_ID=NN.AD_WF_NodeNext_ID)
-//                                                                WHERE NC.AD_WF_NextCondition_ID=" + GetAD_WF_NextCondition_ID(), null, Get_TrxName()));
-//                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetAD_Language(), docID };
+//                                                                INNER JOIN VAF_WFlow_Task WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
+//                                                                INNER JOIN VAF_WFlow_Node NODE ON (NODE.VAF_WFlow_Node_ID=WA.VAF_WFlow_Node_ID)
+//                                                                INNER JOIN VAF_WFlow_NextNode NN ON (NN.VAF_WFlow_Node_ID=NODE.VAF_WFlow_Node_ID)
+//                                                                INNER JOIN VAF_WFlow_NextCondition NC ON (NC.VAF_WFlow_NextNode_ID=NN.VAF_WFlow_NextNode_ID)
+//                                                                WHERE NC.VAF_WFlow_NextCondition_ID=" + GetVAF_WFlow_NextCondition_ID(), null, Get_TrxName()));
+//                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetVAF_Language(), docID };
 //                                    result = methodInfo.Invoke(classInstance, parametersArray);
 //                                }
 //                                if (result == null)
@@ -580,12 +580,12 @@ namespace VAdvantage.WF
                     //                                    int docID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT Doc.VADMS_Document_ID
                     //                                                                FROM VADMS_Document Doc
                     //                                                                INNER JOIN VADMS_MetaData MD ON (MD.VADMS_Document_ID=Doc.VADMS_Document_ID)
-                    //                                                                INNER JOIN AD_WF_Activity WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
-                    //                                                                INNER JOIN AD_WF_Node NODE ON (NODE.AD_WF_Node_ID=WA.AD_WF_Node_ID)
-                    //                                                                INNER JOIN AD_WF_NodeNext NN ON (NN.AD_WF_Node_ID=NODE.AD_WF_Node_ID)
-                    //                                                                INNER JOIN AD_WF_NextCondition NC ON (NC.AD_WF_NodeNext_ID=NN.AD_WF_NodeNext_ID)
-                    //                                                                WHERE NC.AD_WF_NextCondition_ID=" + GetAD_WF_NextCondition_ID(), null, Get_TrxName()));
-                    //                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetAD_Language(), docID };
+                    //                                                                INNER JOIN VAF_WFlow_Task WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
+                    //                                                                INNER JOIN VAF_WFlow_Node NODE ON (NODE.VAF_WFlow_Node_ID=WA.VAF_WFlow_Node_ID)
+                    //                                                                INNER JOIN VAF_WFlow_NextNode NN ON (NN.VAF_WFlow_Node_ID=NODE.VAF_WFlow_Node_ID)
+                    //                                                                INNER JOIN VAF_WFlow_NextCondition NC ON (NC.VAF_WFlow_NextNode_ID=NN.VAF_WFlow_NextNode_ID)
+                    //                                                                WHERE NC.VAF_WFlow_NextCondition_ID=" + GetVAF_WFlow_NextCondition_ID(), null, Get_TrxName()));
+                    //                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetVAF_Language(), docID };
                     //                                    result = methodInfo.Invoke(classInstance, parametersArray);
                     //                                }
                     //                                if (result == null)
@@ -619,16 +619,16 @@ namespace VAdvantage.WF
                     int docID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT Doc.VADMS_Document_ID
                                                 FROM VADMS_Document Doc
                                                 INNER JOIN VADMS_MetaData MD ON (MD.VADMS_Document_ID=Doc.VADMS_Document_ID)
-                                                INNER JOIN AD_WF_Activity WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
-                                                INNER JOIN AD_WF_Node NODE ON (NODE.AD_WF_Node_ID=WA.AD_WF_Node_ID)
-                                                INNER JOIN AD_WF_NodeNext NN ON (NN.AD_WF_Node_ID=NODE.AD_WF_Node_ID)
-                                                INNER JOIN AD_WF_NextCondition NC ON (NC.AD_WF_NodeNext_ID=NN.AD_WF_NodeNext_ID)
-                                                WHERE NC.AD_WF_NextCondition_ID=" + GetAD_WF_NextCondition_ID() +@"
-                                                AND WA.AD_WF_Activity_ID="+ AD_WF_Activity_ID, null, Get_TrxName()));
+                                                INNER JOIN VAF_WFlow_Task WA ON (WA.Record_ID=MD.VADMS_MetaData_ID)
+                                                INNER JOIN VAF_WFlow_Node NODE ON (NODE.VAF_WFlow_Node_ID=WA.VAF_WFlow_Node_ID)
+                                                INNER JOIN VAF_WFlow_NextNode NN ON (NN.VAF_WFlow_Node_ID=NODE.VAF_WFlow_Node_ID)
+                                                INNER JOIN VAF_WFlow_NextCondition NC ON (NC.VAF_WFlow_NextNode_ID=NN.VAF_WFlow_NextNode_ID)
+                                                WHERE NC.VAF_WFlow_NextCondition_ID=" + GetVAF_WFlow_NextCondition_ID() +@"
+                                                AND WA.VAF_WFlow_Task_ID="+ VAF_WFlow_Task_ID, null, Get_TrxName()));
                     string res = string.Empty;
                     //GetPO(Get_TrxName());
                     DocumentAction docAction = new DocumentAction();
-                    return docAction.IsDocumentContainsText(docID, value1S, GetCtx().GetAD_Language(), out res);
+                    return docAction.IsDocumentContainsText(docID, value1S, GetCtx().GetVAF_Language(), out res);
 
                     //return ok;
                 }

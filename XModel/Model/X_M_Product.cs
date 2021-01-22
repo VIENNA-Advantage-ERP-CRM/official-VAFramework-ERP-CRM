@@ -121,7 +121,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721416748765L;
         /** Last Updated Timestamp 8/11/2015 4:40:33 PM */
         public static long updatedMS = 1439291431976L;
-        /** AD_Table_ID=208 */
+        /** VAF_TableView_ID=208 */
         public static int Table_ID;
         // =208;
 
@@ -164,24 +164,24 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** BasisType AD_Reference_ID=1000032 */
-        public static int BASISTYPE_AD_Reference_ID = 1000032;
+        /** BasisType VAF_Control_Ref_ID=1000032 */
+        public static int BASISTYPE_VAF_Control_Ref_ID = 1000032;
         /** Per Batch = B */
         public static String BASISTYPE_PerBatch = "B";
         /** Per Item = I */
@@ -330,8 +330,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ChargeType AD_Reference_ID=1000031 */
-        public static int CHARGETYPE_AD_Reference_ID = 1000031;
+        /** ChargeType VAF_Control_Ref_ID=1000031 */
+        public static int CHARGETYPE_VAF_Control_Ref_ID = 1000031;
         /** Automatic = A */
         public static String CHARGETYPE_Automatic = "A";
         /** Manual = M */
@@ -981,8 +981,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_Product_Category_ID AD_Reference_ID=163 */
-        public static int M_PRODUCT_CATEGORY_ID_AD_Reference_ID = 163;
+        /** M_Product_Category_ID VAF_Control_Ref_ID=163 */
+        public static int M_PRODUCT_CATEGORY_ID_VAF_Control_Ref_ID = 163;
         /** Set Product Category.
         @param M_Product_Category_ID Category of a Product */
         public void SetM_Product_Category_ID(int M_Product_Category_ID)
@@ -1104,8 +1104,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** ProductType AD_Reference_ID=270 */
-        public static int PRODUCTTYPE_AD_Reference_ID = 270;
+        /** ProductType VAF_Control_Ref_ID=270 */
+        public static int PRODUCTTYPE_VAF_Control_Ref_ID = 270;
         /** Expense type = E */
         public static String PRODUCTTYPE_ExpenseType = "E";
         /** Item = I */
@@ -1191,8 +1191,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ResourceGroup AD_Reference_ID=1000030 */
-        public static int RESOURCEGROUP_AD_Reference_ID = 1000030;
+        /** ResourceGroup VAF_Control_Ref_ID=1000030 */
+        public static int RESOURCEGROUP_VAF_Control_Ref_ID = 1000030;
         /** Equipment = E */
         public static String RESOURCEGROUP_Equipment = "E";
         /** Other = O */
@@ -1275,8 +1275,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Sales Rep.
         @param SalesRep_ID Company Agent like Sales Representitive, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -1710,8 +1710,8 @@ namespace VAdvantage.Model
 
 
 
-        //        /** VA019_ItemType AD_Reference_ID=1000239 */
-        //        public static int VA019_ITEMTYPE_AD_Reference_ID = 1000239;/** Combo = C */
+        //        /** VA019_ItemType VAF_Control_Ref_ID=1000239 */
+        //        public static int VA019_ITEMTYPE_VAF_Control_Ref_ID = 1000239;/** Combo = C */
         //        public static String VA019_ITEMTYPE_Combo = "C";/** Ingredient = I */
         //        public static String VA019_ITEMTYPE_Ingredient = "I";/** Modifier = M */
         //        public static String VA019_ITEMTYPE_Modifier = "M";/** Product = P */
@@ -1763,8 +1763,8 @@ namespace VAdvantage.Model
         public void SetVA019_PortionInYield(Decimal? VA019_PortionInYield) { Set_Value("VA019_PortionInYield", (Decimal?)VA019_PortionInYield); }/** Get Portion In Yield.
 @return Portion In Yield */
         public Decimal GetVA019_PortionInYield() { Object bd = Get_Value("VA019_PortionInYield"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** VA019_PortionUOM AD_Reference_ID=114 */
-        public static int VA019_PORTIONUOM_AD_Reference_ID = 114;/** Set Portion UOM.
+        /** VA019_PortionUOM VAF_Control_Ref_ID=114 */
+        public static int VA019_PORTIONUOM_VAF_Control_Ref_ID = 114;/** Set Portion UOM.
 @param VA019_PortionUOM Portion UOM */
         public void SetVA019_PortionUOM(int VA019_PortionUOM) { Set_Value("VA019_PortionUOM", VA019_PortionUOM); }/** Get Portion UOM.
 @return Portion UOM */
@@ -1781,16 +1781,16 @@ namespace VAdvantage.Model
         public void SetVA019_YieldQuantity(Decimal? VA019_YieldQuantity) { Set_Value("VA019_YieldQuantity", (Decimal?)VA019_YieldQuantity); }/** Get Yield Quantity.
 @return Yield Quantity */
         public Decimal GetVA019_YieldQuantity() { Object bd = Get_Value("VA019_YieldQuantity"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** VA019_YieldUOM AD_Reference_ID=114 */
-        public static int VA019_YIELDUOM_AD_Reference_ID = 114;/** Set Yield UOM.
+        /** VA019_YieldUOM VAF_Control_Ref_ID=114 */
+        public static int VA019_YIELDUOM_VAF_Control_Ref_ID = 114;/** Set Yield UOM.
 @param VA019_YieldUOM Yield UOM */
         public void SetVA019_YieldUOM(int VA019_YieldUOM) { Set_Value("VA019_YieldUOM", VA019_YieldUOM); }/** Get Yield UOM.
 @return Yield UOM */
         public int GetVA019_YieldUOM() { Object ii = Get_Value("VA019_YieldUOM"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
-        /** VA019_ItemType AD_Reference_ID=1000239 */
-        public static int VA019_ITEMTYPE_AD_Reference_ID = 1000239;/** Combo = C */
+        /** VA019_ItemType VAF_Control_Ref_ID=1000239 */
+        public static int VA019_ITEMTYPE_VAF_Control_Ref_ID = 1000239;/** Combo = C */
         public static String VA019_ITEMTYPE_Combo = "C";/** Ingredient = I */
         public static String VA019_ITEMTYPE_Ingredient = "I";/** Modifier = M */
         public static String VA019_ITEMTYPE_Modifier = "M";/** Product = P */
@@ -1816,8 +1816,8 @@ namespace VAdvantage.Model
         public Decimal GetVA019_TotalCost() { Object bd = Get_Value("VA019_TotalCost"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
 
-        /** VA019_RecipeType AD_Reference_ID=1000247 */
-        public static int VA019_RECIPETYPE_AD_Reference_ID = 1000247;/** A la carte = AL */
+        /** VA019_RecipeType VAF_Control_Ref_ID=1000247 */
+        public static int VA019_RECIPETYPE_VAF_Control_Ref_ID = 1000247;/** A la carte = AL */
         public static String VA019_RECIPETYPE_ALaCarte = "AL";/** Catring = CA */
         public static String VA019_RECIPETYPE_Catring = "CA";/** Portion = PO */
         public static String VA019_RECIPETYPE_Portion = "PO";/** Pre Production = PP */

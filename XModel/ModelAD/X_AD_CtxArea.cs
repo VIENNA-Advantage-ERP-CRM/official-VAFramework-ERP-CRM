@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_CtxArea
+/** Generated Model for VAF_ContextScope
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_CtxArea : PO
+public class X_VAF_ContextScope : PO
 {
-public X_AD_CtxArea (Context ctx, int AD_CtxArea_ID, Trx trxName) : base (ctx, AD_CtxArea_ID, trxName)
+public X_VAF_ContextScope (Context ctx, int VAF_ContextScope_ID, Trx trxName) : base (ctx, VAF_ContextScope_ID, trxName)
 {
-/** if (AD_CtxArea_ID == 0)
+/** if (VAF_ContextScope_ID == 0)
 {
-SetAD_CtxArea_ID (0);
+SetVAF_ContextScope_ID (0);
 SetEntityType (null);	// U
 SetIsSOTrx (false);
 SetName (null);
 }
  */
 }
-public X_AD_CtxArea (Ctx ctx, int AD_CtxArea_ID, Trx trxName) : base (ctx, AD_CtxArea_ID, trxName)
+public X_VAF_ContextScope (Ctx ctx, int VAF_ContextScope_ID, Trx trxName) : base (ctx, VAF_ContextScope_ID, trxName)
 {
-/** if (AD_CtxArea_ID == 0)
+/** if (VAF_ContextScope_ID == 0)
 {
-SetAD_CtxArea_ID (0);
+SetVAF_ContextScope_ID (0);
 SetEntityType (null);	// U
 SetIsSOTrx (false);
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CtxArea (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ContextScope (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_CtxArea (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CtxArea (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ContextScope (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_CtxArea (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CtxArea (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ContextScope (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_CtxArea()
+static X_VAF_ContextScope()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_CtxArea()
 //static long serialVersionUID = 27562514361075L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044286L;
-/** AD_Table_ID=926 */
+/** VAF_TableView_ID=926 */
 public static int Table_ID;
  // =926;
 
-/** TableName=AD_CtxArea */
-public static String Table_Name="AD_CtxArea";
+/** TableName=VAF_ContextScope */
+public static String Table_Name="VAF_ContextScope";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_CtxArea[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ContextScope[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Context Area.
-@param AD_CtxArea_ID Business Domain Area Terminology */
-public void SetAD_CtxArea_ID (int AD_CtxArea_ID)
+@param VAF_ContextScope_ID Business Domain Area Terminology */
+public void SetVAF_ContextScope_ID (int VAF_ContextScope_ID)
 {
-if (AD_CtxArea_ID < 1) throw new ArgumentException ("AD_CtxArea_ID is mandatory.");
-Set_ValueNoCheck ("AD_CtxArea_ID", AD_CtxArea_ID);
+if (VAF_ContextScope_ID < 1) throw new ArgumentException ("VAF_ContextScope_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ContextScope_ID", VAF_ContextScope_ID);
 }
 /** Get Context Area.
 @return Business Domain Area Terminology */
-public int GetAD_CtxArea_ID() 
+public int GetVAF_ContextScope_ID() 
 {
-Object ii = Get_Value("AD_CtxArea_ID");
+Object ii = Get_Value("VAF_ContextScope_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -149,8 +149,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

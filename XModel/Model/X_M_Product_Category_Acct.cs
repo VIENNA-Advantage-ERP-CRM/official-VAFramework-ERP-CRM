@@ -90,7 +90,7 @@ static X_M_Product_Category_Acct()
 //static long serialVersionUID 27562514380838L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064049L;
-/** AD_Table_ID=401 */
+/** VAF_TableView_ID=401 */
 public static int Table_ID;
  // =401;
 
@@ -154,8 +154,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
 }
 
-/** CostingLevel AD_Reference_ID=355 */
-public static int COSTINGLEVEL_AD_Reference_ID=355;
+/** CostingLevel VAF_Control_Ref_ID=355 */
+public static int COSTINGLEVEL_VAF_Control_Ref_ID=355;
 /** Batch/Lot = B */
 public static String COSTINGLEVEL_BatchLot = "B";
 /** Client = C */
@@ -189,8 +189,8 @@ public String GetCostingLevel()
 return (String)Get_Value("CostingLevel");
 }
 
-/** CostingMethod AD_Reference_ID=122 */
-public static int COSTINGMETHOD_AD_Reference_ID=122;
+/** CostingMethod VAF_Control_Ref_ID=122 */
+public static int COSTINGMETHOD_VAF_Control_Ref_ID=122;
 /** Average PO = A */
 public static String COSTINGMETHOD_AveragePO = "A";
 /** Fifo = F */

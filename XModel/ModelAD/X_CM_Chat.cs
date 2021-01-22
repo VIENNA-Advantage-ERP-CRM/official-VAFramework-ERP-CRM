@@ -20,7 +20,7 @@ public X_CM_Chat (Context ctx, int CM_Chat_ID, Trx trxName) : base (ctx, CM_Chat
 {
 /** if (CM_Chat_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetCM_Chat_ID (0);
 SetConfidentialType (null);
 SetDescription (null);
@@ -32,7 +32,7 @@ public X_CM_Chat (Ctx ctx, int CM_Chat_ID, Trx trxName) : base (ctx, CM_Chat_ID,
 {
 /** if (CM_Chat_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetCM_Chat_ID (0);
 SetConfidentialType (null);
 SetDescription (null);
@@ -76,7 +76,7 @@ static X_CM_Chat()
 //static long serialVersionUID 27562514368473L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051684L;
-/** AD_Table_ID=876 */
+/** VAF_TableView_ID=876 */
 public static int Table_ID;
  // =876;
 
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_CM_Chat[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -165,8 +165,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -227,8 +227,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetDescription());
 }
 
-/** ModerationType AD_Reference_ID=395 */
-public static int MODERATIONTYPE_AD_Reference_ID=395;
+/** ModerationType VAF_Control_Ref_ID=395 */
+public static int MODERATIONTYPE_VAF_Control_Ref_ID=395;
 /** After Publishing = A */
 public static String MODERATIONTYPE_AfterPublishing = "A";
 /** Before Publishing = B */

@@ -86,7 +86,7 @@ static X_R_Status()
 //static long serialVersionUID 27562514383471L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066682L;
-/** AD_Table_ID=776 */
+/** VAF_TableView_ID=776 */
 public static int Table_ID;
  // =776;
 
@@ -271,8 +271,8 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 
-/** Next_Status_ID AD_Reference_ID=345 */
-public static int NEXT_STATUS_ID_AD_Reference_ID=345;
+/** Next_Status_ID VAF_Control_Ref_ID=345 */
+public static int NEXT_STATUS_ID_VAF_Control_Ref_ID=345;
 /** Set Next Status.
 @param Next_Status_ID Move to next status automatically after timeout */
 public void SetNext_Status_ID (int Next_Status_ID)
@@ -356,8 +356,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Update_Status_ID AD_Reference_ID=345 */
-public static int UPDATE_STATUS_ID_AD_Reference_ID=345;
+/** Update_Status_ID VAF_Control_Ref_ID=345 */
+public static int UPDATE_STATUS_ID_VAF_Control_Ref_ID=345;
 /** Set Update Status.
 @param Update_Status_ID Automatically change the status after entry from web */
 public void SetUpdate_Status_ID (int Update_Status_ID)

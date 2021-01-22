@@ -34,14 +34,14 @@ namespace VAdvantage.Model
         /// Get existing Account or create it 
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">client id</param>
-        /// <param name="AD_Org_ID"> organisation id</param>
+        /// <param name="VAF_Client_ID">client id</param>
+        /// <param name="VAF_Org_ID"> organisation id</param>
         /// <param name="C_AcctSchema_ID"> account schema id</param>
         /// <param name="Account_ID">account id</param>
         /// <param name="C_SubAcct_ID">sub-Account id</param>
         /// <param name="M_Product_ID">product id</param>
         /// <param name="C_BPartner_ID">Bussness partner id</param>
-        /// <param name="AD_OrgTrx_ID"> ordTax id</param>
+        /// <param name="VAF_OrgTrx_ID"> ordTax id</param>
         /// <param name="C_LocFrom_ID">C_LocFrom_ID</param>
         /// <param name="C_LocTo_ID"></param>
         /// <param name="C_SalesRegion_ID"></param>
@@ -53,8 +53,8 @@ namespace VAdvantage.Model
         /// <param name="UserElement1_ID"></param>
         /// <param name="UserElement2_ID"></param>
         /// <returns>account or null</returns>
-        public static MAccount Get(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int C_AcctSchema_ID,
-            int Account_ID, int C_SubAcct_ID, int M_Product_ID, int C_BPartner_ID, int AD_OrgTrx_ID,
+        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int C_AcctSchema_ID,
+            int Account_ID, int C_SubAcct_ID, int M_Product_ID, int C_BPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int C_SalesRegion_ID, int C_Project_ID, int C_Campaign_ID,
             int C_Activity_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID)
         {
@@ -63,8 +63,8 @@ namespace VAdvantage.Model
             StringBuilder info = new StringBuilder();
             StringBuilder sql = new StringBuilder("SELECT * FROM C_ValidCombination "
                 //	Mandatory fields
-                + "WHERE AD_Client_ID=" + AD_Client_ID		//	#1
-                + " AND AD_Org_ID=" + AD_Org_ID
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID		//	#1
+                + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND C_AcctSchema_ID=" + C_AcctSchema_ID
                 + " AND Account_ID=" + Account_ID);		//	#4
             //	Optional fields
@@ -92,13 +92,13 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND C_BPartner_ID=" + C_BPartner_ID);
             }
-            if (AD_OrgTrx_ID == 0)
+            if (VAF_OrgTrx_ID == 0)
             {
-                sql.Append(" AND AD_OrgTrx_ID IS NULL");
+                sql.Append(" AND VAF_OrgTrx_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND AD_OrgTrx_ID=" + AD_OrgTrx_ID);
+                sql.Append(" AND VAF_OrgTrx_ID=" + VAF_OrgTrx_ID);
             }
             if (C_LocFrom_ID == 0)
             {
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
                 //IDataReader dr=null;
                 ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql.ToString(), null, null);
                 //  --  Mandatory Accounting fields
-                info.Append("AD_Client_ID=").Append(AD_Client_ID).Append(",AD_Org_ID=").Append(AD_Org_ID);
+                info.Append("VAF_Client_ID=").Append(VAF_Client_ID).Append(",VAF_Org_ID=").Append(VAF_Org_ID);
                 //	Schema
                 info.Append(",C_AcctSchema_ID=").Append(C_AcctSchema_ID);
                 //	Account
@@ -210,14 +210,14 @@ namespace VAdvantage.Model
                 return existingAccount;
             //	New
             MAccount newAccount = new MAccount(ctx, 0, null);
-            newAccount.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            newAccount.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             newAccount.SetC_AcctSchema_ID(C_AcctSchema_ID);
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
             newAccount.SetC_SubAcct_ID(C_SubAcct_ID);
             newAccount.SetM_Product_ID(M_Product_ID);
             newAccount.SetC_BPartner_ID(C_BPartner_ID);
-            newAccount.SetAD_OrgTrx_ID(AD_OrgTrx_ID);
+            newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
             newAccount.SetC_LocTo_ID(C_LocTo_ID);
             newAccount.SetC_SalesRegion_ID(C_SalesRegion_ID);
@@ -240,7 +240,7 @@ namespace VAdvantage.Model
 
 
         // Added by Bharat for New elements UserElements1 to UserElement9
-        public static MAccount Get(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int C_AcctSchema_ID, int Account_ID, int C_SubAcct_ID, int M_Product_ID, int C_BPartner_ID, int AD_OrgTrx_ID,
+        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int C_AcctSchema_ID, int Account_ID, int C_SubAcct_ID, int M_Product_ID, int C_BPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int C_SalesRegion_ID, int C_Project_ID, int C_Campaign_ID, int C_Activity_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID,
             int UserElement3_ID, int UserElement4_ID, int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID)
         {
@@ -249,8 +249,8 @@ namespace VAdvantage.Model
             StringBuilder info = new StringBuilder();
             StringBuilder sql = new StringBuilder("SELECT * FROM C_ValidCombination "
                 //	Mandatory fields
-                + "WHERE AD_Client_ID=" + AD_Client_ID		//	#1
-                + " AND AD_Org_ID=" + AD_Org_ID
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID		//	#1
+                + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND C_AcctSchema_ID=" + C_AcctSchema_ID
                 + " AND Account_ID=" + Account_ID);		//	#4
             //	Optional fields
@@ -281,13 +281,13 @@ namespace VAdvantage.Model
 
          
 
-            if (AD_OrgTrx_ID == 0)
+            if (VAF_OrgTrx_ID == 0)
             {
-                sql.Append(" AND AD_OrgTrx_ID IS NULL");
+                sql.Append(" AND VAF_OrgTrx_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND AD_OrgTrx_ID=" + AD_OrgTrx_ID);
+                sql.Append(" AND VAF_OrgTrx_ID=" + VAF_OrgTrx_ID);
             }
             if (C_LocFrom_ID == 0)
             {
@@ -433,7 +433,7 @@ namespace VAdvantage.Model
                 //IDataReader dr=null;
                 ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql.ToString(), null, null);
                 //  --  Mandatory Accounting fields
-                info.Append("AD_Client_ID=").Append(AD_Client_ID).Append(",AD_Org_ID=").Append(AD_Org_ID);
+                info.Append("VAF_Client_ID=").Append(VAF_Client_ID).Append(",VAF_Org_ID=").Append(VAF_Org_ID);
                 //	Schema
                 info.Append(",C_AcctSchema_ID=").Append(C_AcctSchema_ID);
                 //	Account
@@ -455,14 +455,14 @@ namespace VAdvantage.Model
                 return existingAccount;
             //	New
             MAccount newAccount = new MAccount(ctx, 0, null);
-            newAccount.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            newAccount.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             newAccount.SetC_AcctSchema_ID(C_AcctSchema_ID);
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
             newAccount.SetC_SubAcct_ID(C_SubAcct_ID);
             newAccount.SetM_Product_ID(M_Product_ID);
             newAccount.SetC_BPartner_ID(C_BPartner_ID);
-            newAccount.SetAD_OrgTrx_ID(AD_OrgTrx_ID);
+            newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
             newAccount.SetC_LocTo_ID(C_LocTo_ID);
             newAccount.SetC_SalesRegion_ID(C_SalesRegion_ID);
@@ -527,9 +527,9 @@ namespace VAdvantage.Model
         public static MAccount Get(X_Fact_Acct fa)
         {
             MAccount acct = Get(fa.GetCtx(),
-                fa.GetAD_Client_ID(), fa.GetAD_Org_ID(), fa.GetC_AcctSchema_ID(),
+                fa.GetVAF_Client_ID(), fa.GetVAF_Org_ID(), fa.GetC_AcctSchema_ID(),
                 fa.GetAccount_ID(), fa.GetC_SubAcct_ID(),
-                fa.GetM_Product_ID(), fa.GetC_BPartner_ID(), fa.GetAD_OrgTrx_ID(),
+                fa.GetM_Product_ID(), fa.GetC_BPartner_ID(), fa.GetVAF_OrgTrx_ID(),
                 fa.GetC_LocFrom_ID(), fa.GetC_LocTo_ID(), fa.GetC_SalesRegion_ID(),
                 fa.GetC_Project_ID(), fa.GetC_Campaign_ID(), fa.GetC_Activity_ID(),
                 fa.GetUser1_ID(), fa.GetUser2_ID(), fa.GetUserElement1_ID(), fa.GetUserElement2_ID());
@@ -570,7 +570,7 @@ namespace VAdvantage.Model
                 bool setValue = ase.IsMandatory() || (!ase.IsMandatory() && !optionalNull);
                 //
                 if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Organization))
-                    vc.SetAD_Org_ID(defaultValue);
+                    vc.SetVAF_Org_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Account))
                     vc.SetAccount_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SubAccount) && setValue)
@@ -588,7 +588,7 @@ namespace VAdvantage.Model
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign) && setValue)
                     vc.SetC_Campaign_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx) && setValue)
-                    vc.SetAD_OrgTrx_ID(defaultValue);
+                    vc.SetVAF_OrgTrx_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Project) && setValue)
                     vc.SetC_Project_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion) && setValue)
@@ -602,7 +602,7 @@ namespace VAdvantage.Model
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) && setValue)
                     vc.SetUserElement2_ID(defaultValue);
             }
-            _log.Fine("Client_ID=" + vc.GetAD_Client_ID() + ", Org_ID=" + vc.GetAD_Org_ID()
+            _log.Fine("Client_ID=" + vc.GetVAF_Client_ID() + ", Org_ID=" + vc.GetVAF_Org_ID()
                 + " - AcctSchema_ID=" + vc.GetC_AcctSchema_ID() + ", Account_ID=" + vc.GetAccount_ID());
             return vc;
         }
@@ -710,9 +710,9 @@ namespace VAdvantage.Model
                 sb.Append(",").Append(GetCombination());
             else
             {
-                //	.Append(",Client=").Append(getAD_Client_ID())
+                //	.Append(",Client=").Append(getVAF_Client_ID())
                 sb.Append(",Schema=").Append(GetC_AcctSchema_ID())
-                    .Append(",Org=").Append(GetAD_Org_ID())
+                    .Append(",Org=").Append(GetVAF_Org_ID())
                     .Append(",Acct=").Append(GetAccount_ID())
                     .Append(" ");
                 if (GetC_SubAcct_ID() != 0)
@@ -721,8 +721,8 @@ namespace VAdvantage.Model
                     sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
                 if (GetC_BPartner_ID() != 0)
                     sb.Append(",C_BPartner_ID=").Append(GetC_BPartner_ID());
-                if (GetAD_OrgTrx_ID() != 0)
-                    sb.Append(",AD_OrgTrx_ID=").Append(GetAD_OrgTrx_ID());
+                if (GetVAF_OrgTrx_ID() != 0)
+                    sb.Append(",VAF_OrgTrx_ID=").Append(GetVAF_OrgTrx_ID());
                 if (GetC_LocFrom_ID() != 0)
                     sb.Append(",C_LocFrom_ID=").Append(GetC_LocFrom_ID());
                 if (GetC_LocTo_ID() != 0)
@@ -844,9 +844,9 @@ namespace VAdvantage.Model
 
                 if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(element.GetElementType()))
                 {
-                    if (GetAD_Org_ID() != 0)
+                    if (GetVAF_Org_ID() != 0)
                     {
-                        MOrg org = new MOrg(GetCtx(), GetAD_Org_ID(), Get_TrxName());	//	in Trx!
+                        MOrg org = new MOrg(GetCtx(), GetVAF_Org_ID(), Get_TrxName());	//	in Trx!
                         combiStr = org.GetValue();
                         descrStr = org.GetName();
                     }
@@ -911,9 +911,9 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(element.GetElementType()))
                 {
-                    if (GetAD_OrgTrx_ID() != 0)
+                    if (GetVAF_OrgTrx_ID() != 0)
                     {
-                        MOrg org = new MOrg(GetCtx(), GetAD_OrgTrx_ID(), Get_TrxName());	// in Trx!
+                        MOrg org = new MOrg(GetCtx(), GetVAF_OrgTrx_ID(), Get_TrxName());	// in Trx!
                         combiStr = org.GetValue();
                         descrStr = org.GetName();
                     }
@@ -1027,16 +1027,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement1.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement1_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement1_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement1_ID();
@@ -1046,7 +1046,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement1_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement1_ID();
@@ -1061,16 +1061,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement2.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement2_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement2_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement2_ID();
@@ -1080,7 +1080,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement2_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement2_ID();
@@ -1095,16 +1095,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement3.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement3_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement3_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement3_ID();
@@ -1114,7 +1114,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement3_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement3_ID();
@@ -1129,16 +1129,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement4.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement4_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement4_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement4_ID();
@@ -1148,7 +1148,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement4_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement4_ID();
@@ -1163,16 +1163,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement5.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement5_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement5_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement5_ID();
@@ -1182,7 +1182,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement5_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement5_ID();
@@ -1197,16 +1197,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement6.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement6_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement6_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement6_ID();
@@ -1216,7 +1216,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement6_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement6_ID();
@@ -1231,16 +1231,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement7.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement7_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement7_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement7_ID();
@@ -1250,7 +1250,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement7_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement7_ID();
@@ -1265,16 +1265,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement8.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement8_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement8_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement8_ID();
@@ -1284,7 +1284,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement8_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement8_ID();
@@ -1299,16 +1299,16 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_UserElement9.Equals(element.GetElementType()))
                 {
-                    if (GetUserElement9_ID() != 0 && element.GetAD_Column_ID() > 0)
+                    if (GetUserElement9_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
-                        string qry = "SELECT tab.TableName, tab.AD_Table_ID, col.ColumnName FROM AD_Column col INNER JOIN AD_Table tab ON col.AD_Table_ID = tab.AD_Table_ID WHERE AD_Column_ID = " + element.GetAD_Column_ID();
+                        string qry = "SELECT tab.TableName, tab.VAF_TableView_ID, col.ColumnName FROM VAF_Column col INNER JOIN VAF_TableView tab ON col.VAF_TableView_ID = tab.VAF_TableView_ID WHERE VAF_Column_ID = " + element.GetVAF_Column_ID();
                         DataSet ds = DB.ExecuteDataset(qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             string tableName = Util.GetValueOfString(ds.Tables[0].Rows[0]["TableName"]);
-                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                            int tableID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                             string columnName = Util.GetValueOfString(ds.Tables[0].Rows[0]["ColumnName"]);
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Value'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Value'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Value FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement9_ID();
@@ -1318,7 +1318,7 @@ namespace VAdvantage.Model
                             {
                                 combiStr = Util.GetValueOfString(GetUserElement9_ID());
                             }
-                            qry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID =" + tableID + " AND ColumnName='Name'";
+                            qry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID =" + tableID + " AND ColumnName='Name'";
                             if (Util.GetValueOfInt(DB.ExecuteScalar(qry)) > 0)
                             {
                                 qry = "SELECT Name FROM " + tableName + " WHERE " + tableName + "_ID =" + GetUserElement9_ID();

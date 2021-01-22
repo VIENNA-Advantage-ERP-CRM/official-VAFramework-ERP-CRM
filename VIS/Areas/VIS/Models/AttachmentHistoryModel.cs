@@ -29,25 +29,25 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="searchText"></param>
-        /// <param name="_AD_Table_ID"></param>
+        /// <param name="_VAF_TableView_ID"></param>
         /// <param name="_Record_ID"></param>
         /// <returns></returns>
-        public int LoadRecordDataCount(Ctx ctx, string searchText, int _AD_Table_ID, int _Record_ID)
+        public int LoadRecordDataCount(Ctx ctx, string searchText, int _VAF_TableView_ID, int _Record_ID)
         {
             string strAppCount = "SELECT count(*) FROM " +
-                       "(( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
+                       "(( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='N' And ai.vaf_tableview_Id = " + _VAF_TableView_ID + " And ai.VAF_UserContact_ID = " + ctx.GetVAF_UserContact_ID() + ")   UNION" +
 
-                 "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
+                 "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE, subject  FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strAppCount += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strAppCount += " AND ai.IsTask='Y' And ai.vaf_tableview_Id = " + _VAF_TableView_ID + " And ai.VAF_UserContact_ID = " + ctx.GetVAF_UserContact_ID() + ")   UNION" +
 
 
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, TITLE AS Subject FROM mailattachment1 WHERE record_id=" + _Record_ID;
@@ -55,13 +55,13 @@ namespace VIS.Models
             {
                 strAppCount += " AND ((upper(title)  like upper('%" + searchText + "%')) OR (upper(mailaddressfrom) like upper('%" + searchText + "%')) OR (upper(mailaddress) like upper('%" + searchText + "%')) OR (upper(mailaddressbcc) like upper('%" + searchText + "%')) OR (upper(mailaddresscc) like upper('%" + searchText + "%')))";
             }
-            strAppCount += " And attachmenttype='M' And ad_table_id=" + _AD_Table_ID + " UNION" +
+            strAppCount += " And attachmenttype='M' And vaf_tableview_id=" + _VAF_TableView_ID + " UNION" +
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "InboxMail") + "' AS TYPE, TITLE AS Subject FROM mailattachment1 WHERE record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strAppCount += " AND ((upper(title)  like upper('%" + searchText + "%')) OR (upper(mailaddressfrom) like upper('%" + searchText + "%')) OR (upper(mailaddress) like upper('%" + searchText + "%')) OR (upper(mailaddressbcc) like upper('%" + searchText + "%')) OR (upper(mailaddresscc) like upper('%" + searchText + "%')))";
             }
-            strAppCount += " And attachmenttype='I' And ad_table_id=" + _AD_Table_ID + " UNION" +
+            strAppCount += " And attachmenttype='I' And vaf_tableview_id=" + _VAF_TableView_ID + " UNION" +
             " SELECT MAILATTACHMENT1_ID AS ID, record_ID,created,'" + Msg.GetMsg(ctx, "Letter") + "' AS TYPE, TITLE AS Subject FROM mailattachment1  WHERE record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
@@ -69,14 +69,14 @@ namespace VIS.Models
             }
             //if (VAdvantage.DataBase.DB.IsPostgreSQL())
             //{
-            //    strAppCount += " And attachmenttype='L' And ad_table_id=" + _AD_Table_ID + ") as foo ";
+            //    strAppCount += " And attachmenttype='L' And vaf_tableview_id=" + _VAF_TableView_ID + ") as foo ";
             //}
             //else
             //{
-            //    strAppCount += " And attachmenttype='L' And ad_table_id=" + _AD_Table_ID + ") ORDER BY created DESC";
+            //    strAppCount += " And attachmenttype='L' And vaf_tableview_id=" + _VAF_TableView_ID + ") ORDER BY created DESC";
             //}
 
-            strAppCount += " And attachmenttype='L' And ad_table_id=" + _AD_Table_ID;
+            strAppCount += " And attachmenttype='L' And vaf_tableview_id=" + _VAF_TableView_ID;
 
             // Updated for fetching call records for history by vinay
             if (Env.IsModuleInstalled("VA048_"))
@@ -85,7 +85,7 @@ namespace VIS.Models
 SELECT VA048_CallDetails_ID AS ID, record_ID, created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' AS TYPE, VA048_To AS Subject 
 FROM VA048_CallDetails 
 WHERE VA048_To is not null and IsActive = 'Y' 
-and AD_Table_ID = " + _AD_Table_ID + @"
+and VAF_TableView_ID = " + _VAF_TableView_ID + @"
 and record_id = " + _Record_ID;
 
                 if (searchText != "undefined" && searchText != null && searchText != "")
@@ -105,52 +105,52 @@ and record_id = " + _Record_ID;
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="searchText"></param>
-        /// <param name="_AD_Table_ID"></param>
+        /// <param name="_VAF_TableView_ID"></param>
         /// <param name="_Record_ID"></param>
         /// <param name="historyPageNo"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public List<HistoryRecordInfo> LoadRecordData(Ctx ctx, string searchText, int _AD_Table_ID, int _Record_ID, int historyPageNo, int pageSize)
+        public List<HistoryRecordInfo> LoadRecordData(Ctx ctx, string searchText, int _VAF_TableView_ID, int _Record_ID, int historyPageNo, int pageSize)
         {
             List<HistoryRecordInfo> hLists = new List<HistoryRecordInfo>();
 
             var strApp = "SELECT * FROM " +
-                      "(( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
+                      "(( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='N' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='N' And ai.vaf_tableview_Id = " + _VAF_TableView_ID + " And ai.VAF_UserContact_ID = " + ctx.GetVAF_UserContact_ID() + ")   UNION" +
 
 
-                "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
+                "( SELECT ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,au.name  FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_Id =" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND upper(ai.Subject)  like upper('%" + searchText + "%')";
             }
-            strApp += " AND ai.IsTask='Y' And ai.Ad_Table_Id = " + _AD_Table_ID + " And ai.AD_User_ID = " + ctx.GetAD_User_ID() + ")   UNION" +
+            strApp += " AND ai.IsTask='Y' And ai.vaf_tableview_Id = " + _VAF_TableView_ID + " And ai.VAF_UserContact_ID = " + ctx.GetVAF_UserContact_ID() + ")   UNION" +
 
 
 
-            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
+            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND ((upper(ai.title)  like upper('%" + searchText + "%')) OR (upper(ai.mailaddressfrom) like upper('%" + searchText + "%')) OR (upper(mailaddress) like upper('%" + searchText + "%')) OR (upper(mailaddressbcc) like upper('%" + searchText + "%')) OR (upper(mailaddresscc) like upper('%" + searchText + "%')))";
             }
-            strApp += " And ai.attachmenttype='M' And ai.ad_table_id=" + _AD_Table_ID + " UNION" +
-            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "InboxMail") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
+            strApp += " And ai.attachmenttype='M' And ai.vaf_tableview_id=" + _VAF_TableView_ID + " UNION" +
+            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "InboxMail") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND ((upper(ai.title)  like upper('%" + searchText + "%')) OR (upper(ai.mailaddressfrom) like upper('%" + searchText + "%')) OR (upper(mailaddress) like upper('%" + searchText + "%')) OR (upper(mailaddressbcc) like upper('%" + searchText + "%')) OR (upper(mailaddresscc) like upper('%" + searchText + "%')))";
             }
-            strApp += " And ai.attachmenttype='I' And ai.ad_table_id=" + _AD_Table_ID + " UNION" +
-            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "Letter") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
+            strApp += " And ai.attachmenttype='I' And ai.vaf_tableview_id=" + _VAF_TableView_ID + " UNION" +
+            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "Letter") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND upper(ai.title)  like upper('%" + searchText + "%')";
             }
 
-            strApp += " And ai.attachmenttype='L' And ai.ad_table_id=" + _AD_Table_ID;
+            strApp += " And ai.attachmenttype='L' And ai.vaf_tableview_id=" + _VAF_TableView_ID;
 
             // Updated for fetching call records for history by vinay
             if (Env.IsModuleInstalled("VA048_"))
@@ -158,24 +158,24 @@ and record_id = " + _Record_ID;
                 strApp += @" UNION 
 SELECT VA048_CallDetails_ID AS ID, ai.record_ID, ai.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' AS TYPE, ai.VA048_To AS Subject, au.name 
 FROM VA048_CallDetails ai 
-JOIN AD_User au on au.AD_User_ID=ai.createdby 
+JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby 
 WHERE ai.VA048_To is not null and ai.IsActive = 'Y' 
-and ai.AD_Table_ID = " + _AD_Table_ID + @"
+and ai.VAF_TableView_ID = " + _VAF_TableView_ID + @"
 and ai.record_id = " + _Record_ID;
 
-//                if (_AD_Table_ID == 291)
+//                if (_VAF_TableView_ID == 291)
 //                {
 //                    strApp += @" UNION " +
 //@"select cd.VA048_CallDetails_ID as ID, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as TYPE, cd.VA048_To as Subject, au.name 
 //FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
+//left join VAF_UserContact au on au.VAF_UserContact_ID = cd.VA048_RefRecordID 
 //where cd.VA048_To is not null 
-//and cd.AD_Table_ID = 291 
+//and cd.VAF_TableView_ID = 291 
 //and cd.Record_ID = " + _Record_ID + @" 
 //UNION
 //select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
 //FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.VA048_RefRecordID 
+//left join VAF_UserContact au on au.VAF_UserContact_ID = cd.VA048_RefRecordID 
 //where cd.VA048_To is not null 
 //and au.C_BPartner_ID = " + _Record_ID + @" 
 //and cd.Record_ID = " + _Record_ID;
@@ -185,7 +185,7 @@ and ai.record_id = " + _Record_ID;
 //                    strApp += " UNION " +
 //@"select cd.VA048_CallDetails_ID as id, cd.record_ID, cd.created, '" + Msg.GetMsg(ctx, "VA048_CallType") + @"' as type, cd.VA048_To as Subject, au.name 
 //FROM VA048_CallDetails cd 
-//left join AD_User au on au.AD_User_ID = cd.createdby 
+//left join VAF_UserContact au on au.VAF_UserContact_ID = cd.createdby 
 //WHERE cd.VA048_To is not null 
 //and cd.Record_ID = " + _Record_ID;
 //                }
@@ -233,14 +233,14 @@ and ai.record_id = " + _Record_ID;
 
             string tableName = keyColName.Substring(0, keyColName.Length - 3);
 
-            //select all tables where AD_User_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
+            //select all tables where VAF_UserContact_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
 
-            var sql = @"SELECT ab.AD_Table_ID, ab.Record_ID, att.TableName,ab.Attachtype From (select distinct ad_table_id,record_ID,'A' as Attachtype from appointmentsinfo where ad_table_id IN(     SELECT DISTINCT t.AD_Table_ID
-                        FROM AD_Table t WHERE t.AD_Table_ID IN (SELECT AD_Table_ID FROM AD_Column WHERE ColumnName='" + keyColName + "' ) AND TableName NOT LIKE 'I%' AND TableName NOT LIKE '" + tableName + @"' )
+            var sql = @"SELECT ab.VAF_TableView_ID, ab.Record_ID, att.TableName,ab.Attachtype From (select distinct vaf_tableview_id,record_ID,'A' as Attachtype from appointmentsinfo where vaf_tableview_id IN(     SELECT DISTINCT t.VAF_TableView_ID
+                        FROM VAF_TableView t WHERE t.VAF_TableView_ID IN (SELECT VAF_TableView_ID FROM VAF_Column WHERE ColumnName='" + keyColName + "' ) AND TableName NOT LIKE 'I%' AND TableName NOT LIKE '" + tableName + @"' )
                         UNION
-                        select distinct ad_table_id,record_ID,'M' as Attachtype from mailattachment1 where ad_table_id IN(     SELECT DISTINCT t.AD_Table_ID
-                        FROM AD_Table t WHERE t.AD_Table_ID IN (SELECT AD_Table_ID FROM AD_Column WHERE ColumnName='" + keyColName + "' ) AND TableName NOT LIKE 'I%' AND TableName NOT LIKE '" + tableName + @"' )
-                        ) ab JOIn AD_Table att on att.AD_Table_ID=ab.AD_Table_ID order by TableName";
+                        select distinct vaf_tableview_id,record_ID,'M' as Attachtype from mailattachment1 where vaf_tableview_id IN(     SELECT DISTINCT t.VAF_TableView_ID
+                        FROM VAF_TableView t WHERE t.VAF_TableView_ID IN (SELECT VAF_TableView_ID FROM VAF_Column WHERE ColumnName='" + keyColName + "' ) AND TableName NOT LIKE 'I%' AND TableName NOT LIKE '" + tableName + @"' )
+                        ) ab JOIn VAF_TableView att on att.VAF_TableView_ID=ab.VAF_TableView_ID order by TableName";
 
 
             DataSet ds = DB.ExecuteDataset(sql);
@@ -251,7 +251,7 @@ and ai.record_id = " + _Record_ID;
 
 
             List<string> tableNames = new List<string>();   //contains tables 
-            List<int> AD_Table_ID = new List<int>();        //Contains TableIDs
+            List<int> VAF_TableView_ID = new List<int>();        //Contains TableIDs
             List<string> recIDsA = new List<string>();      //contains record ids  of tables from appointment info like recIDsA[0]="123123,123,123123,12312"
             List<string> recIDsM = new List<string>();      //contains record ids of tables from MailAttachment1 info like recIDsM[0]="123123,123,123123,12312"
             StringBuilder curRecordA = new StringBuilder();
@@ -284,7 +284,7 @@ and ai.record_id = " + _Record_ID;
                     }
 
                     tableNames.Add(ds.Tables[0].Rows[i]["TableName"].ToString());
-                    AD_Table_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"].ToString()));
+                    VAF_TableView_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"].ToString()));
                 }
 
                 if (ds.Tables[0].Rows[i]["Attachtype"].ToString() == "A")
@@ -325,9 +325,9 @@ and ai.record_id = " + _Record_ID;
 
 
 
-            for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013547) OR (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013548)
+            for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013547) OR (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013548)
             {
-                createquer(AD_Table_ID[i], tableNames[i], "", recIDsA[i], recIDsM[i], ctx, keyColName, bPartner_ID);
+                createquer(VAF_TableView_ID[i], tableNames[i], "", recIDsA[i], recIDsM[i], ctx, keyColName, bPartner_ID);
             }
             if (whereApp.Length > 0)
             {
@@ -345,8 +345,8 @@ and ai.record_id = " + _Record_ID;
 
 
             // For Appointments
-            finalsql.Append("  SELECT n'A' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.AD_Table_ID FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
-            finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+            finalsql.Append("  SELECT n'A' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.VAF_TableView_ID FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
+            finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
             if (whereApp.Length > 0)
             {
                 finalsql.Append(" WHERE " + whereApp.ToString());
@@ -354,8 +354,8 @@ and ai.record_id = " + _Record_ID;
             }
             else
             {
-                finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
             }
 
             if (searchText != "undefined" && searchText != null && searchText != "")
@@ -374,8 +374,8 @@ and ai.record_id = " + _Record_ID;
 
             if (finalsql.ToString().Contains("WHERE"))
             {
-                finalsql.Append(" AND ai.IsTask='N' AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
-                finalSqlCount.Append(" AND ai.IsTask='N' AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
+                finalsql.Append(" AND ai.IsTask='N' AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
+                finalSqlCount.Append(" AND ai.IsTask='N' AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
             }
             else
             {
@@ -389,8 +389,8 @@ and ai.record_id = " + _Record_ID;
 
 
             //For Tasks
-            finalsql.Append("  SELECT n'T' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.AD_Table_ID FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
-            finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+            finalsql.Append("  SELECT n'T' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.VAF_TableView_ID FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
+            finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
             if (whereApp.Length > 0)
             {
                 finalsql.Append(" WHERE " + whereApp.ToString());
@@ -398,8 +398,8 @@ and ai.record_id = " + _Record_ID;
             }
             else
             {
-                finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
             }
 
             if (searchText != "undefined" && searchText != null && searchText != "")
@@ -435,8 +435,8 @@ and ai.record_id = " + _Record_ID;
 
             // For Letter, sent Mail, Inbox mail
 
-            finalsql.Append(" SELECT attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.AD_Table_ID   FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID  ");
-            finalSqlCount.Append(" SELECT ai.created FROM mailattachment1  ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+            finalsql.Append(" SELECT attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.VAF_TableView_ID   FROM mailattachment1 ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID  ");
+            finalSqlCount.Append(" SELECT ai.created FROM mailattachment1  ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
             if (whereMAtt.Length > 0)
             {
                 finalsql.Append(" WHERE " + whereMAtt.ToString());
@@ -446,8 +446,8 @@ and ai.record_id = " + _Record_ID;
             }
             else
             {
-                finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
             }
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
@@ -503,7 +503,7 @@ and ai.record_id = " + _Record_ID;
                         related.Type = dsfinal.Tables[0].Rows[i]["attachmenttype"].ToString();
                         related.Subject = dsfinal.Tables[0].Rows[i]["Subject"].ToString();
                         related.TableName = dsfinal.Tables[0].Rows[i]["TableName"].ToString();
-                        related.AD_Table_ID = Util.GetValueOfInt(dsfinal.Tables[0].Rows[i]["AD_Table_ID"]);
+                        related.VAF_TableView_ID = Util.GetValueOfInt(dsfinal.Tables[0].Rows[i]["VAF_TableView_ID"]);
                         histo.Add(related);
                     }
                 }
@@ -533,18 +533,18 @@ and ai.record_id = " + _Record_ID;
         {
             RealtedHistoryInfoDetails hDetails = new RealtedHistoryInfoDetails();
 
-            //select all tables where AD_User_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
+            //select all tables where VAF_UserContact_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
 
-            int userTableID = MTable.Get_Table_ID("AD_User");
+            int userTableID = MTable.Get_Table_ID("VAF_UserContact");
 
-            var sql = @"SELECT AD_Table_ID,Record_ID,Attachtype,TableName FROM (SELECT DISTINCT ad_table_id, record_ID, 'A' AS Attachtype,'AD_User' as TableName FROM appointmentsinfo
-                            WHERE ad_table_id IN(" + userTableID + @") UNION SELECT DISTINCT ad_table_id, record_ID, 'M' AS Attachtype,'AD_User' as TableName FROM mailattachment1
-                            WHERE ad_table_id IN(" + userTableID + @"))";
+            var sql = @"SELECT VAF_TableView_ID,Record_ID,Attachtype,TableName FROM (SELECT DISTINCT vaf_tableview_id, record_ID, 'A' AS Attachtype,'VAF_UserContact' as TableName FROM appointmentsinfo
+                            WHERE vaf_tableview_id IN(" + userTableID + @") UNION SELECT DISTINCT vaf_tableview_id, record_ID, 'M' AS Attachtype,'VAF_UserContact' as TableName FROM mailattachment1
+                            WHERE vaf_tableview_id IN(" + userTableID + @"))";
             DataSet ds = DB.ExecuteDataset(sql);
 
 
             //get all users of bpartner
-            sql = "SELECT AD_User_ID  FROM AD_User WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY AD_User_ID";
+            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
             DataSet dsUsers = DB.ExecuteDataset(sql);
 
             if (dsUsers != null && dsUsers.Tables[0].Rows.Count == 0)
@@ -556,7 +556,7 @@ and ai.record_id = " + _Record_ID;
 
             for (int a = 0; a < dsUsers.Tables[0].Rows.Count; a++)
             {
-                users += dsUsers.Tables[0].Rows[a]["AD_User_ID"] + ",";
+                users += dsUsers.Tables[0].Rows[a]["VAF_UserContact_ID"] + ",";
             }
             users = users.Substring(0, users.Length - 1);  //users in string like 101,102
 
@@ -568,7 +568,7 @@ and ai.record_id = " + _Record_ID;
             try
             {
                 List<string> tableNames = new List<string>();//contains tables 
-                List<int> AD_Table_ID = new List<int>();     //Contains TableIDs
+                List<int> VAF_TableView_ID = new List<int>();     //Contains TableIDs
                 List<string> recIDsA = new List<string>();   //contains record ids  of tables from appointment info like recIDsA[0]="123123,123,123123,12312"
                 List<string> recIDsM = new List<string>();   //contains record ids of tables from MailAttachment1 info like recIDsM[0]="123123,123,123123,12312"
                 StringBuilder curRecordA = new StringBuilder();
@@ -599,7 +599,7 @@ and ai.record_id = " + _Record_ID;
                         }
 
                         tableNames.Add(ds.Tables[0].Rows[i]["TableName"].ToString());
-                        AD_Table_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"].ToString()));
+                        VAF_TableView_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"].ToString()));
                     }
 
                     if (ds.Tables[0].Rows[i]["Attachtype"].ToString() == "A" || ds.Tables[0].Rows[i]["Attachtype"].ToString() == "T")
@@ -639,9 +639,9 @@ and ai.record_id = " + _Record_ID;
 
 
 
-                for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013547) OR (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013548)
+                for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013547) OR (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013548)
                 {
-                    createquerForUserTable(AD_Table_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, "", 0);
+                    createquerForUserTable(VAF_TableView_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, "", 0);
                 }
             }
             catch (Exception ex)
@@ -649,7 +649,7 @@ and ai.record_id = " + _Record_ID;
         }
 
 
-        private string createquerForUserTable(int AD_Table_ID, string tableName, string users, string recordsA, string recordsM, Ctx ctx, string colName, int colID)
+        private string createquerForUserTable(int VAF_TableView_ID, string tableName, string users, string recordsA, string recordsM, Ctx ctx, string colName, int colID)
         {
 
             if (recordsA.Length > 0 && recordsA.EndsWith(","))
@@ -679,9 +679,9 @@ and ai.record_id = " + _Record_ID;
 
             if (users.Length > 0)  //will work in case of user history
             {
-                sql = "SELECT aa.AD_User_ID,bb.Name,bb.AD_User_ID FROM AD_User aa JOIN AD_User bb ";
-                sql += "  ON aa.AD_User_ID=bb.AD_User_ID WHERE aa.IsActive='Y' ";
-                sql += "    AND  aa.AD_User_ID IN( " + users + ") ";
+                sql = "SELECT aa.VAF_UserContact_ID,bb.Name,bb.VAF_UserContact_ID FROM VAF_UserContact aa JOIN VAF_UserContact bb ";
+                sql += "  ON aa.VAF_UserContact_ID=bb.VAF_UserContact_ID WHERE aa.IsActive='Y' ";
+                sql += "    AND  aa.VAF_UserContact_ID IN( " + users + ") ";
             }
 
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
@@ -698,11 +698,11 @@ and ai.record_id = " + _Record_ID;
             //        {
             //            if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
             //            {
-            //                whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+            //                whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
             //            }
             //            if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
             //            {
-            //                whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+            //                whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
             //            }
             //        }
             //    }
@@ -713,7 +713,7 @@ and ai.record_id = " + _Record_ID;
             {
                 for (int j = 0; j < dsRecords.Tables[0].Rows.Count; j++)//if found then fetch that record's appointment, mail, letter, inboxmail and make a single query....
                 {
-                    var key = Util.GetValueOfInt(dsRecords.Tables[0].Rows[j]["AD_User_ID"].ToString());
+                    var key = Util.GetValueOfInt(dsRecords.Tables[0].Rows[j]["VAF_UserContact_ID"].ToString());
 
 
                     UserInfoForWhereClause uif = userQuery.Where(aa => aa.UserID == key).FirstOrDefault();
@@ -726,11 +726,11 @@ and ai.record_id = " + _Record_ID;
                         uif.whereMAtt = new StringBuilder();
                         if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            uif.whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            uif.whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                         if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            uif.whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            uif.whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                         userQuery.Add(uif);
                     }
@@ -738,11 +738,11 @@ and ai.record_id = " + _Record_ID;
                     {
                         if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            uif.whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            uif.whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                         if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            uif.whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            uif.whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                     }
                 }
@@ -753,9 +753,9 @@ and ai.record_id = " + _Record_ID;
         }
 
 
-        private string createquer(int AD_Table_ID, string tableName, string users, string recordsA, string recordsM, Ctx ctx, string colName, int colID)
+        private string createquer(int VAF_TableView_ID, string tableName, string users, string recordsA, string recordsM, Ctx ctx, string colName, int colID)
         {
-            if (tableName.ToUpper().Equals("AD_USER"))//skip AD_User Table
+            if (tableName.ToUpper().Equals("VAF_USERCONTACT"))//skip VAF_UserContact Table
             {
                 return "";
             }
@@ -787,16 +787,16 @@ and ai.record_id = " + _Record_ID;
 
             if (users.Length > 0)  //will work in case of user history
             {
-                sql = "SELECT aa." + tableName + "_ID,bb.Name,bb.AD_User_ID FROM " + tableName + " aa JOIN AD_User bb ";
-                if (colName.Length > 0)  // if refrenece is Table and refrence column is AD_User_ID like SalesRep_ID
+                sql = "SELECT aa." + tableName + "_ID,bb.Name,bb.VAF_UserContact_ID FROM " + tableName + " aa JOIN VAF_UserContact bb ";
+                if (colName.Length > 0)  // if refrenece is Table and refrence column is VAF_UserContact_ID like SalesRep_ID
                 {
-                    sql += "  ON aa." + colName + "=bb.AD_User_ID WHERE aa.IsActive='Y' ";
+                    sql += "  ON aa." + colName + "=bb.VAF_UserContact_ID WHERE aa.IsActive='Y' ";
                     sql += "    AND  aa." + colName + " IN (" + users + ") ";
                 }
-                else// if column Name is AD_User_ID
+                else// if column Name is VAF_UserContact_ID
                 {
-                    sql += "  ON aa.AD_User_ID=bb.AD_User_ID WHERE aa.IsActive='Y' ";
-                    sql += "    AND  aa.AD_User_ID IN( " + users + ") ";
+                    sql += "  ON aa.VAF_UserContact_ID=bb.VAF_UserContact_ID WHERE aa.IsActive='Y' ";
+                    sql += "    AND  aa.VAF_UserContact_ID IN( " + users + ") ";
                 }
             }
             if (colID > 0)      // will work in case of related history records
@@ -826,11 +826,11 @@ and ai.record_id = " + _Record_ID;
                     {
                         if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                         if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                         {
-                            whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                            whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                         }
                     }
                 }
@@ -841,7 +841,7 @@ and ai.record_id = " + _Record_ID;
                 {
                     for (int j = 0; j < dsRecords.Tables[0].Rows.Count; j++)//if found then fetch that record's appointment, mail, letter, inboxmail and make a single query....
                     {
-                        var key = Util.GetValueOfInt(dsRecords.Tables[0].Rows[j]["AD_User_ID"].ToString());
+                        var key = Util.GetValueOfInt(dsRecords.Tables[0].Rows[j]["VAF_UserContact_ID"].ToString());
 
 
                         UserInfoForWhereClause uif = userQuery.Where(aa => aa.UserID == key).FirstOrDefault();
@@ -854,11 +854,11 @@ and ai.record_id = " + _Record_ID;
                             uif.whereMAtt = new StringBuilder();
                             if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                             {
-                                uif.whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                                uif.whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                             }
                             if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                             {
-                                uif.whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                                uif.whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                             }
                             userQuery.Add(uif);
                         }
@@ -866,11 +866,11 @@ and ai.record_id = " + _Record_ID;
                         {
                             if (recordsA.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                             {
-                                uif.whereApp.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                                uif.whereApp.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                             }
                             if (recordsM.Contains(dsRecords.Tables[0].Rows[j][0].ToString()))
                             {
-                                uif.whereMAtt.Append(" (ai.AD_Table_ID=" + AD_Table_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
+                                uif.whereMAtt.Append(" (ai.VAF_TableView_ID=" + VAF_TableView_ID + " AND ai.Record_ID=" + dsRecords.Tables[0].Rows[j][0].ToString() + ") OR ");
                             }
                         }
                     }
@@ -897,18 +897,18 @@ and ai.record_id = " + _Record_ID;
             List<RelatedHistoryInfo> histo = new List<RelatedHistoryInfo>();
 
 
-            //select all tables where AD_User_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
-            var sql = @"SELECT ab.AD_Table_ID, ab.Record_ID, att.TableName,ab.Attachtype From (select distinct ad_table_id,record_ID,'A' as Attachtype from appointmentsinfo where ad_table_id IN(     SELECT DISTINCT t.AD_Table_ID
-                        FROM AD_Table t WHERE t.AD_Table_ID IN (SELECT AD_Table_ID FROM AD_Column WHERE ColumnName='AD_User_ID' ) AND TableName NOT LIKE 'I%' )
+            //select all tables where VAF_UserContact_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
+            var sql = @"SELECT ab.VAF_TableView_ID, ab.Record_ID, att.TableName,ab.Attachtype From (select distinct vaf_tableview_id,record_ID,'A' as Attachtype from appointmentsinfo where vaf_tableview_id IN(     SELECT DISTINCT t.VAF_TableView_ID
+                        FROM VAF_TableView t WHERE t.VAF_TableView_ID IN (SELECT VAF_TableView_ID FROM VAF_Column WHERE ColumnName='VAF_UserContact_ID' ) AND TableName NOT LIKE 'I%' )
                         UNION
-                        select distinct ad_table_id,record_ID,'M' as Attachtype from mailattachment1 where ad_table_id IN(     SELECT DISTINCT t.AD_Table_ID
-                        FROM AD_Table t WHERE t.AD_Table_ID IN (SELECT AD_Table_ID FROM AD_Column WHERE ColumnName='AD_User_ID' ) AND TableName NOT LIKE 'I%' )
-                        ) ab JOIn AD_Table att on att.AD_Table_ID=ab.AD_Table_ID order by TableName";
+                        select distinct vaf_tableview_id,record_ID,'M' as Attachtype from mailattachment1 where vaf_tableview_id IN(     SELECT DISTINCT t.VAF_TableView_ID
+                        FROM VAF_TableView t WHERE t.VAF_TableView_ID IN (SELECT VAF_TableView_ID FROM VAF_Column WHERE ColumnName='VAF_UserContact_ID' ) AND TableName NOT LIKE 'I%' )
+                        ) ab JOIn VAF_TableView att on att.VAF_TableView_ID=ab.VAF_TableView_ID order by TableName";
             DataSet ds = DB.ExecuteDataset(sql);
 
 
             //get all users of bpartner
-            sql = "SELECT AD_User_ID  FROM AD_User WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY AD_User_ID";
+            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
             DataSet dsUsers = DB.ExecuteDataset(sql);
 
             if (dsUsers != null && dsUsers.Tables[0].Rows.Count == 0)
@@ -920,7 +920,7 @@ and ai.record_id = " + _Record_ID;
 
             for (int a = 0; a < dsUsers.Tables[0].Rows.Count; a++)
             {
-                users += dsUsers.Tables[0].Rows[a]["AD_User_ID"] + ",";
+                users += dsUsers.Tables[0].Rows[a]["VAF_UserContact_ID"] + ",";
             }
             users = users.Substring(0, users.Length - 1);  //users in string like 101,102
 
@@ -932,7 +932,7 @@ and ai.record_id = " + _Record_ID;
             try
             {
                 List<string> tableNames = new List<string>();//contains tables 
-                List<int> AD_Table_ID = new List<int>();     //Contains TableIDs
+                List<int> VAF_TableView_ID = new List<int>();     //Contains TableIDs
                 List<string> recIDsA = new List<string>();   //contains record ids  of tables from appointment info like recIDsA[0]="123123,123,123123,12312"
                 List<string> recIDsM = new List<string>();   //contains record ids of tables from MailAttachment1 info like recIDsM[0]="123123,123,123123,12312"
                 StringBuilder curRecordA = new StringBuilder();
@@ -963,7 +963,7 @@ and ai.record_id = " + _Record_ID;
                         }
 
                         tableNames.Add(ds.Tables[0].Rows[i]["TableName"].ToString());
-                        AD_Table_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"].ToString()));
+                        VAF_TableView_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"].ToString()));
                     }
 
                     if (ds.Tables[0].Rows[i]["Attachtype"].ToString() == "A")
@@ -1003,43 +1003,43 @@ and ai.record_id = " + _Record_ID;
 
 
 
-                for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013547) OR (ai.AD_Table_ID     =259 AND ai.Record_ID       =1013548)
+                for (int i = 0; i < tableNames.Count; i++)// This will create where clause like (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013547) OR (ai.VAF_TableView_ID     =259 AND ai.Record_ID       =1013548)
                 {
-                    createquer(AD_Table_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, "", 0);
+                    createquer(VAF_TableView_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, "", 0);
                 }
 
                 finalSqlCount.Append(@"Select COUNT(*) from (SELECT created FROM ");
 
 
-                // here in this query we will find all columns which has Table reference and Key Column is AD_User_ID.
+                // here in this query we will find all columns which has Table reference and Key Column is VAF_UserContact_ID.
                 //Createdby and UpdatedBy
 
 
-                sql = @"select * from (select distinct ab.AD_Table_ID,ab.ColumnName,ai.record_ID,'A'  as Attachtype,att.TableName from appointmentsinfo ai JOIN   (SELECT  AD_Table_ID,
-                                ColumnName FROM AD_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND ad_reference_Value_id IN
-                                (SELECT ad_reference_id FROM ad_ref_table WHERE column_key_id= (SELECT AD_Column_ID FROM AD_Column  WHERE columnname='AD_User_ID'
-                                  AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_User' ) ) ) ) ab ON ab.AD_Table_ID=ai.AD_Table_ID
-                              JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID
+                sql = @"select * from (select distinct ab.VAF_TableView_ID,ab.ColumnName,ai.record_ID,'A'  as Attachtype,att.TableName from appointmentsinfo ai JOIN   (SELECT  VAF_TableView_ID,
+                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND VAF_Control_Ref_Value_id IN
+                                (SELECT VAF_Control_Ref_id FROM VAF_CtrlRef_Table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column  WHERE columnname='VAF_UserContact_ID'
+                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAF_UserContact' ) ) ) ) ab ON ab.VAF_TableView_ID=ai.VAF_TableView_ID
+                              JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID
                               UNION
-                              select distinct ab.AD_Table_ID,ab.ColumnName,ai.record_ID,'M' as  Attachtype,att.TableName from mailattachment1 ai JOIN   (SELECT  AD_Table_ID,
-                                ColumnName FROM AD_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND ad_reference_Value_id IN
-                                (SELECT ad_reference_id FROM ad_ref_table WHERE column_key_id= (SELECT AD_Column_ID FROM AD_Column WHERE columnname='AD_User_ID'
-                                  AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_User' ) ) ) ) ab ON ab.AD_Table_ID=ai.AD_Table_ID ";
-                             // JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID) as foo order by tablename";
+                              select distinct ab.VAF_TableView_ID,ab.ColumnName,ai.record_ID,'M' as  Attachtype,att.TableName from mailattachment1 ai JOIN   (SELECT  VAF_TableView_ID,
+                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND VAF_Control_Ref_Value_id IN
+                                (SELECT VAF_Control_Ref_id FROM VAF_CtrlRef_Table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column WHERE columnname='VAF_UserContact_ID'
+                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAF_UserContact' ) ) ) ) ab ON ab.VAF_TableView_ID=ai.VAF_TableView_ID ";
+                             // JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID) as foo order by tablename";
 
                 if (VAdvantage.DataBase.DB.IsPostgreSQL())
                 {
-                    sql += " JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID)  as foo order by tablename";
+                    sql += " JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID)  as foo order by tablename";
                 }
                 else
                 {
-                    sql += " JOIN AD_Table att on ai.AD_Table_ID=att.AD_Table_ID) order by tablename";
+                    sql += " JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID) order by tablename";
                 }
                 ds = DB.ExecuteDataset(sql);
 
 
                 tableNames = new List<string>();
-                AD_Table_ID = new List<int>();
+                VAF_TableView_ID = new List<int>();
                 recIDsA = new List<string>();
                 recIDsM = new List<string>();
                 curRecordA = new StringBuilder();
@@ -1076,7 +1076,7 @@ and ai.record_id = " + _Record_ID;
                         }
 
                         tableNames.Add(ds.Tables[0].Rows[i]["TableName"].ToString());
-                        AD_Table_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"].ToString()));
+                        VAF_TableView_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"].ToString()));
 
                         List<string> lst = new List<string>();
                         lst.Add(ds.Tables[0].Rows[i]["ColumnName"].ToString());
@@ -1129,7 +1129,7 @@ and ai.record_id = " + _Record_ID;
                 {
                     for (int j = 0; j < colNamess[tableNames[i]].Count; j++)        // for each column in each table we are prepareing where clause...
                     {
-                        createquer(AD_Table_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, colNamess[tableNames[i]][j], 0);
+                        createquer(VAF_TableView_ID[i], tableNames[i], users, recIDsA[i], recIDsM[i], ctx, colNamess[tableNames[i]][j], 0);
                     }
                 }
 
@@ -1153,8 +1153,8 @@ and ai.record_id = " + _Record_ID;
                         }
 
                         // For Appointment
-                        finalsql.Append("  SELECT '" + userQuery[i].UserName + "' as UserName,  n'A' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.AD_Table_ID FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
-                        finalSqlCount.Append(" (SELECT ai.created FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+                        finalsql.Append("  SELECT '" + userQuery[i].UserName + "' as UserName,  n'A' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Appointment") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.VAF_TableView_ID FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
+                        finalSqlCount.Append(" (SELECT ai.created FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
                         if (userQuery[i].whereApp.Length > 0)
                         {
                             finalsql.Append(" WHERE (" + userQuery[i].whereApp.ToString() + ")");
@@ -1162,8 +1162,8 @@ and ai.record_id = " + _Record_ID;
                         }
                         else
                         {
-                            finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                            finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
                         }
 
                         if (searchText != "undefined" && searchText != null && searchText != "")
@@ -1181,13 +1181,13 @@ and ai.record_id = " + _Record_ID;
                         }
                         if (finalsql.ToString().Contains("WHERE"))
                         {
-                            finalsql.Append(" AND ai.IsTask='N' AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
-                            finalSqlCount.Append(" AND ai.IsTask='N' AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
+                            finalsql.Append(" AND ai.IsTask='N' AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
+                            finalSqlCount.Append(" AND ai.IsTask='N' AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
                         }
                         else
                         {
-                            finalsql.Append(" WHERE  ai.IsTask='N' AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
-                            finalSqlCount.Append(" WHERE  ai.IsTask='N'  AND ai.AD_User_ID= " + ctx.GetAD_User_ID());
+                            finalsql.Append(" WHERE  ai.IsTask='N' AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
+                            finalSqlCount.Append(" WHERE  ai.IsTask='N'  AND ai.VAF_UserContact_ID= " + ctx.GetVAF_UserContact_ID());
                         }
 
                         if (VAdvantage.DataBase.DB.IsPostgreSQL())
@@ -1204,8 +1204,8 @@ and ai.record_id = " + _Record_ID;
 
 
                         //For Tasks
-                        finalsql.Append("  SELECT  '" + userQuery[i].UserName + "' as UserName, n'T' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.AD_Table_ID FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
-                        finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+                        finalsql.Append("  SELECT  '" + userQuery[i].UserName + "' as UserName, n'T' as  attachmenttype,ai.AppointmentsInfo_ID AS ID, ai.record_ID, ai.created,'" + Msg.GetMsg(ctx, "Task") + "' AS TYPE,ai.Subject,adt.Name as TableName,ai.VAF_TableView_ID FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
+                        finalSqlCount.Append(" ( SELECT ai.created FROM AppointmentsInfo ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
                         if (userQuery[i].whereApp.Length > 0)
                         {
                             finalsql.Append(" WHERE (" + userQuery[i].whereApp.ToString() + ")");
@@ -1213,8 +1213,8 @@ and ai.record_id = " + _Record_ID;
                         }
                         else
                         {
-                            finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                            finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
                         }
 
                         if (searchText != "undefined" && searchText != null && searchText != "")
@@ -1247,8 +1247,8 @@ and ai.record_id = " + _Record_ID;
 
 
                         //For Letter, Sent mail, Inbox Mail
-                        finalsql.Append(" SELECT  '" + userQuery[i].UserName + "' as UserName, attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.AD_Table_ID   FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID  ");
-                        finalSqlCount.Append(" (SELECT ai.created FROM mailattachment1  ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
+                        finalsql.Append(" SELECT  '" + userQuery[i].UserName + "' as UserName, attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.VAF_TableView_ID   FROM mailattachment1 ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby  JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID  ");
+                        finalSqlCount.Append(" (SELECT ai.created FROM mailattachment1  ai JOIN VAF_UserContact au on au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt on adt.VAF_TableView_ID =ai.VAF_TableView_ID ");
                         if (userQuery[i].whereMAtt.Length > 0)
                         {
                             finalsql.Append(" WHERE (" + userQuery[i].whereMAtt.ToString() + ")");
@@ -1258,8 +1258,8 @@ and ai.record_id = " + _Record_ID;
                         }
                         else
                         {
-                            finalsql.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
-                            finalSqlCount.Append("WHERE (ai.AD_Table_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalsql.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
+                            finalSqlCount.Append("WHERE (ai.VAF_TableView_ID=" + 0 + " AND ai.Record_ID=" + 0 + ")");
                         }
 
                         if (searchText != "undefined" && searchText != null && searchText != "")
@@ -1298,12 +1298,12 @@ and ai.record_id = " + _Record_ID;
                     finalsql.Clear();
                     finalSqlCount.Clear();
 
-                    finalSqlCount.Append(@"SELECT count(*) FROM mailattachment1 ai JOIN AD_User au
-ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Table_ID WHERE (ai.AD_Table_ID=0 AND ai.Record_ID     =0) ");
+                    finalSqlCount.Append(@"SELECT count(*) FROM mailattachment1 ai JOIN VAF_UserContact au
+ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableView_ID   =ai.VAF_TableView_ID WHERE (ai.VAF_TableView_ID=0 AND ai.Record_ID     =0) ");
 
                     finalsql.Append(@"SELECT 'IdeasIncAdmin' AS UserName, attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID, ai.created, '[SentMail]' AS TYPE,
-  ai.TITLE     AS Subject, adt.Name     AS TableName, ai.AD_Table_ID FROM mailattachment1 ai JOIN AD_User au
-ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Table_ID WHERE (ai.AD_Table_ID=0 AND ai.Record_ID     =0) ORDER BY created DESC ");
+  ai.TITLE     AS Subject, adt.Name     AS TableName, ai.VAF_TableView_ID FROM mailattachment1 ai JOIN VAF_UserContact au
+ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableView_ID   =ai.VAF_TableView_ID WHERE (ai.VAF_TableView_ID=0 AND ai.Record_ID     =0) ORDER BY created DESC ");
 
                 }
 
@@ -1347,7 +1347,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                     related.Type = dsfinal.Tables[0].Rows[i]["attachmenttype"].ToString();
                     related.Subject = dsfinal.Tables[0].Rows[i]["Subject"].ToString();
                     related.TableName = dsfinal.Tables[0].Rows[i]["TableName"].ToString();
-                    related.AD_Table_ID = Util.GetValueOfInt(dsfinal.Tables[0].Rows[i]["AD_Table_ID"]);
+                    related.VAF_TableView_ID = Util.GetValueOfInt(dsfinal.Tables[0].Rows[i]["VAF_TableView_ID"]);
                     related.UserName = Util.GetValueOfString(dsfinal.Tables[0].Rows[i]["UserName"]);
                     histo.Add(related);
                 }
@@ -1374,7 +1374,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             MailInfo info = new MailInfo();
 
             var strSql = "select MAILADDRESSFROM, MAILADDRESS,TITLE,MailAddressBcc,MailAddressCc,CREATED" +
-                          ",  ISATTACHMENT, MAILATTACHMENT1_ID, AD_CLIENT_ID, AD_ORG_ID, AD_TABLE_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
+                          ",  ISATTACHMENT, MAILATTACHMENT1_ID, VAF_CLIENT_ID, VAF_ORG_ID, VAF_TABLEVIEW_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
             var ds = DB.ExecuteDataset(strSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1386,7 +1386,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 info.Bcc = Util.GetValueOfString(ds.Tables[0].Rows[0]["mailaddressbcc"]);
                 info.Cc = Util.GetValueOfString(ds.Tables[0].Rows[0]["mailaddresscc"]);
                 //info.Comments = Util.GetValueOfString(ds.Tables[0].Rows[0]["comments"]);
-                info.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["ad_table_id"]);
+                info.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["vaf_tableview_id"]);
                 info.Record_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["record_id"]);
                 info.ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["mailattachment1_id"]);
                 info.IsMail = true;
@@ -1417,7 +1417,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
 
             var strSql = "select MAILADDRESSFROM, MAILADDRESS,MailAddressBcc,MailAddressCc,TITLE " +
                 ",DateMailReceived ,created " +
-                ",  ISATTACHMENT, MAILATTACHMENT1_ID, AD_CLIENT_ID, AD_ORG_ID, AD_TABLE_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
+                ",  ISATTACHMENT, MAILATTACHMENT1_ID, VAF_CLIENT_ID, VAF_ORG_ID, VAF_TABLEVIEW_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
             var ds = DB.ExecuteDataset(strSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1429,7 +1429,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 info.Bcc = Util.GetValueOfString(ds.Tables[0].Rows[0]["mailaddressbcc"]);
                 info.Cc = Util.GetValueOfString(ds.Tables[0].Rows[0]["mailaddresscc"]);
                 //info.Comments = Util.GetValueOfString(ds.Tables[0].Rows[0]["comments"]);
-                info.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["ad_table_id"]);
+                info.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["vaf_tableview_id"]);
                 info.Record_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["record_id"]);
                 info.ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["mailattachment1_id"]);
                 info.IsMail = true;
@@ -1459,7 +1459,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             MailInfo info = new MailInfo();
 
             var strSql = "select TITLE ,CREATED" +
-                 ", ISATTACHMENT, MAILATTACHMENT1_ID, AD_CLIENT_ID, AD_ORG_ID, AD_TABLE_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
+                 ", ISATTACHMENT, MAILATTACHMENT1_ID, VAF_CLIENT_ID, VAF_ORG_ID, VAF_TABLEVIEW_ID, RECORD_ID, CREATEDBY, ISACTIVE, ISMAILSENT,TextMsg from mailattachment1 where mailattachment1_ID=" + ID;
             var ds = DB.ExecuteDataset(strSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1467,7 +1467,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 info.Date = Util.GetValueOfString(ds.Tables[0].Rows[0]["created"]);
                 info.Detail = Util.GetValueOfString(ds.Tables[0].Rows[0]["textmsg"]);
                 //info.Comments = Util.GetValueOfString(ds.Tables[0].Rows[0]["comments"]);
-                info.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["ad_table_id"]);
+                info.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["vaf_tableview_id"]);
                 info.Record_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["record_id"]);
                 info.ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["mailattachment1_id"]);
                 info.IsMail = true;
@@ -1489,22 +1489,22 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
         // Updated for fetching call chat for history by vinay
         public List<ChatInfos> ViewChatonHistory(Ctx ctx, int record_ID, bool isAppointment, bool isCall = false)
         {
-            string sql = @"SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.ad_image_id ,ai.binarydata  AS UsrImg,CH.createdby
+            string sql = @"SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
                     FROM (SELECT * FROM (SELECT CH.cm_chat_id    AS ChatID,MAX(CE.cm_chatentry_id)AS EntryID FROM cm_chatentry CE
                         JOIN cm_chat CH ON CE.cm_chat_id= CH.cm_chat_id GROUP BY CH.cm_chat_id ORDER BY entryID )inn1  ) inn
                     JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)
-                    JOIN ad_user Au ON au.ad_user_id= CH.createdBy LEFT OUTER JOIN ad_image AI ON(ai.ad_image_id=au.ad_image_id)";
+                    JOIN VAF_UserContact Au ON au.VAF_UserContact_id= CH.createdBy LEFT OUTER JOIN VAF_Image AI ON(ai.VAF_Image_id=au.VAF_Image_id)";
             if (isAppointment)
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='appointmentsinfo')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo')";
             }
             else if (isCall)
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='va048_calldetails')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails')";
             }
             else
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='mailattachment1')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1')";
             }
 
 
@@ -1533,7 +1533,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                         DateTime _format = DateTime.SpecifyKind(new DateTime(_createdDate.Year, _createdDate.Month, _createdDate.Day, _createdDate.Hour, _createdDate.Minute, _createdDate.Second), DateTimeKind.Utc);
                         inf.Created = _format;
                     }
-                    int uimgId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["ad_image_id"].ToString());
+                    int uimgId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Image_id"].ToString());
 
                     if (uimgId > 0)
                     {
@@ -1552,22 +1552,22 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
         // Updated for fetching call chat for history by vinay
         public List<ChatInfos> ViewChatonLastHistory(Ctx ctx, int record_ID, bool isAppointment, bool isCall = false)
         {
-            string sql = @"SELECT * FROM (SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.ad_image_id ,ai.binarydata  AS UsrImg,CH.createdby
+            string sql = @"SELECT * FROM (SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
                     FROM (SELECT * FROM (SELECT CH.cm_chat_id    AS ChatID,MAX(CE.cm_chatentry_id)AS EntryID FROM cm_chatentry CE
                         JOIN cm_chat CH ON CE.cm_chat_id= CH.cm_chat_id GROUP BY CH.cm_chat_id ORDER BY entryID )inn1  ) inn
                     JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)
-                    JOIN ad_user Au ON au.ad_user_id= CH.createdBy LEFT OUTER JOIN ad_image AI ON(ai.ad_image_id=au.ad_image_id)";
+                    JOIN VAF_UserContact Au ON au.VAF_UserContact_id= CH.createdBy LEFT OUTER JOIN VAF_Image AI ON(ai.VAF_Image_id=au.VAF_Image_id)";
             if (isAppointment)
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='appointmentsinfo')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo')";
             }
             else if (isCall)
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='va048_calldetails')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails')";
             }
             else
             {
-                sql += " WHERE cMh.AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='mailattachment1')";
+                sql += " WHERE cMh.VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1')";
             }
 
 
@@ -1596,7 +1596,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                         DateTime _format = DateTime.SpecifyKind(new DateTime(_createdDate.Year, _createdDate.Month, _createdDate.Day, _createdDate.Hour, _createdDate.Minute, _createdDate.Second), DateTimeKind.Utc);
                         inf.Created = _format;
                     }
-                    int uimgId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["ad_image_id"].ToString());
+                    int uimgId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Image_id"].ToString());
 
                     if (uimgId > 0)
                     {
@@ -1626,14 +1626,14 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             object chatID = 0;
             if (isAppointment)
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE AD_Table_ID=(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='appointmentsinfo') and Record_ID=" + ID;
+                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {
-                    chatID = DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='appointmentsinfo'", null, null);
+                    chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo'", null, null);
 
                     MChat chats = new MChat(ctx, 0, null);
-                    chats.SetAD_Table_ID(Convert.ToInt32(chatID));
+                    chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
                     chats.Save();
@@ -1643,14 +1643,14 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             }
             else if (isCall) // Updated for fetching call comments for history by vinay
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE AD_Table_ID=(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='va048_calldetails') and Record_ID=" + ID;
+                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {
-                    chatID = DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='va048_calldetails'", null, null);
+                    chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails'", null, null);
 
                     MChat chats = new MChat(ctx, 0, null);
-                    chats.SetAD_Table_ID(Convert.ToInt32(chatID));
+                    chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
                     chats.Save();
@@ -1659,13 +1659,13 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             }
             else
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE AD_Table_ID=(SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='mailattachment1') and Record_ID=" + ID;
+                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {
-                    chatID = DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE lower(TableName)='mailattachment1'", null, null);
+                    chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1'", null, null);
                     MChat chats = new MChat(ctx, 0, null);
-                    chats.SetAD_Table_ID(Convert.ToInt32(chatID));
+                    chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
                     chats.Save();
@@ -1676,7 +1676,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             MChatEntry entry = new MChatEntry(ctx, 0, null);
             entry.SetCM_Chat_ID(Convert.ToInt32(chatID));
             entry.SetCharacterData(text);
-            entry.SetAD_User_ID(ctx.GetAD_User_ID());
+            entry.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             entry.Save();
 
             List<ChatInfos> cInfo = ViewChatonHistory(ctx, ID, isAppointment, isCall);
@@ -1696,7 +1696,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
                 obj["Subject"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Subject"]);
                 obj["Location"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Location"]);
                 obj["Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Description"]);
-                obj["AD_Table_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                obj["VAF_TableView_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                 obj["Record_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Record_ID"]);
                 obj["label"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["label"]);
                 obj["StartDate"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["StartDate"]);
@@ -1740,7 +1740,7 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             CallInfo info = new CallInfo();
 
             string fullNameColumn = string.Empty;
-            int getfullnamecolumn = Util.GetValueOfInt(DB.ExecuteScalar("select count(1) from AD_Column where AD_Table_ID = 114 AND ColumnName = 'FullName'", null, null));
+            int getfullnamecolumn = Util.GetValueOfInt(DB.ExecuteScalar("select count(1) from VAF_Column where VAF_TableView_ID = 114 AND ColumnName = 'FullName'", null, null));
 
             if (getfullnamecolumn > 0)
                 fullNameColumn = "CASE WHEN ad.FullName IS NULL THEN ad.Name || ' ' || ad.LastName ELSE ad.FullName END ";
@@ -1750,10 +1750,10 @@ ON au.AD_User_ID=ai.createdby JOIN AD_Table adt ON adt.AD_Table_ID   =ai.AD_Tabl
             var strSql = @"
 select cd.VA048_IsConference, NVL(cd.VA048_From, '-') as VA048_From, NVL(cd.VA048_To, '-') as VA048_To, cd.VA048_Duration, cd.VA048_Price, 
 NVL(cd.VA048_Price_Unit, '-') as VA048_Price_Unit, NVL(cd.VA048_Status, '-') as VA048_Status, 
-cd.AD_Table_ID, cd.Record_ID, cd.VA048_CallNotes, cd.Created,  
+cd.VAF_TableView_ID, cd.Record_ID, cd.VA048_CallNotes, cd.Created,  
 " + fullNameColumn + @" AS VA048_FullName
 FROM VA048_CallDetails cd
-left join AD_User ad on cd.CreatedBy = ad.AD_User_ID 
+left join VAF_UserContact ad on cd.CreatedBy = ad.VAF_UserContact_ID 
 where cd.IsActive = 'Y' and cd.VA048_CallDetails_ID = " + ID;
 
             var ds = DB.ExecuteDataset(strSql);
@@ -1762,9 +1762,9 @@ where cd.IsActive = 'Y' and cd.VA048_CallDetails_ID = " + ID;
             {
 
                 string attachemntsql = @"
-select att.AD_Attachment_ID, att.FileLocation, atl.AD_AttachmentLine_ID, atl.FileName, atl.FileType from AD_Attachment att 
-left join AD_AttachmentLine atl on att.AD_Attachment_ID = atl.AD_Attachment_ID
-where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and att.Record_ID = " + ID;
+select att.VAF_Attachment_ID, att.FileLocation, atl.VAF_AttachmentLine_ID, atl.FileName, atl.FileType from VAF_Attachment att 
+left join VAF_AttachmentLine atl on att.VAF_Attachment_ID = atl.VAF_Attachment_ID
+where att.vaf_tableview_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and att.Record_ID = " + ID;
 
                 var dsatt = DB.ExecuteDataset(attachemntsql);
 
@@ -1775,8 +1775,8 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
                     for (int i = 0; i < dsatt.Tables[0].Rows.Count; i++)
                     {
                         ai.Name = Util.GetValueOfString(dsatt.Tables[0].Rows[i]["FileName"]);
-                        ai.ID = Util.GetValueOfInt(dsatt.Tables[0].Rows[i]["AD_AttachmentLine_ID"]);
-                        ai.AttID = Util.GetValueOfInt(dsatt.Tables[0].Rows[i]["AD_Attachment_ID"]);
+                        ai.ID = Util.GetValueOfInt(dsatt.Tables[0].Rows[i]["VAF_AttachmentLine_ID"]);
+                        ai.AttID = Util.GetValueOfInt(dsatt.Tables[0].Rows[i]["VAF_Attachment_ID"]);
                         info.Attach.Add(ai);
                     }
                     
@@ -1800,7 +1800,7 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
                 info.VA048_Price = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["VA048_Price"].ToString().Replace("-", ""));
                 info.VA048_Price_Unit = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA048_Price_Unit"]);
                 info.VA048_Status = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA048_Status"]);
-                info.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Table_ID"]);
+                info.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_TableView_ID"]);
                 info.Record_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Record_ID"]);
                 info.VA048_CallNotes = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA048_CallNotes"]);
                 info.Created = DateTime.SpecifyKind(Convert.ToDateTime(ds.Tables[0].Rows[0]["Created"]), DateTimeKind.Utc);
@@ -1824,7 +1824,7 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
         public string Type { get; set; }
         public string Subject { get; set; }
         public string TableName { get; set; }
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public string UserName { get; set; }
     }
 
@@ -1841,7 +1841,7 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
         public bool IsMail { get; set; }
         public bool IsLetter { get; set; }
         public List<AttachmentInfos> Attach { get; set; }
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public int Record_ID { get; set; }
         public int ID { get; set; }
     }
@@ -1858,7 +1858,7 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
     {
         public int ChatID { get; set; }
         public int EntryID { get; set; }
-        public int AD_Image_ID { get; set; }
+        public int VAF_Image_ID { get; set; }
         public int CreatedBy { get; set; }
         public string UserName { get; set; }
         public string UserImage { get; set; }
@@ -1895,8 +1895,8 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
     // call details for history record
     public class CallInfo
     {
-        public int AD_Client_ID { get; set; }
-        public int AD_Org_ID { get; set; }
+        public int VAF_Client_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
         public DateTime Created { get; set; }
         public int CreatedBy { get; set; }
         public string Export_ID { get; set; }
@@ -1927,8 +1927,8 @@ where att.AD_table_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and at
         public string VA048_To { get; set; }
         public string VA048_URI { get; set; }
         public int Record_ID { get; set; }
-        public int AD_Table_ID { get; set; }
-        public int AD_User_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
         public string VA048_CallNotes { get; set; }
         public char VA048_IsConference { get; set; }
         public string VA048_ConferenceSID { get; set; }

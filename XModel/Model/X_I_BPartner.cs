@@ -70,7 +70,7 @@ static X_I_BPartner()
 //static long serialVersionUID 27562514376842L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060053L;
-/** AD_Table_ID=533 */
+/** VAF_TableView_ID=533 */
 public static int Table_ID;
  // =533;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_I_BPartner[").Append(Get_ID()).Append("
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -490,8 +490,8 @@ public String GetI_ErrorMsg()
 return (String)Get_Value("I_ErrorMsg");
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */

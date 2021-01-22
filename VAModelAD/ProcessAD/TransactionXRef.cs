@@ -113,8 +113,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private void InsertTrx (String sqlSubSelect)
 	{
 		String sql = "INSERT INTO T_Transaction "
-			+ "(AD_PInstance_ID, M_Transaction_ID,"
-			+ " AD_Client_ID, AD_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
+			+ "(VAF_JInstance_ID, M_Transaction_ID,"
+			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
 			+ " MovementType, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"
 			+ " MovementDate, MovementQty,"
 			+ " M_InOutLine_ID, M_InOut_ID,"
@@ -141,8 +141,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			
 			/*+ " Search_Order_ID, Search_Invoice_ID, Search_InOut_ID) "*/
 			//	Data
-		sql +=	 ") SELECT " + GetAD_PInstance_ID() + ", M_Transaction_ID,"
-			+ " AD_Client_ID, AD_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
+		sql +=	 ") SELECT " + GetVAF_JInstance_ID() + ", M_Transaction_ID,"
+			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
 			+ " MovementType, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"
 			+ " MovementDate, MovementQty,"
 			+ " M_InOutLine_ID, M_InOut_ID, "

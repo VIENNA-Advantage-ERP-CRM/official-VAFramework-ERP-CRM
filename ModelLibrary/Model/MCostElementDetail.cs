@@ -46,14 +46,14 @@ namespace VAdvantage.Model
             return base.AfterSave(newRecord, success);
         }
 
-        public static bool CreateCostElementDetail(Ctx ctx, int AD_Client_ID, int AD_Org_ID, MProduct Product, int M_ASI_ID,
+        public static bool CreateCostElementDetail(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, MProduct Product, int M_ASI_ID,
                                                      MAcctSchema mas, int M_costElement_ID, string windowName, MCostDetail cd, decimal amt, decimal qty)
         {
             try
             {
                 MCostElementDetail ced = new MCostElementDetail(ctx, 0, cd.Get_Trx());
-                ced.SetAD_Client_ID(AD_Client_ID);
-                ced.SetAD_Org_ID(AD_Org_ID);
+                ced.SetVAF_Client_ID(VAF_Client_ID);
+                ced.SetVAF_Org_ID(VAF_Org_ID);
                 ced.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
                 ced.SetM_CostElement_ID(M_costElement_ID);
                 ced.SetM_Product_ID(Product.GetM_Product_ID());

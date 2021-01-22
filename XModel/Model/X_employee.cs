@@ -36,7 +36,7 @@ public X_employee (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 //static long serialVersionUID 27523912829005L;
 /** Last Updated Timestamp 5/8/2009 6:28:32 PM */
 public static long updatedMS = 1241787512216L;
-/** AD_Table_ID=1000003 */
+/** VAF_TableView_ID=1000003 */
 public static int Table_ID=1000003;
 
 /** TableName=employee */
@@ -70,18 +70,18 @@ StringBuilder sb = new StringBuilder ("X_employee[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Language.
-@param AD_Language_ID System Language */
-public void SetAD_Language_ID (int AD_Language_ID)
+@param VAF_Language_ID System Language */
+public void SetVAF_Language_ID (int VAF_Language_ID)
 {
-if (AD_Language_ID <= 0) Set_Value ("AD_Language_ID", null);
+if (VAF_Language_ID <= 0) Set_Value ("VAF_Language_ID", null);
 else
-Set_Value ("AD_Language_ID", AD_Language_ID);
+Set_Value ("VAF_Language_ID", VAF_Language_ID);
 }
 /** Get Language.
 @return System Language */
-public int GetAD_Language_ID() 
+public int GetVAF_Language_ID() 
 {
-int? ii = (int?)Get_Value("AD_Language_ID");
+int? ii = (int?)Get_Value("VAF_Language_ID");
 if (ii == null) return 0;
 return (int)ii;
 }

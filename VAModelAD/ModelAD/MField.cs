@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MField
  * Purpose        : to get fields from current/base table. 
- * Class Used     : MField inherits X_AD_Field class
+ * Class Used     : MField inherits X_VAF_Field class
  * Chronological    Development
  * Raghunandan      30-March-2009 & 07-May-2009
   ******************************************************/
@@ -20,7 +20,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-   public class MField : X_AD_Field
+   public class MField : X_VAF_Field
     {
         //Column
         private MColumn _column = null;
@@ -34,22 +34,22 @@ namespace VAdvantage.Model
         {
             //this(parent.GetCtx(), 0, parent.Get_TrxName());
             SetClientOrg(parent);
-            SetAD_Tab_ID(parent.GetAD_Tab_ID());
+            SetVAF_Tab_ID(parent.GetVAF_Tab_ID());
         }
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Field_ID">id</param>
+        /// <param name="VAF_Field_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MField(Ctx ctx, int AD_Field_ID, Trx trxName)
-            : base(ctx, AD_Field_ID, trxName)
+        public MField(Ctx ctx, int VAF_Field_ID, Trx trxName)
+            : base(ctx, VAF_Field_ID, trxName)
         {
-            if (AD_Field_ID == 0)
+            if (VAF_Field_ID == 0)
             {
-                //	setAD_Tab_ID (0);	//	parent
-                //	setAD_Column_ID (0);
+                //	setVAF_Tab_ID (0);	//	parent
+                //	setVAF_Column_ID (0);
                 //	setName (null);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsCentrallyMaintained(true);	// Y
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
             //this(parent.getCtx(), 0, parent.get_TrxName());
             // copyValues(from, this);
             SetClientOrg(parent);
-            SetAD_Tab_ID(parent.GetAD_Tab_ID());
+            SetVAF_Tab_ID(parent.GetVAF_Tab_ID());
             SetEntityType(parent.GetEntityType());
         }
 
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         public void SetColumn(MColumn column)
         {
             _column = column;
-            SetAD_Column_ID(column.GetAD_Column_ID());
+            SetVAF_Column_ID(column.GetVAF_Column_ID());
             SetName(column.GetName());
             SetDescription(column.GetDescription());
             SetHelp(column.GetHelp());
@@ -113,20 +113,20 @@ namespace VAdvantage.Model
         public MColumn GetColumn()
         {
             if (_column == null
-                || _column.GetAD_Column_ID() != GetAD_Column_ID())
-                _column = MColumn.Get(GetCtx(), GetAD_Column_ID());
+                || _column.GetVAF_Column_ID() != GetVAF_Column_ID())
+                _column = MColumn.Get(GetCtx(), GetVAF_Column_ID());
             return _column;
         }
 
         /// <summary>
-        ///	Set AD_Column_ID
+        ///	Set VAF_Column_ID
         /// </summary>
-        /// <param name="AD_Column_ID">column</param>
-        public new void SetAD_Column_ID(int AD_Column_ID)
+        /// <param name="VAF_Column_ID">column</param>
+        public new void SetVAF_Column_ID(int VAF_Column_ID)
         {
-            if (_column != null && _column.GetAD_Column_ID() != AD_Column_ID)
+            if (_column != null && _column.GetVAF_Column_ID() != VAF_Column_ID)
                 _column = null;
-            base.SetAD_Column_ID(AD_Column_ID);
+            base.SetVAF_Column_ID(VAF_Column_ID);
         }
 
         /// <summary>
@@ -154,10 +154,10 @@ namespace VAdvantage.Model
             }
 
             //	Sync Terminology
-            if ((newRecord || Is_ValueChanged("AD_Column_ID"))
+            if ((newRecord || Is_ValueChanged("VAF_Column_ID"))
                 && IsCentrallyMaintained())
             {
-                M_Element element = M_Element.GetOfColumn(GetCtx(), GetAD_Column_ID());
+                M_Element element = M_Element.GetOfColumn(GetCtx(), GetVAF_Column_ID());
                 SetName(element.GetName());
                 SetDescription(element.GetDescription());
                 SetHelp(element.GetHelp());

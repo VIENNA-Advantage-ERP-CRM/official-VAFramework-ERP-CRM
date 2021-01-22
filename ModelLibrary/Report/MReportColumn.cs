@@ -28,17 +28,17 @@ namespace VAdvantage.Report
    /// 	Copy
     /// </summary>
    /// <param name="ctx">context</param>
-   /// <param name="AD_Client_ID">parent</param>
-   /// <param name="AD_Org_ID">parent</param>
+   /// <param name="VAF_Client_ID">parent</param>
+   /// <param name="VAF_Org_ID">parent</param>
    /// <param name="PA_ReportColumnSet_ID">parent</param>
    /// <param name="source">copy source</param>
    /// <param name="trxName">transaction</param>
    /// <returns>report column</returns>
-	public static MReportColumn Copy (Ctx ctx, int AD_Client_ID, int AD_Org_ID, 
+	public static MReportColumn Copy (Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, 
 		int PA_ReportColumnSet_ID, MReportColumn source, Trx trxName)
 	{
 		MReportColumn retValue = new MReportColumn (ctx, 0, trxName);
-		MReportColumn.CopyValues(source, retValue, AD_Client_ID, AD_Org_ID);
+		MReportColumn.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
 		//
 		retValue.SetPA_ReportColumnSet_ID(PA_ReportColumnSet_ID);	//	parent
 		retValue.SetOper_1_ID(0);

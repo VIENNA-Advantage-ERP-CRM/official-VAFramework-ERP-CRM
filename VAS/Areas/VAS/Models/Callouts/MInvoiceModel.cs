@@ -33,7 +33,7 @@ namespace VIS.Models
             result["IsReturnTrx"] = inv.IsReturnTrx().ToString();
             result["C_BPartner_ID"] = inv.GetC_BPartner_ID().ToString();
             result["M_PriceList_ID"] = inv.GetM_PriceList_ID().ToString();
-            result["AD_Org_ID"] = inv.GetAD_Org_ID().ToString();
+            result["VAF_Org_ID"] = inv.GetVAF_Org_ID().ToString();
             result["C_BPartner_Location_ID"] = inv.GetC_BPartner_Location_ID().ToString();
             result["C_Currency_ID"] = inv.GetC_Currency_ID().ToString();
             //result["DateAcct"] = Util.GetValueOfString(inv.GetDateAcct());
@@ -66,7 +66,7 @@ namespace VIS.Models
             MBPartner bp = new MBPartner(ctx, inv.GetC_BPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
-                C_Tax_ID = GetExemptTax(ctx, inv.GetAD_Org_ID());
+                C_Tax_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
                 return C_Tax_ID;
             }
             if (M_Product_ID > 0)
@@ -100,8 +100,8 @@ namespace VIS.Models
                     }
                 }
                 dsLoc = null;
-                sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN AD_OrgInfo org ON loc.C_Location_ID = org.C_Location_ID WHERE org.AD_Org_ID ="
-                        + inv.GetAD_Org_ID() + " AND org.IsActive = 'Y'";
+                sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgDetail org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
+                        + inv.GetVAF_Org_ID() + " AND org.IsActive = 'Y'";
                 dsLoc = DB.ExecuteDataset(sql, null, null);
                 if (dsLoc != null)
                 {
@@ -519,7 +519,7 @@ namespace VIS.Models
             int _c_Bill_Location_Id = 0;
             int _CountVATAX = 0;
 
-            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
+            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
             retDic["_CountVATAX"] = _CountVATAX.ToString();
 
             Dictionary<string, string> order = GetInvoice(ctx, C_Invoice_ID.ToString());
@@ -531,11 +531,11 @@ namespace VIS.Models
 
             if (_CountVATAX > 0)
             {
-                sql = "SELECT VATAX_TaxRule FROM AD_OrgInfo WHERE AD_Org_ID=" + Util.GetValueOfInt(order["AD_Org_ID"]) + " AND IsActive ='Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID();
+                sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + Util.GetValueOfInt(order["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID();
                 string taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
                 retDic["taxRule"] = taxRule.ToString();
 
-                sql = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'C_Tax_ID' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_TaxCategory')";
+                sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
                 {
                     var paramString = (C_Invoice_ID).ToString() + "," + (M_Product_ID).ToString() + "," + (C_Charge_ID).ToString();
@@ -590,7 +590,7 @@ namespace VIS.Models
             MBPartner bp = new MBPartner(ctx, inv.GetC_BPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
-                C_Tax_ID = GetExemptTax(ctx, inv.GetAD_Org_ID());
+                C_Tax_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
                 return C_Tax_ID;
             }
             if (M_Product_ID > 0)
@@ -624,8 +624,8 @@ namespace VIS.Models
                     }
                 }
                 dsLoc = null;
-                sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN AD_OrgInfo org ON loc.C_Location_ID = org.C_Location_ID WHERE org.AD_Org_ID ="
-                        + inv.GetAD_Org_ID() + " AND org.IsActive = 'Y'";
+                sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgDetail org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
+                        + inv.GetVAF_Org_ID() + " AND org.IsActive = 'Y'";
                 dsLoc = DB.ExecuteDataset(sql, null, null);
                 if (dsLoc != null)
                 {
@@ -763,13 +763,13 @@ namespace VIS.Models
 
         // Return Exempted Tax Fro the Organization
         VLogger log = VLogger.GetVLogger("Tax");
-        private int GetExemptTax(Ctx ctx, int AD_Org_ID)
+        private int GetExemptTax(Ctx ctx, int VAF_Org_ID)
         {
             int C_Tax_ID = 0;
             String sql = "SELECT t.C_Tax_ID "
                 + "FROM C_Tax t"
-                + " INNER JOIN AD_Org o ON (t.AD_Client_ID=o.AD_Client_ID) "
-                + "WHERE t.IsActive='Y' AND t.IsTaxExempt='Y' AND o.AD_Org_ID= " + AD_Org_ID
+                + " INNER JOIN VAF_Org o ON (t.VAF_Client_ID=o.VAF_Client_ID) "
+                + "WHERE t.IsActive='Y' AND t.IsTaxExempt='Y' AND o.VAF_Org_ID= " + VAF_Org_ID
                 + "ORDER BY t.Rate DESC";
             bool found = false;
             try
@@ -790,7 +790,7 @@ namespace VIS.Models
             if (C_Tax_ID == 0)
             {
                 log.SaveError("TaxCriteriaNotFound", Msg.GetMsg(ctx, "TaxNoExemptFound")
-                    + (found ? "" : " (Tax/Org=" + AD_Org_ID + " not found)"));
+                    + (found ? "" : " (Tax/Org=" + VAF_Org_ID + " not found)"));
             }
             return C_Tax_ID;
         }
@@ -986,7 +986,7 @@ namespace VIS.Models
             int Invoice_ID = Util.GetValueOfInt(fields);
             DataSet _ds = null;
             string _Sql;
-            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'", null, null)) > 0)
+            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'", null, null)) > 0)
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //Added 2 new fields to get VA009_PaymentMethod_ID and VA009_PaymentBaseType To Set the corrosponding value on Payment Window..
@@ -1103,7 +1103,7 @@ namespace VIS.Models
             DateTime? payDate = Util.GetValueOfDateTime(paramValue[2]);
             Dictionary<string, object> retValue = null;
             string sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.C_Currency_ID,"
-                + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.AD_Client_ID, i.AD_Org_ID) as OpenAmt,"
+                + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.VAF_Client_ID, i.VAF_Org_ID) as OpenAmt,"
             + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced,'" + payDate + "') As DiscountAmt, i.IsSOTrx "
             + "FROM C_Invoice_v i, C_BankAccount ba "
             + "WHERE i.C_Invoice_ID = " + C_Invoice_ID + " AND ba.C_BankAccount_ID = " + C_BankAccount_ID;
@@ -1146,7 +1146,7 @@ namespace VIS.Models
             int _c_invoice_Id = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
             int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
-            int _ad_Client_Id = Util.GetValueOfInt(paramValue[4].ToString());
+            int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _c_BPartner_Id = Util.GetValueOfInt(paramValue[5].ToString());
             //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
             //decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
@@ -1223,7 +1223,7 @@ namespace VIS.Models
                         if (ds.Tables[0].Rows.Count > 0)
                         {
                             //Flat Discount
-                            PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                            PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
                             _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
                             //end
                             PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
@@ -1242,7 +1242,7 @@ namespace VIS.Models
                     if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                     {
                         //Flat Discount
-                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
+                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
                        _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
                         //End
                         PriceList = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceList"]);
@@ -1275,7 +1275,7 @@ namespace VIS.Models
                             if (ds.Tables[0].Rows.Count > 0)
                             {
                                 //Flat Discount
-                                PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                                PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
                                 _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
                                 //end
                                 PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
@@ -1294,7 +1294,7 @@ namespace VIS.Models
                                     if (ds2.Tables[0].Rows.Count > 0)
                                     {
                                         //Flat Discount
-                                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _ad_Client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
+                                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
                                                                     _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
                                         //End
                                         PriceList = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceList"]);

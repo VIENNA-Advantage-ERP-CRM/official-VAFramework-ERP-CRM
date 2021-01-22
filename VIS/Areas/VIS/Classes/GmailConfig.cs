@@ -23,9 +23,9 @@ namespace VIS.Classes
     {
         private CalendarService _calenderService;
         private TasksService _service; // We don't need individual service instances for each client.
-        private int AD_User_ID = 0;
-        private int AD_Client_ID = 0;
-        private int AD_Org_ID = 0;
+        private int VAF_UserContact_ID = 0;
+        private int VAF_Client_ID = 0;
+        private int VAF_Org_ID = 0;
         private bool isTask = true;
         private bool isContact = false;
         string authCode = string.Empty;
@@ -45,14 +45,14 @@ namespace VIS.Classes
         //#endregion
 
 
-        public GmailConfig(int AD_user_ID, int AD_Client_ID, int AD_Org_ID, string authCode, bool isTask,bool isContact)
+        public GmailConfig(int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, string authCode, bool isTask,bool isContact)
         {
             this.authCode = authCode;
             this.isTask = isTask;
             this.isContact = isContact;
-            this.AD_User_ID = AD_user_ID;
-            this.AD_Client_ID = AD_Client_ID;
-            this.AD_Org_ID = AD_Org_ID;
+            this.VAF_UserContact_ID = VAF_UserContact_ID;
+            this.VAF_Client_ID = VAF_Client_ID;
+            this.VAF_Org_ID = VAF_Org_ID;
 
             //SecureEngine.Decrypt("asdas");
 
@@ -294,15 +294,15 @@ namespace VIS.Classes
             {
                 sql.Clear();
                 sql.Append("select  appointmentsinfo_id From APPOINTMENTSINFO ")
-                            .Append(" where utaskid='" + tasks.Items[i].Id + "' and AD_User_ID=" + AD_User_ID);
+                            .Append(" where utaskid='" + tasks.Items[i].Id + "' and VAF_UserContact_ID=" + VAF_UserContact_ID);
                 DataSet ds = DB.ExecuteDataset(sql.ToString());
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
                 {
                     if (tasks.Items[i].Title != null && tasks.Items[i].Title != "" && tasks.Items[i].Completed == null)
                     {
                         VAdvantage.Model.MAppointmentsInfo ainfo = new VAdvantage.Model.MAppointmentsInfo(ctx, 0, null);
-                        ainfo.SetAD_Org_ID(AD_Org_ID);
-                        ainfo.SetAD_Client_ID(AD_Client_ID);
+                        ainfo.SetVAF_Org_ID(VAF_Org_ID);
+                        ainfo.SetVAF_Client_ID(VAF_Client_ID);
                         ainfo.SetIsTask(true);
                         ainfo.SetAppointmentCategory_ID(appointCategoryID);
                         if (tasks.Items[i].Completed == null)
@@ -315,7 +315,7 @@ namespace VIS.Classes
                             ainfo.SetStatus(10);
                             ainfo.SetTaskStatus(10);
                         }
-                        ainfo.SetAD_User_ID(AD_User_ID);
+                        ainfo.SetVAF_UserContact_ID(VAF_UserContact_ID);
                         ainfo.SetSubject(tasks.Items[i].Title);
                         if (tasks.Items[i].Notes != null)
                         {
@@ -354,7 +354,7 @@ namespace VIS.Classes
                         {
                             sql.Clear();
                             sql.Append("Update APPOINTMENTSINFO set LastLocalUpdated=" + SetTime(ainfo.GetUpdated()) +
-                                " , Updated=" + SetTime(ainfo.GetUpdated()) + ", CreatedBY= " + AD_User_ID + ", UpdatedBy=" + AD_User_ID +
+                                " , Updated=" + SetTime(ainfo.GetUpdated()) + ", CreatedBY= " + VAF_UserContact_ID + ", UpdatedBy=" + VAF_UserContact_ID +
                                 ",LastGmailUpdated=" + GlobalVariable.TO_DATE(Convert.ToDateTime(tasks.Items[i].Updated), false) + " where APPOINTMENTSINFO_ID=" + ainfo.GetAppointmentsInfo_ID());
                             int result = DB.ExecuteQuery(sql.ToString());
                         }
@@ -450,13 +450,13 @@ namespace VIS.Classes
 
                         sql.Clear();
                         sql.Append("select  appointmentsinfo_id From APPOINTMENTSINFO ")
-                                   .Append(" where utaskid='" + e.Items[i].Id + "' and AD_User_ID=" + AD_User_ID);
+                                   .Append(" where utaskid='" + e.Items[i].Id + "' and VAF_UserContact_ID=" + VAF_UserContact_ID);
                         DataSet ds = DB.ExecuteDataset(sql.ToString());
                         if (ds == null || ds.Tables[0].Rows.Count == 0)
                         {
-                            ainfo.SetAD_Org_ID(AD_Org_ID);
-                            ainfo.SetAD_Client_ID(AD_Client_ID);
-                            ainfo.SetAD_User_ID(AD_User_ID);
+                            ainfo.SetVAF_Org_ID(VAF_Org_ID);
+                            ainfo.SetVAF_Client_ID(VAF_Client_ID);
+                            ainfo.SetVAF_UserContact_ID(VAF_UserContact_ID);
                             ainfo.SetIsTask(false);
                             ainfo.SetUTaskID(e.Items[i].Id);
                             ainfo.SetAppointmentCategory_ID(appointCategoryID);
@@ -576,7 +576,7 @@ namespace VIS.Classes
                             {
                                 sql.Clear();
                                 sql.Append("Update APPOINTMENTSINFO set LastLocalUpdated=" + SetTime(ainfo.GetUpdated()) +
-                                    " , Updated=" + SetTime(ainfo.GetUpdated()) + ", CreatedBY= " + AD_User_ID + ", UpdatedBy=" + AD_User_ID +
+                                    " , Updated=" + SetTime(ainfo.GetUpdated()) + ", CreatedBY= " + VAF_UserContact_ID + ", UpdatedBy=" + VAF_UserContact_ID +
                                     ",LastGmailUpdated=" + GlobalVariable.TO_DATE(Convert.ToDateTime(e.Items[i].Updated), false) + " where APPOINTMENTSINFO_ID=" + ainfo.GetAppointmentsInfo_ID());
                                 int result = DB.ExecuteQuery(sql.ToString());
                             }
@@ -607,7 +607,7 @@ namespace VIS.Classes
             //flag=IsTask
             if (flag)
             {
-                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + AD_User_ID + " and AD_Client_ID=" + AD_Client_ID;
+                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and VAF_UserContact_ID=" + VAF_UserContact_ID + " and VAF_Client_ID=" + VAF_Client_ID;
                 object configID = DB.ExecuteScalar(sql);
                 if (configID != null && configID != DBNull.Value)
                 {
@@ -617,14 +617,14 @@ namespace VIS.Classes
                 else
                 {
                     int ID = DB.GetNextID(0, "WSP_GmailConfiguration", null);
-                    sql = @"Insert into WSP_GmailConfiguration (ad_Org_ID,AD_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,AD_User_ID,WSP_TASKrefreshtoken)
-                                         VALUES(" + AD_Org_ID + "," + AD_Client_ID + ",'Y'," + AD_User_ID + "," + AD_User_ID + "," + ID + "," + AD_User_ID + ",'" + token + "')";
+                    sql = @"Insert into WSP_GmailConfiguration (vaf_org_ID,VAF_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,VAF_UserContact_ID,WSP_TASKrefreshtoken)
+                                         VALUES(" + VAF_Org_ID + "," + VAF_Client_ID + ",'Y'," + VAF_UserContact_ID + "," + VAF_UserContact_ID + "," + ID + "," + VAF_UserContact_ID + ",'" + token + "')";
                     int res = DB.ExecuteQuery(sql, null);
                 }
             }
             else if(isContact)
             {
-                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + AD_User_ID + " and AD_Client_ID=" + AD_Client_ID;
+                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and VAF_UserContact_ID=" + VAF_UserContact_ID + " and VAF_Client_ID=" + VAF_Client_ID;
                 object configID = DB.ExecuteScalar(sql);
                 if (configID != null && configID != DBNull.Value)
                 {
@@ -634,14 +634,14 @@ namespace VIS.Classes
                 else
                 {
                     int ID = DB.GetNextID(0, "WSP_GmailConfiguration", null);
-                    sql = @"Insert into WSP_GmailConfiguration (ad_Org_ID,AD_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,AD_User_ID,WSP_Contactrefreshtoken)
-                                         VALUES(" + AD_Org_ID + "," + AD_Client_ID + ",'Y'," + AD_User_ID + "," + AD_User_ID + "," + ID + "," + AD_User_ID + ",'" + token + "')";
+                    sql = @"Insert into WSP_GmailConfiguration (vaf_org_ID,VAF_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,VAF_UserContact_ID,WSP_Contactrefreshtoken)
+                                         VALUES(" + VAF_Org_ID + "," + VAF_Client_ID + ",'Y'," + VAF_UserContact_ID + "," + VAF_UserContact_ID + "," + ID + "," + VAF_UserContact_ID + ",'" + token + "')";
                     int res = DB.ExecuteQuery(sql, null);
                 }
              }
             else
             {
-                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + AD_User_ID + " and AD_Client_ID=" + AD_Client_ID;
+                string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and VAF_UserContact_ID=" + VAF_UserContact_ID + " and VAF_Client_ID=" + VAF_Client_ID;
                 object configID = DB.ExecuteScalar(sql);
                 if (configID != null && configID != DBNull.Value)
                 {
@@ -651,8 +651,8 @@ namespace VIS.Classes
                 else
                 {
                     int ID = DB.GetNextID(0, "WSP_GmailConfiguration", null);
-                    sql = @"Insert into WSP_GmailConfiguration (ad_Org_ID,AD_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,AD_User_ID,WSP_CalendarRefreshToken)
-                                         VALUES(" + AD_Org_ID + "," + AD_Client_ID + ",'Y'," + AD_User_ID + "," + AD_User_ID + "," + ID + "," + AD_User_ID + ",'" + token + "')";
+                    sql = @"Insert into WSP_GmailConfiguration (vaf_org_ID,VAF_Client_ID,IsActive,CreatedBy,UpdatedBy,WSP_GmailConfiguration_ID,VAF_UserContact_ID,WSP_CalendarRefreshToken)
+                                         VALUES(" + VAF_Org_ID + "," + VAF_Client_ID + ",'Y'," + VAF_UserContact_ID + "," + VAF_UserContact_ID + "," + ID + "," + VAF_UserContact_ID + ",'" + token + "')";
                     int res = DB.ExecuteQuery(sql, null);
                 }
             }

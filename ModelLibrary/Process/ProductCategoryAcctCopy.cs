@@ -109,7 +109,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Insert new Products
             sql = "INSERT INTO M_Product_Acct "
                 + "(M_Product_ID, C_AcctSchema_ID,"
-                + " AD_Client_ID, AD_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
+                + " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
                 + " P_Revenue_Acct, P_Expense_Acct, P_CostAdjustment_Acct, P_InventoryClearing_Acct, P_Asset_Acct, P_CoGs_Acct,"
                 + " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct,"
                 + " P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct "
@@ -117,7 +117,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "  ,P_Resource_Absorption_Acct, P_MaterialOverhd_Acct "
                 + ") "
                 + "SELECT p.M_Product_ID, acct.C_AcctSchema_ID,"
-                + " p.AD_Client_ID, p.AD_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
+                + " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
                 + " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
                 + " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct,"
                 + " acct.P_TradeDiscountRec_Acct, acct.P_TradeDiscountGrant_Acct "

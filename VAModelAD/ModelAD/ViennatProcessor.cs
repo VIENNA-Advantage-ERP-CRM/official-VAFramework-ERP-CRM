@@ -26,8 +26,8 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Client
         /// </summary>
-        /// <returns>AD_Client_ID</returns>
-         int GetAD_Client_ID();
+        /// <returns>VAF_Client_ID</returns>
+         int GetVAF_Client_ID();
 
         /// <summary>
         ///	Get Name
@@ -60,10 +60,10 @@ namespace VAdvantage.Model
          int GetFrequency();
 
         /// <summary>
-        ///Get AD_Schedule_ID
+        ///Get VAF_Plan_ID
         /// </summary>
         /// <returns>schedule</returns>
-         int GetAD_Schedule_ID();
+         int GetVAF_Plan_ID();
 
         /// <summary>
         ///Get Unique ID

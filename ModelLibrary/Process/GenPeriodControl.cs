@@ -23,7 +23,7 @@ namespace VAdvantage.Process
         private int _C_Period_ID = 0;
         //Organization
         private string orgs = null;
-        private string[] _AD_Org_ID;
+        private string[] _VAF_Org_ID;
 
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace VAdvantage.Process
                 {
 
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
                     orgs = Util.GetValueOfString(para[i].GetParameter());
                 }
@@ -68,7 +68,7 @@ namespace VAdvantage.Process
             // Split multiselected organizations to get array
             if (!String.IsNullOrEmpty(orgs))
             {
-                _AD_Org_ID = orgs.Split(',');
+                _VAF_Org_ID = orgs.Split(',');
             }
 
 
@@ -80,10 +80,10 @@ namespace VAdvantage.Process
                     continue;
 
                 // loop on multiple selected organizations
-                for (int j = 0; j < _AD_Org_ID.Length; j++)
+                for (int j = 0; j < _VAF_Org_ID.Length; j++)
                 {
                     MPeriodControl pc = new MPeriodControl(period, docBaseType);
-                    pc.SetAD_Org_ID(Util.GetValueOfInt(_AD_Org_ID[j]));
+                    pc.SetVAF_Org_ID(Util.GetValueOfInt(_VAF_Org_ID[j]));
                     if (pc.Save())
                     {
                         count++;

@@ -11,21 +11,21 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_PrintFormat
+    /** Generated Model for VAF_Print_Rpt_Layout
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_PrintFormat : PO
+    public class X_VAF_Print_Rpt_Layout : PO
     {
-        public X_AD_PrintFormat(Context ctx, int AD_PrintFormat_ID, Trx trxName)
-            : base(ctx, AD_PrintFormat_ID, trxName)
+        public X_VAF_Print_Rpt_Layout(Context ctx, int VAF_Print_Rpt_Layout_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_Layout_ID, trxName)
         {
-            /** if (AD_PrintFormat_ID == 0)
+            /** if (VAF_Print_Rpt_Layout_ID == 0)
             {
-            SetAD_PrintColor_ID (0);
-            SetAD_PrintFont_ID (0);
-            SetAD_PrintFormat_ID (0);
-            SetAD_PrintPaper_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Print_Rpt_Colour_ID (0);
+            SetVAF_Print_Rpt_Font_ID (0);
+            SetVAF_Print_Rpt_Layout_ID (0);
+            SetVAF_Print_Rpt_Paper_ID (0);
+            SetVAF_TableView_ID (0);
             SetFooterMargin (0);
             SetHeaderMargin (0);
             SetIsDefault (false);
@@ -37,16 +37,16 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_PrintFormat(Ctx ctx, int AD_PrintFormat_ID, Trx trxName)
-            : base(ctx, AD_PrintFormat_ID, trxName)
+        public X_VAF_Print_Rpt_Layout(Ctx ctx, int VAF_Print_Rpt_Layout_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_Layout_ID, trxName)
         {
-            /** if (AD_PrintFormat_ID == 0)
+            /** if (VAF_Print_Rpt_Layout_ID == 0)
             {
-            SetAD_PrintColor_ID (0);
-            SetAD_PrintFont_ID (0);
-            SetAD_PrintFormat_ID (0);
-            SetAD_PrintPaper_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Print_Rpt_Colour_ID (0);
+            SetVAF_Print_Rpt_Font_ID (0);
+            SetVAF_Print_Rpt_Layout_ID (0);
+            SetVAF_Print_Rpt_Paper_ID (0);
+            SetVAF_TableView_ID (0);
             SetFooterMargin (0);
             SetHeaderMargin (0);
             SetIsDefault (false);
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PrintFormat(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Print_Rpt_Layout(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PrintFormat(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Print_Rpt_Layout(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -81,14 +81,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PrintFormat(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Print_Rpt_Layout(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_PrintFormat()
+        static X_VAF_Print_Rpt_Layout()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -97,12 +97,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27673821570957L;
         /** Last Updated Timestamp 2/6/2014 7:47:34 PM */
         public static long updatedMS = 1391696254168L;
-        /** AD_Table_ID=493 */
+        /** VAF_TableView_ID=493 */
         public static int Table_ID;
         // =493;
 
-        /** TableName=AD_PrintFormat */
-        public static String Table_Name = "AD_PrintFormat";
+        /** TableName=VAF_Print_Rpt_Layout */
+        public static String Table_Name = "VAF_Print_Rpt_Layout";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_PrintFormat[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Print_Rpt_Layout[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Business View.
@@ -156,125 +156,125 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Print Color.
-        @param AD_PrintColor_ID Color used for printing and display */
-        public void SetAD_PrintColor_ID(int AD_PrintColor_ID)
+        @param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+        public void SetVAF_Print_Rpt_Colour_ID(int VAF_Print_Rpt_Colour_ID)
         {
-            if (AD_PrintColor_ID < 1) throw new ArgumentException("AD_PrintColor_ID is mandatory.");
-            Set_Value("AD_PrintColor_ID", AD_PrintColor_ID);
+            if (VAF_Print_Rpt_Colour_ID < 1) throw new ArgumentException("VAF_Print_Rpt_Colour_ID is mandatory.");
+            Set_Value("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
         }
         /** Get Print Color.
         @return Color used for printing and display */
-        public int GetAD_PrintColor_ID()
+        public int GetVAF_Print_Rpt_Colour_ID()
         {
-            Object ii = Get_Value("AD_PrintColor_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Print Font.
-        @param AD_PrintFont_ID Maintain Print Font */
-        public void SetAD_PrintFont_ID(int AD_PrintFont_ID)
+        @param VAF_Print_Rpt_Font_ID Maintain Print Font */
+        public void SetVAF_Print_Rpt_Font_ID(int VAF_Print_Rpt_Font_ID)
         {
-            if (AD_PrintFont_ID < 1) throw new ArgumentException("AD_PrintFont_ID is mandatory.");
-            Set_Value("AD_PrintFont_ID", AD_PrintFont_ID);
+            if (VAF_Print_Rpt_Font_ID < 1) throw new ArgumentException("VAF_Print_Rpt_Font_ID is mandatory.");
+            Set_Value("VAF_Print_Rpt_Font_ID", VAF_Print_Rpt_Font_ID);
         }
         /** Get Print Font.
         @return Maintain Print Font */
-        public int GetAD_PrintFont_ID()
+        public int GetVAF_Print_Rpt_Font_ID()
         {
-            Object ii = Get_Value("AD_PrintFont_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Font_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Print Format.
-        @param AD_PrintFormat_ID Data Print Format */
-        public void SetAD_PrintFormat_ID(int AD_PrintFormat_ID)
+        @param VAF_Print_Rpt_Layout_ID Data Print Format */
+        public void SetVAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
-            if (AD_PrintFormat_ID < 1) throw new ArgumentException("AD_PrintFormat_ID is mandatory.");
-            Set_ValueNoCheck("AD_PrintFormat_ID", AD_PrintFormat_ID);
+            if (VAF_Print_Rpt_Layout_ID < 1) throw new ArgumentException("VAF_Print_Rpt_Layout_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
         }
         /** Get Print Format.
         @return Data Print Format */
-        public int GetAD_PrintFormat_ID()
+        public int GetVAF_Print_Rpt_Layout_ID()
         {
-            Object ii = Get_Value("AD_PrintFormat_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Print Paper.
-        @param AD_PrintPaper_ID Printer paper definition */
-        public void SetAD_PrintPaper_ID(int AD_PrintPaper_ID)
+        @param VAF_Print_Rpt_Paper_ID Printer paper definition */
+        public void SetVAF_Print_Rpt_Paper_ID(int VAF_Print_Rpt_Paper_ID)
         {
-            if (AD_PrintPaper_ID < 1) throw new ArgumentException("AD_PrintPaper_ID is mandatory.");
-            Set_Value("AD_PrintPaper_ID", AD_PrintPaper_ID);
+            if (VAF_Print_Rpt_Paper_ID < 1) throw new ArgumentException("VAF_Print_Rpt_Paper_ID is mandatory.");
+            Set_Value("VAF_Print_Rpt_Paper_ID", VAF_Print_Rpt_Paper_ID);
         }
         /** Get Print Paper.
         @return Printer paper definition */
-        public int GetAD_PrintPaper_ID()
+        public int GetVAF_Print_Rpt_Paper_ID()
         {
-            Object ii = Get_Value("AD_PrintPaper_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Paper_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Print Table Format.
-        @param AD_PrintTableFormat_ID Table Format in Reports */
-        public void SetAD_PrintTableFormat_ID(int AD_PrintTableFormat_ID)
+        @param VAF_Print_Rpt_TblLayout_ID Table Format in Reports */
+        public void SetVAF_Print_Rpt_TblLayout_ID(int VAF_Print_Rpt_TblLayout_ID)
         {
-            if (AD_PrintTableFormat_ID <= 0) Set_Value("AD_PrintTableFormat_ID", null);
+            if (VAF_Print_Rpt_TblLayout_ID <= 0) Set_Value("VAF_Print_Rpt_TblLayout_ID", null);
             else
-                Set_Value("AD_PrintTableFormat_ID", AD_PrintTableFormat_ID);
+                Set_Value("VAF_Print_Rpt_TblLayout_ID", VAF_Print_Rpt_TblLayout_ID);
         }
         /** Get Print Table Format.
         @return Table Format in Reports */
-        public int GetAD_PrintTableFormat_ID()
+        public int GetVAF_Print_Rpt_TblLayout_ID()
         {
-            Object ii = Get_Value("AD_PrintTableFormat_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_TblLayout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Report View.
-        @param AD_ReportView_ID View used to generate this report */
-        public void SetAD_ReportView_ID(int AD_ReportView_ID)
+        @param VAF_ReportView_ID View used to generate this report */
+        public void SetVAF_ReportView_ID(int VAF_ReportView_ID)
         {
-            if (AD_ReportView_ID <= 0) Set_ValueNoCheck("AD_ReportView_ID", null);
+            if (VAF_ReportView_ID <= 0) Set_ValueNoCheck("VAF_ReportView_ID", null);
             else
-                Set_ValueNoCheck("AD_ReportView_ID", AD_ReportView_ID);
+                Set_ValueNoCheck("VAF_ReportView_ID", VAF_ReportView_ID);
         }
         /** Get Report View.
         @return View used to generate this report */
-        public int GetAD_ReportView_ID()
+        public int GetVAF_ReportView_ID()
         {
-            Object ii = Get_Value("AD_ReportView_ID");
+            Object ii = Get_Value("VAF_ReportView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_ValueNoCheck("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_ValueNoCheck("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

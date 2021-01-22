@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_User_OrgAccess
+/** Generated Model for VAF_UserContact_OrgRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_User_OrgAccess : PO
+public class X_VAF_UserContact_OrgRights : PO
 {
-public X_AD_User_OrgAccess (Context ctx, int AD_User_OrgAccess_ID, Trx trxName) : base (ctx, AD_User_OrgAccess_ID, trxName)
+public X_VAF_UserContact_OrgRights (Context ctx, int VAF_UserContact_OrgRights_ID, Trx trxName) : base (ctx, VAF_UserContact_OrgRights_ID, trxName)
 {
-/** if (AD_User_OrgAccess_ID == 0)
+/** if (VAF_UserContact_OrgRights_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetIsReadOnly (false);	// N
 }
  */
 }
-public X_AD_User_OrgAccess (Ctx ctx, int AD_User_OrgAccess_ID, Trx trxName) : base (ctx, AD_User_OrgAccess_ID, trxName)
+public X_VAF_UserContact_OrgRights (Ctx ctx, int VAF_UserContact_OrgRights_ID, Trx trxName) : base (ctx, VAF_UserContact_OrgRights_ID, trxName)
 {
-/** if (AD_User_OrgAccess_ID == 0)
+/** if (VAF_UserContact_OrgRights_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetIsReadOnly (false);	// N
 }
  */
@@ -39,7 +39,7 @@ SetIsReadOnly (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_User_OrgAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserContact_OrgRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_User_OrgAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_User_OrgAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserContact_OrgRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_User_OrgAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_User_OrgAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserContact_OrgRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_User_OrgAccess()
+static X_VAF_UserContact_OrgRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_User_OrgAccess()
 //static long serialVersionUID 27562514365620L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048831L;
-/** AD_Table_ID=769 */
+/** VAF_TableView_ID=769 */
 public static int Table_ID;
  // =769;
 
-/** TableName=AD_User_OrgAccess */
-public static String Table_Name="AD_User_OrgAccess";
+/** TableName=VAF_UserContact_OrgRights */
+public static String Table_Name="VAF_UserContact_OrgRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_User_OrgAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserContact_OrgRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,7 +131,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Read Only.
 @param IsReadOnly Field is read only */

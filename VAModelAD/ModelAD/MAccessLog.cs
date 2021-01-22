@@ -75,16 +75,16 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="email">email</param>
-        /// <param name="AD_Table_ID">table</param>
-        /// <param name="AD_Column_ID">column</param>
+        /// <param name="VAF_TableView_ID">table</param>
+        /// <param name="VAF_Column_ID">column</param>
         /// <param name="Record_ID">record</param>
         /// <param name="trxName">transaction</param>
-        public MVAFRightsLog(Context ctx, String email, int AD_Table_ID, int AD_Column_ID, 
+        public MVAFRightsLog(Context ctx, String email, int VAF_TableView_ID, int VAF_Column_ID, 
             int Record_ID, Trx trxName)
             : this(new Context(ctx), 0, trxName)
         {
-            SetAD_Table_ID(AD_Table_ID);
-            SetAD_Column_ID(AD_Column_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
+            SetVAF_Column_ID(VAF_Column_ID);
             SetRecord_ID(Record_ID);
             SetCreatedBy(email);
         }
@@ -97,30 +97,30 @@ namespace VAdvantage.Model
         {
             if (email == null || email.Length == 0)
                 return;
-            int AD_User_ID = GetAD_User_ID(email, GetAD_Client_ID());
-            Set_ValueNoCheck("CreatedBy", AD_User_ID);
-            SetUpdatedBy(AD_User_ID);
-            GetCtx().SetContext("##AD_User_ID", AD_User_ID.ToString());
-            SetAD_User_ID(AD_User_ID);
+            int VAF_UserContact_ID = GetVAF_UserContact_ID(email, GetVAF_Client_ID());
+            Set_ValueNoCheck("CreatedBy", VAF_UserContact_ID);
+            SetUpdatedBy(VAF_UserContact_ID);
+            GetCtx().SetContext("##VAF_UserContact_ID", VAF_UserContact_ID.ToString());
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
 
-        private int GetAD_User_ID(String email, int AD_Client_ID)
+        private int GetVAF_UserContact_ID(String email, int VAF_Client_ID)
         {
-            int AD_User_ID = 0;
+            int VAF_UserContact_ID = 0;
             IDataReader idr = null;
-            String sql = "SELECT AD_User_ID FROM AD_User "
+            String sql = "SELECT VAF_UserContact_ID FROM VAF_UserContact "
                 + "WHERE UPPER(EMail)=@param1"
-                + " AND AD_Client_ID=@param2";
+                + " AND VAF_Client_ID=@param2";
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@param1", email.ToUpper());
-                param[1] = new SqlParameter("@param2", AD_Client_ID);
+                param[1] = new SqlParameter("@param2", VAF_Client_ID);
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
-                    AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
+                    VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
                 }
                 idr.Close();
             }
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, email, e);
             }
 
-            return AD_User_ID;
+            return VAF_UserContact_ID;
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 retDic["C_Project_ID"]= io.GetC_Project_ID().ToString();
                 retDic["C_Campaign_ID"]= io.GetC_Campaign_ID().ToString();
                 retDic["C_Activity_ID"]= io.GetC_Activity_ID().ToString();
-                retDic["AD_OrgTrx_ID"]= io.GetAD_OrgTrx_ID().ToString();
+                retDic["VAF_OrgTrx_ID"]= io.GetVAF_OrgTrx_ID().ToString();
                 retDic["User1_ID"]= io.GetUser1_ID().ToString();
                 retDic["User2_ID"]= io.GetUser2_ID().ToString();
                 //retlst.Add(retValue);

@@ -16,14 +16,14 @@ namespace VAdvantage.Model
             _vo = vo;
         }
 
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            return _vo.AD_Tab_ID;
+            return _vo.VAF_Tab_ID;
         }
 
-        public int GetAD_TabPanel_ID()
+        public int GetVAF_TabPanel_ID()
         {
-            return _vo.AD_TabPanel_ID;
+            return _vo.VAF_TabPanel_ID;
         }
 
         public int GetSeqNo()

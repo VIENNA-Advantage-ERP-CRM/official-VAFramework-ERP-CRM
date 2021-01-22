@@ -11,7 +11,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-   public  class MTableAccess:X_AD_Table_Access
+   public  class MTableAccess:X_VAF_TableView_Rights
     {
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
             String inn = Msg.GetMsg(ctx,"Include");
             String ex = Msg.GetMsg(ctx,"Exclude");
             StringBuilder sb = new StringBuilder();
-            sb.Append(Msg.Translate(ctx, "AD_Table_ID"))
+            sb.Append(Msg.Translate(ctx, "VAF_TableView_ID"))
                 .Append("=").Append(GetTableName(ctx));
             if (ACCESSTYPERULE_Accessing.Equals(GetAccessTypeRule()))
                 sb.Append(" - ").Append(Msg.Translate(ctx, "IsReadOnly")).Append("=").Append(IsReadOnly());
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         {
             if (m_tableName == null)
             {
-                String sql = "SELECT TableName FROM AD_Table WHERE AD_Table_ID='" + GetAD_Table_ID() + "'";
+                String sql = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID='" + GetVAF_TableView_ID() + "'";
                 IDataReader dr = null;
                 try
                 {

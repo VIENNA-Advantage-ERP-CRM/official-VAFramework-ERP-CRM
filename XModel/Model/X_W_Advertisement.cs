@@ -76,7 +76,7 @@ static X_W_Advertisement()
 //static long serialVersionUID 27562514384866L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068077L;
-/** AD_Table_ID=579 */
+/** VAF_TableView_ID=579 */
 public static int Table_ID;
  // =579;
 
@@ -119,18 +119,18 @@ StringBuilder sb = new StringBuilder ("X_W_Advertisement[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -152,8 +152,8 @@ public String GetAdText()
 return (String)Get_Value("AdText");
 }
 
-/** C_BPartner_ID AD_Reference_ID=232 */
-public static int C_BPARTNER_ID_AD_Reference_ID=232;
+/** C_BPartner_ID VAF_Control_Ref_ID=232 */
+public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
 public void SetC_BPartner_ID (int C_BPartner_ID)
@@ -281,8 +281,8 @@ if (oo != null)
 return false;
 }
 
-/** PublishStatus AD_Reference_ID=310 */
-public static int PUBLISHSTATUS_AD_Reference_ID=310;
+/** PublishStatus VAF_Control_Ref_ID=310 */
+public static int PUBLISHSTATUS_VAF_Control_Ref_ID=310;
 /** Released = R */
 public static String PUBLISHSTATUS_Released = "R";
 /** Test = T */

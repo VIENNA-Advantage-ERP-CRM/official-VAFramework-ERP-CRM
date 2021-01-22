@@ -241,13 +241,13 @@ namespace VAdvantage.Classes
 
         ///<summary>
         ///Get SQL DataType
-        ///<param name="displayType">AD_Reference_ID</param>
+        ///<param name="displayType">VAF_Control_Ref_ID</param>
         ///<param name="columnName">name</param>
         ///<param name="fieldLength">length</param>
         /// </summary>
         public static string GetSQLDataType(int displayType, String columnName, int fieldLength)
         {
-            if (columnName.Equals("EntityType") || columnName.Equals("AD_Language") || columnName.Equals("DocBaseType"))
+            if (columnName.Equals("EntityType") || columnName.Equals("VAF_Language") || columnName.Equals("DocBaseType"))
                 return "VARCHAR2(" + fieldLength + ")";
             //	ID
             if (DisplayType.IsID(displayType))
@@ -266,7 +266,7 @@ namespace VAdvantage.Classes
                     return "NUMBER(10)";
                 else if (fieldLength < 4)
                     return "CHAR(" + fieldLength + ")";
-                else	//	EntityType, AD_Language	fallback
+                else	//	EntityType, VAF_Language	fallback
                     return "VARCHAR2(" + fieldLength + ")";
             }
             //

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_AD_WF_Process
+ * Class Used     : X_VAF_WFlow_Handler
  * Chronological Development
  * Veena Pandey     04-May-2009
  ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 using VAdvantage.ProcessEngine;
 namespace VAdvantage.WF
 {
-    public class MWFProcess : X_AD_WF_Process
+    public class MWFProcess : X_VAF_WFlow_Handler
     {
         /**	State Machine				*/
         private StateEngine _state = null;
@@ -42,12 +42,12 @@ namespace VAdvantage.WF
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Process_ID">process id</param>
+        /// <param name="VAF_WFlow_Handler_ID">process id</param>
         /// <param name="trxName">transaction</param>
-        public MWFProcess(Ctx ctx, int AD_WF_Process_ID, Trx trxName)
-            : base(ctx, AD_WF_Process_ID, trxName)
+        public MWFProcess(Ctx ctx, int VAF_WFlow_Handler_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_Handler_ID, trxName)
         {
-            if (AD_WF_Process_ID == 0)
+            if (VAF_WFlow_Handler_ID == 0)
                 throw new ArgumentException("Cannot create new WF Process directly");
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
@@ -82,17 +82,17 @@ namespace VAdvantage.WF
             }
 		    _wf = wf;
 		    _pi = pi;
-            SetAD_Client_ID(wf.GetAD_Client_ID());
+            SetVAF_Client_ID(wf.GetVAF_Client_ID());
 		    SetAD_Workflow_ID (wf.GetAD_Workflow_ID());
 		    SetPriority(wf.GetPriority());
 		    base.SetWFState (WFSTATE_NotStarted);
     		
             // vinay bhatt for window id
-            SetAD_Window_ID(pi.GetAD_Window_ID());
+            SetVAF_Screen_ID(pi.GetVAF_Screen_ID());
             //
 
 		    //	Document
-		    SetAD_Table_ID(wf.GetAD_Table_ID());
+		    SetVAF_TableView_ID(wf.GetVAF_TableView_ID());
 		    SetRecord_ID(pi.GetRecord_ID());
 		    if (GetPO() == null)
 		    {
@@ -102,11 +102,11 @@ namespace VAdvantage.WF
             else
                 SetTextMsg(GetPO());
 		    //	Responsible/User
-            if (wf.GetAD_WF_Responsible_ID() == 0)
-                SetAD_WF_Responsible_ID();
+            if (wf.GetVAF_WFlow_Incharge_ID() == 0)
+                SetVAF_WFlow_Incharge_ID();
             else
-                SetAD_WF_Responsible_ID(wf.GetAD_WF_Responsible_ID());
-            SetUser_ID((int)pi.GetAD_User_ID());		//	user starting
+                SetVAF_WFlow_Incharge_ID(wf.GetVAF_WFlow_Incharge_ID());
+            SetUser_ID((int)pi.GetVAF_UserContact_ID());		//	user starting
 		    //
 		    _state = new StateEngine (GetWFState());
             _state.SetCtx(GetCtx());
@@ -116,7 +116,7 @@ namespace VAdvantage.WF
             if (_po != null)
             {
                 // Set transaction organization on workflow process
-                SetAD_Org_ID(_po.GetAD_Org_ID());
+                SetVAF_Org_ID(_po.GetVAF_Org_ID());
                 _po.Lock();
             }
 	    }
@@ -133,7 +133,7 @@ namespace VAdvantage.WF
                 return _activities;
             //
             List<MWFActivity> list = new List<MWFActivity>();
-            String sql = "SELECT * FROM AD_WF_Activity WHERE AD_WF_Process_ID=" + GetAD_WF_Process_ID() + "";
+            String sql = "SELECT * FROM VAF_WFlow_Task WHERE VAF_WFlow_Handler_ID=" + GetVAF_WFlow_Handler_ID() + "";
             if (onlyActive)
                 sql += " AND Processed='N'";
             try
@@ -242,7 +242,7 @@ namespace VAdvantage.WF
             for (int i = 0; i < activities.Length; i++)
             {
                 MWFActivity activity = activities[i];
-                activity.SetAD_Window_ID(GetAD_Window_ID());
+                activity.SetVAF_Screen_ID(GetVAF_Screen_ID());
                 StateEngine activityState = activity.GetState();
 
                 //	Completed - Start Next
@@ -314,7 +314,7 @@ namespace VAdvantage.WF
         {
             log.Config("Last=" + last);
             //	transitions from the last processed node
-            MWFNodeNext[] transitions = GetWorkflow().GetNodeNexts(last.GetAD_WF_Node_ID(), last.GetAD_Client_ID());
+            MWFNodeNext[] transitions = GetWorkflow().GetNodeNexts(last.GetVAF_WFlow_Node_ID(), last.GetVAF_Client_ID());
             if (transitions == null || transitions.Length == 0)
             {
                 log.Config("none");
@@ -344,11 +344,11 @@ namespace VAdvantage.WF
                 //	Start new Activity
                 MWFActivity activity = new MWFActivity(this, transitions[i].GetAD_WF_Next_ID());
                 // set Last Activity ID property in current WF Activity
-                activity.SetLastActivity(last.GetAD_WF_Activity_ID());
+                activity.SetLastActivity(last.GetVAF_WFlow_Task_ID());
                 // new Thread(activity).Start();
                 //thred = new Thread(new ThreadStart(activity.Run));
-                //thred.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
-                //thred.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
+                //thred.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
+                //thred.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
                 activity.Run();
                // thred.Start();
 
@@ -362,15 +362,15 @@ namespace VAdvantage.WF
         /// <summary>
         /// Set Workflow Responsible. Searches for a Invoker.
         /// </summary>
-        public void SetAD_WF_Responsible_ID()
+        public void SetVAF_WFlow_Incharge_ID()
         {
-            int AD_WF_Responsible_ID = DataBase.DB.GetSQLValue(null,
+            int VAF_WFlow_Incharge_ID = DataBase.DB.GetSQLValue(null,
                     MRole.GetDefault(GetCtx(), false).AddAccessSQL(
-                    "SELECT AD_WF_Responsible_ID FROM AD_WF_Responsible "
-                    + "WHERE ResponsibleType='H' AND COALESCE(AD_User_ID,0)=0 "
-                    + "ORDER BY AD_Client_ID DESC",
-                    "AD_WF_Responsible", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO));
-            SetAD_WF_Responsible_ID(AD_WF_Responsible_ID);
+                    "SELECT VAF_WFlow_Incharge_ID FROM VAF_WFlow_Incharge "
+                    + "WHERE ResponsibleType='H' AND COALESCE(VAF_UserContact_ID,0)=0 "
+                    + "ORDER BY VAF_Client_ID DESC",
+                    "VAF_WFlow_Incharge", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO));
+            SetVAF_WFlow_Incharge_ID(VAF_WFlow_Incharge_ID);
         }
 
         /// <summary>
@@ -384,12 +384,12 @@ namespace VAdvantage.WF
         private void SetUser_ID (int User_ID)
 	    {
 		    //	Responsible
-		    MWFResponsible resp = MWFResponsible.Get(GetCtx(), GetAD_WF_Responsible_ID());
+		    MWFResponsible resp = MWFResponsible.Get(GetCtx(), GetVAF_WFlow_Incharge_ID());
 		    //	(1) User - Directly responsible
-		    int AD_User_ID = resp.GetAD_User_ID();
+		    int VAF_UserContact_ID = resp.GetVAF_UserContact_ID();
     		
 		    //	Invoker - get Sales Rep or last updater of Document
-		    if (AD_User_ID == 0 && resp.IsInvoker())
+		    if (VAF_UserContact_ID == 0 && resp.IsInvoker())
 		    {
 			    GetPO();
 			    //	(2) Doc Owner
@@ -397,28 +397,28 @@ namespace VAdvantage.WF
                 if (_po != null && (_po.GetType() == typeof(DocAction) || _po.GetType().GetInterface("DocAction") == typeof(DocAction)))
 			    {
 				    DocAction da = (DocAction)_po;
-				    AD_User_ID = da.GetDoc_User_ID();
+				    VAF_UserContact_ID = da.GetDoc_User_ID();
 			    }
 			    //	(2) Sales Rep
-			    if (AD_User_ID == 0 && _po != null && _po.Get_ColumnIndex("SalesRep_ID") != -1)
+			    if (VAF_UserContact_ID == 0 && _po != null && _po.Get_ColumnIndex("SalesRep_ID") != -1)
 			    {
 				    Object sr = _po.Get_Value("SalesRep_ID");
 				    if (sr != null && sr.GetType() == typeof(int))
-					    AD_User_ID = int.Parse(sr.ToString());
+					    VAF_UserContact_ID = int.Parse(sr.ToString());
 			    }
 			    //	(3) UpdatedBy
-			    if (AD_User_ID == 0 && _po != null)
-				    AD_User_ID = _po.GetUpdatedBy();
+			    if (VAF_UserContact_ID == 0 && _po != null)
+				    VAF_UserContact_ID = _po.GetUpdatedBy();
 		    }
     		
 		    //	(4) Process Owner
-		    if (AD_User_ID == 0 )
-			    AD_User_ID = User_ID;
+		    if (VAF_UserContact_ID == 0 )
+			    VAF_UserContact_ID = User_ID;
 		    //	Fallback 
-		    if (AD_User_ID == 0)
-			    AD_User_ID = GetCtx().GetAD_User_ID();
+		    if (VAF_UserContact_ID == 0)
+			    VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
 		    //
-		    SetAD_User_ID(AD_User_ID);
+		    SetVAF_UserContact_ID(VAF_UserContact_ID);
 	    }
 
         /// <summary>
@@ -469,32 +469,32 @@ namespace VAdvantage.WF
                 log.Warning("State=" + GetWFState() + " - cannot start");
                 return false;
             }
-            int AD_WF_Node_ID = GetWorkflow().GetAD_WF_Node_ID();
-            log.Fine("AD_WF_Node_ID=" + AD_WF_Node_ID);
+            int VAF_WFlow_Node_ID = GetWorkflow().GetVAF_WFlow_Node_ID();
+            log.Fine("VAF_WFlow_Node_ID=" + VAF_WFlow_Node_ID);
             SetWFState(WFSTATE_Running);
             try
             {
                 ////	Start first Activity with first Node
-                //MWFActivity activity = new MWFActivity(this, AD_WF_Node_ID);
+                //MWFActivity activity = new MWFActivity(this, VAF_WFlow_Node_ID);
                 ////new Thread(activity).Start();
                 //thred = new Thread(new ThreadStart(activity.Run));
-                ////System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-                ////System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+                ////System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+                ////System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
-                //thred.CurrentCulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseAD_Language());
-                //thred.CurrentUICulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseAD_Language());
+                //thred.CurrentCulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseVAF_Language());
+                //thred.CurrentUICulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseVAF_Language());
                 //thred.Start();
 
                 //Update By --Raghu
                 //Date-14-Feb-2012
                 //remove thread logic for workflow becouse to show updated workflow record on window
-                MWFActivity activity = new MWFActivity(this, AD_WF_Node_ID);
+                MWFActivity activity = new MWFActivity(this, VAF_WFlow_Node_ID);
                 activity.Run();
 
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "AD_WF_Node_ID=" + AD_WF_Node_ID, e);
+                log.Log(Level.SEVERE, "VAF_WFlow_Node_ID=" + VAF_WFlow_Node_ID, e);
                 SetTextMsg(e.Message);
                 SetWFState(StateEngine.STATE_TERMINATED);
                 return false;
@@ -513,7 +513,7 @@ namespace VAdvantage.WF
             if (GetRecord_ID() == 0)
                 return null;
 
-            MTable table = MTable.Get(GetCtx(), GetAD_Table_ID());
+            MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
             _po = table.GetPO(GetCtx(), GetRecord_ID(), Get_TrxName());
             return _po;
         }

@@ -205,7 +205,7 @@ namespace VAdvantage.Process
             }
 
             //	Just to be sure
-            sql = "DELETE FROM T_Replenish WHERE AD_PInstance_ID=" + GetAD_PInstance_ID();
+            sql = "DELETE FROM T_Replenish WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -220,11 +220,11 @@ namespace VAdvantage.Process
         private void FillTable(MWarehouse wh)
         {
             String sql = "INSERT INTO T_Replenish "
-                + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, AD_Client_ID, AD_Org_ID,"
+                + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                 + " ReplenishType, Level_Min, Level_Max, QtyOnHand,QtyReserved,QtyOrdered,"
                 + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
-                + "SELECT " + GetAD_PInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.AD_Client_ID, r.AD_Org_ID,"
+                + "SELECT " + GetVAF_JInstance_ID()
+                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                 + " r.ReplenishType, r.Level_Min, r.Level_Max, 0,0,0,"
                 + " po.C_BPartner_ID, po.Order_Min, po.Order_Pack, 0, ";
             if (_ReplenishmentCreate == null)
@@ -252,11 +252,11 @@ namespace VAdvantage.Process
             if (_C_BPartner_ID == 0 || _C_BPartner_ID == -1)
             {
                 sql = "INSERT INTO T_Replenish "
-                    + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, AD_Client_ID, AD_Org_ID,"
+                    + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                     + " ReplenishType, Level_Min, Level_Max,"
                     + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
-                    + "SELECT " + GetAD_PInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.AD_Client_ID, r.AD_Org_ID,"
+                    + "SELECT " + GetVAF_JInstance_ID()
+                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                     + " r.ReplenishType, r.Level_Min, r.Level_Max,"
                     //jz + " null, 1, 1, 0, ";
                     + VAdvantage.DataBase.DB.NULL("I", Types.VARCHAR)
@@ -274,7 +274,7 @@ namespace VAdvantage.Process
                     + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID
                     + " AND NOT EXISTS (SELECT * FROM T_Replenish t "
                         + "WHERE r.M_Product_ID=t.M_Product_ID"
-                        + " AND AD_PInstance_ID=" + GetAD_PInstance_ID() + ")";
+                        + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID() + ")";
 
                 no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 log.Fine("Insert (BP) #" + no);
@@ -291,7 +291,7 @@ namespace VAdvantage.Process
             {
                 sql += ", C_DocType_ID=" + _C_DocType_ID;
             }
-            sql += " WHERE AD_PInstance_ID=" + GetAD_PInstance_ID();
+            sql += " WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -304,7 +304,7 @@ namespace VAdvantage.Process
                     + "WHERE p.M_Product_ID=r.M_Product_ID AND p.IsActive='N')"
                 + " OR EXISTS (SELECT * FROM M_Replenish rr "
                     + " WHERE rr.M_Product_ID=r.M_Product_ID AND rr.M_Warehouse_ID=r.M_Warehouse_ID AND rr.IsActive='N'))"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -324,7 +324,7 @@ namespace VAdvantage.Process
             sql = "UPDATE T_Replenish"
                 + " SET QtyToOrder = Level_Min - QtyOnHand + QtyReserved - QtyOrdered "
                 + "WHERE ReplenishType='1'"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -336,7 +336,7 @@ namespace VAdvantage.Process
             sql = "UPDATE T_Replenish"
                 + " SET QtyToOrder = Level_Max - QtyOnHand + QtyReserved - QtyOrdered "
                 + "WHERE ReplenishType='2'"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -346,7 +346,7 @@ namespace VAdvantage.Process
             //	Delete rows where nothing to order
             sql = "DELETE FROM T_Replenish "
                 + "WHERE QtyToOrder < 1"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -357,7 +357,7 @@ namespace VAdvantage.Process
             //sql = "UPDATE T_Replenish"
             //    + " SET QtyToOrder = Order_Min "
             //    + "WHERE QtyToOrder < Order_Min"
-            //    + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+            //    + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             //no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             //if (no != 0)
             //{
@@ -368,7 +368,7 @@ namespace VAdvantage.Process
             sql = "UPDATE T_Replenish"
                 + " SET QtyToOrder = QtyToOrder - MOD(QtyToOrder, Order_Pack) + Order_Pack "
                 + "WHERE MOD(QtyToOrder, Order_Pack) <> 0"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -380,7 +380,7 @@ namespace VAdvantage.Process
             {
                 sql = "UPDATE T_Replenish"
                     + " SET M_WarehouseSource_ID=" + wh.GetM_WarehouseSource_ID()
-                    + " WHERE AD_PInstance_ID=" + GetAD_PInstance_ID();
+                    + " WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
                 no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 0)
                 {
@@ -392,7 +392,7 @@ namespace VAdvantage.Process
                 + "SET M_WarehouseSource_ID=(SELECT M_WarehouseSource_ID FROM M_Replenish r "
                     + "WHERE r.M_Product_ID=T_Replenish.M_Product_ID"
                     + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID + ")"
-                + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID()
+                + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                 + " AND EXISTS (SELECT * FROM M_Replenish r "
                     + "WHERE r.M_Product_ID=T_Replenish.M_Product_ID"
                     + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID
@@ -407,7 +407,7 @@ namespace VAdvantage.Process
             sql = "UPDATE T_Replenish"
                 + " SET M_WarehouseSource_ID = NULL "
                 + "WHERE M_Warehouse_ID=M_WarehouseSource_ID"
-                + " AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -487,10 +487,10 @@ namespace VAdvantage.Process
                     order.SetC_DocTypeTarget_ID(_C_DocType_ID);
                     MBPartner bp = new MBPartner(GetCtx(), replenish.GetC_BPartner_ID(), Get_TrxName());
                     order.SetBPartner(bp);
-                    order.SetSalesRep_ID(GetAD_User_ID());
+                    order.SetSalesRep_ID(GetVAF_UserContact_ID());
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
-                    order.SetAD_Org_ID(wh.GetAD_Org_ID());
+                    order.SetVAF_Org_ID(wh.GetVAF_Org_ID());
                     order.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
                    
                     if (!order.Save())
@@ -534,16 +534,16 @@ namespace VAdvantage.Process
                     || requisition.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
                 {
                     requisition = new MRequisition(GetCtx(), 0, Get_TrxName());
-                    requisition.SetAD_User_ID(GetAD_User_ID());
+                    requisition.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                     requisition.SetC_DocType_ID(_C_DocType_ID);
                     requisition.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
-                    int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_'"));
+                    int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
                     if (_CountDTD001 > 0)
                     {
                         requisition.SetDTD001_MWarehouseSource_ID(wh.GetM_WarehouseSource_ID());
                     }
-                    requisition.SetAD_Org_ID(wh.GetAD_Org_ID());
+                    requisition.SetVAF_Org_ID(wh.GetVAF_Org_ID());
                     requisition.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
                     
                     if (!requisition.Save())
@@ -604,9 +604,9 @@ namespace VAdvantage.Process
                 {
                     whTarget = MWarehouse.Get(GetCtx(), replenish.GetM_Warehouse_ID());
                 }
-                if (client == null || client.GetAD_Client_ID() != whSource.GetAD_Client_ID())
+                if (client == null || client.GetVAF_Client_ID() != whSource.GetVAF_Client_ID())
                 {
-                    client = MClient.Get(GetCtx(), whSource.GetAD_Client_ID());
+                    client = MClient.Get(GetCtx(), whSource.GetVAF_Client_ID());
                 }
                 //
                 if (move == null
@@ -621,7 +621,7 @@ namespace VAdvantage.Process
                     move.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment")
                         + ": " + whSource.GetName() + "->" + whTarget.GetName());
                     //	Set Org
-                    move.SetAD_Org_ID(whSource.GetAD_Org_ID());
+                    move.SetVAF_Org_ID(whSource.GetVAF_Org_ID());
                     if (!move.Save())
                     {
                         return;
@@ -742,7 +742,7 @@ namespace VAdvantage.Process
         private X_T_Replenish[] GetReplenish(String where)
         {
             String sql = "SELECT * FROM T_Replenish "
-                + "WHERE AD_PInstance_ID=@param AND C_BPartner_ID > 0 ";
+                + "WHERE VAF_JInstance_ID=@param AND C_BPartner_ID > 0 ";
             if (where != null && where.Length > 0)
             {
                 sql += " AND " + where;
@@ -754,8 +754,8 @@ namespace VAdvantage.Process
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, get_TrxName());
-                //pstmt.setInt (1, getAD_PInstance_ID());
-                param[0] = new SqlParameter("@param", GetAD_PInstance_ID());
+                //pstmt.setInt (1, getVAF_JInstance_ID());
+                param[0] = new SqlParameter("@param", GetVAF_JInstance_ID());
                 //ResultSet rs = pstmt.executeQuery ();
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 while (idr.Read())

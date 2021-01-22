@@ -77,7 +77,7 @@ namespace VAdvantage.Process
         {
             int index = 1;
             StringBuilder sql = new StringBuilder("SELECT * FROM S_TimeExpenseLine el "
-                + "WHERE el.AD_Client_ID=@param1"                       //	#1
+                + "WHERE el.VAF_Client_ID=@param1"                       //	#1
                 + " AND el.C_BPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
                 + " AND el.C_OrderLine_ID IS NULL"                  //	not invoiced yet
                 + " AND EXISTS (SELECT * FROM S_TimeExpense e "     //	processed only
@@ -119,8 +119,8 @@ namespace VAdvantage.Process
             {
                 //pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
                 int par = 0;
-                //pstmt.setInt(par++, getAD_Client_ID());
-                param[par] = new SqlParameter("@param1", GetAD_Client_ID());
+                //pstmt.setInt(par++, getVAF_Client_ID());
+                param[par] = new SqlParameter("@param1", GetVAF_Client_ID());
                 if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
                 {
                     //pstmt.setInt(par++, _C_BPartner_ID);
@@ -144,11 +144,11 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                if (dt != null && dt.Rows.Count > 0)
+                if (dt !=null && dt.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dt.Rows)             //	********* Expense Line Loop
                     {
-                        tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
+                         tel = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
                         if (!tel.IsInvoiced())
                         {
                             continue;
@@ -171,6 +171,7 @@ namespace VAdvantage.Process
                             te = new MTimeExpense(GetCtx(), tel.GetS_TimeExpense_ID(), Get_TrxName());
                         //
                         ProcessLine(te, tel, oldBPartner);
+
                         //after processLine if message not null it will return
                         if (!string.IsNullOrEmpty(message))
                         {
@@ -211,9 +212,9 @@ namespace VAdvantage.Process
                 }
             }
             CompleteOrder();
-            if (_noOrders > 0)
+            if(_noOrders>0)
             {
-                message = "" + _noOrders + " " + Msg.GetMsg(GetCtx(), "OrderCrtdTimeRep");
+                message= "" + _noOrders + " " + Msg.GetMsg(GetCtx(), "OrderCrtdTimeRep");
             }
             return message;
         }   //	doIt
@@ -230,7 +231,7 @@ namespace VAdvantage.Process
             {
                 log.Info("New Order for " + bp + ", Project=" + tel.GetC_Project_ID());
                 _order = new MOrder(GetCtx(), 0, Get_TrxName());
-                _order.SetAD_Org_ID(tel.GetAD_Org_ID());
+                _order.SetVAF_Org_ID(tel.GetVAF_Org_ID());
                 _order.SetC_DocTypeTarget_ID(MOrder.DocSubTypeSO_Standard);
                 //
                 _order.SetBPartner(bp);
@@ -248,16 +249,7 @@ namespace VAdvantage.Process
                 if (bp.GetC_PaymentTerm_ID() == 0)
                 {
                     // set the default payment method as check
-                    int payTerm = GetPaymentTerm();
-                    if (payTerm <= 0)
-                    {
-                        message = Msg.GetMsg(GetCtx(), "IsActivePaymentTerm");
-                        return;
-                    }
-                    else
-                    {
-                        _order.SetC_PaymentTerm_ID(payTerm);
-                    }
+                    _order.SetC_PaymentTerm_ID(GetPaymentTerm());
                 }
                 else
                 {
@@ -274,19 +266,9 @@ namespace VAdvantage.Process
                 }
                 // Bhupendra: added a cond to check for payment method if null
                 // Added by mohit - to set payment method and sales rep id.
-                if (bp.GetVA009_PaymentMethod_ID() == 0)
-                {
+                if (bp.GetVA009_PaymentMethod_ID()==0){
                     // set the default payment method as check
-                    int paymethod = GetPaymentMethod();
-                    if (paymethod <= 0)
-                    {
-                        message = Msg.GetMsg(GetCtx(), "IsActivePaymentMethod");
-                        return;
-                    }
-                    else
-                    {
-                        _order.SetVA009_PaymentMethod_ID(paymethod);
-                    }
+                    _order.SetVA009_PaymentMethod_ID(GetPaymentMethod());
                 }
                 else
                 {
@@ -304,7 +286,7 @@ namespace VAdvantage.Process
                 _order.SetSalesRep_ID(te.GetDoc_User_ID());
 
                 ////Added By Arpit asked by Surya Sir..................29-12-2015
-                //_order.SetSalesRep_ID(GetCtx().GetAD_User_ID());
+                //_order.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                 //End
                 if (tel.GetC_Activity_ID() != 0)
                 {
@@ -320,6 +302,7 @@ namespace VAdvantage.Process
                     //	Optionally Overwrite BP Price list from Project
                     MProject project = new MProject(GetCtx(), tel.GetC_Project_ID(), Get_TrxName());
                     if (project.GetM_PriceList_ID() != 0)
+                    {
                         //check weather the PriceList is active or not
                         if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM M_PriceList WHERE M_PriceList_ID=" + project.GetM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
                         {
@@ -330,10 +313,12 @@ namespace VAdvantage.Process
                             message = Msg.GetMsg(GetCtx(), "IsActivePriceList");
                             return;
                         }
+                    }
                 }
                 else
                 {
                     if (bp.GetM_PriceList_ID() != 0)
+                    {
                         if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM M_PriceList WHERE M_PriceList_ID=" + bp.GetM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
                         {
                             _order.SetM_PriceList_ID(bp.GetM_PriceList_ID());
@@ -343,22 +328,25 @@ namespace VAdvantage.Process
                             message = Msg.GetMsg(GetCtx(), "IsActivePriceList");
                             return;
                         }
+                    }
                 }
                 _order.SetSalesRep_ID(te.GetDoc_User_ID());
                 //
                 if (!_order.Save())
                 {
                     Rollback();
+                    //get error message from ValueNamePair
                     ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
                         message = pp.GetName();
-                        //if GetName is Empty then it will check GetValue
-                        if (string.IsNullOrEmpty(message))
-                        {
-                            message = Msg.GetMsg("", pp.GetValue());
-                        }
                     }
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        message = Msg.GetMsg("", pp.GetValue());
+                    }
+                    //it will check message is null or not
                     if (string.IsNullOrEmpty(message))
                     {
                         message = Msg.GetMsg(GetCtx(), "CantSaveOrder");
@@ -381,18 +369,16 @@ namespace VAdvantage.Process
                 if (!_order.Save())
                 {
                     Rollback();
-                    //get error message from ValueNamePair
                     ValueNamePair pp = VLogger.RetrieveError();
                     if (pp != null)
                     {
                         message = pp.GetName();
-                        //if GetName is Empty then it will check GetValue
-                        if (string.IsNullOrEmpty(message))
-                        {
-                            message = Msg.GetMsg("", pp.GetValue());
-                        }
                     }
-                    //it will check message is null or not
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        message = Msg.GetMsg("", pp.GetValue());
+                    }
                     if (string.IsNullOrEmpty(message))
                     {
                         message = Msg.GetMsg(GetCtx(), "CantSaveOrder");
@@ -436,7 +422,7 @@ namespace VAdvantage.Process
                 if (tel.GetC_Currency_ID() != _order.GetC_Currency_ID())
                     price = MConversionRate.Convert(GetCtx(), price,
                         tel.GetC_Currency_ID(), _order.GetC_Currency_ID(),
-                        _order.GetAD_Client_ID(), _order.GetAD_Org_ID());
+                        _order.GetVAF_Client_ID(), _order.GetVAF_Org_ID());
                 ol.SetPrice(price);
                 // added by Bhupendra to set the entered price
                 ol.SetPriceEntered(price);
@@ -458,11 +444,11 @@ namespace VAdvantage.Process
                 if (pp != null)
                 {
                     message = pp.GetName();
-                    //if GetName is Empty then it will check GetValue
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        message = Msg.GetMsg("", pp.GetValue());
-                    }
+                }
+                //if GetName is Empty then it will check GetValue
+                if (string.IsNullOrEmpty(message))
+                {
+                    message = Msg.GetMsg("", pp.GetValue());
                 }
                 //it will check message is null or not
                 if (string.IsNullOrEmpty(message))
@@ -509,27 +495,25 @@ namespace VAdvantage.Process
         /// to get the payment method if no payment method found on the business partner
         /// </summary>
         /// <returns>returns payment meyhod ID</returns>
-        public int GetPaymentMethod()
-        {
+        public int GetPaymentMethod(){
             //get organisation default 
             //added IsActive condition to check weather the paymentmethod is active or not
-            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND AD_Client_ID=" + tel.GetAD_Client_ID() + "  AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY VAF_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
-            dynamic pri = DataBase.DB.ExecuteScalar(sql, param, Get_TrxName());
+            param[0] = new SqlParameter("@param1", tel.GetVAF_Org_ID());
+            dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
         /// <summary>
         ///   to get the payment method if no payment term found on the business partner
         /// </summary>
         /// <returns> returns payment term ID</returns>
-        public int GetPaymentTerm()
-        {
+        public int GetPaymentTerm(){
             //added IsActive condition to check weather the term is active or not
-            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' AND AD_Client_ID=" + tel.GetAD_Client_ID() + " ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
+            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY VAF_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
-            dynamic pri = DataBase.DB.ExecuteScalar(sql, param, Get_TrxName());
+            param[0] = new SqlParameter("@param1", tel.GetVAF_Org_ID());
+            dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
     }	//	ExpenseSOrder

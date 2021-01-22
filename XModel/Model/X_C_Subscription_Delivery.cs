@@ -70,7 +70,7 @@ static X_C_Subscription_Delivery()
 //static long serialVersionUID 27562514375306L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058517L;
-/** AD_Table_ID=667 */
+/** VAF_TableView_ID=667 */
 public static int Table_ID;
  // =667;
 

@@ -84,7 +84,7 @@ static X_C_InvoiceBatch()
 //static long serialVersionUID 27562514372375L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055586L;
-/** AD_Table_ID=767 */
+/** VAF_TableView_ID=767 */
 public static int Table_ID;
  // =767;
 
@@ -311,8 +311,8 @@ if (oo != null)
 return false;
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID=190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=190;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)

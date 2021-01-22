@@ -78,7 +78,7 @@ static X_C_InvoiceSchedule()
 //static long serialVersionUID 27562514372595L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055806L;
-/** AD_Table_ID=257 */
+/** VAF_TableView_ID=257 */
 public static int Table_ID;
  // =257;
 
@@ -214,8 +214,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** InvoiceFrequency AD_Reference_ID=168 */
-public static int INVOICEFREQUENCY_AD_Reference_ID=168;
+/** InvoiceFrequency VAF_Control_Ref_ID=168 */
+public static int INVOICEFREQUENCY_VAF_Control_Ref_ID=168;
 /** Daily = D */
 public static String INVOICEFREQUENCY_Daily = "D";
 /** Monthly = M */
@@ -252,8 +252,8 @@ public String GetInvoiceFrequency()
 return (String)Get_Value("InvoiceFrequency");
 }
 
-/** InvoiceWeekDay AD_Reference_ID=167 */
-public static int INVOICEWEEKDAY_AD_Reference_ID=167;
+/** InvoiceWeekDay VAF_Control_Ref_ID=167 */
+public static int INVOICEWEEKDAY_VAF_Control_Ref_ID=167;
 /** Monday = 1 */
 public static String INVOICEWEEKDAY_Monday = "1";
 /** Tuesday = 2 */
@@ -295,8 +295,8 @@ public String GetInvoiceWeekDay()
 return (String)Get_Value("InvoiceWeekDay");
 }
 
-/** InvoiceWeekDayCutoff AD_Reference_ID=167 */
-public static int INVOICEWEEKDAYCUTOFF_AD_Reference_ID=167;
+/** InvoiceWeekDayCutoff VAF_Control_Ref_ID=167 */
+public static int INVOICEWEEKDAYCUTOFF_VAF_Control_Ref_ID=167;
 /** Monday = 1 */
 public static String INVOICEWEEKDAYCUTOFF_Monday = "1";
 /** Tuesday = 2 */

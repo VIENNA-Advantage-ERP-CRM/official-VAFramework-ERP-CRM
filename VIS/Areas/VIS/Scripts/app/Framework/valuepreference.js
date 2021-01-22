@@ -45,11 +45,11 @@
             this.aDisplayValue = (dispValue == null) ? this.aValue : dispValue;
         }
 
-        this.AD_Window_ID = mField.getAD_Window_ID();
+        this.VAF_Screen_ID = mField.getVAF_Screen_ID();
         this.aAttribute = mField.getColumnName();
         this.aDisplayAttribute = mField.getHeader();
         this.aDisplayType = mField.getDisplayType();
-        this.AD_Reference_ID = 0;
+        this.VAF_Control_Ref_ID = 0;
         this.windowNum = mField.getWindowNo();
 
         if ("Value".equals(this.aAttribute) || "DocumentNo".equals(this.aAttribute)) {
@@ -57,9 +57,9 @@
             return null;
         }
 
-        this.AD_Client_ID = VIS.context.getAD_Client_ID();
-        this.AD_Org_ID = VIS.context.getWindowContext(this.windowNum, "AD_Org_ID", true);
-        this.AD_User_ID = VIS.context.getAD_User_ID();
+        this.VAF_Client_ID = VIS.context.getVAF_Client_ID();
+        this.VAF_Org_ID = VIS.context.getWindowContext(this.windowNum, "VAF_Org_ID", true);
+        this.VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
         this.role = VIS.MRole.getDefault();
 
         function setBusy(isBusy) {
@@ -291,26 +291,26 @@
 
     ValuePreference.prototype.getADPreferenceID = function () {
         // make sql query to get preference id
-        var sql = "SELECT AD_Preference_ID FROM AD_Preference WHERE ";
-        var valuetem = this.tenantchk ? this.AD_Client_ID : 0;
+        var sql = "SELECT VAF_ValuePreference_ID FROM VAF_ValuePreference WHERE ";
+        var valuetem = this.tenantchk ? this.VAF_Client_ID : 0;
         //	Client
-        sql += "AD_Client_ID=" + valuetem;
+        sql += "VAF_Client_ID=" + valuetem;
         //	Org
-        valuetem = this.orgchk ? this.AD_Org_ID : 0;
-        sql += " AND AD_Org_ID=" + valuetem;
+        valuetem = this.orgchk ? this.VAF_Org_ID : 0;
+        sql += " AND VAF_Org_ID=" + valuetem;
         //	Optional User
         if (this.userchk) {
-            sql += " AND AD_User_ID=" + this.AD_User_ID;
+            sql += " AND VAF_UserContact_ID=" + this.VAF_UserContact_ID;
         }
         else {
-            sql += " AND AD_User_ID IS NULL";
+            sql += " AND VAF_UserContact_ID IS NULL";
         }
         //	Optional Window
         if (this.windowchk) {
-            sql += " AND AD_Window_ID=" + this.AD_Window_ID;
+            sql += " AND VAF_Screen_ID=" + this.VAF_Screen_ID;
         }
         else {
-            sql += " AND AD_Window_ID IS NULL";
+            sql += " AND VAF_Screen_ID IS NULL";
         }
         //	Attribute (Key)
         sql += " AND Attribute='" + this.aAttribute + "'";
@@ -322,7 +322,7 @@
 
         if (ds != null && ds.tables[0].rows.length > 0) {
             // get id
-            preferenceId = ds.tables[0].rows[0].getCell("ad_preference_id");
+            preferenceId = ds.tables[0].rows[0].getCell("vaf_valuepreference_id");
         }
         if (preferenceId < 0) {
             preferenceId = 0;
@@ -333,14 +333,14 @@
     ValuePreference.prototype.delete = function () {
         var returnValue = false;
         // get preference id
-        var AD_Preference_ID = this.getADPreferenceID();
+        var VAF_ValuePreference_ID = this.getADPreferenceID();
         var localObj = this;
-        if (AD_Preference_ID > 0) {
+        if (VAF_ValuePreference_ID > 0) {
             $.ajax({
                 url: VIS.Application.contextUrl + "ValuePreference/Delete",
                 dataType: "json",
                 data: {
-                    preferenceId: AD_Preference_ID
+                    preferenceId: VAF_ValuePreference_ID
                 },
                 success: function (data) {
                     returnValue = data.result;
@@ -386,21 +386,21 @@
 
         var localObj = this;
 
-        var AD_Preference_ID = this.getADPreferenceID();
+        var VAF_ValuePreference_ID = this.getADPreferenceID();
 
        
         $.ajax({
             url: VIS.Application.contextUrl + "ValuePreference/Save",
             dataType: "json",
             data: {
-                preferenceId: AD_Preference_ID,
-                clientId: this.tenantchk ? this.AD_Client_ID : 0,
-                orgId: this.orgchk ? this.AD_Org_ID : 0,
+                preferenceId: VAF_ValuePreference_ID,
+                clientId: this.tenantchk ? this.VAF_Client_ID : 0,
+                orgId: this.orgchk ? this.VAF_Org_ID : 0,
                 chkWindow: this.windowchk,
-                AD_Window_ID: this.AD_Window_ID,
+                VAF_Screen_ID: this.VAF_Screen_ID,
                 chkUser: this.userchk,
                 attribute: this.aAttribute,
-                userId: this.AD_User_ID,
+                userId: this.VAF_UserContact_ID,
                 value: this.aValue
             },
             success: function (data) {
@@ -419,7 +419,7 @@
 
     ValuePreference.prototype.getContextKey = function () {
         if (this.windowchk) {
-            return "P" + this.AD_Window_ID + "|" + this.aAttribute;
+            return "P" + this.VAF_Screen_ID + "|" + this.aAttribute;
         }
         else {
             return "P|" + this.aAttribute;

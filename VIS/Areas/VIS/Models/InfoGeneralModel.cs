@@ -13,14 +13,14 @@ namespace VIS.Models
     public class InfoGeneralModel
     {
 
-        public List<InfoGenral> GetSchema(string tableName, string ad_Language, bool isBaseLangage)
+        public List<InfoGenral> GetSchema(string tableName, string VAF_Language, bool isBaseLangage)
         {
             try
             {
                 
 
                 //Change by mohit-to handle translation in general info.
-                //Added 2 new parametere- string ad_Language, bool isBaseLangage.
+                //Added 2 new parametere- string VAF_Language, bool isBaseLangage.
                 //Asked by mukesh sir- 09/03/2018
                 string sql = string.Empty;
                 if (isBaseLangage)
@@ -28,15 +28,15 @@ namespace VIS.Models
                     sql = @"SELECT c.ColumnName,
                             c.name,
                             c.IsIdentifier,
-                            t.AD_Table_ID,
+                            t.VAF_TableView_ID,
                             t.TableName,
                             C.IsTranslated 
-                         FROM AD_Table t
-                            INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)
-                            WHERE c.AD_Reference_ID=10
+                         FROM VAF_TableView t
+                            INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)
+                            WHERE c.VAF_Control_Ref_ID=10
                             AND t.TableName='" + tableName + @"'
-                           AND EXISTS (SELECT * FROM AD_Field f 
-                     WHERE f.AD_Column_ID=c.AD_Column_ID
+                           AND EXISTS (SELECT * FROM VAF_Field f 
+                     WHERE f.VAF_Column_ID=c.VAF_Column_ID
                      AND f.IsDisplayed='Y' AND f.IsEncrypted='N' AND f.ObscureType IS NULL)                    
                  ORDER BY c.IsIdentifier DESC, c.SeqNo";
                 }
@@ -45,19 +45,19 @@ namespace VIS.Models
                     sql = @"SELECT c.ColumnName,  
                           trl.name,
                           c.IsIdentifier,
-                          t.AD_Table_ID,
+                          t.VAF_TableView_ID,
                           t.TableName,
                           C.IsTranslated
-                        FROM AD_Table t
-                        INNER JOIN AD_Column c
-                        ON (t.AD_Table_ID      =c.AD_Table_ID)
-                        INNER JOIN AD_Column_Trl trl
-                        ON (c.AD_Column_ID=trl.AD_Column_ID)
-                        WHERE c.AD_Reference_ID=10
+                        FROM VAF_TableView t
+                        INNER JOIN VAF_Column c
+                        ON (t.VAF_TableView_ID      =c.VAF_TableView_ID)
+                        INNER JOIN VAF_Column_TL trl
+                        ON (c.VAF_Column_ID=trl.VAF_Column_ID)
+                        WHERE c.VAF_Control_Ref_ID=10
                         AND t.TableName        ='" + tableName + @"'
-                        AND trl.AD_Language='" + ad_Language + @"'
-                        AND EXISTS(SELECT * FROM AD_Field f
-                          WHERE f.AD_Column_ID=c.AD_Column_ID
+                        AND trl.VAF_Language='" + VAF_Language + @"'
+                        AND EXISTS(SELECT * FROM VAF_Field f
+                          WHERE f.VAF_Column_ID=c.VAF_Column_ID
                           AND f.IsDisplayed   ='Y' AND f.IsEncrypted   ='N' AND f.ObscureType  IS NULL)
                         ORDER BY c.IsIdentifier DESC,c.SeqNo";
                 }
@@ -76,7 +76,7 @@ namespace VIS.Models
                         break;
                     }
                     item = new InfoGenral();
-                    item.AD_Table_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Table_ID"]);
+                    item.VAF_TableView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]);
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
                     item.IsIdentifier = ds.Tables[0].Rows[i]["IsIdentifier"].ToString() == "Y" ? true : false;
@@ -94,7 +94,7 @@ namespace VIS.Models
             }
         }
 
-        public List<InfoColumn> GetDisplayCol(int AD_Table_ID, string AD_Language, bool IsBaseLangage,string _tableName)
+        public List<InfoColumn> GetDisplayCol(int VAF_TableView_ID, string VAF_Language, bool IsBaseLangage,string _tableName)
         {
             try
             {
@@ -111,28 +111,28 @@ namespace VIS.Models
                 }
 
                 //Change by mohit-to handle translation in general info.
-                //Added 2 new parametere- string AD_Language, bool IsBaseLangage.
+                //Added 2 new parametere- string VAF_Language, bool IsBaseLangage.
                 //Asked by mukesh sir - 09/03/2018
 
                 string sql = string.Empty;
                 if (IsBaseLangage)
                 {
                     sql = @"SELECT c.ColumnName,c.Name,
-                              c.AD_Reference_ID,
+                              c.VAF_Control_Ref_ID,
                               c.IsKey,
                               f.IsDisplayed,
-                              c.AD_Reference_Value_ID,
+                              c.VAF_Control_Ref_Value_ID,
                               c.ColumnSQL,
                               C.IsTranslated
-                            FROM AD_Column c
-                            INNER JOIN AD_Table t
-                            ON (c.AD_Table_ID=t.AD_Table_ID)                            
-                            INNER JOIN AD_Tab tab
-                            ON (t.AD_Window_ID=tab.AD_Window_ID)
-                            INNER JOIN AD_Field f
-                            ON (tab.AD_Tab_ID  =f.AD_Tab_ID
-                            AND f.AD_Column_ID =c.AD_Column_ID)
-                            WHERE t.AD_Table_ID=" + AD_Table_ID + @"
+                            FROM VAF_Column c
+                            INNER JOIN VAF_TableView t
+                            ON (c.VAF_TableView_ID=t.VAF_TableView_ID)                            
+                            INNER JOIN VAF_Tab tab
+                            ON (t.VAF_Screen_ID=tab.VAF_Screen_ID)
+                            INNER JOIN VAF_Field f
+                            ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
+                            AND f.VAF_Column_ID =c.VAF_Column_ID)
+                            WHERE t.VAF_TableView_ID=" + VAF_TableView_ID + @"
                             AND (c.IsKey       ='Y'
                             OR (f.IsEncrypted  ='N'
                             AND f.ObscureType IS NULL))                            
@@ -142,24 +142,24 @@ namespace VIS.Models
                 else
                 {
                     sql = @"SELECT c.ColumnName,trl.Name,
-                              c.AD_Reference_ID,
+                              c.VAF_Control_Ref_ID,
                               c.IsKey,
                               f.IsDisplayed,
-                              c.AD_Reference_Value_ID,
+                              c.VAF_Control_Ref_Value_ID,
                               c.ColumnSQL,
                               C.IsTranslated
-                            FROM AD_Column c
-                            INNER JOIN AD_Table t
-                            ON (c.AD_Table_ID=t.AD_Table_ID)
-                            INNER JOIN AD_Column_Trl trl
-                            ON (c.ad_column_ID=trl.AD_Column_ID)
-                            INNER JOIN AD_Tab tab
-                            ON (t.AD_Window_ID=tab.AD_Window_ID)
-                            INNER JOIN AD_Field f
-                            ON (tab.AD_Tab_ID  =f.AD_Tab_ID
-                            AND f.AD_Column_ID =c.AD_Column_ID)
-                            WHERE t.AD_Table_ID=" + AD_Table_ID + @"
-                            AND trl.AD_Language='" + AD_Language + @"'
+                            FROM VAF_Column c
+                            INNER JOIN VAF_TableView t
+                            ON (c.VAF_TableView_ID=t.VAF_TableView_ID)
+                            INNER JOIN VAF_Column_TL trl
+                            ON (c.vaf_column_ID=trl.VAF_Column_ID)
+                            INNER JOIN VAF_Tab tab
+                            ON (t.VAF_Screen_ID=tab.VAF_Screen_ID)
+                            INNER JOIN VAF_Field f
+                            ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
+                            AND f.VAF_Column_ID =c.VAF_Column_ID)
+                            WHERE t.VAF_TableView_ID=" + VAF_TableView_ID + @"
+                            AND trl.VAF_Language='" + VAF_Language + @"'
                             AND (c.IsKey       ='Y'
                             OR (f.IsEncrypted  ='N'
                             AND f.ObscureType IS NULL))                            
@@ -182,7 +182,7 @@ namespace VIS.Models
                     item.IsDisplayed = ds.Tables[0].Rows[i]["IsDisplayed"].ToString() == "Y" ? true : false;
 
 
-                    displayType = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
+                    displayType = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_ID"]);
 
                     if (item.IsKey)
                     {
@@ -211,13 +211,13 @@ namespace VIS.Models
 
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
-                    item.AD_Reference_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
+                    item.VAF_Control_Ref_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_ID"]);
                     item.IsKey = ds.Tables[0].Rows[i]["IsKey"].ToString() == "Y" ? true : false;
                     item.IsDisplayed = ds.Tables[0].Rows[i]["IsDisplayed"].ToString() == "Y" ? true : false;
-                    if (!(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"] == null || ds.Tables[0].Rows[i]["AD_Reference_Value_ID"] == DBNull.Value))
+                    if (!(ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"] == null || ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"] == DBNull.Value))
                     {
-                        item.AD_Reference_Value_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"]);
-                        item.RefList = GetRefList(item.AD_Reference_Value_ID);
+                        item.VAF_Control_Ref_Value_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"]);
+                        item.RefList = GetRefList(item.VAF_Control_Ref_Value_ID);
                     }
                     item.ColumnSQL = ds.Tables[0].Rows[i]["ColumnSQL"].ToString();
                     // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
@@ -235,12 +235,12 @@ namespace VIS.Models
                 return null;
             }
         }
-        private List<InfoRefList> GetRefList(int AD_Reference_ID)
+        private List<InfoRefList> GetRefList(int VAF_Control_Ref_ID)
         {
             try
             {
-                String sql = "SELECT Value, Name FROM AD_Ref_List "
-                    + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+                String sql = "SELECT Value, Name FROM VAF_CtrlRef_List "
+                    + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND IsActive='Y' ORDER BY 1";
                 DataSet ds = null;
                 List<InfoRefList> list = new List<InfoRefList>();
                 try
@@ -329,7 +329,7 @@ namespace VIS.Models
     }
     public class InfoGenral
     {
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
             get;
             set;
@@ -370,7 +370,7 @@ namespace VIS.Models
             Name = colHeader;
             ColumnName = columnName;
             ColumnSQL = colSQL;
-            AD_Reference_ID = colClass;
+            VAF_Control_Ref_ID = colClass;
         }
 
         public string ColumnName
@@ -378,7 +378,7 @@ namespace VIS.Models
             get;
             set;
         }
-        public int AD_Reference_ID
+        public int VAF_Control_Ref_ID
         {
             get;
             set;
@@ -393,7 +393,7 @@ namespace VIS.Models
             get;
             set;
         }
-        public int AD_Reference_Value_ID
+        public int VAF_Control_Ref_Value_ID
         {
             get;
             set;

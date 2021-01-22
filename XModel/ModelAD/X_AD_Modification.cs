@@ -76,7 +76,7 @@ static X_AD_Modification()
 //static long serialVersionUID = 27562514362266L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045477L;
-/** AD_Table_ID=883 */
+/** VAF_TableView_ID=883 */
 public static int Table_ID;
  // =883;
 
@@ -183,8 +183,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** ModificationType AD_Reference_ID=429 */
-public static int MODIFICATIONTYPE_AD_Reference_ID=429;
+/** ModificationType VAF_Control_Ref_ID=429 */
+public static int MODIFICATIONTYPE_VAF_Control_Ref_ID=429;
 /** Functionality Improvement = 1 */
 public static String MODIFICATIONTYPE_FunctionalityImprovement = "1";
 /** Technology Improvement = 2 */

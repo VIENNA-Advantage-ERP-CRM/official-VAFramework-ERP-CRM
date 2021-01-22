@@ -115,7 +115,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27562514373331L;
         /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
         public static long updatedMS = 1280389056542L;
-        /** AD_Table_ID=260 */
+        /** VAF_TableView_ID=260 */
         public static int Table_ID;
         // =260;
 
@@ -158,21 +158,21 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
-        @param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        @param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /** Get Trx Organization.
         @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            Object ii = Get_Value("AD_OrgTrx_ID");
+            Object ii = Get_Value("VAF_OrgTrx_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -591,8 +591,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_Warehouse_ID AD_Reference_ID=197 */
-        public static int M_WAREHOUSE_ID_AD_Reference_ID = 197;
+        /** M_Warehouse_ID VAF_Control_Ref_ID=197 */
+        public static int M_WAREHOUSE_ID_VAF_Control_Ref_ID = 197;
         /** Set Warehouse.
         @param M_Warehouse_ID Storage Warehouse and Service Point */
         public void SetM_Warehouse_ID(int M_Warehouse_ID)
@@ -609,8 +609,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Orig_InOutLine_ID AD_Reference_ID=295 */
-        public static int ORIG_INOUTLINE_ID_AD_Reference_ID = 295;
+        /** Orig_InOutLine_ID VAF_Control_Ref_ID=295 */
+        public static int ORIG_INOUTLINE_ID_VAF_Control_Ref_ID = 295;
         /** Set Orig Shipment Line.
         @param Orig_InOutLine_ID Original shipment line of the RMA */
         public void SetOrig_InOutLine_ID(int Orig_InOutLine_ID)
@@ -628,8 +628,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Orig_OrderLine_ID AD_Reference_ID=271 */
-        public static int ORIG_ORDERLINE_ID_AD_Reference_ID = 271;
+        /** Orig_OrderLine_ID VAF_Control_Ref_ID=271 */
+        public static int ORIG_ORDERLINE_ID_VAF_Control_Ref_ID = 271;
         /** Set Orig Sales Order Line.
         @param Orig_OrderLine_ID Original Sales Order Line for Return Material Authorization */
         public void SetOrig_OrderLine_ID(int Orig_OrderLine_ID)
@@ -912,8 +912,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("RRStartDate");
         }
 
-        /** Ref_OrderLine_ID AD_Reference_ID=271 */
-        public static int REF_ORDERLINE_ID_AD_Reference_ID = 271;
+        /** Ref_OrderLine_ID VAF_Control_Ref_ID=271 */
+        public static int REF_ORDERLINE_ID_VAF_Control_Ref_ID = 271;
         /** Set Referenced Order Line.
         @param Ref_OrderLine_ID Reference to corresponding Sales/Purchase Order */
         public void SetRef_OrderLine_ID(int Ref_OrderLine_ID)
@@ -991,8 +991,8 @@ namespace VAdvantage.Model
                 return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -1010,8 +1010,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -1336,8 +1336,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** DTD001_Org_ID AD_Reference_ID=417 */
-        public static int DTD001_ORG_ID_AD_Reference_ID = 417;
+        /** DTD001_Org_ID VAF_Control_Ref_ID=417 */
+        public static int DTD001_ORG_ID_VAF_Control_Ref_ID = 417;
         /** Set Reference Organization.
         @param DTD001_Org_ID Reference Organization */
         public void SetDTD001_Org_ID(int DTD001_Org_ID)
@@ -1389,8 +1389,8 @@ namespace VAdvantage.Model
         }
         //End
 
-        /** VA008_RefOrderLineExt_ID AD_Reference_ID=1000179 */
-        public static int VA008_REFORDERLINEEXT_ID_AD_Reference_ID = 1000179;
+        /** VA008_RefOrderLineExt_ID VAF_Control_Ref_ID=1000179 */
+        public static int VA008_REFORDERLINEEXT_ID_VAF_Control_Ref_ID = 1000179;
         /** Set Reference Order Line Extension.
         @param VA008_RefOrderLineExt_ID Reference Order Line Extension */
         public void SetVA008_RefOrderLineExt_ID(int VA008_RefOrderLineExt_ID)
@@ -1408,8 +1408,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VA008_RefOrderLine_ID AD_Reference_ID=1000179 */
-        public static int VA008_REFORDERLINE_ID_AD_Reference_ID = 1000179;
+        /** VA008_RefOrderLine_ID VAF_Control_Ref_ID=1000179 */
+        public static int VA008_REFORDERLINE_ID_VAF_Control_Ref_ID = 1000179;
         /** Set Reference Order Line.
         @param VA008_RefOrderLine_ID Reference Order Line */
         public void SetVA008_RefOrderLine_ID(int VA008_RefOrderLine_ID)
@@ -1507,8 +1507,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("VA023_Reference");
         }
-        /** VAPOS_RtnOrderLine_ID AD_Reference_ID=271 */
-        public static int VAPOS_RTNORDERLINE_ID_AD_Reference_ID = 271;
+        /** VAPOS_RtnOrderLine_ID VAF_Control_Ref_ID=271 */
+        public static int VAPOS_RTNORDERLINE_ID_VAF_Control_Ref_ID = 271;
         /** Set Return Order Line.
         @param VAPOS_RtnOrderLine_ID Displays the reference of the order line returned from POS */
         public void SetVAPOS_RtnOrderLine_ID(int VAPOS_RtnOrderLine_ID)
@@ -1544,8 +1544,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VA019_SeatNo");
         }
 
-        /** VA019_Locator_ID AD_Reference_ID=1000264 */
-        public static int VA019_LOCATOR_ID_AD_Reference_ID = 1000264;
+        /** VA019_Locator_ID VAF_Control_Ref_ID=1000264 */
+        public static int VA019_LOCATOR_ID_VAF_Control_Ref_ID = 1000264;
         /** Set Locator.
         @param VA019_Locator_ID Locator */
         public void SetVA019_Locator_ID(int VA019_Locator_ID)
@@ -1564,8 +1564,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA019_Warehouse_ID AD_Reference_ID=1000265 */
-        public static int VA019_WAREHOUSE_ID_AD_Reference_ID = 1000265;
+        /** VA019_Warehouse_ID VAF_Control_Ref_ID=1000265 */
+        public static int VA019_WAREHOUSE_ID_VAF_Control_Ref_ID = 1000265;
         /** Set Warehouse.
         @param VA019_Warehouse_ID Warehouse */
         public void SetVA019_Warehouse_ID(int VA019_Warehouse_ID)
@@ -1634,8 +1634,8 @@ namespace VAdvantage.Model
         @return Reason */
         public int GetVAPOS_Reason_ID() { Object ii = Get_Value("VAPOS_Reason_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** VAPOS_LineStatus AD_Reference_ID=1000259 */
-        public static int VAPOS_LINESTATUS_AD_Reference_ID = 1000259;/** Void = VO */
+        /** VAPOS_LineStatus VAF_Control_Ref_ID=1000259 */
+        public static int VAPOS_LINESTATUS_VAF_Control_Ref_ID = 1000259;/** Void = VO */
         public static String VAPOS_LINESTATUS_Void = "VO";/** Is test a valid value.
 @param test testvalue
 @returns true if valid **/

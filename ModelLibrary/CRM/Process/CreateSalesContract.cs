@@ -45,7 +45,7 @@ namespace VAdvantage.Process
                 {
 
                     VAdvantage.Model.X_C_Contract contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, null);
-                    VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetAD_Client_ID(), GetCtx().GetAD_Org_ID(),
+                    VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                         line.GetM_Product_ID(), order.GetC_BPartner_ID(), line.GetQtyOrdered(), true);
                     int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
                     pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
           int C_BPartner_ID = ctx.GetContextAsInt(WindowNo, "C_BPartner_ID");
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
-                MProductPricing pp = new MProductPricing(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+                MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
                 int M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
                 pp.SetM_PriceList_ID(M_PriceList_ID);

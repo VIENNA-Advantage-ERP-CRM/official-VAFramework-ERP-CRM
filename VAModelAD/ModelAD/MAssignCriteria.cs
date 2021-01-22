@@ -22,16 +22,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAssignCriteria : X_AD_AssignCriteria
+    public class MAssignCriteria : X_VAF_AllotCriteria
     {
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param AD_AssignCriteria_ID id
+         *	@param VAF_AllotCriteria_ID id
          *	@param trxName trx
          */
-        public MAssignCriteria(Ctx ctx, int AD_AssignCriteria_ID, Trx trxName)
-            : base(ctx, AD_AssignCriteria_ID, trxName)
+        public MAssignCriteria(Ctx ctx, int VAF_AllotCriteria_ID, Trx trxName)
+            : base(ctx, VAF_AllotCriteria_ID, trxName)
         {
 
         }	//	MAssignCriteria
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
          */
         public MColumn GetSourceColumn()
         {
-            if (m_column == null || m_column.GetAD_Column_ID() != GetAD_SourceColumn_ID())
+            if (m_column == null || m_column.GetVAF_Column_ID() != GetAD_SourceColumn_ID())
                 m_column = MColumn.Get(GetCtx(), GetAD_SourceColumn_ID());
             return m_column;
         }	//	GetSourceColumn
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
             String columnName = column.GetColumnName();
             int index = po.Get_ColumnIndex(columnName);
             if (index == -1)
-                throw new Exception(ToString() + ": AD_Column_ID not found");
+                throw new Exception(ToString() + ": VAF_Column_ID not found");
             //	Get Value
             Object value = po.Get_Value(index);
             String op = GetOperation();
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
                     else
                         cmp = (int)int.Parse(compareString);
                     //	Tree Handling
-                    bool? treeOp = (bool?)TreeOperation(columnName, cmp, op, ii, po.GetAD_Client_ID());
+                    bool? treeOp = (bool?)TreeOperation(columnName, cmp, op, ii, po.GetVAF_Client_ID());
                     if (treeOp != null)
                         return treeOp.Value;
                     //
@@ -263,7 +263,7 @@ namespace VAdvantage.Model
          *	@param value user value
          *	@return null if n/a otherwise evaluation
          */
-        private Boolean? TreeOperation(String columnName, int? cmp, String op, int value, int AD_Client_ID)
+        private Boolean? TreeOperation(String columnName, int? cmp, String op, int value, int VAF_Client_ID)
         {
             String tableName = null;
             //	Is this a Tree capable column
@@ -288,11 +288,11 @@ namespace VAdvantage.Model
                 return null;
 
             //	Get Tree
-            int AD_Tree_ID = MTree.GetDefaultAD_Tree_ID(AD_Client_ID, tableName);
-            if (AD_Tree_ID <= 0)
+            int VAF_TreeInfo_ID = MTree.GetDefaultVAF_TreeInfo_ID(VAF_Client_ID, tableName);
+            if (VAF_TreeInfo_ID <= 0)
                 return null;
 
-            MTree tree = new MTree(GetCtx(), AD_Tree_ID, false, true, null);
+            MTree tree = new MTree(GetCtx(), VAF_TreeInfo_ID, false, true, null);
             //VTreeNode node = tree.GetRootNode().findNode(id);
             //log.Finest("Root=" + node);
             //

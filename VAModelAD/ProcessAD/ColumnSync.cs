@@ -25,7 +25,7 @@ namespace VAdvantage.Process
     public class ColumnSync : ProcessEngine.SvrProcess
     {
         // The Column				
-        private int p_AD_Column_ID = 0;
+        private int p_VAF_Column_ID = 0;
 
         /// <summary>
         /// function to et parameters
@@ -47,7 +47,7 @@ namespace VAdvantage.Process
                     // log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            p_AD_Column_ID = GetRecord_ID();
+            p_VAF_Column_ID = GetRecord_ID();
         }//	prepare
 
 
@@ -60,23 +60,23 @@ namespace VAdvantage.Process
         {
 
             string exception = "";
-            log.Info("C_Column_ID=" + p_AD_Column_ID);
-            if (p_AD_Column_ID == 0)
+            log.Info("C_Column_ID=" + p_VAF_Column_ID);
+            if (p_VAF_Column_ID == 0)
             {
                 //    return "";
-                throw new Exception("@No@ @AD_Column_ID@");
+                throw new Exception("@No@ @VAF_Column_ID@");
             }
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
-            MColumn column = new MColumn(GetCtx(), p_AD_Column_ID, Get_Trx());
+            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
             if (column.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ @AD_Column_ID@" + p_AD_Column_ID);
+                throw new Exception("@NotFound@ @VAF_Column_ID@" + p_VAF_Column_ID);
             }
 
-            MTable table = MTable.Get(GetCtx(), column.GetAD_Table_ID());
+            MTable table = MTable.Get(GetCtx(), column.GetVAF_TableView_ID());
             if (table.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ @AD_Table_ID@" + column.GetAD_Table_ID());
+                throw new Exception("@NotFound@ @VAF_TableView_ID@" + column.GetVAF_TableView_ID());
             }
             //	Find Column in Database
 
@@ -216,12 +216,12 @@ namespace VAdvantage.Process
             string r = createFK(noColumns);
 
             // Change here for Master Data Versioning
-            bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + column.GetAD_Table_ID() + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, Get_Trx())) > 0;
+            bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + column.GetVAF_TableView_ID() + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, Get_Trx())) > 0;
             // check whether there are any columns in the table
             // marked as "Maintain Versions", then proceed else return
 
             if(!hasMainVerCol)
-                hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + column.GetAD_Table_ID(), null, Get_Trx())) == "Y";
+                hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM VAF_TableView WHERE VAF_TableView_ID = " + column.GetVAF_TableView_ID(), null, Get_Trx())) == "Y";
 
             string versionMsg = "";
             if (hasMainVerCol)
@@ -229,41 +229,41 @@ namespace VAdvantage.Process
                 // call CreateVersionInfo function of MasterVersions class
                 // to create version table and all columns
                 MasterVersions mv = new MasterVersions();
-                versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+                versionMsg = mv.CreateVersionInfo(column.GetVAF_Column_ID(), column.GetVAF_TableView_ID(), Get_Trx());
             }
 
             return sql + "; " + r + "; " + versionMsg;
         }	//	doIt
 
-        public void SetAD_Column_ID(int AD_Column_ID)
+        public void SetVAF_Column_ID(int VAF_Column_ID)
         {
-            p_AD_Column_ID = AD_Column_ID;
+            p_VAF_Column_ID = VAF_Column_ID;
         }
 
         DataSet dsMetaData = null;
         public String createFK(int noColumns)
         {
             StringBuilder returnMessage = new StringBuilder("");
-            if (p_AD_Column_ID == 0)
-                throw new Exception("@No@ @AD_Column_ID@");
+            if (p_VAF_Column_ID == 0)
+                throw new Exception("@No@ @VAF_Column_ID@");
 
-            MColumn column = new MColumn(GetCtx(), p_AD_Column_ID, Get_Trx());
+            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
             if (column.Get_ID() == 0)
-                throw new Exception("@NotFound@ @AD_Column_ID@ " + p_AD_Column_ID);
+                throw new Exception("@NotFound@ @VAF_Column_ID@ " + p_VAF_Column_ID);
 
-            MTable table = MTable.Get(GetCtx(), column.GetAD_Table_ID());
+            MTable table = MTable.Get(GetCtx(), column.GetVAF_TableView_ID());
             if (table.Get_ID() == 0)
-                throw new Exception("@NotFound@ @AD_Table_ID@ " + column.GetAD_Table_ID());
+                throw new Exception("@NotFound@ @VAF_TableView_ID@ " + column.GetVAF_TableView_ID());
 
             // List of columns to be synched
             List<int> cols = new List<int>();
             // Add current column on which user pressed Synchronize
-            cols.Add(p_AD_Column_ID);
+            cols.Add(p_VAF_Column_ID);
             // if new table is being created and column synch is being done for the first time
             // then get all columns of table and add to list
             if (noColumns == 0)
             {
-                int[] AllCols = MColumn.GetAllIDs("AD_Column", "AD_Table_ID = " + column.GetAD_Table_ID(), Get_Trx());
+                int[] AllCols = MColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + column.GetVAF_TableView_ID(), Get_Trx());
                 cols = AllCols.ToList();
             }
 
@@ -318,62 +318,62 @@ namespace VAdvantage.Process
                     ConstraintType.Clear();
                     ConstraintName.Clear();
 
-                    if ((column.GetAD_Reference_ID() == DisplayType.Account)
+                    if ((column.GetVAF_Control_Ref_ID() == DisplayType.Account)
                         && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
                     {
-                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                            + "FROM AD_Table t"
-                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                            + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=1014)"
-                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=25 AND C.AD_Column_ID= @param"   //	Acct
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
+                            + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.VAF_TableView_ID || '_' || c.VAF_Column_ID AS ConstraintName "
+                            + "FROM VAF_TableView t"
+                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
+                            + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=1014)"
+                            + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=25 AND C.VAF_Column_ID= @param"   //	Acct
                             + " AND c.ColumnName<>'C_ValidCombination_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
-                    else if ((column.GetAD_Reference_ID() == DisplayType.PAttribute)
+                    else if ((column.GetVAF_Control_Ref_ID() == DisplayType.PAttribute)
                         && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
                     {
-                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                            + "FROM AD_Table t"
-                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                            + " INNER JOIN AD_Column cPK ON (cPK.AD_Column_ID=8472)"
-                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=35 AND C.AD_Column_ID=@param"    //	Product Attribute
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
+                            + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.VAF_TableView_ID || '_' || c.VAF_Column_ID AS ConstraintName "
+                            + "FROM VAF_TableView t"
+                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
+                            + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=8472)"
+                            + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=35 AND C.VAF_Column_ID=@param"    //	Product Attribute
                             + " AND c.ColumnName<>'C_ValidCombination_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
-                    else if (((column.GetAD_Reference_ID() == DisplayType.TableDir) || (column.GetAD_Reference_ID() == DisplayType.Search))
-                        && (column.GetAD_Reference_Value_ID() == 0))
+                    else if (((column.GetVAF_Control_Ref_ID() == DisplayType.TableDir) || (column.GetVAF_Control_Ref_ID() == DisplayType.Search))
+                        && (column.GetVAF_Control_Ref_Value_ID() == 0))
                     {
-                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                            + "FROM AD_Table t"
-                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                            + " INNER JOIN AD_Column cPK ON (c.AD_Element_ID=cPK.AD_Element_ID AND cPK.IsKey='Y')"
-                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID AND tPK.IsView='N') "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_Value_ID IS NULL AND C.AD_Column_ID=@param"
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
+                            + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.VAF_TableView_ID || '_' || c.VAF_Column_ID AS ConstraintName "
+                            + "FROM VAF_TableView t"
+                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
+                            + " INNER JOIN VAF_Column cPK ON (c.VAF_ColumnDic_ID=cPK.VAF_ColumnDic_ID AND cPK.IsKey='Y')"
+                            + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID AND tPK.IsView='N') "
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_Value_ID IS NULL AND C.VAF_Column_ID=@param"
                             + " AND t.IsView='N' AND c.ColumnSQL IS NULL "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
                     else //	Table
                     {
-                        fk.Append("SELECT t.TableName, c.ColumnName, c.AD_Column_ID,"
-                            + " cPK.AD_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
-                            + " 'FK' || t.AD_Table_ID || '_' || c.AD_Column_ID AS ConstraintName "
-                            + "FROM AD_Table t"
-                            + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID AND c.AD_Reference_Value_ID IS NOT NULL)"
-                            + " INNER JOIN AD_Ref_Table rt ON (c.AD_Reference_Value_ID=rt.AD_Reference_ID)"
-                            + " INNER JOIN AD_Column cPK ON (rt.Column_Key_ID=cPK.AD_Column_ID)"
-                            + " INNER JOIN AD_Table tPK ON (cPK.AD_Table_ID=tPK.AD_Table_ID) "
+                        fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
+                            + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
+                            + " 'FK' || t.VAF_TableView_ID || '_' || c.VAF_Column_ID AS ConstraintName "
+                            + "FROM VAF_TableView t"
+                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID AND c.VAF_Control_Ref_Value_ID IS NOT NULL)"
+                            + " INNER JOIN VAF_CtrlRef_Table rt ON (c.VAF_Control_Ref_Value_ID=rt.VAF_Control_Ref_ID)"
+                            + " INNER JOIN VAF_Column cPK ON (rt.Column_Key_ID=cPK.VAF_Column_ID)"
+                            + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
                             + "WHERE c.IsKey='N'"
-                            + " AND t.IsView='N' AND c.ColumnSQL IS NULL AND C.AD_Column_ID=@param"
+                            + " AND t.IsView='N' AND c.ColumnSQL IS NULL AND C.VAF_Column_ID=@param"
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
 
@@ -417,7 +417,7 @@ namespace VAdvantage.Process
                     {
                         TableName.Append(ds.Tables[0].Rows[0]["TableName"].ToString());
                         ColumnName.Append(ds.Tables[0].Rows[0]["ColumnName"].ToString());
-                        //	int AD_Column_ID = rs.getInt (3);
+                        //	int VAF_Column_ID = rs.getInt (3);
                         //	int PK_Column_ID = rs.getInt (4);
                         PKTableName.Append(ds.Tables[0].Rows[0]["TableName1"].ToString());
                         PKColumnName.Append(ds.Tables[0].Rows[0]["ColumnName1"].ToString());
@@ -432,15 +432,15 @@ namespace VAdvantage.Process
                                     && (PKTableNameDB != null) && (PKTableNameDB.ToString().Equals(PKTableName.ToString(), StringComparison.OrdinalIgnoreCase))
                                     && (PKColumnNameDB != null) && (PKColumnNameDB.ToString().Equals(PKColumnName.ToString(), StringComparison.OrdinalIgnoreCase))
                                     && ((constraintTypeDB == DatabaseMetaData.importedKeyRestrict) &&
-                                            (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
-                                                    || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))))
+                                            (X_VAF_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
+                                                    || X_VAF_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))))
                                                     ||
                                                     ((constraintTypeDB == DatabaseMetaData.importedKeyCascade) &&
-                                                            (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
-                                                                    || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString())))
+                                                            (X_VAF_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
+                                                                    || X_VAF_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString())))
                                                                     ||
                                                                     ((constraintTypeDB == DatabaseMetaData.importedKeySetNull) &&
-                                                                            (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())))
+                                                                            (X_VAF_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())))
 
                             )
                             {
@@ -476,18 +476,18 @@ namespace VAdvantage.Process
                                 Boolean createfk = true;
                                 if (!String.IsNullOrEmpty(ConstraintType.ToString()))
                                 {
-                                    if (X_AD_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType.ToString()))
+                                    if (X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate.Equals(ConstraintType.ToString()))
                                         createfk = false;
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
-                                        || X_AD_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))
+                                    else if (X_VAF_Column.CONSTRAINTTYPE_Restrict.Equals(ConstraintType.ToString())
+                                        || X_VAF_Column.CONSTRAINTTYPE_RistrictTrigger.Equals(ConstraintType.ToString()))
                                     {
                                         ;
                                     }
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
-                                        || X_AD_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString()))
+                                    else if (X_VAF_Column.CONSTRAINTTYPE_Cascade.Equals(ConstraintType.ToString())
+                                        || X_VAF_Column.CONSTRAINTTYPE_CascadeTrigger.Equals(ConstraintType.ToString()))
                                         sql.Append(" ON DELETE CASCADE");
-                                    else if (X_AD_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())
-                                        || X_AD_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType.ToString()))
+                                    else if (X_VAF_Column.CONSTRAINTTYPE_Null.Equals(ConstraintType.ToString())
+                                        || X_VAF_Column.CONSTRAINTTYPE_NullTrigger.Equals(ConstraintType.ToString()))
                                         sql.Append(" ON DELETE SET NULL");
                                 }
                                 else
@@ -532,7 +532,7 @@ namespace VAdvantage.Process
                     }   //	rs.next
                     else
                     {
-                        if (constraintNameDB != null && constraintNameDB.ToString().Equals("FK" + column.GetAD_Table_ID() + "_" + p_AD_Column_ID, StringComparison.OrdinalIgnoreCase))
+                        if (constraintNameDB != null && constraintNameDB.ToString().Equals("FK" + column.GetVAF_TableView_ID() + "_" + p_VAF_Column_ID, StringComparison.OrdinalIgnoreCase))
                         {
                             dropsql.Append("ALTER TABLE " + table.GetTableName()
                             + " DROP CONSTRAINT " + constraintNameDB);

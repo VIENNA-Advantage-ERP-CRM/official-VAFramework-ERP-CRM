@@ -33,8 +33,8 @@ namespace VAdvantage.Process
             VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), 0, null);
             ol.SetC_Order_ID(c_order_id);
             ol.SetM_Product_ID(pid);
-            ol.SetAD_Client_ID(ord.GetAD_Client_ID());
-            ol.SetAD_Org_ID(ord.GetAD_Org_ID());
+            ol.SetVAF_Client_ID(ord.GetVAF_Client_ID());
+            ol.SetVAF_Org_ID(ord.GetVAF_Org_ID());
             ol.SetQty(1);
             if (!ol.Save())
             {

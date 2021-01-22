@@ -74,12 +74,12 @@ namespace VAdvantage.Process
                     if (bpartnerloc.IsShipTo() == true)
                     {
                         order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetAD_User_ID(fromProject.GetAD_User_ID());
+                        order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
                         order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetBill_User_ID(fromProject.GetAD_User_ID());
+                        order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
                 if (C_BPartnerSR_ID != 0)
@@ -97,17 +97,17 @@ namespace VAdvantage.Process
                     if (bpartnerloc.IsShipTo() == true)
                     {
                         order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetAD_User_ID(fromProject.GetAD_User_ID());
+                        order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
                         order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetBill_User_ID(fromProject.GetAD_User_ID());
+                        order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
                // String sql = "select c_doctype_id from c_doctype where name = 'Standard Order'";
 
-                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'SO' and isreturntrx = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'SO' and isreturntrx = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 int Doctype_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 order.SetM_PriceList_ID(Util.GetValueOfInt(fromProject.GetM_PriceList_ID()));
                 //String sqlmpricelist = "select m_pricelist_id from m_pricelist where name='Export'";
@@ -125,8 +125,8 @@ namespace VAdvantage.Process
                 {
                     VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_id, Get_TrxName());
                     bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
@@ -144,8 +144,8 @@ namespace VAdvantage.Process
                 {
                     VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_BPartnerSR_ID, Get_TrxName());
                     bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());

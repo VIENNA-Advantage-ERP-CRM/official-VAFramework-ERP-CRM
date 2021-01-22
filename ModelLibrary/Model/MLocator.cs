@@ -214,12 +214,12 @@ namespace VAdvantage.Model
         {
             return GetValue();
         }
-        public static MLocator GetDefaultLocatorOfOrg(Ctx ctx, int AD_Org_ID)
+        public static MLocator GetDefaultLocatorOfOrg(Ctx ctx, int VAF_Org_ID)
         {
             MLocator retValue = null;
             List<int> defaultlocators = new List<int>();
             List<int> locators = new List<int>();
-            String sql = "SELECT M_Locator_ID, IsDefault FROM M_Locator WHERE (AD_Org_ID=" + AD_Org_ID + " OR 0=" + AD_Org_ID + ")";
+            String sql = "SELECT M_Locator_ID, IsDefault FROM M_Locator WHERE (VAF_Org_ID=" + VAF_Org_ID + " OR 0=" + VAF_Org_ID + ")";
             IDataReader idr = null;
             try
             {

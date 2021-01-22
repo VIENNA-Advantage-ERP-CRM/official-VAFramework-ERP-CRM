@@ -70,7 +70,7 @@ static X_C_ForecastLine()
 //static long serialVersionUID = 27609451562317L;
 /** Last Updated Timestamp 1/23/2012 7:14:05 PM */
 public static long updatedMS = 1327326245528L;
-/** AD_Table_ID=1000245 */
+/** VAF_TableView_ID=1000245 */
 public static int Table_ID;
  // =1000245;
 
@@ -159,8 +159,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Product_ID AD_Reference_ID=162 */
-public static int M_PRODUCT_ID_AD_Reference_ID=162;
+/** M_Product_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCT_ID_VAF_Control_Ref_ID=162;
 /** Set Product.
 @param M_Product_ID Product, Service, Item */
 public void SetM_Product_ID (int M_Product_ID)

@@ -80,7 +80,7 @@ static X_CM_Container()
 //static long serialVersionUID 27562514368896L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052107L;
-/** AD_Table_ID=855 */
+/** VAF_TableView_ID=855 */
 public static int Table_ID;
  // =855;
 
@@ -123,8 +123,8 @@ StringBuilder sb = new StringBuilder ("X_CM_Container[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** CM_ContainerLink_ID AD_Reference_ID=386 */
-public static int CM_CONTAINERLINK_ID_AD_Reference_ID=386;
+/** CM_ContainerLink_ID VAF_Control_Ref_ID=386 */
+public static int CM_CONTAINERLINK_ID_VAF_Control_Ref_ID=386;
 /** Set Container Link.
 @param CM_ContainerLink_ID Link to another Container in the Web Project */
 public void SetCM_ContainerLink_ID (int CM_ContainerLink_ID)
@@ -205,8 +205,8 @@ public String GetContainerLinkURL()
 return (String)Get_Value("ContainerLinkURL");
 }
 
-/** ContainerType AD_Reference_ID=385 */
-public static int CONTAINERTYPE_AD_Reference_ID=385;
+/** ContainerType VAF_Control_Ref_ID=385 */
+public static int CONTAINERTYPE_VAF_Control_Ref_ID=385;
 /** Document = D */
 public static String CONTAINERTYPE_Document = "D";
 /** Internal Link = L */

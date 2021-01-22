@@ -31,7 +31,7 @@
         return ret;
     };
 
-    function AProcess(AD_Process_ID, height, splitUI, extrnalForm) {
+    function AProcess(VAF_Job_ID, height, splitUI, extrnalForm) {
 
         var self = null;
         this.parent;
@@ -127,7 +127,7 @@
                 url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes/",
                 dataType: "json",
                 data: {
-                    AD_Process_ID: self.jpObj.AD_Process_ID
+                    VAF_Job_ID: self.jpObj.VAF_Job_ID
                 },
                 success: function (data) {
                     if (data == null) {
@@ -405,9 +405,9 @@
                 dataType: "json",
                 type: "post",
                 data: {
-                    AD_Process_ID: pctl.pi.getAD_Process_ID(),
+                    VAF_Job_ID: pctl.pi.getVAF_Job_ID(),
                     Name: pctl.pi.getTitle(),
-                    AD_Table_ID: pctl.pi.getTable_ID(),
+                    VAF_TableView_ID: pctl.pi.getTable_ID(),
                     Record_ID: pctl.pi.getRecord_ID(),
                     C_BPartner_ID: 0,
                     isReport: true,
@@ -431,9 +431,9 @@
                 return;
             }
             var pi = null;
-            pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.AD_Process_ID, 0, 0);
-            pi.setAD_User_ID(self.ctx.getAD_User_ID());
-            pi.setAD_Client_ID(self.ctx.getAD_Client_ID());
+            pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.VAF_Job_ID, 0, 0);
+            pi.setVAF_UserContact_ID(self.ctx.getVAF_UserContact_ID());
+            pi.setVAF_Client_ID(self.ctx.getVAF_Client_ID());
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));
             pi.setIsReport(self.isReport);
@@ -771,9 +771,9 @@
             if (!orginName)
                 orginName = "Menu";
             pctl.pi.setOriginName(orginName);
-            var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
+            var VAF_TableView_ID = pctl.pi.get_VAF_Print_Rpt_Layout_Table_ID();
 
-            canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
+            canExport = VIS.MRole.getDefault().getIsCanExport(VAF_TableView_ID);
             var checkName = [];
             var count = -1;
             otherPf = [];
@@ -782,7 +782,7 @@
                 type: 'Get',
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetPrintFormatDetails",
-                data: { AD_Table_ID: AD_Table_ID },
+                data: { VAF_TableView_ID: VAF_TableView_ID },
                 success: function (data) {
                     dr = new VIS.DB.DataReader().toJson(data);
 
@@ -972,10 +972,10 @@
                 if (!orginName)
                     orginName = "Menu";
                 var data = {
-                    AD_Process_ID: pctl.pi.getAD_Process_ID(),
+                    VAF_Job_ID: pctl.pi.getVAF_Job_ID(),
                     Name: pctl.pi.getTitle(),
-                    AD_PInstance_ID: pctl.pi.getAD_PInstance_ID(),
-                    AD_Table_ID: pctl.pi.getTable_ID(),
+                    VAF_JInstance_ID: pctl.pi.getVAF_JInstance_ID(),
+                    VAF_TableView_ID: pctl.pi.getTable_ID(),
                     Record_ID: pctl.pi.getRecord_ID(),
                     pageNumber: pageNo,
                     page_Size: PageSize,
@@ -1000,15 +1000,15 @@
                 return data;
             };
 
-            function getExecuteReportComposerData(AD_Process_ID, Name, AD_PInstance_ID, AD_Table_ID, Record_ID, pageNumber, page_Size, printAllPages) {
+            function getExecuteReportComposerData(VAF_Job_ID, Name, VAF_JInstance_ID, VAF_TableView_ID, Record_ID, pageNumber, page_Size, printAllPages) {
                 var orginName = pctl.pi.getOriginName();
                 if (!orginName)
                     orginName = "Menu";
                 var data = {
-                    AD_Process_ID: AD_Process_ID,
+                    VAF_Job_ID: VAF_Job_ID,
                     Name: Name,
-                    AD_PInstance_ID: AD_PInstance_ID,
-                    AD_Table_ID: AD_Table_ID,
+                    VAF_JInstance_ID: VAF_JInstance_ID,
+                    VAF_TableView_ID: VAF_TableView_ID,
                     Record_ID: Record_ID,
                     pageNumber: pageNumber,
                     page_Size: page_Size,
@@ -1164,7 +1164,7 @@
             });
             btnCustomize.on('click', function () {
                 var zoomQuery = new VIS.Query();
-                zoomQuery.addRestriction("AD_PrintFormat_ID", VIS.Query.prototype.EQUAL, pctl.pi.AD_PrintFormat_ID);
+                zoomQuery.addRestriction("VAF_Print_Rpt_Layout_ID", VIS.Query.prototype.EQUAL, pctl.pi.VAF_Print_Rpt_Layout_ID);
                 VIS.viewManager.startWindow(240, zoomQuery);
             });
             btnPrint.on('click', function () {
@@ -1198,7 +1198,7 @@
                             }
                             else {
 
-                                if (pctl.pi.GetAD_ReportView_ID() > 0) {
+                                if (pctl.pi.GetVAF_ReportView_ID() > 0) {
                                     getCsv($cmbPages.val(), 0, null);
                                 }
                                 else if (pctl.pi.getIsJasperReport()) {
@@ -1249,7 +1249,7 @@
                             loadDynamicReport(pctl.REPORT_TYPE_PDF, pctl.pi.getPageNo());
                         }
                         else {
-                            if (pctl.pi.GetAD_ReportView_ID() > 0) {
+                            if (pctl.pi.GetVAF_ReportView_ID() > 0) {
                                 getReportData(pctl.pi.getPageNo(), 0, null);
                             }
                             else if (pctl.pi.getIsJasperReport()) {
@@ -1258,7 +1258,7 @@
                             else if (pctl.pi.getIsReportFormat()) {
                                 // pageNo = $cmbPages.val();
 
-                                var data = getExecuteReportComposerData(pctl.pi.getAD_Process_ID(), pctl.pi.getTitle(), pctl.pi.getAD_PInstance_ID(), pctl.pi.getTable_ID(), pctl.pi.getRecord_ID(), pctl.pi.getPageNo(), pctl.pi.getPageSize(), false);
+                                var data = getExecuteReportComposerData(pctl.pi.getVAF_Job_ID(), pctl.pi.getTitle(), pctl.pi.getVAF_JInstance_ID(), pctl.pi.getTable_ID(), pctl.pi.getRecord_ID(), pctl.pi.getPageNo(), pctl.pi.getPageSize(), false);
 
 
                                 $.ajax({
@@ -1293,7 +1293,7 @@
                 $cmbPages.on("change", function () {
                     pageNo = $cmbPages.val();
 
-                    if (pctl.pi.GetAD_ReportView_ID() > 0) {
+                    if (pctl.pi.GetVAF_ReportView_ID() > 0) {
                         panel.setBusy(true);
                         var queryInfo = [];
                         pctl.pi.setPageNo(pageNo);
@@ -1400,7 +1400,7 @@
                             }
                         }
                         else {
-                            if (pctl.pi.GetAD_ReportView_ID() > 0) {
+                            if (pctl.pi.GetVAF_ReportView_ID() > 0) {
                                 for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getCsv(d, pctl.pi.getTotalPages(), bulkdownload);
                                 }
@@ -1528,7 +1528,7 @@
                             }
                         }
                         else {
-                            if (pctl.pi.GetAD_ReportView_ID() > 0) {
+                            if (pctl.pi.GetVAF_ReportView_ID() > 0) {
 
                                 for (var d = 1; d <= pctl.pi.getTotalPages(); d++) {
                                     getReportData(d, pctl.pi.getTotalPages(), bulkdownload);
@@ -1556,7 +1556,7 @@
                         reportUrl = loadDynamicReportAll(pctl.REPORT_TYPE_CSV, d);
                     }
                     else {
-                        var data = getExecuteReportComposerData(pctl.pi.getAD_Process_ID(), pctl.pi.getTitle(), pctl.pi.getAD_PInstance_ID(), pctl.pi.getTable_ID(), pctl.pi.getRecord_ID(), d, pctl.pi.getPageSize(), false);
+                        var data = getExecuteReportComposerData(pctl.pi.getVAF_Job_ID(), pctl.pi.getTitle(), pctl.pi.getVAF_JInstance_ID(), pctl.pi.getTable_ID(), pctl.pi.getRecord_ID(), d, pctl.pi.getPageSize(), false);
 
 
                         $.ajax({
@@ -1641,8 +1641,8 @@
 
                     var sqlQry = "VIS_76";
                     var param = [];
-                    param[0] = new VIS.DB.SqlParam("@tableID", pctl.pi.Ad_Table_ID);
-                    param[1] = new VIS.DB.SqlParam("@tabID", curTab.getAD_Tab_ID());
+                    param[0] = new VIS.DB.SqlParam("@tableID", pctl.pi.vaf_tableview_ID);
+                    param[1] = new VIS.DB.SqlParam("@tabID", curTab.getVAF_Tab_ID());
                     executeQuery(sql, param);
 
                     var sqlQry = "VIS_77";
@@ -1661,10 +1661,10 @@
                     }
                     return;
                 }
-                AD_PrintFormat_ID = id;
+                VAF_Print_Rpt_Layout_ID = id;
                 var isCreateNew = false;
                 if (id == -1) {
-                    id = pctl.pi.get_AD_PrintFormat_Table_ID;
+                    id = pctl.pi.get_VAF_Print_Rpt_Layout_Table_ID;
                     isCreateNew = true;
                 }
                 var queryInfo = [];

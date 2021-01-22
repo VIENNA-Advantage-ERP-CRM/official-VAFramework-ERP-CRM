@@ -70,7 +70,7 @@ static X_C_JobCategory()
 //static long serialVersionUID 27562514372751L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055962L;
-/** AD_Table_ID=790 */
+/** VAF_TableView_ID=790 */
 public static int Table_ID;
  // =790;
 

@@ -301,12 +301,12 @@ namespace VAdvantage.Model
         /// Get Total Costs (amt*qty) in Accounting Schema Currency
         /// </summary>
         /// <param name="as1">accounting schema</param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="costingMethod">if null uses Accounting Schema - AcctSchema.COSTINGMETHOD_*</param>
         /// <param name="C_OrderLine_ID">optional order line</param>
         /// <param name="zeroCostsOK">zero/no costs are OK</param>
         /// <returns>cost or null, if qty or costs cannot be determined</returns>
-        public Decimal? GetProductCosts(MAcctSchema as1, int AD_Org_ID, String costingMethod, int C_OrderLine_ID, bool zeroCostsOK)
+        public Decimal? GetProductCosts(MAcctSchema as1, int VAF_Org_ID, String costingMethod, int C_OrderLine_ID, bool zeroCostsOK)
         {
             if (_qty == null)
             {
@@ -321,7 +321,7 @@ namespace VAdvantage.Model
             }
             //
             Decimal? cost = MCost.GetCurrentCost(_product, _M_AttributeSetInstance_ID,
-                as1, AD_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), C_OrderLine_ID, zeroCostsOK, _trx);
+                as1, VAF_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), C_OrderLine_ID, zeroCostsOK, _trx);
             if (cost == null || cost == 0)
             {
                 log.Fine("No Costs");
@@ -409,14 +409,14 @@ namespace VAdvantage.Model
             {
                 StringBuilder sql = new StringBuilder("INSERT INTO M_Product_Costing "
                     + "(M_Product_ID,C_AcctSchema_ID,"
-                    + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + " CurrentCostPrice,CostStandard,FutureCostPrice,"
                     + " CostStandardPOQty,CostStandardPOAmt,CostStandardCumQty,CostStandardCumAmt,"
                     + " CostAverage,CostAverageCumQty,CostAverageCumAmt,"
                     + " PriceLastPO,PriceLastInv, TotalInvQty,TotalInvAmt) "
                     + "VALUES (");
                 sql.Append(_M_Product_ID).Append(",").Append(as1.GetC_AcctSchema_ID()).Append(",")
-                    .Append(as1.GetAD_Client_ID()).Append(",").Append(as1.GetAD_Org_ID()).Append(",")
+                    .Append(as1.GetVAF_Client_ID()).Append(",").Append(as1.GetVAF_Org_ID()).Append(",")
                     .Append("'Y',SysDate,0,SysDate,0, 0,0,0,  0,0,0,0,  0,0,0,  0,0,  0,0)");
                 int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, _trx);
                 if (no == 1)
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
             if (price != null && !price.Equals(Env.ZERO))
             {
                 price = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(price), C_Currency_ID, as1.GetC_Currency_ID(),
-                    as1.GetAD_Client_ID(), 0);
+                    as1.GetVAF_Client_ID(), 0);
             }
             return price;
         }
@@ -578,7 +578,7 @@ namespace VAdvantage.Model
             //  Convert - standard precision!! - should be costing precision
             if (cost != null && !cost.Equals(Env.ZERO))
             {
-                cost = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), C_Currency_ID, as1.GetC_Currency_ID(), as1.GetAD_Client_ID(), as1.GetAD_Org_ID());
+                cost = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), C_Currency_ID, as1.GetC_Currency_ID(), as1.GetVAF_Client_ID(), as1.GetVAF_Org_ID());
             }
             return cost;
         }

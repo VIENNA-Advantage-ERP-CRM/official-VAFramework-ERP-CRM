@@ -97,20 +97,20 @@ namespace VAdvantage.Report
 
         /**
          * 	Delete Balances
-         * 	@param AD_Client_ID client
+         * 	@param VAF_Client_ID client
          * 	@param C_AcctSchema_ID	accounting schema 0 for all
          * 	@param dateFrom null for all or first date to delete
          * 	@param trx transaction
          * 	@param svrPrc optional server process
          *  @return Message to be translated
          */
-        public static String DeleteBalance(int AD_Client_ID, int C_AcctSchema_ID,
+        public static String DeleteBalance(int VAF_Client_ID, int C_AcctSchema_ID,
             DateTime? dateFrom, Trx trxp, int Fact_Accumulation_ID, SvrProcess svrPrc)
         {
             Trx trx = trxp;
             //List<Object> param = new List<Object>();
-            StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct_Balance WHERE AD_Client_ID=" + AD_Client_ID);
-            //param.add(new Integer(AD_Client_ID));
+            StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct_Balance WHERE VAF_Client_ID=" + VAF_Client_ID);
+            //param.add(new Integer(VAF_Client_ID));
             if (C_AcctSchema_ID != 0)
             {
                 sql.Append(" AND C_AcctSchema_ID=" + C_AcctSchema_ID);
@@ -146,7 +146,7 @@ namespace VAdvantage.Report
         /**
          * 	Update / Create Balances.
          * 	Called from FinReport, FactAcctReset (indirect)
-         * 	@param AD_Client_ID client
+         * 	@param VAF_Client_ID client
          * 	@param C_AcctSchema_ID	accounting schema 0 for all
          * 	@param deleteFirst delete balances first
          * 	@param dateFrom null for all or first date to delete/calculate
@@ -175,8 +175,8 @@ namespace VAdvantage.Report
                     // Create a Balance aggregation of type Daily.
 
                     MFactAccumulation defaultAccum = new MFactAccumulation(ctx, 0, trx);
-                    defaultAccum.SetAD_Client_ID(ctx.GetAD_Client_ID());
-                    defaultAccum.SetAD_Org_ID(ctx.GetAD_Org_ID());
+                    defaultAccum.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
+                    defaultAccum.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                     defaultAccum.SetC_AcctSchema_ID(C_AcctSchema_ID);
                     defaultAccum.SetBALANCEACCUMULATION(X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth);
                     defaultAccum.SetIsActive(true);
@@ -271,13 +271,13 @@ namespace VAdvantage.Report
                 //}
 
                 // Delete the balances
-                DeleteBalance(ctx.GetAD_Client_ID(), C_AcctSchema_ID,
+                DeleteBalance(ctx.GetVAF_Client_ID(), C_AcctSchema_ID,
                             dateFrom, trx, accum.GetFACT_ACCUMULATION_ID(), svrPrc);
 
                 /** Insert		**/
                 //param = new List<Object>();
                 String insert = "INSERT INTO Fact_Acct_Balance "
-                    + "(AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID, DateAcct,"
+                    + "(VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, C_AcctSchema_ID, DateAcct,"
                     + " Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, C_BPartner_ID,"
                     + "	C_Project_ID,	C_SalesRegion_ID,C_Activity_ID,"
                     + " C_Campaign_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID,"
@@ -285,7 +285,7 @@ namespace VAdvantage.Report
                     + " UserElement7_ID, UserElement8_ID,UserElement9_ID, "
                     + " AmtAcctDr, AmtAcctCr, Qty) ";
 
-                String select = " SELECT AD_Client_ID, AD_Org_ID, AD_OrgTrx_ID, C_AcctSchema_ID ";
+                String select = " SELECT VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, C_AcctSchema_ID ";
 
                 if (!String.IsNullOrEmpty(type))
                 {
@@ -423,8 +423,8 @@ namespace VAdvantage.Report
                     where += " AND DateAcct >= " + DB.TO_DATE(dateFrom);
                 }
 
-                String groupBy = " GROUP BY AD_Client_ID,C_AcctSchema_ID, AD_Org_ID, "
-                    + " AD_OrgTrx_ID,Account_ID, PostingType ";
+                String groupBy = " GROUP BY VAF_Client_ID,C_AcctSchema_ID, VAF_Org_ID, "
+                    + " VAF_OrgTrx_ID,Account_ID, PostingType ";
 
                 if (!String.IsNullOrEmpty(type))
                 {
@@ -497,9 +497,9 @@ namespace VAdvantage.Report
         public static String UpdateBalanceClient(Ctx ctx,
              DateTime? dateFrom, Trx trx, int Fact_Accumulation_ID, SvrProcess svrPrc)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             StringBuilder Info = new StringBuilder();
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, AD_Client_ID);
+            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
             foreach (MAcctSchema as1 in ass)
             {
                 if (Info.Length > 0)

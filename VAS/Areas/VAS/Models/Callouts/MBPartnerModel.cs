@@ -54,7 +54,7 @@ namespace VIS.Models
             }
             //30-4-2016
             //VA025
-            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA025_'")) > 0)
+            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA025_'")) > 0)
             //{ 
             //    if (bpartner.GetVA025_DiscountCalculation() != null)
             //    {
@@ -132,13 +132,13 @@ namespace VIS.Models
         {
             int C_BPartner_ID = Util.GetValueOfInt(fields);
             Dictionary<string, int> retDic = null;
-            string sql = "SELECT au.Ad_User_ID,  cl.C_BPartner_Location_ID FROM C_BPartner cp INNER JOIN C_BPartner_Location cl ON cl.C_BPartner_ID = cp.C_BPartner_ID " +
-                "INNER JOIN Ad_User au ON au.C_BPartner_ID = cp.C_BPartner_ID WHERE cp.C_BPartner_ID = " + C_BPartner_ID + " AND cp.IsActive ='Y' ORDER BY cp.Created";
+            string sql = "SELECT au.VAF_UserContact_ID,  cl.C_BPartner_Location_ID FROM C_BPartner cp INNER JOIN C_BPartner_Location cl ON cl.C_BPartner_ID = cp.C_BPartner_ID " +
+                "INNER JOIN VAF_UserContact au ON au.C_BPartner_ID = cp.C_BPartner_ID WHERE cp.C_BPartner_ID = " + C_BPartner_ID + " AND cp.IsActive ='Y' ORDER BY cp.Created";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 retDic = new Dictionary<string, int>();
-                retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0][0]);
+                retDic["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0][0]);
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
             }
             return retDic;
@@ -151,19 +151,19 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int C_BPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.AD_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.IsDiscountPrinted, ";
             if (countVA009)
             {
                 sql += " p.VA009_PaymentMethod_ID, ";
             }
             sql += "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0)-NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.AD_User_ID, p.SOCreditStatus,"
+                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID, p.SOCreditStatus,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -188,7 +188,7 @@ namespace VIS.Models
                 retDic["PaymentRulePO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRulePO"]);
                 retDic["PO_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PO_PaymentTerm_ID"]);
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
-                retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                retDic["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]);
                 retDic["SOCreditStatus"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SOCreditStatus"]);
             }
             return retDic;
@@ -220,7 +220,7 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int C_BPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.AD_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.SalesRep_ID, ";
             if (countVA009)
             {
@@ -229,14 +229,14 @@ namespace VIS.Models
             }
             sql += "p.IsDiscountPrinted, p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + " p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0)-NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + " lship.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
                 + " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo"
                 + " FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
                 + " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -268,7 +268,7 @@ namespace VIS.Models
                 retDic["PaymentRulePO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRulePO"]);
                 retDic["PO_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PO_PaymentTerm_ID"]);
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
-                retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                retDic["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]);
                 retDic["Bill_BPartner_ID"] = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_BPartnerRelation_ID FROM C_BP_Relation WHERE C_BPartner_ID = " + C_BPartner_ID, null, null));
                 retDic["Bill_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_Location_ID"]);
                 retDic["SOCreditStatus"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SOCreditStatus"]);
@@ -282,17 +282,17 @@ namespace VIS.Models
         {
             int bill_BPartner_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> retDic = null;
-            string sql = sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            string sql = sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "c.AD_User_ID,"
+                + "c.VAF_UserContact_ID,"
                 + "p.PO_PriceList_ID, p.PaymentRulePO, p.PO_PaymentTerm_ID,"
                 + "lbill.C_BPartner_Location_ID AS Bill_Location_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -315,7 +315,7 @@ namespace VIS.Models
                 retDic["PaymentRulePO"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRulePO"]);
                 retDic["PO_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["PO_PaymentTerm_ID"]);
                 retDic["Bill_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_Location_ID"]);
-                retDic["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                retDic["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]);
             }
             return retDic;
         }

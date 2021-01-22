@@ -72,7 +72,7 @@ static X_M_ProductionLineMA()
 //static long serialVersionUID 27562514380995L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064206L;
-/** AD_Table_ID=765 */
+/** VAF_TableView_ID=765 */
 public static int Table_ID;
  // =765;
 

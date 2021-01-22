@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserDef_Field
+/** Generated Model for VAF_UserCustom_Field
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserDef_Field : PO
+public class X_VAF_UserCustom_Field : PO
 {
-public X_AD_UserDef_Field (Context ctx, int AD_UserDef_Field_ID, Trx trxName) : base (ctx, AD_UserDef_Field_ID, trxName)
+public X_VAF_UserCustom_Field (Context ctx, int VAF_UserCustom_Field_ID, Trx trxName) : base (ctx, VAF_UserCustom_Field_ID, trxName)
 {
-/** if (AD_UserDef_Field_ID == 0)
+/** if (VAF_UserCustom_Field_ID == 0)
 {
-SetAD_Field_ID (0);
-SetAD_UserDef_Field_ID (0);
-SetAD_UserDef_Tab_ID (0);
+SetVAF_Field_ID (0);
+SetVAF_UserCustom_Field_ID (0);
+SetVAF_UserCustom_Tab_ID (0);
 }
  */
 }
-public X_AD_UserDef_Field (Ctx ctx, int AD_UserDef_Field_ID, Trx trxName) : base (ctx, AD_UserDef_Field_ID, trxName)
+public X_VAF_UserCustom_Field (Ctx ctx, int VAF_UserCustom_Field_ID, Trx trxName) : base (ctx, VAF_UserCustom_Field_ID, trxName)
 {
-/** if (AD_UserDef_Field_ID == 0)
+/** if (VAF_UserCustom_Field_ID == 0)
 {
-SetAD_Field_ID (0);
-SetAD_UserDef_Field_ID (0);
-SetAD_UserDef_Tab_ID (0);
+SetVAF_Field_ID (0);
+SetVAF_UserCustom_Field_ID (0);
+SetVAF_UserCustom_Tab_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetAD_UserDef_Tab_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Field (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Field (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_UserDef_Field (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Field (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Field (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_UserDef_Field (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Field (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserCustom_Field (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserDef_Field()
+static X_VAF_UserCustom_Field()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_UserDef_Field()
 //static long serialVersionUID 27562514365307L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048518L;
-/** AD_Table_ID=464 */
+/** VAF_TableView_ID=464 */
 public static int Table_ID;
  // =464;
 
-/** TableName=AD_UserDef_Field */
-public static String Table_Name="AD_UserDef_Field";
+/** TableName=VAF_UserCustom_Field */
+public static String Table_Name="VAF_UserCustom_Field";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserDef_Field[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserCustom_Field[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Field.
-@param AD_Field_ID Field on a tab in a window */
-public void SetAD_Field_ID (int AD_Field_ID)
+@param VAF_Field_ID Field on a tab in a window */
+public void SetVAF_Field_ID (int VAF_Field_ID)
 {
-if (AD_Field_ID < 1) throw new ArgumentException ("AD_Field_ID is mandatory.");
-Set_Value ("AD_Field_ID", AD_Field_ID);
+if (VAF_Field_ID < 1) throw new ArgumentException ("VAF_Field_ID is mandatory.");
+Set_Value ("VAF_Field_ID", VAF_Field_ID);
 }
 /** Get Field.
 @return Field on a tab in a window */
-public int GetAD_Field_ID() 
+public int GetVAF_Field_ID() 
 {
-Object ii = Get_Value("AD_Field_ID");
+Object ii = Get_Value("VAF_Field_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,35 +133,35 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Field_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Field_ID().ToString());
 }
 /** Set User defined Field.
-@param AD_UserDef_Field_ID User defined Field */
-public void SetAD_UserDef_Field_ID (int AD_UserDef_Field_ID)
+@param VAF_UserCustom_Field_ID User defined Field */
+public void SetVAF_UserCustom_Field_ID (int VAF_UserCustom_Field_ID)
 {
-if (AD_UserDef_Field_ID < 1) throw new ArgumentException ("AD_UserDef_Field_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserDef_Field_ID", AD_UserDef_Field_ID);
+if (VAF_UserCustom_Field_ID < 1) throw new ArgumentException ("VAF_UserCustom_Field_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserCustom_Field_ID", VAF_UserCustom_Field_ID);
 }
 /** Get User defined Field.
 @return User defined Field */
-public int GetAD_UserDef_Field_ID() 
+public int GetVAF_UserCustom_Field_ID() 
 {
-Object ii = Get_Value("AD_UserDef_Field_ID");
+Object ii = Get_Value("VAF_UserCustom_Field_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User defined Tab.
-@param AD_UserDef_Tab_ID User defined Tab */
-public void SetAD_UserDef_Tab_ID (int AD_UserDef_Tab_ID)
+@param VAF_UserCustom_Tab_ID User defined Tab */
+public void SetVAF_UserCustom_Tab_ID (int VAF_UserCustom_Tab_ID)
 {
-if (AD_UserDef_Tab_ID < 1) throw new ArgumentException ("AD_UserDef_Tab_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserDef_Tab_ID", AD_UserDef_Tab_ID);
+if (VAF_UserCustom_Tab_ID < 1) throw new ArgumentException ("VAF_UserCustom_Tab_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserCustom_Tab_ID", VAF_UserCustom_Tab_ID);
 }
 /** Get User defined Tab.
 @return User defined Tab */
-public int GetAD_UserDef_Tab_ID() 
+public int GetVAF_UserCustom_Tab_ID() 
 {
-Object ii = Get_Value("AD_UserDef_Tab_ID");
+Object ii = Get_Value("VAF_UserCustom_Tab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -250,8 +250,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDisplayed AD_Reference_ID=319 */
-public static int ISDISPLAYED_AD_Reference_ID=319;
+/** IsDisplayed VAF_Control_Ref_ID=319 */
+public static int ISDISPLAYED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDISPLAYED_No = "N";
 /** Yes = Y */
@@ -283,8 +283,8 @@ public String GetIsDisplayed()
 return (String)Get_Value("IsDisplayed");
 }
 
-/** IsMandatoryUI AD_Reference_ID=319 */
-public static int ISMANDATORYUI_AD_Reference_ID=319;
+/** IsMandatoryUI VAF_Control_Ref_ID=319 */
+public static int ISMANDATORYUI_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISMANDATORYUI_No = "N";
 /** Yes = Y */
@@ -316,8 +316,8 @@ public String GetIsMandatoryUI()
 return (String)Get_Value("IsMandatoryUI");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */
@@ -349,8 +349,8 @@ public String GetIsReadOnly()
 return (String)Get_Value("IsReadOnly");
 }
 
-/** IsSameLine AD_Reference_ID=319 */
-public static int ISSAMELINE_AD_Reference_ID=319;
+/** IsSameLine VAF_Control_Ref_ID=319 */
+public static int ISSAMELINE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSAMELINE_No = "N";
 /** Yes = Y */
@@ -382,8 +382,8 @@ public String GetIsSameLine()
 return (String)Get_Value("IsSameLine");
 }
 
-/** IsSelectionColumn AD_Reference_ID=319 */
-public static int ISSELECTIONCOLUMN_AD_Reference_ID=319;
+/** IsSelectionColumn VAF_Control_Ref_ID=319 */
+public static int ISSELECTIONCOLUMN_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSELECTIONCOLUMN_No = "N";
 /** Yes = Y */
@@ -415,8 +415,8 @@ public String GetIsSelectionColumn()
 return (String)Get_Value("IsSelectionColumn");
 }
 
-/** IsSummaryColumn AD_Reference_ID=319 */
-public static int ISSUMMARYCOLUMN_AD_Reference_ID=319;
+/** IsSummaryColumn VAF_Control_Ref_ID=319 */
+public static int ISSUMMARYCOLUMN_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSUMMARYCOLUMN_No = "N";
 /** Yes = Y */
@@ -448,8 +448,8 @@ public String GetIsSummaryColumn()
 return (String)Get_Value("IsSummaryColumn");
 }
 
-/** IsUpdateable AD_Reference_ID=319 */
-public static int ISUPDATEABLE_AD_Reference_ID=319;
+/** IsUpdateable VAF_Control_Ref_ID=319 */
+public static int ISUPDATEABLE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISUPDATEABLE_No = "N";
 /** Yes = Y */

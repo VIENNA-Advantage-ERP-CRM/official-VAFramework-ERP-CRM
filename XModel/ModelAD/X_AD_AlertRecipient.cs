@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AlertRecipient
+/** Generated Model for VAF_AlertRecipient
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AlertRecipient : PO
+public class X_VAF_AlertRecipient : PO
 {
-public X_AD_AlertRecipient (Context ctx, int AD_AlertRecipient_ID, Trx trxName) : base (ctx, AD_AlertRecipient_ID, trxName)
+public X_VAF_AlertRecipient (Context ctx, int VAF_AlertRecipient_ID, Trx trxName) : base (ctx, VAF_AlertRecipient_ID, trxName)
 {
-/** if (AD_AlertRecipient_ID == 0)
+/** if (VAF_AlertRecipient_ID == 0)
 {
-SetAD_AlertRecipient_ID (0);
-SetAD_Alert_ID (0);
+SetVAF_AlertRecipient_ID (0);
+SetVAF_Alert_ID (0);
 }
  */
 }
-public X_AD_AlertRecipient (Ctx ctx, int AD_AlertRecipient_ID, Trx trxName) : base (ctx, AD_AlertRecipient_ID, trxName)
+public X_VAF_AlertRecipient (Ctx ctx, int VAF_AlertRecipient_ID, Trx trxName) : base (ctx, VAF_AlertRecipient_ID, trxName)
 {
-/** if (AD_AlertRecipient_ID == 0)
+/** if (VAF_AlertRecipient_ID == 0)
 {
-SetAD_AlertRecipient_ID (0);
-SetAD_Alert_ID (0);
+SetVAF_AlertRecipient_ID (0);
+SetVAF_Alert_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Alert_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRecipient (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertRecipient (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_AlertRecipient (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRecipient (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertRecipient (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_AlertRecipient (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRecipient (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AlertRecipient (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AlertRecipient()
+static X_VAF_AlertRecipient()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_AlertRecipient()
 //static long serialVersionUID = 27562514360386L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043597L;
-/** AD_Table_ID=592 */
+/** VAF_TableView_ID=592 */
 public static int Table_ID;
  // =592;
 
-/** TableName=AD_AlertRecipient */
-public static String Table_Name="AD_AlertRecipient";
+/** TableName=VAF_AlertRecipient */
+public static String Table_Name="VAF_AlertRecipient";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,68 +109,68 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AlertRecipient[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AlertRecipient[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Alert Recipient.
-@param AD_AlertRecipient_ID Recipient of the Alert Notification */
-public void SetAD_AlertRecipient_ID (int AD_AlertRecipient_ID)
+@param VAF_AlertRecipient_ID Recipient of the Alert Notification */
+public void SetVAF_AlertRecipient_ID (int VAF_AlertRecipient_ID)
 {
-if (AD_AlertRecipient_ID < 1) throw new ArgumentException ("AD_AlertRecipient_ID is mandatory.");
-Set_ValueNoCheck ("AD_AlertRecipient_ID", AD_AlertRecipient_ID);
+if (VAF_AlertRecipient_ID < 1) throw new ArgumentException ("VAF_AlertRecipient_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AlertRecipient_ID", VAF_AlertRecipient_ID);
 }
 /** Get Alert Recipient.
 @return Recipient of the Alert Notification */
-public int GetAD_AlertRecipient_ID() 
+public int GetVAF_AlertRecipient_ID() 
 {
-Object ii = Get_Value("AD_AlertRecipient_ID");
+Object ii = Get_Value("VAF_AlertRecipient_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Alert.
-@param AD_Alert_ID Vienna Alert */
-public void SetAD_Alert_ID (int AD_Alert_ID)
+@param VAF_Alert_ID Vienna Alert */
+public void SetVAF_Alert_ID (int VAF_Alert_ID)
 {
-if (AD_Alert_ID < 1) throw new ArgumentException ("AD_Alert_ID is mandatory.");
-Set_ValueNoCheck ("AD_Alert_ID", AD_Alert_ID);
+if (VAF_Alert_ID < 1) throw new ArgumentException ("VAF_Alert_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Alert_ID", VAF_Alert_ID);
 }
 /** Get Alert.
 @return Vienna Alert */
-public int GetAD_Alert_ID() 
+public int GetVAF_Alert_ID() 
 {
-Object ii = Get_Value("AD_Alert_ID");
+Object ii = Get_Value("VAF_Alert_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -178,7 +178,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 }
 

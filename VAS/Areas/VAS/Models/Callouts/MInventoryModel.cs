@@ -24,11 +24,11 @@ namespace VIS.Models
             M_Inventory_ID = Util.GetValueOfInt(paramValue[0].ToString());
             MInventory inv = new MInventory(ctx, M_Inventory_ID, null);
             DateTime? MovementDate = inv.GetMovementDate();
-            int AD_Org_ID = inv.GetAD_Org_ID();
+            int VAF_Org_ID = inv.GetVAF_Org_ID();
 
             Dictionary<string, string> retDic = new Dictionary<string, string>();
             retDic["MovementDate"] = MovementDate.ToString();
-            retDic["AD_Org_ID"] = AD_Org_ID.ToString();
+            retDic["VAF_Org_ID"] = VAF_Org_ID.ToString();
             return retDic;
         }
     }

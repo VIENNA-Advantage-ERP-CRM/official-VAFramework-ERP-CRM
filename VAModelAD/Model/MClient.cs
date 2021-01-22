@@ -14,16 +14,16 @@ using VAdvantage.Utility;
 
 namespace VAModelAD.Model
 {
-    public class MClient: VAdvantage.Model.X_AD_Client
+    public class MClient: VAdvantage.Model.X_VAF_Client
     {
 
-        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("AD_Client_AD", 3);
+        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("VAF_Client_AD", 3);
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MClient).FullName);
 
         private VAdvantage.Login.Language _language = null;
-        public MClient(Ctx ctx, int AD_Client_ID, Trx trxName)
-            : base(ctx, AD_Client_ID, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, Trx trxName)
+            : base(ctx, VAF_Client_ID, trxName)
         {
 
         }
@@ -34,17 +34,17 @@ namespace VAModelAD.Model
 
         internal static MClient Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_Client_ID());
+            return Get(ctx, ctx.GetVAF_Client_ID());
         }
 
-        internal static MClient Get(Ctx ctx, int AD_Client_ID)
+        internal static MClient Get(Ctx ctx, int VAF_Client_ID)
         {
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             MClient client = (MClient)s_cache[key];
             if (client != null)
                 return client;
-            client = new MClient(ctx, AD_Client_ID, null);
-            if (AD_Client_ID == 0)
+            client = new MClient(ctx, VAF_Client_ID, null);
+            if (VAF_Client_ID == 0)
                 client.Load((Trx)null);
             s_cache.Add(key, client);
             return client;
@@ -54,7 +54,7 @@ namespace VAModelAD.Model
         {
             if (_language == null)
             {
-                _language = VAdvantage.Login.Language.GetLanguage(GetAD_Language());
+                _language = VAdvantage.Login.Language.GetLanguage(GetVAF_Language());
                 _language = Env.VerifyLanguage(GetCtx(), _language);
             }
             return _language;
@@ -85,7 +85,7 @@ namespace VAModelAD.Model
         internal static MClient[] GetAll(Ctx ctx)
         {
             List<MClient> list = new List<MClient>();
-            String sql = "SELECT * FROM AD_Client";
+            String sql = "SELECT * FROM VAF_Client";
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -196,8 +196,8 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -248,8 +248,8 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -299,7 +299,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            toEMail, toName, subject, message);
                 //    }
                 //    else
@@ -371,7 +371,7 @@ namespace VAModelAD.Model
             }
         }
 
-        public bool SendEMail(String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int AD_Table_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
+        public bool SendEMail(String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int VAF_TableView_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
         {
             EMail email = CreateEMail(toEMail, toName, subject, message, isHtml);
             if (email == null)
@@ -383,7 +383,7 @@ namespace VAModelAD.Model
                 email.AddAttachment(array, fileName);
             }
 
-            FetchRecordsAttachment(email, AD_Table_ID, Record_ID);
+            FetchRecordsAttachment(email, VAF_TableView_ID, Record_ID);
             try
             {
                 String msg = email.Send();
@@ -405,9 +405,9 @@ namespace VAModelAD.Model
             }
         }
 
-        private void FetchRecordsAttachment(EMail email, int AD_Table_ID, int Record_ID)
+        private void FetchRecordsAttachment(EMail email, int VAF_TableView_ID, int Record_ID)
         {
-            MAttachment mAttach = MAttachment.Get(p_ctx, AD_Table_ID, Record_ID);
+            MAttachment mAttach = MAttachment.Get(p_ctx, VAF_TableView_ID, Record_ID);
             string filePath = ""; //System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
             if (mAttach == null)
                 return;
@@ -525,8 +525,8 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -574,8 +574,8 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -622,7 +622,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            toEMail, toName, subject, message);
                 //    }
                 //    else
@@ -689,14 +689,14 @@ namespace VAModelAD.Model
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public bool SendEMail(int AD_User_ID, String subject, String message, FileInfo attachment)
+        public bool SendEMail(int VAF_UserContact_ID, String subject, String message, FileInfo attachment)
         {
-            MUser to = MUser.Get(GetCtx(), AD_User_ID);
+            MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
             String toEMail = to.GetEMail();
             if (toEMail == null || toEMail.Length == 0)
             {
@@ -820,9 +820,9 @@ namespace VAModelAD.Model
         {
             String msg = email.Send();
             //
-            X_AD_UserMail um = new X_AD_UserMail(GetCtx(), 0, null);
+            X_VAF_UserMailLog um = new X_VAF_UserMailLog(GetCtx(), 0, null);
             um.SetClientOrg(this);
-            um.SetAD_User_ID(to.GetAD_User_ID());
+            um.SetVAF_UserContact_ID(to.GetVAF_UserContact_ID());
             um.SetSubject(email.GetSubject());
             um.SetMailText(email.GetMessageCRLF());
             if (email.IsSentOK())
@@ -830,7 +830,7 @@ namespace VAModelAD.Model
             else
             {
                 um.SetMessageID(email.GetSentMsg());
-                um.SetIsDelivered(X_AD_UserMail.ISDELIVERED_No);
+                um.SetIsDelivered(X_VAF_UserMailLog.ISDELIVERED_No);
             }
             um.Save();
 
@@ -862,9 +862,9 @@ namespace VAModelAD.Model
         {
             String msg = email.Send();
             //
-            X_AD_UserMail um = new X_AD_UserMail(GetCtx(), 0, null);
+            X_VAF_UserMailLog um = new X_VAF_UserMailLog(GetCtx(), 0, null);
             um.SetClientOrg(this);
-            um.SetAD_User_ID((int)to.Get_Value("AD_User_ID"));
+            um.SetVAF_UserContact_ID((int)to.Get_Value("VAF_UserContact_ID"));
             um.SetSubject(email.GetSubject());
             um.SetMailText(email.GetMessageCRLF());
             if (email.IsSentOK())
@@ -872,7 +872,7 @@ namespace VAModelAD.Model
             else
             {
                 um.SetMessageID(email.GetSentMsg());
-                um.SetIsDelivered(X_AD_UserMail.ISDELIVERED_No);
+                um.SetIsDelivered(X_VAF_UserMailLog.ISDELIVERED_No);
             }
             um.Save();
 

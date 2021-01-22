@@ -18,14 +18,14 @@ namespace VIS.Models
         /// get value from proper accounting schema
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_client_id"></param>
-        /// <param name="ad_org_id"></param>
+        /// <param name="vaf_client_id"></param>
+        /// <param name="vaf_org_id"></param>
         /// <returns></returns>
-        public AcctViewerDataGetClientAcctSch GetClientAcctSchema(Ctx ctx, int ad_client_id, int ad_org_id)
+        public AcctViewerDataGetClientAcctSch GetClientAcctSchema(Ctx ctx, int vaf_client_id, int vaf_org_id)
         {
             AcctViewerDataGetClientAcctSch obj = new AcctViewerDataGetClientAcctSch();
-            obj.AcctSchemas = GetAcctSchemas(ad_client_id, ad_org_id);
-            obj.OtherAcctSchemas = OtherAcctSchemas(ad_client_id);
+            obj.AcctSchemas = GetAcctSchemas(vaf_client_id, vaf_org_id);
+            obj.OtherAcctSchemas = OtherAcctSchemas(vaf_client_id);
             return obj;
         }
 
@@ -33,17 +33,17 @@ namespace VIS.Models
         /// Get Accounting Schema
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_client_id"></param>
-        /// <param name="ad_org_id"></param>
+        /// <param name="vaf_client_id"></param>
+        /// <param name="vaf_org_id"></param>
         /// <returns></returns>
-        private List<AcctViewerDatakeysParam> GetAcctSchemas(int ad_client_id, int ad_org_id)
+        private List<AcctViewerDatakeysParam> GetAcctSchemas(int vaf_client_id, int vaf_org_id)
         {
             List<AcctViewerDatakeysParam> obj = new List<AcctViewerDatakeysParam>();
             string sql =
             sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_AcctSchema WHERE ISACTIVE='Y' AND C_ACCTSCHEMA_ID IN( " +
-        "SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND AD_CLIENT_ID=" + ad_client_id + " AND AD_ORG_ID=" + ad_org_id + ")" +
+        "SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + vaf_client_id + " AND VAF_ORG_ID=" + vaf_org_id + ")" +
         //Get default Accounting schema selected on tenant
-        " OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM AD_ClientInfo where  AD_Client_ID=" + ad_client_id + ")";
+        " OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + vaf_client_id + ")";
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
@@ -63,9 +63,9 @@ namespace VIS.Models
         /// <summary>
         /// get accounting schema according to C_AcctSchema_Gl
         /// </summary>
-        /// <param name="ad_client_id"></param>
+        /// <param name="vaf_client_id"></param>
         /// <returns></returns>
-        private List<AcctViewerDatakeysParam> OtherAcctSchemas(int ad_client_id)
+        private List<AcctViewerDatakeysParam> OtherAcctSchemas(int vaf_client_id)
         {
             List<AcctViewerDatakeysParam> obj = new List<AcctViewerDatakeysParam>();
             string sql = "SELECT c_acctschema_id,name FROM C_AcctSchema acs "
@@ -79,9 +79,9 @@ namespace VIS.Models
             {
                 sql += " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
             }
-            if (ad_client_id != 0)
+            if (vaf_client_id != 0)
             {
-                sql += " AND AD_Client_ID=" + ad_client_id;
+                sql += " AND VAF_Client_ID=" + vaf_client_id;
             }
 
             sql += " ORDER BY C_AcctSchema_ID";
@@ -114,16 +114,16 @@ namespace VIS.Models
 
 
         /// <summary>
-        /// Get Table Data from Ad_table
+        /// Get Table Data from vaf_tableview
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
         public List<AcctViewerDataTabel> AcctViewerGetTabelData(Ctx ctx)
         {
             List<AcctViewerDataTabel> obj = new List<AcctViewerDataTabel>();
-            var sql = "SELECT AD_Table_ID, TableName FROM AD_Table t "
-                        + "WHERE EXISTS (SELECT * FROM AD_Column c"
-                        + " WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='Posted')"
+            var sql = "SELECT VAF_TableView_ID, TableName FROM VAF_TableView t "
+                        + "WHERE EXISTS (SELECT * FROM VAF_Column c"
+                        + " WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='Posted')"
                         + " AND IsView='N'";
             DataSet ds = DB.ExecuteDataset(sql);
 
@@ -132,7 +132,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     AcctViewerDataTabel objt = new AcctViewerDataTabel();
-                    objt.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"]);
+                    objt.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"]);
                     objt.TableName = Util.GetValueOfString(ds.Tables[0].Rows[i]["TableName"]);
                     obj.Add(objt);
                 }
@@ -144,15 +144,15 @@ namespace VIS.Models
         /// get organization data.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_client_id"></param>
+        /// <param name="vaf_client_id"></param>
         /// <returns></returns>
-        public List<AcctViewerDataOrg> AcctViewerGetOrgData(Ctx ctx, int ad_client_id)
+        public List<AcctViewerDataOrg> AcctViewerGetOrgData(Ctx ctx, int vaf_client_id)
         {
             List<AcctViewerDataOrg> obj = new List<AcctViewerDataOrg>();
 
-            var sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + ad_client_id;
+            var sql = "SELECT VAF_Org_ID, Name FROM VAF_Org WHERE VAF_Client_ID=" + vaf_client_id;
             // check applied for checking if organization unit window is available on the target DB or not.
-            MOrg Org = new MOrg(ctx, ctx.GetAD_Org_ID(), null);
+            MOrg Org = new MOrg(ctx, ctx.GetVAF_Org_ID(), null);
             if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
             {
                 sql += " AND IsActive='Y' AND IsCostCenter='N' AND IsProfitCenter='N' AND IsSummary='N' ORDER BY Value ";
@@ -168,7 +168,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     AcctViewerDataOrg objt = new AcctViewerDataOrg();
-                    objt.AD_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Org_ID"]);
+                    objt.VAF_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]);
                     objt.OrgName = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
                     obj.Add(objt);
                 }
@@ -180,13 +180,13 @@ namespace VIS.Models
         /// Get posting data
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_reference_id"></param>
+        /// <param name="VAF_Control_Ref_id"></param>
         /// <returns></returns>
-        public List<AcctViewerDataPosting> AcctViewerGetPostingType(Ctx ctx, int ad_reference_id)
+        public List<AcctViewerDataPosting> AcctViewerGetPostingType(Ctx ctx, int VAF_Control_Ref_id)
         {
             List<AcctViewerDataPosting> obj = new List<AcctViewerDataPosting>();
-            var sql = " SELECT Value, Name FROM AD_Ref_List "
-            + "WHERE AD_Reference_ID=" + ad_reference_id + " AND IsActive='Y' ORDER BY 1";
+            var sql = " SELECT Value, Name FROM VAF_CtrlRef_List "
+            + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_id + " AND IsActive='Y' ORDER BY 1";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {
@@ -311,7 +311,7 @@ namespace VIS.Models
         /// <returns></returns>
         public bool HasOrganizationUnit(Ctx ctx)
         {
-            MOrg Org = new MOrg(ctx, ctx.GetAD_Org_ID(), null);
+            MOrg Org = new MOrg(ctx, ctx.GetVAF_Org_ID(), null);
             if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
             {
                 return true;

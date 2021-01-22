@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Org
+/** Generated Model for VAF_Org
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Org : PO
+public class X_VAF_Org : PO
 {
-public X_AD_Org (Context ctx, int AD_Org_ID, Trx trxName) : base (ctx, AD_Org_ID, trxName)
+public X_VAF_Org (Context ctx, int VAF_Org_ID, Trx trxName) : base (ctx, VAF_Org_ID, trxName)
 {
-/** if (AD_Org_ID == 0)
-{
-SetIsSummary (false);
-SetName (null);
-SetValue (null);
-}
- */
-}
-public X_AD_Org (Ctx ctx, int AD_Org_ID, Trx trxName) : base (ctx, AD_Org_ID, trxName)
-{
-/** if (AD_Org_ID == 0)
+/** if (VAF_Org_ID == 0)
 {
 SetIsSummary (false);
 SetName (null);
@@ -36,12 +26,22 @@ SetValue (null);
 }
  */
 }
+public X_VAF_Org (Ctx ctx, int VAF_Org_ID, Trx trxName) : base (ctx, VAF_Org_ID, trxName)
+{
+/** if (VAF_Org_ID == 0)
+{
+SetIsSummary (false);
+SetName (null);
+SetValue (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Org (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Org (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Org (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Org (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Org (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Org (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Org (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Org (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Org()
+static X_VAF_Org()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_Org()
 //static long serialVersionUID = 27562514362345L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045556L;
-/** AD_Table_ID=155 */
+/** VAF_TableView_ID=155 */
 public static int Table_ID;
  // =155;
 
-/** TableName=AD_Org */
-public static String Table_Name="AD_Org";
+/** TableName=VAF_Org */
+public static String Table_Name="VAF_Org";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Org[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Org[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.

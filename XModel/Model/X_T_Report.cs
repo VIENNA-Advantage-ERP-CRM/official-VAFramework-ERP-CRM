@@ -20,7 +20,7 @@ public X_T_Report (Context ctx, int T_Report_ID, Trx trxName) : base (ctx, T_Rep
 {
 /** if (T_Report_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetFact_Acct_ID (0);
 SetPA_ReportLine_ID (0);
 SetRecord_ID (0);
@@ -31,7 +31,7 @@ public X_T_Report (Ctx ctx, int T_Report_ID, Trx trxName) : base (ctx, T_Report_
 {
 /** if (T_Report_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetFact_Acct_ID (0);
 SetPA_ReportLine_ID (0);
 SetRecord_ID (0);
@@ -74,7 +74,7 @@ static X_T_Report()
 //static long serialVersionUID 27562514384349L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067560L;
-/** AD_Table_ID=544 */
+/** VAF_TableView_ID=544 */
 public static int Table_ID;
  // =544;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_T_Report[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,7 +135,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 /** Set Col_0.
 @param Col_0 Col_0 */

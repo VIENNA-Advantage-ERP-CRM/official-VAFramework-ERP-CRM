@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserDef_Win
+/** Generated Model for VAF_UserCustom_Win
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserDef_Win : PO
+public class X_VAF_UserCustom_Win : PO
 {
-public X_AD_UserDef_Win (Context ctx, int AD_UserDef_Win_ID, Trx trxName) : base (ctx, AD_UserDef_Win_ID, trxName)
+public X_VAF_UserCustom_Win (Context ctx, int VAF_UserCustom_Win_ID, Trx trxName) : base (ctx, VAF_UserCustom_Win_ID, trxName)
 {
-/** if (AD_UserDef_Win_ID == 0)
+/** if (VAF_UserCustom_Win_ID == 0)
 {
-SetAD_UserDef_Win_ID (0);
-SetAD_Window_ID (0);
+SetVAF_UserCustom_Win_ID (0);
+SetVAF_Screen_ID (0);
 SetCustomizationName (null);
 }
  */
 }
-public X_AD_UserDef_Win (Ctx ctx, int AD_UserDef_Win_ID, Trx trxName) : base (ctx, AD_UserDef_Win_ID, trxName)
+public X_VAF_UserCustom_Win (Ctx ctx, int VAF_UserCustom_Win_ID, Trx trxName) : base (ctx, VAF_UserCustom_Win_ID, trxName)
 {
-/** if (AD_UserDef_Win_ID == 0)
+/** if (VAF_UserCustom_Win_ID == 0)
 {
-SetAD_UserDef_Win_ID (0);
-SetAD_Window_ID (0);
+SetVAF_UserCustom_Win_ID (0);
+SetVAF_Screen_ID (0);
 SetCustomizationName (null);
 }
  */
@@ -41,7 +41,7 @@ SetCustomizationName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Win (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Win (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_UserDef_Win (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Win (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Win (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_UserDef_Win (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Win (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserCustom_Win (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserDef_Win()
+static X_VAF_UserCustom_Win()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_UserDef_Win()
 //static long serialVersionUID 27562514365385L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048596L;
-/** AD_Table_ID=467 */
+/** VAF_TableView_ID=467 */
 public static int Table_ID;
  // =467;
 
-/** TableName=AD_UserDef_Win */
-public static String Table_Name="AD_UserDef_Win";
+/** TableName=VAF_UserCustom_Win */
+public static String Table_Name="VAF_UserCustom_Win";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,88 +111,88 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserDef_Win[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserCustom_Win[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** AD_Language AD_Reference_ID=106 */
-public static int AD_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language != null && AD_Language.Length > 5)
+if (VAF_Language != null && VAF_Language.Length > 5)
 {
 log.Warning("Length > 5 - truncated");
-AD_Language = AD_Language.Substring(0,5);
+VAF_Language = VAF_Language.Substring(0,5);
 }
-Set_Value ("AD_Language", AD_Language);
+Set_Value ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User defined Window.
-@param AD_UserDef_Win_ID User defined Window */
-public void SetAD_UserDef_Win_ID (int AD_UserDef_Win_ID)
+@param VAF_UserCustom_Win_ID User defined Window */
+public void SetVAF_UserCustom_Win_ID (int VAF_UserCustom_Win_ID)
 {
-if (AD_UserDef_Win_ID < 1) throw new ArgumentException ("AD_UserDef_Win_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserDef_Win_ID", AD_UserDef_Win_ID);
+if (VAF_UserCustom_Win_ID < 1) throw new ArgumentException ("VAF_UserCustom_Win_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserCustom_Win_ID", VAF_UserCustom_Win_ID);
 }
 /** Get User defined Window.
 @return User defined Window */
-public int GetAD_UserDef_Win_ID() 
+public int GetVAF_UserCustom_Win_ID() 
 {
-Object ii = Get_Value("AD_UserDef_Win_ID");
+Object ii = Get_Value("VAF_UserCustom_Win_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID < 1) throw new ArgumentException ("AD_Window_ID is mandatory.");
-Set_Value ("AD_Window_ID", AD_Window_ID);
+if (VAF_Screen_ID < 1) throw new ArgumentException ("VAF_Screen_ID is mandatory.");
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -255,8 +255,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDefault AD_Reference_ID=319 */
-public static int ISDEFAULT_AD_Reference_ID=319;
+/** IsDefault VAF_Control_Ref_ID=319 */
+public static int ISDEFAULT_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDEFAULT_No = "N";
 /** Yes = Y */
@@ -288,8 +288,8 @@ public String GetIsDefault()
 return (String)Get_Value("IsDefault");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */

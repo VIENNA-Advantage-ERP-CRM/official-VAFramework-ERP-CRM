@@ -82,7 +82,7 @@ static X_M_PriceList()
 //static long serialVersionUID 27562514380384L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063595L;
-/** AD_Table_ID=255 */
+/** VAF_TableView_ID=255 */
 public static int Table_ID;
  // =255;
 
@@ -125,8 +125,8 @@ StringBuilder sb = new StringBuilder ("X_M_PriceList[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 
-/** BasePriceList_ID AD_Reference_ID=166 */
-public static int BASEPRICELIST_ID_AD_Reference_ID=166;
+/** BasePriceList_ID VAF_Control_Ref_ID=166 */
+public static int BASEPRICELIST_ID_VAF_Control_Ref_ID=166;
 /** Set Base Pricelist.
 @param BasePriceList_ID Pricelist to be used, if product not found on this pricelist */
 public void SetBasePriceList_ID (int BasePriceList_ID)
@@ -300,8 +300,8 @@ Object ii = Get_Value("PricePrecision");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** VA008_SalesRegion_ID AD_Reference_ID=1000177 */
-public static int VA008_SALESREGION_ID_AD_Reference_ID = 1000177;
+/** VA008_SalesRegion_ID VAF_Control_Ref_ID=1000177 */
+public static int VA008_SALESREGION_ID_VAF_Control_Ref_ID = 1000177;
 /** Set Sales Region.
 @param VA008_SalesRegion_ID Sales Region */
 public void SetVA008_SalesRegion_ID(int VA008_SalesRegion_ID)

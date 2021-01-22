@@ -20,7 +20,7 @@ public X_T_Aging (Context ctx, int T_Aging_ID, Trx trxName) : base (ctx, T_Aging
 {
 /** if (T_Aging_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetC_BP_Group_ID (0);
 SetC_BPartner_ID (0);
 SetC_Currency_ID (0);
@@ -59,7 +59,7 @@ public X_T_Aging (Ctx ctx, int T_Aging_ID, Trx trxName) : base (ctx, T_Aging_ID,
 {
 /** if (T_Aging_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetC_BP_Group_ID (0);
 SetC_BPartner_ID (0);
 SetC_Currency_ID (0);
@@ -130,7 +130,7 @@ static X_T_Aging()
 //static long serialVersionUID 27562514384130L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067341L;
-/** AD_Table_ID=631 */
+/** VAF_TableView_ID=631 */
 public static int Table_ID;
  // =631;
 
@@ -173,17 +173,17 @@ StringBuilder sb = new StringBuilder ("X_T_Aging[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -191,7 +191,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 /** Set Activity.
 @param C_Activity_ID Business Activity */

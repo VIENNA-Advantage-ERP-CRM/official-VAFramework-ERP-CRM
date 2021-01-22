@@ -76,7 +76,7 @@ static X_C_Task()
 //static long serialVersionUID 27562514375322L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058533L;
-/** AD_Table_ID=583 */
+/** VAF_TableView_ID=583 */
 public static int Table_ID;
  // =583;
 
@@ -254,8 +254,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** TaskType AD_Reference_ID=408 */
-public static int TASKTYPE_AD_Reference_ID=408;
+/** TaskType VAF_Control_Ref_ID=408 */
+public static int TASKTYPE_VAF_Control_Ref_ID=408;
 /** Personal Activity = A */
 public static String TASKTYPE_PersonalActivity = "A";
 /** Delegation = D */

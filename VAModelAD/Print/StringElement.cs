@@ -164,12 +164,12 @@ namespace VAdvantage.Print
                                 layout = measurer.NextLayout(p_width, iter.GetEndIndex());
                                 tabPos = -1;	//	reset (just one tab)
                             }
-                            else if ((X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType) && layout.IsLeftToRight())
-                                || (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft.Equals(p_FieldAlignmentType)) && !layout.IsLeftToRight())
+                            else if ((X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType) && layout.IsLeftToRight())
+                                || (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_LeadingLeft.Equals(p_FieldAlignmentType)) && !layout.IsLeftToRight())
                                 xPen += p_maxWidth - layout.GetAdvance();
-                            else if (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+                            else if (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                                 xPen += (p_maxWidth - layout.GetAdvance()) / 2;
-                            else if (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Block.Equals(p_FieldAlignmentType) && measurer.GetPosition() < iter.GetEndIndex())
+                            else if (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Block.Equals(p_FieldAlignmentType) && measurer.GetPosition() < iter.GetEndIndex())
                             {
                                 //layout = layout.getJustifiedLayout(p_maxWidth);
                                 fastDraw = false;
@@ -650,12 +650,12 @@ namespace VAdvantage.Print
                                 layout = measurer.NextLayout(p_width, iter.GetEndIndex());
                                 tabPos = -1;	//	reset (just one tab)
                             }
-                            else if ((X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType) && layout.IsLeftToRight())
-                                || (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft.Equals(p_FieldAlignmentType)) && !layout.IsLeftToRight())
+                            else if ((X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType) && layout.IsLeftToRight())
+                                || (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_LeadingLeft.Equals(p_FieldAlignmentType)) && !layout.IsLeftToRight())
                                 xPen += p_maxWidth - layout.GetAdvance();
-                            else if (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+                            else if (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                                 xPen += (p_maxWidth - layout.GetAdvance()) / 2;
-                            else if (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Block.Equals(p_FieldAlignmentType) && measurer.GetPosition() < iter.GetEndIndex())
+                            else if (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Block.Equals(p_FieldAlignmentType) && measurer.GetPosition() < iter.GetEndIndex())
                             {
                                 //layout = layout.getJustifiedLayout(p_maxWidth);
                                 fastDraw = false;

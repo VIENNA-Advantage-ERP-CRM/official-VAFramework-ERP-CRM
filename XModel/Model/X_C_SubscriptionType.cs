@@ -74,7 +74,7 @@ static X_C_SubscriptionType()
 //static long serialVersionUID 27562514375275L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058486L;
-/** AD_Table_ID=668 */
+/** VAF_TableView_ID=668 */
 public static int Table_ID;
  // =668;
 
@@ -163,8 +163,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */

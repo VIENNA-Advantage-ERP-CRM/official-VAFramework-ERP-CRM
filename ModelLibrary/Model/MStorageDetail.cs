@@ -539,8 +539,8 @@ namespace VAdvantage.Model
             List<MStorageDetail> list = new List<MStorageDetail>();
             String sql = "select s.* "
                     + "from M_STORAGEDETAIL  s INNER JOIN M_STORAGEDETAIL  t "
-                    + "on ( s.AD_CLIENT_ID = t.AD_CLIENT_ID "
-                    + "and s.AD_ORG_ID    = t.AD_ORG_ID "
+                    + "on ( s.VAF_CLIENT_ID = t.VAF_CLIENT_ID "
+                    + "and s.VAF_ORG_ID    = t.VAF_ORG_ID "
                     + "and s.M_PRODUCT_ID = t.M_PRODUCT_ID "
                     + "and s.M_LOCATOR_ID = t.M_LOCATOR_ID) "
                     + "where s.QTYTYPE ='" + qtyType.GetValue() + "' " + "and s.M_PRODUCT_ID =" + M_Product_ID

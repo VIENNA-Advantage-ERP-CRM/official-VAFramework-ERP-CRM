@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (RC_KPI_ID == 0)
             {
-            SetAD_Table_ID (0);	// 0
+            SetVAF_TableView_ID (0);	// 0
             SetRC_KPI_ID (0);
             }
              */
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         {
             /** if (RC_KPI_ID == 0)
             {
-            SetAD_Table_ID (0);	// 0
+            SetVAF_TableView_ID (0);	// 0
             SetRC_KPI_ID (0);
             }
              */
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27699638137869L;
         /** Last Updated Timestamp 12/2/2014 3:03:41 PM */
         public static long updatedMS = 1417512821080L;
-        /** AD_Table_ID=1000227 */
+        /** VAF_TableView_ID=1000227 */
         public static int Table_ID;
         // =1000227;
 
@@ -118,136 +118,136 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Column.
-        @param AD_Column_ID Column in the table */
-        public void SetAD_Column_ID(int AD_Column_ID)
+        @param VAF_Column_ID Column in the table */
+        public void SetVAF_Column_ID(int VAF_Column_ID)
         {
-            if (AD_Column_ID <= 0) Set_Value("AD_Column_ID", null);
+            if (VAF_Column_ID <= 0) Set_Value("VAF_Column_ID", null);
             else
-                Set_Value("AD_Column_ID", AD_Column_ID);
+                Set_Value("VAF_Column_ID", VAF_Column_ID);
         }
         /** Get Column.
         @return Column in the table */
-        public int GetAD_Column_ID()
+        public int GetVAF_Column_ID()
         {
-            Object ii = Get_Value("AD_Column_ID");
+            Object ii = Get_Value("VAF_Column_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-           // if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_Value("AD_Table_ID", AD_Table_ID);
+           // if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User Query.
-        @param AD_UserQuery_ID Saved User Query */
-        public void SetAD_UserQuery_ID(int AD_UserQuery_ID)
+        @param VAF_UserSearch_ID Saved User Query */
+        public void SetVAF_UserSearch_ID(int VAF_UserSearch_ID)
         {
-            if (AD_UserQuery_ID <= 0) Set_Value("AD_UserQuery_ID", null);
+            if (VAF_UserSearch_ID <= 0) Set_Value("VAF_UserSearch_ID", null);
             else
-                Set_Value("AD_UserQuery_ID", AD_UserQuery_ID);
+                Set_Value("VAF_UserSearch_ID", VAF_UserSearch_ID);
         }
         /** Get User Query.
         @return Saved User Query */
-        public int GetAD_UserQuery_ID()
+        public int GetVAF_UserSearch_ID()
         {
-            Object ii = Get_Value("AD_UserQuery_ID");
+            Object ii = Get_Value("VAF_UserSearch_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_UserQuery_ID_1 AD_Reference_ID=1000182 */
-        public static int AD_USERQUERY_ID_1_AD_Reference_ID = 1000182;
+        /** VAF_UserSearch_ID_1 VAF_Control_Ref_ID=1000182 */
+        public static int VAF_USERSEARCH_ID_1_VAF_Control_Ref_ID = 1000182;
         /** Set User Query for Comparison.
-        @param AD_UserQuery_ID_1 User Query for Comparison */
-        public void SetAD_UserQuery_ID_1(int AD_UserQuery_ID_1)
+        @param VAF_UserSearch_ID_1 User Query for Comparison */
+        public void SetVAF_UserSearch_ID_1(int VAF_UserSearch_ID_1)
         {
-            Set_Value("AD_UserQuery_ID_1", AD_UserQuery_ID_1);
+            Set_Value("VAF_UserSearch_ID_1", VAF_UserSearch_ID_1);
         }
         /** Get User Query for Comparison.
         @return User Query for Comparison */
-        public int GetAD_UserQuery_ID_1()
+        public int GetVAF_UserSearch_ID_1()
         {
-            Object ii = Get_Value("AD_UserQuery_ID_1");
+            Object ii = Get_Value("VAF_UserSearch_ID_1");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** Ad_Chart_BG_Color_ID AD_Reference_ID=266 */
-        public static int AD_CHART_BG_COLOR_ID_AD_Reference_ID = 266;
+        /** Ad_Chart_BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int AD_CHART_BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Chart Background Color.
         @param Ad_Chart_BG_Color_ID Chart Background Color */
         public void SetAd_Chart_BG_Color_ID(int Ad_Chart_BG_Color_ID)
@@ -458,8 +458,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** KPIType AD_Reference_ID=1000179 */
-        public static int KPITYPE_AD_Reference_ID = 1000179;
+        /** KPIType VAF_Control_Ref_ID=1000179 */
+        public static int KPITYPE_VAF_Control_Ref_ID = 1000179;
         /** Linear = Li */
         public static String KPITYPE_Linear = "Li";
         /** Radial = Ra */
@@ -493,8 +493,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("KPIType");
         }
 
-        /** LabelColor_ID AD_Reference_ID=266 */
-        public static int LABELCOLOR_ID_AD_Reference_ID = 266;
+        /** LabelColor_ID VAF_Control_Ref_ID=266 */
+        public static int LABELCOLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Label Color.
         @param LabelColor_ID Label Color */
         public void SetLabelColor_ID(int LabelColor_ID)
@@ -700,8 +700,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** TableView_ID AD_Reference_ID=1000186 */
-        public static int TABLEVIEW_ID_AD_Reference_ID = 1000186;
+        /** TableView_ID VAF_Control_Ref_ID=1000186 */
+        public static int TABLEVIEW_ID_VAF_Control_Ref_ID = 1000186;
         /** Set Table View.
         @param TableView_ID Table View */
         public void SetTableView_ID(int TableView_ID)

@@ -82,7 +82,7 @@ static X_M_MovementLineConfirm()
 //static long serialVersionUID 27562514380165L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063376L;
-/** AD_Table_ID=737 */
+/** VAF_TableView_ID=737 */
 public static int Table_ID;
  // =737;
 

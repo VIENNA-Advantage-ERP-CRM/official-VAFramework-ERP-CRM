@@ -25,14 +25,14 @@ namespace VIS.Controllers
         [HttpPost]
         [ValidateInput(false)]
 
-        public JsonResult GetDocActions(int AD_Table_ID, int Record_ID, string docStatus, bool processing, string orderType, bool isSOTrx, string docAction, string tableName, string values, string names)
+        public JsonResult GetDocActions(int VAF_TableView_ID, int Record_ID, string docStatus, bool processing, string orderType, bool isSOTrx, string docAction, string tableName, string values, string names)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             DocActionModel model = new DocActionModel(ctx);
             List<string> lstValues = JsonConvert.DeserializeObject<List<string>>(values);
             List<string> lstNames = JsonConvert.DeserializeObject<List<string>>(names);
 
-            DocAtions action = model.GetActions(AD_Table_ID, Record_ID, docStatus, Util.GetValueOfBool(processing), orderType, Util.GetValueOfBool(isSOTrx), docAction, tableName, lstValues, lstNames);
+            DocAtions action = model.GetActions(VAF_TableView_ID, Record_ID, docStatus, Util.GetValueOfBool(processing), orderType, Util.GetValueOfBool(isSOTrx), docAction, tableName, lstValues, lstNames);
             return Json(JsonConvert.SerializeObject(action), JsonRequestBehavior.AllowGet); ;
         }
 

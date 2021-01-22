@@ -60,10 +60,10 @@ namespace VAdvantage.Model
          * 	Create Asset Delivery for HTTP Request
          * 	@param asset asset
          * 	@param request request
-         * 	@param AD_User_ID BP Contact
+         * 	@param VAF_UserContact_ID BP Contact
          */
         //public MAssetDelivery(MAsset asset,
-        //    HttpServletRequest request, int AD_User_ID)
+        //    HttpServletRequest request, int VAF_UserContact_ID)
         //{
         //    base(asset.getCtx(), 0, asset.get_TrxName());
         //    setClientOrg(asset);
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         //    setRemote_Addr(request.getRemoteAddr());
         //    setRemote_Host(request.getRemoteHost());
         //    //	Who
-        //    setAD_User_ID(AD_User_ID);
+        //    setVAF_UserContact_ID(VAF_UserContact_ID);
         //    //
         //    save();
         //}
@@ -90,9 +90,9 @@ namespace VAdvantage.Model
          * 	@param asset asset
          * 	@param email optional email
          * 	@param messageID access ID
-         * 	@param AD_User_ID BP Contact
+         * 	@param VAF_UserContact_ID BP Contact
          */
-        public MAssetDelivery(MAsset asset, EMail email, String messageID, int AD_User_ID)
+        public MAssetDelivery(MAsset asset, EMail email, String messageID, int VAF_UserContact_ID)
             : base(asset.GetCtx(), 0, asset.Get_TrxName())
         {
             SetClientOrg(asset);
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
             else
                 SetMessageID(messageID);
             //	Who
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             //
             Save();
         }

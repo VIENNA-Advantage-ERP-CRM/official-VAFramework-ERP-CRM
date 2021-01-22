@@ -68,7 +68,7 @@ static X_CM_Subscribe()
 //static long serialVersionUID 27687125081137L;
 /** Last Updated Timestamp 2014-07-10 7:12:44 PM */
 public static long updatedMS = 1404999764348L;
-/** AD_Table_ID=1000239 */
+/** VAF_TableView_ID=1000239 */
 public static int Table_ID;
  // =1000239;
 
@@ -111,50 +111,50 @@ StringBuilder sb = new StringBuilder ("X_CM_Subscribe[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID <= 0) Set_Value ("AD_Window_ID", null);
+if (VAF_Screen_ID <= 0) Set_Value ("VAF_Screen_ID", null);
 else
-Set_Value ("AD_Window_ID", AD_Window_ID);
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

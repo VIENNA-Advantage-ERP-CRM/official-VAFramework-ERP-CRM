@@ -91,7 +91,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27562514379710L;
         /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
         public static long updatedMS = 1280389062921L;
-        /** AD_Table_ID=321 */
+        /** VAF_TableView_ID=321 */
         public static int Table_ID;
         // =321;
 
@@ -134,21 +134,21 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
-        @param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        @param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /** Get Trx Organization.
         @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            Object ii = Get_Value("AD_OrgTrx_ID");
+            Object ii = Get_Value("VAF_OrgTrx_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -247,8 +247,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -305,8 +305,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -566,8 +566,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("UpdateQty");
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -585,8 +585,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -675,8 +675,8 @@ namespace VAdvantage.Model
         public void SetIsReversal(Boolean IsReversal) { Set_Value("IsReversal", IsReversal); }
         /** Get Reversal.@return This is a reversing transaction */
         public Boolean IsReversal() { Object oo = Get_Value("IsReversal"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** ReversalDoc_ID AD_Reference_ID=1000208 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 1000208;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=1000208 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 1000208;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

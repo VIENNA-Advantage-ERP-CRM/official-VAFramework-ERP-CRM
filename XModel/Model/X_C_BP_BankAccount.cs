@@ -72,7 +72,7 @@ static X_C_BP_BankAccount()
 //static long serialVersionUID 27562514369868L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053079L;
-/** AD_Table_ID=298 */
+/** VAF_TableView_ID=298 */
 public static int Table_ID;
  // =298;
 
@@ -115,18 +115,18 @@ StringBuilder sb = new StringBuilder ("X_C_BP_BankAccount[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -318,8 +318,8 @@ public String GetBBAN()
 return (String)Get_Value("BBAN");
 }
 
-/** BPBankAcctUse AD_Reference_ID=393 */
-public static int BPBANKACCTUSE_AD_Reference_ID=393;
+/** BPBankAcctUse VAF_Control_Ref_ID=393 */
+public static int BPBANKACCTUSE_VAF_Control_Ref_ID=393;
 /** Both = B */
 public static String BPBANKACCTUSE_Both = "B";
 /** Direct Debit = D */
@@ -355,8 +355,8 @@ public String GetBPBankAcctUse()
 return (String)Get_Value("BPBankAcctUse");
 }
 
-/** BankAccountType AD_Reference_ID=216 */
-public static int BANKACCOUNTTYPE_AD_Reference_ID=216;
+/** BankAccountType VAF_Control_Ref_ID=216 */
+public static int BANKACCOUNTTYPE_VAF_Control_Ref_ID=216;
 /** Checking = C */
 public static String BANKACCOUNTTYPE_Checking = "C";
 /** Savings = S */
@@ -485,8 +485,8 @@ public String GetCreditCardNumber()
 return (String)Get_Value("CreditCardNumber");
 }
 
-/** CreditCardType AD_Reference_ID=149 */
-public static int CREDITCARDTYPE_AD_Reference_ID=149;
+/** CreditCardType VAF_Control_Ref_ID=149 */
+public static int CREDITCARDTYPE_VAF_Control_Ref_ID=149;
 /** Amex = A */
 public static String CREDITCARDTYPE_Amex = "A";
 /** ATM = C */
@@ -563,8 +563,8 @@ if (oo != null)
 return false;
 }
 
-/** R_AvsAddr AD_Reference_ID=213 */
-public static int R_AVSADDR_AD_Reference_ID=213;
+/** R_AvsAddr VAF_Control_Ref_ID=213 */
+public static int R_AVSADDR_VAF_Control_Ref_ID=213;
 /** No Match = N */
 public static String R_AVSADDR_NoMatch = "N";
 /** Unavailable = X */
@@ -598,8 +598,8 @@ public String GetR_AvsAddr()
 return (String)Get_Value("R_AvsAddr");
 }
 
-/** R_AvsZip AD_Reference_ID=213 */
-public static int R_AVSZIP_AD_Reference_ID=213;
+/** R_AvsZip VAF_Control_Ref_ID=213 */
+public static int R_AVSZIP_VAF_Control_Ref_ID=213;
 /** No Match = N */
 public static String R_AVSZIP_NoMatch = "N";
 /** Unavailable = X */

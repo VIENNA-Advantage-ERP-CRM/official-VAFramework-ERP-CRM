@@ -84,7 +84,7 @@ static X_C_ProjectPhase()
 //static long serialVersionUID 27562514374334L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057545L;
-/** AD_Table_ID=576 */
+/** VAF_TableView_ID=576 */
 public static int Table_ID;
  // =576;
 
@@ -381,8 +381,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** ProjInvoiceRule AD_Reference_ID=383 */
-public static int PROJINVOICERULE_AD_Reference_ID=383;
+/** ProjInvoiceRule VAF_Control_Ref_ID=383 */
+public static int PROJINVOICERULE_VAF_Control_Ref_ID=383;
 /** None = - */
 public static String PROJINVOICERULE_None = "-";
 /** Committed Amount = C */

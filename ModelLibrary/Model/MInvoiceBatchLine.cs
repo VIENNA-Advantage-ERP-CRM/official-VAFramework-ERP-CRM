@@ -188,16 +188,16 @@ namespace VAdvantage.Model
             if (C_BPartner_ID == 0)
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=@C_BPartner_ID AND p.IsActive='Y'";		//	#1
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
@@ -218,10 +218,10 @@ namespace VAdvantage.Model
                     if (C_BPartner_Location_ID != 0)
                         SetC_BPartner_Location_ID(C_BPartner_Location_ID);
                     //	Contact - overwritten by InfoBP selection
-                    int AD_User_ID = int.Parse(dr["AD_User_ID"].ToString());
+                    int VAF_UserContact_ID = int.Parse(dr["VAF_UserContact_ID"].ToString());
                     if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == C_BPartner_ID)
-                        AD_User_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
-                    SetAD_User_ID(AD_User_ID);
+                        VAF_UserContact_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
+                    SetVAF_UserContact_ID(VAF_UserContact_ID);
 
                     //	CreditAvailable
                     if (isSOTrx)
@@ -328,16 +328,16 @@ namespace VAdvantage.Model
             DateTime? shipDate = billDate;
             log.Fine("Ship Date=" + shipDate);
 
-            int AD_Org_ID = GetAD_Org_ID();
-            log.Fine("Org=" + AD_Org_ID);
-            MOrg org = MOrg.Get(GetCtx(), AD_Org_ID);
+            int VAF_Org_ID = GetVAF_Org_ID();
+            log.Fine("Org=" + VAF_Org_ID);
+            MOrg org = MOrg.Get(GetCtx(), VAF_Org_ID);
             int M_Warehouse_ID = org.GetM_Warehouse_ID();
             log.Fine("Warehouse=" + M_Warehouse_ID);
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             //
             int C_Tax_ID = Tax.Get(GetCtx(), 0, C_Charge_ID, billDate, shipDate,
-                AD_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
+                VAF_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
                 isSOTrx);
             log.Info("Tax ID=" + C_Tax_ID + " - SOTrx=" + isSOTrx);
 

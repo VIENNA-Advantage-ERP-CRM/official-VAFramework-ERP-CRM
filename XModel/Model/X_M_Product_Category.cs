@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721931421699L;
         /** Last Updated Timestamp 8/17/2015 3:38:25 PM */
         public static long updatedMS = 1439806104910L;
-        /** AD_Table_ID=209 */
+        /** VAF_TableView_ID=209 */
         public static int Table_ID;
         // =209;
 
@@ -130,34 +130,34 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Print Color.
-        @param AD_PrintColor_ID Color used for printing and display */
-        public void SetAD_PrintColor_ID(int AD_PrintColor_ID)
+        @param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+        public void SetVAF_Print_Rpt_Colour_ID(int VAF_Print_Rpt_Colour_ID)
         {
-            if (AD_PrintColor_ID <= 0) Set_Value("AD_PrintColor_ID", null);
+            if (VAF_Print_Rpt_Colour_ID <= 0) Set_Value("VAF_Print_Rpt_Colour_ID", null);
             else
-                Set_Value("AD_PrintColor_ID", AD_PrintColor_ID);
+                Set_Value("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
         }
         /** Get Print Color.
         @return Color used for printing and display */
-        public int GetAD_PrintColor_ID()
+        public int GetVAF_Print_Rpt_Colour_ID()
         {
-            Object ii = Get_Value("AD_PrintColor_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -317,8 +317,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** MMPolicy AD_Reference_ID=335 */
-        public static int MMPOLICY_AD_Reference_ID = 335;
+        /** MMPolicy VAF_Control_Ref_ID=335 */
+        public static int MMPOLICY_VAF_Control_Ref_ID = 335;
         /** FiFo = F */
         public static String MMPOLICY_FiFo = "F";
         /** LiFo = L */
@@ -431,8 +431,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** ProductType AD_Reference_ID=270 */
-        public static int PRODUCTTYPE_AD_Reference_ID = 270;
+        /** ProductType VAF_Control_Ref_ID=270 */
+        public static int PRODUCTTYPE_VAF_Control_Ref_ID = 270;
         /** Expense type = E */
         public static String PRODUCTTYPE_ExpenseType = "E";
         /** Item = I */
@@ -507,8 +507,8 @@ namespace VAdvantage.Model
         }
 
         #region FRPT Posting Columns
-        /** FRPT_CostingLevel AD_Reference_ID=355 */
-        public static int FRPT_COSTINGLEVEL_AD_Reference_ID = 355;/** Batch/Lot = B */
+        /** FRPT_CostingLevel VAF_Control_Ref_ID=355 */
+        public static int FRPT_COSTINGLEVEL_VAF_Control_Ref_ID = 355;/** Batch/Lot = B */
         public static String FRPT_COSTINGLEVEL_BatchLot = "B";/** Client = C */
         public static String FRPT_COSTINGLEVEL_Client = "C";/** Organization = O */
         public static String FRPT_COSTINGLEVEL_Organization = "O";
@@ -542,8 +542,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("FRPT_CostingLevel");
         }
 
-        /** FRPT_CostingMethod AD_Reference_ID=122 */
-        public static int FRPT_COSTINGMETHOD_AD_Reference_ID = 122;/** Average PO = A */
+        /** FRPT_CostingMethod VAF_Control_Ref_ID=122 */
+        public static int FRPT_COSTINGMETHOD_VAF_Control_Ref_ID = 122;/** Average PO = A */
         public static String FRPT_COSTINGMETHOD_AveragePO = "A";/** Fifo = F */
         public static String FRPT_COSTINGMETHOD_Fifo = "F";/** Average Invoice = I */
         public static String FRPT_COSTINGMETHOD_AverageInvoice = "I";/** Lifo = L */
@@ -588,8 +588,8 @@ namespace VAdvantage.Model
         #endregion
 
 
-        /** CostingLevel AD_Reference_ID=355 */
-        public static int COSTINGLEVEL_AD_Reference_ID = 355;/** Org + Batch = A */
+        /** CostingLevel VAF_Control_Ref_ID=355 */
+        public static int COSTINGLEVEL_VAF_Control_Ref_ID = 355;/** Org + Batch = A */
         public static String COSTINGLEVEL_OrgPlusBatch = "A";/** Batch/Lot = B */
         public static String COSTINGLEVEL_BatchLot = "B";/** Client = C */
         public static String COSTINGLEVEL_Client = "C";/** Warehouse + Batch = D */
@@ -617,8 +617,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("CostingLevel");
         }
 
-        /** CostingMethod AD_Reference_ID=122 */
-        public static int COSTINGMETHOD_AD_Reference_ID = 122;/** Average PO = A */
+        /** CostingMethod VAF_Control_Ref_ID=122 */
+        public static int COSTINGMETHOD_VAF_Control_Ref_ID = 122;/** Average PO = A */
         public static String COSTINGMETHOD_AveragePO = "A";/** Cost Combination = C */
         public static String COSTINGMETHOD_CostCombination = "C";/** Fifo = F */
         public static String COSTINGMETHOD_Fifo = "F";/** Average Invoice = I */

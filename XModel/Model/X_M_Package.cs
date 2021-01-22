@@ -74,7 +74,7 @@ static X_M_Package()
 //static long serialVersionUID 27562514380306L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063517L;
-/** AD_Table_ID=664 */
+/** VAF_TableView_ID=664 */
 public static int Table_ID;
  // =664;
 
@@ -272,8 +272,8 @@ public Boolean IsDTD001_IsPackgConfirm()
     }
     return false;
 }
-/** C_DocType_ID AD_Reference_ID=170 */
-public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+/** C_DocType_ID VAF_Control_Ref_ID=170 */
+public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
 /** Set Document Type.
 @param C_DocType_ID Document type or rules */
 public void SetC_DocType_ID(int C_DocType_ID)

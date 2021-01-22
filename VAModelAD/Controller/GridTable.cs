@@ -44,7 +44,7 @@ namespace VAdvantage.Model
     public class GridTable
     {
         #region delaration
-        public int _AD_Table_ID;
+        public int _VAF_TableView_ID;
         public string _tableName = "";
         public bool _withAccessControl;
         public bool _readOnly = true;
@@ -111,9 +111,9 @@ namespace VAdvantage.Model
         public int _indexProcessedColumn = -1;
         /** Index of IsActive Column            */
         public int _indexActiveColumn = -1;
-        /** Index of AD_Client_ID Column        */
+        /** Index of VAF_Client_ID Column        */
         public int _indexClientColumn = -1;
-        /** Index of AD_Org_ID Column           */
+        /** Index of VAF_Org_ID Column           */
         public int _indexOrgColumn = -1;
         public int _windowNo;
         /** Tab No 0..				*/
@@ -193,14 +193,14 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="tctx"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="TableName"></param>
         /// <param name="winNo"></param>
         /// <param name="tabNo"></param>
         /// <param name="withAccessControl"></param>
-        public GridTable(Ctx tctx, int AD_Table_ID, string TableName, int winNo, int tabNo, bool withAccessControl, GridTab tabObj)
+        public GridTable(Ctx tctx, int VAF_TableView_ID, string TableName, int winNo, int tabNo, bool withAccessControl, GridTab tabObj)
         {
-            _AD_Table_ID = AD_Table_ID;
+            _VAF_TableView_ID = VAF_TableView_ID;
             _ctx = tctx;
             SetTableName(TableName);
             _tabNo = tabNo;
@@ -226,7 +226,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Table already open - ignored: " + field.GetColumnName());
                 return;
             }
-            if (!MRole.GetDefault(_ctx, false).IsColumnAccess(_AD_Table_ID, field.GetAD_Column_ID(), true))
+            if (!MRole.GetDefault(_ctx, false).IsColumnAccess(_VAF_TableView_ID, field.GetVAF_Column_ID(), true))
             {
                 log.Fine("No Column Access " + field.GetColumnName());
                 return;
@@ -238,9 +238,9 @@ namespace VAdvantage.Model
                 _indexActiveColumn = m_fields.Count;
             else if (field.GetColumnName().Equals("Processed"))
                 _indexProcessedColumn = m_fields.Count;
-            else if (field.GetColumnName().Equals("AD_Client_ID"))
+            else if (field.GetColumnName().Equals("VAF_Client_ID"))
                 _indexClientColumn = m_fields.Count;
-            else if (field.GetColumnName().Equals("AD_Org_ID"))
+            else if (field.GetColumnName().Equals("VAF_Org_ID"))
                 _indexOrgColumn = m_fields.Count;
             //
             m_fields.Insert(m_fields.Count, field);
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
 
         public int GetTableID()
         {
-            return _AD_Table_ID;
+            return _VAF_TableView_ID;
         }
 
         /// <summary>
@@ -725,8 +725,8 @@ namespace VAdvantage.Model
             //    loader = new Thread(new ThreadStart(FillData));
             //    //loader.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             //    //loader.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
-            //    loader.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetAD_Language());
-            //    loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetAD_Language());
+            //    loader.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetVAF_Language());
+            //    loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetVAF_Language());
 
             //}
             _rowCount = CountRecords(maxRows);
@@ -756,7 +756,7 @@ namespace VAdvantage.Model
             if (_rowCount > 0)
             {
                 MSession session = MSession.Get(_ctx, true);
-                session.QueryLog(_ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(), _AD_Table_ID,
+                session.QueryLog(_ctx.GetVAF_Client_ID(), _ctx.GetVAF_Org_ID(), _VAF_TableView_ID,
                     _SQL_Count, _rowCount);
             }
             return true;
@@ -856,7 +856,7 @@ namespace VAdvantage.Model
         //    {
         //        _rowCount = _bufferTable.Rows.Count;
         //        MSession session = MSession.Get(_ctx, true);
-        //        session.queryLog(_ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(), _AD_Table_ID,
+        //        session.queryLog(_ctx.GetVAF_Client_ID(), _ctx.GetVAF_Org_ID(), _VAF_TableView_ID,
         //              "Row Count", _rowCount);
         //    }	//	open
         //}
@@ -1122,11 +1122,11 @@ namespace VAdvantage.Model
             }
 
             int[] co = GetClientOrg(drv);
-            int AD_Client_ID = co[0];
-            int AD_Org_ID = co[1];
+            int VAF_Client_ID = co[0];
+            int VAF_Org_ID = co[1];
             bool createError = true;
             if (!MRole.GetDefault(_ctx, false)
-                 .CanUpdate(AD_Client_ID, AD_Org_ID, _AD_Table_ID, 0, createError))
+                 .CanUpdate(VAF_Client_ID, VAF_Org_ID, _VAF_TableView_ID, 0, createError))
             {
                 ShowInfoMessage("", "can-not Update records(access)");
                 FireDataStatusEEvent("can-not Update records(access)", "", true);//CLogger.retrieveError());
@@ -1303,7 +1303,7 @@ namespace VAdvantage.Model
              */
                 //	Constants for Created/Updated(By)
                 DateTime now = DateTime.Now;
-                int user = _ctx.GetAD_User_ID();
+                int user = _ctx.GetVAF_UserContact_ID();
 
                 /**
                  *	for every column
@@ -1311,8 +1311,8 @@ namespace VAdvantage.Model
                 int size1 = m_fields.Count;
                 int colRs = 1;
 
-                //System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
-                //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
+                //System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
 
 
                 for (int col = 0; col < size1; col++)
@@ -1395,7 +1395,7 @@ namespace VAdvantage.Model
                                 if (!newDocNo && docNo != null && docNo.Length > 0)
                                     insertDoc = docNo;
                                 else //  get a number from DocType or Table
-                                    insertDoc = MSequence.GetDocumentNo(AD_Client_ID, _tableName, null,_ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
+                                    insertDoc = MSequence.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
                                 //m_tableName, false, null);	//	no trx
                                 /****************************************Check********************************************************/
                             }
@@ -1434,7 +1434,7 @@ namespace VAdvantage.Model
                         if (value == null || value.Length == 0)
                         {
                             /***************************************Check**************************************************/
-                            value = MSequence.GetDocumentNo(AD_Client_ID, _tableName, null,_ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
+                            value = MSequence.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
                             //  No Value
                             if (value == null || value.Length == 0)
                             {
@@ -1538,7 +1538,7 @@ namespace VAdvantage.Model
                                     || !drv[col].Equals(_rowData[col])) 			//	changed
                     {
                         //	Original == DB
-                        bool isClientOrgId = field.GetColumnName() == "AD_Client_ID" || field.GetColumnName() == "AD_Org_ID";
+                        bool isClientOrgId = field.GetColumnName() == "VAF_Client_ID" || field.GetColumnName() == "VAF_Org_ID";
                         object columnValue = GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
                         object colNewValue = GetValueAccordingPO(drv[col], field.GetDisplayType(), isClientOrgId);
 
@@ -1581,7 +1581,7 @@ namespace VAdvantage.Model
                                         //	rs.updateInt (colRs, iii.intValue()); 		// 	***
                                     }
                                 }
-                                catch  //  could also be a String (AD_Language, AD_Message)
+                                catch  //  could also be a String (VAF_Language, VAF_Msg_Lable)
                                 {
                                     if (manualUpdate)
                                         CreateUpdateSql(columnName, DataBase.GlobalVariable.TO_STRING(colNewValue.ToString()));
@@ -1748,8 +1748,8 @@ namespace VAdvantage.Model
 			 *	Save to Database
 			 */
                 //
-                System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
-                System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
+                System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
+                System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
 
                 String whereClause = singleRowWHERE.ToString();
                 if (whereClause.Length == 0)
@@ -2161,21 +2161,21 @@ namespace VAdvantage.Model
         /// <returns>array [0] = Client [1] = Org - a value of -1 is not defined/found</returns>
         private int[] GetClientOrg(DataRowView row)
         {
-            int AD_Client_ID = -1;
+            int VAF_Client_ID = -1;
             if (_indexClientColumn != -1)
             {
                 object ii = row[_indexClientColumn];
                 if (ii != null && ii != DBNull.Value)
-                    AD_Client_ID = Convert.ToInt32(ii);
+                    VAF_Client_ID = Convert.ToInt32(ii);
             }
-            int AD_Org_ID = 0;
+            int VAF_Org_ID = 0;
             if (_indexOrgColumn != -1)
             {
                 object ii = row[_indexOrgColumn];
                 if (ii != null && ii != DBNull.Value)
-                    AD_Org_ID = Convert.ToInt32(ii);
+                    VAF_Org_ID = Convert.ToInt32(ii);
             }
-            return new int[] { AD_Client_ID, AD_Org_ID };
+            return new int[] { VAF_Client_ID, VAF_Org_ID };
         }	//	getClientOrg
 
         /*************************************************************************/
@@ -2331,7 +2331,7 @@ namespace VAdvantage.Model
         {
             log.Fine("ID=" + Record_ID);
 
-            MTable table = MTable.Get(_ctx, _AD_Table_ID);
+            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             if (table.IsSingleKey() || Record_ID == 0)
             {
@@ -2354,7 +2354,7 @@ namespace VAdvantage.Model
                 if (field.IsVirtualColumn())
                     continue;
                 String columnName = field.GetColumnName();
-                bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
+                bool isClientOrgId = columnName == "VAF_Client_ID" || columnName == "VAF_Org_ID";
 
                 Object value = GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -2830,7 +2830,7 @@ namespace VAdvantage.Model
                     if (field.IsVirtualColumn())
                     { continue; }
                     else if (field.IsKey()
-                        || columnName.Equals("AD_Client_ID")
+                        || columnName.Equals("VAF_Client_ID")
                         //
                         || columnName.StartsWith("Created") || columnName.StartsWith("Updated")
                         || columnName.Equals("EntityType") || columnName.Equals("DocumentNo")
@@ -2924,7 +2924,7 @@ namespace VAdvantage.Model
 
             DataRow rowData = _bufferTable.Rows[row];// _buffer.Tables[0].Rows[row];
             //
-            MTable table = MTable.Get(_ctx, _AD_Table_ID);
+            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             int recordId = GetKeyID(row);
             if (recordId != -1)
@@ -3035,7 +3035,7 @@ namespace VAdvantage.Model
 
             // DataRow rowData = _bufferTable.Rows[row];// _buffer.Tables[0].Rows[row];
             //
-            MTable table = MTable.Get(_ctx, _AD_Table_ID);
+            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             int recordId = GetKeyID(-1);
             if (recordId != -1)
@@ -3071,7 +3071,7 @@ namespace VAdvantage.Model
                 //String trxName = Trx.CreateTrxName("del_");
                 Trx trx = Trx.Get("del_");
 
-                PORecord.DeleteCascade(_AD_Table_ID, recordId, trx);
+                PORecord.DeleteCascade(_VAF_TableView_ID, recordId, trx);
 
                 StringBuilder sql = new StringBuilder("DELETE FROM ");
                 sql.Append(_tableName).Append(" WHERE ").Append(GetWhereClause(rowData));
@@ -3144,16 +3144,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Create and fire Data Status Error Event
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
         /// <param name="isError"></param>
-        protected void FireDataStatusEEvent(String AD_Message, String info, bool isError)
+        protected void FireDataStatusEEvent(String VAF_Msg_Lable, String info, bool isError)
         {
             DataStatusEvent e = CreateDSE();
-            e.SetInfo(AD_Message, info, isError, !isError);
+            e.SetInfo(VAF_Msg_Lable, info, isError, !isError);
             if (isError)
             {
-                log.SaveWarning(AD_Message, info);
+                log.SaveWarning(VAF_Msg_Lable, info);
             }
             if (FireDataStatusEvent != null)
             {
@@ -3164,12 +3164,12 @@ namespace VAdvantage.Model
         /// <summary>
         ///  Create and fire Data Status Info Event
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
-        protected void FireDataStatusIEvent(String AD_Message, String info)
+        protected void FireDataStatusIEvent(String VAF_Msg_Lable, String info)
         {
             DataStatusEvent e = CreateDSE();
-            e.SetInfo(AD_Message, info, false, false);
+            e.SetInfo(VAF_Msg_Lable, info, false, false);
             //e.SetCurrentRow(_currentRow);
             if (FireDataStatusEvent != null)
             {
@@ -3190,7 +3190,7 @@ namespace VAdvantage.Model
             //   changed = true;
             DataStatusEvent dse = new DataStatusEvent(this, (_bufferTable != null) ? _bufferTable.Rows.Count : 0, _changed,
                _ctx.IsAutoCommit(_windowNo), _inserting);
-            dse.AD_Table_ID = _AD_Table_ID;
+            dse.VAF_TableView_ID = _VAF_TableView_ID;
             dse.Record_ID = null;
             return dse;
         }
@@ -3506,7 +3506,7 @@ namespace VAdvantage.Model
         private bool _autoSave;
         private bool _inserting;
         //
-        private String _AD_Message = null;
+        private String _VAF_Msg_Lable = null;
         private String _info = null;
         public bool _isError = false;
         private bool _isWarning = false;
@@ -3531,7 +3531,7 @@ namespace VAdvantage.Model
         /** Info					*/
         public String Info = null;
         /** Table ID				*/
-        public int AD_Table_ID = 0;
+        public int VAF_TableView_ID = 0;
         /** Record ID				*/
         public Object Record_ID = null;
         private Object _source;
@@ -3553,7 +3553,7 @@ namespace VAdvantage.Model
 
         public DataStatusEvent(string msg, string information)
         {
-            _AD_Message = msg;
+            _VAF_Msg_Lable = msg;
             _info = information;
         }
 
@@ -3583,13 +3583,13 @@ namespace VAdvantage.Model
         /// <summary>
         ///Set Message Info
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
         /// <param name="isError"></param>
         /// <param name="isWarning"></param>
-        public void SetInfo(String AD_Message, String info, bool isError, bool isWarning)
+        public void SetInfo(String VAF_Msg_Lable, String info, bool isError, bool isWarning)
         {
-            _AD_Message = AD_Message;
+            _VAF_Msg_Lable = VAF_Msg_Lable;
             _info = info;
             _isError = isError;
             _isWarning = isWarning;
@@ -3599,9 +3599,9 @@ namespace VAdvantage.Model
         ///Get Message Info
         /// </summary>
         /// <returns></returns>
-        public String GetAD_Message()
+        public String GetVAF_Msg_Lable()
         {
-            return _AD_Message;
+            return _VAF_Msg_Lable;
         }
 
         public bool IsChanged()
@@ -3623,9 +3623,9 @@ namespace VAdvantage.Model
         ///Get Message Info
         /// </summary>
         /// <returns></returns>
-        public void SetAD_Message()
+        public void SetVAF_Msg_Lable()
         {
-            _AD_Message = null;
+            _VAF_Msg_Lable = null;
         }
 
         /// <summary>

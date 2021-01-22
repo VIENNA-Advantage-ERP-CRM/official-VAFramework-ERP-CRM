@@ -67,7 +67,7 @@ namespace ViennaAdvantage.Process
                          FROM c_acctschema                            
                          WHERE IsActive='Y' 
                            AND IsActive='Y'
-                           AND AD_Client_ID=" + GetCtx().GetAD_Client_ID());
+                           AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
             DataSet ds = DB.ExecuteDataset(sql.ToString(),null);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
@@ -125,8 +125,8 @@ namespace ViennaAdvantage.Process
             }
             sql.Clear();
             sql.Append(@"SELECT C_Calendar_ID FROM C_Calendar
-                                        WHERE ISACTIVE='Y' AND AD_CLIENT_ID=" + GetCtx().GetAD_Client_ID() + @"
-                                        AND AD_ORG_ID=(SELECT AD_ORG_ID FROM AD_ORG WHERE NAME ='*' )");
+                                        WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetCtx().GetVAF_Client_ID() + @"
+                                        AND VAF_ORG_ID=(SELECT VAF_ORG_ID FROM VAF_ORG WHERE NAME ='*' )");
             int calendarID = 0;
             try
             {
@@ -147,7 +147,7 @@ namespace ViennaAdvantage.Process
                 year.SetC_Calendar_ID(calendarID);
                 year.SetFiscalYear(YearName);
                 year.SetIsActive(true);
-                year.SetAD_Org_ID(0);
+                year.SetVAF_Org_ID(0);
                 if (!year.Save(trx))
                 {
                     status = "YearNotSaved";
@@ -418,7 +418,7 @@ namespace ViennaAdvantage.Process
             //	Open                          
             sql.Append(MPeriodControl.PERIODSTATUS_Open);
 
-            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetAD_User_ID());
+            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE
             sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID());
 

@@ -213,7 +213,7 @@ namespace VAdvantage.Acct
                     LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt,
                         invoice.GetC_Currency_ID(), as1.GetC_Currency_ID(),
                         invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
-                        invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                        invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 }
                 cr = fact.CreateLine(null, expense,
                     as1.GetC_Currency_ID(), null, LineNetAmt);
@@ -250,7 +250,7 @@ namespace VAdvantage.Acct
             if (!IsPosted())
             {
                 //	Cost Detail Record - data from Expense/IncClearing (CR) record
-                MCostDetail.CreateInvoice(as1, GetAD_Org_ID(),
+                MCostDetail.CreateInvoice(as1, GetVAF_Org_ID(),
                     GetM_Product_ID(), matchInv.GetM_AttributeSetInstance_ID(),
                     _invoiceLine.GetC_InvoiceLine_ID(), 0,		//	No cost element
                     Decimal.Negate(cr.GetAcctBalance()), isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),		//	correcting
@@ -296,9 +296,9 @@ namespace VAdvantage.Acct
                 "UPDATE M_Product_Costing pc "
                 + "SET (CostStandardCumQty,CostStandardCumAmt, CostAverageCumQty,CostAverageCumAmt) = "
                 + "(SELECT pc.CostStandardCumQty + m.Qty, " //jz ", "
-                + "pc.CostStandardCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)*m.Qty, "
+                + "pc.CostStandardCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty, "
                 + "pc.CostAverageCumQty + m.Qty, "
-                + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)*m.Qty "
+                + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty "
                 + "FROM M_MatchInv m"
                 + " INNER JOIN C_InvoiceLine il ON (m.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID),"

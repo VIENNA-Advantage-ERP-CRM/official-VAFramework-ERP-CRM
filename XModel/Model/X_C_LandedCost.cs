@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514372924L;
         /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
         public static long updatedMS = 1280389056135L;
-        /** AD_Table_ID=759 */
+        /** VAF_TableView_ID=759 */
         public static int Table_ID;
         // =759;
 
@@ -175,8 +175,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** LandedCostDistribution AD_Reference_ID=339 */
-        public static int LANDEDCOSTDISTRIBUTION_AD_Reference_ID = 339;
+        /** LandedCostDistribution VAF_Control_Ref_ID=339 */
+        public static int LANDEDCOSTDISTRIBUTION_VAF_Control_Ref_ID = 339;
         /** Costs = C */
         public static String LANDEDCOSTDISTRIBUTION_Costs = "C";
         /** Import Value = I */
@@ -336,8 +336,8 @@ namespace VAdvantage.Model
         /** Get Inventory Move.
         @return Movement of Inventory */
         public int GetM_Movement_ID() { Object ii = Get_Value("M_Movement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_InvoiceLine_ID AD_Reference_ID=1000215 */
-        public static int REF_INVOICELINE_ID_AD_Reference_ID = 1000215;
+        /** Ref_InvoiceLine_ID VAF_Control_Ref_ID=1000215 */
+        public static int REF_INVOICELINE_ID_VAF_Control_Ref_ID = 1000215;
         /** Set Referenced Invoice Line.
        @param Ref_InvoiceLine_ID Referenced Invoice Line */
         public void SetRef_InvoiceLine_ID(int Ref_InvoiceLine_ID)
@@ -348,8 +348,8 @@ namespace VAdvantage.Model
         }/** Get Referenced Invoice Line.
 @return Referenced Invoice Line */
         public int GetRef_InvoiceLine_ID() { Object ii = Get_Value("Ref_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_Invoice_ID AD_Reference_ID=336 */
-        public static int REF_INVOICE_ID_AD_Reference_ID = 336;/** Set Referenced Invoice.
+        /** Ref_Invoice_ID VAF_Control_Ref_ID=336 */
+        public static int REF_INVOICE_ID_VAF_Control_Ref_ID = 336;/** Set Referenced Invoice.
 @param Ref_Invoice_ID Referenced Invoice */
         public void SetRef_Invoice_ID(int Ref_Invoice_ID)
         {
@@ -361,9 +361,9 @@ namespace VAdvantage.Model
         public int GetRef_Invoice_ID() { Object ii = Get_Value("Ref_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /// <summary>
-        ///  ReversalDoc_ID AD_Reference_ID=1000215 
+        ///  ReversalDoc_ID VAF_Control_Ref_ID=1000215 
         /// </summary>
-        public static int REVERSALDOC_ID_AD_Reference_ID = 1000215;
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 1000215;
         /// <summary>
         ///  Set Reversal Document.
         /// </summary>

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRecordAccess
  * Purpose        : Record Access Model
- * Class Used     : X_AD_Record_Access
+ * Class Used     : X_VAF_Record_Rights
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRecordAccess : X_AD_Record_Access
+    public class MRecordAccess : X_VAF_Record_Rights
     {
         #region Private Variables
        // private static long serialVersionUID = -5115765616266528435L;
@@ -77,15 +77,15 @@ namespace VAdvantage.Model
         /// Full New Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Role_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="trxName"></param>
-        public MRecordAccess(Ctx ctx, int AD_Role_ID, int AD_Table_ID, int Record_ID, Trx trxName)
+        public MRecordAccess(Ctx ctx, int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetAD_Role_ID(AD_Role_ID);
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_Role_ID(VAF_Role_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
             SetIsExclude(true);
             SetIsReadOnly(false);
@@ -104,8 +104,8 @@ namespace VAdvantage.Model
             }
             //
             String sql = "SELECT ColumnName "
-                + "FROM AD_Column "
-                + "WHERE AD_Table_ID=" + GetAD_Table_ID() + " AND IsKey='Y' AND IsActive='Y'";
+                + "FROM VAF_Column "
+                + "WHERE VAF_TableView_ID=" + GetVAF_TableView_ID() + " AND IsKey='Y' AND IsActive='Y'";
             IDataReader idr = null;
             try
             {
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
         /// <returns>Synonym Column Name</returns>
         public String GetSynonym()
         {
-            if ("AD_User_ID".Equals(GetKeyColumnName()))
+            if ("VAF_UserContact_ID".Equals(GetKeyColumnName()))
             {
                 return "SalesRep_ID";
             }
@@ -196,16 +196,16 @@ namespace VAdvantage.Model
             //	We have a synonym - ignore it if base table inquired
             for (int i = 0; i < tableInfo.Length; i++)
             {
-                if (_keyColumnName.Equals("AD_User_ID"))
+                if (_keyColumnName.Equals("VAF_UserContact_ID"))
                 {
                     //	List of tables where not to use SalesRep_ID
-                    if (tableInfo[i].GetTableName().Equals("AD_User"))
+                    if (tableInfo[i].GetTableName().Equals("VAF_UserContact"))
                         return _keyColumnName;
                 }
-                else if (_keyColumnName.Equals("AD_ElementValue_ID"))
+                else if (_keyColumnName.Equals("VAF_ColumnDicValue_ID"))
                 {
                     //	List of tables where not to use Account_ID
-                    if (tableInfo[i].GetTableName().Equals("AD_ElementValue"))
+                    if (tableInfo[i].GetTableName().Equals("VAF_ColumnDicValue"))
                         return _keyColumnName;
                 }
             }	//	tables to be ignored
@@ -217,9 +217,9 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MRecordAccess[AD_Role_ID=")
-                .Append(GetAD_Role_ID())
-                .Append(",AD_Table_ID=").Append(GetAD_Table_ID())
+            StringBuilder sb = new StringBuilder("MRecordAccess[VAF_Role_ID=")
+                .Append(GetVAF_Role_ID())
+                .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
                 .Append(",Record_ID=").Append(GetRecord_ID())
                 .Append(",Active=").Append(IsActive())
                 .Append(",Exclude=").Append(IsExclude())
@@ -239,7 +239,7 @@ namespace VAdvantage.Model
             String en = Msg.GetMsg(ctx, "Include");
             String ex = Msg.GetMsg(ctx, "Exclude");
             StringBuilder sb = new StringBuilder();
-            sb.Append(Msg.Translate(ctx, "AD_Table_ID"))
+            sb.Append(Msg.Translate(ctx, "VAF_TableView_ID"))
                     .Append("=").Append(GetTableName(ctx)).Append(", ")
                 .Append(Msg.Translate(ctx, "Record_ID"))
                 .Append("=").Append(GetRecord_ID())
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
         {
             if (_tableName == null)
             {
-                String sql = "SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + GetAD_Table_ID();
+                String sql = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + GetVAF_TableView_ID();
                 IDataReader idr = null;
                 try
                 {

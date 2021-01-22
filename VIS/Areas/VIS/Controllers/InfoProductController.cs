@@ -82,7 +82,7 @@ namespace VIS.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveStockTfr(int id, string keyColumn, int AD_Table_ID, string prod, string C_UOM_ID, string listAst, string qty, string listLoc, int locatorTo, string astID, int lineID, int ContainerID)
+        public JsonResult SaveStockTfr(int id, string keyColumn, int VAF_TableView_ID, string prod, string C_UOM_ID, string listAst, string qty, string listLoc, int locatorTo, string astID, int lineID, int ContainerID)
         {
             List<string> prodID = new List<string>();
             if (prod != null && prod.Trim().Length > 0)
@@ -112,7 +112,7 @@ namespace VIS.Controllers
             }
             
             VIS.Models.InfoProductModel model = new Models.InfoProductModel();
-            var value = model.SetProductQtyStockTrasfer(id, keyColumn, AD_Table_ID, prodID, uomID, Attributes, quantity, Locators, locatorTo, lineID, ContainerID, Session["ctx"] as Ctx);
+            var value = model.SetProductQtyStockTrasfer(id, keyColumn, VAF_TableView_ID, prodID, uomID, Attributes, quantity, Locators, locatorTo, lineID, ContainerID, Session["ctx"] as Ctx);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 
@@ -134,7 +134,7 @@ namespace VIS.Controllers
         {
 
             VIS.Models.InfoProductModel model = new VIS.Models.InfoProductModel();
-            //model.GetSchema(Ad_InfoWindow_ID);
+            //model.GetSchema(VAF_QuickSearchWindow_ID);
             return Json(JsonConvert.SerializeObject(model.GetVariants(M_Product_ID, M_Warehouse_ID, ParentRec_ID, M_AttributeSetInstance_ID, AttributeCode, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 

@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using System.Data;
     using VAdvantage.Utility;
-/** Generated Model for AD_Field_Trl
+/** Generated Model for VAF_Field_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Field_Trl : PO
+public class X_VAF_Field_TL : PO
 {
-public X_AD_Field_Trl (Context ctx, int AD_Field_Trl_ID, Trx trxName) : base (ctx, AD_Field_Trl_ID, trxName)
+public X_VAF_Field_TL (Context ctx, int VAF_Field_TL_ID, Trx trxName) : base (ctx, VAF_Field_TL_ID, trxName)
 {
-/** if (AD_Field_Trl_ID == 0)
+/** if (VAF_Field_TL_ID == 0)
 {
-SetAD_Field_ID (0);
-SetAD_Language (null);
+SetVAF_Field_ID (0);
+SetVAF_Language (null);
 SetIsTranslated (false);
 SetName (null);
 }
@@ -32,20 +32,20 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Field_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Field_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Serial Version No */
 //static long serialVersionUID = 27519927395714L;
 /** Last Updated Timestamp 3/23/2009 3:24:39 PM */
 public static long updatedMS = 1237802078925L;
-/** AD_Table_ID=127 */
+/** VAF_TableView_ID=127 */
 public static int Table_ID=127;
 
-/** TableName=AD_Field_Trl */
-public static String Table_Name="AD_Field_Trl";
+/** TableName=VAF_Field_TL */
+public static String Table_Name="VAF_Field_TL";
 
-protected static KeyNamePair model = new KeyNamePair(127,"AD_Field_Trl");
+protected static KeyNamePair model = new KeyNamePair(127,"VAF_Field_TL");
 
 protected Decimal accessLevel = new Decimal(4);
 /** AccessLevel
@@ -69,49 +69,49 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Field_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Field_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Field.
-@param AD_Field_ID Field on a tab in a window */
-public void SetAD_Field_ID (int AD_Field_ID)
+@param VAF_Field_ID Field on a tab in a window */
+public void SetVAF_Field_ID (int VAF_Field_ID)
 {
-if (AD_Field_ID < 1) throw new ArgumentException ("AD_Field_ID is mandatory.");
-Set_ValueNoCheck ("AD_Field_ID", AD_Field_ID);
+if (VAF_Field_ID < 1) throw new ArgumentException ("VAF_Field_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Field_ID", VAF_Field_ID);
 }
 /** Get Field.
 @return Field on a tab in a window */
-public int GetAD_Field_ID() 
+public int GetVAF_Field_ID() 
 {
-int? ii = (int)Get_Value("AD_Field_ID");
+int? ii = (int)Get_Value("VAF_Field_ID");
 if (ii == null) return 0;
 return (int)ii;
 }
 
-/** AD_Language AD_Reference_ID=106 */
-public static int AD_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language.Length > 5)
+if (VAF_Language.Length > 5)
 {
 //log.warning("Length > 5 - truncated");
-AD_Language = AD_Language.Substring(0,5);
+VAF_Language = VAF_Language.Substring(0,5);
 }
-Set_ValueNoCheck ("AD_Language", AD_Language);
+Set_ValueNoCheck ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Language().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Language().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */

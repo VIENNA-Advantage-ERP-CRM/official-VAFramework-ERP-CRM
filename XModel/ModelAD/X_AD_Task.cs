@@ -78,7 +78,7 @@ static X_AD_Task()
 //static long serialVersionUID 27562514364476L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047687L;
-/** AD_Table_ID=118 */
+/** VAF_TableView_ID=118 */
 public static int Table_ID;
  // =118;
 
@@ -136,8 +136,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AccessLevel AD_Reference_ID=5 */
-public static int ACCESSLEVEL_AD_Reference_ID=5;
+/** AccessLevel VAF_Control_Ref_ID=5 */
+public static int ACCESSLEVEL_VAF_Control_Ref_ID=5;
 /** Organization = 1 */
 public static String ACCESSLEVEL_Organization = "1";
 /** Client only = 2 */
@@ -195,8 +195,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

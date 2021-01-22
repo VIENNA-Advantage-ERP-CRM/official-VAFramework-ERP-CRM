@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /**	Lines						*/
         private MTimeExpenseLine[] _lines = null;
         /** Cached User					*/
-        private int _AD_User_ID = 0;
+        private int _VAF_UserContact_ID = 0;
 
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open? - AP (Reimbursement) Invoice
-            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -353,7 +353,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport(), GetVAF_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -541,20 +541,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
-            if (_AD_User_ID != 0)
+            if (_VAF_UserContact_ID != 0)
             {
-                return _AD_User_ID;
+                return _VAF_UserContact_ID;
             }
             if (GetC_BPartner_ID() != 0)
             {
                 VAdvantage.Model.MUser[] users = VAdvantage.Model.MUser.GetOfBPartner(GetCtx(), GetC_BPartner_ID());
                 if (users.Length > 0)
                 {
-                    _AD_User_ID = users[0].GetAD_User_ID();
-                    return _AD_User_ID;
+                    _VAF_UserContact_ID = users[0].GetVAF_UserContact_ID();
+                    return _VAF_UserContact_ID;
                 }
             }
             return GetCreatedBy();

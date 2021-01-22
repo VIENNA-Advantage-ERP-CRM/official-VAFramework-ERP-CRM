@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ModuleProcess
+/** Generated Model for VAF_ModuleProcess
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ModuleProcess : PO
+public class X_VAF_ModuleProcess : PO
 {
-public X_AD_ModuleProcess (Context ctx, int AD_ModuleProcess_ID, Trx trxName) : base (ctx, AD_ModuleProcess_ID, trxName)
+public X_VAF_ModuleProcess (Context ctx, int VAF_ModuleProcess_ID, Trx trxName) : base (ctx, VAF_ModuleProcess_ID, trxName)
 {
-/** if (AD_ModuleProcess_ID == 0)
+/** if (VAF_ModuleProcess_ID == 0)
 {
-SetAD_ModuleInfo_ID (0);
-SetAD_ModuleProcess_ID (0);
+SetVAF_ModuleInfo_ID (0);
+SetVAF_ModuleProcess_ID (0);
 }
  */
 }
-public X_AD_ModuleProcess (Ctx ctx, int AD_ModuleProcess_ID, Trx trxName) : base (ctx, AD_ModuleProcess_ID, trxName)
+public X_VAF_ModuleProcess (Ctx ctx, int VAF_ModuleProcess_ID, Trx trxName) : base (ctx, VAF_ModuleProcess_ID, trxName)
 {
-/** if (AD_ModuleProcess_ID == 0)
+/** if (VAF_ModuleProcess_ID == 0)
 {
-SetAD_ModuleInfo_ID (0);
-SetAD_ModuleProcess_ID (0);
+SetVAF_ModuleInfo_ID (0);
+SetVAF_ModuleProcess_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_ModuleProcess_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleProcess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleProcess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ModuleProcess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleProcess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleProcess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ModuleProcess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleProcess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ModuleProcess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ModuleProcess()
+static X_VAF_ModuleProcess()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_ModuleProcess()
 //static long serialVersionUID = 27622811907283L;
 /** Last Updated Timestamp 6/26/2012 10:26:30 AM */
 public static long updatedMS = 1340686590494L;
-/** AD_Table_ID=1000057 */
+/** VAF_TableView_ID=1000057 */
 public static int Table_ID;
  // =1000057;
 
-/** TableName=AD_ModuleProcess */
-public static String Table_Name="AD_ModuleProcess";
+/** TableName=VAF_ModuleProcess */
+public static String Table_Name="VAF_ModuleProcess";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ModuleProcess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ModuleProcess[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Module.
-@param AD_ModuleInfo_ID Module */
-public void SetAD_ModuleInfo_ID (int AD_ModuleInfo_ID)
+@param VAF_ModuleInfo_ID Module */
+public void SetVAF_ModuleInfo_ID (int VAF_ModuleInfo_ID)
 {
-if (AD_ModuleInfo_ID < 1) throw new ArgumentException ("AD_ModuleInfo_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+if (VAF_ModuleInfo_ID < 1) throw new ArgumentException ("VAF_ModuleInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
 }
 /** Get Module.
 @return Module */
-public int GetAD_ModuleInfo_ID() 
+public int GetVAF_ModuleInfo_ID() 
 {
-Object ii = Get_Value("AD_ModuleInfo_ID");
+Object ii = Get_Value("VAF_ModuleInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ModuleProcess_ID.
-@param AD_ModuleProcess_ID AD_ModuleProcess_ID */
-public void SetAD_ModuleProcess_ID (int AD_ModuleProcess_ID)
+/** Set VAF_ModuleProcess_ID.
+@param VAF_ModuleProcess_ID VAF_ModuleProcess_ID */
+public void SetVAF_ModuleProcess_ID (int VAF_ModuleProcess_ID)
 {
-if (AD_ModuleProcess_ID < 1) throw new ArgumentException ("AD_ModuleProcess_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleProcess_ID", AD_ModuleProcess_ID);
+if (VAF_ModuleProcess_ID < 1) throw new ArgumentException ("VAF_ModuleProcess_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleProcess_ID", VAF_ModuleProcess_ID);
 }
-/** Get AD_ModuleProcess_ID.
-@return AD_ModuleProcess_ID */
-public int GetAD_ModuleProcess_ID() 
+/** Get VAF_ModuleProcess_ID.
+@return VAF_ModuleProcess_ID */
+public int GetVAF_ModuleProcess_ID() 
 {
-Object ii = Get_Value("AD_ModuleProcess_ID");
+Object ii = Get_Value("VAF_ModuleProcess_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -192,28 +192,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ModuleTable
+    /** Generated Model for VAF_ModuleTable
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ModuleTable : PO
+    public class X_VAF_ModuleTable : PO
     {
-        public X_AD_ModuleTable(Context ctx, int AD_ModuleTable_ID, Trx trxName)
-            : base(ctx, AD_ModuleTable_ID, trxName)
+        public X_VAF_ModuleTable(Context ctx, int VAF_ModuleTable_ID, Trx trxName)
+            : base(ctx, VAF_ModuleTable_ID, trxName)
         {
-            /** if (AD_ModuleTable_ID == 0)
+            /** if (VAF_ModuleTable_ID == 0)
             {
-            SetAD_ModuleInfo_ID (0);
-            SetAD_ModuleTable_ID (0);
+            SetVAF_ModuleInfo_ID (0);
+            SetVAF_ModuleTable_ID (0);
             }
              */
         }
-        public X_AD_ModuleTable(Ctx ctx, int AD_ModuleTable_ID, Trx trxName)
-            : base(ctx, AD_ModuleTable_ID, trxName)
+        public X_VAF_ModuleTable(Ctx ctx, int VAF_ModuleTable_ID, Trx trxName)
+            : base(ctx, VAF_ModuleTable_ID, trxName)
         {
-            /** if (AD_ModuleTable_ID == 0)
+            /** if (VAF_ModuleTable_ID == 0)
             {
-            SetAD_ModuleInfo_ID (0);
-            SetAD_ModuleTable_ID (0);
+            SetVAF_ModuleInfo_ID (0);
+            SetVAF_ModuleTable_ID (0);
             }
              */
         }
@@ -222,7 +222,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleTable(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_ModuleTable(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -231,7 +231,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleTable(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_ModuleTable(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -240,14 +240,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleTable(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_ModuleTable(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_ModuleTable()
+        static X_VAF_ModuleTable()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -256,12 +256,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27624292225707L;
         /** Last Updated Timestamp 7/13/2012 1:38:28 PM */
         public static long updatedMS = 1342166908918L;
-        /** AD_Table_ID=1000063 */
+        /** VAF_TableView_ID=1000063 */
         public static int Table_ID;
         // =1000063;
 
-        /** TableName=AD_ModuleTable */
-        public static String Table_Name = "AD_ModuleTable";
+        /** TableName=VAF_ModuleTable */
+        public static String Table_Name = "VAF_ModuleTable";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -295,52 +295,52 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_ModuleTable[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_ModuleTable[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Module.
-        @param AD_ModuleInfo_ID Module */
-        public void SetAD_ModuleInfo_ID(int AD_ModuleInfo_ID)
+        @param VAF_ModuleInfo_ID Module */
+        public void SetVAF_ModuleInfo_ID(int VAF_ModuleInfo_ID)
         {
-            if (AD_ModuleInfo_ID < 1) throw new ArgumentException("AD_ModuleInfo_ID is mandatory.");
-            Set_ValueNoCheck("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+            if (VAF_ModuleInfo_ID < 1) throw new ArgumentException("VAF_ModuleInfo_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
         }
         /** Get Module.
         @return Module */
-        public int GetAD_ModuleInfo_ID()
+        public int GetVAF_ModuleInfo_ID()
         {
-            Object ii = Get_Value("AD_ModuleInfo_ID");
+            Object ii = Get_Value("VAF_ModuleInfo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set AD_ModuleTable_ID.
-        @param AD_ModuleTable_ID AD_ModuleTable_ID */
-        public void SetAD_ModuleTable_ID(int AD_ModuleTable_ID)
+        /** Set VAF_ModuleTable_ID.
+        @param VAF_ModuleTable_ID VAF_ModuleTable_ID */
+        public void SetVAF_ModuleTable_ID(int VAF_ModuleTable_ID)
         {
-            if (AD_ModuleTable_ID < 1) throw new ArgumentException("AD_ModuleTable_ID is mandatory.");
-            Set_ValueNoCheck("AD_ModuleTable_ID", AD_ModuleTable_ID);
+            if (VAF_ModuleTable_ID < 1) throw new ArgumentException("VAF_ModuleTable_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ModuleTable_ID", VAF_ModuleTable_ID);
         }
-        /** Get AD_ModuleTable_ID.
-        @return AD_ModuleTable_ID */
-        public int GetAD_ModuleTable_ID()
+        /** Get VAF_ModuleTable_ID.
+        @return VAF_ModuleTable_ID */
+        public int GetVAF_ModuleTable_ID()
         {
-            Object ii = Get_Value("AD_ModuleTable_ID");
+            Object ii = Get_Value("VAF_ModuleTable_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

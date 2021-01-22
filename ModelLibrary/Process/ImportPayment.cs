@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportPayment : ProcessEngine.SvrProcess
     {
         /**	Organization to be imported to	*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /** Default Bank Account			*/
         private int _C_BankAccount_ID = 0;
         /**	Delete old Imported				*/
@@ -43,8 +43,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Org_ID"))
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                if (name.Equals("VAF_Org_ID"))
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("C_BankAccount_ID"))
                     _C_BankAccount_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
@@ -67,13 +67,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MBankAccount ba = MBankAccount.Get(GetCtx(), _C_BankAccount_ID);
             if (_C_BankAccount_ID == 0 || ba.Get_ID() != _C_BankAccount_ID)
                 throw new Exception("@NotFound@ @C_BankAccount_ID@ - " + _C_BankAccount_ID);
-            if (_AD_Org_ID != ba.GetAD_Org_ID() && ba.GetAD_Org_ID() != 0)
-                _AD_Org_ID = ba.GetAD_Org_ID();
-            log.Info("AD_Org_ID=" + _AD_Org_ID);
+            if (_VAF_Org_ID != ba.GetVAF_Org_ID() && ba.GetVAF_Org_ID() != 0)
+                _VAF_Org_ID = ba.GetVAF_Org_ID();
+            log.Info("VAF_Org_ID=" + _VAF_Org_ID);
 
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + ba.GetAD_Client_ID();
+            String clientCheck = " AND VAF_Client_ID=" + ba.GetVAF_Client_ID();
 
             //	****	Prepare	****
 
@@ -88,8 +88,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_Payment "
-                  + "SET AD_Client_ID = COALESCE (AD_Client_ID,").Append(ba.GetAD_Client_ID()).Append("),"
-                  + " AD_Org_ID = COALESCE (AD_Org_ID,").Append(_AD_Org_ID).Append("),");
+                  + "SET VAF_Client_ID = COALESCE (VAF_Client_ID,").Append(ba.GetVAF_Client_ID()).Append("),"
+                  + " VAF_Org_ID = COALESCE (VAF_Org_ID,").Append(_VAF_Org_ID).Append("),");
             sql.Append(" IsActive = COALESCE (IsActive, 'Y'),"
                   + " Created = COALESCE (Created, SysDate),"
                   + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -97,15 +97,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                   + " UpdatedBy = COALESCE (UpdatedBy, 0),"
                   + " I_ErrorMsg = NULL,"
                   + " I_IsImported = 'N' "
-                  + "WHERE I_IsImported<>'Y' OR I_IsImported IS NULL OR AD_Client_ID IS NULL OR AD_Org_ID IS NULL OR AD_Client_ID=0 OR AD_Org_ID=0");
+                  + "WHERE I_IsImported<>'Y' OR I_IsImported IS NULL OR VAF_Client_ID IS NULL OR VAF_Org_ID IS NULL OR VAF_Client_ID=0 OR VAF_Org_ID=0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Reset=" + no);
 
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_Payment o "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Org, '"
-                + "WHERE (AD_Org_ID IS NULL OR AD_Org_ID=0"
-                + " OR EXISTS (SELECT * FROM AD_Org oo WHERE o.AD_Org_ID=oo.AD_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
+                + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0"
+                + " OR EXISTS (SELECT * FROM VAF_Org oo WHERE o.VAF_Org_ID=oo.VAF_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -118,7 +118,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " SELECT C_BankAccount_ID "
                 + " FROM C_BankAccount a, C_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
-                + " AND a.AD_Client_ID=i.AD_Client_ID "
+                + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + " AND a.C_Bank_ID=b.C_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND b.RoutingNo=i.RoutingNo "
@@ -139,7 +139,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " WHERE b.IsOwnBank='Y' "
                 + " AND a.C_Bank_ID=b.C_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
-                + " AND a.AD_Client_ID=i.AD_Client_ID "
+                + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + ") "
                 + "WHERE i.C_BankAccount_ID IS NULL "
                 + "AND i.I_isImported<>'Y' "
@@ -150,7 +150,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_Payment i "
                 + "SET C_BankAccount_ID=(SELECT C_BankAccount_ID FROM C_BankAccount a WHERE a.C_BankAccount_ID=").Append(_C_BankAccount_ID);
-            sql.Append(" and a.AD_Client_ID=i.AD_Client_ID) "
+            sql.Append(" and a.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE i.C_BankAccount_ID IS NULL "
                 + "AND i.BankAccountNo IS NULL "
                 + "AND i.I_isImported<>'Y' "
@@ -171,7 +171,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Currency
             sql = new StringBuilder("UPDATE I_Payment i "
                 + "SET C_Currency_ID=(SELECT C_Currency_ID FROM C_Currency c"
-                + " WHERE i.ISO_Code=c.ISO_Code AND c.AD_Client_ID IN (0,i.AD_Client_ID)) "
+                + " WHERE i.ISO_Code=c.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
                 + "WHERE C_Currency_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -250,7 +250,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Invoice
             sql = new StringBuilder("UPDATE I_Payment i "
                   + "SET C_Invoice_ID=(SELECT MAX(C_Invoice_ID) FROM C_Invoice ii"
-                  + " WHERE i.InvoiceDocumentNo=ii.DocumentNo AND i.AD_Client_ID=ii.AD_Client_ID) "
+                  + " WHERE i.InvoiceDocumentNo=ii.DocumentNo AND i.VAF_Client_ID=ii.VAF_Client_ID) "
                   + "WHERE C_Invoice_ID IS NULL AND InvoiceDocumentNo IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -260,7 +260,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	BPartner
             sql = new StringBuilder("UPDATE I_Payment i "
                   + "SET C_BPartner_ID=(SELECT MAX(C_BPartner_ID) FROM C_BPartner bp"
-                  + " WHERE i.BPartnerValue=bp.Value AND i.AD_Client_ID=bp.AD_Client_ID) "
+                  + " WHERE i.BPartnerValue=bp.Value AND i.VAF_Client_ID=bp.VAF_Client_ID) "
                   + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -269,7 +269,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             sql = new StringBuilder("UPDATE I_Payment i "
                   + "SET C_BPartner_ID=(SELECT MAX(C_BPartner_ID) FROM C_Invoice ii"
-                  + " WHERE i.C_Invoice_ID=ii.C_Invoice_ID AND i.AD_Client_ID=ii.AD_Client_ID) "
+                  + " WHERE i.C_Invoice_ID=ii.C_Invoice_ID AND i.VAF_Client_ID=ii.VAF_Client_ID) "
                   + "WHERE C_BPartner_ID IS NULL AND C_Invoice_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -367,7 +367,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Document Type
             sql = new StringBuilder("UPDATE I_Payment i "
                   + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=i.DocTypeName"
-                  + " AND d.DocBaseType IN ('ARR','APP') AND i.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType IN ('ARR','APP') AND i.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -417,7 +417,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	New Payment
                     MPayment payment = new MPayment(_ctx, 0, Get_TrxName());
-                    payment.SetAD_Org_ID(imp.GetAD_Org_ID());
+                    payment.SetVAF_Org_ID(imp.GetVAF_Org_ID());
                     payment.SetDocumentNo(imp.GetDocumentNo());
                     payment.SetPONum(imp.GetPONum());
 

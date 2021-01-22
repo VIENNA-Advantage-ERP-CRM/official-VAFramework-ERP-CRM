@@ -25,7 +25,7 @@ public X_Fact_Accumulation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr
  added by ->Harwinder */
 static X_Fact_Accumulation(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27741383602286L;/** Last Updated Timestamp 3/29/2016 7:01:27 PM */
-public static long updatedMS = 1459258285497L;/** AD_Table_ID=1000178 */
+public static long updatedMS = 1459258285497L;/** VAF_TableView_ID=1000178 */
 public static int Table_ID; // =1000178;
 /** TableName=Fact_Accumulation */
 public static String Table_Name="Fact_Accumulation";
@@ -44,8 +44,8 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_Fact_Accumulation[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** BALANCEACCUMULATION AD_Reference_ID=1000073 */
-public static int BALANCEACCUMULATION_AD_Reference_ID=1000073;/** Daily = D */
+/** BALANCEACCUMULATION VAF_Control_Ref_ID=1000073 */
+public static int BALANCEACCUMULATION_VAF_Control_Ref_ID=1000073;/** Daily = D */
 public static String BALANCEACCUMULATION_Daily = "D";/** Calendar Month = M */
 public static String BALANCEACCUMULATION_CalendarMonth = "M";/** Period of VA Calendar = P */
 public static String BALANCEACCUMULATION_PeriodOfAViennaCalendar = "P";/** Calendar Week = W */

@@ -17,11 +17,11 @@ namespace VIS.Controllers
         public String DisplayValue { get; set; }
         public int DisplayType { get; set; }
 
-        public int AD_Client_ID { get; set; }
-        public int AD_Org_ID { get; set; }
-        public int AD_User_ID { get; set; }
-        public int AD_Window_ID { get; set; }
-        public int AD_Reference_ID { get; set; }
+        public int VAF_Client_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
+        public int VAF_Screen_ID { get; set; }
+        public int VAF_Control_Ref_ID { get; set; }
 
         //Repository
 
@@ -34,9 +34,9 @@ namespace VIS.Controllers
         public bool DeletePrefrence(Ctx ctx, string preferenceId)
         {
             bool success = false;
-            int AD_Preference_ID = Convert.ToInt32(preferenceId);
+            int VAF_ValuePreference_ID = Convert.ToInt32(preferenceId);
 
-            MPreference pref = new MPreference(ctx, AD_Preference_ID, null);
+            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
             // delete the preference
             success = pref.Delete(true);
 
@@ -56,20 +56,20 @@ namespace VIS.Controllers
         /// <param name="chkUser"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        public bool SavePrefrence(Ctx ctx, string preferenceId, string clientId, string orgId, string chkWindow, string AD_Window_ID, string chkUser, string attribute, string userId, string value)
+        public bool SavePrefrence(Ctx ctx, string preferenceId, string clientId, string orgId, string chkWindow, string VAF_Screen_ID, string chkUser, string attribute, string userId, string value)
         {
             bool success = false;
 
-            int AD_Preference_ID = Convert.ToInt32(preferenceId);
-            int _AD_Window_ID = Convert.ToInt32(AD_Window_ID);
-            int _AD_User_ID = Convert.ToInt32(userId);
+            int VAF_ValuePreference_ID = Convert.ToInt32(preferenceId);
+            int _VAF_Screen_ID = Convert.ToInt32(VAF_Screen_ID);
+            int _VAF_UserContact_ID = Convert.ToInt32(userId);
             bool _chkUser, _chkWindow;
             _chkUser = Convert.ToBoolean(chkUser);
             _chkWindow = Convert.ToBoolean(chkWindow);
 
-            MPreference pref = new MPreference(ctx, AD_Preference_ID, null);
+            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
             // if preference id=0
-            if (AD_Preference_ID == 0)
+            if (VAF_ValuePreference_ID == 0)
             {
                 // if inserting a new record, then set initial values
                 // set client id
@@ -81,12 +81,12 @@ namespace VIS.Controllers
                 // set window id
                 if (_chkWindow)
                 {
-                    pref.SetAD_Window_ID(_AD_Window_ID);
+                    pref.SetVAF_Screen_ID(_VAF_Screen_ID);
                 }
                 // set user id
                 if (_chkUser)
                 {
-                    pref.SetAD_User_ID(_AD_User_ID);
+                    pref.SetVAF_UserContact_ID(_VAF_UserContact_ID);
                 }
 
                 // set attribute(columnname)

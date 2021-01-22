@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27610984547573L;
         /** Last Updated Timestamp 2/10/2012 1:03:51 PM */
         public static long updatedMS = 1328859230784L;
-        /** AD_Table_ID=1000256 */
+        /** VAF_TableView_ID=1000256 */
         public static int Table_ID;
         // =1000256;
 
@@ -152,8 +152,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** Bill_BPartner_ID AD_Reference_ID=138 */
-        public static int BILL_BPARTNER_ID_AD_Reference_ID = 138;
+        /** Bill_BPartner_ID VAF_Control_Ref_ID=138 */
+        public static int BILL_BPARTNER_ID_VAF_Control_Ref_ID = 138;
         /** Set Bill To.
         @param Bill_BPartner_ID Business Partner to be invoiced */
         public void SetBill_BPartner_ID(int Bill_BPartner_ID)
@@ -171,8 +171,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Bill_Location_ID AD_Reference_ID=159 */
-        public static int BILL_LOCATION_ID_AD_Reference_ID = 159;
+        /** Bill_Location_ID VAF_Control_Ref_ID=159 */
+        public static int BILL_LOCATION_ID_VAF_Control_Ref_ID = 159;
         /** Set Bill To Location.
         @param Bill_Location_ID Business Partner Location for invoicing */
         public void SetBill_Location_ID(int Bill_Location_ID)
@@ -190,8 +190,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Bill_User_ID AD_Reference_ID=110 */
-        public static int BILL_USER_ID_AD_Reference_ID = 110;
+        /** Bill_User_ID VAF_Control_Ref_ID=110 */
+        public static int BILL_USER_ID_VAF_Control_Ref_ID = 110;
         /** Set Invoice Contact.
         @param Bill_User_ID Business Partner Contact for invoicing */
         public void SetBill_User_ID(int Bill_User_ID)
@@ -498,8 +498,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -556,8 +556,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -813,8 +813,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** PriceListID AD_Reference_ID=166 */
-        public static int PRICELISTID_AD_Reference_ID = 166;
+        /** PriceListID VAF_Control_Ref_ID=166 */
+        public static int PRICELISTID_VAF_Control_Ref_ID = 166;
         /** Set Price List.
         @param PriceListID Price List */
         public void SetPriceListID(int PriceListID)
@@ -897,8 +897,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("RefContract");
         }
 
-        /** Ref_Contract_ID AD_Reference_ID=1000096 */
-        public static int REF_CONTRACT_ID_AD_Reference_ID = 1000096;
+        /** Ref_Contract_ID VAF_Control_Ref_ID=1000096 */
+        public static int REF_CONTRACT_ID_VAF_Control_Ref_ID = 1000096;
         /** Set Contract Ref..
         @param Ref_Contract_ID Contract Ref. */
         public void SetRef_Contract_ID(int Ref_Contract_ID)
@@ -933,8 +933,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("RenewContract");
         }
 
-        /** RenewalType AD_Reference_ID=1000095 */
-        public static int RENEWALTYPE_AD_Reference_ID = 1000095;
+        /** RenewalType VAF_Control_Ref_ID=1000095 */
+        public static int RENEWALTYPE_VAF_Control_Ref_ID = 1000095;
         /** Automatic = A */
         public static String RENEWALTYPE_Automatic = "A";
         /** Manual = M */
@@ -966,8 +966,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("RenewalType");
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Owner.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -1063,8 +1063,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Ref_PriceList_ID AD_Reference_ID=166 */
-        public static int Ref_PriceList_ID_AD_Reference_ID = 166;
+        /** Ref_PriceList_ID VAF_Control_Ref_ID=166 */
+        public static int Ref_PriceList_ID_VAF_Control_Ref_ID = 166;
         /** Set Price List.
         @param Ref_PriceList_ID Price List */
         public void SetRef_PriceList_ID(int Ref_PriceList_ID)

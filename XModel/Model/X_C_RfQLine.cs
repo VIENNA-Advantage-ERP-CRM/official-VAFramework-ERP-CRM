@@ -28,7 +28,7 @@ public X_C_RfQLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxNam
  added by ->Harwinder */
 static X_C_RfQLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27829052854760L;/** Last Updated Timestamp 1/8/2019 11:35:37 AM */
-public static long updatedMS = 1546927537971L;/** AD_Table_ID=676 */
+public static long updatedMS = 1546927537971L;/** VAF_TableView_ID=676 */
 public static int Table_ID; // =676;
 /** TableName=C_RfQLine */
 public static String Table_Name="C_RfQLine";

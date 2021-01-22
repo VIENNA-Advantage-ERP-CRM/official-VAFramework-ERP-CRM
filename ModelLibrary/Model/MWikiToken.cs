@@ -92,7 +92,7 @@ namespace VAdvantage.Model
 	public static MWikiToken[] GetAllForPreload(Ctx ctx, Trx trxName) 
 	{
 		List<MWikiToken> list = new List<MWikiToken>();
-		String sql = "SELECT * FROM CM_WikiToken WHERE Ad_Client_ID=0 AND isActive='Y' ORDER By SeqNo";
+		String sql = "SELECT * FROM CM_WikiToken WHERE vaf_client_ID=0 AND isActive='Y' ORDER By SeqNo";
 		//PreparedStatement pstmt = null;
         IDataReader idr = null;
 		try

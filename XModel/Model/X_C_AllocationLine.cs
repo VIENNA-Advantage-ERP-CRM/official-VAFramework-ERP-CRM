@@ -39,7 +39,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_AllocationLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27884379430766L;/** Last Updated Timestamp 10/9/2020 2:35:14 PM */
-        public static long updatedMS = 1602254113977L;/** AD_Table_ID=390 */
+        public static long updatedMS = 1602254113977L;/** VAF_TableView_ID=390 */
         public static int Table_ID; // =390;
         /** TableName=C_AllocationLine */
         public static String Table_Name = "C_AllocationLine";
@@ -180,8 +180,8 @@ namespace VAdvantage.Model
         public void SetOverUnderAmt(Decimal? OverUnderAmt) { Set_Value("OverUnderAmt", (Decimal?)OverUnderAmt); }/** Get Over/Under Payment.
 @return Over-Payment (unallocated) or Under-Payment (partial payment) Amount */
         public Decimal GetOverUnderAmt() { Object bd = Get_Value("OverUnderAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** Ref_C_Invoice_ID AD_Reference_ID=336 */
-        public static int REF_C_INVOICE_ID_AD_Reference_ID = 336;/** Set Invoice Ref.
+        /** Ref_C_Invoice_ID VAF_Control_Ref_ID=336 */
+        public static int REF_C_INVOICE_ID_VAF_Control_Ref_ID = 336;/** Set Invoice Ref.
 @param Ref_C_Invoice_ID Invoice Ref */
         public void SetRef_C_Invoice_ID(int Ref_C_Invoice_ID)
         {
@@ -191,8 +191,8 @@ namespace VAdvantage.Model
         }/** Get Invoice Ref.
 @return Invoice Ref */
         public int GetRef_C_Invoice_ID() { Object ii = Get_Value("Ref_C_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_CashLine_ID AD_Reference_ID=1000602 */
-        public static int REF_CASHLINE_ID_AD_Reference_ID = 1000602;/** Set Ref Cash Journal.
+        /** Ref_CashLine_ID VAF_Control_Ref_ID=1000602 */
+        public static int REF_CASHLINE_ID_VAF_Control_Ref_ID = 1000602;/** Set Ref Cash Journal.
 @param Ref_CashLine_ID Ref Cash Journal */
         public void SetRef_CashLine_ID(int Ref_CashLine_ID)
         {
@@ -202,8 +202,8 @@ namespace VAdvantage.Model
         }/** Get Ref Cash Journal.
 @return Ref Cash Journal */
         public int GetRef_CashLine_ID() { Object ii = Get_Value("Ref_CashLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_GLJournalLine_ID AD_Reference_ID=1000314 */
-        public static int REF_GLJOURNALLINE_ID_AD_Reference_ID = 1000314;/** Set Ref GL Journal Line.
+        /** Ref_GLJournalLine_ID VAF_Control_Ref_ID=1000314 */
+        public static int REF_GLJOURNALLINE_ID_VAF_Control_Ref_ID = 1000314;/** Set Ref GL Journal Line.
 @param Ref_GLJournalLine_ID General Ledger Journal Line */
         public void SetRef_GLJournalLine_ID(int Ref_GLJournalLine_ID)
         {
@@ -213,8 +213,8 @@ namespace VAdvantage.Model
         }/** Get Ref GL Journal Line.
 @return General Ledger Journal Line */
         public int GetRef_GLJournalLine_ID() { Object ii = Get_Value("Ref_GLJournalLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_Invoiceschedule_ID AD_Reference_ID=1000603 */
-        public static int REF_INVOICESCHEDULE_ID_AD_Reference_ID = 1000603;/** Set Ref Invoice Schedule.
+        /** Ref_Invoiceschedule_ID VAF_Control_Ref_ID=1000603 */
+        public static int REF_INVOICESCHEDULE_ID_VAF_Control_Ref_ID = 1000603;/** Set Ref Invoice Schedule.
 @param Ref_Invoiceschedule_ID Ref Invoice Schedule */
         public void SetRef_Invoiceschedule_ID(int Ref_Invoiceschedule_ID)
         {
@@ -224,8 +224,8 @@ namespace VAdvantage.Model
         }/** Get Ref Invoice Schedule.
 @return Ref Invoice Schedule */
         public int GetRef_Invoiceschedule_ID() { Object ii = Get_Value("Ref_Invoiceschedule_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Ref_Payment_ID AD_Reference_ID=343 */
-        public static int REF_PAYMENT_ID_AD_Reference_ID = 343;/** Set Referenced Payment.
+        /** Ref_Payment_ID VAF_Control_Ref_ID=343 */
+        public static int REF_PAYMENT_ID_VAF_Control_Ref_ID = 343;/** Set Referenced Payment.
 @param Ref_Payment_ID Referenced Payment */
         public void SetRef_Payment_ID(int Ref_Payment_ID)
         {

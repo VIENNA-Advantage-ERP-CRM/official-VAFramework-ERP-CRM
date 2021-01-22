@@ -44,7 +44,7 @@ namespace VAdvantage.Process
                 opp.SetC_Campaign_ID (lead.GetC_Campaign_ID());
                 //opp.SetR_Source_ID (lead.GetR_Source_ID());
                // opp.SetOpportunityStatus("N");
-                opp.SetAD_User_ID(lead.GetAD_User_ID());
+                opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                 VAdvantage.Model.X_C_BPartner bp=new VAdvantage.Model.X_C_BPartner(GetCtx(),ExCustomer,Get_TrxName());
                 VAdvantage.Model.X_C_BPartner_Location loc=new VAdvantage.Model.X_C_BPartner_Location (GetCtx(),ExCustomer,Get_TrxName());
 
@@ -75,8 +75,8 @@ namespace VAdvantage.Process
                 opp.SetC_Campaign_ID ( lead.GetC_Campaign_ID());
                // opp.SetR_Source_ID (lead.GetR_Source_ID());
                 //opp.SetOpportunityStatus ("N");
-               // opp.SetAD_Client_ID(GetAD_Client_ID());
-                opp.SetAD_User_ID(lead.GetAD_User_ID());
+               // opp.SetVAF_Client_ID(GetVAF_Client_ID());
+                opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                 VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), Pospect, Get_TrxName());
                 //X_C_BPartner_Location loc = new X_C_BPartner_Location(GetCtx(), Pospect, Get_TrxName());
 
@@ -108,17 +108,17 @@ namespace VAdvantage.Process
         }
         private void CallProcess(int lead_id)
         {
-            string sql = "select ad_process_id from ad_process where name = 'C_Lead BPartner'";
-            int AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
+            string sql = "select VAF_Job_id from VAF_Job where name = 'C_Lead BPartner'";
+            int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
 
-            MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, GetRecord_ID());
+            MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, GetRecord_ID());
             if (!instance.Save())
             {
                 return;
             }
 
-            ProcessInfo pi = new ProcessInfo("VInOutGen", AD_Process_ID);
-            pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo("VInOutGen", VAF_Job_ID);
+            pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
             // Add Parameter - Selection=Y
             MPInstancePara para = new MPInstancePara(instance, 10);
@@ -170,7 +170,7 @@ namespace VAdvantage.Process
             VAdvantage.Model.MUser user = lead.GetUser();
             if (user != null)
             {
-                return "@AD_User_ID@: " + user.GetName();
+                return "@VAF_UserContact_ID@: " + user.GetName();
             }
             return "@SaveError@";
         }	//	doIt

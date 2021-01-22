@@ -87,11 +87,11 @@ namespace VAdvantage.Model
                 ml.SetColumnName(_vo.ColumnName.ToLower());
                 if (_vo.lookupInfo == null)
                 {
-                    _vo.lookupInfo = VLookUpFactory.GetLookUpInfo(ml, _vo.AD_Column_ID,
-                    Env.GetLanguage(_vo.GetCtx()), _vo.ColumnName, _vo.AD_Reference_Value_ID,
+                    _vo.lookupInfo = VLookUpFactory.GetLookUpInfo(ml, _vo.VAF_Column_ID,
+                    Env.GetLanguage(_vo.GetCtx()), _vo.ColumnName, _vo.VAF_Control_Ref_Value_ID,
                     _vo.IsParent, _vo.ValidationCode);
 
-                    //_vo.lookupInfo = VLookUpFactory.GetLookUpInfo(_vo.GetContext(), _vo.GetWindowNum(), _vo.DISPLAYTYPE, _vo.AD_COLUMN_ID,
+                    //_vo.lookupInfo = VLookUpFactory.GetLookUpInfo(_vo.GetContext(), _vo.GetWindowNum(), _vo.DISPLAYTYPE, _vo.VAF_COLUMN_ID,
                     //     Utility.Env.GetLanguage(_vo.GetCtx()), _vo.COLUMNNAME, _vo.AD_REF_VAL_ID,
                     //    _vo.ISPARENT, _vo.VALIDATIONCODE);
                 }
@@ -192,9 +192,9 @@ namespace VAdvantage.Model
         /// Field Window Id
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return _vo.AD_Window_ID;
+            return _vo.VAF_Screen_ID;
         }
 
         /// <summary>
@@ -704,21 +704,21 @@ namespace VAdvantage.Model
             //	Role Access & Column Access			
             if (checkContext)
             {
-                int AD_Client_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "AD_Client_ID");
-                int AD_Org_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "AD_Org_ID");
+                int VAF_Client_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "VAF_Client_ID");
+                int VAF_Org_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, "VAF_Org_ID");
                 String keyColumn = _vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "KeyColumnName");
                 if ("EntityType".Equals(keyColumn))
-                    keyColumn = "AD_EntityType_ID";
+                    keyColumn = "VAF_RecrodType_ID";
                 if (!keyColumn.EndsWith("_ID"))
-                    keyColumn += "_ID";			//	AD_Language_ID
+                    keyColumn += "_ID";			//	VAF_Language_ID
                 int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, keyColumn);
-                int AD_Table_ID = _vo.AD_Table_ID;
+                int VAF_TableView_ID = _vo.VAF_TableView_ID;
                 if (!MRole.GetDefault((Context)_vo.GetCtx(), false).CanUpdate(
-                    AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false))
+                    VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID, Record_ID, false))
                 {
                     return false;
                 }
-                if (!MRole.GetDefault((Context)_vo.GetCtx(), false).IsColumnAccess(AD_Table_ID, _vo.AD_Column_ID, false))
+                if (!MRole.GetDefault((Context)_vo.GetCtx(), false).IsColumnAccess(VAF_TableView_ID, _vo.VAF_Column_ID, false))
                 {
                     return false;
                 }
@@ -798,14 +798,14 @@ namespace VAdvantage.Model
             return _vo.ObscureType;
         }
 
-        public int GetAD_Column_ID()
+        public int GetVAF_Column_ID()
         {
-            return _vo.AD_Column_ID;
+            return _vo.VAF_Column_ID;
         }
 
-        public int GetAD_Field_ID()
+        public int GetVAF_Field_ID()
         {
-            return _vo.AD_Field_ID;
+            return _vo.VAF_Field_ID;
         }
         /// <summary>
         ///	Set Error.
@@ -872,9 +872,9 @@ namespace VAdvantage.Model
             return _vo.windowNo;
         }
 
-        public int GetAD_InfoWindow_ID()
+        public int GetVAF_QuickSearchWindow_ID()
         {
-            return _vo.AD_InfoWindow_ID;
+            return _vo.VAF_QuickSearchWindow_ID;
         }
 
 
@@ -884,12 +884,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_Process_ID
+        /// Get VAF_Job_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            return _vo.AD_Process_ID;
+            return _vo.VAF_Job_ID;
         }
 
         /// <summary>
@@ -919,9 +919,9 @@ namespace VAdvantage.Model
             return _vo.ValueMax;
         }
 
-        public int GetAD_Reference_Value_ID()
+        public int GetVAF_Control_Ref_Value_ID()
         {
-            return _vo.AD_Reference_Value_ID;
+            return _vo.VAF_Control_Ref_Value_ID;
         }
 
         public void SetDisplayType(int displayType)
@@ -990,15 +990,15 @@ namespace VAdvantage.Model
             }
 
             //	Set Client & Org to System, if System access
-            if (X_AD_Table.ACCESSLEVEL_SystemOnly.Equals(_vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "AccessLevel"))
-                && (_vo.ColumnName.Equals("AD_Client_ID") || _vo.ColumnName.Equals("AD_Org_ID")))
+            if (X_VAF_TableView.ACCESSLEVEL_SystemOnly.Equals(_vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "AccessLevel"))
+                && (_vo.ColumnName.Equals("VAF_Client_ID") || _vo.ColumnName.Equals("VAF_Org_ID")))
             {
                 log.Fine("[SystemAccess] " + _vo.ColumnName + "=0");
                 return 0;
             }
             //	Set Org to System, if Client access
-            else if (X_AD_Table.ACCESSLEVEL_SystemPlusClient.Equals(_vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "AccessLevel"))
-                && _vo.ColumnName.Equals("AD_Org_ID"))
+            else if (X_VAF_TableView.ACCESSLEVEL_SystemPlusClient.Equals(_vo.GetCtx().GetContext(_vo.windowNo, _vo.tabNo, "AccessLevel"))
+                && _vo.ColumnName.Equals("VAF_Org_ID"))
             {
                 log.Fine("[ClientAccess] " + _vo.ColumnName + "=0");
                 return 0;
@@ -1084,7 +1084,7 @@ namespace VAdvantage.Model
             /**
                      *	(d) Preference (user) - P|
                      */
-            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.AD_Window_ID, _vo.ColumnName, false);
+            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.VAF_Screen_ID, _vo.ColumnName, false);
             if (!defStr.Equals(""))
             {
                 log.Fine("[UserPreference] " + _vo.ColumnName + "=" + defStr);
@@ -1094,7 +1094,7 @@ namespace VAdvantage.Model
             /**
              *	(e) Preference (System) - # $
              */
-            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.AD_Window_ID, _vo.ColumnName, true);
+            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.VAF_Screen_ID, _vo.ColumnName, true);
             if (!defStr.Equals(""))
             {
                 log.Fine("[SystemPreference] " + _vo.ColumnName + "=" + defStr);
@@ -1515,8 +1515,8 @@ namespace VAdvantage.Model
         public bool IsCreateMnemonic()
         {
             if (IsReadOnly()
-                || _vo.ColumnName.Equals("AD_Client_ID")
-                || _vo.ColumnName.Equals("AD_Org_ID")
+                || _vo.ColumnName.Equals("VAF_Client_ID")
+                || _vo.ColumnName.Equals("VAF_Org_ID")
                 || _vo.ColumnName.Equals("DocumentNo"))
                 return false;
             return true;
@@ -1576,32 +1576,32 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
         /// <param name="TabNo"></param>
-        /// <param name="AD_Tab_ID"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_Tab_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
         public static GridField[] CreateFields(Ctx ctx, int windowNo, int tabNo,
-             int AD_Tab_ID, int AD_UserDef_Win_ID)
+             int VAF_Tab_ID, int VAF_UserCustom_Win_ID)
         {
             List<GridFieldVO> listVO = new List<GridFieldVO>();
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
             bool readOnly = false;
 
             String[] stdFieldNames = new String[] { "Created", "CreatedBy", "Updated", "UpdatedBy" };
             bool[] stdFieldsFound = new bool[] { false, false, false, false };
 
-            String sql = GridFieldVO.GetSQL(ctx, AD_UserDef_Win_ID);
+            String sql = GridFieldVO.GetSQL(ctx, VAF_UserCustom_Win_ID);
             System.Data.IDataReader dr = null;
             System.Data.SqlClient.SqlParameter[] param = null;
             try
             {
                 param = new System.Data.SqlClient.SqlParameter[1];
-                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", AD_Tab_ID);
+                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", VAF_Tab_ID);
 
                 dr = DataBase.DB.ExecuteReader(sql, param);
                 while (dr.Read())
                 {
                     GridFieldVO vo = GridFieldVO.Create(ctx, windowNo, tabNo,
-                        AD_Window_ID, AD_Tab_ID, readOnly, dr);
+                        VAF_Screen_ID, VAF_Tab_ID, readOnly, dr);
                     listVO.Add(vo);
                     String columnName = vo.ColumnName;
                     for (int i = 0; i < stdFieldsFound.Length; i++)
@@ -1628,13 +1628,13 @@ namespace VAdvantage.Model
 
             //	Standard Fields
             if (!stdFieldsFound[0])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, AD_Tab_ID, false, true, true));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, true, true));
             if (!stdFieldsFound[1])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, AD_Tab_ID, false, true, false));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, true, false));
             if (!stdFieldsFound[2])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, AD_Tab_ID, false, false, true));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, false, true));
             if (!stdFieldsFound[3])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, AD_Tab_ID, false, false, false));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, false, false));
             //
             GridField[] retValue = new GridField[listVO.Count];
             for (int i = 0; i < listVO.Count; i++)

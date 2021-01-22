@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserDef_Tab
+/** Generated Model for VAF_UserCustom_Tab
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserDef_Tab : PO
+public class X_VAF_UserCustom_Tab : PO
 {
-public X_AD_UserDef_Tab (Context ctx, int AD_UserDef_Tab_ID, Trx trxName) : base (ctx, AD_UserDef_Tab_ID, trxName)
+public X_VAF_UserCustom_Tab (Context ctx, int VAF_UserCustom_Tab_ID, Trx trxName) : base (ctx, VAF_UserCustom_Tab_ID, trxName)
 {
-/** if (AD_UserDef_Tab_ID == 0)
+/** if (VAF_UserCustom_Tab_ID == 0)
 {
-SetAD_Tab_ID (0);
-SetAD_UserDef_Tab_ID (0);
-SetAD_UserDef_Win_ID (0);
+SetVAF_Tab_ID (0);
+SetVAF_UserCustom_Tab_ID (0);
+SetVAF_UserCustom_Win_ID (0);
 }
  */
 }
-public X_AD_UserDef_Tab (Ctx ctx, int AD_UserDef_Tab_ID, Trx trxName) : base (ctx, AD_UserDef_Tab_ID, trxName)
+public X_VAF_UserCustom_Tab (Ctx ctx, int VAF_UserCustom_Tab_ID, Trx trxName) : base (ctx, VAF_UserCustom_Tab_ID, trxName)
 {
-/** if (AD_UserDef_Tab_ID == 0)
+/** if (VAF_UserCustom_Tab_ID == 0)
 {
-SetAD_Tab_ID (0);
-SetAD_UserDef_Tab_ID (0);
-SetAD_UserDef_Win_ID (0);
+SetVAF_Tab_ID (0);
+SetVAF_UserCustom_Tab_ID (0);
+SetVAF_UserCustom_Win_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetAD_UserDef_Win_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Tab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Tab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_UserDef_Tab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Tab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserCustom_Tab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_UserDef_Tab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserDef_Tab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserCustom_Tab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserDef_Tab()
+static X_VAF_UserCustom_Tab()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_UserDef_Tab()
 //static long serialVersionUID 27562514365338L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048549L;
-/** AD_Table_ID=466 */
+/** VAF_TableView_ID=466 */
 public static int Table_ID;
  // =466;
 
-/** TableName=AD_UserDef_Tab */
-public static String Table_Name="AD_UserDef_Tab";
+/** TableName=VAF_UserCustom_Tab */
+public static String Table_Name="VAF_UserCustom_Tab";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserDef_Tab[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserCustom_Tab[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tab.
-@param AD_Tab_ID Tab within a Window */
-public void SetAD_Tab_ID (int AD_Tab_ID)
+@param VAF_Tab_ID Tab within a Window */
+public void SetVAF_Tab_ID (int VAF_Tab_ID)
 {
-if (AD_Tab_ID < 1) throw new ArgumentException ("AD_Tab_ID is mandatory.");
-Set_Value ("AD_Tab_ID", AD_Tab_ID);
+if (VAF_Tab_ID < 1) throw new ArgumentException ("VAF_Tab_ID is mandatory.");
+Set_Value ("VAF_Tab_ID", VAF_Tab_ID);
 }
 /** Get Tab.
 @return Tab within a Window */
-public int GetAD_Tab_ID() 
+public int GetVAF_Tab_ID() 
 {
-Object ii = Get_Value("AD_Tab_ID");
+Object ii = Get_Value("VAF_Tab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,35 +133,35 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Tab_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Tab_ID().ToString());
 }
 /** Set User defined Tab.
-@param AD_UserDef_Tab_ID User defined Tab */
-public void SetAD_UserDef_Tab_ID (int AD_UserDef_Tab_ID)
+@param VAF_UserCustom_Tab_ID User defined Tab */
+public void SetVAF_UserCustom_Tab_ID (int VAF_UserCustom_Tab_ID)
 {
-if (AD_UserDef_Tab_ID < 1) throw new ArgumentException ("AD_UserDef_Tab_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserDef_Tab_ID", AD_UserDef_Tab_ID);
+if (VAF_UserCustom_Tab_ID < 1) throw new ArgumentException ("VAF_UserCustom_Tab_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserCustom_Tab_ID", VAF_UserCustom_Tab_ID);
 }
 /** Get User defined Tab.
 @return User defined Tab */
-public int GetAD_UserDef_Tab_ID() 
+public int GetVAF_UserCustom_Tab_ID() 
 {
-Object ii = Get_Value("AD_UserDef_Tab_ID");
+Object ii = Get_Value("VAF_UserCustom_Tab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User defined Window.
-@param AD_UserDef_Win_ID User defined Window */
-public void SetAD_UserDef_Win_ID (int AD_UserDef_Win_ID)
+@param VAF_UserCustom_Win_ID User defined Window */
+public void SetVAF_UserCustom_Win_ID (int VAF_UserCustom_Win_ID)
 {
-if (AD_UserDef_Win_ID < 1) throw new ArgumentException ("AD_UserDef_Win_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserDef_Win_ID", AD_UserDef_Win_ID);
+if (VAF_UserCustom_Win_ID < 1) throw new ArgumentException ("VAF_UserCustom_Win_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserCustom_Win_ID", VAF_UserCustom_Win_ID);
 }
 /** Get User defined Window.
 @return User defined Window */
-public int GetAD_UserDef_Win_ID() 
+public int GetVAF_UserCustom_Win_ID() 
 {
-Object ii = Get_Value("AD_UserDef_Win_ID");
+Object ii = Get_Value("VAF_UserCustom_Win_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -217,8 +217,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDisplayed AD_Reference_ID=319 */
-public static int ISDISPLAYED_AD_Reference_ID=319;
+/** IsDisplayed VAF_Control_Ref_ID=319 */
+public static int ISDISPLAYED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDISPLAYED_No = "N";
 /** Yes = Y */
@@ -250,8 +250,8 @@ public String GetIsDisplayed()
 return (String)Get_Value("IsDisplayed");
 }
 
-/** IsInsertRecord AD_Reference_ID=319 */
-public static int ISINSERTRECORD_AD_Reference_ID=319;
+/** IsInsertRecord VAF_Control_Ref_ID=319 */
+public static int ISINSERTRECORD_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISINSERTRECORD_No = "N";
 /** Yes = Y */
@@ -283,8 +283,8 @@ public String GetIsInsertRecord()
 return (String)Get_Value("IsInsertRecord");
 }
 
-/** IsMultiRowOnly AD_Reference_ID=319 */
-public static int ISMULTIROWONLY_AD_Reference_ID=319;
+/** IsMultiRowOnly VAF_Control_Ref_ID=319 */
+public static int ISMULTIROWONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISMULTIROWONLY_No = "N";
 /** Yes = Y */
@@ -316,8 +316,8 @@ public String GetIsMultiRowOnly()
 return (String)Get_Value("IsMultiRowOnly");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */
@@ -349,8 +349,8 @@ public String GetIsReadOnly()
 return (String)Get_Value("IsReadOnly");
 }
 
-/** IsSingleRow AD_Reference_ID=319 */
-public static int ISSINGLEROW_AD_Reference_ID=319;
+/** IsSingleRow VAF_Control_Ref_ID=319 */
+public static int ISSINGLEROW_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSINGLEROW_No = "N";
 /** Yes = Y */

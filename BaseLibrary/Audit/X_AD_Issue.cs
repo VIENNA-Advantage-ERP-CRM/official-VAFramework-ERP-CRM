@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Issue
+/** Generated Model for VAF_Issue
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Issue : PO
+public class X_VAF_Issue : PO
 {
-public X_AD_Issue (Context ctx, int AD_Issue_ID, Trx trxName) : base (ctx, AD_Issue_ID, trxName)
+public X_VAF_Issue (Context ctx, int VAF_Issue_ID, Trx trxName) : base (ctx, VAF_Issue_ID, trxName)
 {
-/** if (AD_Issue_ID == 0)
+/** if (VAF_Issue_ID == 0)
 {
-SetAD_Issue_ID (0);
+SetVAF_Issue_ID (0);
 SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
@@ -31,11 +31,11 @@ SetVersion (null);	// .
 }
  */
 }
-public X_AD_Issue (Ctx ctx, int AD_Issue_ID, Trx trxName) : base (ctx, AD_Issue_ID, trxName)
+public X_VAF_Issue (Ctx ctx, int VAF_Issue_ID, Trx trxName) : base (ctx, VAF_Issue_ID, trxName)
 {
-/** if (AD_Issue_ID == 0)
+/** if (VAF_Issue_ID == 0)
 {
-SetAD_Issue_ID (0);
+SetVAF_Issue_ID (0);
 SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
@@ -51,7 +51,7 @@ SetVersion (null);	// .
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Issue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Issue()
+static X_VAF_Issue()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,12 +82,12 @@ static X_AD_Issue()
 //static long serialVersionUID = 27562514361859L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045070L;
-/** AD_Table_ID=828 */
+/** VAF_TableView_ID=828 */
 public static int Table_ID;
  // =828;
 
-/** TableName=AD_Issue */
-public static String Table_Name="AD_Issue";
+/** TableName=VAF_Issue */
+public static String Table_Name="VAF_Issue";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,69 +121,69 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Issue[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Issue[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set System Issue.
-@param AD_Issue_ID Automatically created or manually entered System Issue */
-public void SetAD_Issue_ID (int AD_Issue_ID)
+@param VAF_Issue_ID Automatically created or manually entered System Issue */
+public void SetVAF_Issue_ID (int VAF_Issue_ID)
 {
-if (AD_Issue_ID < 1) throw new ArgumentException ("AD_Issue_ID is mandatory.");
-Set_ValueNoCheck ("AD_Issue_ID", AD_Issue_ID);
+if (VAF_Issue_ID < 1) throw new ArgumentException ("VAF_Issue_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Issue_ID", VAF_Issue_ID);
 }
 /** Get System Issue.
 @return Automatically created or manually entered System Issue */
-public int GetAD_Issue_ID() 
+public int GetVAF_Issue_ID() 
 {
-Object ii = Get_Value("AD_Issue_ID");
+Object ii = Get_Value("VAF_Issue_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID <= 0) Set_Value ("AD_Window_ID", null);
+if (VAF_Screen_ID <= 0) Set_Value ("VAF_Screen_ID", null);
 else
-Set_Value ("AD_Window_ID", AD_Window_ID);
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -272,8 +272,8 @@ public String GetErrorTrace()
 return (String)Get_Value("ErrorTrace");
 }
 
-/** IsReproducible AD_Reference_ID=319 */
-public static int ISREPRODUCIBLE_AD_Reference_ID=319;
+/** IsReproducible VAF_Control_Ref_ID=319 */
+public static int ISREPRODUCIBLE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREPRODUCIBLE_No = "N";
 /** Yes = Y */
@@ -305,8 +305,8 @@ public String GetIsReproducible()
 return (String)Get_Value("IsReproducible");
 }
 
-/** IsVanillaSystem AD_Reference_ID=319 */
-public static int ISVANILLASYSTEM_AD_Reference_ID=319;
+/** IsVanillaSystem VAF_Control_Ref_ID=319 */
+public static int ISVANILLASYSTEM_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISVANILLASYSTEM_No = "N";
 /** Yes = Y */
@@ -338,8 +338,8 @@ public String GetIsVanillaSystem()
 return (String)Get_Value("IsVanillaSystem");
 }
 
-/** IssueSource AD_Reference_ID=104 */
-public static int ISSUESOURCE_AD_Reference_ID=104;
+/** IssueSource VAF_Control_Ref_ID=104 */
+public static int ISSUESOURCE_VAF_Control_Ref_ID=104;
 /** Workbench = B */
 public static String ISSUESOURCE_Workbench = "B";
 /** WorkFlow = F */
@@ -842,8 +842,8 @@ public String GetSupportEMail()
 return (String)Get_Value("SupportEMail");
 }
 
-/** SystemStatus AD_Reference_ID=374 */
-public static int SYSTEMSTATUS_AD_Reference_ID=374;
+/** SystemStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
 public static String SYSTEMSTATUS_Evaluation = "E";
 /** Implementation = I */

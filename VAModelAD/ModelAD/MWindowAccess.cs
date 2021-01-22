@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MWindowAccess
  * Purpose        : 
- * Class Used     : MWindowAccess inherits X_AD_Window_Access
+ * Class Used     : MWindowAccess inherits X_VAF_Screen_Rights
  * Chronological    Development
  * Raghunandan      05-May-2009 
   ******************************************************/
@@ -17,7 +17,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
- public class MWindowAccess : X_AD_Window_Access
+ public class MWindowAccess : X_VAF_Screen_Rights
     {
         /// <summary>
         ///Standard Constructor
@@ -32,8 +32,8 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Multi-Key");
             else
             {
-                //	setAD_Role_ID (0);
-                //	setAD_Window_ID (0);
+                //	setVAF_Role_ID (0);
+                //	setVAF_Screen_ID (0);
                 SetIsReadWrite(true);
             }
         }
@@ -42,13 +42,13 @@ namespace VAdvantage.Model
         ///Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="AD_Role_ID">role id</param>
-        public MWindowAccess(MWindow parent, int AD_Role_ID)
+        /// <param name="VAF_Role_ID">role id</param>
+        public MWindowAccess(MWindow parent, int VAF_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Window_ID(parent.GetAD_Window_ID());
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
+            SetVAF_Role_ID(VAF_Role_ID);
         }
 
         /// <summary>
@@ -70,8 +70,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MWindowAccess[");
-            sb.Append("AD_Window_ID=").Append(GetAD_Window_ID())
-                .Append(",AD_Role_ID=").Append(GetAD_Role_ID())
+            sb.Append("VAF_Screen_ID=").Append(GetVAF_Screen_ID())
+                .Append(",VAF_Role_ID=").Append(GetVAF_Role_ID())
                 .Append("]");
             return sb.ToString();
         }

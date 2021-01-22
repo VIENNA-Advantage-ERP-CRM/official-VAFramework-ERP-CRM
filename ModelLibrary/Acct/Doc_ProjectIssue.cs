@@ -138,7 +138,7 @@ namespace VAdvantage.Acct
                 cost = GetLaborCost(as1);
             }
             if (cost == null)	//	standard Product Costs
-                cost = _line.GetProductCosts(as1, GetAD_Org_ID(), false);
+                cost = _line.GetProductCosts(as1, GetVAF_Org_ID(), false);
 
             //  Project         DR
             int acctType = ACCTTYPE_ProjectWIP;
@@ -186,8 +186,8 @@ namespace VAdvantage.Acct
             {
                 SqlParameter[] param = new SqlParameter[4];
                 param[0] = new SqlParameter("@param1", as1.GetC_Currency_ID());
-                param[1] = new SqlParameter("@param2", GetAD_Client_ID());
-                param[2] = new SqlParameter("@param3", GetAD_Org_ID());
+                param[1] = new SqlParameter("@param2", GetVAF_Client_ID());
+                param[2] = new SqlParameter("@param3", GetVAF_Org_ID());
                 param[3] = new SqlParameter("@param4", _issue.GetM_InOutLine_ID());
 
                 idr = DataBase.DB.ExecuteReader(sql, param, null);

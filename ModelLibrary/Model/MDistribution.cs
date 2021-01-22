@@ -39,9 +39,9 @@ namespace VAdvantage.Model
 	{
 		return Get (acct.GetCtx(), acct.GetC_AcctSchema_ID(), 
 			PostingType, C_DocType_ID,
-			acct.GetAD_Org_ID(), acct.GetAccount_ID(),
+			acct.GetVAF_Org_ID(), acct.GetAccount_ID(),
 			acct.GetM_Product_ID(), acct.GetC_BPartner_ID(), acct.GetC_Project_ID(),
-			acct.GetC_Campaign_ID(), acct.GetC_Activity_ID(), acct.GetAD_OrgTrx_ID(),
+			acct.GetC_Campaign_ID(), acct.GetC_Activity_ID(), acct.GetVAF_OrgTrx_ID(),
 			acct.GetC_SalesRegion_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
 			acct.GetUser1_ID(), acct.GetUser2_ID());
 	}	//	get
@@ -52,14 +52,14 @@ namespace VAdvantage.Model
         /// <param name="C_AcctSchema_ID">schema</param>
         /// <param name="PostingType">posting type</param>
         /// <param name="C_DocType_ID">document type</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="Account_ID">account</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="C_BPartner_ID">partner</param>
         /// <param name="C_Project_ID">project</param>
         /// <param name="C_Campaign_ID">campaign</param>
         /// <param name="C_Activity_ID">activity</param>
-        /// <param name="AD_OrgTrx_ID">trx org</param>
+        /// <param name="VAF_OrgTrx_ID">trx org</param>
         /// <param name="C_SalesRegion_ID">C_SalesRegion_ID</param>
         /// <param name="C_LocTo_ID">location to</param>
         /// <param name="C_LocFrom_ID">from</param>
@@ -68,9 +68,9 @@ namespace VAdvantage.Model
        /// <returns>array of distributions or null</returns>
 	public static MDistribution[] Get (Ctx ctx, int C_AcctSchema_ID, 
 		String PostingType, int C_DocType_ID,
-		int AD_Org_ID, int Account_ID,
+		int VAF_Org_ID, int Account_ID,
 		int M_Product_ID, int C_BPartner_ID, int C_Project_ID,
-		int C_Campaign_ID, int C_Activity_ID, int AD_OrgTrx_ID,
+		int C_Campaign_ID, int C_Activity_ID, int VAF_OrgTrx_ID,
 		int C_SalesRegion_ID, int C_LocTo_ID, int C_LocFrom_ID,
 		int User1_ID, int User2_ID)
 	{
@@ -104,7 +104,7 @@ namespace VAdvantage.Model
 				continue;
 			}
 			//	Optional Elements - "non-Any"
-			if (!distribution.IsAnyOrg() && distribution.GetAD_Org_ID() != AD_Org_ID)
+			if (!distribution.IsAnyOrg() && distribution.GetVAF_Org_ID() != VAF_Org_ID)
             {
 				continue;
             }
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyOrgTrx() && distribution.GetAD_OrgTrx_ID() != AD_OrgTrx_ID)
+			if (!distribution.IsAnyOrgTrx() && distribution.GetVAF_OrgTrx_ID() != VAF_OrgTrx_ID)
             {
 				continue;
             }
@@ -510,9 +510,9 @@ namespace VAdvantage.Model
         {
 			SetOrg_ID(0);
         }
-		if (IsAnyOrgTrx() && GetAD_OrgTrx_ID() != 0)
+		if (IsAnyOrgTrx() && GetVAF_OrgTrx_ID() != 0)
         {
-			SetAD_OrgTrx_ID(0);
+			SetVAF_OrgTrx_ID(0);
         }
 		if (IsAnyProduct() && GetM_Product_ID() != 0)
         {

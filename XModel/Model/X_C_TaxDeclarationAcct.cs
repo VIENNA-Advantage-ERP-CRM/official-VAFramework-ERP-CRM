@@ -74,7 +74,7 @@ static X_C_TaxDeclarationAcct()
 //static long serialVersionUID 27562514375463L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058674L;
-/** AD_Table_ID=820 */
+/** VAF_TableView_ID=820 */
 public static int Table_ID;
  // =820;
 
@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_C_TaxDeclarationAcct[").Append(Get_ID()
 return sb.ToString();
 }
 
-/** Account_ID AD_Reference_ID=331 */
-public static int ACCOUNT_ID_AD_Reference_ID=331;
+/** Account_ID VAF_Control_Ref_ID=331 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=331;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)

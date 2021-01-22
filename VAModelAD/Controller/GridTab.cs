@@ -1,7 +1,7 @@
 ﻿/********************************************************
 // Module Name    : Run Time Show Window
 // Purpose        : Tab model.
-                    a combination of AD_Tab (the display attributes) and AD_Table information.
+                    a combination of VAF_Tab (the display attributes) and VAF_TableView information.
                     and Set Field value & perform callout
 // Class Used     : GlobalVariable.cs, CommonFunctions.cs,Context.cs
 // Created By     : Harwinder 
@@ -226,11 +226,11 @@ namespace VAdvantage.Model
             _wVo = wVo;
             _vo = vo;
             _vo.onlyCurrentDays = curDays;
-            _gridTable = new GridTable(_vo.GetCtx(), _vo.AD_Table_ID, _vo.TableName, _vo.windowNo, _vo.tabNo, true, this);
+            _gridTable = new GridTable(_vo.GetCtx(), _vo.VAF_TableView_ID, _vo.TableName, _vo.windowNo, _vo.tabNo, true, this);
             _gridTable.SetReadOnly(_vo.IsReadOnly || _vo.IsView);
             _gridTable.SetDeleteable(_vo.IsDeleteable);
             IniTab();
-            LoadData(_vo.GetCtx().GetAD_User_ID());
+            LoadData(_vo.GetCtx().GetVAF_UserContact_ID());
             InitIsAllowLetter();
 
         }
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
         {
             //try
             //{
-            //    _isAllowLetter = DataBase.DB.ExecuteScalar("Select IsAllowLetter From Ad_Tab where AD_Tab_ID = " + _vo.AD_Tab_ID).ToString() == "Y" ? true : false;
+            //    _isAllowLetter = DataBase.DB.ExecuteScalar("Select IsAllowLetter From vaf_tab where VAF_Tab_ID = " + _vo.VAF_Tab_ID).ToString() == "Y" ? true : false;
             //}
             //catch (Exception e)
             //{
@@ -254,7 +254,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        ///Initialize Tab with record from AD_Tab_v
+        ///Initialize Tab with record from VAF_Tab_v
         /// </summary>
         /// <returns></returns>
         protected bool IniTab()
@@ -380,28 +380,28 @@ namespace VAdvantage.Model
             {
                 GridField created = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, true));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, true, true));
                 _gridTable.AddField(created);
             }
             if (_gridTable.GetField("CreatedBy") == null)
             {
                 GridField createdBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, true, false));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, true, false));
                 _gridTable.AddField(createdBy);
             }
             if (_gridTable.GetField("Updated") == null)
             {
                 GridField updated = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, true));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, false, true));
                 _gridTable.AddField(updated);
             }
             if (_gridTable.GetField("UpdatedBy") == null)
             {
                 GridField updatedBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.AD_Tab_ID, false, false, false));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, false, false));
                 _gridTable.AddField(updatedBy);
             }
             return true;
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public bool IsPrinted()
         {
-            return _vo.AD_Process_ID != 0;
+            return _vo.VAF_Job_ID != 0;
         }	//	isPrinted
 
 
@@ -535,12 +535,12 @@ namespace VAdvantage.Model
                 _linkColumnName = linkColumnName;
             else
             {
-                if (_vo.AD_Column_ID == 0)
+                if (_vo.VAF_Column_ID == 0)
                     return;
                 //	we have a link column identified (primary parent column)
                 else
                 {
-                    string SQL = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID=" + _vo.AD_Column_ID;
+                    string SQL = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID=" + _vo.VAF_Column_ID;
                     try
                     {
                         _linkColumnName = DataBase.DB.ExecuteScalar(SQL).ToString();
@@ -549,7 +549,7 @@ namespace VAdvantage.Model
                     {
                         log.Log(Level.SEVERE, "", e);
                     }
-                    log.Fine("AD_Column_ID=" + _vo.AD_Column_ID + " - " + _linkColumnName);
+                    log.Fine("VAF_Column_ID=" + _vo.VAF_Column_ID + " - " + _linkColumnName);
                 }
             }
             _vo.GetCtx().SetContext(_vo.windowNo, _vo.tabNo, "LinkColumnName", _linkColumnName);
@@ -630,9 +630,9 @@ namespace VAdvantage.Model
         /// Table Id
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            return _vo.AD_Table_ID;
+            return _vo.VAF_TableView_ID;
         }
 
         /// <summary>
@@ -669,7 +669,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public int GetTabID()
         {
-            return _vo.AD_Tab_ID;
+            return _vo.VAF_Tab_ID;
         }
 
         /// <summary>
@@ -712,19 +712,19 @@ namespace VAdvantage.Model
         /// Get Order column for sort tab
         /// </summary>
         /// <returns></returns>
-        public int GetAD_ColumnSortOrder_ID()
+        public int GetVAF_ColumnSortOrder_ID()
         {
-            return _vo.AD_ColumnSortOrder_ID;
+            return _vo.VAF_ColumnSortOrder_ID;
         }
 
         /// <summary>
         ///	Get Yes/No column for sort tab
         /// </summary>
         /// <returns></returns>
-        public int GetAD_ColumnSortYesNo_ID()
+        public int GetVAF_ColumnSortYesNo_ID()
         {
-            return _vo.AD_ColumnSortYesNo_ID;
-        }	//	getAD_ColumnSortYesNo_ID
+            return _vo.VAF_ColumnSortYesNo_ID;
+        }	//	getVAF_ColumnSortYesNo_ID
 
 
         /*public int GetMaxFieldLenght()
@@ -1233,7 +1233,7 @@ namespace VAdvantage.Model
         public bool IsDetail()
         {
             //	We have IsParent columns and/or a link column
-            if (_parents.Count > 0 || _vo.AD_Column_ID != 0)
+            if (_parents.Count > 0 || _vo.VAF_Column_ID != 0)
                 return true;
             return false;
         }	//	IsDetail
@@ -1312,13 +1312,13 @@ namespace VAdvantage.Model
             //Comment by raghu 18-Aug-2011
             //else if (colName.Equals("CreatedBy") || colName.Equals("UpdatedBy"))
             //{
-            //    refColName = "AD_User_ID";
+            //    refColName = "VAF_UserContact_ID";
             //}
             // Updated by raghu 18-Aug-2011
             // resolved CreatedBy and UpdatedBy Search problem.i.e.Invoice(Vendor)
             else if (colName.Equals("CreatedBy"))
             {
-                //refColName = "AD_User_ID";
+                //refColName = "VAF_UserContact_ID";
                 refColName = "CreatedBy";
             }
             else if (colName.Equals("UpdatedBy"))
@@ -1355,10 +1355,10 @@ namespace VAdvantage.Model
 
             //	Find Refernce Column e.g. BillTo_ID -> C_BPartner_Location_ID
             string sql = "SELECT cc.ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Ref_Table r ON (c.AD_Reference_Value_ID=r.AD_Reference_ID)"
-                + " INNER JOIN AD_Column cc ON (r.Column_Key_ID=cc.AD_Column_ID) "
-                + "WHERE c.AD_Reference_ID IN (18,30)" 	//	Table/Search
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
+                + " INNER JOIN VAF_Column cc ON (r.Column_Key_ID=cc.VAF_Column_ID) "
+                + "WHERE c.VAF_Control_Ref_ID IN (18,30)" 	//	Table/Search
                 + " AND c.ColumnName='" + colName + "'";
             IDataReader dr = null;
             try
@@ -1393,14 +1393,14 @@ namespace VAdvantage.Model
             //	Column NOT in Tab - create EXISTS subquery
             String tableName = null;
             String tabKeyColumn = GetKeyColumnName();
-            ////	Column=SalesRep_ID, Key=AD_User_ID, Query=SalesRep_ID=101
+            ////	Column=SalesRep_ID, Key=VAF_UserContact_ID, Query=SalesRep_ID=101
 
             sql = "SELECT t.TableName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE c.ColumnName='" + colName + "' AND IsKey='Y'"		//	#1 Link Column
-                + " AND EXISTS (SELECT * FROM AD_Column cc"
-                + " WHERE cc.AD_Table_ID=t.AD_Table_ID AND cc.ColumnName='" + tabKeyColumn + "')";	//	#2 Tab Key Column
+                + " AND EXISTS (SELECT * FROM VAF_Column cc"
+                + " WHERE cc.VAF_TableView_ID=t.VAF_TableView_ID AND cc.ColumnName='" + tabKeyColumn + "')";	//	#2 Tab Key Column
             try
             {
                 dr = DataBase.DB.ExecuteReader(sql);
@@ -1420,17 +1420,17 @@ namespace VAdvantage.Model
             }
 
             //	Special Reference Handling
-            if (tabKeyColumn.Equals("AD_Reference_ID"))
+            if (tabKeyColumn.Equals("VAF_Control_Ref_ID"))
             {
-                //	Column=AccessLevel, Key=AD_Reference_ID, Query=AccessLevel='6'
-                sql = "SELECT AD_Reference_ID FROM AD_Column WHERE ColumnName='" + colName + "'";
-                //int AD_Reference_ID = DataBase.getSQLValue(null, sql, colName);
-                string AD_Reference_ID = DataBase.DB.ExecuteScalar(sql).ToString();
-                return "AD_Reference_ID=" + AD_Reference_ID;
+                //	Column=AccessLevel, Key=VAF_Control_Ref_ID, Query=AccessLevel='6'
+                sql = "SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName='" + colName + "'";
+                //int VAF_Control_Ref_ID = DataBase.getSQLValue(null, sql, colName);
+                string VAF_Control_Ref_ID = DataBase.DB.ExecuteScalar(sql).ToString();
+                return "VAF_Control_Ref_ID=" + VAF_Control_Ref_ID;
             }
 
             ////	Causes could be functions in query
-            ////	e.g. Column=UPPER(Name), Key=AD_Element_ID, Query=UPPER(AD_Element.Name) LIKE '%CUSTOMER%'
+            ////	e.g. Column=UPPER(Name), Key=VAF_ColumnDic_ID, Query=UPPER(VAF_ColumnDic.Name) LIKE '%CUSTOMER%'
             if (tableName == null)
             {
                 log.Fine("Not successfull - Column=" + colName + ", Key=" + tabKeyColumn + ", Query=" + query);
@@ -1857,9 +1857,9 @@ namespace VAdvantage.Model
         /// Get Tab ID
         /// </summary>
         /// <returns>Tab ID</returns>
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            return _vo.AD_Tab_ID;
+            return _vo.VAF_Tab_ID;
         }
 
         /// <summary>
@@ -1875,9 +1875,9 @@ namespace VAdvantage.Model
         /// Get ProcessID
         /// </summary>
         /// <returns>ProcessID</returns>
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            return _vo.AD_Process_ID;
+            return _vo.VAF_Job_ID;
         }
 
         /// <summary>
@@ -1908,7 +1908,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <returns>ID or 0, if not found</returns>
         /// <author>Veena Pandey</author>
-        public int GetAD_AttachmentID()
+        public int GetVAF_AttachmentID()
         {
             //if (_attachments == null)
             //    LoadAttachments();
@@ -1959,8 +1959,8 @@ namespace VAdvantage.Model
         /// Will be fetched while opening window only.
         /// </summary>
         /// Karan.... 18 Dec 2018
-        /// <param name="AD_User_ID"></param>
-        public void LoadData(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void LoadData(int VAF_UserContact_ID)
         {
 
             if (!CanHaveAttachment())
@@ -1974,7 +1974,7 @@ namespace VAdvantage.Model
 
             if (_wVo.IsMarkToExport)
             {
-                sql = " SELECT AD_EXPORTDATA_ID,RECORD_ID, AD_ColOne_ID FROM AD_ExportData WHERE AD_Table_ID=" + _vo.AD_Table_ID;
+                sql = " SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1983,14 +1983,14 @@ namespace VAdvantage.Model
                     for (var i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         key = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["Record_ID"]);
-                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ExportData_ID"]);
+                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_ExportData_ID"]);
                         _exports.Add(new AttachmentList() { ID = key, value = value });
                     }
                 }
             }
             if (_wVo.IsAttachment)
             {
-                sql = " SELECT distinct att.AD_Attachment_ID, att.Record_ID FROM AD_Attachment att  INNER JOIN AD_AttachmentLine al ON (al.AD_Attachment_id=att.AD_Attachment_id)  WHERE att.AD_Table_ID=" + _vo.AD_Table_ID;
+                sql = " SELECT distinct att.VAF_Attachment_ID, att.Record_ID FROM VAF_Attachment att  INNER JOIN VAF_AttachmentLine al ON (al.VAF_Attachment_id=att.VAF_Attachment_id)  WHERE att.VAF_TableView_ID=" + _vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1999,7 +1999,7 @@ namespace VAdvantage.Model
                     for (var i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         key = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["Record_ID"]);
-                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Attachment_ID"]);
+                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Attachment_ID"]);
                         _attachments.Add(new AttachmentList() { ID = key, value = value });
                     }
 
@@ -2007,7 +2007,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsChat)
             {
-                sql = (" SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE AD_Table_ID=" + _vo.AD_Table_ID);
+                sql = (" SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID);
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2024,7 +2024,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsPrivateRecordLock)
             {
-                sql = " SELECT Record_ID FROM AD_Private_Access WHERE AD_User_ID=" + AD_User_ID + " AND AD_Table_ID=" + _vo.AD_Table_ID + " AND IsActive='Y' ORDER BY Record_ID";
+                sql = " SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_UserContact_ID=" + VAF_UserContact_ID + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2039,7 +2039,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsSubscribedRecord)
             {
-                sql = " Select cm_Subscribe_ID,Record_ID from CM_Subscribe where AD_User_ID=" + AD_User_ID + " AND ad_Table_ID=" + +_vo.AD_Table_ID;
+                sql = " Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + VAF_UserContact_ID + " AND vaf_tableview_ID=" + +_vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2056,7 +2056,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsViewDocument)
             {
-                sql = " SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + _vo.AD_Table_ID;
+                sql = " SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND VAF_TableView_ID =" + _vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2084,8 +2084,8 @@ namespace VAdvantage.Model
             //if (!CanHaveAttachment())
             //    return;
 
-            //string sqlQry = "SELECT AD_Attachment_ID, Record_ID FROM AD_Attachment "
-            //    + "WHERE AD_Table_ID=" + _vo.AD_Table_ID;
+            //string sqlQry = "SELECT VAF_Attachment_ID, Record_ID FROM VAF_Attachment "
+            //    + "WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
             //IDataReader dr = null;
             //try
             //{
@@ -2099,7 +2099,7 @@ namespace VAdvantage.Model
             //    while (dr.Read())
             //    {
             //        key = Utility.Util.GetValueOfInt(dr["Record_ID"].ToString());
-            //        value = Utility.Util.GetValueOfInt(dr["AD_Attachment_ID"].ToString());
+            //        value = Utility.Util.GetValueOfInt(dr["VAF_Attachment_ID"].ToString());
             //        _attachments[0].Add(key, value);
             //    }
             //    dr.Close();
@@ -2131,7 +2131,7 @@ namespace VAdvantage.Model
                 return;//return nothing
             //set query
             string sql = "SELECT CM_Chat_ID, Record_ID FROM CM_Chat "
-                + "WHERE AD_Table_ID=" + _vo.AD_Table_ID;
+                + "WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
             IDataReader dr = null;
             try
             {
@@ -2226,8 +2226,8 @@ namespace VAdvantage.Model
             if (!CanHaveAttachment())
                 return;//return nothing
             //set query
-            string sql = "SELECT AD_EXPORTDATA_ID,RECORD_ID FROM AD_EXPORTDATA"
-                + " WHERE AD_Table_ID=" + _vo.AD_Table_ID;
+            string sql = "SELECT VAF_ExportData_ID,RECORD_ID FROM VAF_ExportData"
+                + " WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
 
             IDataReader dr = null;
             try
@@ -2245,7 +2245,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     key = Utility.Util.GetValueOfInt(dr["Record_ID"].ToString());
-                    value = Utility.Util.GetValueOfInt(dr["AD_EXPORTDATA_ID"].ToString());
+                    value = Utility.Util.GetValueOfInt(dr["VAF_ExportData_ID"].ToString());
                     _exports.Add(new AttachmentList() { ID = key, value = value });
                 }
 
@@ -2668,10 +2668,10 @@ namespace VAdvantage.Model
         ///Get Window ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return _vo.AD_Window_ID;
-        }	//	getAD_Window_ID
+            return _vo.VAF_Screen_ID;
+        }	//	getVAF_Screen_ID
 
 
 
@@ -2690,14 +2690,14 @@ namespace VAdvantage.Model
 	 */
         public void LoadLocks()
         {
-            int AD_User_ID = Env.GetContext().GetAD_User_ID();
-            log.Fine("#" + _vo.tabNo + " - AD_User_ID=" + AD_User_ID);
+            int VAF_UserContact_ID = Env.GetContext().GetVAF_UserContact_ID();
+            log.Fine("#" + _vo.tabNo + " - VAF_UserContact_ID=" + VAF_UserContact_ID);
             if (!CanHaveAttachment())
                 return;
 
             String sql = "SELECT Record_ID "
-                + "FROM AD_Private_Access "
-                + "WHERE AD_User_ID=" + AD_User_ID.ToString() + " AND AD_Table_ID=" + _vo.AD_Table_ID.ToString() + " AND IsActive='Y' "
+                + "FROM VAF_Private_Rights "
+                + "WHERE VAF_UserContact_ID=" + VAF_UserContact_ID.ToString() + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID.ToString() + " AND IsActive='Y' "
                 + "ORDER BY Record_ID";
             IDataReader dr = null;
             try
@@ -2752,13 +2752,13 @@ namespace VAdvantage.Model
         /// <param name="locks">true if lock, otherwise unlock</param>
         public void Locks(Ctx ctx, int Record_ID, bool locks)
         {
-            int AD_User_ID = ctx.GetAD_User_ID();
-            log.Finer("Lock=" + locks + ", AD_User_ID=" + AD_User_ID
-              + ", AD_Table_ID=" + _vo.AD_Table_ID + ", Record_ID=" + Record_ID);
-            MPrivateAccess access = MPrivateAccess.Get(ctx, AD_User_ID, _vo.AD_Table_ID, Record_ID);
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
+            log.Finer("Lock=" + locks + ", VAF_UserContact_ID=" + VAF_UserContact_ID
+              + ", VAF_TableView_ID=" + _vo.VAF_TableView_ID + ", Record_ID=" + Record_ID);
+            MPrivateAccess access = MPrivateAccess.Get(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(ctx, AD_User_ID, _vo.AD_Table_ID, Record_ID);
+                access = new MPrivateAccess(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locks);
             access.Save();
@@ -2775,7 +2775,7 @@ namespace VAdvantage.Model
             String retValue = "MTab #" + _vo.tabNo;
             if (_vo != null)
             {
-                retValue += " " + _vo.Name + " (" + _vo.AD_Tab_ID
+                retValue += " " + _vo.Name + " (" + _vo.VAF_Tab_ID
                     + ") QueryActive=" + (_query != null && _query.IsActive())
                     + ", CurrentDays=" + _vo.onlyCurrentDays;
             }
@@ -2975,11 +2975,11 @@ namespace VAdvantage.Model
                 MessageFormat mf = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "InvoiceBatchSummary"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "InvoiceBatchSummary"));
                 }
                 catch (Exception e)
                 {
-                    log.Log(Level.SEVERE, "InvoiceBatchSummary=" + Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "InvoiceBatchSummary"), e);
+                    log.Log(Level.SEVERE, "InvoiceBatchSummary=" + Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "InvoiceBatchSummary"), e);
                 }
                 if (mf == null)
                     return " ";
@@ -3042,7 +3042,7 @@ namespace VAdvantage.Model
                 bool isOrder = _vo.TableName.StartsWith("C_Order");
                 //
                 StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
-                    + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.AD_Client_ID,o.AD_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
+                    + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
                 if (isOrder)
                 {
                     Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_Order_ID");
@@ -3059,7 +3059,7 @@ namespace VAdvantage.Model
                         + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
                         + "WHERE o.C_Invoice_ID= " + Record_ID);
                 }
-                sql.Append(" GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.AD_Client_ID, o.AD_Org_ID");
+                sql.Append(" GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID");
 
                 log.Fine(_vo.TableName + " - " + Record_ID);
 
@@ -3067,8 +3067,8 @@ namespace VAdvantage.Model
                 MessageFormat mfMC = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "OrderSummary"));
-                    mfMC = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "OrderSummaryMC"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "OrderSummary"));
+                    mfMC = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "OrderSummaryMC"));
                 }
                 catch (Exception e)
                 {
@@ -3149,11 +3149,11 @@ namespace VAdvantage.Model
                 MessageFormat mf = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "ExpenseSummary"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "ExpenseSummary"));
                 }
                 catch (Exception e)
                 {
-                    log.Log(Level.SEVERE, "ExpenseSummary=" + Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "ExpenseSummary"), e);
+                    log.Log(Level.SEVERE, "ExpenseSummary=" + Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "ExpenseSummary"), e);
                 }
                 if (mf == null)
                     return " ";
@@ -3271,7 +3271,7 @@ namespace VAdvantage.Model
             }
             //
             _DataStatusEvent.SetCurrentRow(_currentRow);
-            String status = _DataStatusEvent.GetAD_Message();
+            String status = _DataStatusEvent.GetVAF_Msg_Lable();
             if (status == null || status.Length == 0)
             {
                 _DataStatusEvent.SetInfo("NavigateOrUpdate", null, false, false);

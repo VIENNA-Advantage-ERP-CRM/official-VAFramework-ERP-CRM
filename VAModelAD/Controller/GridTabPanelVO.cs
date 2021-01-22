@@ -16,7 +16,7 @@ namespace VAdvantage.Controller
         /** Window No - replicated  */
         public int windowNo;
         /**	Tab	ID			*/
-        public int AD_Tab_ID;
+        public int VAF_Tab_ID;
         /**          */
         public string Name;
         /**       */
@@ -28,7 +28,7 @@ namespace VAdvantage.Controller
         /**         */
         public string Classname;
         /**       ***/
-        public int AD_TabPanel_ID;
+        public int VAF_TabPanel_ID;
 
         /**       ***/
         public string ExtraInfo;
@@ -47,11 +47,11 @@ namespace VAdvantage.Controller
             windowNo = windowNm;
         }   //  MTabVO
 
-        public GridTabPanelVO(Ctx newCtx, int windowNm, int AD_Tab_ID)
+        public GridTabPanelVO(Ctx newCtx, int windowNm, int VAF_Tab_ID)
         {
             ctx = newCtx;
             windowNo = windowNm;
-            this.AD_Tab_ID = AD_Tab_ID;
+            this.VAF_Tab_ID = VAF_Tab_ID;
         }
 
 
@@ -59,18 +59,18 @@ namespace VAdvantage.Controller
         ///Return the SQL statement used for the MTabVO.create
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
         public static String GetSQL(Ctx ctx)
         {
             //  View only returns IsActive='Y'
-            String sql = "SELECT panel.classname, panel.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id, panel.ExtraInfo FROM AD_TabPanel panel WHERE panel.AD_Tab_ID =@tabID AND panel.IsActive='Y'";
-            if (!Env.IsBaseLanguage(ctx, "AD_Window"))
+            String sql = "SELECT panel.classname, panel.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.vaf_tabpanel_id, panel.vaf_tab_id, panel.ExtraInfo FROM VAF_TabPanel panel WHERE panel.VAF_Tab_ID =@tabID AND panel.IsActive='Y'";
+            if (!Env.IsBaseLanguage(ctx, "VAF_Screen"))
             {
-                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.ad_tabpanel_id, panel.ad_tab_id, panel.ExtraInfo FROM AD_TabPanel panel JOIN AD_TabPanel_trl  trl ON panel.ad_tabpanel_id=trl.ad_tabpanel_id "
-                    + " WHERE panel.AD_Tab_ID =@tabID AND trl.AD_Language='" + Env.GetAD_Language(ctx) + "'";
+                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.vaf_tabpanel_id, panel.vaf_tab_id, panel.ExtraInfo FROM VAF_TabPanel panel JOIN VAF_TabPanel_TL  trl ON panel.vaf_tabpanel_id=trl.vaf_tabpanel_id "
+                    + " WHERE panel.VAF_Tab_ID =@tabID AND trl.VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
             }
-            sql += " ORDER BY panel.SeqNo, panel.ad_tabpanel_id asc";
+            sql += " ORDER BY panel.SeqNo, panel.vaf_tabpanel_id asc";
             return sql;
         }
 
@@ -79,17 +79,17 @@ namespace VAdvantage.Controller
         ///  Create Field Value Object
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tab_ID">Tab Id</param>
-        /// <param name="AD_TabPanel_ID">Tab Panel ID</param>
+        /// <param name="VAF_Tab_ID">Tab Id</param>
+        /// <param name="VAF_TabPanel_ID">Tab Panel ID</param>
         /// <param name="dr">datarow</param>
         /// <returns>object of this Class</returns>
-        public static GridTabPanelVO Create(Ctx ctx, int windowNo, int AD_Tab_ID, IDataReader dr)
+        public static GridTabPanelVO Create(Ctx ctx, int windowNo, int VAF_Tab_ID, IDataReader dr)
         {
-            GridTabPanelVO vo = new GridTabPanelVO(ctx, windowNo, AD_Tab_ID);
+            GridTabPanelVO vo = new GridTabPanelVO(ctx, windowNo, VAF_Tab_ID);
             try
             {
-                vo.AD_Tab_ID = Convert.ToInt32(dr["AD_Tab_ID"]);
-                vo.AD_TabPanel_ID = Convert.ToInt32(dr["AD_TabPanel_ID"]);
+                vo.VAF_Tab_ID = Convert.ToInt32(dr["VAF_Tab_ID"]);
+                vo.VAF_TabPanel_ID = Convert.ToInt32(dr["VAF_TabPanel_ID"]);
                 vo.Classname = dr["ClassName"].ToString();
                 vo.IconPath = dr["IconPath"].ToString();
                 vo.IsDefault = dr["IsDefault"].Equals("Y") ? true : false;
@@ -99,7 +99,7 @@ namespace VAdvantage.Controller
             }
             catch (Exception ex)
             {
-                VLogger.Get().Log(Level.SEVERE, "Exception while getting Tab Pabel info for Tab =" + AD_Tab_ID, ex);
+                VLogger.Get().Log(Level.SEVERE, "Exception while getting Tab Pabel info for Tab =" + VAF_Tab_ID, ex);
                 return null;
             }
             return vo;
@@ -108,8 +108,8 @@ namespace VAdvantage.Controller
 
         public GridTabPanelVO Clone(Ctx newCtx, int windowNo)
         {
-            GridTabPanelVO clone = new GridTabPanelVO(newCtx, windowNo, AD_Tab_ID);
-            clone.AD_TabPanel_ID = AD_TabPanel_ID;
+            GridTabPanelVO clone = new GridTabPanelVO(newCtx, windowNo, VAF_Tab_ID);
+            clone.VAF_TabPanel_ID = VAF_TabPanel_ID;
             clone.Classname = Classname;
             clone.IconPath = IconPath;
             clone.IsDefault = IsDefault;

@@ -154,9 +154,9 @@
         function roleTemplate() {
             var script = ' <script type="text/x-handlebars-template">' +
                 '{{#each this}}' +
-                '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
+                '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{VAF_Role_ID}}">' +
                 '<div class="vis-group-user-profile">' +
-                '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
+                '<input tabindex="7"  type="checkbox" data-UID="{{VAF_Role_ID}}" >' +
                 '<label>{{Name}}</label>' +
                 '</div>' +
                 '</div>' +
@@ -174,13 +174,13 @@
         // function roleTemplate() {
         //     var script = ' <script type="text/x-handlebars-template">' +
         //         '{{#each this}}' +
-        //         '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
+        //         '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{VAF_Role_ID}}">' +
         //             	'<div class="vis-group-user-profile">' +
         //                 '{{#if IsAssignedToUser}}' +
-        //                 	'<input tabindex="7" type="checkbox" data-UID="{{AD_Role_ID}}">' +
+        //                 	'<input tabindex="7" type="checkbox" data-UID="{{VAF_Role_ID}}">' +
         //                     '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
         //                     '{{else}}' +
-        //                     '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
+        //                     '<input tabindex="7"  type="checkbox" data-UID="{{VAF_Role_ID}}" >' +
         //                     '<label>{{Name}}</label>' +
         //                     '{{/if}}' +
 
@@ -201,7 +201,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/GetRoleInfo",
-                data: ({ AD_User_ID: 0 }),
+                data: ({ VAF_UserContact_ID: 0 }),
                 success: function (result) {
                     var data = JSON.parse(result);
 
@@ -222,7 +222,7 @@
                     }
 
                     for (var i = 0; i < data.length; i++) {
-                        roleAssigned.push({ AD_Role_ID: data[i].AD_Role_ID, IsAssignedToUser: false })
+                        roleAssigned.push({ VAF_Role_ID: data[i].VAF_Role_ID, IsAssignedToUser: false })
                     }
 
                     $($divRoleGroup.find('input')).off("click");
@@ -252,7 +252,7 @@
 
             //this is used to set if role is assigned or assigned to user.
             var element = $.grep(roleAssigned, function (ele, index) {
-                return ele.AD_Role_ID == target.data('uid');
+                return ele.VAF_Role_ID == target.data('uid');
             });
             if (element != null && element.length > 0) {
                 element[0].IsAssignedToUser = target.prop('checked');

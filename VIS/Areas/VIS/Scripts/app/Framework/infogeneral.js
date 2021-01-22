@@ -215,13 +215,13 @@
 
         this.show = function () {
             // debugger;
-            //Change by mohit-to handle translation in general info. Added 2 new parametere- ad_Language, isBaseLangage. Asked by mukesh sir - 09/03/2018
+            //Change by mohit-to handle translation in general info. Added 2 new parametere- VAF_Language, isBaseLangage. Asked by mukesh sir - 09/03/2018
             $.ajax({
                 url: VIS.Application.contextUrl + "InfoGeneral/GetSearchColumns",
                 dataType: "json",
                 data: {
                     tableName: tableName,
-                    ad_Language: VIS.context.getAD_Language(),
+                    VAF_Language: VIS.context.getVAF_Language(),
                     isBaseLangage: VIS.Env.isBaseLanguage(VIS.context)
                 },
                 error: function () {
@@ -246,8 +246,8 @@
 
         var displaySearchCol = function () {
 
-            //Change by mohit-to handle translation in general info. Added 2 new parametere- AD_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
-            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "AD_Table_ID": schema[0].AD_Table_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
+            //Change by mohit-to handle translation in general info. Added 2 new parametere- VAF_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
+            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "VAF_TableView_ID": schema[0].VAF_TableView_ID, "VAF_Language": VIS.context.getVAF_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
 
             if (displayCols == null) {
                 alert(VIS.Msg.getMsg('ERRORGettingDisplayCols'));
@@ -277,9 +277,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox(schema[item].ColumnName, false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox(schema[item].ColumnName, false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = schema[item].ColumnName;
                 // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
                 srchCtrl.IsTranslated = schema[item].IsTranslated;
@@ -351,7 +351,7 @@
             for (var item in displayCols) {
 
 
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
                     sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
                 }
@@ -402,7 +402,7 @@
             sql += " FROM " + tableName + " " + tableName;
             // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
             if (isTrlColExist) {
-                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.AD_Language='" + VIS.context.getAD_Language() + "')";
+                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.VAF_Language='" + VIS.context.getVAF_Language() + "')";
             }
 
             if (requery == true) {
@@ -527,7 +527,7 @@
 
                     resizable: true
                 }
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
 
                 oColumn.caption = displayCols[item].Name;
                 oColumn.field = displayCols[item].ColumnName.toUpperCase();

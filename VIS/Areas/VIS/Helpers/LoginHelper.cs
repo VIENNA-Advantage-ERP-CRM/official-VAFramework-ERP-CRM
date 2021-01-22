@@ -67,7 +67,7 @@ namespace VIS.Helpers
 
 
 
-            DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount, IsOnlyLDAP FROM AD_User WHERE Value=@username", param);
+            DataSet dsUserInfo = DB.ExecuteDataset("SELECT VAF_UserContact_ID, Value, Password,IsLoginUser,FailedLoginCount, IsOnlyLDAP FROM VAF_UserContact WHERE Value=@username", param);
             if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
             {
                 // skipped Login user check for SuperUser (100)
@@ -94,7 +94,7 @@ namespace VIS.Helpers
             //if authenticated by LDAP or password is null(Means request from home page)
             if (!authenticated && model.Login1Model.Password != null)
             {
-                string sqlEnc = "SELECT isencrypted FROM ad_column WHERE ad_table_id=(SELECT ad_table_id FROM ad_table WHERE tablename='AD_User') AND columnname='Password'";
+                string sqlEnc = "SELECT isencrypted FROM vaf_column WHERE vaf_tableview_id=(SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename='VAF_UserContact') AND columnname='Password'";
                 char isEncrypted = Convert.ToChar(DB.ExecuteScalar(sqlEnc));
                 string originalpwd = model.Login1Model.Password;
                 if (isEncrypted == 'Y' && model.Login1Model.Password != null)
@@ -102,7 +102,7 @@ namespace VIS.Helpers
                     model.Login1Model.Password = SecureEngine.Encrypt(model.Login1Model.Password);
                 }
 
-                //  DataSet dsUserInfo = DB.ExecuteDataset("SELECT AD_User_ID, Value, Password,IsLoginUser,FailedLoginCount FROM AD_User WHERE Value=@username", param);
+                //  DataSet dsUserInfo = DB.ExecuteDataset("SELECT VAF_UserContact_ID, Value, Password,IsLoginUser,FailedLoginCount FROM VAF_UserContact WHERE Value=@username", param);
                 if (dsUserInfo != null && dsUserInfo.Tables[0].Rows.Count > 0)
                 {
                     //if username or password is not matching
@@ -114,7 +114,7 @@ namespace VIS.Helpers
                         if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
                         {
                             param[0] = new SqlParameter("@username", model.Login1Model.UserValue);
-                            int count = DB.ExecuteQuery("UPDATE AD_User Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value=@username ", param);
+                            int count = DB.ExecuteQuery("UPDATE VAF_UserContact Set FAILEDLOGINCOUNT=FAILEDLOGINCOUNT+1 WHERE Value=@username ", param);
 
                             if (fCount > 0 && fCount <= Util.GetValueOfInt(dsUserInfo.Tables[0].Rows[0]["FailedLoginCount"]) + 1)
                             {
@@ -143,9 +143,9 @@ namespace VIS.Helpers
             }
 
             // if user logged in successfully, then set failed login count to 0
-            DB.ExecuteQuery("UPDATE AD_User SET FailedLoginCount=0 WHERE Value=@username", param);
+            DB.ExecuteQuery("UPDATE VAF_UserContact SET FailedLoginCount=0 WHERE Value=@username", param);
 
-            int AD_User_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
+            int VAF_UserContact_ID = Util.GetValueOfInt(dr[0].ToString()); //User Id
 
             if (!cache["SuperUserVal"].Equals(model.Login1Model.UserValue))
             {
@@ -157,7 +157,7 @@ namespace VIS.Helpers
                     TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
                     SetupCode setupInfo = null;
                     string userSKey = Util.GetValueOfString(dr["Value"]);
-                    int ADUserID = Util.GetValueOfInt(dr["AD_User_ID"]);
+                    int ADUserID = Util.GetValueOfInt(dr["VAF_UserContact_ID"]);
                     // if token key don't exist for user, then create new
                     if (Token2FAKey.Trim() == "")
                     {
@@ -203,20 +203,20 @@ namespace VIS.Helpers
 
             do	//	read all roles
             {
-                AD_User_ID = Util.GetValueOfInt(dr[0].ToString());
-                int AD_Role_ID = Util.GetValueOfInt(dr[1].ToString());
+                VAF_UserContact_ID = Util.GetValueOfInt(dr[0].ToString());
+                int VAF_Role_ID = Util.GetValueOfInt(dr[1].ToString());
 
                 String Name = dr[2].ToString();
-                KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
+                KeyNamePair p = new KeyNamePair(VAF_Role_ID, Name);
                 username = Util.GetValueOfString(dr["username"].ToString());
                 roles.Add(p);
 
-                usersRoles.Add(AD_Role_ID);
+                usersRoles.Add(VAF_Role_ID);
             }
             while (dr.Read());
 
             dr.Close();
-            model.Login1Model.AD_User_ID = AD_User_ID;
+            model.Login1Model.VAF_UserContact_ID = VAF_UserContact_ID;
             model.Login1Model.DisplayName = username;
 
             IDataReader drLogin = null;
@@ -228,16 +228,16 @@ namespace VIS.Helpers
                 {
                     //* Change sub query into ineer join */
 
-                    drLogin = DB.ExecuteReader(" SELECT l.AD_Role_ID," +
-                                               " (SELECT r.Name FROM AD_ROLE r WHERE r.AD_Role_ID=l.AD_ROLE_ID) as RoleName," +
+                    drLogin = DB.ExecuteReader(" SELECT l.VAF_Role_ID," +
+                                               " (SELECT r.Name FROM VAF_ROLE r WHERE r.VAF_Role_ID=l.VAF_ROLE_ID) as RoleName," +
 
-                                               " l.AD_Org_ID," +
-                                               " (SELECT o.Name FROM AD_Org o WHERE o.AD_Org_ID=l.AD_Org_ID) as OrgName," +
-                                               " l.AD_Client_ID," +
-                                               " (SELECT c.Name FROM AD_Client c WHERE c.AD_Client_ID=l.AD_Client_ID) as ClientName," +
+                                               " l.VAF_Org_ID," +
+                                               " (SELECT o.Name FROM VAF_Org o WHERE o.VAF_Org_ID=l.VAF_Org_ID) as OrgName," +
+                                               " l.VAF_Client_ID," +
+                                               " (SELECT c.Name FROM VAF_Client c WHERE c.VAF_Client_ID=l.VAF_Client_ID) as ClientName," +
                                                " l.M_Warehouse_ID," +
                                                " (SELECT m.Name FROM M_Warehouse m WHERE m.M_Warehouse_Id = l.M_Warehouse_ID) as WarehouseName" +
-                                               " FROM AD_LoginSetting l WHERE l.IsActive = 'Y' AND l.AD_User_ID=" + AD_User_ID);
+                                               " FROM VAF_LoginSetting l WHERE l.IsActive = 'Y' AND l.VAF_UserContact_ID=" + VAF_UserContact_ID);
                     if (drLogin.Read())
                     {
 
@@ -247,7 +247,7 @@ namespace VIS.Helpers
                         //Delete Login Setting 
                         if (deleteRecord)
                         {
-                            DB.ExecuteQuery("DELETE FROM AD_LoginSetting WHERE AD_User_ID = " + AD_User_ID);
+                            DB.ExecuteQuery("DELETE FROM VAF_LoginSetting WHERE VAF_UserContact_ID = " + VAF_UserContact_ID);
                         }
                         else
                         {
@@ -281,12 +281,12 @@ namespace VIS.Helpers
 
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@username", uname);
-            StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
+            StringBuilder sql = new StringBuilder("SELECT u.VAF_UserContact_ID, r.VAF_Role_ID,r.Name,")
                // .Append(" u.ConnectionProfile, u.Password,u.FailedLoginCount,u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value ")	//	4,5
                .Append(" u.ConnectionProfile, u.Password, u.FailedLoginCount, u.PasswordExpireOn, u.Is2FAEnabled, u.TokenKey2FA, u.Value, u.Name as username, u.Created ")	//	4,5
-               .Append("FROM AD_User u")
-               .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
-               .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ");
+               .Append("FROM VAF_UserContact u")
+               .Append(" INNER JOIN VAF_UserContact_Roles ur ON (u.VAF_UserContact_ID=ur.VAF_UserContact_ID AND ur.IsActive='Y')")
+               .Append(" INNER JOIN VAF_Role r ON (ur.VAF_Role_ID=r.VAF_Role_ID AND r.IsActive='Y') ");
             if (isLDAP && authenticated)
             {
                 sql.Append(" WHERE (COALESCE(u.LDAPUser,u.Value)=@username)");
@@ -300,8 +300,8 @@ namespace VIS.Helpers
             // allowed SuperUser to login if it's not login user // no need to check Login user for SuperUser
             if (!cache["SuperUserVal"].Equals(uname))
                 sql.Append(" AND u.IsLoginUser='Y' ");
-            sql.Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
-            .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
+            sql.Append(" AND EXISTS (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')")
+            .Append(" AND EXISTS (SELECT * FROM VAF_Client c WHERE r.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')");
 
             sql.Append(" ORDER BY r.Name");
             IDataReader dr = null;
@@ -320,7 +320,7 @@ namespace VIS.Helpers
                 cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
 
                 //then check setting in System Config, if found, then will replace default values.
-                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM VAF_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -330,7 +330,7 @@ namespace VIS.Helpers
                 }
 
                 //Save SuperUser's key in cache
-                cache["SuperUserVal"] = DB.ExecuteScalar("SELECT value from AD_User where AD_User_ID=100").ToString();
+                cache["SuperUserVal"] = DB.ExecuteScalar("SELECT value from VAF_UserContact where VAF_UserContact_ID=100").ToString();
 
             }
         }
@@ -340,10 +340,10 @@ namespace VIS.Helpers
             return Common.ValidatePassword(oldPassword, NewPassword, ConfirmNewPasseword);
         }
 
-        public static bool UpdatePassword(string newPwd, int AD_User_ID)
+        public static bool UpdatePassword(string newPwd, int VAF_UserContact_ID)
         {
             int pwdValidity = Util.GetValueOfInt(cache[Common.Password_Valid_Upto_Key]);
-            return Common.UpdatePasswordAndValidity(newPwd, AD_User_ID, AD_User_ID, pwdValidity, null);
+            return Common.UpdatePasswordAndValidity(newPwd, VAF_UserContact_ID, VAF_UserContact_ID, pwdValidity, null);
 
         }
 
@@ -369,15 +369,15 @@ namespace VIS.Helpers
         /// <returns>client list </returns>
         public static List<KeyNamePair> GetClients(int role)
         {
-            int AD_Role_ID = role;
+            int VAF_Role_ID = role;
 
             List<KeyNamePair> list = new List<KeyNamePair>();
             //KeyNamePair[] retValue = null;
             String sql = "SELECT DISTINCT r.UserLevel, r.ConnectionProfile, "	//	1..2
-                + " c.AD_Client_ID,c.Name "								//	3..4 
-                + "FROM AD_Role r"
-                + " INNER JOIN AD_Client c ON (r.AD_Client_ID=c.AD_Client_ID) "
-                + "WHERE r.AD_Role_ID=@roleid"		//	#1
+                + " c.VAF_Client_ID,c.Name "								//	3..4 
+                + "FROM VAF_Role r"
+                + " INNER JOIN VAF_Client c ON (r.VAF_Client_ID=c.VAF_Client_ID) "
+                + "WHERE r.VAF_Role_ID=@roleid"		//	#1
                 + " AND r.IsActive='Y' AND c.IsActive='Y'";
 
             //	get Role details
@@ -385,7 +385,7 @@ namespace VIS.Helpers
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@roleid", AD_Role_ID);
+                param[0] = new SqlParameter("@roleid", VAF_Role_ID);
 
                 dr = DB.ExecuteReader(sql, param);
                 if (!dr.Read())
@@ -398,9 +398,9 @@ namespace VIS.Helpers
 
                 do
                 {
-                    int AD_Client_ID = Util.GetValueOfInt(dr[2].ToString());
+                    int VAF_Client_ID = Util.GetValueOfInt(dr[2].ToString());
                     String Name = dr[3].ToString();
-                    KeyNamePair p = new KeyNamePair(AD_Client_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAF_Client_ID, Name);
                     list.Add(p);
                 }
                 while (dr.Read());
@@ -423,25 +423,25 @@ namespace VIS.Helpers
         /// <summary>
         /// return org access list aginst client and role of user
         /// </summary>
-        /// <param name="AD_Role_ID">role id </param>
-        /// <param name="AD_User_ID">user id</param>
-        /// <param name="AD_Client_ID"> client id</param>
+        /// <param name="VAF_Role_ID">role id </param>
+        /// <param name="VAF_UserContact_ID">user id</param>
+        /// <param name="VAF_Client_ID"> client id</param>
         /// <returns></returns>
-        public static List<KeyNamePair> GetOrgs(int AD_Role_ID, int AD_User_ID, int AD_Client_ID)
+        public static List<KeyNamePair> GetOrgs(int VAF_Role_ID, int VAF_UserContact_ID, int VAF_Client_ID)
         {
             List<KeyNamePair> list = new List<KeyNamePair>();
 
-            String sql = "SELECT o.AD_Org_ID,o.Name,o.IsSummary "	//	1..3
-                + "FROM AD_Role r, AD_Client c"
-                + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
-                + "WHERE r.AD_Role_ID='" + AD_Role_ID + "'" 	//	#1
-                + " AND c.AD_Client_ID='" + AD_Client_ID + "'"	//	#2
+            String sql = "SELECT o.VAF_Org_ID,o.Name,o.IsSummary "	//	1..3
+                + "FROM VAF_Role r, VAF_Client c"
+                + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
+                + "WHERE r.VAF_Role_ID='" + VAF_Role_ID + "'" 	//	#1
+                + " AND c.VAF_Client_ID='" + VAF_Client_ID + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N' AND o.IsCostCenter='N' AND o.IsProfitCenter='N' "
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
-                        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
-                        + "WHERE ua.AD_User_ID='" + AD_User_ID + "' AND ua.IsActive='Y'))"		//	#3
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                        + "WHERE ua.VAF_UserContact_ID='" + VAF_UserContact_ID + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
             //
@@ -457,21 +457,21 @@ namespace VIS.Helpers
                 Ctx ctx = new Ctx();
                 while (dr.Read())
                 {
-                    int AD_Org_ID = Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Org_ID = Util.GetValueOfInt(dr[0].ToString());
                     String Name = dr[1].ToString();
                     bool summary = "Y".Equals(dr[2].ToString());
                     if (summary)
                     {
                         if (role == null)
                         {
-                            ctx.SetAD_Client_ID(AD_Client_ID);
-                            role = MRole.Get(ctx, AD_Role_ID, AD_User_ID, false);
+                            ctx.SetVAF_Client_ID(VAF_Client_ID);
+                            role = MRole.Get(ctx, VAF_Role_ID, VAF_UserContact_ID, false);
                         }
-                        GetOrgsAddSummary(list, AD_Org_ID, Name, role, ctx);
+                        GetOrgsAddSummary(list, VAF_Org_ID, Name, role, ctx);
                     }
                     else
                     {
-                        KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+                        KeyNamePair p = new KeyNamePair(VAF_Org_ID, Name);
                         if (!list.Contains(p))
                             list.Add(p);
                     }
@@ -511,16 +511,16 @@ namespace VIS.Helpers
                 return;
             }
             //	Do we look for trees?
-            if (role.GetAD_Tree_Org_ID() == 0)
+            if (role.GetVAF_TreeInfo_Org_ID() == 0)
             {
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(ctx, role.GetAD_Tree_Org_ID(), null);
-            String sql = "SELECT AD_Client_ID, AD_Org_ID, Name, IsSummary FROM AD_Org "
-                + "WHERE IsActive='Y' AND AD_Org_ID IN (SELECT Node_ID FROM "
+            MTree tree = MTree.Get(ctx, role.GetVAF_TreeInfo_Org_ID(), null);
+            String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
+                + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID='" + tree.GetAD_Tree_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
+                + " WHERE VAF_TreeInfo_ID='" + tree.GetVAF_TreeInfo_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
                 + "ORDER BY Name";
 
             IDataReader dr = DB.ExecuteReader(sql);
@@ -528,16 +528,16 @@ namespace VIS.Helpers
             {
                 while (dr.Read())
                 {
-                    //	int AD_Client_ID = rs.getInt(1);
-                    int AD_Org_ID = Util.GetValueOfInt(dr[1].ToString());
+                    //	int VAF_Client_ID = rs.getInt(1);
+                    int VAF_Org_ID = Util.GetValueOfInt(dr[1].ToString());
                     String Name = dr[2].ToString();
                     bool summary = "Y".Equals(dr[3].ToString());
                     //
                     if (summary)
-                        GetOrgsAddSummary(list, AD_Org_ID, Name, role, ctx);
+                        GetOrgsAddSummary(list, VAF_Org_ID, Name, role, ctx);
                     else
                     {
-                        KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+                        KeyNamePair p = new KeyNamePair(VAF_Org_ID, Name);
                         if (!list.Contains(p))
                             list.Add(p);
                     }
@@ -570,7 +570,7 @@ namespace VIS.Helpers
             List<KeyNamePair> list = new List<KeyNamePair>();
 
             String sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse "
-                + "WHERE AD_Org_ID=@p1 AND IsActive='Y' "
+                + "WHERE VAF_Org_ID=@p1 AND IsActive='Y' "
                 + "ORDER BY Name";
             IDataReader dr = null;
             try
@@ -613,39 +613,39 @@ namespace VIS.Helpers
         internal static LoginContext GetLoginContext(LoginModel model)
         {
             LoginContext ctx = new LoginContext();
-            ctx.SetContext("##AD_User_ID", model.Login1Model.AD_User_ID.ToString());
-            ctx.SetContext("##AD_User_Value", model.Login1Model.UserValue);
-            ctx.SetContext("##AD_User_Name", model.Login1Model.DisplayName);
-            ctx.SetContext("#AD_Language", model.Login1Model.LoginLanguage);
+            ctx.SetContext("##VAF_UserContact_ID", model.Login1Model.VAF_UserContact_ID.ToString());
+            ctx.SetContext("##VAF_UserContact_Value", model.Login1Model.UserValue);
+            ctx.SetContext("##VAF_UserContact_Name", model.Login1Model.DisplayName);
+            ctx.SetContext("#VAF_Language", model.Login1Model.LoginLanguage);
 
-            ctx.SetContext("#AD_Role_ID", model.Login2Model.Role);
-            ctx.SetContext("#AD_Role_Name", model.Login2Model.RoleName);
+            ctx.SetContext("#VAF_Role_ID", model.Login2Model.Role);
+            ctx.SetContext("#VAF_Role_Name", model.Login2Model.RoleName);
 
-            ctx.SetContext("#AD_Client_ID", model.Login2Model.Client);
-            ctx.SetContext("#AD_Client_Name", model.Login2Model.ClientName);
+            ctx.SetContext("#VAF_Client_ID", model.Login2Model.Client);
+            ctx.SetContext("#VAF_Client_Name", model.Login2Model.ClientName);
 
-            ctx.SetContext("#AD_Org_ID", model.Login2Model.Org);
-            ctx.SetContext("#AD_Org_Name", model.Login2Model.OrgName);
+            ctx.SetContext("#VAF_Org_ID", model.Login2Model.Org);
+            ctx.SetContext("#VAF_Org_Name", model.Login2Model.OrgName);
 
             ctx.SetContext("#M_Warehouse_ID", model.Login2Model.Warehouse);
             ctx.SetContext("#M_Warehouse_Name", model.Login2Model.WarehouseName);
             ctx.SetContext("#Date", model.Login2Model.Date.ToString());
-            ctx.SetContext("#AD_ChangeLogBatch", "");
+            ctx.SetContext("#VAF_AlterLogBatch", "");
 
 
             //{
-            //    ____AD_User_ID = model.Login1Model.AD_User_ID.ToString(),
-            //    ____AD_User_Name = model.Login1Model.UserName,
-            //    __AD_Language = model.Login1Model.LoginLanguage,
+            //    ____VAF_UserContact_ID = model.Login1Model.VAF_UserContact_ID.ToString(),
+            //    ____VAF_UserContact_Name = model.Login1Model.UserName,
+            //    __VAF_Language = model.Login1Model.LoginLanguage,
 
-            //    __AD_Role_ID = model.Login2Model.Role,
-            //    __AD_Role_Name = model.Login2Model.RoleName,
+            //    __VAF_Role_ID = model.Login2Model.Role,
+            //    __VAF_Role_Name = model.Login2Model.RoleName,
 
-            //    __AD_Client_ID = model.Login2Model.Client,
-            //    __AD_Client_Name = model.Login2Model.ClientName,
+            //    __VAF_Client_ID = model.Login2Model.Client,
+            //    __VAF_Client_Name = model.Login2Model.ClientName,
 
-            //    __AD_Org_ID = model.Login2Model.Org,
-            //    __AD_Org_Name = model.Login2Model.OrgName,
+            //    __VAF_Org_ID = model.Login2Model.Org,
+            //    __VAF_Org_Name = model.Login2Model.OrgName,
 
             //    __AD_Warehouse_ID = model.Login2Model.Warehouse,
             //    __AD_Warehouse_Name = model.Login2Model.WarehouseName,
@@ -659,23 +659,23 @@ namespace VIS.Helpers
         internal static LoginContext GetLoginContext(LoginModel model, Ctx ctxLogIn)
         {
             LoginContext ctx = new LoginContext();
-            ctx.SetContext("##AD_User_ID", ctxLogIn.GetAD_User_ID().ToString());
-            ctx.SetContext("##AD_User_Name", ctxLogIn.GetContext("##AD_User_Name"));
+            ctx.SetContext("##VAF_UserContact_ID", ctxLogIn.GetVAF_UserContact_ID().ToString());
+            ctx.SetContext("##VAF_UserContact_Name", ctxLogIn.GetContext("##VAF_UserContact_Name"));
 
 
-            ctx.SetContext("##AD_User_Value", ctxLogIn.GetContext("##AD_User_Value"));
+            ctx.SetContext("##VAF_UserContact_Value", ctxLogIn.GetContext("##VAF_UserContact_Value"));
 
-            //ctx.SetContext("#AD_Language", ctxLogIn.GetContext("#AD_Language"));
-            ctx.SetContext("#AD_Language", model.Login2Model.LoginLanguage);
+            //ctx.SetContext("#VAF_Language", ctxLogIn.GetContext("#VAF_Language"));
+            ctx.SetContext("#VAF_Language", model.Login2Model.LoginLanguage);
 
-            ctx.SetContext("#AD_Role_ID", model.Login2Model.Role);
-            ctx.SetContext("#AD_Role_Name", model.Login2Model.RoleName);
+            ctx.SetContext("#VAF_Role_ID", model.Login2Model.Role);
+            ctx.SetContext("#VAF_Role_Name", model.Login2Model.RoleName);
 
-            ctx.SetContext("#AD_Client_ID", model.Login2Model.Client);
-            ctx.SetContext("#AD_Client_Name", model.Login2Model.ClientName);
+            ctx.SetContext("#VAF_Client_ID", model.Login2Model.Client);
+            ctx.SetContext("#VAF_Client_Name", model.Login2Model.ClientName);
 
-            ctx.SetContext("#AD_Org_ID", model.Login2Model.Org);
-            ctx.SetContext("#AD_Org_Name", model.Login2Model.OrgName);
+            ctx.SetContext("#VAF_Org_ID", model.Login2Model.Org);
+            ctx.SetContext("#VAF_Org_Name", model.Login2Model.OrgName);
 
             ctx.SetContext("#M_Warehouse_ID", model.Login2Model.Warehouse);
             ctx.SetContext("#M_Warehouse_Name", model.Login2Model.WarehouseName);
@@ -688,12 +688,12 @@ namespace VIS.Helpers
         {
             try
             {
-                int id = MSequence.GetNextID(Convert.ToInt32(model.Login2Model.Client), "AD_LoginSetting", (Trx)null);
+                int id = MSequence.GetNextID(Convert.ToInt32(model.Login2Model.Client), "VAF_LoginSetting", (Trx)null);
                 if (id > 0)
                 {
-                    string sql = "INSERT INTO AD_LoginSetting " +
-                                 "(AD_Client_ID,AD_LoginSetting_ID,AD_Org_ID,AD_Role_ID,AD_User_ID,Created,CreatedBy,IsActive,M_WareHouse_ID,Updated,UpdatedBy) " +
-                          " VALUES (" + model.Login2Model.Client + "," + id + "," + model.Login2Model.Org + "," + model.Login2Model.Role + "," + model.Login1Model.AD_User_ID + ",sysdate," + model.Login1Model.AD_User_ID + ",'Y',";
+                    string sql = "INSERT INTO VAF_LoginSetting " +
+                                 "(VAF_Client_ID,VAF_LoginSetting_ID,VAF_Org_ID,VAF_Role_ID,VAF_UserContact_ID,Created,CreatedBy,IsActive,M_WareHouse_ID,Updated,UpdatedBy) " +
+                          " VALUES (" + model.Login2Model.Client + "," + id + "," + model.Login2Model.Org + "," + model.Login2Model.Role + "," + model.Login1Model.VAF_UserContact_ID + ",sysdate," + model.Login1Model.VAF_UserContact_ID + ",'Y',";
                     if (!String.IsNullOrEmpty(model.Login2Model.Warehouse) && model.Login2Model.Warehouse != "-1")
                     {
                         sql += model.Login2Model.Warehouse + ",";
@@ -702,7 +702,7 @@ namespace VIS.Helpers
                     {
                         sql += "null,";
                     }
-                    sql += "sysdate," + model.Login1Model.AD_User_ID + ")";
+                    sql += "sysdate," + model.Login1Model.VAF_UserContact_ID + ")";
 
                     DB.ExecuteQuery(sql);
                 }
@@ -723,12 +723,12 @@ namespace VIS.Helpers
         public static bool Validate2FAOTP(LoginModel model)
         {
             bool isValid = false;
-            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, AD_User_ID FROM AD_User WHERE AD_User_ID = " + model.Login1Model.AD_User_ID);
+            DataSet dsUser = DB.ExecuteDataset(@"SELECT Value, TokenKey2FA, Created, Is2FAEnabled, VAF_UserContact_ID FROM VAF_UserContact WHERE VAF_UserContact_ID = " + model.Login1Model.VAF_UserContact_ID);
             if (dsUser != null && dsUser.Tables[0].Rows.Count > 0)
             {
                 TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
                 string Token2FAKey = Util.GetValueOfString(dsUser.Tables[0].Rows[0]["Value"]);
-                int ADUserID = Util.GetValueOfInt(dsUser.Tables[0].Rows[0]["AD_User_ID"]);
+                int ADUserID = Util.GetValueOfInt(dsUser.Tables[0].Rows[0]["VAF_UserContact_ID"]);
                 if (model.Login1Model.TokenKey2FA != null && model.Login1Model.TokenKey2FA != "")
                     Token2FAKey = Token2FAKey.ToString() + ADUserID.ToString() + model.Login1Model.TokenKey2FA;
                 else if (Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]) != "")
@@ -742,8 +742,8 @@ namespace VIS.Helpers
                 if (isValid && Util.GetValueOfString(dsUser.Tables[0].Rows[0]["TokenKey2FA"]).Trim() == "")
                 {
                     string encKey = SecureEngine.Encrypt(model.Login1Model.TokenKey2FA);
-                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_USER SET TokenKey2FA = '" + encKey + @"' WHERE 
-                                    AD_USER_ID = " + model.Login1Model.AD_User_ID));
+                    int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAF_USERCONTACT SET TokenKey2FA = '" + encKey + @"' WHERE 
+                                    VAF_USERCONTACT_ID = " + model.Login1Model.VAF_UserContact_ID));
                 }
             }
             return isValid;

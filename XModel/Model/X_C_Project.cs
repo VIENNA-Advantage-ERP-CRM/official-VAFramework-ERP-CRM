@@ -105,7 +105,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514374162L;
         /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
         public static long updatedMS = 1280389057373L;
-        /** AD_Table_ID=203 */
+        /** VAF_TableView_ID=203 */
         public static int Table_ID;
         // =203;
 
@@ -148,24 +148,24 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_BPartnerSR_ID AD_Reference_ID=353 */
-        public static int C_BPARTNERSR_ID_AD_Reference_ID = 353;
+        /** C_BPartnerSR_ID VAF_Control_Ref_ID=353 */
+        public static int C_BPARTNERSR_ID_VAF_Control_Ref_ID = 353;
         /** Set BPartner (Agent).
         @param C_BPartnerSR_ID Business Partner (Agent or Sales Rep) */
         public void SetC_BPartnerSR_ID(int C_BPartnerSR_ID)
@@ -712,8 +712,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** ProjInvoiceRule AD_Reference_ID=383 */
-        public static int PROJINVOICERULE_AD_Reference_ID = 383;
+        /** ProjInvoiceRule VAF_Control_Ref_ID=383 */
+        public static int PROJINVOICERULE_VAF_Control_Ref_ID = 383;
         /** None = - */
         public static String PROJINVOICERULE_None = "-";
         /** Committed Amount = C */
@@ -767,8 +767,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** ProjectCategory AD_Reference_ID=288 */
-        public static int PROJECTCATEGORY_AD_Reference_ID = 288;
+        /** ProjectCategory VAF_Control_Ref_ID=288 */
+        public static int PROJECTCATEGORY_VAF_Control_Ref_ID = 288;
         /** Asset Project = A */
         public static String PROJECTCATEGORY_AssetProject = "A";
         /** General = N */
@@ -804,8 +804,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("ProjectCategory");
         }
 
-        /** ProjectLineLevel AD_Reference_ID=384 */
-        public static int PROJECTLINELEVEL_AD_Reference_ID = 384;
+        /** ProjectLineLevel VAF_Control_Ref_ID=384 */
+        public static int PROJECTLINELEVEL_VAF_Control_Ref_ID = 384;
         /** Phase = A */
         public static String PROJECTLINELEVEL_Phase = "A";
         /** Project = P */
@@ -840,8 +840,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("ProjectLineLevel");
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -919,8 +919,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** Ref_Order_ID AD_Reference_ID=290 */
-        public static int REF_ORDER_ID_AD_Reference_ID = 290;
+        /** Ref_Order_ID VAF_Control_Ref_ID=290 */
+        public static int REF_ORDER_ID_VAF_Control_Ref_ID = 290;
         /** Set Referenced Order.
         @param Ref_Order_ID Reference to corresponding Sales/Purchase Order */
         public void SetRef_Order_ID(int Ref_Order_ID)
@@ -955,8 +955,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Generate_Quotation");
         }
 
-        /** C_Order_ID AD_Reference_ID=290 */
-        public static int C_ORDER_ID_AD_Reference_ID = 290;
+        /** C_Order_ID VAF_Control_Ref_ID=290 */
+        public static int C_ORDER_ID_VAF_Control_Ref_ID = 290;
         /** Set Order.
         @param C_Order_ID Order */
         public void SetC_Order_ID(int C_Order_ID)
@@ -1009,8 +1009,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Stage AD_Reference_ID=1000093 */
-        public static int STAGE_AD_Reference_ID = 1000093;
+        /** Stage VAF_Control_Ref_ID=1000093 */
+        public static int STAGE_VAF_Control_Ref_ID = 1000093;
         /** Closed/Lost = L */
         public static String STAGE_ClosedLost = "L";
         /** Negotiation = N */
@@ -1063,8 +1063,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** OpportunityStatus AD_Reference_ID=1000094 */
-        public static int OPPORTUNITYSTATUS_AD_Reference_ID = 1000094;
+        /** OpportunityStatus VAF_Control_Ref_ID=1000094 */
+        public static int OPPORTUNITYSTATUS_VAF_Control_Ref_ID = 1000094;
         /** Lost = L */
         public static String OPPORTUNITYSTATUS_Lost = "L";
         /** New = N */

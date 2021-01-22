@@ -85,7 +85,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514381403L;
         /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
         public static long updatedMS = 1280389064614L;
-        /** AD_Table_ID=329 */
+        /** VAF_TableView_ID=329 */
         public static int Table_ID;
         // =329;
 
@@ -302,8 +302,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** MovementType AD_Reference_ID=189 */
-        public static int MOVEMENTTYPE_AD_Reference_ID = 189;
+        /** MovementType VAF_Control_Ref_ID=189 */
+        public static int MOVEMENTTYPE_VAF_Control_Ref_ID = 189;
         /** Customer Returns = C+ */
         public static String MOVEMENTTYPE_CustomerReturns = "C+";
         /** Customer Shipment = C- */

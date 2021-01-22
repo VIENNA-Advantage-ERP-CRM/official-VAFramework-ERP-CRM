@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportContact : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
 
@@ -38,8 +38,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
                 else
@@ -55,7 +55,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -71,8 +71,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_Contact "
-                + "SET AD_Client_ID = COALESCE (AD_Client_ID, ").Append(_AD_Client_ID).Append("),"
-                + " AD_Org_ID = COALESCE (AD_Org_ID, 0),"
+                + "SET VAF_Client_ID = COALESCE (VAF_Client_ID, ").Append(_VAF_Client_ID).Append("),"
+                + " VAF_Org_ID = COALESCE (VAF_Org_ID, 0),"
                 + " IsActive = COALESCE (IsActive, 'Y'),"
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -87,7 +87,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Interest Area
             sql = new StringBuilder("UPDATE I_Contact i "
                 + "SET R_InterestArea_ID=(SELECT R_InterestArea_ID FROM R_InterestArea ia "
-                    + "WHERE i.InterestAreaName=ia.Name AND ia.AD_Client_ID=i.AD_Client_ID) "
+                    + "WHERE i.InterestAreaName=ia.Name AND ia.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE R_InterestArea_ID IS NULL AND InterestAreaName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -96,14 +96,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             int noProcessed = 0;
             String sql0 = "SELECT * FROM I_Contact "
-                + "WHERE I_IsImported<>'Y' AND AD_Client_ID=@param ORDER BY I_Contact_ID";
+                + "WHERE I_IsImported<>'Y' AND VAF_Client_ID=@param ORDER BY I_Contact_ID";
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[1];
             try
             {
                 //pstmt = DataBase.prepareStatement (sql0, Get_TrxName());
-                //pstmt.setInt (1, _AD_Client_ID);
-                param[0] = new SqlParameter("@param", _AD_Client_ID);
+                //pstmt.setInt (1, _VAF_Client_ID);
+                param[0] = new SqlParameter("@param", _VAF_Client_ID);
                 idr = DataBase.DB.ExecuteReader(sql0, param, Get_TrxName());
                 while (idr.Read())
                 {
@@ -136,7 +136,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             MUser user = MUser.Get(GetCtx(), imp.GetEMail(), Get_TrxName());
             //	New User
-            if (user == null || user.GetAD_User_ID() == 0)
+            if (user == null || user.GetVAF_UserContact_ID() == 0)
             {
                 if (imp.IsEMailBounced())
                     return ProcessFail(imp, "No User found with email - cannou set Bounced flag");
@@ -185,7 +185,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
                 lead.SetName(imp.GetContactName());
                 lead.SetDescription(imp.GetContactDescription());
-                lead.SetAD_User_ID(user.GetAD_User_ID());
+                lead.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                 lead.SetC_BPartner_ID(user.GetC_BPartner_ID());
                 lead.Save();
                 imp.SetC_Lead_ID(lead.GetC_Lead_ID());
@@ -195,12 +195,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (imp.GetR_InterestArea_ID() != 0 && user != null)
             {
                 MContactInterest ci = MContactInterest.Get(GetCtx(),
-                    imp.GetR_InterestArea_ID(), user.GetAD_User_ID(),
+                    imp.GetR_InterestArea_ID(), user.GetVAF_UserContact_ID(),
                     true, Get_TrxName());
                 ci.Save();		//	don't subscribe or re-activate
             }
 
-            imp.SetAD_User_ID(user.GetAD_User_ID());
+            imp.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
             imp.SetI_IsImported(true);
             imp.SetI_ErrorMsg(null);
             imp.Save();

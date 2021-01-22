@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Client
+ * Class Used     : X_VAF_Client
  * Chronological Development
  * ------
  * Veena Pandey     01-June-2009 Added functions of mail
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
         //Client Info					
         private MClientInfo _info = null;
         /**	Cache						*/
-        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("AD_Client", 3);
+        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("VAF_Client", 3);
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MClient).FullName);
 
-        public MClient(Ctx ctx, int AD_Client_ID, Trx trxName)
-            : this(ctx, AD_Client_ID, false, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, Trx trxName)
+            : this(ctx, VAF_Client_ID, false, trxName)
         {
 
         }
@@ -42,17 +42,17 @@ namespace VAdvantage.Model
 
         public static MClient Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_Client_ID());
+            return Get(ctx, ctx.GetVAF_Client_ID());
         }
 
-        public static MClient Get(Ctx ctx, int AD_Client_ID)
+        public static MClient Get(Ctx ctx, int VAF_Client_ID)
         {
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             MClient client = (MClient)s_cache[key];
             if (client != null)
                 return client;
-            client = new MClient(ctx, AD_Client_ID, null);
-            if (AD_Client_ID == 0)
+            client = new MClient(ctx, VAF_Client_ID, null);
+            if (VAF_Client_ID == 0)
                 client.Load((Trx)null);
             s_cache.Add(key, client);
             return client;
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         public static MClient[] GetAll(Ctx ctx)
         {
             List<MClient> list = new List<MClient>();
-            String sql = "SELECT * FROM AD_Client";
+            String sql = "SELECT * FROM VAF_Client";
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -90,22 +90,22 @@ namespace VAdvantage.Model
 
         private bool m_createNew = false;
 
-        public MClient(Ctx ctx, int AD_Client_ID, bool createNew, Trx trxName)
-            : base(ctx, AD_Client_ID, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, bool createNew, Trx trxName)
+            : base(ctx, VAF_Client_ID, trxName)
         {
             m_createNew = createNew;
-            if (AD_Client_ID == 0)
+            if (VAF_Client_ID == 0)
             {
                 if (m_createNew)
                 {
                     //	setValue (null);
                     //	setName (null);
-                    SetAD_Org_ID(0);
+                    SetVAF_Org_ID(0);
                     SetIsMultiLingualDocument(false);
                     SetIsSmtpAuthorization(false);
                     SetIsUseBetaFunctions(false);
                     SetIsServerEMail(false);
-                    SetAD_Language(GlobalVariable.GetLanguageCode());
+                    SetVAF_Language(GlobalVariable.GetLanguageCode());
                     SetAutoArchive(AUTOARCHIVE_None);
                     SetMMPolicy(MMPOLICY_FiFo);	// F
                     SetIsPostImmediate(false);
@@ -176,7 +176,7 @@ namespace VAdvantage.Model
         internal MAcctSchema GetAcctSchema()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
                 int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
         public int GetAcctSchemaID()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
                 int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
         //public static MClient[] GetAll(Ctx ctx)
         //{
         //    List<MClient> list = new List<MClient>();
-        //    String sql = "SELECT * FROM AD_Client";
+        //    String sql = "SELECT * FROM VAF_Client";
         //    try
         //    {
         //        DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
         public MClientInfo GetInfo()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_Trx());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_Trx());
             return _info;
         }
 
@@ -268,26 +268,26 @@ namespace VAdvantage.Model
         //{
         //    if (_language == null)
         //    {
-        //        _language = VAdvantage.Login.Language.GetLanguages(GetAD_Language());
+        //        _language = VAdvantage.Login.Language.GetLanguages(GetVAF_Language());
         //        _language = Env.VerifyLanguage(GetCtx(), _language);
         //    }
         //    return _language;
         //}	//	getLanguage
 
-        //public void SetAD_Language(String AD_Language)
+        //public void SetVAF_Language(String VAF_Language)
         //{
         //    _language = null;
-        //    base.SetAD_Language(AD_Language);
-        //}	//	setAD_Language
+        //    base.SetVAF_Language(VAF_Language);
+        //}	//	setVAF_Language
 
 
-        public new String GetAD_Language()
+        public new String GetVAF_Language()
         {
-            String s = base.GetAD_Language();
+            String s = base.GetVAF_Language();
             if (s == null)
-                return VAdvantage.Login.Language.GetBaseAD_Language();
+                return VAdvantage.Login.Language.GetBaseVAF_Language();
             return s;
-        }	//	getAD_Language
+        }	//	getVAF_Language
 
 
       
@@ -304,16 +304,16 @@ namespace VAdvantage.Model
         {
             //	Create Trees
             String sql = null;
-            if (Env.IsBaseLanguage(language, "AD_Ref_List"))	//	Get TreeTypes & Name
-                sql = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=120 AND IsActive='Y'";
+            if (Env.IsBaseLanguage(language, "VAF_CtrlRef_List"))	//	Get TreeTypes & Name
+                sql = "SELECT Value, Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=120 AND IsActive='Y'";
             else
-                sql = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=120 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND l.IsActive='Y' AND t.AD_Language='" + language + "'";
+                sql = "SELECT l.Value, t.Name FROM VAF_CtrlRef_List l, VAF_CtrlRef_TL t "
+                    + "WHERE l.VAF_Control_Ref_ID=120 AND l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID AND l.IsActive='Y' AND t.VAF_Language='" + language + "'";
 
             //  Tree IDs
-            int AD_Tree_Org_ID = 0, AD_Tree_BPartner_ID = 0, AD_Tree_Project_ID = 0,
-                AD_Tree_SalesRegion_ID = 0, AD_Tree_Product_ID = 0,
-                AD_Tree_Campaign_ID = 0, AD_Tree_Activity_ID = 0;
+            int VAF_TreeInfo_Org_ID = 0, VAF_TreeInfo_BPartner_ID = 0, VAF_TreeInfo_Project_ID = 0,
+                VAF_TreeInfo_SalesRegion_ID = 0, VAF_TreeInfo_Product_ID = 0,
+                VAF_TreeInfo_Campaign_ID = 0, VAF_TreeInfo_Activity_ID = 0;
 
             bool success = false;
             try
@@ -327,62 +327,62 @@ namespace VAdvantage.Model
                     try
                     {
                         String treeType = dr.Tables[0].Rows[i]["Value"].ToString();
-                        if (treeType.Equals(X_AD_Tree.TREETYPE_Other)
+                        if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Other)
                             || treeType.StartsWith("U"))
                             continue;
                         String name = GetName() + " " + dr.Tables[0].Rows[i]["Name"].ToString();
                         //
-                        if (treeType.Equals(X_AD_Tree.TREETYPE_Organization))
+                        if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Organization))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Org_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Org_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_BPartner))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_BPartner))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_BPartner_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_BPartner_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Project))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Project))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Project_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Project_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_SalesRegion))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_SalesRegion))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_SalesRegion_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_SalesRegion_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Product))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Product))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Product_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Product_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_ElementValue))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_ElementValue))
                         {
                             //commented by lakhwinder 
                             //do not crete Account Tree While tenant Creation
                             //tree = new MTree(this, name, treeType);
                             //success = tree.Save();
-                            //m_AD_Tree_Account_ID = tree.GetAD_Tree_ID();
+                            //m_VAF_TreeInfo_Account_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Campaign))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Campaign))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Campaign_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Campaign_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Activity))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Activity))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Activity_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Activity_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Menu))	//	No Menu
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Menu))	//	No Menu
                             success = true;
                         else	//	PC (Product Category), BB (BOM)
                         {
@@ -411,20 +411,20 @@ namespace VAdvantage.Model
 
             //	Create ClientInfo
             MClientInfo clientInfo = new MClientInfo(this,
-                AD_Tree_Org_ID, AD_Tree_BPartner_ID, AD_Tree_Project_ID,
-                AD_Tree_SalesRegion_ID, AD_Tree_Product_ID,
-                AD_Tree_Campaign_ID, AD_Tree_Activity_ID, Get_TrxName());
+                VAF_TreeInfo_Org_ID, VAF_TreeInfo_BPartner_ID, VAF_TreeInfo_Project_ID,
+                VAF_TreeInfo_SalesRegion_ID, VAF_TreeInfo_Product_ID,
+                VAF_TreeInfo_Campaign_ID, VAF_TreeInfo_Activity_ID, Get_TrxName());
             success = clientInfo.Save();
             return success;
         }	//	createTrees
 
         /** Client Info Setup Tree for Account	*/
-        private int m_AD_Tree_Account_ID;
+        private int m_VAF_TreeInfo_Account_ID;
 
-        public int GetSetup_AD_Tree_Account_ID()
+        public int GetSetup_VAF_TreeInfo_Account_ID()
         {
-            return m_AD_Tree_Account_ID;
-        }	//	getSetup_AD_Tree_Account_ID
+            return m_VAF_TreeInfo_Account_ID;
+        }	//	getSetup_VAF_TreeInfo_Account_ID
 
 
         /**
@@ -457,34 +457,34 @@ namespace VAdvantage.Model
             try
             {
                 // check columnname exist in table or not
-                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT count(*) FROM ad_column WHERE 
-                    ad_table_id = ( SELECT ad_table_id FROM ad_table WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT count(*) FROM vaf_column WHERE 
+                    vaf_tableview_id = ( SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
                 {
                     // check module exist or not
-                    count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
+                    count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
 
                     // check how many records in system whose costing not calculated based on client
                     sql = @"SELECT SUM(record) FROM (
-                            SELECT COUNT(*) AS record FROM m_Inventory WHERE AD_Client_ID = " + client_ID + @" AND IsActive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_Inventory WHERE VAF_Client_ID = " + client_ID + @" AND IsActive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL')  AND iscostcalculated = 'N')  OR (docstatus IN ('RE')  AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N'  AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_movement WHERE AD_Client_ID  = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_movement WHERE VAF_Client_ID  = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM C_Invoice WHERE AD_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM C_Invoice WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND issotrx = 'N' AND isreturntrx = 'N'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_inout  WHERE AD_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_inout  WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))";
                     if (count > 0)
                     {
                         sql += @" UNION 
-                                 SELECT COUNT(*) AS record FROM VAMFG_M_WrkOdrTransaction WHERE AD_Client_ID = " + client_ID + @" 
+                                 SELECT COUNT(*) AS record FROM VAMFG_M_WrkOdrTransaction WHERE VAF_Client_ID = " + client_ID + @" 
                                  AND VAMFG_WorkOrderTxnType IN ('CI', 'CR') AND  isactive = 'Y' AND
                                  ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                                  AND ISREVERSEDCOSTCALCULATED= 'N' AND VAMFG_description like '%{->%'))";

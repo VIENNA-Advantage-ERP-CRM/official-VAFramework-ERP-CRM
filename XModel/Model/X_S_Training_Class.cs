@@ -76,7 +76,7 @@ static X_S_Training_Class()
 //static long serialVersionUID 27562514383942L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067153L;
-/** AD_Table_ID=537 */
+/** VAF_TableView_ID=537 */
 public static int Table_ID;
  // =537;
 

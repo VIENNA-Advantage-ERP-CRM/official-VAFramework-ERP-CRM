@@ -66,7 +66,7 @@ namespace VAdvantage.Model
 		{
 			user = new MIssueUser(issue.GetCtx(), 0, null);
 			user.SetUserName(issue.GetUserName());
-			user.SetAD_User_ID();
+			user.SetVAF_UserContact_ID();
 			if (!user.Save())
             {
 				return null;
@@ -106,17 +106,17 @@ namespace VAdvantage.Model
         : base(ctx, idr, trxName)
     { }
 	/// <summary>
-    ///	Set AD_User_ID
+    ///	Set VAF_UserContact_ID
 	/// </summary>
-	public void SetAD_User_ID ()
+	public void SetVAF_UserContact_ID ()
 	{
-		int AD_User_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, 
-			"SELECT AD_User_ID FROM AD_User WHERE EMail=@param1",Utility.Util.GetValueOfInt(GetUserName()));
-        if (AD_User_ID != 0)
+		int VAF_UserContact_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, 
+			"SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE EMail=@param1",Utility.Util.GetValueOfInt(GetUserName()));
+        if (VAF_UserContact_ID != 0)
         {
-            base.SetAD_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
-	}	//	setAD_User_ID
+	}	//	setVAF_UserContact_ID
 	
 	/// <summary>
 	///	String Representation
@@ -127,7 +127,7 @@ namespace VAdvantage.Model
 		StringBuilder sb = new StringBuilder ("MIssueUser[");
 		sb.Append (Get_ID())
 			.Append ("-").Append(GetUserName())
-			.Append(",AD_User_ID=").Append(GetAD_User_ID())
+			.Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
 			.Append ("]");
 		return sb.ToString ();
 	}	//	toString

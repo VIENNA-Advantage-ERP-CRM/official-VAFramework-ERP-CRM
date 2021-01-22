@@ -110,18 +110,18 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="tender">optional Tender see TENDER_</param>
         /// <param name="CCType">optional CC Type see CC_</param>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="C_Currency_ID">Currency (ignored)</param>
         /// <param name="amt">Amount (ignored)</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of BankAccount[0] & PaymentProcessor[1] or null</returns>
         public static MPaymentProcessor[] Find(Ctx ctx, String tender, String CCType,
-            int AD_Client_ID, int C_Currency_ID, Decimal amt, Trx trxName)
+            int VAF_Client_ID, int C_Currency_ID, Decimal amt, Trx trxName)
         {
             List<MPaymentProcessor> list = new List<MPaymentProcessor>();
             StringBuilder sql = new StringBuilder("SELECT * "
                 + "FROM C_PaymentProcessor "
-                + "WHERE AD_Client_ID=@clid AND IsActive='Y'"				//	#1
+                + "WHERE VAF_Client_ID=@clid AND IsActive='Y'"				//	#1
                 + " AND (C_Currency_ID IS NULL OR C_Currency_ID=@curid)"		//	#2
                 + " AND (MinimumAmt IS NULL OR MinimumAmt = 0 OR MinimumAmt <= @amot)");	//	#3
             if (MPayment.TENDERTYPE_DirectDeposit.Equals(tender))
@@ -149,7 +149,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[3];
-                param[0] = new SqlParameter("@clid", AD_Client_ID);
+                param[0] = new SqlParameter("@clid", VAF_Client_ID);
                 param[1] = new SqlParameter("@curid", C_Currency_ID);
                 param[2] = new SqlParameter("@amot", amt);
                 DataSet ds = DataBase.DB.ExecuteDataset(sql.ToString(), param);
@@ -169,12 +169,12 @@ namespace VAdvantage.Model
             //
             if (list.Count == 0)
             {
-                _log.Warning("find - not found - AD_Client_ID=" + AD_Client_ID
+                _log.Warning("find - not found - VAF_Client_ID=" + VAF_Client_ID
                     + ", C_Currency_ID=" + C_Currency_ID + ", Amt=" + amt);
             }
             else
             {
-                _log.Fine("find - #" + list.Count + " - AD_Client_ID=" + AD_Client_ID
+                _log.Fine("find - #" + list.Count + " - VAF_Client_ID=" + VAF_Client_ID
                     + ", C_Currency_ID=" + C_Currency_ID + ", Amt=" + amt);
             }
             MPaymentProcessor[] retValue = new MPaymentProcessor[list.Count];

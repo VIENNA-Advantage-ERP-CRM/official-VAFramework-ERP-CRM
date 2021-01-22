@@ -72,7 +72,7 @@ static X_M_Substitute()
 //static long serialVersionUID 27562514381387L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064598L;
-/** AD_Table_ID=213 */
+/** VAF_TableView_ID=213 */
 public static int Table_ID;
  // =213;
 
@@ -171,8 +171,8 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 
-/** Substitute_ID AD_Reference_ID=162 */
-public static int SUBSTITUTE_ID_AD_Reference_ID=162;
+/** Substitute_ID VAF_Control_Ref_ID=162 */
+public static int SUBSTITUTE_ID_VAF_Control_Ref_ID=162;
 /** Set Substitute.
 @param Substitute_ID Entity which can be used in place of this entity */
 public void SetSubstitute_ID (int Substitute_ID)

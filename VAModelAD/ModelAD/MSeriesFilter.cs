@@ -87,7 +87,7 @@ namespace VAdvantage.Model
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MSeriesFilter pfi = new MSeriesFilter(Env.GetCtx(), dr, null);
-                    //if (role.IsColumnAccess(GetAD_Table_ID(), pfi.GetAD_Column_ID(), true))
+                    //if (role.IsColumnAccess(GetVAF_TableView_ID(), pfi.GetVAF_Column_ID(), true))
                     list.Add(pfi);
                 }
             }

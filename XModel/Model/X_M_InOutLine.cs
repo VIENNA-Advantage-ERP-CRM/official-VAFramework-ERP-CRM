@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514379632L;
         /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
         public static long updatedMS = 1280389062843L;
-        /** AD_Table_ID=320 */
+        /** VAF_TableView_ID=320 */
         public static int Table_ID;
         // =320;
 
@@ -132,21 +132,21 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
-        @param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        @param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /** Get Trx Organization.
         @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            Object ii = Get_Value("AD_OrgTrx_ID");
+            Object ii = Get_Value("VAF_OrgTrx_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -377,8 +377,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetLine().ToString());
         }
 
-        /** LineDocStatus AD_Reference_ID=131 */
-        public static int LINEDOCSTATUS_AD_Reference_ID = 131;
+        /** LineDocStatus VAF_Control_Ref_ID=131 */
+        public static int LINEDOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String LINEDOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -536,8 +536,8 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Orig_OrderLine_ID AD_Reference_ID=271 */
-        public static int ORIG_ORDERLINE_ID_AD_Reference_ID = 271;
+        /** Orig_OrderLine_ID VAF_Control_Ref_ID=271 */
+        public static int ORIG_ORDERLINE_ID_VAF_Control_Ref_ID = 271;
         /** Set Orig Sales Order Line.
         @param Orig_OrderLine_ID Original Sales Order Line for Return Material Authorization */
         public void SetOrig_OrderLine_ID(int Orig_OrderLine_ID)
@@ -644,8 +644,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -663,8 +663,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -789,8 +789,8 @@ namespace VAdvantage.Model
         /** Get Product Container.@return Product Container */
         public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** ReversalDoc_ID AD_Reference_ID=295 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 295;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=295 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 295;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

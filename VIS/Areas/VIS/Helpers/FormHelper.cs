@@ -12,20 +12,20 @@ namespace VIS.Helpers
 {
     public class FormHelper
     {
-        public static FormDataOut GetFormInfo(int AD_Form_ID, Ctx ctx)
+        public static FormDataOut GetFormInfo(int VAF_Page_ID, Ctx ctx)
         {
             FormDataOut outt = new FormDataOut();
 
             String className = null;
 
-            String sql = "SELECT Name, Description, Classname, Help , IsReport, DisplayName FROM AD_Form WHERE AD_Form_ID=" + AD_Form_ID;  //jz ClassName, AD?
-            bool trl = !Env.IsBaseLanguage(ctx, "AD_Form");
+            String sql = "SELECT Name, Description, Classname, Help , IsReport, DisplayName FROM VAF_Page WHERE VAF_Page_ID=" + VAF_Page_ID;  //jz ClassName, AD?
+            bool trl = !Env.IsBaseLanguage(ctx, "VAF_Page");
             if (trl)
             {
                 sql = " SELECT f.Name, t.Description, f.Classname, t.Help ,f.IsReport,t.Name " //jz
-                    + " FROM AD_Form f INNER JOIN AD_Form_Trl t"
-                    + " ON (f.AD_Form_ID=t.AD_Form_ID AND AD_Language='" + Env.GetAD_Language(ctx) + "')"
-                    + " WHERE f.AD_Form_ID=" + AD_Form_ID;
+                    + " FROM VAF_Page f INNER JOIN VAF_Page_TL t"
+                    + " ON (f.VAF_Page_ID=t.VAF_Page_ID AND VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
+                    + " WHERE f.VAF_Page_ID=" + VAF_Page_ID;
             }
 
             IDataReader idr = null;
@@ -119,10 +119,10 @@ namespace VIS.Helpers
             else
             {
                
-                // bool success = OpenForm(AD_Form_ID, className, name);
+                // bool success = OpenForm(VAF_Page_ID, className, name);
                 //	Log
                 MSession session = MSession.Get(ctx, true);
-                session.WindowLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), 0, AD_Form_ID);
+                session.WindowLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), 0, VAF_Page_ID);
             }
 
             return outt;

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_CtxArea
+ * Class Used     : X_VAF_ContextScope
  * Chronological Development
  * Veena Pandey     31-Aug-09
  ******************************************************/
@@ -17,18 +17,18 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MCtxArea : X_AD_CtxArea
+    public class MCtxArea : X_VAF_ContextScope
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_CtxArea_ID">id</param>
+        /// <param name="VAF_ContextScope_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCtxArea(Context ctx, int AD_CtxArea_ID, Trx trxName)
-            : base(ctx, AD_CtxArea_ID, trxName)
+        public MCtxArea(Context ctx, int VAF_ContextScope_ID, Trx trxName)
+            : base(ctx, VAF_ContextScope_ID, trxName)
         {
-            if (AD_CtxArea_ID == 0)
+            if (VAF_ContextScope_ID == 0)
             {
                 SetEntityType(ENTITYTYPE_UserMaintained); // U
                 SetIsSOTrx(false);
@@ -36,10 +36,10 @@ namespace VAdvantage.Model
         }
 
 
-        public MCtxArea(Ctx ctx, int AD_CtxArea_ID, Trx trxName)
-            : base(ctx, AD_CtxArea_ID, trxName)
+        public MCtxArea(Ctx ctx, int VAF_ContextScope_ID, Trx trxName)
+            : base(ctx, VAF_ContextScope_ID, trxName)
         {
-            if (AD_CtxArea_ID == 0)
+            if (VAF_ContextScope_ID == 0)
             {
                 SetEntityType(ENTITYTYPE_UserMaintained); // U
                 SetIsSOTrx(false);

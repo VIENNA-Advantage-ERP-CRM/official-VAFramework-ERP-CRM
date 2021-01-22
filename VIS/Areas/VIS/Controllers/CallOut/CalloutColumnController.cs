@@ -20,9 +20,9 @@ namespace VIS.Controllers
             return View();
         }
 
-        public ContentResult GetDBColunName(int AD_Element_ID)
+        public ContentResult GetDBColunName(int VAF_ColumnDic_ID)
         {
-            string sql = "SELECT ColumnName from AD_Element WHERE AD_Element_ID="+AD_Element_ID;
+            string sql = "SELECT ColumnName from VAF_ColumnDic WHERE VAF_ColumnDic_ID="+VAF_ColumnDic_ID;
             return Content(DB.ExecuteScalar(sql).ToString());
         }
     }

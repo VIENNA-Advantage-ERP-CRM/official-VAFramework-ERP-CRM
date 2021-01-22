@@ -10,7 +10,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
 
-    public class MPrivateAccess : X_AD_Private_Access
+    public class MPrivateAccess : X_VAF_Private_Rights
     {
         #region Private Variables
         //private static long serialVersionUID = -5649529789751432279L;
@@ -21,14 +21,14 @@ namespace VAdvantage.Model
         /// Load Pricate Access
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_User_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <returns>access or null if not found</returns>
-        public static MPrivateAccess Get(Ctx ctx, int AD_User_ID, int AD_Table_ID, int Record_ID)
+        public static MPrivateAccess Get(Ctx ctx, int VAF_UserContact_ID, int VAF_TableView_ID, int Record_ID)
         {
             MPrivateAccess retValue = null;
-            String sql = "SELECT * FROM AD_Private_Access WHERE AD_User_ID=" + AD_User_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID;
+            String sql = "SELECT * FROM VAF_Private_Rights WHERE VAF_UserContact_ID=" + VAF_UserContact_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID;
             IDataReader idr = null;
             try
             {
@@ -54,22 +54,22 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Where Clause of Locked Records for Table
-         *	@param AD_Table_ID table
-         *	@param AD_User_ID user requesting info
+         *	@param VAF_TableView_ID table
+         *	@param VAF_UserContact_ID user requesting info
          *	@return "<>1" or " NOT IN (1,2)" or null
          */
-        public static String GetLockedRecordWhere(int AD_Table_ID, int AD_User_ID)
+        public static String GetLockedRecordWhere(int VAF_TableView_ID, int VAF_UserContact_ID)
         {
             //[ 1644094 ] MPrivateAccess.getLockedRecordWhere inefficient
             /*
             ArrayList<Integer> list = new ArrayList<Integer>();
             PreparedStatement pstmt = null;
-            String sql = "SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID=? AND AD_User_ID<>? AND IsActive='Y'";
+            String sql = "SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID=? AND VAF_UserContact_ID<>? AND IsActive='Y'";
             try
             {
                 pstmt = DB.prepareStatement(sql, null);
-                pstmt.setInt(1, AD_Table_ID);
-                pstmt.setInt(2, AD_User_ID);
+                pstmt.setInt(1, VAF_TableView_ID);
+                pstmt.setInt(2, VAF_UserContact_ID);
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next())
                     list.add(new Integer(rs.getInt(1))); 
@@ -106,8 +106,8 @@ namespace VAdvantage.Model
             }
             sb.append(")");
             return sb.toString();*/
-            String whereClause = " NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = "
-                + AD_Table_ID + " AND AD_User_ID <> " + AD_User_ID + " AND IsActive = 'Y' )";
+            String whereClause = " NOT IN ( SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID = "
+                + VAF_TableView_ID + " AND VAF_UserContact_ID <> " + VAF_UserContact_ID + " AND IsActive = 'Y' )";
             return whereClause;
         }
 
@@ -153,15 +153,15 @@ namespace VAdvantage.Model
         /**
          * 	New Constructor
          *	@param ctx context
-         *	@param AD_User_ID user
-         *	@param AD_Table_ID table
+         *	@param VAF_UserContact_ID user
+         *	@param VAF_TableView_ID table
          *	@param Record_ID record
          */
-        public MPrivateAccess(Ctx ctx, int AD_User_ID, int AD_Table_ID, int Record_ID)
+        public MPrivateAccess(Ctx ctx, int VAF_UserContact_ID, int VAF_TableView_ID, int Record_ID)
             : base(ctx, 0, null)
         {
-            SetAD_User_ID(AD_User_ID);
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
         }
 

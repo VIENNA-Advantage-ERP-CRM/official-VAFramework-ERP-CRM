@@ -47,16 +47,16 @@ namespace VIS.Models
         /// Used to send mails .... Fetechs credentails used to send mails...
         /// </summary>
         /// <param name="mails"></param>
-        /// <param name="AD_User_ID"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="attachment_ID"></param>
         /// <param name="fileNames"></param>
         /// <param name="fileNameForOpenFormat"></param>
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMails(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds)
+        public string SendMails(List<NewMailMessage> mails, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds)
         {
 
 
@@ -77,13 +77,13 @@ namespace VIS.Models
             {
                 System.Threading.ThreadPool.QueueUserWorkItem(delegate
                 {
-                    SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                    SendMailstart(mails, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
                 });
                 return "";
             }
             else
             {
-                return SendMailstart(mails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                return SendMailstart(mails, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
             }
         }
 
@@ -91,16 +91,16 @@ namespace VIS.Models
         /// this method actually send mail, both static and dynamic.... and save info in MailAttachment....
         /// </summary>
         /// <param name="mails"></param>
-        /// <param name="AD_User_ID"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="attachment_ID"></param>
         /// <param name="fileNames"></param>
         /// <param name="fileNameForOpenFormat"></param>
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMailstart(List<NewMailMessage> mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails, List<int> documentID)
+        public string SendMailstart(List<NewMailMessage> mails, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails, List<int> documentID)
         {
 
 
@@ -113,11 +113,11 @@ namespace VIS.Models
 
             UserInformation userinfo = new UserInformation();
             SMTPConfig config = null;
-            config = MailConfigMethod.GetUSmtpConfig(AD_User_ID, ctx);
+            config = MailConfigMethod.GetUSmtpConfig(VAF_UserContact_ID, ctx);
             // var config = "";
             if (config == null)
             {
-                MClient client = new MClient(ctx, AD_Client_ID, null);
+                MClient client = new MClient(ctx, VAF_Client_ID, null);
                 userinfo.Email = client.GetRequestEMail();
             }
             else
@@ -233,9 +233,9 @@ namespace VIS.Models
                         try
                         {
                             int attachmentID = AttachmentID(documentID[i]);
-                            //MAttachment objAttachment = new MAttachment(ctx, attachmentID, null, Common.GetPassword(), ctx.GetAD_Client_ID());
+                            //MAttachment objAttachment = new MAttachment(ctx, attachmentID, null, Common.GetPassword(), ctx.GetVAF_Client_ID());
                             //objAttachment.Force = false;
-                            ////objAttachment.AD_Client_ID = ctx.GetAD_Client_ID();
+                            ////objAttachment.VAF_Client_ID = ctx.GetVAF_Client_ID();
                             //byte[] fileByte = objAttachment.GetEntryData(0);
                             //string fileName = objAttachment.GetEntryName(0);
                             List<AttachedFileInfo> lstAttchments = GetBytes(ctx, attachmentID, "");
@@ -306,12 +306,12 @@ namespace VIS.Models
                         {
                             _mAttachment.SetIsMailSent(true);
                         }
-                        int AD_Client_Id = ctx.GetAD_Client_ID();
-                        int iOrgid = ctx.GetAD_Org_ID();
+                        int VAF_Client_Id = ctx.GetVAF_Client_ID();
+                        int iOrgid = ctx.GetVAF_Org_ID();
 
-                        _mAttachment.SetAD_Client_ID(AD_Client_Id);
-                        _mAttachment.SetAD_Org_ID(iOrgid);
-                        _mAttachment.SetAD_Table_ID(_table_id);
+                        _mAttachment.SetVAF_Client_ID(VAF_Client_Id);
+                        _mAttachment.SetVAF_Org_ID(iOrgid);
+                        _mAttachment.SetVAF_TableView_ID(_table_id);
                         _mAttachment.IsActive();
                         _mAttachment.SetMailAddress(bcctext.ToString());
                         _mAttachment.SetAttachmentType("M");
@@ -377,8 +377,8 @@ namespace VIS.Models
 
             if (notify)             //  make an entry in Notice window.....
             {
-                MNote note = new MNote(ctx, "SentMailNotice", AD_User_ID,
-                    AD_Client_ID, AD_Org_ID, null);
+                MNote note = new MNote(ctx, "SentMailNotice", VAF_UserContact_ID,
+                    VAF_Client_ID, VAF_Org_ID, null);
                 //  Reference
                 note.SetReference(ToString());	//	Document
                 //	Text
@@ -405,7 +405,7 @@ namespace VIS.Models
             try
             {
                 int id = 0;
-                id = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_ATTACHMENT_ID FROM VADMS_METADATA WHERE VADMS_DOCUMENT_ID=" + documentID + " and (vadms_innerversion=(SELECT max(vadms_innerversion) FROM vadms_metadata where vadms_document_id=" + documentID + ") or vadms_innerversion is null)"));
+                id = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Attachment_ID FROM VADMS_METADATA WHERE VADMS_DOCUMENT_ID=" + documentID + " and (vadms_innerversion=(SELECT max(vadms_innerversion) FROM vadms_metadata where vadms_document_id=" + documentID + ") or vadms_innerversion is null)"));
                 return id;
             }
             catch (Exception ex)
@@ -427,7 +427,7 @@ namespace VIS.Models
             byte[] byteArray = null;
             string filepath = string.Empty;
             List<AttachedFileInfo> lstAttchment = new List<AttachedFileInfo>();
-            MAttachment attachment = new MAttachment(ctx, Convert.ToInt32(attachmentID), null, "", Convert.ToInt32(ctx.GetAD_Client_ID()));
+            MAttachment attachment = new MAttachment(ctx, Convert.ToInt32(attachmentID), null, "", Convert.ToInt32(ctx.GetVAF_Client_ID()));
             attachment.FolderKey = "";
             attachment.GetLines();
             if (attachment._lines != null && attachment._lines.Count > 0)
@@ -460,22 +460,22 @@ namespace VIS.Models
         /// Save new mail formats and update existing
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="name"></param>
         /// <param name="isDynamic"></param>
         /// <param name="subject"></param>
         /// <param name="text"></param>
         /// <param name="saveforAll"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <param name="folder"></param>
         /// <param name="attachmentID"></param>
         /// <returns></returns>
-        public int SaveFormats(int id, int AD_Client_ID, int AD_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folder, int attachmentID)
+        public int SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int VAF_Screen_ID, string folder, int attachmentID)
         {
-            X_AD_TextTemplate _textTemplate = new X_AD_TextTemplate(ctx, id, null);
-            _textTemplate.Set_Value("AD_Client_ID", AD_Client_ID);
-            _textTemplate.Set_Value("AD_Org_ID", AD_Org_ID);
+            X_VAF_TextTemplate _textTemplate = new X_VAF_TextTemplate(ctx, id, null);
+            _textTemplate.Set_Value("VAF_Client_ID", VAF_Client_ID);
+            _textTemplate.Set_Value("VAF_Org_ID", VAF_Org_ID);
             _textTemplate.Set_Value("Name", name);
             _textTemplate.Set_Value("IsActive", true);
             _textTemplate.Set_Value("IsHtml", true);
@@ -493,18 +493,18 @@ namespace VIS.Models
 
             if (!saveforAll)
             {
-                _textTemplate.Set_Value("AD_Window_ID", AD_Window_ID);
+                _textTemplate.Set_Value("VAF_Screen_ID", VAF_Screen_ID);
             }
             if (_textTemplate.Save())
             {
                 //MMailAttachment1 mAttachment = new MMailAttachment1(ctx, attachmentID, null);
-                //mAttachment.SetAD_Client_ID(AD_Client_ID);
-                //mAttachment.SetAD_Org_ID(AD_Org_ID);
-                //mAttachment.SetAD_Table_ID(_textTemplate.Get_Table_ID());
+                //mAttachment.SetVAF_Client_ID(VAF_Client_ID);
+                //mAttachment.SetVAF_Org_ID(VAF_Org_ID);
+                //mAttachment.SetVAF_TableView_ID(_textTemplate.Get_Table_ID());
                 //mAttachment.IsActive();
                 //mAttachment.SetAttachmentType("Z");
                 ////get first key coloumn
-                //mAttachment.SetRecord_ID(_textTemplate.GetAD_TextTemplate_ID());
+                //mAttachment.SetRecord_ID(_textTemplate.GetVAF_TextTemplate_ID());
                 //mAttachment.SetTextMsg(text);
                 //mAttachment.SetTitle(name);
                 //FileInfo[] files = null;
@@ -540,7 +540,7 @@ namespace VIS.Models
                 //    mAttachment.AddEntry("", null);
                 //}
                 //files = null;
-                return _textTemplate.GetAD_TextTemplate_ID();
+                return _textTemplate.GetVAF_TextTemplate_ID();
             }
             return 0;
         }
@@ -548,7 +548,7 @@ namespace VIS.Models
         //public SavedAttachmentInfo SavedAttachmentForFormat(int textTemplate_ID)
         //{
         //    List<string> entry = new List<string>();
-        //    string sql = "select MailAttachment1_ID from MailAttachment1 where ad_table_id=(Select AD_Table_ID from AD_Table where tablename='AD_TextTemplate') and record_id=" + textTemplate_ID;
+        //    string sql = "select MailAttachment1_ID from MailAttachment1 where vaf_tableview_id=(Select VAF_TableView_ID from VAF_TableView where tablename='VAF_TextTemplate') and record_id=" + textTemplate_ID;
         //    int attach = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
         //    MMailAttachment1 mattach = new MMailAttachment1(ctx, attach, null);
@@ -759,7 +759,7 @@ namespace VIS.Models
 
 
         //Used to save letters as Attachment.... User can see saved letteres from History Form.......
-        public string SaveAttachment(string subject, int AD_Table_ID, string html, Dictionary<string, Dictionary<string, string>> values)
+        public string SaveAttachment(string subject, int VAF_TableView_ID, string html, Dictionary<string, Dictionary<string, string>> values)
         {
             StringBuilder strb = new StringBuilder();
             StringBuilder sHtml = new StringBuilder();
@@ -780,13 +780,13 @@ namespace VIS.Models
 
                 byte[] arrays = HtmlToPdfbytes(copy, true);
 
-                int AD_Client_Id = ctx.GetAD_Client_ID();
-                int iOrgid = ctx.GetAD_Org_ID();
+                int VAF_Client_Id = ctx.GetVAF_Client_ID();
+                int iOrgid = ctx.GetVAF_Org_ID();
                 MMailAttachment1 _mAttachment = new MMailAttachment1(ctx, 0, null);
                 _mAttachment.AddEntry(subject + ".pdf", arrays);
-                _mAttachment.SetAD_Client_ID(AD_Client_Id);
-                _mAttachment.SetAD_Org_ID(iOrgid);
-                _mAttachment.SetAD_Table_ID(AD_Table_ID);
+                _mAttachment.SetVAF_Client_ID(VAF_Client_Id);
+                _mAttachment.SetVAF_Org_ID(iOrgid);
+                _mAttachment.SetVAF_TableView_ID(VAF_TableView_ID);
                 _mAttachment.IsActive();
                 _mAttachment.SetAttachmentType("L");
                 //get first key coloumn
@@ -814,7 +814,7 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetUser(int bpartner)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "Select AD_User_ID, Email FROM AD_User WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
+            string sql = "Select VAF_UserContact_ID, Email FROM VAF_UserContact WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -823,7 +823,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
-                    obj["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    obj["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
                     obj["Email"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Email"]);
                     retDic.Add(obj);
                 }
@@ -836,16 +836,16 @@ namespace VIS.Models
         {
             List<RecordData> obj = null;
             string sql = @"SELECT NAME, NVL(SUBJECT,' ') AS SUBJECT, NVL(MAILTEXT,' ') as MAILTEXT,
-                    NVL(CREATED,sysdate) AS CREATED, AD_CLIENT_ID, AD_ORG_ID, CREATEDBY, 
-                    NVL(ISACTIVE,'Y') AS ISACTIVE, NVL(ISHTML,'Y') AS ISHTML, AD_TEXTTEMPLATE_ID, 
-                    NVL(UPDATED,sysdate) AS UPDATED, UPDATEDBY, AD_Window_ID, NVL(ISDYNAMICCONTENT,'N') AS ISDYNAMICCONTENT
-                    FROM AD_TextTemplate WHERE IsActive = 'Y' AND (AD_Window_ID IS NULL ";
+                    NVL(CREATED,sysdate) AS CREATED, VAF_CLIENT_ID, VAF_ORG_ID, CREATEDBY, 
+                    NVL(ISACTIVE,'Y') AS ISACTIVE, NVL(ISHTML,'Y') AS ISHTML, VAF_TEXTTEMPLATE_ID, 
+                    NVL(UPDATED,sysdate) AS UPDATED, UPDATEDBY, VAF_Screen_ID, NVL(ISDYNAMICCONTENT,'N') AS ISDYNAMICCONTENT
+                    FROM VAF_TextTemplate WHERE IsActive = 'Y' AND (VAF_Screen_ID IS NULL ";
             if (window_ID > 0)
             {
-                sql += " OR AD_Window_ID=" + window_ID;
+                sql += " OR VAF_Screen_ID=" + window_ID;
             }
             sql += ")";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)

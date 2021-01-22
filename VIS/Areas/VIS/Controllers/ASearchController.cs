@@ -54,8 +54,8 @@ namespace VIS.Controllers
 
             if (id == 0)
             {
-                string sql = "SELECT Count(*) FROM AD_UserQuery WHERE AD_Table_ID=" + tid + " AND AD_Tab_ID=" + tabid + " AND Upper(Name)='" + name.ToUpper() + "'";
-                int count = Convert.ToInt32(DB.ExecuteScalar(MRole.GetDefault(Session["ctx"] as VAdvantage.Utility.Ctx).AddAccessSQL(sql, "AD_UserQuery", true, false)));
+                string sql = "SELECT Count(*) FROM VAF_UserSearch WHERE VAF_TableView_ID=" + tid + " AND VAF_Tab_ID=" + tabid + " AND Upper(Name)='" + name.ToUpper() + "'";
+                int count = Convert.ToInt32(DB.ExecuteScalar(MRole.GetDefault(Session["ctx"] as VAdvantage.Utility.Ctx).AddAccessSQL(sql, "VAF_UserSearch", true, false)));
                 if (count > 0)
                 {
                     return Json(-5);
@@ -71,9 +71,9 @@ namespace VIS.Controllers
             // set query code
             uq.SetCode(where);
             // set tab id
-            uq.SetAD_Tab_ID(tabid);
+            uq.SetVAF_Tab_ID(tabid);
             // set table id
-            uq.SetAD_Table_ID(tid);
+            uq.SetVAF_TableView_ID(tid);
             // save the values in database
             if (uq.Save())
             {
@@ -148,7 +148,7 @@ namespace VIS.Controllers
             public string VALUE1VALUE { get; set; }
             public string VALUE2NAME { get; set; }
             public string VALUE2VALUE { get; set; }
-            public string AD_USERQUERYLINE_ID { get; set; }
+            public string VAF_USERSEARCHLINE_ID { get; set; }
             public string OPERATOR { get; set; }
             public string FULLDAY { get; set; }
         }

@@ -74,7 +74,7 @@ static X_C_PaymentBatch()
 //static long serialVersionUID 27562514373958L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057169L;
-/** AD_Table_ID=411 */
+/** VAF_TableView_ID=411 */
 public static int Table_ID;
  // =411;
 

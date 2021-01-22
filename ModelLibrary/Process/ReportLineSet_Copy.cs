@@ -81,14 +81,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //MReportLine[] rls = rlSet.GetLiness();
             //for (int i = 0; i < rls.Length; i++)
             //{
-            //    MReportLine rl = MReportLine.Copy(GetCtx(), to.GetAD_Client_ID(), to.GetAD_Org_ID(), to_ID, rls[i], Get_TrxName());
+            //    MReportLine rl = MReportLine.Copy(GetCtx(), to.GetVAF_Client_ID(), to.GetVAF_Org_ID(), to_ID, rls[i], Get_TrxName());
             //    rl.Save();
             //    MReportSource[] rss = rls[i].GetSources();
             //    if (rss != null)
             //    {
             //        for (int ii = 0; ii < rss.Length; ii++)
             //        {
-            //            MReportSource rs = MReportSource.Copy(GetCtx(), to.GetAD_Client_ID(), to.GetAD_Org_ID(), rl.Get_ID(), rss[ii], Get_TrxName());
+            //            MReportSource rs = MReportSource.Copy(GetCtx(), to.GetVAF_Client_ID(), to.GetVAF_Org_ID(), rl.Get_ID(), rss[ii], Get_TrxName());
             //            rs.Save();
             //        }
             //    }

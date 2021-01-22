@@ -65,8 +65,8 @@ namespace VAdvantage.Process
             MCommissionRun comRun = new MCommissionRun(m_com);
             SetStartEndDate();
             comRun.SetStartDate(p_StartDate);
-            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetVAF_Language());
             //	01-Jan-2000 - 31-Jan-2001 - USD
             Classes.SimpleDateFormat format = Classes.DisplayType.GetDateFormat(Classes.DisplayType.Date);
             String description = format.Format(p_StartDate)
@@ -78,8 +78,8 @@ namespace VAdvantage.Process
             //    + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetC_Currency_ID());
 
             comRun.SetDescription(description);
-            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
 
             if (!comRun.Save())
                 throw new Exception("Could not save Commission Run please check Organization");
@@ -116,7 +116,7 @@ namespace VAdvantage.Process
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND p.AD_Client_ID = @clientid"
+                            + " AND p.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND p.DateTrx BETWEEN @sdate AND @edate");
                     }
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND p.AD_Client_ID = @clientid"
+                            + " AND p.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND p.DateTrx BETWEEN @sdate AND @edate");
                     }
@@ -148,7 +148,7 @@ namespace VAdvantage.Process
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND h.DateOrdered BETWEEN @sdate AND @edate");
                     }
@@ -162,7 +162,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateOrdered BETWEEN @sdate AND @edate");
                     }
                 }
@@ -179,7 +179,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateInvoiced BETWEEN @sdate AND @edate");
                     }
                     else
@@ -192,7 +192,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateInvoiced BETWEEN @sdate AND @edate");
                     }
                 }
@@ -204,14 +204,14 @@ namespace VAdvantage.Process
                         throw new Exception("Commission Business Partner has no Users/Contact");
                     if (users.Length == 1)
                     {
-                        int SalesRep_ID = users[0].GetAD_User_ID();
+                        int SalesRep_ID = users[0].GetVAF_UserContact_ID();
                         sql.Append(" AND h.SalesRep_ID=").Append(SalesRep_ID);
                     }
                     else
                     {
                         log.Warning("Not 1 User/Contact for C_BPartner_ID="
                             + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID=")
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
                             .Append(m_com.GetC_BPartner_ID()).Append(")");
                     }
                 }
@@ -226,7 +226,7 @@ namespace VAdvantage.Process
                     }
                     if (users.Length == 1)
                     {
-                        int SaleRepID = users[0].GetAD_User_ID();
+                        int SaleRepID = users[0].GetVAF_UserContact_ID();
                         sql.Append(" AND h.SalesRep_ID = ");
                         sql.Append(SaleRepID);
                     }
@@ -234,14 +234,14 @@ namespace VAdvantage.Process
                     {
                         log.Warning("Not 1 User/Contact for C_BPartner_ID="
                             + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID=")
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
                             .Append(m_com.GetC_BPartner_ID()).Append(")");
                     }
                 }
 
                 //	Organization
                 if (lines[i].GetOrg_ID() != 0)
-                    sql.Append(" AND h.AD_Org_ID=").Append(lines[i].GetOrg_ID());
+                    sql.Append(" AND h.VAF_Org_ID=").Append(lines[i].GetOrg_ID());
                 //	BPartner
                 if (lines[i].GetC_BPartner_ID() != 0)
                     sql.Append(" AND h.C_BPartner_ID=").Append(lines[i].GetC_BPartner_ID());
@@ -373,7 +373,7 @@ namespace VAdvantage.Process
             try
             {
                 SqlParameter[] param = new SqlParameter[3];
-                param[0] = new SqlParameter("@clientid", m_com.GetAD_Client_ID());
+                param[0] = new SqlParameter("@clientid", m_com.GetVAF_Client_ID());
                 param[1] = new SqlParameter("@sdate", p_StartDate.Date);
                 param[2] = new SqlParameter("@edate", m_EndDate.Date);
 

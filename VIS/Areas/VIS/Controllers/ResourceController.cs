@@ -58,7 +58,7 @@ namespace VIS.Controllers
 
                 SecureEngine.Encrypt("a");
 
-                CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetAD_Language());
+                CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetVAF_Language());
 
                 sb.Append("; var VIS = {");
                 sb.Append("Application: {contextUrl:'").Append(@Url.Content("~/")).Append("',").Append(" contextFullUrl:'").Append(fullUrl).Append("',")
@@ -81,7 +81,7 @@ namespace VIS.Controllers
 
                 /* USER */
                 sb.Append(" VIS.MUser = {");
-                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetAD_User_ID()) + "' }; ");
+                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetVAF_UserContact_ID()) + "' }; ");
 
                 /* ROLE */
                 sb.Append(" VIS.MRole =  {");
@@ -89,7 +89,7 @@ namespace VIS.Controllers
                 sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
                 sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
 
-                sb.Append(", columnSynonym : { 'AD_User_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
+                sb.Append(", columnSynonym : { 'VAF_UserContact_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
                 sb.Append("};");
 
                 /* CTX */
@@ -136,7 +136,7 @@ namespace VIS.Controllers
 
                 //Update Login Time
 
-                var r = new ResourceManager(fullUrl, ctx.GetAD_Client_ID());
+                var r = new ResourceManager(fullUrl, ctx.GetVAF_Client_ID());
                 r.RunAsync();
                 r = null;
             }
@@ -152,9 +152,9 @@ namespace VIS.Controllers
         {
             LoginProcess process = new VAdvantage.Login.LoginProcess(_ctx);
 
-            if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetAD_User_ID()))
-                _ctx.SetContext("#SalesRep_ID", _ctx.GetAD_User_ID());
-            if (_ctx.GetAD_Role_ID() == 0)	//	User is a Sys Admin
+            if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetVAF_UserContact_ID()))
+                _ctx.SetContext("#SalesRep_ID", _ctx.GetVAF_UserContact_ID());
+            if (_ctx.GetVAF_Role_ID() == 0)	//	User is a Sys Admin
                 _ctx.SetContext("#SysAdmin", "Y");
 
             _ctx.SetContext("#IsAdmin", VAdvantage.Model.MRole.GetDefault(_ctx, false).IsAdministrator() ? "Y" : "N");
@@ -172,21 +172,21 @@ namespace VIS.Controllers
 
             //1 first user and client 
 
-            string qry = "SELECT COALESCE(u.AD_Theme_ID,c.AD_Theme_ID) FROM AD_User u INNER JOIN AD_Client c ON c.AD_Client_ID = u.AD_Client_ID " +
-                         " WHERE u.AD_User_ID ="+_ctx.GetAD_User_ID();
+            string qry = "SELECT COALESCE(u.VAF_Theme_ID,c.VAF_Theme_ID) FROM VAF_UserContact u INNER JOIN VAF_Client c ON c.VAF_Client_ID = u.VAF_Client_ID " +
+                         " WHERE u.VAF_UserContact_ID ="+_ctx.GetVAF_UserContact_ID();
 
             int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry,null,null));
 
             if (id < 1)
             {
                 //2 get System default
-                id = Util.GetValueOfInt(DBase.DB.ExecuteScalar("SELECT AD_Theme_ID FROM AD_Theme WHERE IsDefault = 'Y' ORDER By Updated DESC", null, null));
+                id = Util.GetValueOfInt(DBase.DB.ExecuteScalar("SELECT VAF_Theme_ID FROM VAF_Theme WHERE IsDefault = 'Y' ORDER By Updated DESC", null, null));
             }
 
             if (id > 0)
             {
                 System.Data.DataSet ds = DBase.DB.ExecuteDataset("SELECT SecondaryColor, OnSecondaryColor, PrimaryColor, OnPrimaryColor " +
-                                                        " FROM AD_Theme WHERE AD_Theme_ID = " + id, null);
+                                                        " FROM VAF_Theme WHERE VAF_Theme_ID = " + id, null);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -204,13 +204,13 @@ namespace VIS.Controllers
     public class ResourceManager
     {
         string _url = "";
-        int _AD_Client_ID = 0;
+        int _VAF_Client_ID = 0;
         Thread _thread = null;
 
-        public ResourceManager(string url,int AD_Client_ID)
+        public ResourceManager(string url,int VAF_Client_ID)
         {
             _url = url;
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }
 
 
@@ -224,7 +224,7 @@ namespace VIS.Controllers
         {
             try
             {
-                UpdateLoginTime(_AD_Client_ID, _url, VAdvantage.DataBase.GlobalVariable.TO_DATE(DateTime.Now, false));
+                UpdateLoginTime(_VAF_Client_ID, _url, VAdvantage.DataBase.GlobalVariable.TO_DATE(DateTime.Now, false));
             }
             catch
             {
@@ -233,7 +233,7 @@ namespace VIS.Controllers
             _thread = null;
         }
 
-        public string UpdateLoginTime(int AD_Client_ID, String url, string loginTime)
+        public string UpdateLoginTime(int VAF_Client_ID, String url, string loginTime)
         {
             var client = VAdvantage.Classes.ServerEndPoint.GetCloudClient();
             string retStr = "";
@@ -244,7 +244,7 @@ namespace VIS.Controllers
                 try
                 {
                     System.Net.ServicePointManager.Expect100Continue = false;
-                    retStr = client.SetLastLogin(AD_Client_ID, url, loginTime, key);
+                    retStr = client.SetLastLogin(VAF_Client_ID, url, loginTime, key);
                     VAdvantage.Logging.VLogger.Get().Info("Update Login =>" + retStr);
                     client.Close();
                 }

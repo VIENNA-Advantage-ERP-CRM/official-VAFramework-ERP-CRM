@@ -72,7 +72,7 @@ static X_PA_Ratio()
 //static long serialVersionUID 27562514381983L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065194L;
-/** AD_Table_ID=835 */
+/** VAF_TableView_ID=835 */
 public static int Table_ID;
  // =835;
 

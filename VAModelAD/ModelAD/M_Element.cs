@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : M_Element
  * Purpose        : System Element Model
- * Class Used     : M_Element inherits from X_AD_Element class
+ * Class Used     : M_Element inherits from X_VAF_ColumnDic class
  * Chronological    Development
  * Raghunandan      08-May-2009
   ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class M_Element : X_AD_Element
+    public class M_Element : X_VAF_ColumnDic
     {
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(M_Element).FullName);
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             if (columnName == null || columnName.Length == 0)
                 return columnName;
             String retValue = columnName;
-            String sql = "SELECT ColumnName FROM AD_Element WHERE UPPER(ColumnName)=" + columnName.ToUpper();
+            String sql = "SELECT ColumnName FROM VAF_ColumnDic WHERE UPPER(ColumnName)=" + columnName.ToUpper();
             DataSet ds = null;
             try
             {
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
             if (columnName == null || columnName.Length == 0)
                 return null;
             M_Element retValue = null;
-            String sql = "SELECT * FROM AD_Element WHERE UPPER(ColumnName)=" + columnName.ToUpper();
+            String sql = "SELECT * FROM VAF_ColumnDic WHERE UPPER(ColumnName)=" + columnName.ToUpper();
             DataSet ds = null;
             try
             {
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
             if (columnName == null || columnName.Length == 0)
                 return null;
             M_Element retValue = null;
-            String sql = "SELECT * FROM AD_Element WHERE UPPER(ColumnName)='" + columnName.ToUpper() + "'";
+            String sql = "SELECT * FROM VAF_ColumnDic WHERE UPPER(ColumnName)='" + columnName.ToUpper() + "'";
             DataSet ds = null;
             try
             {
@@ -127,16 +127,16 @@ namespace VAdvantage.Model
         ///Get Element
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Column_ID">columnName case insensitive column name</param>
+        /// <param name="VAF_Column_ID">columnName case insensitive column name</param>
         /// <returns>case sensitive column name</returns>
-        public static M_Element GetOfColumn(Ctx ctx, int AD_Column_ID)
+        public static M_Element GetOfColumn(Ctx ctx, int VAF_Column_ID)
         {
-            if (AD_Column_ID == 0)
+            if (VAF_Column_ID == 0)
                 return null;
             M_Element retValue = null;
-            String sql = "SELECT * FROM AD_Element e "
-                + "WHERE EXISTS (SELECT * FROM AD_Column c "
-                    + "WHERE c.AD_Element_ID=e.AD_Element_ID AND c.AD_Column_ID=" + AD_Column_ID + ")";
+            String sql = "SELECT * FROM VAF_ColumnDic e "
+                + "WHERE EXISTS (SELECT * FROM VAF_Column c "
+                    + "WHERE c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Column_ID=" + VAF_Column_ID + ")";
             DataSet ds = null;
             try
             {
@@ -159,12 +159,12 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Element_ID">element</param>
+        /// <param name="VAF_ColumnDic_ID">element</param>
         /// <param name="trxName">transaction</param>
-        public M_Element(Ctx ctx, int AD_Element_ID, Trx trxName)
-            : base(ctx, AD_Element_ID, trxName)
+        public M_Element(Ctx ctx, int VAF_ColumnDic_ID, Trx trxName)
+            : base(ctx, VAF_ColumnDic_ID, trxName)
         {
-            if (AD_Element_ID == 0)
+            if (VAF_ColumnDic_ID == 0)
             {
                 //	setColumnName (null);
                 //	setEntityType (null);	// U
@@ -213,17 +213,17 @@ namespace VAdvantage.Model
 		if (!newRecord)
 		{
 			//	Column
-			StringBuilder sql = new StringBuilder("UPDATE AD_Column SET ColumnName=")
+			StringBuilder sql = new StringBuilder("UPDATE VAF_Column SET ColumnName=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName()))
 				.Append(", Name=").Append(DataBase.DB.TO_STRING(GetName()))
 				.Append(", Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-				.Append(" WHERE AD_Element_ID=").Append(Get_ID());
+				.Append(" WHERE VAF_ColumnDic_ID=").Append(Get_ID());
 
             int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("Columns updated #" + no);
 			//	Field
-            sql = new StringBuilder("UPDATE AD_Field SET ");
+            sql = new StringBuilder("UPDATE VAF_Field SET ");
 
             //In Case of migration- do not update name of fields
             if(!DB.UseMigratedConnection)
@@ -232,16 +232,16 @@ namespace VAdvantage.Model
             }
 				sql.Append(" Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-				.Append(" WHERE AD_Column_ID IN (SELECT AD_Column_ID FROM AD_Column WHERE AD_Element_ID=")
+				.Append(" WHERE VAF_Column_ID IN (SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_ColumnDic_ID=")
 				.Append(Get_ID())
 				.Append(") AND IsCentrallyMaintained='Y'")
-				.Append(" AND AD_Tab_ID IN (SELECT AD_Tab_ID FROM AD_Tab t INNER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID) WHERE t.AD_CtxArea_ID IS NULL AND w.AD_CtxArea_ID IS NULL)");
+				.Append(" AND VAF_Tab_ID IN (SELECT VAF_Tab_ID FROM VAF_Tab t INNER JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID) WHERE t.VAF_ContextScope_ID IS NULL AND w.VAF_ContextScope_ID IS NULL)");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("Fields updated #" + no);
 			
 			//	Parameter 
-			sql = new StringBuilder("UPDATE AD_Process_Para SET ColumnName=")
+			sql = new StringBuilder("UPDATE VAF_Job_Para SET ColumnName=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName()));
             if (!DB.UseMigratedConnection)
             {
@@ -250,13 +250,13 @@ namespace VAdvantage.Model
 				//.Append(", Name=").Append(DataBase.DB.TO_STRING(GetName()))
                  sql.Append(", Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-				.Append(", AD_Element_ID=").Append(Get_ID())
+				.Append(", VAF_ColumnDic_ID=").Append(Get_ID())
 				.Append(" WHERE UPPER(ColumnName)=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName().ToUpper()))
-				.Append(" AND IsCentrallyMaintained='Y' AND AD_Element_ID IS NULL");
+				.Append(" AND IsCentrallyMaintained='Y' AND VAF_ColumnDic_ID IS NULL");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
-			sql = new StringBuilder("UPDATE AD_Process_Para SET ColumnName=")
+			sql = new StringBuilder("UPDATE VAF_Job_Para SET ColumnName=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName()));
                  if (!DB.UseMigratedConnection)
             {
@@ -266,14 +266,14 @@ namespace VAdvantage.Model
 				//.Append(", Name=").Append(DataBase.DB.TO_STRING(GetName()))
 				sql.Append(", Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-				.Append(" WHERE AD_Element_ID=").Append(Get_ID())
+				.Append(" WHERE VAF_ColumnDic_ID=").Append(Get_ID())
 				.Append(" AND IsCentrallyMaintained='Y'")
-				.Append(" AND AD_Process_ID IN (SELECT AD_Process_ID FROM AD_Process WHERE AD_CtxArea_ID IS NULL)");
+				.Append(" AND VAF_Job_ID IN (SELECT VAF_Job_ID FROM VAF_Job WHERE VAF_ContextScope_ID IS NULL)");
 
             no += Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("Parameters updated #" + no);
 			//	Print Info
-            sql = new StringBuilder("UPDATE AD_PrintFormatItem pi SET PrintName=")
+            sql = new StringBuilder("UPDATE VAF_Print_Rpt_LItem pi SET PrintName=")
                 .Append(DataBase.DB.TO_STRING(GetPrintName()));
                  if (!DB.UseMigratedConnection)
             {
@@ -282,18 +282,18 @@ namespace VAdvantage.Model
 			
 				//.Append(", Name=").Append(DataBase.DB.TO_STRING(GetName()))
 				sql.Append(" WHERE IsCentrallyMaintained='Y'")	
-				.Append(" AND EXISTS (SELECT * FROM AD_Column c ")
-					.Append("WHERE c.AD_Column_ID=pi.AD_Column_ID AND c.AD_Element_ID=")
+				.Append(" AND EXISTS (SELECT * FROM VAF_Column c ")
+					.Append("WHERE c.VAF_Column_ID=pi.VAF_Column_ID AND c.VAF_ColumnDic_ID=")
 					.Append(Get_ID()).Append(")");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("PrintFormatItem updated #" + no);
 			// Info Column
-			sql = new StringBuilder ("UPDATE AD_InfoColumn SET Name=")
+			sql = new StringBuilder ("UPDATE VAF_QuickSearchColumn SET Name=")
 				.Append(DataBase.DB.TO_STRING(GetName()))
 				.Append(", Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-				.Append(" WHERE AD_Element_ID=").Append(Get_ID())
+				.Append(" WHERE VAF_ColumnDic_ID=").Append(Get_ID())
 				.Append(" AND IsCentrallyMaintained='Y'");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));

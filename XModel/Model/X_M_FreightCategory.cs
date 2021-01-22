@@ -72,7 +72,7 @@ static X_M_FreightCategory()
 //static long serialVersionUID 27562514379428L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062639L;
-/** AD_Table_ID=595 */
+/** VAF_TableView_ID=595 */
 public static int Table_ID;
  // =595;
 

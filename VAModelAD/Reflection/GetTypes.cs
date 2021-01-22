@@ -25,7 +25,7 @@ namespace VAModelAD.Reflection
             if (_fnGetWhereClause != null)
             {
                 string ele = "";
-                if (columnName.Equals("AD_Org_ID", StringComparison.OrdinalIgnoreCase))
+                if (columnName.Equals("VAF_Org_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     ele =  X_C_AcctSchema_Element.ELEMENTTYPE_Organization;
                 }
@@ -41,7 +41,7 @@ namespace VAModelAD.Reflection
                 {
                     ele = X_C_AcctSchema_Element.ELEMENTTYPE_Project;
                 }
-                else if (columnName.Equals("AD_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
+                else if (columnName.Equals("VAF_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     ele = X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx;
                 }

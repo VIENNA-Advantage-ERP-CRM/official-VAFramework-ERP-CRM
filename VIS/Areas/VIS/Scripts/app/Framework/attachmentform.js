@@ -1,5 +1,5 @@
 ﻿(function (VIS, $) {
-    function attachmentForm(windowNo, AD_Attachment_ID, AD_Table_ID, Record_ID, trxName, newRecord_ID, restrictUpload, isDMSAttachment) {
+    function attachmentForm(windowNo, VAF_Attachment_ID, VAF_TableView_ID, Record_ID, trxName, newRecord_ID, restrictUpload, isDMSAttachment) {
         var isFALoaded = false;
         var isIMALoaded = false;
         var isSMALoaded = false;
@@ -11,7 +11,7 @@
         var dOAContent = null;
         var cmbFileLocation = null;
         this.windowNo = windowNo;
-        var AD_Attachment_ID = 0;
+        var VAF_Attachment_ID = 0;
         if (!newRecord_ID) {
             newRecord_ID = 0;
         }
@@ -443,7 +443,7 @@
                 url: VIS.Application.contextUrl + "Attachment/GetAttachment",
                 dataType: "json",
                 data: {
-                    AD_Table_ID: AD_Table_ID,
+                    VAF_TableView_ID: VAF_TableView_ID,
                     Record_ID: Record_ID
                 },
                 error: function () {
@@ -620,10 +620,10 @@
 
                     //AppendFiles in Old Files Region
                     if (attachment != null) {
-                        AD_Attachment_ID = attachment.AD_Attachment_ID;
+                        VAF_Attachment_ID = attachment.VAF_Attachment_ID;
                     }
                     if (attachment != null && attachment._lines != null) {
-                        AD_Attachment_ID = attachment.AD_Attachment_ID;
+                        VAF_Attachment_ID = attachment.VAF_Attachment_ID;
                         for (var item in attachment._lines) {
                             AppendFileOldRegion(attachment._lines[item], item);
                         }
@@ -739,7 +739,7 @@
                 url: VIS.Application.contextUrl + "Attachment/GetAttachment",
                 dataType: "json",
                 data: {
-                    AD_Table_ID: AD_Table_ID,
+                    VAF_TableView_ID: VAF_TableView_ID,
                     Record_ID: Record_ID
                 },
                 error: function () {
@@ -751,10 +751,10 @@
                     var attachment = data.result.Attachment;
                     //AppendFiles in Old Files Region
                     if (attachment != null) {
-                        AD_Attachment_ID = attachment.AD_Attachment_ID;
+                        VAF_Attachment_ID = attachment.VAF_Attachment_ID;
                     }
                     if (attachment != null && attachment._lines != null) {
-                        AD_Attachment_ID = attachment.AD_Attachment_ID;
+                        VAF_Attachment_ID = attachment.VAF_Attachment_ID;
                         for (var item in attachment._lines) {
                             AppendFileOldRegion(attachment._lines[item], item);
                         }
@@ -1068,9 +1068,9 @@
             //    type: "POST",
             //    data: {
             //        files: JSON.stringify(filesInfo),
-            //        AD_Attachment_ID: AD_Attachment_ID,
+            //        VAF_Attachment_ID: VAF_Attachment_ID,
             //        folderKey: folder,
-            //        AD_Table_ID: AD_Table_ID,
+            //        VAF_TableView_ID: VAF_TableView_ID,
             //        Record_ID: Record_ID,
             //        fileLocation: cmbFileLocation.val()
             //    },
@@ -1124,9 +1124,9 @@
                     type: "POST",
                     data: {
                         files: JSON.stringify(filesInfo),
-                        AD_Attachment_ID: AD_Attachment_ID,
+                        VAF_Attachment_ID: VAF_Attachment_ID,
                         folderKey: folder,
-                        AD_Table_ID: AD_Table_ID,
+                        VAF_TableView_ID: VAF_TableView_ID,
                         Record_ID: Record_ID,
                         fileLocation: cmbFileLocation.val(),
                         NewRecord_ID: newRecord_ID,
@@ -1363,11 +1363,11 @@
                 dataType: "json",
                 data: {
                     fileName: oldFiles[index].Name,
-                    AD_Attachment_ID: AD_Attachment_ID,
-                    AD_AttachmentLine_ID: oldFiles[index].Line_ID,
+                    VAF_Attachment_ID: VAF_Attachment_ID,
+                    VAF_AttachmentLine_ID: oldFiles[index].Line_ID,
                     actionOrigin: actionOrigin,
                     originName: VIS.context.getWindowContext(selfi.windowNo, "WindowName"),
-                    AD_Table_ID: AD_Table_ID,
+                    VAF_TableView_ID: VAF_TableView_ID,
                     recordID: Record_ID
 
                 },

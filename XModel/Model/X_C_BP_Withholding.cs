@@ -74,7 +74,7 @@ static X_C_BP_Withholding()
 //static long serialVersionUID 27562514370401L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053612L;
-/** AD_Table_ID=299 */
+/** VAF_TableView_ID=299 */
 public static int Table_ID;
  // =299;
 

@@ -9,20 +9,20 @@ namespace ViennaAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for AD_MailQueue
+    using System.Data;/** Generated Model for VAF_MailQueue
  *  @author Vienna Solutions 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_MailQueue : PO
+    public class X_VAF_MailQueue : PO
     {
-        public X_AD_MailQueue(Context ctx, int AD_MailQueue_ID, Trx trxName)
-            : base(ctx, AD_MailQueue_ID, trxName)
+        public X_VAF_MailQueue(Context ctx, int VAF_MailQueue_ID, Trx trxName)
+            : base(ctx, VAF_MailQueue_ID, trxName)
         {
-            /** if (AD_MailQueue_ID == 0){SetAD_MailQueue_ID (0);SetToEMail (null);} */
+            /** if (VAF_MailQueue_ID == 0){SetVAF_MailQueue_ID (0);SetToEMail (null);} */
         }
-        public X_AD_MailQueue(Ctx ctx, int AD_MailQueue_ID, Trx trxName)
-            : base(ctx, AD_MailQueue_ID, trxName)
+        public X_VAF_MailQueue(Ctx ctx, int VAF_MailQueue_ID, Trx trxName)
+            : base(ctx, VAF_MailQueue_ID, trxName)
         {
-            /** if (AD_MailQueue_ID == 0){SetAD_MailQueue_ID (0);SetToEMail (null);} */
+            /** if (VAF_MailQueue_ID == 0){SetVAF_MailQueue_ID (0);SetToEMail (null);} */
         }
 
         ///<summary>
@@ -31,7 +31,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_MailQueue(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -42,7 +42,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_MailQueue(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -53,7 +53,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_MailQueue(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace ViennaAdvantage.Model
         /// Static Constructor 
         /// Set Table ID By Table Name
         ///</summary>
-        static X_AD_MailQueue()
+        static X_VAF_MailQueue()
         {
             Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name);
         }
@@ -78,14 +78,14 @@ namespace ViennaAdvantage.Model
         public static long updatedMS = 1530876521245L;
 
         ///<summary>
-        /// AD_Table_ID=1000668
+        /// VAF_TableView_ID=1000668
         ///</summary>
         public static int Table_ID; // =1000668;
 
         ///<summary>
-        /// TableName=AD_MailQueue
+        /// TableName=VAF_MailQueue
         ///</summary>
-        public static String Table_Name = "AD_MailQueue";
+        public static String Table_Name = "VAF_MailQueue";
         protected static KeyNamePair model;
 
         protected Decimal accessLevel = new Decimal(7);
@@ -126,131 +126,131 @@ namespace ViennaAdvantage.Model
 
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_MailQueue[").Append(Get_ID()).Append("]"); return sb.ToString();
+            StringBuilder sb = new StringBuilder("X_VAF_MailQueue[").Append(Get_ID()).Append("]"); return sb.ToString();
         }
 
         ///<summary>
-        /// SetAD_MailQueue_ID
+        /// SetVAF_MailQueue_ID
         ///</summary>
-        ///<param name="AD_MailQueue_ID">AD_MailQueue_ID</param>
-        public void SetAD_MailQueue_ID(int AD_MailQueue_ID)
+        ///<param name="VAF_MailQueue_ID">VAF_MailQueue_ID</param>
+        public void SetVAF_MailQueue_ID(int VAF_MailQueue_ID)
         {
-            if (AD_MailQueue_ID < 1) throw new ArgumentException("AD_MailQueue_ID is mandatory.");
-            Set_ValueNoCheck("AD_MailQueue_ID", AD_MailQueue_ID);
+            if (VAF_MailQueue_ID < 1) throw new ArgumentException("VAF_MailQueue_ID is mandatory.");
+            Set_ValueNoCheck("VAF_MailQueue_ID", VAF_MailQueue_ID);
         }
 
         ///<summary>
-        /// GetAD_MailQueue_ID
+        /// GetVAF_MailQueue_ID
         ///</summary>
-        ///<returns> AD_MailQueue_ID</returns>
-        public int GetAD_MailQueue_ID()
+        ///<returns> VAF_MailQueue_ID</returns>
+        public int GetVAF_MailQueue_ID()
         {
-            Object ii = Get_Value("AD_MailQueue_ID");
+            Object ii = Get_Value("VAF_MailQueue_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetRole
         ///</summary>
-        ///<param name="AD_Role_ID">Responsibility Role</param>
-        public void SetAD_Role_ID(int AD_Role_ID)
+        ///<param name="VAF_Role_ID">Responsibility Role</param>
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
 
         ///<summary>
         /// GetRole
         ///</summary>
         ///<returns> Responsibility Role</returns>
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetTable
         ///</summary>
-        ///<param name="AD_Table_ID">Database Table information</param>
-        public void SetAD_Table_ID(int AD_Table_ID)
+        ///<param name="VAF_TableView_ID">Database Table information</param>
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
 
         ///<summary>
         /// GetTable
         ///</summary>
         ///<returns> Database Table information</returns>
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetWorkflow Activity
         ///</summary>
-        ///<param name="AD_WF_Activity_ID">Workflow Activity</param>
-        public void SetAD_WF_Activity_ID(int AD_WF_Activity_ID)
+        ///<param name="VAF_WFlow_Task_ID">Workflow Activity</param>
+        public void SetVAF_WFlow_Task_ID(int VAF_WFlow_Task_ID)
         {
-            if (AD_WF_Activity_ID <= 0) Set_Value("AD_WF_Activity_ID", null);
+            if (VAF_WFlow_Task_ID <= 0) Set_Value("VAF_WFlow_Task_ID", null);
             else
-                Set_Value("AD_WF_Activity_ID", AD_WF_Activity_ID);
+                Set_Value("VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
         }
 
         ///<summary>
         /// GetWorkflow Activity
         ///</summary>
         ///<returns> Workflow Activity</returns>
-        public int GetAD_WF_Activity_ID()
+        public int GetVAF_WFlow_Task_ID()
         {
-            Object ii = Get_Value("AD_WF_Activity_ID");
+            Object ii = Get_Value("VAF_WFlow_Task_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetWorkflow Event Audit
         ///</summary>
-        ///<param name="AD_WF_EventAudit_ID">Workflow Process Activity Event Audit Information</param>
-        public void SetAD_WF_EventAudit_ID(int AD_WF_EventAudit_ID)
+        ///<param name="VAF_WFlow_EventLog_ID">Workflow Process Activity Event Audit Information</param>
+        public void SetVAF_WFlow_EventLog_ID(int VAF_WFlow_EventLog_ID)
         {
-            if (AD_WF_EventAudit_ID <= 0) Set_Value("AD_WF_EventAudit_ID", null);
+            if (VAF_WFlow_EventLog_ID <= 0) Set_Value("VAF_WFlow_EventLog_ID", null);
             else
-                Set_Value("AD_WF_EventAudit_ID", AD_WF_EventAudit_ID);
+                Set_Value("VAF_WFlow_EventLog_ID", VAF_WFlow_EventLog_ID);
         }
 
         ///<summary>
         /// GetWorkflow Event Audit
         ///</summary>
         ///<returns> Workflow Process Activity Event Audit Information</returns>
-        public int GetAD_WF_EventAudit_ID()
+        public int GetVAF_WFlow_EventLog_ID()
         {
-            Object ii = Get_Value("AD_WF_EventAudit_ID");
+            Object ii = Get_Value("VAF_WFlow_EventLog_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetWorkflow Process
         ///</summary>
-        ///<param name="AD_WF_Process_ID">Actual Workflow Process Instance</param>
-        public void SetAD_WF_Process_ID(int AD_WF_Process_ID)
+        ///<param name="VAF_WFlow_Handler_ID">Actual Workflow Process Instance</param>
+        public void SetVAF_WFlow_Handler_ID(int VAF_WFlow_Handler_ID)
         {
-            if (AD_WF_Process_ID <= 0) Set_Value("AD_WF_Process_ID", null);
+            if (VAF_WFlow_Handler_ID <= 0) Set_Value("VAF_WFlow_Handler_ID", null);
             else
-                Set_Value("AD_WF_Process_ID", AD_WF_Process_ID);
+                Set_Value("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
         }
 
         ///<summary>
         /// GetWorkflow Process
         ///</summary>
         ///<returns> Actual Workflow Process Instance</returns>
-        public int GetAD_WF_Process_ID()
+        public int GetVAF_WFlow_Handler_ID()
         {
-            Object ii = Get_Value("AD_WF_Process_ID");
+            Object ii = Get_Value("VAF_WFlow_Handler_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
@@ -319,9 +319,9 @@ namespace ViennaAdvantage.Model
         }
 
         ///<summary>
-        /// MailStatus AD_Reference_ID=1000243
+        /// MailStatus VAF_Control_Ref_ID=1000243
         ///</summary>
-        public static int MAILSTATUS_AD_Reference_ID = 1000243;
+        public static int MAILSTATUS_VAF_Control_Ref_ID = 1000243;
         ///<summary>
         /// Failed = F
         ///</summary>

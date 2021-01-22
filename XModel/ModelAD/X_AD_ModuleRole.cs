@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ModuleRole
+/** Generated Model for VAF_ModuleRole
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ModuleRole : PO
+public class X_VAF_ModuleRole : PO
 {
-public X_AD_ModuleRole (Context ctx, int AD_ModuleRole_ID, Trx trxName) : base (ctx, AD_ModuleRole_ID, trxName)
+public X_VAF_ModuleRole (Context ctx, int VAF_ModuleRole_ID, Trx trxName) : base (ctx, VAF_ModuleRole_ID, trxName)
 {
-/** if (AD_ModuleRole_ID == 0)
+/** if (VAF_ModuleRole_ID == 0)
 {
-SetAD_ModuleRole_ID (0);
-SetAD_Module_ID (0);
+SetVAF_ModuleRole_ID (0);
+SetVAF_Module_ID (0);
 }
  */
 }
-public X_AD_ModuleRole (Ctx ctx, int AD_ModuleRole_ID, Trx trxName) : base (ctx, AD_ModuleRole_ID, trxName)
+public X_VAF_ModuleRole (Ctx ctx, int VAF_ModuleRole_ID, Trx trxName) : base (ctx, VAF_ModuleRole_ID, trxName)
 {
-/** if (AD_ModuleRole_ID == 0)
+/** if (VAF_ModuleRole_ID == 0)
 {
-SetAD_ModuleRole_ID (0);
-SetAD_Module_ID (0);
+SetVAF_ModuleRole_ID (0);
+SetVAF_Module_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Module_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleRole (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleRole (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ModuleRole (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleRole (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleRole (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ModuleRole (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleRole (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ModuleRole (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ModuleRole()
+static X_VAF_ModuleRole()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_ModuleRole()
 //static long serialVersionUID 27634389886506L;
 /** Last Updated Timestamp 11/7/2012 10:32:49 AM */
 public static long updatedMS = 1352264569717L;
-/** AD_Table_ID=1000013 */
+/** VAF_TableView_ID=1000013 */
 public static int Table_ID;
  // =1000013;
 
-/** TableName=AD_ModuleRole */
-public static String Table_Name="AD_ModuleRole";
+/** TableName=VAF_ModuleRole */
+public static String Table_Name="VAF_ModuleRole";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ModuleRole[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ModuleRole[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_ModuleRole_ID.
-@param AD_ModuleRole_ID AD_ModuleRole_ID */
-public void SetAD_ModuleRole_ID (int AD_ModuleRole_ID)
+/** Set VAF_ModuleRole_ID.
+@param VAF_ModuleRole_ID VAF_ModuleRole_ID */
+public void SetVAF_ModuleRole_ID (int VAF_ModuleRole_ID)
 {
-if (AD_ModuleRole_ID < 1) throw new ArgumentException ("AD_ModuleRole_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleRole_ID", AD_ModuleRole_ID);
+if (VAF_ModuleRole_ID < 1) throw new ArgumentException ("VAF_ModuleRole_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleRole_ID", VAF_ModuleRole_ID);
 }
-/** Get AD_ModuleRole_ID.
-@return AD_ModuleRole_ID */
-public int GetAD_ModuleRole_ID() 
+/** Get VAF_ModuleRole_ID.
+@return VAF_ModuleRole_ID */
+public int GetVAF_ModuleRole_ID() 
 {
-Object ii = Get_Value("AD_ModuleRole_ID");
+Object ii = Get_Value("VAF_ModuleRole_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_Module_ID.
-@param AD_Module_ID AD_Module_ID */
-public void SetAD_Module_ID (int AD_Module_ID)
+/** Set VAF_Module_ID.
+@param VAF_Module_ID VAF_Module_ID */
+public void SetVAF_Module_ID (int VAF_Module_ID)
 {
-if (AD_Module_ID < 1) throw new ArgumentException ("AD_Module_ID is mandatory.");
-Set_ValueNoCheck ("AD_Module_ID", AD_Module_ID);
+if (VAF_Module_ID < 1) throw new ArgumentException ("VAF_Module_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Module_ID", VAF_Module_ID);
 }
-/** Get AD_Module_ID.
-@return AD_Module_ID */
-public int GetAD_Module_ID() 
+/** Get VAF_Module_ID.
+@return VAF_Module_ID */
+public int GetVAF_Module_ID() 
 {
-Object ii = Get_Value("AD_Module_ID");
+Object ii = Get_Value("VAF_Module_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -42,7 +42,7 @@
             Delete = "ACTION"
         ];
         this.exclCols = [
-            Tenant = "AD_Client_ID",
+            Tenant = "VAF_Client_ID",
             Created = "Created",
             CreatedBy = "CreatedBy",
             Updated = "Updated",
@@ -302,7 +302,7 @@
                         if (recRow[colName + "_TXT"]) {
                             this.htmlUI.push('<td>' + VIS.Utility.encodeText(recRow[colName + "_TXT"]) + '</td>');
                         }
-                        // display delete button icon for row if RecordsDeleteable is set on Version table in AD_Table
+                        // display delete button icon for row if RecordsDeleteable is set on Version table in VAF_TableView
                         else if (colName == "ACTION") {
                             if (this.deletable) {
                                 this.htmlUI.push("<td style='text-align: center;'><button class='vis-mas-ver-btnDel'><img src='" + src + "' /></button></td>");
@@ -394,7 +394,7 @@
             //for (var v = 0; v < this.defaultCols.length; v++) {
             //    this.gridCols.push(this.defaultColElements[v]);
 
-            //    // column header for Action (delete), based on setting on AD_Table for Version table
+            //    // column header for Action (delete), based on setting on VAF_TableView for Version table
             //    if (this.defaultColElements[v] == "ACTION") {
             //        if (this.deletable) {
             //            hdrUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(this.defaultCols[v]) + '</th>');
@@ -415,7 +415,7 @@
         for (var v = 0; v < defCols.length; v++) {
             this.gridCols.push(defColEle[v]);
 
-            // column header for Action (delete), based on setting on AD_Table for Version table
+            // column header for Action (delete), based on setting on VAF_TableView for Version table
             if (defColEle[v] == "ACTION") {
                 if (this.deletable) {
                     hUI.push('<th style="text-align: center;">' + VIS.Utility.encodeText(defCols[v]) + '</th>');

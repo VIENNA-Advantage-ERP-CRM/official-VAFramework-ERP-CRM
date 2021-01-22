@@ -22,7 +22,7 @@ namespace VAdvantage.Model
        // private static long serialVersionUID = -6558017105997010172L;
         private int tableID = 0;
         private String tableName = null;
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
 
         #endregion
 
@@ -112,16 +112,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Trx Organization. Performing or initiating organization
         /// </summary>
-        /// <param name="AD_OrgTrx_ID"></param>
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        /// <param name="VAF_OrgTrx_ID"></param>
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID == 0)
+            if (VAF_OrgTrx_ID == 0)
             {
-                Set_Value("AD_OrgTrx_ID", null);
+                Set_Value("VAF_OrgTrx_ID", null);
             }
             else
             {
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
             }
         }
 
@@ -129,9 +129,9 @@ namespace VAdvantage.Model
         /// Get Trx Organization. Performing or initiating organization
         /// </summary>
         /// <returns></returns>
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            int ii = Util.GetValueOfInt(Get_Value("AD_OrgTrx_ID"));
+            int ii = Util.GetValueOfInt(Get_Value("VAF_OrgTrx_ID"));
             //if (ii == null)
             //{
             //    return 0;

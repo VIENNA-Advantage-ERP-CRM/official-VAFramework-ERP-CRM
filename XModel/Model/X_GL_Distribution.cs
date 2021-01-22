@@ -102,7 +102,7 @@ static X_GL_Distribution()
 //static long serialVersionUID 27562514376403L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059614L;
-/** AD_Table_ID=708 */
+/** VAF_TableView_ID=708 */
 public static int Table_ID;
  // =708;
 
@@ -145,27 +145,27 @@ StringBuilder sb = new StringBuilder ("X_GL_Distribution[").Append(Get_ID()).App
 return sb.ToString();
 }
 
-/** AD_OrgTrx_ID AD_Reference_ID=130 */
-public static int AD_ORGTRX_ID_AD_Reference_ID=130;
+/** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=130;
 /** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-public void SetAD_OrgTrx_ID (int AD_OrgTrx_ID)
+@param VAF_OrgTrx_ID Performing or initiating organization */
+public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
 {
-if (AD_OrgTrx_ID <= 0) Set_Value ("AD_OrgTrx_ID", null);
+if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);
 else
-Set_Value ("AD_OrgTrx_ID", AD_OrgTrx_ID);
+Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
 }
 /** Get Trx Organization.
 @return Performing or initiating organization */
-public int GetAD_OrgTrx_ID() 
+public int GetVAF_OrgTrx_ID() 
 {
-Object ii = Get_Value("AD_OrgTrx_ID");
+Object ii = Get_Value("VAF_OrgTrx_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Account_ID AD_Reference_ID=132 */
-public static int ACCOUNT_ID_AD_Reference_ID=132;
+/** Account_ID VAF_Control_Ref_ID=132 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=132;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)
@@ -496,8 +496,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocFrom_ID AD_Reference_ID=133 */
-public static int C_LOCFROM_ID_AD_Reference_ID=133;
+/** C_LocFrom_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;
 /** Set Location From.
 @param C_LocFrom_ID Location that inventory was moved from */
 public void SetC_LocFrom_ID (int C_LocFrom_ID)
@@ -515,8 +515,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocTo_ID AD_Reference_ID=133 */
-public static int C_LOCTO_ID_AD_Reference_ID=133;
+/** C_LocTo_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCTO_ID_VAF_Control_Ref_ID=133;
 /** Set Location To.
 @param C_LocTo_ID Location that inventory was moved to */
 public void SetC_LocTo_ID (int C_LocTo_ID)
@@ -673,8 +673,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Org_ID AD_Reference_ID=130 */
-public static int ORG_ID_AD_Reference_ID=130;
+/** Org_ID VAF_Control_Ref_ID=130 */
+public static int ORG_ID_VAF_Control_Ref_ID=130;
 /** Set Organization.
 @param Org_ID Organizational entity within client */
 public void SetOrg_ID (int Org_ID)
@@ -707,8 +707,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;
 /** Actual = A */
 public static String POSTINGTYPE_Actual = "A";
 /** Budget = B */
@@ -764,8 +764,8 @@ if (oo != null)
 return false;
 }
 
-/** User1_ID AD_Reference_ID=134 */
-public static int USER1_ID_AD_Reference_ID=134;
+/** User1_ID VAF_Control_Ref_ID=134 */
+public static int USER1_ID_VAF_Control_Ref_ID=134;
 /** Set User List 1.
 @param User1_ID User defined list element #1 */
 public void SetUser1_ID (int User1_ID)
@@ -783,8 +783,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** User2_ID AD_Reference_ID=137 */
-public static int USER2_ID_AD_Reference_ID=137;
+/** User2_ID VAF_Control_Ref_ID=137 */
+public static int USER2_ID_VAF_Control_Ref_ID=137;
 /** Set User List 2.
 @param User2_ID User defined list element #2 */
 public void SetUser2_ID (int User2_ID)

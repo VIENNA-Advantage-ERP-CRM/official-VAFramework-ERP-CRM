@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         {
             Decimal amt = MConversionRate.ConvertBase(GetCtx(),
                 GetActualAmt(), GetC_Currency_ID(), date, 0, 	//	type
-                GetAD_Client_ID(), GetAD_Org_ID());
+                GetVAF_Client_ID(), GetVAF_Org_ID());
             //if (amt != null)
                 SetConvertedAmt(amt);
         }

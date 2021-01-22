@@ -72,7 +72,7 @@ static X_PA_ReportLineSet()
 //static long serialVersionUID 27562514382265L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065476L;
-/** AD_Table_ID=449 */
+/** VAF_TableView_ID=449 */
 public static int Table_ID;
  // =449;
 

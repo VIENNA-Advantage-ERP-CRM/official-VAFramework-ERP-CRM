@@ -141,7 +141,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("@NotFound@ @M_CostElement_ID@ (StdCost)");
             }
             log.Config(_ce.ToString());
-            _ass = MAcctSchema.GetClientAcctSchema(GetCtx(), client.GetAD_Client_ID());
+            _ass = MAcctSchema.GetClientAcctSchema(GetCtx(), client.GetVAF_Client_ID());
             for (int i = 0; i < _ass.Length; i++)
             {
                 CreateNew(_ass[i]);
@@ -209,7 +209,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE NOT EXISTS (SELECT * FROM M_Cost c WHERE c.M_Product_ID=p.M_Product_ID"
                 + " AND c.M_CostType_ID=" + as1.GetM_CostType_ID() + " AND c.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND c.M_CostElement_ID=" + _ce.GetM_CostElement_ID()
                 + " AND c.M_AttributeSetInstance_ID=0) "
-                + "AND AD_Client_ID=" + as1.GetAD_Client_ID();
+                + "AND VAF_Client_ID=" + as1.GetVAF_Client_ID();
             if (_M_Product_Category_ID != 0)
             {
                 sql += " AND M_Product_Category_ID=" + _M_Product_Category_ID;
@@ -398,7 +398,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -412,7 +412,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AverageInvoice);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetHistoryAverage();
@@ -427,7 +427,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -441,7 +441,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_AveragePO);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetHistoryAverage();
@@ -456,7 +456,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_FiFo);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();
@@ -475,7 +475,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MCostElement ce = GetCostElement(TO_LastInvoicePrice);
                 if (ce != null)
                 {
-                    MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                    MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                     if (xCost != null)
                     {
                         retValue = xCost.GetCurrentCostPrice();
@@ -486,7 +486,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     MProduct product = MProduct.Get(GetCtx(), cost.GetM_Product_ID());
                     MAcctSchema as1 = MAcctSchema.Get(GetCtx(), cost.GetC_AcctSchema_ID());
                     retValue = MCost.GetLastInvoicePrice(product,
-                        cost.GetM_AttributeSetInstance_ID(), cost.GetAD_Org_ID(), as1.GetC_Currency_ID());
+                        cost.GetM_AttributeSetInstance_ID(), cost.GetVAF_Org_ID(), as1.GetC_Currency_ID());
                 }
             }
 
@@ -496,7 +496,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MCostElement ce = GetCostElement(TO_LastPOPrice);
                 if (ce != null)
                 {
-                    MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                    MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                     if (xCost != null)
                     {
                         retValue = xCost.GetCurrentCostPrice();
@@ -507,7 +507,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     MProduct product = MProduct.Get(GetCtx(), cost.GetM_Product_ID());
                     MAcctSchema as1 = MAcctSchema.Get(GetCtx(), cost.GetC_AcctSchema_ID());
                     retValue = MCost.GetLastPOPrice(product,
-                        cost.GetM_AttributeSetInstance_ID(), cost.GetAD_Org_ID(), as1.GetC_Currency_ID());
+                        cost.GetM_AttributeSetInstance_ID(), cost.GetVAF_Org_ID(), as1.GetC_Currency_ID());
                 }
             }
 
@@ -519,7 +519,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new Exception("CostElement not found: " + TO_LiFo);
                 }
-                MCost xCost = MCost.Get(GetCtx(), cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
+                MCost xCost = MCost.Get(GetCtx(), cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID(), cost.GetM_CostType_ID(), cost.GetC_AcctSchema_ID(), ce.GetM_CostElement_ID(), cost.GetM_AttributeSetInstance_ID());
                 if (xCost != null)
                 {
                     retValue = xCost.GetCurrentCostPrice();

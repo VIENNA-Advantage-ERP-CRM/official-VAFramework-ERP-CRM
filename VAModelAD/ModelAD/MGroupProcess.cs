@@ -8,16 +8,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MGroupProcess : X_AD_Group_Process
+    public class MGroupProcess : X_VAF_Group_Process
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_GroupProcess_ID">id</param>
+        /// <param name="VAF_GroupProcess_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MGroupProcess(Ctx ctx, int AD_GroupProcess_ID, Trx trxName)
-            : base(ctx, AD_GroupProcess_ID, trxName)
+        public MGroupProcess(Ctx ctx, int VAF_GroupProcess_ID, Trx trxName)
+            : base(ctx, VAF_GroupProcess_ID, trxName)
         {
 
         }
@@ -61,33 +61,33 @@ namespace VAdvantage.Model
         {
             if (isActive)
             {
-                DB.ExecuteQuery(@"UPDATE ad_Process_access
+                DB.ExecuteQuery(@"UPDATE VAF_Job_Rights
                                     SET IsActive      ='Y',IsReadWrite='Y'
-                                    WHERE ad_process_id=" + GetAD_Process_ID() + @"
-                                    AND AD_Role_ID   IN
-                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() + ")");
+                                    WHERE VAF_Job_id=" + GetVAF_Job_ID() + @"
+                                    AND VAF_Role_ID   IN
+                                      ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
             else
             {
-                DB.ExecuteQuery(@"UPDATE ad_Process_access
+                DB.ExecuteQuery(@"UPDATE VAF_Job_Rights
                                     SET IsActive      ='N',IsReadWrite='N'
-                                    WHERE ad_process_id=" + GetAD_Process_ID() + @"
-                                    AND AD_Role_ID   IN
-                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE AD_GroupInfo_ID=" + GetAD_GroupInfo_ID() + ")");
+                                    WHERE VAF_Job_id=" + GetVAF_Job_ID() + @"
+                                    AND VAF_Role_ID   IN
+                                      ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_GroupInfo_ID=" + GetVAF_GroupInfo_ID() + ")");
             }
             return true;
         }
 
         private void InsertNewRecordInRole()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Role_ID FROM AD_Role_Group WHERE AD_GroupInfo_ID=" + GetAD_GroupInfo_ID() );
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_GroupInfo_ID=" + GetVAF_GroupInfo_ID() );
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    X_AD_Process_Access access = new X_AD_Process_Access(GetCtx(), 0, null);
-                    access.SetAD_Process_ID(GetAD_Process_ID());
-                    access.SetAD_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                    X_VAF_Job_Rights access = new X_VAF_Job_Rights(GetCtx(), 0, null);
+                    access.SetVAF_Job_ID(GetVAF_Job_ID());
+                    access.SetVAF_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     access.SetIsReadWrite(true);
                     access.Save();
                 }

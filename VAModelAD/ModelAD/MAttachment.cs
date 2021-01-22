@@ -2,7 +2,7 @@
  * Module Name    : Attachment
  * Purpose        : Contains functions used to upload/download/view/delete attachments 
  *                  of a record from "Attachment" window
- * Class Used     : MAttachmentEntry.cs, X_AD_Attachment.cs
+ * Class Used     : MAttachmentEntry.cs, X_VAF_Attachment.cs
  * Chronological Development
  * Veena Pandey     10-March-2009
  ******************************************************/
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
     /// A class which contains functions used to upload/download/view/delete attachments
     /// of a record from "Attachment" window
     /// </summary>
-    public class MAttachment : X_AD_Attachment
+    public class MAttachment : X_VAF_Attachment
     {
 
         /**	Static Logger	*/
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
             }
 
         }
-        public int AD_Client_ID
+        public int VAF_Client_ID
         {
             get;
             set;
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
                 }
             }
         }
-        public int AD_Attachment_ID
+        public int VAF_Attachment_ID
         {
             get;
             set;
@@ -111,15 +111,15 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">AD_Table_ID</param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID</param>
         /// <param name="Record_ID">Record_ID</param>
         /// <param name="trxName">transaction</param>
-        public MAttachment(Ctx ctx, int AD_Table_ID, int Record_ID, Trx trxName)
+        public MAttachment(Ctx ctx, int VAF_TableView_ID, int Record_ID, Trx trxName)
             : base(ctx, 0, trxName)
         {
             //this(ctx, 0, trxName);
             // set table id
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             // set record id
             SetRecord_ID(Record_ID);
             error = new StringBuilder();
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (GetAD_Attachment_ID() > 0)
+                if (GetVAF_Attachment_ID() > 0)
                 {
                     FolderKey = DateTime.Now.Ticks.ToString();
                     LoadLOBData();
@@ -157,10 +157,10 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Attachment_ID">AD_Attachment_ID</param>
+        /// <param name="VAF_Attachment_ID">VAF_Attachment_ID</param>
         /// <param name="trxName">transaction</param>
-        public MAttachment(Ctx ctx, int AD_Attachment_ID, Trx trxName)
-            : base(ctx, AD_Attachment_ID, trxName)
+        public MAttachment(Ctx ctx, int VAF_Attachment_ID, Trx trxName)
+            : base(ctx, VAF_Attachment_ID, trxName)
         {
             error = new StringBuilder();
             TryGetLines();
@@ -170,14 +170,14 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Attachment_ID">AD_Attachment_ID</param>
+        /// <param name="VAF_Attachment_ID">VAF_Attachment_ID</param>
         /// <param name="trxName">transaction</param>
-        public MAttachment(Ctx ctx, int AD_Attachment_ID, Trx trxName, string password, int AD_client_ID)
-            : base(ctx, AD_Attachment_ID, trxName)
+        public MAttachment(Ctx ctx, int VAF_Attachment_ID, Trx trxName, string password, int vaf_client_ID)
+            : base(ctx, VAF_Attachment_ID, trxName)
         {
             error = new StringBuilder();
             Password = password;
-            AD_Client_ID = AD_client_ID;
+            VAF_Client_ID = vaf_client_ID;
             TryGetLines();
             GetSetFileLocation();
         }
@@ -201,19 +201,19 @@ namespace VAdvantage.Model
         private void GetSetFileLocation()
         {
 
-            X_AD_ClientInfo cInfo = null;
-            if (AD_Client_ID > 0)
+            X_VAF_ClientDetail cInfo = null;
+            if (VAF_Client_ID > 0)
             {
-                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
             }
             else
             {
-                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
             }
 
             if (string.IsNullOrEmpty(cInfo.GetSaveAttachmentOn()))
             {
-                SetFileLocation(X_AD_ClientInfo.SAVEATTACHMENTON_ServerFileSystem);
+                SetFileLocation(X_VAF_ClientDetail.SAVEATTACHMENTON_ServerFileSystem);
             }
             else
             {
@@ -225,13 +225,13 @@ namespace VAdvantage.Model
         /// Get Attachment
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns>attachment or null</returns>
-        public static MAttachment Get(Ctx ctx, int AD_Table_ID, int Record_ID)
+        public static MAttachment Get(Ctx ctx, int VAF_TableView_ID, int Record_ID)
         {
             MAttachment retValue = null;
-            String sql = "SELECT * FROM AD_Attachment WHERE AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + "";
+            String sql = "SELECT * FROM VAF_Attachment WHERE VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + "";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -521,8 +521,8 @@ namespace VAdvantage.Model
         private bool SaveLOBData()
         {
             //File name
-            fileName = GetAD_Table_ID().ToString() + "_" + GetRecord_ID().ToString();
-            X_AD_ClientInfo cInfo = null;
+            fileName = GetVAF_TableView_ID().ToString() + "_" + GetRecord_ID().ToString();
+            X_VAF_ClientDetail cInfo = null;
 
 
             if (_items == null || _items.Count == 0)
@@ -531,13 +531,13 @@ namespace VAdvantage.Model
                 // Set binary data in PO and return
                 SetBinaryData(null);
                 DeleteFileData(fileName);
-                //if (AD_Client_ID > 0)
+                //if (VAF_Client_ID > 0)
                 //{
-                //    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                //    cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                 //}
                 //else
                 //{
-                //    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                //    cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                 //}
                 //SetFileLocation(cInfo.GetSaveAttachmentOn());
                 return true;
@@ -589,13 +589,13 @@ namespace VAdvantage.Model
                 if (string.IsNullOrEmpty(GetFileLocation()))
                 {
 
-                    if (AD_Client_ID > 0)
+                    if (VAF_Client_ID > 0)
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                     }
                     string fileLocation = cInfo.GetSaveAttachmentOn();
                     if (string.IsNullOrEmpty(fileLocation))
@@ -725,19 +725,19 @@ namespace VAdvantage.Model
                 {
                     string filePath = GlobalVariable.AttachmentPath;
                     string folderKey = "0";
-                    int AD_AttachmentLine_ID = 0;
+                    int VAF_AttachmentLine_ID = 0;
                     try
                     {
                         // Create client info object
                         if (cInfo == null)
                         {
-                            if (AD_Client_ID > 0)
+                            if (VAF_Client_ID > 0)
                             {
-                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -761,8 +761,8 @@ namespace VAdvantage.Model
 
                         MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
 
-                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
-                        attRef.SetAD_AttachmentRef(resURI);
+                        attRef.SetVAF_AttachmentLine_ID(VAF_AttachmentLine_ID);
+                        attRef.SetVAF_AttachmentRef(resURI);
                         if (!attRef.Save(Get_Trx()))
                         {
                             log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
@@ -848,7 +848,7 @@ namespace VAdvantage.Model
             return false;
         }
 
-        private bool UploadFtpFile(string fileName, byte[] file, X_AD_ClientInfo cInfo)
+        private bool UploadFtpFile(string fileName, byte[] file, X_VAF_ClientDetail cInfo)
         {
 
             FtpWebRequest request;
@@ -856,14 +856,14 @@ namespace VAdvantage.Model
             {
                 if (cInfo == null)
                 {
-                    // X_AD_ClientInfo cInfo = null;
-                    if (AD_Client_ID > 0)
+                    // X_VAF_ClientDetail cInfo = null;
+                    if (VAF_Client_ID > 0)
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                     }
                 }
                 request = WebRequest.Create(new Uri(string.Format(@"{0}/{1}/{2}", cInfo.GetFTPUrl(), cInfo.GetFTPFolder(), fileName))) as FtpWebRequest;
@@ -894,14 +894,14 @@ namespace VAdvantage.Model
 
             try
             {
-                X_AD_ClientInfo cInfo = null;
-                if (AD_Client_ID > 0)
+                X_VAF_ClientDetail cInfo = null;
+                if (VAF_Client_ID > 0)
                 {
-                    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                    cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                 }
                 else
                 {
-                    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                    cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                 }
                 request.Credentials = new NetworkCredential(cInfo.GetFTPUsername(), cInfo.GetFTPPwd());
                 retVal = request.DownloadData(new Uri(string.Format(@"{0}/{1}/{2}", cInfo.GetFTPUrl(), cInfo.GetFTPFolder(), fileName)));
@@ -1017,7 +1017,7 @@ namespace VAdvantage.Model
             {
                 if (GetFileLocation() == FILELOCATION_FTPLocation)
                 {
-                    fileName = this.GetAD_Table_ID() + "_" + this.GetRecord_ID();
+                    fileName = this.GetVAF_TableView_ID() + "_" + this.GetRecord_ID();
                     sdata = DownloadFtpFile(fileName);
                     if (GetCryptAndZipWay() == CRYPTANDZIPWAY_KeyEncryptionAndServerSideZip)
                     {
@@ -1035,7 +1035,7 @@ namespace VAdvantage.Model
                 }
                 else if (GetFileLocation() == FILELOCATION_ServerFileSystem)
                 {
-                    fileName = this.GetAD_Table_ID() + "_" + this.GetRecord_ID();
+                    fileName = this.GetVAF_TableView_ID() + "_" + this.GetRecord_ID();
                     String filePath = GlobalVariable.AttachmentPath + "\\" + fileName;
                     if (System.IO.File.Exists(filePath))
                     {
@@ -1057,7 +1057,7 @@ namespace VAdvantage.Model
                 } // No need to implement for now, but do not delete
                 if (GetFileLocation() == FILELOCATION_WebService)
                 {
-                    DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + 0);
+                    DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM VAF_AttachmentLine WHERE VAF_AttachmentLine_ID=" + 0);
 
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -1068,17 +1068,17 @@ namespace VAdvantage.Model
                         string filePath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
 
                         // Create client info object
-                        X_AD_ClientInfo cInfo = null;
-                        if (AD_Client_ID > 0)
+                        X_VAF_ClientDetail cInfo = null;
+                        if (VAF_Client_ID > 0)
                         {
-                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                         }
 
-                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+                        string documentURI = GetDocumentURI(VAF_Attachment_ID);
 
                         if (!string.IsNullOrEmpty(documentURI))
                         {
@@ -1249,19 +1249,19 @@ namespace VAdvantage.Model
 
         public void GetLines()
         {
-            string sql = @"SELECT * FROM AD_AttachmentLine WHERE AD_Attachment_ID=" + GetAD_Attachment_ID();
+            string sql = @"SELECT * FROM VAF_AttachmentLine WHERE VAF_Attachment_ID=" + GetVAF_Attachment_ID();
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 return;
             }
-            AD_Attachment_ID = GetAD_Attachment_ID();
+            VAF_Attachment_ID = GetVAF_Attachment_ID();
             List<AttachmentLineInfo> lines = new List<AttachmentLineInfo>();
             AttachmentLineInfo item = null;
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 item = new AttachmentLineInfo();
-                item.Line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_AttachmentLine_ID"]);
+                item.Line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_AttachmentLine_ID"]);
                 item.FileName = Util.GetValueOfString(ds.Tables[0].Rows[i]["FileName"]);
                 item.Filetype = Util.GetValueOfString(ds.Tables[0].Rows[i]["FileType"]);
                 item.Size = Util.GetValueOfDecimal(Util.GetValueOfString(ds.Tables[0].Rows[i]["FileSize"]));
@@ -1276,11 +1276,11 @@ namespace VAdvantage.Model
         {
             string ext = fileName.Substring(fileName.LastIndexOf('.'), fileName.Length - (fileName.LastIndexOf('.')));
             //save line 
-            int AD_AttachmentLine_ID = DB.GetNextID(GetCtx().GetAD_Client_ID(), "AD_AttachmentLine", null);
-            string sql = @"INSERT INTO AD_AttachmentLine (AD_ATTACHMENTLINE_ID ,
-                                    AD_ATTACHMENT_ID   ,    
-                                    AD_CLIENT_ID   ,
-                                    AD_ORG_ID       ,
+            int VAF_AttachmentLine_ID = DB.GetNextID(GetCtx().GetVAF_Client_ID(), "VAF_AttachmentLine", null);
+            string sql = @"INSERT INTO VAF_AttachmentLine (VAF_AttachmentLINE_ID ,
+                                    VAF_Attachment_ID   ,    
+                                    VAF_CLIENT_ID   ,
+                                    VAF_ORG_ID       ,
                                     CREATED        ,     
                                     CREATEDBY     ,
                                     EXPORT_ID    ,
@@ -1289,22 +1289,22 @@ namespace VAdvantage.Model
                                     FILETYPE      ,
                                     ISACTIVE       ,
                                     UPDATED       ,
-                                    UPDATEDBY) VALUES (" + AD_AttachmentLine_ID + "," + GetAD_Attachment_ID() + "," + GetCtx().GetAD_Client_ID() + "," + GetCtx().GetAD_Org_ID() + @",
-                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetAD_User_ID() + ",NULL,'" + fileName + "'," + size + ",'" + ext + @"','Y',
-                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetAD_User_ID() + ")";
+                                    UPDATEDBY) VALUES (" + VAF_AttachmentLine_ID + "," + GetVAF_Attachment_ID() + "," + GetCtx().GetVAF_Client_ID() + "," + GetCtx().GetVAF_Org_ID() + @",
+                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetVAF_UserContact_ID() + ",NULL,'" + fileName + "'," + size + ",'" + ext + @"','Y',
+                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetVAF_UserContact_ID() + ")";
             int res = DB.ExecuteQuery(sql);
             if (res == -1)
             {
                 return "False";
             }
-            if (!SaveFromFS(GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID, folderKey, fileName, AD_AttachmentLine_ID + ext, AD_AttachmentLine_ID))
+            if (!SaveFromFS(GetVAF_TableView_ID() + "_" + GetRecord_ID() + "_" + VAF_AttachmentLine_ID, folderKey, fileName, VAF_AttachmentLine_ID + ext, VAF_AttachmentLine_ID))
             {
-                DB.ExecuteQuery("DELETE AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID);
+                DB.ExecuteQuery("DELETE VAF_AttachmentLine WHERE VAF_AttachmentLine_ID=" + VAF_AttachmentLine_ID);
                 return "False";
             }
             return "";
         }
-        private bool SaveFromFS(string outputfileName, string folderKey, string fileName, string newFileName, int AD_AttachmentLine_ID)
+        private bool SaveFromFS(string outputfileName, string folderKey, string fileName, string newFileName, int VAF_AttachmentLine_ID)
         {
             try
             {
@@ -1318,17 +1318,17 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                X_AD_ClientInfo cInfo = null;
+                X_VAF_ClientDetail cInfo = null;
                 if (string.IsNullOrEmpty(GetFileLocation()))
                 {
 
-                    if (AD_Client_ID > 0)
+                    if (VAF_Client_ID > 0)
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                     }
                     string fileLocation = cInfo.GetSaveAttachmentOn();
                     if (string.IsNullOrEmpty(fileLocation))
@@ -1349,13 +1349,13 @@ namespace VAdvantage.Model
                         // Create client info object
                         if (cInfo == null)
                         {
-                            if (AD_Client_ID > 0)
+                            if (VAF_Client_ID > 0)
                             {
-                                cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                                cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                             }
                             else
                             {
-                                cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                                cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                             }
                         }
 
@@ -1379,8 +1379,8 @@ namespace VAdvantage.Model
 
                         MAttachmentReference attRef = new MAttachmentReference(GetCtx(), 0, Get_Trx());
 
-                        attRef.SetAD_AttachmentLine_ID(AD_AttachmentLine_ID);
-                        attRef.SetAD_AttachmentRef(resURI);
+                        attRef.SetVAF_AttachmentLine_ID(VAF_AttachmentLine_ID);
+                        attRef.SetVAF_AttachmentRef(resURI);
                         if (!attRef.Save(Get_Trx()))
                         {
                             log.Severe("MAttachmentReference not saved " + VLogger.RetrieveError().Name);
@@ -1513,7 +1513,7 @@ namespace VAdvantage.Model
                     byte[] fileData = System.IO.File.ReadAllBytes(filePath + "\\" + outputfileName);
                     if (fileData != null)
                     {
-                        string sql = " UPDATE AD_AttachmentLine SET BinaryData=@data WHERE  AD_AttachmentLine_ID=" + AD_AttachmentLine_ID;
+                        string sql = " UPDATE VAF_AttachmentLine SET BinaryData=@data WHERE  VAF_AttachmentLine_ID=" + VAF_AttachmentLine_ID;
                         SqlParameter[] param = new SqlParameter[1];
                         param[0] = new SqlParameter("@data", fileData);
                         int res = DB.ExecuteQuery(sql, param);
@@ -1566,7 +1566,7 @@ namespace VAdvantage.Model
         }
 
 
-        private bool UploadFtpFileWithoutRAM(string fullname, X_AD_ClientInfo cInfo, string fNameFTP)
+        private bool UploadFtpFileWithoutRAM(string fullname, X_VAF_ClientDetail cInfo, string fNameFTP)
         {
 
             FtpWebRequest request;
@@ -1574,14 +1574,14 @@ namespace VAdvantage.Model
             {
                 if (cInfo == null)
                 {
-                    // X_AD_ClientInfo cInfo = null;
-                    if (AD_Client_ID > 0)
+                    // X_VAF_ClientDetail cInfo = null;
+                    if (VAF_Client_ID > 0)
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                     }
                     else
                     {
-                        cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                        cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                     }
                 }
 
@@ -1649,11 +1649,11 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public string GetFile(int AD_AttachmentLine_ID)
+        public string GetFile(int VAF_AttachmentLine_ID)
         {
             try
             {
-                DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID);
+                DataSet ds = DB.ExecuteDataset("SELECT FileName, FileType FROM VAF_AttachmentLine WHERE VAF_AttachmentLine_ID=" + VAF_AttachmentLine_ID);
 
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1661,12 +1661,12 @@ namespace VAdvantage.Model
                     string folder = DateTime.Now.Ticks.ToString();
                     string filePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath);
                     Directory.CreateDirectory(Path.Combine(filePath, "TempDownload", folder));
-                    string filename = GetAD_Table_ID() + "_" + GetRecord_ID() + "_" + AD_AttachmentLine_ID;
+                    string filename = GetVAF_TableView_ID() + "_" + GetRecord_ID() + "_" + VAF_AttachmentLine_ID;
                     string zipFileName = "zip" + DateTime.Now.Ticks.ToString();
-                    if (fileLocation == X_AD_Attachment.FILELOCATION_Database)
+                    if (fileLocation == X_VAF_Attachment.FILELOCATION_Database)
                     {
                         byte[] data = null;
-                        object d = (DB.ExecuteScalar("SELECT BinaryData FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID=" + AD_AttachmentLine_ID)); //GetBinaryData();
+                        object d = (DB.ExecuteScalar("SELECT BinaryData FROM VAF_AttachmentLine WHERE VAF_AttachmentLine_ID=" + VAF_AttachmentLine_ID)); //GetBinaryData();
                         if (d != null && d != DBNull.Value)
                         {
                             data = (byte[])d;
@@ -1676,7 +1676,7 @@ namespace VAdvantage.Model
                             System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
                         }
                     }
-                    else if (fileLocation == X_AD_Attachment.FILELOCATION_FTPLocation)
+                    else if (fileLocation == X_VAF_Attachment.FILELOCATION_FTPLocation)
                     {
 
                         DownloadFtpFileWithoutRAM(filename, Path.Combine(filePath, "TempDownload", folder));
@@ -1685,7 +1685,7 @@ namespace VAdvantage.Model
                         System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
 
                     }
-                    else if (fileLocation == X_AD_Attachment.FILELOCATION_ServerFileSystem)
+                    else if (fileLocation == X_VAF_Attachment.FILELOCATION_ServerFileSystem)
                     {
                         //Copy to temp
                         System.IO.File.Copy(Path.Combine(filePath, "Attachments", filename), Path.Combine(filePath, "TempDownload", folder, filename));
@@ -1696,24 +1696,24 @@ namespace VAdvantage.Model
                         System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, filename));
 
                     }
-                    else if (fileLocation == X_AD_Attachment.FILELOCATION_WebService)
+                    else if (fileLocation == X_VAF_Attachment.FILELOCATION_WebService)
                     {
                         // Get file from web service and save it in temp folder
 
                         //(filename, Path.Combine(filePath, "TempDownload", folder));
 
                         // Create client info object
-                        X_AD_ClientInfo cInfo = null;
-                        if (AD_Client_ID > 0)
+                        X_VAF_ClientDetail cInfo = null;
+                        if (VAF_Client_ID > 0)
                         {
-                            cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                            cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                         }
                         else
                         {
-                            cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                            cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                         }
 
-                        string documentURI = GetDocumentURI(AD_Attachment_ID);
+                        string documentURI = GetDocumentURI(VAF_Attachment_ID);
 
                         if (!string.IsNullOrEmpty(documentURI))
                         {
@@ -1748,8 +1748,8 @@ namespace VAdvantage.Model
                     ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 720;
 
                     z.ExtractZip(Path.Combine(filePath, "TempDownload", folder, zipFileName), Path.Combine(filePath, "TempDownload", folder), null);
-                    System.IO.File.Copy(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1], Path.Combine(filePath, "TempDownload", folder) + "\\" + ds.Tables[0].Rows[0][0]);
-                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder) + "\\" + AD_AttachmentLine_ID + ds.Tables[0].Rows[0][1]);
+                    System.IO.File.Copy(Path.Combine(filePath, "TempDownload", folder) + "\\" + VAF_AttachmentLine_ID + ds.Tables[0].Rows[0][1], Path.Combine(filePath, "TempDownload", folder) + "\\" + ds.Tables[0].Rows[0][0]);
+                    System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder) + "\\" + VAF_AttachmentLine_ID + ds.Tables[0].Rows[0][1]);
                     System.IO.File.Delete(Path.Combine(filePath, "TempDownload", folder, zipFileName));
 
                     return folder;
@@ -1773,14 +1773,14 @@ namespace VAdvantage.Model
             {
 
 
-                X_AD_ClientInfo cInfo = null;
-                if (AD_Client_ID > 0)
+                X_VAF_ClientDetail cInfo = null;
+                if (VAF_Client_ID > 0)
                 {
-                    cInfo = new X_AD_ClientInfo(GetCtx(), AD_Client_ID, Get_Trx());
+                    cInfo = new X_VAF_ClientDetail(GetCtx(), VAF_Client_ID, Get_Trx());
                 }
                 else
                 {
-                    cInfo = new X_AD_ClientInfo(GetCtx(), GetCtx().GetAD_Client_ID(), Get_Trx());
+                    cInfo = new X_VAF_ClientDetail(GetCtx(), GetCtx().GetVAF_Client_ID(), Get_Trx());
                 }
 
 
@@ -1824,15 +1824,15 @@ namespace VAdvantage.Model
             }
         }
 
-        public string GetDocumentURI(int AD_Attachment_ID)
+        public string GetDocumentURI(int VAF_Attachment_ID)
         {
             DataSet attRefDs = DB.ExecuteDataset(@"
 SELECT 
-ar.AD_AttachmentRef AS DocumentURI
-FROM AD_Attachment att 
-INNER JOIN AD_AttachmentLine al ON att.AD_Attachment_ID = al.AD_Attachment_ID
-INNER JOIN AD_AttachmentReference ar ON al.AD_AttachmentLine_ID = ar.AD_AttachmentLine_ID
-WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.AD_Attachment_ID = " + AD_Attachment_ID
+ar.VAF_AttachmentRef AS DocumentURI
+FROM VAF_Attachment att 
+INNER JOIN VAF_AttachmentLine al ON att.VAF_Attachment_ID = al.VAF_Attachment_ID
+INNER JOIN VAF_AttachmentReference ar ON al.VAF_AttachmentLine_ID = ar.VAF_AttachmentLine_ID
+WHERE att.IsActive = 'Y' AND al.IsActive = 'Y' AND ar.IsActive = 'Y' AND att.VAF_Attachment_ID = " + VAF_Attachment_ID
 );
 
             if (attRefDs != null && attRefDs.Tables.Count > 0 && attRefDs.Tables[0].Rows.Count > 0)

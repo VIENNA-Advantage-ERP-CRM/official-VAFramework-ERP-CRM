@@ -72,7 +72,7 @@ static X_VADMS_AttachMetaData()
 static long serialVersionUID = 27723132101570L;
 /** Last Updated Timestamp 8/31/2015 1:09:44 PM */
 public static long updatedMS = 1441006784781L;
-/** AD_Table_ID=1000522 */
+/** VAF_TableView_ID=1000522 */
 public static int Table_ID;
  // =1000522;
 

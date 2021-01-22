@@ -33,14 +33,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class IssueReport : ProcessEngine.SvrProcess
     {
         /**	Issue to report			*/
-        private int _AD_Issue_ID = 0;
+        private int _VAF_Issue_ID = 0;
 
         /// <summary>
         /// perpare
         /// </summary>
         protected override void Prepare()
         {
-            _AD_Issue_ID = GetRecord_ID();
+            _VAF_Issue_ID = GetRecord_ID();
         }	//	prepare
 
         /// <summary>
@@ -49,16 +49,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("AD_Issue_ID=" + _AD_Issue_ID);
+            log.Info("VAF_Issue_ID=" + _VAF_Issue_ID);
             if (!MSystem.Get(GetCtx()).IsAutoErrorReport())
             {
                 return "NOT reported - Enable Error Reporting in Window System";
             }
             //
-            MIssue issue = new MIssue(GetCtx(), _AD_Issue_ID, Get_TrxName());
+            MIssue issue = new MIssue(GetCtx(), _VAF_Issue_ID, Get_TrxName());
             if (issue.Get_ID() == 0)
             {
-                return "No Issue to report - ID=" + _AD_Issue_ID;
+                return "No Issue to report - ID=" + _VAF_Issue_ID;
             }
             //
             String error = issue.Report();

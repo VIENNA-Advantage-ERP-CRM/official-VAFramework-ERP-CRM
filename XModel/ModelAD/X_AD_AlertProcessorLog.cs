@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AlertProcessorLog
+/** Generated Model for VAF_AlertHandlerLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AlertProcessorLog : PO
+public class X_VAF_AlertHandlerLog : PO
 {
-public X_AD_AlertProcessorLog (Context ctx, int AD_AlertProcessorLog_ID, Trx trxName) : base (ctx, AD_AlertProcessorLog_ID, trxName)
+public X_VAF_AlertHandlerLog (Context ctx, int VAF_AlertHandlerLog_ID, Trx trxName) : base (ctx, VAF_AlertHandlerLog_ID, trxName)
 {
-/** if (AD_AlertProcessorLog_ID == 0)
+/** if (VAF_AlertHandlerLog_ID == 0)
 {
-SetAD_AlertProcessorLog_ID (0);
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandlerLog_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetIsError (false);
 }
  */
 }
-public X_AD_AlertProcessorLog (Ctx ctx, int AD_AlertProcessorLog_ID, Trx trxName) : base (ctx, AD_AlertProcessorLog_ID, trxName)
+public X_VAF_AlertHandlerLog (Ctx ctx, int VAF_AlertHandlerLog_ID, Trx trxName) : base (ctx, VAF_AlertHandlerLog_ID, trxName)
 {
-/** if (AD_AlertProcessorLog_ID == 0)
+/** if (VAF_AlertHandlerLog_ID == 0)
 {
-SetAD_AlertProcessorLog_ID (0);
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandlerLog_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetIsError (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsError (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertHandlerLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_AlertProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertHandlerLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_AlertProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessorLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AlertHandlerLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AlertProcessorLog()
+static X_VAF_AlertHandlerLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_AlertProcessorLog()
 //static long serialVersionUID = 27562514360370L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043581L;
-/** AD_Table_ID=699 */
+/** VAF_TableView_ID=699 */
 public static int Table_ID;
  // =699;
 
-/** TableName=AD_AlertProcessorLog */
-public static String Table_Name="AD_AlertProcessorLog";
+/** TableName=VAF_AlertHandlerLog */
+public static String Table_Name="VAF_AlertHandlerLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AlertProcessorLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AlertHandlerLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Alert Processor Log.
-@param AD_AlertProcessorLog_ID Result of the execution of the Alert Processor */
-public void SetAD_AlertProcessorLog_ID (int AD_AlertProcessorLog_ID)
+@param VAF_AlertHandlerLog_ID Result of the execution of the Alert Processor */
+public void SetVAF_AlertHandlerLog_ID (int VAF_AlertHandlerLog_ID)
 {
-if (AD_AlertProcessorLog_ID < 1) throw new ArgumentException ("AD_AlertProcessorLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_AlertProcessorLog_ID", AD_AlertProcessorLog_ID);
+if (VAF_AlertHandlerLog_ID < 1) throw new ArgumentException ("VAF_AlertHandlerLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AlertHandlerLog_ID", VAF_AlertHandlerLog_ID);
 }
 /** Get Alert Processor Log.
 @return Result of the execution of the Alert Processor */
-public int GetAD_AlertProcessorLog_ID() 
+public int GetVAF_AlertHandlerLog_ID() 
 {
-Object ii = Get_Value("AD_AlertProcessorLog_ID");
+Object ii = Get_Value("VAF_AlertHandlerLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Alert Processor.
-@param AD_AlertProcessor_ID Alert Processor/Server Parameter */
-public void SetAD_AlertProcessor_ID (int AD_AlertProcessor_ID)
+@param VAF_AlertHandler_ID Alert Processor/Server Parameter */
+public void SetVAF_AlertHandler_ID (int VAF_AlertHandler_ID)
 {
-if (AD_AlertProcessor_ID < 1) throw new ArgumentException ("AD_AlertProcessor_ID is mandatory.");
-Set_ValueNoCheck ("AD_AlertProcessor_ID", AD_AlertProcessor_ID);
+if (VAF_AlertHandler_ID < 1) throw new ArgumentException ("VAF_AlertHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AlertHandler_ID", VAF_AlertHandler_ID);
 }
 /** Get Alert Processor.
 @return Alert Processor/Server Parameter */
-public int GetAD_AlertProcessor_ID() 
+public int GetVAF_AlertHandler_ID() 
 {
-Object ii = Get_Value("AD_AlertProcessor_ID");
+Object ii = Get_Value("VAF_AlertHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

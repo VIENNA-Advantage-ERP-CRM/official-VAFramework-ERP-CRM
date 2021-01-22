@@ -113,10 +113,10 @@ namespace VAdvantage.Classes
         /// <summary>
         ///Constructor get TableNAme from Table
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
-        public Query(int AD_Table_ID)
+        /// <param name="VAF_TableView_ID"></param>
+        public Query(int VAF_TableView_ID)
         {	//	Use Client Ctx as r/o
-            _tableName = Model.MTable.GetTableName(Utility.Env.GetCtx(), AD_Table_ID);
+            _tableName = Model.MTable.GetTableName(Utility.Env.GetCtx(), VAF_TableView_ID);
         }	//	MQ
         /// <summary>
         ///Create simple Equal Query.
@@ -154,19 +154,19 @@ namespace VAdvantage.Classes
         ///Get Query from Parameter
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_PInstance_ID"></param>
+        /// <param name="VAF_JInstance_ID"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public static Query Get(Ctx ctx, int AD_PInstance_ID, String tableName)
+        public static Query Get(Ctx ctx, int VAF_JInstance_ID, String tableName)
         {
             Query query = new Query(tableName);
             //	Temporary Tables - add qualifier (not displayed)
             if (tableName.StartsWith("T_"))
-                query.AddRestriction(tableName + ".AD_PInstance_ID=" + AD_PInstance_ID);
+                query.AddRestriction(tableName + ".VAF_JInstance_ID=" + VAF_JInstance_ID);
 
             //	How many rows do we have?
             int rows = 0;
-            String sql = "SELECT COUNT(*) FROM AD_PInstance_Para WHERE AD_PInstance_ID='" + AD_PInstance_ID + "'";
+            String sql = "SELECT COUNT(*) FROM VAF_JInstance_Para WHERE VAF_JInstance_ID='" + VAF_JInstance_ID + "'";
 
             IDataReader dr = null;
             try
@@ -199,28 +199,28 @@ namespace VAdvantage.Classes
                 return query;
 
             //	Msg.getMsg(GetCtx(), "Parameter")
-            bool trl = !Utility.Env.IsBaseLanguage(ctx, "AD_Process_Para");// GlobalVariable.IsBaseLanguage();
+            bool trl = !Utility.Env.IsBaseLanguage(ctx, "VAF_Job_Para");// GlobalVariable.IsBaseLanguage();
             if (!trl)
                 sql = "SELECT ip.ParameterName,ip.P_String,ip.P_String_To,"			//	1..3
                     + "ip.P_Number,ip.P_Number_To,"									//	4..5
                     + "ip.P_Date,ip.P_Date_To, ip.Info,ip.Info_To, "				//	6..9
-                    + "pp.Name, pp.IsRange,nvl(pp.AD_REFERENCE_ID,0) as AD_REFERENCE_ID, nvl(pp.LoadRecursiveData,'N') as LoadRecursiveData,nvl(pp.ShowChildOfSelected,'N') "										//	10..11..12..13
-                    + "FROM AD_PInstance_Para ip, AD_PInstance i, AD_Process_Para pp "
-                    + "WHERE i.AD_PInstance_ID=ip.AD_PInstance_ID"
-                    + " AND pp.AD_Process_ID=i.AD_Process_ID"
+                    + "pp.Name, pp.IsRange,nvl(pp.VAF_CONTROL_REF_ID,0) as VAF_CONTROL_REF_ID, nvl(pp.LoadRecursiveData,'N') as LoadRecursiveData,nvl(pp.ShowChildOfSelected,'N') "										//	10..11..12..13
+                    + "FROM VAF_JInstance_Para ip, VAF_JInstance i, VAF_Job_Para pp "
+                    + "WHERE i.VAF_JInstance_ID=ip.VAF_JInstance_ID"
+                    + " AND pp.VAF_Job_ID=i.VAF_Job_ID"
                     + " AND pp.ColumnName=ip.ParameterName"
-                    + " AND ip.AD_PInstance_ID='" + AD_PInstance_ID + "'";
+                    + " AND ip.VAF_JInstance_ID='" + VAF_JInstance_ID + "'";
             else
                 sql = "SELECT ip.ParameterName,ip.P_String,ip.P_String_To, ip.P_Number,ip.P_Number_To,"
                     + "ip.P_Date,ip.P_Date_To, ip.Info,ip.Info_To, "
-                    + "ppt.Name, pp.IsRange,nvl(pp.AD_REFERENCE_ID,0) as AD_REFERENCE_ID, nvl(pp.LoadRecursiveData,'N') as LoadRecursiveData,nvl(pp.ShowChildOfSelected,'N') "										//	10..11..12..13
-                    + "FROM AD_PInstance_Para ip, AD_PInstance i, AD_Process_Para pp, AD_Process_Para_Trl ppt "
-                    + "WHERE i.AD_PInstance_ID=ip.AD_PInstance_ID"
-                    + " AND pp.AD_Process_ID=i.AD_Process_ID"
+                    + "ppt.Name, pp.IsRange,nvl(pp.VAF_CONTROL_REF_ID,0) as VAF_CONTROL_REF_ID, nvl(pp.LoadRecursiveData,'N') as LoadRecursiveData,nvl(pp.ShowChildOfSelected,'N') "										//	10..11..12..13
+                    + "FROM VAF_JInstance_Para ip, VAF_JInstance i, VAF_Job_Para pp, VAF_Job_Para_TL ppt "
+                    + "WHERE i.VAF_JInstance_ID=ip.VAF_JInstance_ID"
+                    + " AND pp.VAF_Job_ID=i.VAF_Job_ID"
                     + " AND pp.ColumnName=ip.ParameterName"
-                    + " AND pp.AD_Process_Para_ID=ppt.AD_Process_Para_ID"
-                    + " AND ip.AD_PInstance_ID='" + AD_PInstance_ID + "'"
-                    + " AND ppt.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "'";
+                    + " AND pp.VAF_Job_Para_ID=ppt.VAF_Job_Para_ID"
+                    + " AND ip.VAF_JInstance_ID='" + VAF_JInstance_ID + "'"
+                    + " AND ppt.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "'";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
@@ -286,7 +286,7 @@ namespace VAdvantage.Classes
                     String Name = ds.Tables[0].Rows[row][9].ToString();
                     bool isRange = "Y".Equals(ds.Tables[0].Rows[row][10].ToString());
 
-                    int displayType = Util.GetValueOfInt(ds.Tables[0].Rows[row]["AD_REFERENCE_ID"].ToString());
+                    int displayType = Util.GetValueOfInt(ds.Tables[0].Rows[row]["VAF_CONTROL_REF_ID"].ToString());
 
 
                     if (ds.Tables[0].Rows[row][12].ToString().Equals("Y") && ((DisplayType.IsID(displayType) || DisplayType.MultiKey == displayType)))
@@ -499,7 +499,7 @@ namespace VAdvantage.Classes
                 {
                     _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
                 }
-                Language _language = Language.GetLanguage(_ctx.GetAD_Language());
+                Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
                 //Get Query to fetch identifier value from table based on column selected. it will be used to display identifires on for parameter in report.
                 eSql = VLookUpFactory.GetLookup_TableDirEmbed(_language, columnName, columnName.Substring(0, columnName.Length - 3));
@@ -658,7 +658,7 @@ namespace VAdvantage.Classes
             if (columnName == null)
                 return null;
             if (columnName.Equals("SalesRep_ID"))
-                return "AD_User_ID";
+                return "VAF_UserContact_ID";
             if (columnName.Equals("C_DocTypeTarget_ID"))
                 return "C_DocType_ID";
             if (columnName.Equals("Bill_BPartner_ID"))

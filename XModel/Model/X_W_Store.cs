@@ -102,7 +102,7 @@ static X_W_Store()
 //static long serialVersionUID 27562514385101L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068312L;
-/** AD_Table_ID=778 */
+/** VAF_TableView_ID=778 */
 public static int Table_ID;
  // =778;
 
@@ -145,18 +145,18 @@ StringBuilder sb = new StringBuilder ("X_W_Store[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -497,8 +497,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID=190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=190;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)

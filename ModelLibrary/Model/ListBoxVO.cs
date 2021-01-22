@@ -55,10 +55,10 @@ namespace VAdvantage.Model
         // Validation flag 
         public bool isValidated = false;
 
-        //	AD_Column_Info or AD_Process_Para	
+        //	VAF_Column_Info or VAF_Job_Para	
         public int Column_ID;
-        // Real AD_Reference_ID				
-        public int AD_Reference_Value_ID;
+        // Real VAF_Control_Ref_ID				
+        public int VAF_Control_Ref_Value_ID;
         // CreadedBy?updatedBy				
         public bool isCreadedUpdatedBy = false;
 

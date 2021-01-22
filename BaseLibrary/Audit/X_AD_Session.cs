@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514364163L;
         /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
         public static long updatedMS = 1280389047374L;
-        /** AD_Table_ID=566 */
+        /** VAF_TableView_ID=566 */
         public static int Table_ID;
         // =566;
 
@@ -118,18 +118,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         /// <returns>PriceList or null</returns>
         public static MPriceList GetDefault(Ctx ctx, bool IsSOPriceList)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             MPriceList retValue = null;
             //	Search for it in cache
             //Iterator<MPriceList> it = _cache.values().iterator();
@@ -81,7 +81,7 @@ namespace VAdvantage.Model
             while (it.MoveNext())
             {
                 retValue = (MPriceList)it.Current;
-                if (retValue.IsDefault() && retValue.GetAD_Client_ID() == AD_Client_ID)
+                if (retValue.IsDefault() && retValue.GetVAF_Client_ID() == VAF_Client_ID)
                     return retValue;
             }
 
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
             retValue = null;
             StringBuilder sql = new StringBuilder();
             sql.Append("SELECT * FROM M_PriceList "
-                + "WHERE AD_Client_ID=" + AD_Client_ID + " AND IsDefault='Y'");
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsDefault='Y'");
             if (IsSOPriceList)
             {
                 //pstmt.setString(2, "Y");
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             sql.Append("ORDER BY M_PriceList_ID");
 
             //String sql = "SELECT * FROM M_PriceList "
-            //    + "WHERE AD_Client_ID=" + AD_Client_ID
+            //    + "WHERE VAF_Client_ID=" + VAF_Client_ID
             //    + " AND IsDefault='Y'"
             //    + " AND IsSOPriceList=?" // YS: Changed from hard code to Parameter
             //    + "ORDER BY M_PriceList_ID";

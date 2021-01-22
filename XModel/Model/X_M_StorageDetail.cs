@@ -76,7 +76,7 @@ static X_M_StorageDetail()
 //static long serialVersionUID 27581088221905L;
 /** Last Updated Timestamp 3/1/2011 12:31:45 PM */
 public static long updatedMS = 1298962905116L;
-/** AD_Table_ID=2160 */
+/** VAF_TableView_ID=2160 */
 public static int Table_ID;
  // =2160;
 
@@ -191,8 +191,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** QtyType AD_Reference_ID=533 */
-public static int QTYTYPE_AD_Reference_ID=533;
+/** QtyType VAF_Control_Ref_ID=533 */
+public static int QTYTYPE_VAF_Control_Ref_ID=533;
 /** Allocated = A */
 public static String QTYTYPE_Allocated = "A";
 /** Dedicated = D */

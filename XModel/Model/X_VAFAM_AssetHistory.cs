@@ -74,7 +74,7 @@ static X_VAFAM_AssetHistory()
 static long serialVersionUID = 27715977413553L;
 /** Last Updated Timestamp 6/9/2015 5:44:56 PM */
 public static long updatedMS = 1433852096764L;
-/** AD_Table_ID=1000747 */
+/** VAF_TableView_ID=1000747 */
 public static int Table_ID;
  // =1000747;
 
@@ -117,18 +117,18 @@ StringBuilder sb = new StringBuilder ("X_VAFAM_AssetHistory[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

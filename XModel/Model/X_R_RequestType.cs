@@ -90,7 +90,7 @@ static X_R_RequestType()
 //static long serialVersionUID 27562514383315L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066526L;
-/** AD_Table_ID=529 */
+/** VAF_TableView_ID=529 */
 public static int Table_ID;
  // =529;
 
@@ -147,8 +147,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */

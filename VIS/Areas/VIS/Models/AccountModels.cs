@@ -57,7 +57,7 @@ namespace VIS.Models
         public string NewPassword { get; set; }
 
 
-        public int AD_User_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
 
         public bool ResetPwd { get; set; }
 

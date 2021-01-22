@@ -80,7 +80,7 @@ static X_C_Conversion_Rate()
 //static long serialVersionUID 27562514371466L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054677L;
-/** AD_Table_ID=140 */
+/** VAF_TableView_ID=140 */
 public static int Table_ID;
  // =140;
 
@@ -159,8 +159,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetC_Conversion_Rate_ID().ToString());
 }
 
-/** C_Currency_ID AD_Reference_ID=112 */
-public static int C_CURRENCY_ID_AD_Reference_ID=112;
+/** C_Currency_ID VAF_Control_Ref_ID=112 */
+public static int C_CURRENCY_ID_VAF_Control_Ref_ID=112;
 /** Set Currency.
 @param C_Currency_ID The Currency for this record */
 public void SetC_Currency_ID (int C_Currency_ID)
@@ -191,8 +191,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Currency_To_ID AD_Reference_ID=112 */
-public static int C_CURRENCY_TO_ID_AD_Reference_ID=112;
+/** C_Currency_To_ID VAF_Control_Ref_ID=112 */
+public static int C_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
 /** Set Currency To.
 @param C_Currency_To_ID Target currency */
 public void SetC_Currency_To_ID (int C_Currency_To_ID)

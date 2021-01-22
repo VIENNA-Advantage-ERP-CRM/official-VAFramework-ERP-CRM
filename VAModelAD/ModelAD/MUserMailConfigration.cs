@@ -11,13 +11,13 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MUserMailConfigration : X_AD_UserMailConfigration
+    public class MUserMailConfigration : X_VAF_UserMailConfigration
     {
 
-        public MUserMailConfigration(Ctx ctx, int AD_UserMailConfigration_ID, Trx trxName)
-            : base(ctx, AD_UserMailConfigration_ID, trxName)
+        public MUserMailConfigration(Ctx ctx, int VAF_UserMailConfigration_ID, Trx trxName)
+            : base(ctx, VAF_UserMailConfigration_ID, trxName)
         {
-            if (AD_UserMailConfigration_ID == 0)
+            if (VAF_UserMailConfigration_ID == 0)
             {
                
             }

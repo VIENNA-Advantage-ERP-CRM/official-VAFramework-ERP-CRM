@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27716737942354L;
         /** Last Updated Timestamp 6/18/2015 1:00:26 PM */
         public static long updatedMS = 1434612625565L;
-        /** AD_Table_ID=1000005 */
+        /** VAF_TableView_ID=1000005 */
         public static int Table_ID;
         // =1000005;
 
@@ -118,8 +118,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** Ad_Chart_BG_Color_ID AD_Reference_ID=266 */
-        public static int AD_CHART_BG_COLOR_ID_AD_Reference_ID = 266;
+        /** Ad_Chart_BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int AD_CHART_BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Chart Background Color.
         @param Ad_Chart_BG_Color_ID Chart Background Color */
         public void SetAd_Chart_BG_Color_ID(int Ad_Chart_BG_Color_ID)
@@ -137,8 +137,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ChartType AD_Reference_ID=1000000 */
-        public static int CHARTTYPE_AD_Reference_ID = 1000000;
+        /** ChartType VAF_Control_Ref_ID=1000000 */
+        public static int CHARTTYPE_VAF_Control_Ref_ID = 1000000;
         /** Column = 1 */
         public static String CHARTTYPE_Column = "1";
         /** Line = 2 */
@@ -335,8 +335,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** LabelColor_ID AD_Reference_ID=266 */
-        public static int LABELCOLOR_ID_AD_Reference_ID = 266;
+        /** LabelColor_ID VAF_Control_Ref_ID=266 */
+        public static int LABELCOLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Label Color.
         @param LabelColor_ID Label Color */
         public void SetLabelColor_ID(int LabelColor_ID)

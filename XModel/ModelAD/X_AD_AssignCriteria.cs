@@ -11,32 +11,32 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AssignCriteria
+/** Generated Model for VAF_AllotCriteria
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AssignCriteria : PO
+public class X_VAF_AllotCriteria : PO
 {
-public X_AD_AssignCriteria (Context ctx, int AD_AssignCriteria_ID, Trx trxName) : base (ctx, AD_AssignCriteria_ID, trxName)
+public X_VAF_AllotCriteria (Context ctx, int VAF_AllotCriteria_ID, Trx trxName) : base (ctx, VAF_AllotCriteria_ID, trxName)
 {
-/** if (AD_AssignCriteria_ID == 0)
+/** if (VAF_AllotCriteria_ID == 0)
 {
-SetAD_AssignCriteria_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotCriteria_ID (0);
+SetVAF_AllotTarget_ID (0);
 SetAD_SourceColumn_ID (0);
 SetOperation (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE AD_AssignTarget_ID=@AD_AssignTarget_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_AllotCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
  */
 }
-public X_AD_AssignCriteria (Ctx ctx, int AD_AssignCriteria_ID, Trx trxName) : base (ctx, AD_AssignCriteria_ID, trxName)
+public X_VAF_AllotCriteria (Ctx ctx, int VAF_AllotCriteria_ID, Trx trxName) : base (ctx, VAF_AllotCriteria_ID, trxName)
 {
-/** if (AD_AssignCriteria_ID == 0)
+/** if (VAF_AllotCriteria_ID == 0)
 {
-SetAD_AssignCriteria_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotCriteria_ID (0);
+SetVAF_AllotTarget_ID (0);
 SetAD_SourceColumn_ID (0);
 SetOperation (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE AD_AssignTarget_ID=@AD_AssignTarget_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_AllotCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
  */
 }
@@ -45,7 +45,7 @@ SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_A
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignCriteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotCriteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_AD_AssignCriteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignCriteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotCriteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_AD_AssignCriteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignCriteria (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AllotCriteria (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AssignCriteria()
+static X_VAF_AllotCriteria()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,12 +76,12 @@ static X_AD_AssignCriteria()
 //static long serialVersionUID = 27562514360448L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043659L;
-/** AD_Table_ID=932 */
+/** VAF_TableView_ID=932 */
 public static int Table_ID;
  // =932;
 
-/** TableName=AD_AssignCriteria */
-public static String Table_Name="AD_AssignCriteria";
+/** TableName=VAF_AllotCriteria */
+public static String Table_Name="VAF_AllotCriteria";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -115,42 +115,42 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AssignCriteria[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AllotCriteria[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Assign Criteria.
-@param AD_AssignCriteria_ID Auto assignment Criteria */
-public void SetAD_AssignCriteria_ID (int AD_AssignCriteria_ID)
+@param VAF_AllotCriteria_ID Auto assignment Criteria */
+public void SetVAF_AllotCriteria_ID (int VAF_AllotCriteria_ID)
 {
-if (AD_AssignCriteria_ID < 1) throw new ArgumentException ("AD_AssignCriteria_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignCriteria_ID", AD_AssignCriteria_ID);
+if (VAF_AllotCriteria_ID < 1) throw new ArgumentException ("VAF_AllotCriteria_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotCriteria_ID", VAF_AllotCriteria_ID);
 }
 /** Get Assign Criteria.
 @return Auto assignment Criteria */
-public int GetAD_AssignCriteria_ID() 
+public int GetVAF_AllotCriteria_ID() 
 {
-Object ii = Get_Value("AD_AssignCriteria_ID");
+Object ii = Get_Value("VAF_AllotCriteria_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Assign Target.
-@param AD_AssignTarget_ID Automatic Assignment Target Column */
-public void SetAD_AssignTarget_ID (int AD_AssignTarget_ID)
+@param VAF_AllotTarget_ID Automatic Assignment Target Column */
+public void SetVAF_AllotTarget_ID (int VAF_AllotTarget_ID)
 {
-if (AD_AssignTarget_ID < 1) throw new ArgumentException ("AD_AssignTarget_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignTarget_ID", AD_AssignTarget_ID);
+if (VAF_AllotTarget_ID < 1) throw new ArgumentException ("VAF_AllotTarget_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotTarget_ID", VAF_AllotTarget_ID);
 }
 /** Get Assign Target.
 @return Automatic Assignment Target Column */
-public int GetAD_AssignTarget_ID() 
+public int GetVAF_AllotTarget_ID() 
 {
-Object ii = Get_Value("AD_AssignTarget_ID");
+Object ii = Get_Value("VAF_AllotTarget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_SourceColumn_ID AD_Reference_ID=414 */
-public static int AD_SOURCECOLUMN_ID_AD_Reference_ID=414;
+/** AD_SourceColumn_ID VAF_Control_Ref_ID=414 */
+public static int AD_SOURCECOLUMN_ID_VAF_Control_Ref_ID=414;
 /** Set Source Column.
 @param AD_SourceColumn_ID The column used as the criteria */
 public void SetAD_SourceColumn_ID (int AD_SourceColumn_ID)
@@ -184,8 +184,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** Operation AD_Reference_ID=205 */
-public static int OPERATION_AD_Reference_ID=205;
+/** Operation VAF_Control_Ref_ID=205 */
+public static int OPERATION_VAF_Control_Ref_ID=205;
 /** != = != */
 public static String OPERATION_NotEq = "!=";
 /** < = << */

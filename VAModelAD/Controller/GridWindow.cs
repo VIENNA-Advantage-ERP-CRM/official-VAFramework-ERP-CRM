@@ -28,12 +28,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
-        public static GridWindow Get(Context ctx, int windowNo, int AD_Window_ID)
+        public static GridWindow Get(Context ctx, int windowNo, int VAF_Screen_ID)
         {
-            log.Config("Window=" + windowNo + ", AD_Window_ID=" + AD_Window_ID);
-            GridWindowVO mWindowVO = GridWindowVO.Create(ctx, windowNo, AD_Window_ID);
+            log.Config("Window=" + windowNo + ", VAF_Screen_ID=" + VAF_Screen_ID);
+            GridWindowVO mWindowVO = GridWindowVO.Create(ctx, windowNo, VAF_Screen_ID);
             if (mWindowVO == null)
                 return null;
             return new GridWindow(mWindowVO);
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         /// </summary>
         public void Dispose()
         {
-    		log.Info("AD_Window_ID=" + _vo.AD_Window_ID);
+    		log.Info("VAF_Screen_ID=" + _vo.VAF_Screen_ID);
 		    for (int i = 0; i < _tabs.Count; i++)
             {
 			 _tabs[i].Dispose();
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
                             }	//	for all previous tabs
                         }	//	parents.size > 1
                     }	//	set Link column
-                    mTab.SetLinkColumnName(null);	//	overwrites, if AD_Column_ID exists
+                    mTab.SetLinkColumnName(null);	//	overwrites, if VAF_Column_ID exists
                     //
                     _tabs.Add(mTab);
                 }
@@ -146,8 +146,8 @@ namespace VAdvantage.Model
         private void LogAccess()
         {
             MSession session = MSession.Get(_vo.GetCtx(), true);
-            session.WindowLog(_vo.GetCtx().GetAD_Client_ID(), _vo.GetCtx().GetAD_Org_ID(),
-                GetAD_Window_ID(), 0);
+            session.WindowLog(_vo.GetCtx().GetVAF_Client_ID(), _vo.GetCtx().GetVAF_Org_ID(),
+                GetVAF_Screen_ID(), 0);
         }	//
 
        /// <summary>
@@ -165,10 +165,10 @@ namespace VAdvantage.Model
        /// <returns></returns>
         public System.Drawing.Image GetImage()
         {
-            if (_vo.AD_Image_ID == 0)
+            if (_vo.VAF_Image_ID == 0)
                 return null;
             //
-            Model.MImage mImage = MImage.Get((Context)_vo.GetCtx(), _vo.AD_Image_ID);
+            Model.MImage mImage = MImage.Get((Context)_vo.GetCtx(), _vo.VAF_Image_ID);
             return mImage.GetImage();
             
         }   //  getImage
@@ -179,10 +179,10 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public System.Drawing.Icon GetIcon()
         {
-            if (_vo.AD_Image_ID == 0)
+            if (_vo.VAF_Image_ID == 0)
                 return null;
             //
-            //MImage mImage = MImage.get(m_vo.ctx, m_vo.AD_Image_ID);
+            //MImage mImage = MImage.get(m_vo.ctx, m_vo.VAF_Image_ID);
             //return mImage.getIcon();
             return null;
         }   //  
@@ -221,9 +221,9 @@ namespace VAdvantage.Model
         ///Get Window_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return _vo.AD_Window_ID;
+            return _vo.VAF_Screen_ID;
         }
 
         public int GetWindowWidth()
@@ -309,7 +309,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override  String ToString()
         {
-            return "MWindow[" + _vo.windowNo + "," + _vo.Name + " (" + _vo.AD_Window_ID + ")]";
+            return "MWindow[" + _vo.windowNo + "," + _vo.Name + " (" + _vo.VAF_Screen_ID + ")]";
         }  
 
        /// <summary>
@@ -322,12 +322,12 @@ namespace VAdvantage.Model
             if (recalc || _modelUpdated == null)
             {
                 String sql = "SELECT MAX(w.Updated), MAX(t.Updated), MAX(tt.Updated), MAX(f.Updated), MAX(c.Updated) "
-                    + "FROM AD_Window w"
-                    + " INNER JOIN AD_Tab t ON (w.AD_Window_ID=t.AD_Window_ID)"
-                    + " INNER JOIN AD_Table tt ON (t.AD_Table_ID=tt.AD_Table_ID)"
-                    + " INNER JOIN AD_Field f ON (t.AD_Tab_ID=f.AD_Tab_ID)"
-                    + " INNER JOIN AD_Column c ON (f.AD_Column_ID=c.AD_Column_ID) "
-                    + "WHERE w.AD_Window_ID=" + GetAD_Window_ID();
+                    + "FROM VAF_Screen w"
+                    + " INNER JOIN VAF_Tab t ON (w.VAF_Screen_ID=t.VAF_Screen_ID)"
+                    + " INNER JOIN VAF_TableView tt ON (t.VAF_TableView_ID=tt.VAF_TableView_ID)"
+                    + " INNER JOIN VAF_Field f ON (t.VAF_Tab_ID=f.VAF_Tab_ID)"
+                    + " INNER JOIN VAF_Column c ON (f.VAF_Column_ID=c.VAF_Column_ID) "
+                    + "WHERE w.VAF_Screen_ID=" + GetVAF_Screen_ID();
                 try
                 {
                     //System.Data.IDataReader dr = DataBase.DB.ExecuteReader(sql);
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
         {
             for (int i = 0; i <= _tabs.Count - 1; i++)
             {
-                if (ID.Equals(_tabs[i].GetAD_Tab_ID()))
+                if (ID.Equals(_tabs[i].GetVAF_Tab_ID()))
                     return _tabs[i];
             }
 

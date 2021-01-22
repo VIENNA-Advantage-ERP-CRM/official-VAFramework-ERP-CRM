@@ -162,14 +162,14 @@ namespace VAdvantage.Process
             //	Message
 
             //		UpdatedBy: Joe
-            int UpdatedBy = GetCtx().GetAD_User_ID();
+            int UpdatedBy = GetCtx().GetVAF_UserContact_ID();
             MUser from = MUser.Get(GetCtx(), UpdatedBy);
 
             FileInfo pdf = CreatePDF();
             log.Finer(message.ToString());
 
             //	Prepare sending Notice/Mail
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
             //	ReSet from if external
             if (from.GetEMailUser() == null || from.GetEMailUserPW() == null)
                 from = null;
@@ -179,12 +179,12 @@ namespace VAdvantage.Process
 
             /** List of users - aviod duplicates	*/
             List<int> userList = new List<int>();
-            String sql = "SELECT u.AD_User_ID, u.NotificationType, u.EMail, u.Name, MAX(r.AD_Role_ID) "
+            String sql = "SELECT u.VAF_UserContact_ID, u.NotificationType, u.EMail, u.Name, MAX(r.VAF_Role_ID) "
                 + "FROM RV_RequestUpdates_Only ru"
-                + " INNER JOIN AD_User u ON (ru.AD_User_ID=u.AD_User_ID)"
-                + " LEFT OUTER JOIN AD_User_Roles r ON (u.AD_User_ID=r.AD_User_ID) "
+                + " INNER JOIN VAF_UserContact u ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)"
+                + " LEFT OUTER JOIN VAF_UserContact_Roles r ON (u.VAF_UserContact_ID=r.VAF_UserContact_ID) "
                 + "WHERE ru.R_Request_ID= " + _req.GetR_Request_ID()
-                + " GROUP BY u.AD_User_ID, u.NotificationType, u.EMail, u.Name";
+                + " GROUP BY u.VAF_UserContact_ID, u.NotificationType, u.EMail, u.Name";
 
             IDataReader idr = null;
             try
@@ -192,10 +192,10 @@ namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    int AD_User_ID = Utility.Util.GetValueOfInt(idr[0]);
+                    int VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[0]);
                     String NotificationType = Util.GetValueOfString(idr[1]); //idr.GetString(1);
                     if (NotificationType == null)
-                        NotificationType = X_AD_User.NOTIFICATIONTYPE_EMail;
+                        NotificationType = X_VAF_UserContact.NOTIFICATIONTYPE_EMail;
                     String email = Util.GetValueOfString(idr[2]);// idr.GetString(2);
 
                     if (String.IsNullOrEmpty(email))
@@ -205,62 +205,62 @@ namespace VAdvantage.Process
 
                     String Name = Util.GetValueOfString(idr[3]);//idr.GetString(3);
                     //	Role
-                    int AD_Role_ID = Utility.Util.GetValueOfInt(idr[4]);
+                    int VAF_Role_ID = Utility.Util.GetValueOfInt(idr[4]);
                     if (idr == null)
                     {
-                        AD_Role_ID = -1;
+                        VAF_Role_ID = -1;
                     }
 
                     //	Don't send mail to oneself
-                    //		if (AD_User_ID == UpdatedBy)
+                    //		if (VAF_UserContact_ID == UpdatedBy)
                     //			continue;
 
                     //	No confidential to externals
-                    if (AD_Role_ID == -1
+                    if (VAF_Role_ID == -1
                         && (_req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
                             || _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_PrivateInformation)))
                         continue;
 
-                    if (X_AD_User.NOTIFICATIONTYPE_None.Equals(NotificationType))
+                    if (X_VAF_UserContact.NOTIFICATIONTYPE_None.Equals(NotificationType))
                     {
                         log.Config("Opt out: " + Name);
                         continue;
                     }
                     // JID_1858 IF User's Notification Type is Notice is allow to send notification to respective User
-                    if ((X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
-                        || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
+                    if ((X_VAF_UserContact.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
+                        || X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
                         && (email == null || email.Length == 0))
                     {
-                        if (AD_Role_ID >= 0)
-                            NotificationType = X_AD_User.NOTIFICATIONTYPE_Notice;
+                        if (VAF_Role_ID >= 0)
+                            NotificationType = X_VAF_UserContact.NOTIFICATIONTYPE_Notice;
                         else
                         {
                             log.Config("No EMail: " + Name);
                             continue;
                         }
                     }
-                    if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID < 0)
+                    if (X_VAF_UserContact.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
+                        && VAF_Role_ID < 0)
                     {
                         log.Config("No internal User: " + Name);
                         continue;
                     }
 
                     //	Check duplicate receivers
-                    int ii = AD_User_ID;
+                    int ii = VAF_UserContact_ID;
                     if (userList.Contains(ii))
                         continue;
                     userList.Add(ii);
 
                     // check the user roles for organization access.
-                    MUser user = new MUser(GetCtx(), AD_User_ID, null);
-                    MRole[] role = user.GetRoles(GetAD_Org_ID());
+                    MUser user = new MUser(GetCtx(), VAF_UserContact_ID, null);
+                    MRole[] role = user.GetRoles(GetVAF_Org_ID());
                     if (role.Length == 0)
                         continue;
 
 
                     //
-                    SendNoticeNow(AD_User_ID, NotificationType,
+                    SendNoticeNow(VAF_UserContact_ID, NotificationType,
                         client, from, subject, message.ToString(), pdf);
                     finalMsg.Append("\n").Append(user.GetName()).Append(".");
                     isEmailSent = true;
@@ -272,10 +272,10 @@ namespace VAdvantage.Process
                 for (int i = 0; i < _users.Count; i++)
                 {
                     MUser user = new MUser(GetCtx(), _users[i], null);
-                    int AD_User_ID = user.GetAD_User_ID();
+                    int VAF_UserContact_ID = user.GetVAF_UserContact_ID();
                     String NotificationType = user.GetNotificationType(); //idr.GetString(1);
                     if (NotificationType == null)
-                        NotificationType = X_AD_User.NOTIFICATIONTYPE_EMail;
+                        NotificationType = X_VAF_UserContact.NOTIFICATIONTYPE_EMail;
                     String email = user.GetEMail();// idr.GetString(2);
 
                     if (String.IsNullOrEmpty(email))
@@ -286,7 +286,7 @@ namespace VAdvantage.Process
                     String Name = user.GetName();//idr.GetString(3);
                                                  //	Role                  
 
-                    if (X_AD_User.NOTIFICATIONTYPE_None.Equals(NotificationType))
+                    if (X_VAF_UserContact.NOTIFICATIONTYPE_None.Equals(NotificationType))
                     {
                         log.Config("Opt out: " + Name);
                         continue;
@@ -305,8 +305,8 @@ namespace VAdvantage.Process
                     finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
                 }
 
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetVAF_UserContact_ID(),
                     X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
@@ -355,7 +355,7 @@ namespace VAdvantage.Process
             {
                 message = new StringBuilder();
                 //		UpdatedBy: Joe
-                int UpdatedBy = GetCtx().GetAD_User_ID();
+                int UpdatedBy = GetCtx().GetVAF_UserContact_ID();
                 MUser from = MUser.Get(GetCtx(), UpdatedBy);
                 if (from != null)
                     message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
@@ -433,27 +433,27 @@ namespace VAdvantage.Process
         /// <summary>
         /// Send notice to user
         /// </summary>
-        /// <param name="AD_User_ID">Id of user</param>
+        /// <param name="VAF_UserContact_ID">Id of user</param>
         /// <param name="NotificationType"> Notification type</param>
         /// <param name="client"> Tenant object</param>
         /// <param name="from"> From user notice</param>
         /// <param name="subject">Subject of notice.</param>
         /// <param name="message">Message to be sent to user</param>
         /// <param name="pdf"> Attachment</param>
-        private void SendNoticeNow(int AD_User_ID, String NotificationType,
+        private void SendNoticeNow(int VAF_UserContact_ID, String NotificationType,
           MClient client, MUser from, String subject, String message, FileInfo pdf)
         {
-            MUser to = MUser.Get(GetCtx(), AD_User_ID);
+            MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
             if (NotificationType == null)
                 NotificationType = to.GetNotificationType();
             //	Send Mail
-            if (X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
-                || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
+            if (X_VAF_UserContact.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
+                || X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
                 VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
-                _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                _mAttachment.SetAD_Table_ID(MTable.Get_Table_ID(Table_Name));
+                _mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                _mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
+                _mAttachment.SetVAF_TableView_ID(MTable.Get_Table_ID(Table_Name));
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");
@@ -485,7 +485,7 @@ namespace VAdvantage.Process
                 {
                     log.Warning("Failed: " + to);
                     _failure++;
-                    NotificationType = X_AD_User.NOTIFICATIONTYPE_Notice;
+                    NotificationType = X_VAF_UserContact.NOTIFICATIONTYPE_Notice;
                     _mAttachment.SetIsMailSent(false);
                 }
 
@@ -493,11 +493,11 @@ namespace VAdvantage.Process
             }
 
             //	Send Note
-            if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
+            if (X_VAF_UserContact.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
+                || X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, AD_User_ID,
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, VAF_UserContact_ID,
                     X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())
@@ -513,28 +513,28 @@ namespace VAdvantage.Process
         private List<int> SendRoleNotice()
         {
             List<int> _users = new List<int>();
-            string sql = @"SELECT AD_User.ad_user_ID,
-                         AD_User_Roles.AD_Role_ID
-                        FROM AD_User_Roles
-                        INNER JOIN ad_user
-                        ON (AD_User_Roles.AD_User_ID    =AD_User.AD_User_ID)
-                        WHERE AD_User_Roles.AD_Role_ID IN
-                          (SELECT AD_Role_ID
+            string sql = @"SELECT VAF_UserContact.VAF_UserContact_ID,
+                         VAF_UserContact_Roles.VAF_Role_ID
+                        FROM VAF_UserContact_Roles
+                        INNER JOIN VAF_UserContact
+                        ON (VAF_UserContact_Roles.VAF_UserContact_ID    =VAF_UserContact.VAF_UserContact_ID)
+                        WHERE VAF_UserContact_Roles.VAF_Role_ID IN
+                          (SELECT VAF_Role_ID
                           FROM R_RequestTypeUpdates
-                          WHERE AD_Role_ID   IS NOT NULL
+                          WHERE VAF_Role_ID   IS NOT NULL
                           AND R_RequestType_ID=" + _req.GetR_RequestType_ID() + @"
                           AND IsActive        ='Y'
                           )
-                        AND AD_User_Roles.AD_User_ID NOT IN
-                          (SELECT u.AD_User_ID
+                        AND VAF_UserContact_Roles.VAF_UserContact_ID NOT IN
+                          (SELECT u.VAF_UserContact_ID
                           FROM RV_RequestUpdates_Only ru
-                          INNER JOIN AD_User u
-                          ON (ru.AD_User_ID=u.AD_User_ID)
-                          LEFT OUTER JOIN AD_User_Roles r
-                          ON (u.AD_User_ID     =r.AD_User_ID)
+                          INNER JOIN VAF_UserContact u
+                          ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)
+                          LEFT OUTER JOIN VAF_UserContact_Roles r
+                          ON (u.VAF_UserContact_ID     =r.VAF_UserContact_ID)
                           WHERE ru.R_Request_ID=" + _req.GetR_Request_ID() + @"
                           )
-                        AND ad_user.email IS NOT NULL";
+                        AND VAF_UserContact.email IS NOT NULL";
 
             DataSet _ds = DB.ExecuteDataset(sql, null, null);
             if (_ds != null && _ds.Tables[0].Rows.Count > 0)
@@ -553,7 +553,7 @@ namespace VAdvantage.Process
         private List<int> validateUsers(DataSet _ds)
         {
             List<int> users = new List<int>();
-            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["AD_Role_ID"]), null);
+            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["VAF_Role_ID"]), null);
             bool isAllUser = false;
             // if access all organization
             if (role.IsAccessAllOrgs())
@@ -563,7 +563,7 @@ namespace VAdvantage.Process
             // if not access user organization access.
             if (!isAllUser && !role.IsUseUserOrgAccess())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm VAF_Role_OrgRights WHERE IsActive='Y' AND  VAF_Role_ID=" + role.GetVAF_Role_ID() + " AND VAF_Org_ID IN (" + _req.GetVAF_Org_ID() + ",0)")) > 0)
                 {
                     isAllUser = true;
                 }
@@ -576,13 +576,13 @@ namespace VAdvantage.Process
             {
                 if (isAllUser)
                 {
-                    users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
+                    users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + _req.GetAD_Org_ID() + ",0)")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm VAF_UserContact_OrgRights WHERE VAF_UserContact_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAF_UserContact_ID"]) + " AND  IsActive='Y' AND  VAF_Org_ID IN (" + _req.GetVAF_Org_ID() + ",0)")) > 0)
                     {
-                        users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
+                        users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                     }
                 }
             }

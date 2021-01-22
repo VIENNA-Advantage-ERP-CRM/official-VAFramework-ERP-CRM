@@ -17,7 +17,7 @@ using BaseLibrary.Model;
 
 namespace VAdvantage.Model
 {
-    public class MTable : X_AD_Table
+    public class MTable : X_VAF_TableView
     {
         private static VLogger s_log = VLogger.GetVLogger(typeof(MTable).FullName);
         private MViewComponent[] m_vcs = null;
@@ -43,14 +43,14 @@ namespace VAdvantage.Model
         /**************************************************************************
       * 	Standard Constructor
       *	@param ctx context
-      *	@param AD_Table_ID id
+      *	@param VAF_TableView_ID id
       *	@param trxName transaction
       */
-        public MTable(Ctx ctx, int AD_Table_ID, Trx trxName)
-            : base(ctx, AD_Table_ID, trxName)
+        public MTable(Ctx ctx, int VAF_TableView_ID, Trx trxName)
+            : base(ctx, VAF_TableView_ID, trxName)
         {
-            //super(ctx, AD_Table_ID, trxName);
-            if (AD_Table_ID == 0)
+            //super(ctx, VAF_TableView_ID, trxName);
+            if (VAF_TableView_ID == 0)
             {
                 //	setName (null);
                 //	setTableName (null);
@@ -70,9 +70,9 @@ namespace VAdvantage.Model
 	 *	@return sql statement
 	 */
         
-        private static CCache<int, MTable> s_cache = new CCache<int, MTable>("AD_Table", 20);
+        private static CCache<int, MTable> s_cache = new CCache<int, MTable>("VAF_TableView", 20);
 
-        private static CCache<int, bool> s_cacheHasKey = new CCache<int, bool>("AD_Table_key", 20);
+        private static CCache<int, bool> s_cacheHasKey = new CCache<int, bool>("VAF_TableView_key", 20);
 
         public String GetSQLCreate()
         {
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
                 //
                 if (column.IsKey())
                 {
-                    constraints.Append(", CONSTRAINT PK").Append(GetAD_Table_ID())
+                    constraints.Append(", CONSTRAINT PK").Append(GetVAF_TableView_ID())
                         .Append(" PRIMARY KEY (").Append(column.GetColumnName()).Append(")");
                     hasPK = true;
                 }
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
                 {
                     if (unqConstraints.Length == 0)
                     {
-                        unqConstraints.Append(", CONSTRAINT UK").Append(GetAD_Table_ID())
+                        unqConstraints.Append(", CONSTRAINT UK").Append(GetVAF_TableView_ID())
                         .Append(" UNIQUE (").Append(column.GetColumnName()); 
                     }
                     else
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
                         cols.Append(", ");
                     cols.Append(column.GetColumnName());
                 }
-                sb.Append(", CONSTRAINT PK").Append(GetAD_Table_ID())
+                sb.Append(", CONSTRAINT PK").Append(GetVAF_TableView_ID())
                     .Append(" PRIMARY KEY (").Append(cols).Append(")");
             }
             if (unqConstraints.Length > 0)
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
         {
             if (m_columns != null && !requery)
                 return m_columns;
-            String sql = "SELECT * FROM AD_Column WHERE AD_Table_ID=@AD_Table_Id ORDER BY ColumnName";
+            String sql = "SELECT * FROM VAF_Column WHERE VAF_TableView_ID=@VAF_TableView_Id ORDER BY ColumnName";
 
             List<MColumn> list = GetCols(sql);
             //
@@ -190,7 +190,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_Table_Id", GetAD_Table_ID());
+                param[0] = new SqlParameter("@VAF_TableView_Id", GetVAF_TableView_ID());
                 //DataSet ds = ExecuteQuery.ExecuteDataset(sql, param);
                 DataSet ds = DB.ExecuteDataset(sql, param, Get_Trx());
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -221,17 +221,17 @@ namespace VAdvantage.Model
         /**
      * 	Get Table from Cache
      *	@param ctx context
-     *	@param AD_Table_ID id
+     *	@param VAF_TableView_ID id
      *	@return MTable
      */
-        public static MTable Get(Ctx ctx, int AD_Table_ID)
+        public static MTable Get(Ctx ctx, int VAF_TableView_ID)
         {
-            int key = AD_Table_ID;
+            int key = VAF_TableView_ID;
             MTable retValue = null;
             s_cache.TryGetValue(key, out retValue);
             if (retValue != null)
                 return retValue;
-            retValue = new MTable(ctx, AD_Table_ID, null);
+            retValue = new MTable(ctx, VAF_TableView_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -286,7 +286,7 @@ namespace VAdvantage.Model
             }
             //	Get direct
             MTable retValue = null;
-            String sql = "SELECT * FROM AD_Table WHERE UPPER(TableName)=UPPER('" + tableName + "')";
+            String sql = "SELECT * FROM VAF_TableView WHERE UPPER(TableName)=UPPER('" + tableName + "')";
             DataSet ds = null;
             try
             {
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
             ds = null;
             if (retValue != null)
             {
-                int key = retValue.GetAD_Table_ID();
+                int key = retValue.GetVAF_TableView_ID();
                 s_cache.Add(key, retValue);
             }
             return retValue;
@@ -316,29 +316,29 @@ namespace VAdvantage.Model
         /// Get Table Name
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <returns>table name</returns>
-        public static String GetTableName(Ctx ctx, int AD_Table_ID)
+        public static String GetTableName(Ctx ctx, int VAF_TableView_ID)
         {
-            return MTable.Get(ctx, AD_Table_ID).GetTableName();
+            return MTable.Get(ctx, VAF_TableView_ID).GetTableName();
         }
 
-        public bool Haskey(int AD_Table_ID)
+        public bool Haskey(int VAF_TableView_ID)
         {
             if (s_cacheHasKey.Count == 0)
             {
                 LoadHasKeyData();
             }
-            if (s_cacheHasKey.ContainsKey(AD_Table_ID))
+            if (s_cacheHasKey.ContainsKey(VAF_TableView_ID))
             {
-                return s_cacheHasKey[AD_Table_ID];
+                return s_cacheHasKey[VAF_TableView_ID];
             }
             return false;
         }
 
         private void LoadHasKeyData()
         {
-            string sql = "SELECT t.AD_Table_ID , (SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE UPPER(ColumnName) = UPPER(t.TableName)||'_ID' AND AD_Table_ID=t.AD_Table_ID AND IsActive='Y' ) as hasKey FROM AD_Table t";
+            string sql = "SELECT t.VAF_TableView_ID , (SELECT COUNT(VAF_Column_ID) FROM VAF_Column WHERE UPPER(ColumnName) = UPPER(t.TableName)||'_ID' AND VAF_TableView_ID=t.VAF_TableView_ID AND IsActive='Y' ) as hasKey FROM VAF_TableView t";
             IDataReader dr = null;
             try
             {
@@ -607,7 +607,7 @@ namespace VAdvantage.Model
                     string verTblName = GetTableName() + "_Ver";
                     if (HasVersionData(verTblName))
                     {
-                        int countMtnVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + GetAD_Table_ID() + " AND IsMaintainVersions = 'Y'"));
+                        int countMtnVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Column_ID) FROM VAF_Column WHERE VAF_TableView_ID = " + GetVAF_TableView_ID() + " AND IsMaintainVersions = 'Y'"));
                         if (countMtnVerCol == 0)
                             return false;
                     }
@@ -623,9 +623,9 @@ namespace VAdvantage.Model
         /// <returns>True/False</returns>
         public bool HasVersionData(string TblName)
         {
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + TblName + "'", null, Get_Trx())) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_TableView_ID) FROM VAF_TableView WHERE TableName = '" + TblName + "'", null, Get_Trx())) > 0)
             {
-                int countRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Client_ID) FROM " + TblName, null, Get_TrxName()));
+                int countRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Client_ID) FROM " + TblName, null, Get_TrxName()));
                 if (countRec > 0)
                 {
                     log.SaveError("VersionDataExists", Utility.Msg.GetElement(GetCtx(), "VersionDataExists"));
@@ -664,12 +664,12 @@ namespace VAdvantage.Model
             {
                 if (!newRecord && IsMaintainVersions())
                 {
-                    int ColID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT AD_Column_ID FROM AD_Column WHERE IsActive = 'Y' AND AD_Table_ID = " + GetAD_Table_ID() + " ORDER BY ColumnName", null, Get_Trx()));
+                    int ColID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAF_Column_ID FROM VAF_Column WHERE IsActive = 'Y' AND VAF_TableView_ID = " + GetVAF_TableView_ID() + " ORDER BY ColumnName", null, Get_Trx()));
                     if (ColID > 0)
                     {
                         MColumn column = new MColumn(GetCtx(), ColID, Get_Trx());
                         MasterVersions mv = new MasterVersions();
-                        string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+                        string versionMsg = mv.CreateVersionInfo(column.GetVAF_Column_ID(), column.GetVAF_TableView_ID(), Get_Trx());
                     }
                 }
             }
@@ -822,7 +822,7 @@ namespace VAdvantage.Model
                 return m_vcs;
             //
             List<MViewComponent> list = new List<MViewComponent>();
-            String sql = "SELECT * FROM AD_ViewComponent WHERE AD_Table_ID = " + this.GetAD_Table_ID() + " AND IsActive = 'Y'";
+            String sql = "SELECT * FROM VAF_DBViewElement WHERE VAF_TableView_ID = " + this.GetVAF_TableView_ID() + " AND IsActive = 'Y'";
             IDataReader idr = null;
             try
             {

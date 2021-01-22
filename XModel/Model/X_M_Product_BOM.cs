@@ -43,7 +43,7 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
  added by ->Harwinder */
         static X_M_Product_BOM() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763409763836L;/** Last Updated Timestamp 12/9/2016 5:24:07 PM */
-        public static long updatedMS = 1481284447047L;/** AD_Table_ID=383 */
+        public static long updatedMS = 1481284447047L;/** VAF_TableView_ID=383 */
         public static int Table_ID; // =383;
         /** TableName=M_Product_BOM */
         public static String Table_Name = "M_Product_BOM";
@@ -66,8 +66,8 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
         public void SetBOMQty(Decimal? BOMQty) { if (BOMQty == null) throw new ArgumentException("BOMQty is mandatory."); Set_Value("BOMQty", (Decimal?)BOMQty); }/** Get Quantity.
 @return Bill of Materials Quantity */
         public Decimal GetBOMQty() { Object bd = Get_Value("BOMQty"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** BOMType AD_Reference_ID=279 */
-        public static int BOMTYPE_AD_Reference_ID = 279;/** In alternative Group 1 = 1 */
+        /** BOMType VAF_Control_Ref_ID=279 */
+        public static int BOMTYPE_VAF_Control_Ref_ID = 279;/** In alternative Group 1 = 1 */
         public static String BOMTYPE_InAlternativeGroup1 = "1";/** In alternative Group 2 = 2 */
         public static String BOMTYPE_InAlternativeGroup2 = "2";/** In alternaltve Group 3 = 3 */
         public static String BOMTYPE_InAlternaltveGroup3 = "3";/** In alternative Group 4 = 4 */
@@ -111,8 +111,8 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
         public void SetLine(int Line) { Set_Value("Line", Line); }/** Get Line No.
 @return Unique line for this document */
         public int GetLine() { Object ii = Get_Value("Line"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** M_ProductBOM_ID AD_Reference_ID=162 */
-        public static int M_PRODUCTBOM_ID_AD_Reference_ID = 162;/** Set Component.
+        /** M_ProductBOM_ID VAF_Control_Ref_ID=162 */
+        public static int M_PRODUCTBOM_ID_VAF_Control_Ref_ID = 162;/** Set Component.
 @param M_ProductBOM_ID Bill of Material Component Product */
         public void SetM_ProductBOM_ID(int M_ProductBOM_ID) { if (M_ProductBOM_ID < 1) throw new ArgumentException("M_ProductBOM_ID is mandatory."); Set_Value("M_ProductBOM_ID", M_ProductBOM_ID); }/** Get Component.
 @return Bill of Material Component Product */

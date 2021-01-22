@@ -80,7 +80,7 @@ static X_W_BasketLine()
 //static long serialVersionUID 27562514384913L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068124L;
-/** AD_Table_ID=549 */
+/** VAF_TableView_ID=549 */
 public static int Table_ID;
  // =549;
 

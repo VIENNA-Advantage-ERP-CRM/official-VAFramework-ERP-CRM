@@ -20,7 +20,7 @@ public X_M_Requisition (Context ctx, int M_Requisition_ID, Trx trxName) : base (
 {
 /** if (M_Requisition_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_DocType_ID (0);
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDateRequired (DateTime.Now);
@@ -42,7 +42,7 @@ public X_M_Requisition (Ctx ctx, int M_Requisition_ID, Trx trxName) : base (ctx,
 {
 /** if (M_Requisition_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_DocType_ID (0);
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDateRequired (DateTime.Now);
@@ -96,7 +96,7 @@ static X_M_Requisition()
 //static long serialVersionUID 27562514381121L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064332L;
-/** AD_Table_ID=702 */
+/** VAF_TableView_ID=702 */
 public static int Table_ID;
  // =702;
 
@@ -139,17 +139,17 @@ StringBuilder sb = new StringBuilder ("X_M_Requisition[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_Value ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -212,8 +212,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -270,8 +270,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */
@@ -446,8 +446,8 @@ if (oo != null)
 return false;
 }
 
-/** PriorityRule AD_Reference_ID=154 */
-public static int PRIORITYRULE_AD_Reference_ID=154;
+/** PriorityRule VAF_Control_Ref_ID=154 */
+public static int PRIORITYRULE_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITYRULE_Urgent = "1";
 /** High = 3 */
@@ -536,8 +536,8 @@ Object bd =Get_Value("TotalLines");
 if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
-/** DTD001_MWarehouseSource_ID AD_Reference_ID=1000313 */
-public static int DTD001_MWAREHOUSESOURCE_ID_AD_Reference_ID = 1000313;
+/** DTD001_MWarehouseSource_ID VAF_Control_Ref_ID=1000313 */
+public static int DTD001_MWAREHOUSESOURCE_ID_VAF_Control_Ref_ID = 1000313;
 /** Set Source Warehouse.
 @param DTD001_MWarehouseSource_ID Source Warehouse */
 public void SetDTD001_MWarehouseSource_ID(int DTD001_MWarehouseSource_ID)

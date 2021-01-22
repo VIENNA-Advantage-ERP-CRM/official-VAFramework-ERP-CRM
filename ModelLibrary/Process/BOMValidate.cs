@@ -88,12 +88,12 @@ namespace VAdvantage.Process
             int counter = 0;
             DataTable dt = null;
             IDataReader idr = null;
-            int AD_Client_ID = GetCtx().GetAD_Client_ID();
+            int VAF_Client_ID = GetCtx().GetVAF_Client_ID();
             String sql = "SELECT * FROM M_Product "
                 + "WHERE IsBOM='Y' AND ";
             if (_M_Product_Category_ID == 0)
             {
-                sql += "AD_Client_ID=" + AD_Client_ID;
+                sql += "VAF_Client_ID=" + VAF_Client_ID;
             }
             else
             {
@@ -147,7 +147,7 @@ namespace VAdvantage.Process
         /// <returns>Info</returns>
         private String ValidateProduct(MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
 
             if (!product.IsBOM())
             {
@@ -198,7 +198,7 @@ namespace VAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateOldProduct(MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             if (!product.IsBOM())
             {
                 return true;
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateBOM(MBOM bom)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             MBOMProduct[] BOMproducts = MBOMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
             if (count > 0 && BOMproducts.Length == 0)

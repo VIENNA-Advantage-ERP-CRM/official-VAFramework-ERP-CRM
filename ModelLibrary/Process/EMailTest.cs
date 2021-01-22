@@ -25,18 +25,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class EMailTest : ProcessEngine.SvrProcess
     {
         /** Client Parameter			*/
-        protected int _AD_Client_ID = 0;
+        protected int _VAF_Client_ID = 0;
 
         /// <summary>
         /// Get Parameters
         /// </summary>
         protected override void Prepare()
         {
-            _AD_Client_ID = GetRecord_ID();
-            if (_AD_Client_ID == 0)
+            _VAF_Client_ID = GetRecord_ID();
+            if (_VAF_Client_ID == 0)
             {
                 
-                _AD_Client_ID = GetCtx().GetAD_Client_ID();
+                _VAF_Client_ID = GetCtx().GetVAF_Client_ID();
             }
         }	//	prepare
 
@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            MClient client = MClient.Get(GetCtx(), _AD_Client_ID);
+            MClient client = MClient.Get(GetCtx(), _VAF_Client_ID);
             log.Info(client.ToString());
 
             //	 Test Client Mail

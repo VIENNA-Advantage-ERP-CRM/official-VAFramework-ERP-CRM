@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_User
+    /** Generated Model for VAF_UserContact
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_User : PO
+    public class X_VAF_UserContact : PO
     {
-        public X_AD_User(Context ctx, int AD_User_ID, Trx trxName)
-            : base(ctx, AD_User_ID, trxName)
+        public X_VAF_UserContact(Context ctx, int VAF_UserContact_ID, Trx trxName)
+            : base(ctx, VAF_UserContact_ID, trxName)
         {
-            /** if (AD_User_ID == 0)
+            /** if (VAF_UserContact_ID == 0)
             {
-            SetAD_User_ID (0);
+            SetVAF_UserContact_ID (0);
             SetIsFullBPAccess (true);	// Y
             SetName (null);
             SetNotificationType (null);	// E
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_User(Ctx ctx, int AD_User_ID, Trx trxName)
-            : base(ctx, AD_User_ID, trxName)
+        public X_VAF_UserContact(Ctx ctx, int VAF_UserContact_ID, Trx trxName)
+            : base(ctx, VAF_UserContact_ID, trxName)
         {
-            /** if (AD_User_ID == 0)
+            /** if (VAF_UserContact_ID == 0)
             {
-            SetAD_User_ID (0);
+            SetVAF_UserContact_ID (0);
             SetIsFullBPAccess (true);	// Y
             SetName (null);
             SetNotificationType (null);	// E
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_User(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_UserContact(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_User(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_UserContact(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_User(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_UserContact(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_User()
+        static X_VAF_UserContact()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,12 +81,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27626193958544L;
         /** Last Updated Timestamp 8/4/2012 1:54:03 PM */
         public static long updatedMS = 1344068641755L;
-        /** AD_Table_ID=114 */
+        /** VAF_TableView_ID=114 */
         public static int Table_ID;
         // =114;
 
-        /** TableName=AD_User */
-        public static String Table_Name = "AD_User";
+        /** TableName=VAF_UserContact */
+        public static String Table_Name = "VAF_UserContact";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -120,110 +120,110 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_User[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_UserContact[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
-        @param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        @param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /** Get Trx Organization.
         @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            Object ii = Get_Value("AD_OrgTrx_ID");
+            Object ii = Get_Value("VAF_OrgTrx_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuFavorite_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENUFAVORITE_ID_AD_Reference_ID = 184;
+        /** VAF_TreeInfo_MenuFavorite_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_MENUFAVORITE_ID_VAF_Control_Ref_ID = 184;
         /** Set Favorite Menu Tree.
-        @param AD_Tree_MenuFavorite_ID Tree of the personal Favorite menu */
-        public void SetAD_Tree_MenuFavorite_ID(int AD_Tree_MenuFavorite_ID)
+        @param VAF_TreeInfo_MenuFavorite_ID Tree of the personal Favorite menu */
+        public void SetVAF_TreeInfo_MenuFavorite_ID(int VAF_TreeInfo_MenuFavorite_ID)
         {
-            if (AD_Tree_MenuFavorite_ID <= 0) Set_ValueNoCheck("AD_Tree_MenuFavorite_ID", null);
+            if (VAF_TreeInfo_MenuFavorite_ID <= 0) Set_ValueNoCheck("VAF_TreeInfo_MenuFavorite_ID", null);
             else
-                Set_ValueNoCheck("AD_Tree_MenuFavorite_ID", AD_Tree_MenuFavorite_ID);
+                Set_ValueNoCheck("VAF_TreeInfo_MenuFavorite_ID", VAF_TreeInfo_MenuFavorite_ID);
         }
         /** Get Favorite Menu Tree.
         @return Tree of the personal Favorite menu */
-        public int GetAD_Tree_MenuFavorite_ID()
+        public int GetVAF_TreeInfo_MenuFavorite_ID()
         {
-            Object ii = Get_Value("AD_Tree_MenuFavorite_ID");
+            Object ii = Get_Value("VAF_TreeInfo_MenuFavorite_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuNew_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENUNEW_ID_AD_Reference_ID = 184;
+        /** VAF_TreeInfo_MenuNew_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_MENUNEW_ID_VAF_Control_Ref_ID = 184;
         /** Set New Menu Tree.
-        @param AD_Tree_MenuNew_ID Tree of the personal Favorite menu for new items */
-        public void SetAD_Tree_MenuNew_ID(int AD_Tree_MenuNew_ID)
+        @param VAF_TreeInfo_MenuNew_ID Tree of the personal Favorite menu for new items */
+        public void SetVAF_TreeInfo_MenuNew_ID(int VAF_TreeInfo_MenuNew_ID)
         {
-            if (AD_Tree_MenuNew_ID <= 0) Set_ValueNoCheck("AD_Tree_MenuNew_ID", null);
+            if (VAF_TreeInfo_MenuNew_ID <= 0) Set_ValueNoCheck("VAF_TreeInfo_MenuNew_ID", null);
             else
-                Set_ValueNoCheck("AD_Tree_MenuNew_ID", AD_Tree_MenuNew_ID);
+                Set_ValueNoCheck("VAF_TreeInfo_MenuNew_ID", VAF_TreeInfo_MenuNew_ID);
         }
         /** Get New Menu Tree.
         @return Tree of the personal Favorite menu for new items */
-        public int GetAD_Tree_MenuNew_ID()
+        public int GetVAF_TreeInfo_MenuNew_ID()
         {
-            Object ii = Get_Value("AD_Tree_MenuNew_ID");
+            Object ii = Get_Value("VAF_TreeInfo_MenuNew_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID < 1) throw new ArgumentException("AD_User_ID is mandatory.");
-            Set_ValueNoCheck("AD_User_ID", AD_User_ID);
+            if (VAF_UserContact_ID < 1) throw new ArgumentException("VAF_UserContact_ID is mandatory.");
+            Set_ValueNoCheck("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -388,8 +388,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Comments");
         }
 
-        /** ConnectionProfile AD_Reference_ID=364 */
-        public static int CONNECTIONPROFILE_AD_Reference_ID = 364;
+        /** ConnectionProfile VAF_Control_Ref_ID=364 */
+        public static int CONNECTIONPROFILE_VAF_Control_Ref_ID = 364;
         /** LAN = L */
         public static String CONNECTIONPROFILE_LAN = "L";
         /** Terminal Server = T */
@@ -683,8 +683,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Graduation");
         }
 
-        /** HEALTH AD_Reference_ID=1000011 */
-        public static int HEALTH_AD_Reference_ID = 1000011;
+        /** HEALTH VAF_Control_Ref_ID=1000011 */
+        public static int HEALTH_VAF_Control_Ref_ID = 1000011;
         /** Normal = NO */
         public static String HEALTH_Normal = "NO";
         /** Special1 = S1 */
@@ -906,8 +906,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** NotificationType AD_Reference_ID=344 */
-        public static int NOTIFICATIONTYPE_AD_Reference_ID = 344;
+        /** NotificationType VAF_Control_Ref_ID=344 */
+        public static int NOTIFICATIONTYPE_VAF_Control_Ref_ID = 344;
         /** FaxEMail = A */
         public static String NOTIFICATIONTYPE_FaxEMail = "A";
         /** EMail+Notice = B */
@@ -1175,8 +1175,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("RelivingReason");
         }
 
-        /** Supervisor_ID AD_Reference_ID=110 */
-        public static int SUPERVISOR_ID_AD_Reference_ID = 110;
+        /** Supervisor_ID VAF_Control_Ref_ID=110 */
+        public static int SUPERVISOR_ID_VAF_Control_Ref_ID = 110;
         /** Set Supervisor.
         @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
         public void SetSupervisor_ID(int Supervisor_ID)
@@ -1544,8 +1544,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SAP001_PartnerCounter");
         }
 
-        /** SAP001_PartnerFunction AD_Reference_ID=1000194 */
-        public static int SAP001_PARTNERFUNCTION_AD_Reference_ID = 1000194;
+        /** SAP001_PartnerFunction VAF_Control_Ref_ID=1000194 */
+        public static int SAP001_PARTNERFUNCTION_VAF_Control_Ref_ID = 1000194;
         /** Sold-to party = AG */
         public static String SAP001_PARTNERFUNCTION_Sold_ToParty = "AG";
         /** Bill-to party = RE */

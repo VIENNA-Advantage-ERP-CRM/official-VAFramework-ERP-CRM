@@ -32,13 +32,13 @@ namespace VIS.Models
                             FROM C_Currency C
                             INNER JOIN C_Currency_Trl CL
                             ON (C.C_Currency_ID=CL.C_Currency_ID
-                            AND CL.ad_language ='" + ctx.GetAD_Language() + "') ORDER BY 1";
+                            AND CL.VAF_Language ='" + ctx.GetVAF_Language() + "') ORDER BY 1";
                // sqlCo = "SELECT C_Country_ID, Name FROM C_Country WHERE IsSummary='N' ORDER BY 1";
                 sqlCo=@"SELECT C.C_Country_ID, CL.Name
                             FROM C_Country C
                             INNER JOIN C_Country_Trl CL
                             ON (C.C_Country_ID=CL.C_Country_ID
-                            AND CL.ad_language ='" + ctx.GetAD_Language() + "') ORDER BY 1";
+                            AND CL.VAF_Language ='" + ctx.GetVAF_Language() + "') ORDER BY 1";
                 sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY C_Country_ID, Name";
                 
             }
@@ -158,7 +158,7 @@ namespace VIS.Models
                     //worker.ReportProgress(90);
                     info += ms.GetInfo();
                     //	Create Print Documents
-                    ms.SetupPrintForm(ms.GetAD_Client_ID());
+                    ms.SetupPrintForm(ms.GetVAF_Client_ID());
                     // worker.ReportProgress(100);
                 }
 

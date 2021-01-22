@@ -29,29 +29,29 @@ namespace VAdvantage.Model
         /**
          * 	Get User Goals
          *	@param ctx context
-         *	@param AD_User_ID user
+         *	@param VAF_UserContact_ID user
          *	@return array of goals
          */
-        public static MGoal[] GetUserGoals(Ctx ctx, int AD_User_ID)
+        public static MGoal[] GetUserGoals(Ctx ctx, int VAF_UserContact_ID)
         {
-            if (AD_User_ID < 0)
+            if (VAF_UserContact_ID < 0)
                 return GetTestGoals(ctx);
             List<MGoal> list = new List<MGoal>();
             String sql = "SELECT * FROM PA_Goal g "
                 + "WHERE IsActive='Y'"
-                + " AND AD_Client_ID=@ADClientID"		//	#1
-                + " AND ((AD_User_ID IS NULL AND AD_Role_ID IS NULL)"
-                    + " OR AD_User_ID=@ADUserID"	//	#2
-                    + " OR EXISTS (SELECT * FROM AD_User_Roles ur "
-                        + "WHERE g.AD_User_ID=ur.AD_User_ID AND g.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y')) "
+                + " AND VAF_Client_ID=@ADClientID"		//	#1
+                + " AND ((VAF_UserContact_ID IS NULL AND VAF_Role_ID IS NULL)"
+                    + " OR VAF_UserContact_ID=@ADUserID"	//	#2
+                    + " OR EXISTS (SELECT * FROM VAF_UserContact_Roles ur "
+                        + "WHERE g.VAF_UserContact_ID=ur.VAF_UserContact_ID AND g.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y')) "
                 + "ORDER BY SeqNo";
             DataTable dt;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@ADClientID", ctx.GetAD_Client_ID());
-                param[1] = new SqlParameter("@ADUserID", AD_User_ID);
+                param[0] = new SqlParameter("@ADClientID", ctx.GetVAF_Client_ID());
+                param[1] = new SqlParameter("@ADUserID", VAF_UserContact_ID);
 
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
 
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
             if (PA_Goal_ID == 0)
             {
                 //	SetName (null);
-                //	SetAD_User_ID (0);
+                //	SetVAF_UserContact_ID (0);
                 //	SetPA_ColorSchema_ID (0);
                 SetSeqNo(0);
                 SetIsSummary(false);
@@ -515,7 +515,7 @@ namespace VAdvantage.Model
                     return Msg.GetElement(GetCtx(), "C_Phase_ID");
             }
             String value = GetMeasureDisplay();
-            String display = MRefList.GetListName(GetCtx(), MEASUREDISPLAY_AD_Reference_ID, value);
+            String display = MRefList.GetListName(GetCtx(), MEASUREDISPLAY_VAF_Control_Ref_ID, value);
             return display == null ? value : display;
         }
 
@@ -559,34 +559,34 @@ namespace VAdvantage.Model
                 SetPA_Measure_ID(0);
 
             //	User/Role Check
-            if ((newRecord || Is_ValueChanged("AD_User_ID") || Is_ValueChanged("AD_Role_ID"))
-                && GetAD_User_ID() != 0)
+            if ((newRecord || Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("VAF_Role_ID"))
+                && GetVAF_UserContact_ID() != 0)
             {
-                MUser user = MUser.Get(GetCtx(), GetAD_User_ID());
-                MRole[] roles = user.GetRoles(GetAD_Org_ID());
+                MUser user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
+                MRole[] roles = user.GetRoles(GetVAF_Org_ID());
                 if (roles.Length == 0)		//	No Role
-                    SetAD_Role_ID(0);
+                    SetVAF_Role_ID(0);
                 else if (roles.Length == 1)	//	One
-                    SetAD_Role_ID(roles[0].GetAD_Role_ID());
+                    SetVAF_Role_ID(roles[0].GetVAF_Role_ID());
                 else
                 {
-                    int AD_Role_ID = GetAD_Role_ID();
-                    if (AD_Role_ID != 0)	//	validate
+                    int VAF_Role_ID = GetVAF_Role_ID();
+                    if (VAF_Role_ID != 0)	//	validate
                     {
                         Boolean found = false;
                         for (int i = 0; i < roles.Length; i++)
                         {
-                            if (AD_Role_ID == roles[i].GetAD_Role_ID())
+                            if (VAF_Role_ID == roles[i].GetVAF_Role_ID())
                             {
                                 found = true;
                                 break;
                             }
                         }
                         if (!found)
-                            AD_Role_ID = 0;
+                            VAF_Role_ID = 0;
                     }
-                    if (AD_Role_ID == 0)		//	Set to first one
-                        SetAD_Role_ID(roles[0].GetAD_Role_ID());
+                    if (VAF_Role_ID == 0)		//	Set to first one
+                        SetVAF_Role_ID(roles[0].GetVAF_Role_ID());
                 }	//	multiple roles
             }
 

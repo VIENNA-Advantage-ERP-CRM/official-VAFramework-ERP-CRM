@@ -24,9 +24,9 @@ VIS.context.m_map = {}; //window's context
     var value = VIS.context.ctx[context];
     //m_map[context];
     if (!value) {
-        if (context == "#AD_User_ID")
+        if (context == "#VAF_UserContact_ID")
             return VIS.context.getContext("#" + context);
-        if (context == "#AD_User_Name")
+        if (context == "#VAF_UserContact_Name")
             return VIS.context.getContext("#" + context);
         return "";
     }
@@ -180,36 +180,36 @@ VIS.context.clearTabContext = function (windowNo, tabNo) {
 };
 
 
-VIS.context.getAD_User_ID = function () {
-    return VIS.context.getContext("##AD_User_ID");
+VIS.context.getVAF_UserContact_ID = function () {
+    return VIS.context.getContext("##VAF_UserContact_ID");
 };
 
-VIS.context.getAD_User_Name = function () {
-    return this.getContext("#AD_User_Name");
+VIS.context.getVAF_UserContact_Name = function () {
+    return this.getContext("#VAF_UserContact_Name");
 };
 
-VIS.context.getAD_Role_ID = function () {
-    return this.getContextAsInt("#AD_Role_ID");
+VIS.context.getVAF_Role_ID = function () {
+    return this.getContextAsInt("#VAF_Role_ID");
 }
 
-VIS.context.getAD_Role_Name = function () {
-    return this.getContext("#AD_Role_Name");
+VIS.context.getVAF_Role_Name = function () {
+    return this.getContext("#VAF_Role_Name");
 };
 
-VIS.context.getAD_Client_ID = function () {
-    return VIS.context.getContext("#AD_Client_ID");
+VIS.context.getVAF_Client_ID = function () {
+    return VIS.context.getContext("#VAF_Client_ID");
 };
 
-VIS.context.getAD_Client_Name = function () {
-    return this.getContext("#AD_Client_Name");
+VIS.context.getVAF_Client_Name = function () {
+    return this.getContext("#VAF_Client_Name");
 };
 
-VIS.context.getAD_Org_ID = function () {
-    return VIS.context.getContext("#AD_Org_ID");
+VIS.context.getVAF_Org_ID = function () {
+    return VIS.context.getContext("#VAF_Org_ID");
 };
 
-VIS.context.getAD_Language = function () {
-    return VIS.context.getContext('#AD_Language');
+VIS.context.getVAF_Language = function () {
+    return VIS.context.getContext('#VAF_Language');
 };
 
 VIS.context.setAutoCommit = function (windowNo, autoCommit) {

@@ -55,7 +55,7 @@ namespace VAdvantage.Model
                 if (M_Requisition_ID == 0)
                 {
                     //	setDocumentNo (null);
-                    //	setAD_User_ID (0);
+                    //	setVAF_UserContact_ID (0);
                     //	setM_PriceList_ID (0);
                     //	setM_Warehouse_ID(0);
                     //SetDateDoc(new Timestamp(System.currentTimeMillis()));
@@ -298,7 +298,7 @@ namespace VAdvantage.Model
                 }
 
                 //	Invalid
-                if (GetAD_User_ID() == 0
+                if (GetVAF_UserContact_ID() == 0
                     || GetM_PriceList_ID() == 0
                     || GetM_Warehouse_ID() == 0)
                     return DocActionVariables.STATUS_INVALID;
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
 
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, GetVAF_Org_ID()))
                 {
                     _processMsg = "@PeriodClosed@";
                     return DocActionVariables.STATUS_INVALID;
@@ -314,7 +314,7 @@ namespace VAdvantage.Model
 
                 // is Non Business Day?
                 // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc(), GetAD_Org_ID()))
+                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc(), GetVAF_Org_ID()))
                 {
                     _processMsg = Common.Common.NONBUSINESSDAY;
                     return DocActionVariables.STATUS_INVALID;
@@ -435,7 +435,7 @@ namespace VAdvantage.Model
                 SetDocAction(DocActionVariables.ACTION_CLOSE);
                 /**************************************************************************************************************/
                 // Check Column Name  new 6jan 0 vikas
-                int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
+                int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM VAF_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
                 Tuple<String, String, String> mInfo = null;
                 if (Env.HasModulePrefix("DTD001_", out mInfo))
@@ -473,7 +473,7 @@ namespace VAdvantage.Model
                                 return DocActionVariables.STATUS_INVALID;
                             }
                         }
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
                         // SI_0686_2 :  storage should not update in case of product is other than item type.
                         if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
@@ -563,7 +563,7 @@ namespace VAdvantage.Model
                 SetDateDoc(DateTime.Now.Date);
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                 {
                     throw new Exception("@PeriodClosed@");
                 }
@@ -606,16 +606,16 @@ namespace VAdvantage.Model
             sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
                   GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
                 FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
-                INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
-                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")  
+                INNER JOIN VAF_ClientDetail ON VAF_ClientDetail.VAF_Client_ID = GL_Budget.VAF_Client_ID
+                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.VAF_Org_ID IN (0 , " + GetVAF_Org_ID() + @")  
                    AND GL_BudgetControl.CommitmentType IN ('B' ) AND 
                   (( GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
                   (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID      = C_Period.c_year_ID
-                  WHERE C_Period.IsActive  = 'Y'  AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                  WHERE C_Period.IsActive  = 'Y'  AND c_year.C_Calendar_ID = VAF_ClientDetail.C_Calendar_ID
                   AND " + GlobalVariable.TO_DATE(GetDateDoc(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate )) 
                 OR ( GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
                   (SELECT C_Period.C_Year_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID = C_Period.c_year_ID
-                  WHERE C_Period.IsActive  = 'Y'   AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID  
+                  WHERE C_Period.IsActive  = 'Y'   AND c_year.C_Calendar_ID = VAF_ClientDetail.C_Calendar_ID  
                 AND " + GlobalVariable.TO_DATE(GetDateDoc(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate   ) ) ) 
                 AND (SELECT COUNT(fact_acct_id) FROM fact_acct
                 WHERE gl_budget_id = GL_Budget.GL_Budget_ID
@@ -679,7 +679,7 @@ namespace VAdvantage.Model
         /// <returns>DataSet of Posting Records</returns>
         private DataSet BudgetControlling()
         {
-            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_322'"));
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_322'"));
             DataSet result = new DataSet();
             Type type = null;
             MethodInfo methodInfo = null;
@@ -694,11 +694,11 @@ namespace VAdvantage.Model
                     if (parameters.Length == 8)
                     {
                         object[] parametersArray = new object[] { GetCtx(),
-                                                                Util.GetValueOfInt(GetAD_Client_ID()),
-                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MTable.Get(GetCtx() , "M_Requisition").GetAD_Table_ID()
+                                                                Util.GetValueOfInt(GetVAF_Client_ID()),
+                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MTable.Get(GetCtx() , "M_Requisition").GetVAF_TableView_ID()
                                                                 Util.GetValueOfInt(GetM_Requisition_ID()),
                                                                 true,
-                                                                Util.GetValueOfInt(GetAD_Org_ID()),
+                                                                Util.GetValueOfInt(GetVAF_Org_ID()),
                                                                 ad_window_id,
                                                                 Util.GetValueOfInt(GetC_DocType_ID()) };
                         result = (DataSet)methodInfo.Invoke(null, parametersArray);
@@ -731,14 +731,14 @@ namespace VAdvantage.Model
             if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
                                               (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
-                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.VAF_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
                                               (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
                                               (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
                                               (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
-                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
                                               (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
                                               (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
@@ -757,14 +757,14 @@ namespace VAdvantage.Model
                 _budgetControl = _listBudgetControl.Find(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
                                               (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
-                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.VAF_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
                                               (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
                                               (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
                                               (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
-                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
                                               (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
                                               (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
@@ -932,10 +932,10 @@ namespace VAdvantage.Model
                     {
                         int quant = Util.GetValueOfInt(line.GetQty() - line.GetDTD001_DeliveredQty());
                         // new 6jan  0
-                        int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
+                        int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM VAF_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
                         //Update storage requisition reserved qty
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
                         if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
                             if (GetDocAction() != "VO" && GetDocStatus() != "DR")
@@ -1110,11 +1110,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Owner
-         *	@return AD_User_ID
+         *	@return VAF_UserContact_ID
          */
         public int GetDoc_User_ID()
         {
-            return GetAD_User_ID();
+            return GetVAF_UserContact_ID();
         }
 
         /**
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
          */
         public String GetUserName()
         {
-            return MUser.Get(GetCtx(), GetAD_User_ID()).GetName();
+            return MUser.Get(GetCtx(), GetVAF_UserContact_ID()).GetName();
         }
         #region DocAction Members
 

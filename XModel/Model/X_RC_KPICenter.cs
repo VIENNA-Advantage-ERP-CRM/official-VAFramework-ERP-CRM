@@ -70,7 +70,7 @@ static X_RC_KPICenter()
 //static long serialVersionUID 27634333565125L;
 /** Last Updated Timestamp 11/6/2012 6:54:08 PM */
 public static long updatedMS = 1352208248336L;
-/** AD_Table_ID=1000230 */
+/** VAF_TableView_ID=1000230 */
 public static int Table_ID;
  // =1000230;
 
@@ -130,8 +130,8 @@ public String GetExport_ID()
 return (String)Get_Value("Export_ID");
 }
 
-/** Font_Color_ID AD_Reference_ID=266 */
-public static int FONT_COLOR_ID_AD_Reference_ID=266;
+/** Font_Color_ID VAF_Control_Ref_ID=266 */
+public static int FONT_COLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Font Color.
 @param Font_Color_ID Font Color */
 public void SetFont_Color_ID (int Font_Color_ID)

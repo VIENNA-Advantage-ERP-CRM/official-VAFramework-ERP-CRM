@@ -131,7 +131,7 @@ namespace VAdvantage.Model
         {
             List<MDocType> list = new List<MDocType>();
             String sql = "SELECT * FROM C_DocType "
-                + "WHERE AD_Client_ID=" + ctx.GetAD_Client_ID() + " AND DocBaseType='" + docBaseType + "' AND IsActive='Y'"
+                + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND DocBaseType='" + docBaseType + "' AND IsActive='Y'"
                 + "ORDER BY C_DocType_ID";
             DataSet pstmt = null;
             try
@@ -162,7 +162,7 @@ namespace VAdvantage.Model
         public static MDocType[] GetOfClient(Ctx ctx)
         {
             List<MDocType> list = new List<MDocType>();
-            String sql = "SELECT * FROM C_DocType WHERE AD_Client_ID=" + ctx.GetAD_Client_ID();
+            String sql = "SELECT * FROM C_DocType WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet pstmt = null;
             try
             {
@@ -253,7 +253,7 @@ namespace VAdvantage.Model
         public MDocType(Ctx ctx, string docBaseType, string name, Trx trxName)
             : this(ctx, 0, trxName)
         {
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
             SetDocBaseType(docBaseType);
             SetName(name);
             SetPrintName(name);
@@ -265,13 +265,13 @@ namespace VAdvantage.Model
         /// </summary>
         public void SetGL_Category_ID()
         {
-            String sql = "SELECT * FROM GL_Category WHERE AD_Client_ID=" + GetAD_Client_ID() + "AND IsDefault='Y'";
+            String sql = "SELECT * FROM GL_Category WHERE VAF_Client_ID=" + GetVAF_Client_ID() + "AND IsDefault='Y'";
 
             int GL_Category_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql);
             if (GL_Category_ID == 0)
             {
-                sql = "SELECT * FROM GL_Category WHERE AD_Client_ID=@param1";
-                GL_Category_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetAD_Client_ID());
+                sql = "SELECT * FROM GL_Category WHERE VAF_Client_ID=@param1";
+                GL_Category_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAF_Client_ID());
             }
             SetGL_Category_ID(GL_Category_ID);
         }
@@ -335,13 +335,13 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Print Name
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns>print Name if available translated</returns>
-        public string GetPrintName(string AD_Language)
+        public string GetPrintName(string VAF_Language)
         {
-            if (AD_Language == null || AD_Language.Length == 0)
+            if (VAF_Language == null || VAF_Language.Length == 0)
                 return base.GetPrintName();
-            string retValue = Get_Translation("PrintName", AD_Language);
+            string retValue = Get_Translation("PrintName", VAF_Language);
             if (retValue != null)
                 return retValue;
             return base.GetPrintName();
@@ -355,8 +355,8 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             // JID_0811: commented as per point given by Ravikant and discussed with Mukesh sir.
-            //if (GetAD_Org_ID() != 0)
-            //    SetAD_Org_ID(0);
+            //if (GetVAF_Org_ID() != 0)
+            //    SetVAF_Org_ID(0);
 
             //	Sync DocBaseType && Return Trx
             //	if (newRecord || is_ValueChanged("DocBaseType"))

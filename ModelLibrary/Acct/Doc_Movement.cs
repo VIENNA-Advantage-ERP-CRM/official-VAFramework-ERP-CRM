@@ -124,7 +124,7 @@ namespace VAdvantage.Acct
             for (int i = 0; i < _lines.Length; i++)
             {
                 DocLine line = _lines[i];
-                Decimal costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);
+                Decimal costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);
 
                 //  ** Inventory       DR      CR
                 dr = fact.CreateLine(line,
@@ -149,7 +149,7 @@ namespace VAdvantage.Acct
                 cr.SetQty(line.GetQty());
 
                 //	Only for between-org movements
-                if (dr.GetAD_Org_ID() != cr.GetAD_Org_ID())
+                if (dr.GetVAF_Org_ID() != cr.GetVAF_Org_ID())
                 {
                     String costingLevel = as1.GetCostingLevel();
                     MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
@@ -173,7 +173,7 @@ namespace VAdvantage.Acct
                     {
 
                         //	Cost Detail From
-                        MCostDetail.CreateMovement(as1, dr.GetAD_Org_ID(), 	//	locator org
+                        MCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
                             line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                             line.Get_ID(), 0,
                             Decimal.Negate(costs), Decimal.Negate(line.GetQty().Value), true,
@@ -181,7 +181,7 @@ namespace VAdvantage.Acct
 
 
                         //	Cost Detail To
-                        MCostDetail.CreateMovement(as1, cr.GetAD_Org_ID(),	//	locator org 
+                        MCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
                             line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                             line.Get_ID(), 0,
                             costs, line.GetQty().Value, false,

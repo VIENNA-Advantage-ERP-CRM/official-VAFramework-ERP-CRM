@@ -86,7 +86,7 @@ static X_C_GenAttributeSet()
 //static long serialVersionUID 27667169099943L;
 /** Last Updated Timestamp 11/21/2013 7:53:03 PM */
 public static long updatedMS = 1385043783154L;
-/** AD_Table_ID=1000421 */
+/** VAF_TableView_ID=1000421 */
 public static int Table_ID;
  // =1000421;
 
@@ -384,8 +384,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** MandatoryType AD_Reference_ID=324 */
-public static int MANDATORYTYPE_AD_Reference_ID=324;
+/** MandatoryType VAF_Control_Ref_ID=324 */
+public static int MANDATORYTYPE_VAF_Control_Ref_ID=324;
 /** Not Mandatary = N */
 public static String MANDATORYTYPE_NotMandatary = "N";
 /** When Shipping = S */

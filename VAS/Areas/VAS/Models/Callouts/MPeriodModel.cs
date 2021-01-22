@@ -24,11 +24,11 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             int period_ID;
 
-            int AD_Client_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAF_Client_ID = Util.GetValueOfInt(paramValue[0]);
             DateTime? dateAcct = Util.GetValueOfDateTime(paramValue[1]);
-            int AD_Org_ID = Util.GetValueOfInt(paramValue[2]);
+            int VAF_Org_ID = Util.GetValueOfInt(paramValue[2]);
 
-            period_ID = MPeriod.GetC_Period_ID(ctx, dateAcct, AD_Org_ID);
+            period_ID = MPeriod.GetC_Period_ID(ctx, dateAcct, VAF_Org_ID);
             return period_ID;
         }
 

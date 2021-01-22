@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_OrgInfo
+ * Class Used     : X_VAF_OrgDetail
  * Chronological Development
  * Veena Pandey     
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MOrgInfo : X_AD_OrgInfo
+    public class MOrgInfo : X_VAF_OrgDetail
     {
         // Static Logger					
          private static VLogger _log = VLogger.GetVLogger(typeof(MOrgInfo).FullName);
@@ -29,10 +29,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">id</param>
+        /// <param name="VAF_Org_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MOrgInfo(Ctx ctx, int AD_Org_ID, Trx trxName)
-            : base(ctx, AD_Org_ID, trxName)
+        public MOrgInfo(Ctx ctx, int VAF_Org_ID, Trx trxName)
+            : base(ctx, VAF_Org_ID, trxName)
         {
         }
 
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// Organization constructor
         /// </summary>
         /// <param name="org">org</param>
-        public MOrgInfo(X_AD_Org org)
+        public MOrgInfo(X_VAF_Org org)
             : base(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);
@@ -63,13 +63,13 @@ namespace VAdvantage.Model
         /// Load Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">id</param>
+        /// <param name="VAF_Org_ID">id</param>
         /// <param name="trx">transaction</param>
         /// <returns>Org Info</returns>
-        public static MOrgInfo Get(Ctx ctx, int AD_Org_ID, Trx trxName)
+        public static MOrgInfo Get(Ctx ctx, int VAF_Org_ID, Trx trxName)
         {
             MOrgInfo retValue = null;
-            String sql = "SELECT * FROM AD_OrgInfo WHERE AD_Org_ID=" + AD_Org_ID;
+            String sql = "SELECT * FROM VAF_OrgDetail WHERE VAF_Org_ID=" + VAF_Org_ID;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -96,14 +96,14 @@ namespace VAdvantage.Model
             if (M_Warehouse_ID != 0)
                 return M_Warehouse_ID;
             //
-            MWarehouse[] whss = MWarehouse.GetForOrg(GetCtx(), GetAD_Org_ID());
+            MWarehouse[] whss = MWarehouse.GetForOrg(GetCtx(), GetVAF_Org_ID());
             if (whss.Length > 0)
             {
                 M_Warehouse_ID = whss[0].GetM_Warehouse_ID();
                 SetM_Warehouse_ID(M_Warehouse_ID);
                 return M_Warehouse_ID;
             }
-            log.Warning("No Warehouse for AD_Org_ID=" + GetAD_Org_ID());
+            log.Warning("No Warehouse for VAF_Org_ID=" + GetVAF_Org_ID());
             return 0;
         }
 

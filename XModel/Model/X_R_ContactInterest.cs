@@ -20,7 +20,7 @@ public X_R_ContactInterest (Context ctx, int R_ContactInterest_ID, Trx trxName) 
 {
 /** if (R_ContactInterest_ID == 0)
 {
-SetAD_User_ID (0);	// @AD_User_ID@
+SetVAF_UserContact_ID (0);	// @VAF_UserContact_ID@
 SetR_InterestArea_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_R_ContactInterest (Ctx ctx, int R_ContactInterest_ID, Trx trxName) : ba
 {
 /** if (R_ContactInterest_ID == 0)
 {
-SetAD_User_ID (0);	// @AD_User_ID@
+SetVAF_UserContact_ID (0);	// @VAF_UserContact_ID@
 SetR_InterestArea_ID (0);
 }
  */
@@ -70,7 +70,7 @@ static X_R_ContactInterest()
 //static long serialVersionUID 27562514382719L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065930L;
-/** AD_Table_ID=528 */
+/** VAF_TableView_ID=528 */
 public static int Table_ID;
  // =528;
 
@@ -113,17 +113,17 @@ StringBuilder sb = new StringBuilder ("X_R_ContactInterest[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,7 +131,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Opt-out Date.
 @param OptOutDate Date the contact opted out */

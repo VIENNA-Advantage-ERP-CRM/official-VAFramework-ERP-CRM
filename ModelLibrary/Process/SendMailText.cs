@@ -34,7 +34,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private MMailText _MailText = null;
 
         //	From (sender)			
-        private int _AD_User_ID = -1;
+        private int _VAF_UserContact_ID = -1;
         // Client Info				
         private MClient _client = null;
         //	From					
@@ -79,9 +79,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _C_BP_Group_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_User_ID"))
+                else if (name.Equals("VAF_UserContact_ID"))
                 {
-                    _AD_User_ID = para[i].GetParameterAsInt();
+                    _VAF_UserContact_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -105,21 +105,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //	Client Info
             _client = MClient.Get(GetCtx());
-            if (_client.GetAD_Client_ID() == 0)
+            if (_client.GetVAF_Client_ID() == 0)
             {
-                throw new Exception("Not found @AD_Client_ID@");
+                throw new Exception("Not found @VAF_Client_ID@");
             }
             if (_client.GetSmtpHost() == null || _client.GetSmtpHost().Length == 0)
             {
                 throw new Exception("No SMTP Host found");
             }
             //
-            if (_AD_User_ID > 0)
+            if (_VAF_UserContact_ID > 0)
             {
-                _from = new MUser(GetCtx(), _AD_User_ID, Get_TrxName());
-                if (_from.GetAD_User_ID() == 0)
+                _from = new MUser(GetCtx(), _VAF_UserContact_ID, Get_TrxName());
+                if (_from.GetVAF_UserContact_ID() == 0)
                 {
-                    throw new Exception("No found @AD_User_ID@=" + _AD_User_ID);
+                    throw new Exception("No found @VAF_UserContact_ID@=" + _VAF_UserContact_ID);
                 }
             }
             log.Fine("From " + _from);
@@ -169,9 +169,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //
-            String sql = "SELECT u.Name, u.EMail, u.AD_User_ID "
+            String sql = "SELECT u.Name, u.EMail, u.VAF_UserContact_ID "
                 + "FROM R_ContactInterest ci"
-                + " INNER JOIN AD_User u ON (ci.AD_User_ID=u.AD_User_ID) "
+                + " INNER JOIN VAF_UserContact u ON (ci.VAF_UserContact_ID=u.VAF_UserContact_ID) "
                 + "WHERE ci.IsActive='Y' AND u.IsActive='Y'"
                 + " AND ci.OptOutDate IS NULL"
                 + " AND u.EMail IS NOT NULL"
@@ -219,8 +219,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private void SendBPGroup()
         {
             log.Info("C_BP_Group_ID=" + _C_BP_Group_ID);
-            String sql = "SELECT u.Name, u.EMail, u.AD_User_ID "
-                + "FROM AD_User u"
+            String sql = "SELECT u.Name, u.EMail, u.VAF_UserContact_ID "
+                + "FROM VAF_UserContact u"
                 + " INNER JOIN C_BPartner bp ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
                 + "WHERE u.IsActive='Y' AND bp.IsActive='Y'"
                 + " AND u.EMail IS NOT NULL"
@@ -268,13 +268,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         ///	Send Individual Mail
         /// </summary>
         /// <param name="Name">user name</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="unsubscribe">unsubscribe message</param>
         /// <returns>true if mail has been sent</returns>
-        private Boolean SendIndividualMail(String Name, int AD_User_ID, String unsubscribe)
+        private Boolean SendIndividualMail(String Name, int VAF_UserContact_ID, String unsubscribe)
         {
             //	Prevent two email
-            int ii = AD_User_ID;
+            int ii = VAF_UserContact_ID;
             if (_list.Contains(ii))
             {
                 //return null;
@@ -282,13 +282,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             _list.Add(ii);
             //
-            MUser to = new MUser(GetCtx(), AD_User_ID, null);
+            MUser to = new MUser(GetCtx(), VAF_UserContact_ID, null);
             if (to.IsEMailBounced())			//	ignore bounces
             {
                 //return null;
                 return false;
             }
-            _MailText.SetUser(AD_User_ID);		//	parse context
+            _MailText.SetUser(VAF_UserContact_ID);		//	parse context
             String message = _MailText.GetMailText(true);
             //	Unsubscribe
             if (unsubscribe != null)
@@ -321,7 +321,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return false;
             }
             Boolean OK = EMail.SENT_OK.Equals(email.Send());
-            new MUserMail(_MailText, AD_User_ID, email).Save();
+            new MUserMail(_MailText, VAF_UserContact_ID, email).Save();
             if (OK)
             {
                 log.Fine(to.GetEMail());

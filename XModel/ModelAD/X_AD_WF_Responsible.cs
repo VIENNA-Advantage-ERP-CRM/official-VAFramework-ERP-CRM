@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_WF_Responsible
+    /** Generated Model for VAF_WFlow_Incharge
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_WF_Responsible : PO
+    public class X_VAF_WFlow_Incharge : PO
     {
-        public X_AD_WF_Responsible(Context ctx, int AD_WF_Responsible_ID, Trx trxName) : base(ctx, AD_WF_Responsible_ID, trxName)
+        public X_VAF_WFlow_Incharge(Context ctx, int VAF_WFlow_Incharge_ID, Trx trxName) : base(ctx, VAF_WFlow_Incharge_ID, trxName)
         {
-            /** if (AD_WF_Responsible_ID == 0)
+            /** if (VAF_WFlow_Incharge_ID == 0)
 {
-SetAD_WF_Responsible_ID (0);
+SetVAF_WFlow_Incharge_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetResponsibleType (null);
 }
              */
         }
-        public X_AD_WF_Responsible(Ctx ctx, int AD_WF_Responsible_ID, Trx trxName) : base(ctx, AD_WF_Responsible_ID, trxName)
+        public X_VAF_WFlow_Incharge(Ctx ctx, int VAF_WFlow_Incharge_ID, Trx trxName) : base(ctx, VAF_WFlow_Incharge_ID, trxName)
         {
-            /** if (AD_WF_Responsible_ID == 0)
+            /** if (VAF_WFlow_Incharge_ID == 0)
 {
-SetAD_WF_Responsible_ID (0);
+SetVAF_WFlow_Incharge_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetResponsibleType (null);
@@ -43,7 +43,7 @@ SetResponsibleType (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_Responsible(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_WFlow_Incharge(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -51,7 +51,7 @@ SetResponsibleType (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_Responsible(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_WFlow_Incharge(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -59,13 +59,13 @@ SetResponsibleType (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_Responsible(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+        public X_VAF_WFlow_Incharge(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_WF_Responsible()
+        static X_VAF_WFlow_Incharge()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -74,12 +74,12 @@ SetResponsibleType (null);
         //static long serialVersionUID 27562514366357L;
         /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
         public static long updatedMS = 1280389049568L;
-        /** AD_Table_ID=646 */
+        /** VAF_TableView_ID=646 */
         public static int Table_ID;
         // =646;
 
-        /** TableName=AD_WF_Responsible */
-        public static String Table_Name = "AD_WF_Responsible";
+        /** TableName=VAF_WFlow_Incharge */
+        public static String Table_Name = "VAF_WFlow_Incharge";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -113,56 +113,56 @@ SetResponsibleType (null);
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_WF_Responsible[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_WFlow_Incharge[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Role.
-@param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
 @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_User_ID AD_Reference_ID=286 */
-        public static int AD_USER_ID_AD_Reference_ID = 286;
+        /** VAF_UserContact_ID VAF_Control_Ref_ID=286 */
+        public static int VAF_USERCONTACT_ID_VAF_Control_Ref_ID = 286;
         /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Workflow Responsible.
-@param AD_WF_Responsible_ID Responsible for Workflow Execution */
-        public void SetAD_WF_Responsible_ID(int AD_WF_Responsible_ID)
+@param VAF_WFlow_Incharge_ID Responsible for Workflow Execution */
+        public void SetVAF_WFlow_Incharge_ID(int VAF_WFlow_Incharge_ID)
         {
-            if (AD_WF_Responsible_ID < 1) throw new ArgumentException("AD_WF_Responsible_ID is mandatory.");
-            Set_ValueNoCheck("AD_WF_Responsible_ID", AD_WF_Responsible_ID);
+            if (VAF_WFlow_Incharge_ID < 1) throw new ArgumentException("VAF_WFlow_Incharge_ID is mandatory.");
+            Set_ValueNoCheck("VAF_WFlow_Incharge_ID", VAF_WFlow_Incharge_ID);
         }
         /** Get Workflow Responsible.
 @return Responsible for Workflow Execution */
-        public int GetAD_WF_Responsible_ID()
+        public int GetVAF_WFlow_Incharge_ID()
         {
-            Object ii = Get_Value("AD_WF_Responsible_ID");
+            Object ii = Get_Value("VAF_WFlow_Incharge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -184,8 +184,8 @@ SetResponsibleType (null);
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -230,8 +230,8 @@ SetResponsibleType (null);
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** ResponsibleType AD_Reference_ID=304 */
-        public static int RESPONSIBLETYPE_AD_Reference_ID = 304;
+        /** ResponsibleType VAF_Control_Ref_ID=304 */
+        public static int RESPONSIBLETYPE_VAF_Control_Ref_ID = 304;
         /** SQL = C */
         public static String RESPONSIBLETYPE_SQL = "C";
         /** Human = H */

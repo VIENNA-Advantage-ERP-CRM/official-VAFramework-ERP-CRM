@@ -65,7 +65,7 @@ namespace VAdvantage.DataBase
             return dateString.ToString();
         }
 
-        public string TO_CHAR(string columnName, int displayType, string AD_Language)
+        public string TO_CHAR(string columnName, int displayType, string VAF_Language)
         {
             StringBuilder retValue = new StringBuilder("TRIM(TO_CHAR(");
 
@@ -79,7 +79,7 @@ namespace VAdvantage.DataBase
                 else
                     retValue.Append(",'TM9'");
                 //  TO_CHAR(GrandTotal,'9G999G990D00','NLS_NUMERIC_CHARACTERS='',.''')
-                //if (!Language.isDecimalPoint(AD_Language))      //  reversed
+                //if (!Language.isDecimalPoint(VAF_Language))      //  reversed
                 //    retValue.append(",'NLS_NUMERIC_CHARACTERS='',.'''");
             }
             else if (VAdvantage.Classes.DisplayType.IsDate(displayType))

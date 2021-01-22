@@ -33,7 +33,7 @@ namespace VIS.Models
             retDic["C_Project_ID"] = io.GetC_Project_ID().ToString();
             retDic["C_Campaign_ID"] = io.GetC_Campaign_ID().ToString();
             retDic["C_Activity_ID"] = io.GetC_Activity_ID().ToString();
-            retDic["AD_OrgTrx_ID"] = io.GetAD_OrgTrx_ID().ToString();
+            retDic["VAF_OrgTrx_ID"] = io.GetVAF_OrgTrx_ID().ToString();
             retDic["User1_ID"] = io.GetUser1_ID().ToString();
             retDic["User2_ID"] = io.GetUser2_ID().ToString();
             retDic["IsDropShip"] = io.IsDropShip() ? "Y" : "N";
@@ -46,7 +46,7 @@ namespace VIS.Models
         {
             int M_Warehouse_ID = Util.GetValueOfInt(param);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT w.AD_Org_ID, l.M_Locator_ID"
+            string sql = "SELECT w.VAF_Org_ID, l.M_Locator_ID"
             + " FROM M_Warehouse w"
             + " LEFT OUTER JOIN M_Locator l ON (l.M_Warehouse_ID=w.M_Warehouse_ID AND l.IsDefault='Y') "
             + "WHERE w.M_Warehouse_ID=" + M_Warehouse_ID;		//	1
@@ -54,7 +54,7 @@ namespace VIS.Models
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 retDic = new Dictionary<string, object>();
-                retDic["AD_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Org_ID"]);
+                retDic["VAF_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Org_ID"]);
                 retDic["M_Locator_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Locator_ID"]);
             }
             return retDic;
@@ -66,9 +66,9 @@ namespace VIS.Models
             Dictionary<string, object> retValue = null;
             DataSet _ds = null;
             string sql = "SELECT d.docBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-           + " FROM C_DocType d, AD_Sequence s "
+           + " FROM C_DocType d, VAF_Record_Seq s "
            + " WHERE C_DocType_ID=" + Util.GetValueOfInt(fields)
-           + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
+           + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
             try
             {
                 _ds = DB.ExecuteDataset(sql, null, null);

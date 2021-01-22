@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Reference
+/** Generated Model for VAF_Control_Ref
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Reference : PO
+public class X_VAF_Control_Ref : PO
 {
-public X_AD_Reference (Context ctx, int AD_Reference_ID, Trx trxName) : base (ctx, AD_Reference_ID, trxName)
+public X_VAF_Control_Ref (Context ctx, int VAF_Control_Ref_ID, Trx trxName) : base (ctx, VAF_Control_Ref_ID, trxName)
 {
-/** if (AD_Reference_ID == 0)
+/** if (VAF_Control_Ref_ID == 0)
 {
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetValidationType (null);
 }
  */
 }
-public X_AD_Reference (Ctx ctx, int AD_Reference_ID, Trx trxName) : base (ctx, AD_Reference_ID, trxName)
+public X_VAF_Control_Ref (Ctx ctx, int VAF_Control_Ref_ID, Trx trxName) : base (ctx, VAF_Control_Ref_ID, trxName)
 {
-/** if (AD_Reference_ID == 0)
+/** if (VAF_Control_Ref_ID == 0)
 {
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetValidationType (null);
@@ -43,7 +43,7 @@ SetValidationType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Reference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Control_Ref (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_Reference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Reference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Control_Ref (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_Reference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Reference (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Control_Ref (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Reference()
+static X_VAF_Control_Ref()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_Reference()
 //static long serialVersionUID = 27562514363426L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046637L;
-/** AD_Table_ID=102 */
+/** VAF_TableView_ID=102 */
 public static int Table_ID;
  // =102;
 
-/** TableName=AD_Reference */
-public static String Table_Name="AD_Reference";
+/** TableName=VAF_Control_Ref */
+public static String Table_Name="VAF_Control_Ref";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Reference[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Control_Ref[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Reference.
-@param AD_Reference_ID System Reference and Validation */
-public void SetAD_Reference_ID (int AD_Reference_ID)
+@param VAF_Control_Ref_ID System Reference and Validation */
+public void SetVAF_Control_Ref_ID (int VAF_Control_Ref_ID)
 {
-if (AD_Reference_ID < 1) throw new ArgumentException ("AD_Reference_ID is mandatory.");
-Set_ValueNoCheck ("AD_Reference_ID", AD_Reference_ID);
+if (VAF_Control_Ref_ID < 1) throw new ArgumentException ("VAF_Control_Ref_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Control_Ref_ID", VAF_Control_Ref_ID);
 }
 /** Get Reference.
 @return System Reference and Validation */
-public int GetAD_Reference_ID() 
+public int GetVAF_Control_Ref_ID() 
 {
-Object ii = Get_Value("AD_Reference_ID");
+Object ii = Get_Value("VAF_Control_Ref_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -149,8 +149,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -231,8 +231,8 @@ public String GetVFormat()
 return (String)Get_Value("VFormat");
 }
 
-/** ValidationType AD_Reference_ID=2 */
-public static int VALIDATIONTYPE_AD_Reference_ID=2;
+/** ValidationType VAF_Control_Ref_ID=2 */
+public static int VALIDATIONTYPE_VAF_Control_Ref_ID=2;
 /** DataType = D */
 public static String VALIDATIONTYPE_DataType = "D";
 /** List Validation = L */

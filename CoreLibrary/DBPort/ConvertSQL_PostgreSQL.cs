@@ -1384,9 +1384,9 @@ namespace VAdvantage.DBPort
             }
         } // 
 
-        // ALTER TABLE AD_FieldGroup MODIFY IsTab CHAR(1) DEFAULT N;
-        // ALTER TABLE AD_FieldGroup ALTER COLUMN IsTab TYPE CHAR(1); ALTER TABLE
-        // AD_FieldGroup ALTER COLUMN SET DEFAULT 'N';
+        // ALTER TABLE VAF_FieldSection MODIFY IsTab CHAR(1) DEFAULT N;
+        // ALTER TABLE VAF_FieldSection ALTER COLUMN IsTab TYPE CHAR(1); ALTER TABLE
+        // VAF_FieldSection ALTER COLUMN SET DEFAULT 'N';
         private String ConvertDDL(String sqlStatement)
         {
             if (sqlStatement.ToUpper().IndexOf("ALTER TABLE ") == 0)

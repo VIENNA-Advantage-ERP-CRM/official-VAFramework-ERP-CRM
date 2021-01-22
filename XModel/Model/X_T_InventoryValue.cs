@@ -20,7 +20,7 @@ public X_T_InventoryValue (Context ctx, int T_InventoryValue_ID, Trx trxName) : 
 {
 /** if (T_InventoryValue_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
 SetM_Product_ID (0);
 SetM_Warehouse_ID (0);
@@ -31,7 +31,7 @@ public X_T_InventoryValue (Ctx ctx, int T_InventoryValue_ID, Trx trxName) : base
 {
 /** if (T_InventoryValue_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
 SetM_Product_ID (0);
 SetM_Warehouse_ID (0);
@@ -74,7 +74,7 @@ static X_T_InventoryValue()
 //static long serialVersionUID 27562514384255L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067466L;
-/** AD_Table_ID=478 */
+/** VAF_TableView_ID=478 */
 public static int Table_ID;
  // =478;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_T_InventoryValue[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -70,7 +70,7 @@ static X_K_EntryRelated()
 //static long serialVersionUID 27562514378017L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061228L;
-/** AD_Table_ID=610 */
+/** VAF_TableView_ID=610 */
 public static int Table_ID;
  // =610;
 
@@ -113,8 +113,8 @@ StringBuilder sb = new StringBuilder ("X_K_EntryRelated[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** K_EntryRelated_ID AD_Reference_ID=285 */
-public static int K_ENTRYRELATED_ID_AD_Reference_ID=285;
+/** K_EntryRelated_ID VAF_Control_Ref_ID=285 */
+public static int K_ENTRYRELATED_ID_VAF_Control_Ref_ID=285;
 /** Set Related Entry.
 @param K_EntryRelated_ID Related Entry for this Enntry */
 public void SetK_EntryRelated_ID (int K_EntryRelated_ID)

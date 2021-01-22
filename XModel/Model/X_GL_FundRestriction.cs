@@ -74,7 +74,7 @@ static X_GL_FundRestriction()
 //static long serialVersionUID 27562514376544L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059755L;
-/** AD_Table_ID=824 */
+/** VAF_TableView_ID=824 */
 public static int Table_ID;
  // =824;
 

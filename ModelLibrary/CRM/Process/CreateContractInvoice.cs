@@ -65,7 +65,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                sql = "select C_Contract_id from c_contract where isactive = 'Y' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                sql = "select C_Contract_id from c_contract where isactive = 'Y' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -115,7 +115,7 @@ namespace VAdvantage.Process
             if (contSchedule.IsActive())
             {
                 int res = 0;
-                sql = "select c_doctype_id from c_doctype where name = 'AR Invoice' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                sql = "select c_doctype_id from c_doctype where name = 'AR Invoice' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                // sql = "select noofdays from c_frequency where c_frequency_id = " + cont.GetC_Frequency_ID();
@@ -179,8 +179,8 @@ namespace VAdvantage.Process
                 price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
                 VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, null);
-                inv.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                inv.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 inv.SetC_BPartner_ID(cont.GetC_BPartner_ID());
                 if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
                 {
@@ -204,8 +204,8 @@ namespace VAdvantage.Process
                 if (inv.GetC_Invoice_ID() != 0)
                 {
                     VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
-                    invLine.SetAD_Client_ID(inv.GetAD_Client_ID());
-                    invLine.SetAD_Org_ID(inv.GetAD_Org_ID());
+                    invLine.SetVAF_Client_ID(inv.GetVAF_Client_ID());
+                    invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
                     invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());
                     invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
                     invLine.SetC_UOM_ID(cont.GetC_UOM_ID());

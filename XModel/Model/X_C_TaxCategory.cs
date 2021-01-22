@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514375384L;
         /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
         public static long updatedMS = 1280389058595L;
-        /** AD_Table_ID=252 */
+        /** VAF_TableView_ID=252 */
         public static int Table_ID;
         // =252;
 
@@ -261,8 +261,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("VATAX_GenerateLines");
         }
-        /** VATAX_Location AD_Reference_ID=1000191 */
-        public static int VATAX_LOCATION_AD_Reference_ID = 1000191;
+        /** VATAX_Location VAF_Control_Ref_ID=1000191 */
+        public static int VATAX_LOCATION_VAF_Control_Ref_ID = 1000191;
         /** Invoice To Address = I */
         public static String VATAX_LOCATION_InvoiceToAddress = "I";
         /** Ship To Address = S */
@@ -293,8 +293,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("VATAX_Location");
         }
-        /** VATAX_Preference1 AD_Reference_ID=1000190 */
-        public static int VATAX_PREFERENCE1_AD_Reference_ID = 1000190;
+        /** VATAX_Preference1 VAF_Control_Ref_ID=1000190 */
+        public static int VATAX_PREFERENCE1_VAF_Control_Ref_ID = 1000190;
         /** Location = L */
         public static String VATAX_PREFERENCE1_Location = "L";
         /** Tax Region = R */
@@ -330,8 +330,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VATAX_Preference1");
         }
 
-        /** VATAX_Preference2 AD_Reference_ID=1000190 */
-        public static int VATAX_PREFERENCE2_AD_Reference_ID = 1000190;
+        /** VATAX_Preference2 VAF_Control_Ref_ID=1000190 */
+        public static int VATAX_PREFERENCE2_VAF_Control_Ref_ID = 1000190;
         /** Location = L */
         public static String VATAX_PREFERENCE2_Location = "L";
         /** Tax Region = R */
@@ -367,8 +367,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VATAX_Preference2");
         }
 
-        /** VATAX_Preference3 AD_Reference_ID=1000190 */
-        public static int VATAX_PREFERENCE3_AD_Reference_ID = 1000190;
+        /** VATAX_Preference3 VAF_Control_Ref_ID=1000190 */
+        public static int VATAX_PREFERENCE3_VAF_Control_Ref_ID = 1000190;
         /** Location = L */
         public static String VATAX_PREFERENCE3_Location = "L";
         /** Tax Region = R */

@@ -129,7 +129,7 @@
             //this.log.log(VIS.Logging.Level.OFF, "OFF");
             $busyDiv[0].style.visibility = 'visible';
 
-            $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getAD_User_ID(), function (event) {
+            $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getVAF_UserContact_ID(), function (event) {
 
               
 
@@ -512,7 +512,7 @@
 
             // check if did not logged in as System Administrator Role, 
             // then hide download server log and Date section from user preference
-            if (VIS.context && !VIS.context.getAD_Role_ID() == 0)
+            if (VIS.context && !VIS.context.getVAF_Role_ID() == 0)
                 root.find(".VIS_Pref_err_btnLeft").hide();
 
             $btnlogDate = root.find("#vbtnLogDate_" + windowNo);
@@ -588,7 +588,7 @@
                                 if (VIS.themeMgr)
                     VIS.themeMgr.applyTheme(clr);
                 //save theme 
-                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getAD_User_ID() }, function (e) {
+                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getVAF_UserContact_ID() }, function (e) {
 
                 });
                 
@@ -790,7 +790,7 @@
                     dataType: "json",
                     data: {
 
-                        AD_User_ID: VIS.context.getAD_User_ID(),
+                        VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID(),
                         currentPws: currentPws,
                         newPws: newPws,
 
@@ -846,11 +846,11 @@
                     return;
                 }
 
-                var AD_Role_ID = $cmdRole.val();
-                var AD_Client_ID = $cmdClient.val();
-                var AD_Org_ID = $cmdOrg.val();
+                var VAF_Role_ID = $cmdRole.val();
+                var VAF_Client_ID = $cmdClient.val();
+                var VAF_Org_ID = $cmdOrg.val();
                 var AD_WH_ID = $cmdWareHouse.val();
-                if (AD_Role_ID == undefined || AD_Client_ID == undefined || AD_Org_ID == undefined) {
+                if (VAF_Role_ID == undefined || VAF_Client_ID == undefined || VAF_Org_ID == undefined) {
                     lblRecordSave.text(VIS.Msg.getMsg("VIS_FillLogin"));
                     return;
                 }
@@ -866,7 +866,7 @@
                     dataType: "json",
                     data: {
 
-                        AD_User_ID: VIS.context.getAD_User_ID(),
+                        VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID(),
                         currentPws: currentPws,
                         newPws: newPws,
                         conformPws: conformPws,
@@ -876,9 +876,9 @@
                         chkFax: $chkFax.prop("checked"),
                         emailUserName: emailUserName,
                         emailPws: emailPws,
-                        AD_Role_ID: AD_Role_ID,
-                        AD_Client_ID: AD_Client_ID,
-                        AD_Org_ID: AD_Org_ID,
+                        VAF_Role_ID: VAF_Role_ID,
+                        VAF_Client_ID: VAF_Client_ID,
+                        VAF_Org_ID: VAF_Org_ID,
                         M_Warehouse_ID: AD_WH_ID
                     },
                     success: function (data) {
@@ -908,7 +908,7 @@
                     ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "Mail Configuration" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
                     if (ad_window_Id > 0) {
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_User_ID());
+                        zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
                         VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
                     }
                 }
@@ -932,7 +932,7 @@
                     ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "User Substitute" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
                     if (ad_window_Id > 0) {
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_User_ID());
+                        zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
                         VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
                     }
                 }
@@ -1568,29 +1568,29 @@
                 url: VIS.Application.contextUrl + "UserPreference/GetDefaultLogin",
                 dataType: "json",
                 //async: false,
-                data: { AD_User_ID: VIS.context.getAD_User_ID() },
+                data: { VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID() },
                 success: function (data) {
                     var di = JSON.parse(data);
-                    defaultLogin.AD_Role_ID = di.AD_Role_ID;
-                    defaultLogin.AD_Client_ID = di.AD_Client_ID;
-                    defaultLogin.AD_Org_ID = di.AD_Org_ID;
+                    defaultLogin.VAF_Role_ID = di.VAF_Role_ID;
+                    defaultLogin.VAF_Client_ID = di.VAF_Client_ID;
+                    defaultLogin.VAF_Org_ID = di.VAF_Org_ID;
                     defaultLogin.M_Warehouse_ID = di.M_Warehouse_ID;
                     loadRoles();
                 }
             });
         };
         var loadRoles = function () {
-            var sql = "SELECT  r.Name,r.AD_Role_ID" +
+            var sql = "SELECT  r.Name,r.VAF_Role_ID" +
                //" u.ConnectionProfile, u.Password "+	//	4,5
-               " FROM AD_User u" +
-               " INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')" +
-               " INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') " +
+               " FROM VAF_UserContact u" +
+               " INNER JOIN VAF_UserContact_Roles ur ON (u.VAF_UserContact_ID=ur.VAF_UserContact_ID AND ur.IsActive='Y')" +
+               " INNER JOIN VAF_Role r ON (ur.VAF_Role_ID=r.VAF_Role_ID AND r.IsActive='Y') " +
                 //.Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
                " WHERE " +//(COALESCE(u.LDAPUser,u.Name)=@username OR COALESCE(u.LDAPUser,u.Value)=@username)"+
-               " u.AD_User_ID=" + VIS.context.getAD_User_ID() + " AND u.IsActive='Y' " +
+               " u.VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND u.IsActive='Y' " +
                " AND u.IsLoginUser='Y' " +
-               " AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')" +
-               " AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')" +
+               " AND EXISTS (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')" +
+               " AND EXISTS (SELECT * FROM VAF_Client c WHERE r.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')" +
                " ORDER BY r.Name";
 
 
@@ -1605,7 +1605,7 @@
                         cmbRoleContent += "<option value=" + dic[itm].RecKey + ">" + dic[itm].Name + "</option>";
                     }
                     $cmdRole.append(cmbRoleContent);
-                    $cmdRole.val(defaultLogin.AD_Role_ID);
+                    $cmdRole.val(defaultLogin.VAF_Role_ID);
                     cmbRoleContent = null;
                     dic = null;
                     loadClient();
@@ -1622,7 +1622,7 @@
                 return;
 
             }
-            var sql = "SELECT c.Name,r.AD_Client_ID FROM AD_Role r INNER JOIN AD_Client c ON (c.AD_Client_ID=r.AD_Client_ID) WHERE r.AD_Role_ID=" + roleID;
+            var sql = "SELECT c.Name,r.VAF_Client_ID FROM VAF_Role r INNER JOIN VAF_Client c ON (c.VAF_Client_ID=r.VAF_Client_ID) WHERE r.VAF_Role_ID=" + roleID;
             roleID = null;
 
             $.ajax({
@@ -1636,7 +1636,7 @@
                         cmbClientContent += "<option value=" + dic[itm].RecKey + ">" + dic[itm].Name + "</option>";
                     }
                     $cmdClient.append(cmbClientContent);
-                    $cmdClient.val(defaultLogin.AD_Client_ID);
+                    $cmdClient.val(defaultLogin.VAF_Client_ID);
                     cmbClientContent = null;
                     dic = null;
                     sql = null;
@@ -1647,30 +1647,30 @@
 
         };
         var loadOrg = function () {
-            var AD_Role_ID = $cmdRole.val();
-            var AD_Client_ID = $cmdClient.val();
+            var VAF_Role_ID = $cmdRole.val();
+            var VAF_Client_ID = $cmdClient.val();
             $cmdOrg.empty();
             $cmdWareHouse.empty();
-            if (AD_Role_ID == undefined || AD_Client_ID == undefined) {
+            if (VAF_Role_ID == undefined || VAF_Client_ID == undefined) {
                 return;
 
             }
-            var sql = "SELECT o.Name,o.AD_Org_ID "	//	1..3
-                + "FROM AD_Role r, AD_Client c"
-                + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
-                + "WHERE r.AD_Role_ID='" + AD_Role_ID + "'" 	//	#1
-                + " AND c.AD_Client_ID='" + AD_Client_ID + "'"	//	#2
+            var sql = "SELECT o.Name,o.VAF_Org_ID "	//	1..3
+                + "FROM VAF_Role r, VAF_Client c"
+                + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
+                + "WHERE r.VAF_Role_ID='" + VAF_Role_ID + "'" 	//	#1
+                + " AND c.VAF_Client_ID='" + VAF_Client_ID + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N'  AND o.IsCostCenter='N' AND o.IsProfitCenter='N' "
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
-                        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
-                        + "WHERE ua.AD_User_ID='" + VIS.context.getAD_User_ID() + "' AND ua.IsActive='Y'))"		//	#3
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                        + "WHERE ua.VAF_UserContact_ID='" + VIS.context.getVAF_UserContact_ID() + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
 
-            AD_Role_ID = null;
-            AD_Client_ID = null;
+            VAF_Role_ID = null;
+            VAF_Client_ID = null;
             $.ajax({
                 url: VIS.Application.contextUrl + "UserPreference/GetLoginData",
                 dataType: "json",
@@ -1682,7 +1682,7 @@
                         cmbOrgContent += "<option value=" + dic[itm].RecKey + ">" + dic[itm].Name + "</option>";
                     }
                     $cmdOrg.append(cmbOrgContent);
-                    $cmdOrg.val(defaultLogin.AD_Org_ID);
+                    $cmdOrg.val(defaultLogin.VAF_Org_ID);
                     cmbOrgContent = null;
                     dic = null;
                     sql = null;
@@ -1693,18 +1693,18 @@
 
         };
         var loadWH = function () {
-            var AD_Org_ID = $cmdOrg.val();
+            var VAF_Org_ID = $cmdOrg.val();
 
             $cmdWareHouse.empty();
-            if (AD_Org_ID == undefined) {
+            if (VAF_Org_ID == undefined) {
                 return;
 
             }
             var sql = "SELECT Name,M_Warehouse_ID  FROM M_Warehouse "
-                + "WHERE AD_Org_ID=" + AD_Org_ID + " AND IsActive='Y' "
+                + "WHERE VAF_Org_ID=" + VAF_Org_ID + " AND IsActive='Y' "
                 + "ORDER BY Name";
 
-            AD_Org_ID = null;
+            VAF_Org_ID = null;
 
             $.ajax({
                 url: VIS.Application.contextUrl + "UserPreference/GetLoginData",

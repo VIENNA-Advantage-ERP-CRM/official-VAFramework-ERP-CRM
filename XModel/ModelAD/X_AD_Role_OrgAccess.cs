@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Role_OrgAccess
+/** Generated Model for VAF_Role_OrgRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Role_OrgAccess : PO
+public class X_VAF_Role_OrgRights : PO
 {
-public X_AD_Role_OrgAccess (Context ctx, int AD_Role_OrgAccess_ID, Trx trxName) : base (ctx, AD_Role_OrgAccess_ID, trxName)
+public X_VAF_Role_OrgRights (Context ctx, int VAF_Role_OrgRights_ID, Trx trxName) : base (ctx, VAF_Role_OrgRights_ID, trxName)
 {
-/** if (AD_Role_OrgAccess_ID == 0)
+/** if (VAF_Role_OrgRights_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadOnly (false);
 }
  */
 }
-public X_AD_Role_OrgAccess (Ctx ctx, int AD_Role_OrgAccess_ID, Trx trxName) : base (ctx, AD_Role_OrgAccess_ID, trxName)
+public X_VAF_Role_OrgRights (Ctx ctx, int VAF_Role_OrgRights_ID, Trx trxName) : base (ctx, VAF_Role_OrgRights_ID, trxName)
 {
-/** if (AD_Role_OrgAccess_ID == 0)
+/** if (VAF_Role_OrgRights_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadOnly (false);
 }
  */
@@ -39,7 +39,7 @@ SetIsReadOnly (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Role_OrgAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Role_OrgRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Role_OrgAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Role_OrgAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Role_OrgRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Role_OrgAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Role_OrgAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Role_OrgRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Role_OrgAccess()
+static X_VAF_Role_OrgRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_Role_OrgAccess()
 //static long serialVersionUID = 27562514363896L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047107L;
-/** AD_Table_ID=422 */
+/** VAF_TableView_ID=422 */
 public static int Table_ID;
  // =422;
 
-/** TableName=AD_Role_OrgAccess */
-public static String Table_Name="AD_Role_OrgAccess";
+/** TableName=VAF_Role_OrgRights */
+public static String Table_Name="VAF_Role_OrgRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Role_OrgAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Role_OrgRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,7 +131,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Read Only.
 @param IsReadOnly Field is read only */

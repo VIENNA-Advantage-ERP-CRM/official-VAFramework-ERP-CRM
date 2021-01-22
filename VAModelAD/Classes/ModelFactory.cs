@@ -44,9 +44,9 @@ namespace VAModelAD.Classes
 
         /**	Special Classes				*/
         private static String[] _special = new String[] {
-        "AD_Element", "VAdvantage.Model.M_Element",
+        "VAF_ColumnDic", "VAdvantage.Model.M_Element",
         "AD_Registration", "VAdvantage.Model.M_Registration",
-        "AD_Tree", "VAdvantage.Model.MTree_Base",
+        "VAF_TreeInfo", "VAdvantage.Model.MTree_Base",
         "R_Category", "VAdvantage.Model.MRequestCategory",
         "GL_Category", "VAdvantage.Model.MGLCategory",
         "K_Category", "VAdvantage.Model.MKCategory",
@@ -55,7 +55,7 @@ namespace VAModelAD.Classes
         "C_Task", "VAdvantage.Model.MProjectTypeTask",
         "K_Source", "VAdvantage.Model.X_K_Source",
         "RC_ViewColumn","VAdvantage.Model.X_RC_ViewColumn",
-	//	AD_Attribute_Value, AD_TreeNode
+	//	AD_Attribute_Value, VAF_TreeInfoChild
 	    };
 
         private static String[] _projectClasses = new String[]{

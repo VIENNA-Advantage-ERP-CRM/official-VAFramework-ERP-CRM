@@ -72,7 +72,7 @@ static X_M_InventoryLineMA()
 //static long serialVersionUID 27562514379835L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063046L;
-/** AD_Table_ID=763 */
+/** VAF_TableView_ID=763 */
 public static int Table_ID;
  // =763;
 

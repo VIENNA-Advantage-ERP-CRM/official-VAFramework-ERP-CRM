@@ -10,19 +10,19 @@ namespace VAdvantage.Classes
 {
     public class TableSQL
     {
-        public string GetTableQuery(Ctx ctx, int AD_Tab_ID, int AD_Table_ID)
+        public string GetTableQuery(Ctx ctx, int VAF_Tab_ID, int VAF_TableView_ID)
         {
             StringBuilder sqlTbl = new StringBuilder("");
 
-            if (AD_Table_ID <= 0 && AD_Tab_ID > 0)
-                AD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Tab WHERE AD_Tab_ID = " + AD_Tab_ID));
+            if (VAF_TableView_ID <= 0 && VAF_Tab_ID > 0)
+                VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VAF_Tab_ID));
 
-            if (AD_Table_ID <= 0)
+            if (VAF_TableView_ID <= 0)
                 return sqlTbl.ToString();
 
-            string sql = "SELECT * FROM AD_Column WHERE AD_Table_ID = " + AD_Table_ID;
+            string sql = "SELECT * FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID;
 
-            POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
+            POInfo inf = POInfo.GetPOInfo(ctx, VAF_TableView_ID);
 
 
             return sqlTbl.ToString();
@@ -31,12 +31,12 @@ namespace VAdvantage.Classes
         public string GetFieldV(Ctx ctx)
         {
             //	IsActive is part of View
-            String sql = "SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID";
-            if (!Env.IsBaseLanguage(ctx, "AD_Tab"))
-                sql = "SELECT * FROM AD_Field_vt WHERE AD_Tab_ID=@tabID"
-                    + " AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
-            //if (AD_UserDef_Win_ID != 0)
-            //    sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
+            String sql = "SELECT * FROM VAF_Field_v WHERE VAF_Tab_ID=@tabID";
+            if (!Env.IsBaseLanguage(ctx, "VAF_Tab"))
+                sql = "SELECT * FROM VAF_Field_vt WHERE VAF_Tab_ID=@tabID"
+                    + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
+            //if (VAF_UserCustom_Win_ID != 0)
+            //    sql += " AND VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID;
             sql += " ORDER BY IsDisplayed DESC, SeqNo";
             return sql;
         }

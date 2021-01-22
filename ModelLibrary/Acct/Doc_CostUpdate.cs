@@ -136,10 +136,10 @@ namespace VAdvantage.Acct
                            + " AND C_AcctSchema_ID = " + as1.GetC_AcctSchema_ID()
                            + " AND M_CostElement_ID = " + m_ce.GetM_CostElement_ID()
                            + " AND M_CostType_ID = " + as1.GetM_CostType_ID()
-                           + " AND AD_Client_ID = " + GetAD_Client_ID();
+                           + " AND VAF_Client_ID = " + GetVAF_Client_ID();
                 if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Client))
                 {
-                    sql += " AND AD_Org_ID = 0"
+                    sql += " AND VAF_Org_ID = 0"
                         + " AND M_AttributeSetInstance_ID  = 0";
                 }
                 else if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Organization))
@@ -148,7 +148,7 @@ namespace VAdvantage.Acct
                 }
                 else if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_BatchLot))
                 {
-                    sql += " AND AD_Org_ID = 0";
+                    sql += " AND VAF_Org_ID = 0";
                 }
 
                 IDataReader idr = null;

@@ -2,7 +2,7 @@
  * Module Name    : Context Menu (Value Preference)
  * Purpose        : Contains constructors to set values in PO context and functions 
  *                  to delete preference from database of an attribute(column)
- * Class Used     : X_AD_Preference.cs
+ * Class Used     : X_VAF_ValuePreference.cs
  * Chronological Development
  * Veena Pandey     21-Apr-2009
  ******************************************************/
@@ -22,18 +22,18 @@ namespace VAdvantage.Model
     /// Contains constructors to set values in PO context and functions to 
     /// delete preference from database of an attribute(column)
     /// </summary>
-    public class MPreference : X_AD_Preference
+    public class MPreference : X_VAF_ValuePreference
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Preference_ID">id</param>
+        /// <param name="VAF_ValuePreference_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPreference(Context ctx, int AD_Preference_ID, Trx trxName)
-            : base(ctx, AD_Preference_ID, trxName)
+        public MPreference(Context ctx, int VAF_ValuePreference_ID, Trx trxName)
+            : base(ctx, VAF_ValuePreference_ID, trxName)
         {
-            if (AD_Preference_ID == 0)
+            if (VAF_ValuePreference_ID == 0)
             {
                 //	SetAttribute (null);
                 //	SetValue (null);
@@ -69,12 +69,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Preference_ID">id</param>
+        /// <param name="VAF_ValuePreference_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPreference(Ctx ctx, int AD_Preference_ID, Trx trxName)
-            : base(ctx, AD_Preference_ID, trxName)
+        public MPreference(Ctx ctx, int VAF_ValuePreference_ID, Trx trxName)
+            : base(ctx, VAF_ValuePreference_ID, trxName)
         {
-            if (AD_Preference_ID == 0)
+            if (VAF_ValuePreference_ID == 0)
             {
                 //	SetAttribute (null);
                 //	SetValue (null);
@@ -139,7 +139,7 @@ namespace VAdvantage.Model
         /// <returns>number of records deleted</returns>
         public static int Delete(String Attribute, String Value)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM AD_Preference WHERE Attribute='")
+            StringBuilder sql = new StringBuilder("DELETE FROM VAF_ValuePreference WHERE Attribute='")
                 .Append(Attribute).Append("' AND Value='").Append(Value).Append("'");
             return DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
         }

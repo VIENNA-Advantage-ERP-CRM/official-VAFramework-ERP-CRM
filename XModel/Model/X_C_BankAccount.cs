@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721596534964L;
         /** Last Updated Timestamp 8/13/2015 6:36:58 PM */
         public static long updatedMS = 1439471218175L;
-        /** AD_Table_ID=297 */
+        /** VAF_TableView_ID=297 */
         public static int Table_ID;
         // =297;
 
@@ -167,8 +167,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BBAN");
         }
 
-        /** BankAccountType AD_Reference_ID=216 */
-        public static int BANKACCOUNTTYPE_AD_Reference_ID = 216;
+        /** BankAccountType VAF_Control_Ref_ID=216 */
+        public static int BANKACCOUNTTYPE_VAF_Control_Ref_ID = 216;
         /** Checking = C */
         public static String BANKACCOUNTTYPE_Checking = "C";
         /** Savings = S */

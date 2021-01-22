@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ClientShare
+/** Generated Model for VAF_ClientShare
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ClientShare : PO
+public class X_VAF_ClientShare : PO
 {
-public X_AD_ClientShare (Context ctx, int AD_ClientShare_ID, Trx trxName) : base (ctx, AD_ClientShare_ID, trxName)
+public X_VAF_ClientShare (Context ctx, int VAF_ClientShare_ID, Trx trxName) : base (ctx, VAF_ClientShare_ID, trxName)
 {
-/** if (AD_ClientShare_ID == 0)
+/** if (VAF_ClientShare_ID == 0)
 {
-SetAD_ClientShare_ID (0);
-SetAD_Table_ID (0);
+SetVAF_ClientShare_ID (0);
+SetVAF_TableView_ID (0);
 SetName (null);
 SetShareType (null);
 }
  */
 }
-public X_AD_ClientShare (Ctx ctx, int AD_ClientShare_ID, Trx trxName) : base (ctx, AD_ClientShare_ID, trxName)
+public X_VAF_ClientShare (Ctx ctx, int VAF_ClientShare_ID, Trx trxName) : base (ctx, VAF_ClientShare_ID, trxName)
 {
-/** if (AD_ClientShare_ID == 0)
+/** if (VAF_ClientShare_ID == 0)
 {
-SetAD_ClientShare_ID (0);
-SetAD_Table_ID (0);
+SetVAF_ClientShare_ID (0);
+SetVAF_TableView_ID (0);
 SetName (null);
 SetShareType (null);
 }
@@ -43,7 +43,7 @@ SetShareType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ClientShare (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ClientShare (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_ClientShare (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ClientShare (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ClientShare (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_ClientShare (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ClientShare (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ClientShare (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ClientShare()
+static X_VAF_ClientShare()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_ClientShare()
 //static long serialVersionUID = 27562514360919L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044130L;
-/** AD_Table_ID=827 */
+/** VAF_TableView_ID=827 */
 public static int Table_ID;
  // =827;
 
-/** TableName=AD_ClientShare */
-public static String Table_Name="AD_ClientShare";
+/** TableName=VAF_ClientShare */
+public static String Table_Name="VAF_ClientShare";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ClientShare[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ClientShare[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tenant Share.
-@param AD_ClientShare_ID Force (not) sharing of tenant/org entities */
-public void SetAD_ClientShare_ID (int AD_ClientShare_ID)
+@param VAF_ClientShare_ID Force (not) sharing of tenant/org entities */
+public void SetVAF_ClientShare_ID (int VAF_ClientShare_ID)
 {
-if (AD_ClientShare_ID < 1) throw new ArgumentException ("AD_ClientShare_ID is mandatory.");
-Set_ValueNoCheck ("AD_ClientShare_ID", AD_ClientShare_ID);
+if (VAF_ClientShare_ID < 1) throw new ArgumentException ("VAF_ClientShare_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ClientShare_ID", VAF_ClientShare_ID);
 }
 /** Get Tenant Share.
 @return Force (not) sharing of tenant/org entities */
-public int GetAD_ClientShare_ID() 
+public int GetVAF_ClientShare_ID() 
 {
-Object ii = Get_Value("AD_ClientShare_ID");
+Object ii = Get_Value("VAF_ClientShare_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -188,8 +188,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** ShareType AD_Reference_ID=365 */
-public static int SHARETYPE_AD_Reference_ID=365;
+/** ShareType VAF_Control_Ref_ID=365 */
+public static int SHARETYPE_VAF_Control_Ref_ID=365;
 /** Client (all shared) = C */
 public static String SHARETYPE_ClientAllShared = "C";
 /** Org (not shared) = O */

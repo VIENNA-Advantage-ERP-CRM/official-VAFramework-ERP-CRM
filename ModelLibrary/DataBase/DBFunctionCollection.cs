@@ -62,7 +62,7 @@ namespace VAdvantage.DataBase
                             currentQty = Decimal.Round(currentQty, precision, MidpointRounding.AwayFromZero);
                     }
                     sql.Clear();
-                    sql.Append(@"INSERT INTO M_InventoryLine (AD_Client_ID, AD_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
+                    sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
                                 M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
                     if (line.Get_ColumnIndex("C_UOM_ID") > 0)
@@ -79,7 +79,7 @@ namespace VAdvantage.DataBase
                         sql.Append(",M_ProductContainer_ID ");
                     }
 
-                    sql.Append(" ) VALUES ( " + _inventory.GetAD_Client_ID() + "," + _inventory.GetAD_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
+                    sql.Append(" ) VALUES ( " + _inventory.GetVAF_Client_ID() + "," + _inventory.GetVAF_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
                         GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
                         M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
@@ -137,7 +137,7 @@ namespace VAdvantage.DataBase
                             currentQty = Decimal.Round(currentQty, precision, MidpointRounding.AwayFromZero);
                     }
                     sql.Clear();
-                    sql.Append(@"INSERT INTO M_InventoryLine (AD_Client_ID, AD_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
+                    sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
                                 M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
                     if (line.Get_ColumnIndex("C_UOM_ID") > 0)
@@ -154,7 +154,7 @@ namespace VAdvantage.DataBase
                         sql.Append(",M_ProductContainer_ID ");
                     }
 
-                    sql.Append(" ) VALUES ( " + _inventory.GetAD_Client_ID() + "," + _inventory.GetAD_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
+                    sql.Append(" ) VALUES ( " + _inventory.GetVAF_Client_ID() + "," + _inventory.GetVAF_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
                         GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
                         M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
@@ -651,10 +651,10 @@ namespace VAdvantage.DataBase
                                                      NVL((SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty
                                                      FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                                                       WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
-                                                            AD_Client_ID = m.AD_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
+                                                            VAF_Client_ID = m.VAF_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
                                                             AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
                                                             AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
-                                                       AND t.AD_Client_ID                     = m.AD_Client_ID
+                                                       AND t.VAF_Client_ID                     = m.VAF_Client_ID
                                                        AND t.M_Locator_ID                     = ml.M_LocatorTo_ID
                                                        AND t.M_Product_ID                     = ml.M_Product_ID
                                                        AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
@@ -676,10 +676,10 @@ namespace VAdvantage.DataBase
                         t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                         FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                         WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
-                        AD_Client_ID = m.AD_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
+                        VAF_Client_ID = m.VAF_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
                         AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
                         AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
-                        AND t.AD_Client_ID                     = m.AD_Client_ID
+                        AND t.VAF_Client_ID                     = m.VAF_Client_ID
                         AND t.M_Locator_ID                     = ml.M_LocatorTo_ID
                         AND t.M_Product_ID                     = ml.M_Product_ID
                         AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
@@ -701,7 +701,7 @@ namespace VAdvantage.DataBase
                                   t.ContainerCurrentQty, t.MovementDate, t.M_Transaction_ID,
                                   row_number() OVER(PARTITION BY ml.m_movementline_id ORDER BY t.M_Transaction_ID DESC, t.MovementDate DESC) RN_
                                 FROM m_transaction T INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                INNER JOIN M_movementLine ml ON(t.AD_Client_ID = ml.AD_Client_ID
+                                INNER JOIN M_movementLine ml ON(t.VAF_Client_ID = ml.VAF_Client_ID
                                 AND t.M_Locator_ID = ml.M_Locator_ID
                                 AND t.M_Product_ID = ml.M_Product_ID
                                 AND NVL(t.M_AttributeSetInstance_ID, 0) = NVL(ml.M_AttributeSetInstance_ID, 0)
@@ -726,7 +726,7 @@ namespace VAdvantage.DataBase
                                 t.ContainerCurrentQty, t.MovementDate,  t.M_Transaction_ID,
                                 row_number() OVER (PARTITION BY ml.m_movementline_id ORDER BY t.M_Transaction_ID DESC, t.MovementDate DESC) RN_
                                 FROM m_transaction T INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                INNER JOIN M_movementLine ml ON ( t.AD_Client_ID = ml.AD_Client_ID
+                                INNER JOIN M_movementLine ml ON ( t.VAF_Client_ID = ml.VAF_Client_ID
                                 AND t.M_Locator_ID = ml.M_Locator_ID
                                 AND t.M_Product_ID = ml.M_Product_ID
                                 AND NVL (t.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
@@ -779,38 +779,38 @@ namespace VAdvantage.DataBase
         {
             if (DB.IsOracle())
             {
-                if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButLast4))
+                if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureDigitsButLast4))
                 {
                     return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
                 {
                     return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
                 {
                     return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]|[[:alpha:]]|[^A-Z0-9 ]|[[:space:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButFirstLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureAlphaNumericButFirstLast4))
                 {
                     return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]|[[:alpha:]]|[^A-Z0-9 ]|[[:space:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
                 }
             }
             else if (DB.IsPostgreSQL())
             {
-                if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButLast4))
+                if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureDigitsButLast4))
                 {
                     return " Case when LENGTH(" + tableName + "." + columnName + ") > 4 then REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-3) ,'[[:digit:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) when LENGTH(" + tableName + "." + columnName + ")<=4 then " + tableName + "." + columnName + " END ";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
                 {
                     return " Case when LENGTH(" + tableName + "." + columnName + ") > 8 then SUBSTR(" + tableName + "." + columnName + ",0,5) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)  when LENGTH(" + tableName + "." + columnName + ")<=8 then " + tableName + "." + columnName + " END ";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
                 {
                     return " Case when LENGTH(" + tableName + "." + columnName + ") > 4 then REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-3) ,'[[:digit:]]|[[:alpha:]]|[^A-Z0-9 ]|[[:space:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)  when LENGTH(" + tableName + "." + columnName + ")<=4 then " + tableName + "." + columnName + " END ";
                 }
-                else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButFirstLast4))
+                else if (obscureType.Equals(X_VAF_Column.OBSCURETYPE_ObscureAlphaNumericButFirstLast4))
                 {
                     return " Case when LENGTH(" + tableName + "." + columnName + ") > 8 then SUBSTR(" + tableName + "." + columnName + ",0,5) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]|[[:alpha:]]|[^A-Z0-9 ]|[[:space:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)  when LENGTH(" + tableName + "." + columnName + ")<=8 then " + tableName + "." + columnName + " END ";
                 }
@@ -910,7 +910,7 @@ namespace VAdvantage.DataBase
                              WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , 
                              VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)
                              CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT 
-                             FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             FROM (SELECT us.Name FROM VAF_UserContact us JOIN C_BPartner_Location bp ON bp.VAF_UserContact_ID = us.VAF_UserContact_ID 
                              WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @")) WHERE rn = cnt START WITH RN = 1 
                              CONNECT BY rn = PRIOR rn + 1) WHERE C_BPartner_ID = " + C_BPartner_ID);
             }
@@ -918,8 +918,8 @@ namespace VAdvantage.DataBase
             {
                 sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(VA077_LocNo, ', ') AS Name 
                              FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
-                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM AD_User us 
-                             JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM VAF_UserContact us 
+                             JOIN C_BPartner_Location bp ON bp.VAF_UserContact_ID = us.VAF_UserContact_ID 
                              WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @") AS U) WHERE C_BPartner_ID = " + C_BPartner_ID);
             }
             return sql.ToString();

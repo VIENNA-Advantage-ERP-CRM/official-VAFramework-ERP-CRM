@@ -940,7 +940,7 @@
     /**
      * Get Zoom
      * 
-     * @return Zoom AD_Window_ID
+     * @return Zoom VAF_Screen_ID
      */
     MLookup.prototype.getZoomWindow = function () {
         if (arguments.length == 0) {
@@ -955,9 +955,9 @@
     * more tables if they have multiple windows.
     */
 
-        var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID(this.info.tableName,
+        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID(this.info.tableName,
             this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }; // getZoomWindow
     /**
      * Get Zoom Query String
@@ -971,8 +971,8 @@
     /// Get Reference Value
     /// </summary>
     /// <returns>Reference Value</returns>
-    MLookup.prototype.getAD_Reference_Value_ID = function () {
-        return this.info.AD_Reference_Value_ID;
+    MLookup.prototype.getVAF_Control_Ref_Value_ID = function () {
+        return this.info.VAF_Control_Ref_Value_ID;
     };
 
     MLookup.prototype.disableValidation = function () {
@@ -1469,7 +1469,7 @@
     /**
     * Get Zoom
     * 
-    * @return Zoom AD_Window_ID
+    * @return Zoom VAF_Screen_ID
     */
     MLocatorLookup.prototype.getZoomWindow = function () {
         if (arguments.length == 0) {
@@ -1484,9 +1484,9 @@
     * more tables if they have multiple windows.
     */
 
-        var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID("M_Locator",
+        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID("M_Locator",
             this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }; // getZoomWindow
 
 
@@ -1606,7 +1606,7 @@
             list.push({ "Key": -1, "Name": "" });
         //
         //var sql = "SELECT C_ValidCombination_ID, Combination, Description "
-        //    + "FROM C_ValidCombination WHERE AD_Client_ID=" + this.ctx.getAD_Client_ID();
+        //    + "FROM C_ValidCombination WHERE VAF_Client_ID=" + this.ctx.getVAF_Client_ID();
         //if (onlyActive)
         //    sql += " AND IsActive='Y'";
         //sql.append(" ORDER BY 2");
@@ -1619,7 +1619,7 @@
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetValidAccountCombination",
                 data: {
-                    AD_Client_ID: AD_Client_ID,
+                    VAF_Client_ID: VAF_Client_ID,
                     onlyActive: onlyActive
                 },
                 success: function (data) {
@@ -1854,9 +1854,9 @@
     VIS.MLookupFactory =
     {
 
-        get: function (ctx, windowNo, column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, isParent, validationCode) {
+        get: function (ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode) {
 
-            //var lookup = this.getLookupInfo(ctx, windowNo, AD_Reference_ID, column_ID, columnName, AD_Reference_Value_ID, isParent, validationCode);
+            //var lookup = this.getLookupInfo(ctx, windowNo, VAF_Control_Ref_ID, column_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode);
             //if (lookup == null)
             //    throw new IllegalArgumentException("MLookup.create - no LookupInfo");
             //return lookup;
@@ -1866,24 +1866,24 @@
                 'ctx': ctx.getWindowCtx(windowNo),
                 'windowNo': windowNo,
                 'column_ID': column_ID,
-                'AD_Reference_ID': AD_Reference_ID,
+                'VAF_Control_Ref_ID': VAF_Control_Ref_ID,
                 'columnName': columnName,
-                'AD_Reference_Value_ID': AD_Reference_Value_ID,
+                'VAF_Control_Ref_Value_ID': VAF_Control_Ref_Value_ID,
                 'isParent': isParent,
                 'validationCode': validationCode
             };
 
-            //var paramStr = "ctx="+ctxstr+"&windowNo=" + windowNo + "&column_ID=" + column_ID + "&AD_Reference_ID="
-            //    + AD_Reference_ID + "&columnName=" + columnName + "&AD_Reference_Value_ID=" + AD_Reference_Value_ID
+            //var paramStr = "ctx="+ctxstr+"&windowNo=" + windowNo + "&column_ID=" + column_ID + "&VAF_Control_Ref_ID="
+            //    + VAF_Control_Ref_ID + "&columnName=" + columnName + "&VAF_Control_Ref_Value_ID=" + VAF_Control_Ref_Value_ID
             //    + "&isParent=" + isParent + "&validationCode="+validationCode;
 
             var lookup = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetLookup", d);
             var df = new VIS.MLookup(lookup._vInfo, lookup);
             return df;
         },
-        getMLookUp: function (ctx, windowNo, Column_ID, AD_Reference_ID) {
+        getMLookUp: function (ctx, windowNo, Column_ID, VAF_Control_Ref_ID) {
             var columnName = "";
-            var AD_Reference_Value_ID = 0;
+            var VAF_Control_Ref_Value_ID = 0;
             var isParent = false;
             var validationCode = "";
             //
@@ -1895,12 +1895,12 @@
                 dr = executeReader(sql.toString(), param, null);
                 if (dr.read()) {
                     columnName = dr.getString(0);
-                    AD_Reference_Value_ID = dr.getInt(1);
+                    VAF_Control_Ref_Value_ID = dr.getInt(1);
                     isParent = "Y".equals(dr.getString(2));
                     validationCode = dr.getString(3);
                 }
                 else {
-                    //this.log.Log(Level.SEVERE, "Column Not Found - AD_Column_ID=" + Column_ID);
+                    //this.log.Log(Level.SEVERE, "Column Not Found - VAF_Column_ID=" + Column_ID);
                 }
                 dr.close();
                 dr = null;
@@ -1913,22 +1913,22 @@
                 // s_log.Log(Level.SEVERE, sql, ex);
             }
 
-            return VIS.MLookupFactory.get(ctx, windowNo, Column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, isParent, validationCode);
-            //var lookup = new VIS.MLookup(ctx, windowNo, AD_Reference_ID);
-            //var info = GetLookUpInfo(VIS.Env.getLanguage(ctx), windowNo, lookup, Column_ID, columnName, AD_Reference_Value_ID, isParent, validationCode);
+            return VIS.MLookupFactory.get(ctx, windowNo, Column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode);
+            //var lookup = new VIS.MLookup(ctx, windowNo, VAF_Control_Ref_ID);
+            //var info = GetLookUpInfo(VIS.Env.getLanguage(ctx), windowNo, lookup, Column_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode);
             //if (info == null) {
             //   return null;
             //}
             //return lookup.initialize(info);
         },
-        GetLookUpInfo: function (ctx, windowNum, AD_Reference_ID, column_ID, columnName, AD_Reference_Value_ID, isParent, validationCode) {
+        GetLookUpInfo: function (ctx, windowNum, VAF_Control_Ref_ID, column_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode) {
 
             var data = {
                 WindowNum: windowNum,
-                AD_Reference_ID: AD_Reference_ID,
+                VAF_Control_Ref_ID: VAF_Control_Ref_ID,
                 Column_ID: column_ID,
                 columnName: columnName,
-                AD_Reference_Value_ID: AD_Reference_Value_ID,
+                VAF_Control_Ref_Value_ID: VAF_Control_Ref_Value_ID,
                 IsParent: isParent,
                 ValidationCode: validationCode
             };
@@ -1946,7 +1946,7 @@
             try {
                 var dr = executeReader(sql, param);
                 while (dr.read()) {
-                    list.push({ 'ColumnName': dr.getString(0), 'IsTranslated': dr.getString(1), 'DisplayType': dr.getInt(2), 'AD_Reference_Value_ID': dr.getInt(3) });
+                    list.push({ 'ColumnName': dr.getString(0), 'IsTranslated': dr.getString(1), 'DisplayType': dr.getInt(2), 'VAF_Control_Ref_Value_ID': dr.getInt(3) });
                 }
                 dr.close();
                 dr = null;
@@ -1969,7 +1969,7 @@
 
                 //  date, number
                 if (VIS.DisplayType.IsDate(ldc.DisplayType) || VIS.DisplayType.IsNumeric(ldc.DisplayType)) {
-                    embedSQL = embedSQL.concat(VIS.DB.to_char(tableName + "." + ldc.ColumnName, ldc.DisplayType, VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                    embedSQL = embedSQL.concat(VIS.DB.to_char(tableName + "." + ldc.ColumnName, ldc.DisplayType, VIS.Env.getVAF_Language(VIS.Env.getCtx())));
                 }
                 //  TableDir
                 else if ((ldc.DisplayType == VIS.DisplayType.TableDir || ldc.DisplayType == VIS.DisplayType.Search) && ldc.ColumnName.endsWith("_ID")) {
@@ -2019,7 +2019,7 @@
             var sb = info.windowNo + ":";
             //sb += info.column_ID;
             sb += ":" + info.keyColumn +
-                info.AD_Reference_Value_ID + info.query +
+                info.VAF_Control_Ref_Value_ID + info.query +
                 info.validationCode;
             // does not include ctx
             return sb;

@@ -42,21 +42,21 @@ namespace VAdvantage.Classes
 
         /**	Window Cache		*/
         private static CCache<string, GridWindowVO> s_windows
-            = new CCache<string, GridWindowVO>("AD_Window", 10);
+            = new CCache<string, GridWindowVO>("VAF_Screen", 10);
 
         /// <summary>
         /// Get Window Model object from cache 
         /// </summary>
         /// <param name="WindowNo">window Number </param>
-        /// <param name="AD_Window_ID">window id </param>
-        /// <param name="AD_Menu_ID"> menu id </param>
+        /// <param name="VAF_Screen_ID">window id </param>
+        /// <param name="VAF_MenuConfig_ID"> menu id </param>
         /// <returns>return windowVo if found</returns>
-        public static GridWindowVO GetMWindowVO(Ctx ctx, int windowNo, int AD_Window_ID, int AD_Menu_ID)
+        public static GridWindowVO GetMWindowVO(Ctx ctx, int windowNo, int VAF_Screen_ID, int VAF_MenuConfig_ID)
         {
-            log.Config("Window=" + windowNo + ", AD_Window_ID=" + AD_Window_ID);
+            log.Config("Window=" + windowNo + ", VAF_Screen_ID=" + VAF_Screen_ID);
             GridWindowVO mWindowVO = null;
-            string format = string.Format("{0}{1}{2}{3}", AD_Window_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Role_ID(), ctx.GetAD_Language());          //JID_1238: Addedd language to reset cache
-            if (AD_Window_ID != 0)// && Ini.IsCacheWindow())	//	try cache always
+            string format = string.Format("{0}{1}{2}{3}", VAF_Screen_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Role_ID(), ctx.GetVAF_Language());          //JID_1238: Addedd language to reset cache
+            if (VAF_Screen_ID != 0)// && Ini.IsCacheWindow())	//	try cache always
             {
 
                 mWindowVO = s_windows[format];
@@ -71,7 +71,7 @@ namespace VAdvantage.Classes
             if (mWindowVO == null)
             {
                 log.Config("create local");
-                mWindowVO = GridWindowVO.Create(ctx, windowNo, AD_Window_ID, AD_Menu_ID);
+                mWindowVO = GridWindowVO.Create(ctx, windowNo, VAF_Screen_ID, VAF_MenuConfig_ID);
                 if (mWindowVO != null)
                     s_windows[format] = mWindowVO;
             }	//	from Client

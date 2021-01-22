@@ -40,11 +40,11 @@ namespace VIS.Controllers
         #endregion
 
         #region Request
-        public ActionResult GetProcessedRequest(int AD_Table_ID, int Record_ID)
+        public ActionResult GetProcessedRequest(int VAF_TableView_ID, int Record_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetProcessedRequest(AD_Table_ID, Record_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetProcessedRequest(VAF_TableView_ID, Record_ID)), JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -65,17 +65,17 @@ namespace VIS.Controllers
         #endregion
 
         #region processFrame.js
-        public ActionResult GetPrintFormatDetails(int AD_Table_ID)
+        public ActionResult GetPrintFormatDetails(int VAF_TableView_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
 
             string sql = MRole.GetDefault(ctx).AddAccessSQL(
-                     "SELECT AD_PrintFormat_ID, Name, Description,IsDefault "
-                         + "FROM AD_PrintFormat "
-                         + "WHERE AD_Table_ID= " + AD_Table_ID
+                     "SELECT VAF_Print_Rpt_Layout_ID, Name, Description,IsDefault "
+                         + "FROM VAF_Print_Rpt_Layout "
+                         + "WHERE VAF_TableView_ID= " + VAF_TableView_ID
                          + " ORDER BY Name",
-                     "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                     "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
 
             SqlParamsIn sqlP = new SqlParamsIn();
@@ -89,19 +89,19 @@ namespace VIS.Controllers
         #endregion
 
         #region utility.js
-        public ActionResult GetWorkflowWindowID(int AD_Table_ID)
+        public ActionResult GetWorkflowWindowID(int VAF_TableView_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetWorkflowWindowID(AD_Table_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetWorkflowWindowID(VAF_TableView_ID)), JsonRequestBehavior.AllowGet);
 
         }
 
-        public ActionResult GetZoomWindowID(int AD_Table_ID)
+        public ActionResult GetZoomWindowID(int VAF_TableView_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetZoomWindowID(AD_Table_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetZoomWindowID(VAF_TableView_ID)), JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -154,11 +154,11 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(model.GetWareProWiseLocator(ctx, colName, orgId, warehouseId, productId, onlyIsSOTrx)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetValidAccountCombination(int AD_Client_ID, bool onlyActive)
+        public JsonResult GetValidAccountCombination(int VAF_Client_ID, bool onlyActive)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetValidAccountCombination(AD_Client_ID, onlyActive)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetValidAccountCombination(VAF_Client_ID, onlyActive)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GenAttributeSetInstance(int C_GenAttributeSet_ID, bool onlyActive)
@@ -173,17 +173,17 @@ namespace VIS.Controllers
 
         #region Role
 
-        public ContentResult GetDocWhere(int AD_User_ID, string TableName)
+        public ContentResult GetDocWhere(int VAF_UserContact_ID, string TableName)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Content(model.GetDocWhere(AD_User_ID, TableName));
+            return Content(model.GetDocWhere(VAF_UserContact_ID, TableName));
         }
 
         #endregion
 
         #region TreePanel
-        public ContentResult UpdateTree(string oldParentChildren, string newParentChildren, int oldId, int newId, int AD_Tree_ID, string tableName)
+        public ContentResult UpdateTree(string oldParentChildren, string newParentChildren, int oldId, int newId, int VAF_TreeInfo_ID, string tableName)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
@@ -200,24 +200,24 @@ namespace VIS.Controllers
                 newParentChildrens = JsonConvert.DeserializeObject<List<int>>(newParentChildren);
             }
 
-            return Content(model.UpdateTree(oldParentChildrens, newParentChildrens, oldId, newId, AD_Tree_ID, tableName));
+            return Content(model.UpdateTree(oldParentChildrens, newParentChildrens, oldId, newId, VAF_TreeInfo_ID, tableName));
         }
         #endregion
 
         #region AReport
 
-        public ActionResult GetPrintFormats(int AD_Table_ID, int AD_Tab_ID)
+        public ActionResult GetPrintFormats(int VAF_TableView_ID, int VAF_Tab_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetPrintFormats(AD_Table_ID, AD_Tab_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetPrintFormats(VAF_TableView_ID, VAF_Tab_ID)), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetShowReportDetails(int AD_Table_ID, int AD_Tab_ID)
+        public ActionResult GetShowReportDetails(int VAF_TableView_ID, int VAF_Tab_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetShowReportDetails(AD_Table_ID, AD_Tab_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetShowReportDetails(VAF_TableView_ID, VAF_Tab_ID)), JsonRequestBehavior.AllowGet);
         }
 
         #endregion

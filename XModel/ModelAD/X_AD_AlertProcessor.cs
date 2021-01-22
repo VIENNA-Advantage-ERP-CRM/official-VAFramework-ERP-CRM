@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AlertProcessor
+/** Generated Model for VAF_AlertHandler
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AlertProcessor : PO
+public class X_VAF_AlertHandler : PO
 {
-public X_AD_AlertProcessor (Context ctx, int AD_AlertProcessor_ID, Trx trxName) : base (ctx, AD_AlertProcessor_ID, trxName)
+public X_VAF_AlertHandler (Context ctx, int VAF_AlertHandler_ID, Trx trxName) : base (ctx, VAF_AlertHandler_ID, trxName)
 {
-/** if (AD_AlertProcessor_ID == 0)
+/** if (VAF_AlertHandler_ID == 0)
 {
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
 }
  */
 }
-public X_AD_AlertProcessor (Ctx ctx, int AD_AlertProcessor_ID, Trx trxName) : base (ctx, AD_AlertProcessor_ID, trxName)
+public X_VAF_AlertHandler (Ctx ctx, int VAF_AlertHandler_ID, Trx trxName) : base (ctx, VAF_AlertHandler_ID, trxName)
 {
-/** if (AD_AlertProcessor_ID == 0)
+/** if (VAF_AlertHandler_ID == 0)
 {
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
@@ -43,7 +43,7 @@ SetSupervisor_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertHandler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_AlertProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlertHandler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_AlertProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertProcessor (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AlertHandler (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AlertProcessor()
+static X_VAF_AlertHandler()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_AlertProcessor()
 //static long serialVersionUID = 27562514360229L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043440L;
-/** AD_Table_ID=700 */
+/** VAF_TableView_ID=700 */
 public static int Table_ID;
  // =700;
 
-/** TableName=AD_AlertProcessor */
-public static String Table_Name="AD_AlertProcessor";
+/** TableName=VAF_AlertHandler */
+public static String Table_Name="VAF_AlertHandler";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,37 +113,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AlertProcessor[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AlertHandler[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Alert Processor.
-@param AD_AlertProcessor_ID Alert Processor/Server Parameter */
-public void SetAD_AlertProcessor_ID (int AD_AlertProcessor_ID)
+@param VAF_AlertHandler_ID Alert Processor/Server Parameter */
+public void SetVAF_AlertHandler_ID (int VAF_AlertHandler_ID)
 {
-if (AD_AlertProcessor_ID < 1) throw new ArgumentException ("AD_AlertProcessor_ID is mandatory.");
-Set_ValueNoCheck ("AD_AlertProcessor_ID", AD_AlertProcessor_ID);
+if (VAF_AlertHandler_ID < 1) throw new ArgumentException ("VAF_AlertHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AlertHandler_ID", VAF_AlertHandler_ID);
 }
 /** Get Alert Processor.
 @return Alert Processor/Server Parameter */
-public int GetAD_AlertProcessor_ID() 
+public int GetVAF_AlertHandler_ID() 
 {
-Object ii = Get_Value("AD_AlertProcessor_ID");
+Object ii = Get_Value("VAF_AlertHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Schedule.
-@param AD_Schedule_ID Execution Schedule */
-public void SetAD_Schedule_ID (int AD_Schedule_ID)
+@param VAF_Plan_ID Execution Schedule */
+public void SetVAF_Plan_ID (int VAF_Plan_ID)
 {
-if (AD_Schedule_ID <= 0) Set_Value ("AD_Schedule_ID", null);
+if (VAF_Plan_ID <= 0) Set_Value ("VAF_Plan_ID", null);
 else
-Set_Value ("AD_Schedule_ID", AD_Schedule_ID);
+Set_Value ("VAF_Plan_ID", VAF_Plan_ID);
 }
 /** Get Schedule.
 @return Execution Schedule */
-public int GetAD_Schedule_ID() 
+public int GetVAF_Plan_ID() 
 {
-Object ii = Get_Value("AD_Schedule_ID");
+Object ii = Get_Value("VAF_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -203,8 +203,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -294,8 +294,8 @@ if (oo != null)
 return false;
 }
 
-/** Supervisor_ID AD_Reference_ID=316 */
-public static int SUPERVISOR_ID_AD_Reference_ID=316;
+/** Supervisor_ID VAF_Control_Ref_ID=316 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=316;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514372548L;
         /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
         public static long updatedMS = 1280389055759L;
-        /** AD_Table_ID=551 */
+        /** VAF_TableView_ID=551 */
         public static int Table_ID;
         // =551;
 
@@ -360,8 +360,8 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** VA009_ExecutionStatus AD_Reference_ID=1000403 */
-        public static int VA009_EXECUTIONSTATUS_AD_Reference_ID = 1000403;
+        /** VA009_ExecutionStatus VAF_Control_Ref_ID=1000403 */
+        public static int VA009_EXECUTIONSTATUS_VAF_Control_Ref_ID = 1000403;
         /** Awaited = A */
         public static String VA009_EXECUTIONSTATUS_Awaited = "A";
         /** Bounced = B */
@@ -517,8 +517,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA009_BseCurrncy AD_Reference_ID=1000446 */
-        public static int VA009_BSECURRNCY_AD_Reference_ID = 1000446;
+        /** VA009_BseCurrncy VAF_Control_Ref_ID=1000446 */
+        public static int VA009_BSECURRNCY_VAF_Control_Ref_ID = 1000446;
         /** Set Base Currency.
         @param VA009_BseCurrncy Base Currency */
         public void SetVA009_BseCurrncy(int VA009_BseCurrncy)
@@ -624,8 +624,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA009_PaymentMode AD_Reference_ID=1000368 */
-        public static int VA009_PAYMENTMODE_AD_Reference_ID = 1000368;
+        /** VA009_PaymentMode VAF_Control_Ref_ID=1000368 */
+        public static int VA009_PAYMENTMODE_VAF_Control_Ref_ID = 1000368;
         /** Bank = B */
         public static String VA009_PAYMENTMODE_Bank = "B";
         /** Cash = C */
@@ -658,8 +658,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA009_PaymentTrigger AD_Reference_ID=1000370 */
-        public static int VA009_PAYMENTTRIGGER_AD_Reference_ID = 1000370;
+        /** VA009_PaymentTrigger VAF_Control_Ref_ID=1000370 */
+        public static int VA009_PAYMENTTRIGGER_VAF_Control_Ref_ID = 1000370;
         /** Pull By Recipient = R */
         public static String VA009_PAYMENTTRIGGER_PullByRecipient = "R";
         /** Push By Sender = S */
@@ -692,8 +692,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA009_PaymentType AD_Reference_ID=1000369 */
-        public static int VA009_PAYMENTTYPE_AD_Reference_ID = 1000369;
+        /** VA009_PaymentType VAF_Control_Ref_ID=1000369 */
+        public static int VA009_PAYMENTTYPE_VAF_Control_Ref_ID = 1000369;
         /** Batch = B */
         public static String VA009_PAYMENTTYPE_Batch = "B";
         /** Single = S */
@@ -740,8 +740,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA009_ReconciliationStatus AD_Reference_ID=1000376 */
-        public static int VA009_RECONCILIATIONSTATUS_AD_Reference_ID = 1000376;
+        /** VA009_ReconciliationStatus VAF_Control_Ref_ID=1000376 */
+        public static int VA009_RECONCILIATIONSTATUS_VAF_Control_Ref_ID = 1000376;
         /** Bounced = B */
         public static String VA009_RECONCILIATIONSTATUS_Bounced = "B";
         /** Dunning = D */

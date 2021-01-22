@@ -3,7 +3,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MWFNode
  * Purpose        : 
- * Class Used     : MWFNode inherits X_AD_WF_Node
+ * Class Used     : MWFNode inherits X_VAF_WFlow_Node
  * Chronological    Development
  * Raghunandan      01-May-2009 
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.WF
 {
-    public class MWFNode : X_AD_WF_Node
+    public class MWFNode : X_VAF_WFlow_Node
     {
         #region Private variable
         private const long SERIALVERSIONUID = 1L;
@@ -46,21 +46,21 @@ namespace VAdvantage.WF
         private MWFNodePara[] _paras = null;
         //Duration Base MS	
         private long _durationBaseMS = -1;
-        private static CCache<int, MWFNode> _cache = new CCache<int, MWFNode>("AD_WF_Node", 50);
+        private static CCache<int, MWFNode> _cache = new CCache<int, MWFNode>("VAF_WFlow_Node", 50);
         #endregion
 
         /// <summary>
         ///Standard Constructor - save to cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFNode(Ctx ctx, int AD_WF_Node_ID, Trx trxName)
-            : base(ctx, AD_WF_Node_ID, trxName)
+        public MWFNode(Ctx ctx, int VAF_WFlow_Node_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_Node_ID, trxName)
         {
-            if (AD_WF_Node_ID == 0)
+            if (VAF_WFlow_Node_ID == 0)
             {
-                //	setAD_WF_Node_ID (0);
+                //	setVAF_WFlow_Node_ID (0);
                 //	setAD_Workflow_ID (0);
                 //	setValue (null);
                 //	setName (null);
@@ -79,7 +79,7 @@ namespace VAdvantage.WF
             //	Save to Cache
             if (Get_ID() != 0)
             {
-                _cache.Add(GetAD_WF_Node_ID(), this);
+                _cache.Add(GetVAF_WFlow_Node_ID(), this);
             }
         }
 
@@ -111,22 +111,22 @@ namespace VAdvantage.WF
             LoadNext();
             LoadTrl();
             //	Save to Cache            
-            _cache.Add((int)GetAD_WF_Node_ID(), this);
+            _cache.Add((int)GetVAF_WFlow_Node_ID(), this);
         }
 
         /// <summary>
         /// Get WF Node from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <returns>MWFNode</returns>
-        public static MWFNode Get(Ctx ctx, int AD_WF_Node_ID)
+        public static MWFNode Get(Ctx ctx, int VAF_WFlow_Node_ID)
         {
-            int key = AD_WF_Node_ID;
+            int key = VAF_WFlow_Node_ID;
             MWFNode retValue = _cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MWFNode(ctx, AD_WF_Node_ID, null);
+            retValue = new MWFNode(ctx, VAF_WFlow_Node_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -135,11 +135,11 @@ namespace VAdvantage.WF
         /// <summary>
         ///Set Client Org
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
-        //public  void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        //public  void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         //{
-        //    base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+        //    base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         //}
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace VAdvantage.WF
         /// </summary>
         private void LoadNext()
         {
-            String sql = "SELECT * FROM AD_WF_NodeNext WHERE AD_WF_Node_ID=" + Get_ID() + " AND IsActive='Y' ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_WFlow_NextNode WHERE VAF_WFlow_Node_ID=" + Get_ID() + " AND IsActive='Y' ORDER BY SeqNo";
             bool splitAnd = SPLITELEMENT_AND.Equals(GetSplitElement());
             DataSet ds = null;
             try
@@ -176,7 +176,7 @@ namespace VAdvantage.WF
         {
             if (Utility.Env.IsBaseLanguage(GetCtx(),"AD_Workflow") || Get_ID() == 0)
                 return;
-            String sql = "SELECT Name, Description, Help FROM AD_WF_Node_Trl WHERE AD_WF_Node_ID=" + Get_ID() + " AND AD_Language='" + Utility.Env.GetAD_Language(GetCtx()) + "'";
+            String sql = "SELECT Name, Description, Help FROM VAF_WFlow_Node_TL WHERE VAF_WFlow_Node_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";
             IDataReader idr = null;
             try
             {
@@ -283,25 +283,25 @@ namespace VAdvantage.WF
         {
             String action = GetAction();
             if (ACTION_AppsProcess.Equals(action))
-                return "Process:AD_Process_ID=" + GetAD_Process_ID();
+                return "Process:VAF_Job_ID=" + GetVAF_Job_ID();
             else if (ACTION_DocumentAction.Equals(action))
                 return "DocumentAction=" + GetDocAction();
             else if (ACTION_AppsReport.Equals(action))
-                return "Report:AD_Process_ID=" + GetAD_Process_ID();
+                return "Report:VAF_Job_ID=" + GetVAF_Job_ID();
             else if (ACTION_AppsTask.Equals(action))
                 return "Task:AD_Task_ID=" + GetAD_Task_ID();
             else if (ACTION_SetVariable.Equals(action))
-                return "SetVariable:AD_Column_ID=" + GetAD_Column_ID();
+                return "SetVariable:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_SubWorkflow.Equals(action))
                 return "Workflow:AD_Workflow_ID=" + GetAD_Workflow_ID();
             else if (ACTION_UserChoice.Equals(action))
-                return "UserChoice:AD_Column_ID=" + GetAD_Column_ID();
+                return "UserChoice:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_UserWorkbench.Equals(action))
                 return "Workbench:?";
             else if (ACTION_UserForm.Equals(action))
-                return "Form:AD_Form_ID=" + GetAD_Form_ID();
+                return "Form:VAF_Page_ID=" + GetVAF_Page_ID();
             else if (ACTION_UserWindow.Equals(action))
-                return "Window:AD_Window_ID=" + GetAD_Window_ID();
+                return "Window:VAF_Screen_ID=" + GetVAF_Screen_ID();
             else if (ACTION_WaitSleep.Equals(action))
                 return "Sleep:WaitTime=" + GetWaitTime();
             return "??";
@@ -309,12 +309,12 @@ namespace VAdvantage.WF
 
         /// <summary>
         /// Get Attribute Name
-        /// @see model.X_AD_WF_Node#getAttributeName()
+        /// @see model.X_VAF_WFlow_Node#getAttributeName()
         /// </summary>
         /// <returns>Attribute Name</returns>
         public new String GetAttributeName()
         {
-            if (GetAD_Column_ID() == 0)
+            if (GetVAF_Column_ID() == 0)
                 return base.GetAttributeName();
             //	We have a column
             String attribute = base.GetAttributeName();
@@ -331,10 +331,10 @@ namespace VAdvantage.WF
         /// <returns>column if valid</returns>
         public MColumn GetColumn()
         {
-            if (GetAD_Column_ID() == 0)
+            if (GetVAF_Column_ID() == 0)
                 return null;
             if (_column == null)
-                _column = MColumn.Get(GetCtx(), GetAD_Column_ID());
+                _column = MColumn.Get(GetCtx(), GetVAF_Column_ID());
             return _column;
         }
 
@@ -488,9 +488,9 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_AppsProcess) || action.Equals(ACTION_AppsReport))
             {
-                if (GetAD_Process_ID() == 0)
+                if (GetVAF_Job_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Process_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Job_ID"));
                     return false;
                 }
             }
@@ -536,25 +536,25 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_UserChoice))
             {
-                if (GetAD_Column_ID() == 0)
+                if (GetVAF_Column_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Column_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Column_ID"));
                     return false;
                 }
             }
             else if (action.Equals(ACTION_UserForm))
             {
-                if (GetAD_Form_ID() == 0)
+                if (GetVAF_Page_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Form_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Page_ID"));
                     return false;
                 }
             }
             else if (action.Equals(ACTION_UserWindow))
             {
-                if (GetAD_Window_ID() == 0)
+                if (GetVAF_Screen_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Window_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Screen_ID"));
                     return false;
                 }
             }
@@ -597,15 +597,15 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get the transitions
         /// </summary>
-        /// <param name="AD_Client_ID">for client</param>
+        /// <param name="VAF_Client_ID">for client</param>
         /// <returns>array of next nodes</returns>
-        public MWFNodeNext[] GetTransitions(int AD_Client_ID)
+        public MWFNodeNext[] GetTransitions(int VAF_Client_ID)
         {
             List<MWFNodeNext> list = new List<MWFNodeNext>();
             for (int i = 0; i < _next.Count; i++)
             {
                 MWFNodeNext next = _next[i];
-                if (next.GetAD_Client_ID() == 0 || next.GetAD_Client_ID() == AD_Client_ID)
+                if (next.GetVAF_Client_ID() == 0 || next.GetVAF_Client_ID() == VAF_Client_ID)
                     list.Add(next);
             }
             MWFNodeNext[] retValue = new MWFNodeNext[list.Count];
@@ -620,7 +620,7 @@ namespace VAdvantage.WF
         public MWFNodePara[] GetParameters()
         {
             if (_paras == null)
-                _paras = MWFNodePara.GetParameters(GetCtx(), GetAD_WF_Node_ID());
+                _paras = MWFNodePara.GetParameters(GetCtx(), GetVAF_WFlow_Node_ID());
             return _paras;
         }
     }

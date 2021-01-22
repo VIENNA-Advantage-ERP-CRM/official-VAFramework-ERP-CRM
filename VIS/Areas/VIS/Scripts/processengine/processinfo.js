@@ -1,17 +1,17 @@
 ﻿; (function (VIS, $) {
 
     // Updated un initialized user and client id, table name by vinay bhatt
-    function ProcessInfo(strTitle, AD_Process_ID, Table_ID, Record_ID) {
+    function ProcessInfo(strTitle, VAF_Job_ID, Table_ID, Record_ID) {
         this.title = strTitle;
-        this.AD_Process_ID = AD_Process_ID;
+        this.VAF_Job_ID = VAF_Job_ID;
         this.table_ID = Table_ID;
         this.tableName = "";
         this.record_ID = Record_ID;
-        this.AD_User_ID = 0;
-        this.AD_Client_ID = 0;
+        this.VAF_UserContact_ID = 0;
+        this.VAF_Client_ID = 0;
         this.className = null;
 
-        this.AD_PInstance_ID = 0;
+        this.VAF_JInstance_ID = 0;
         this.summary = "";
         this.error = false;
         this.batch = false;
@@ -19,8 +19,8 @@
         this.timeout = false;
         //private List<ProcessInfoLog> m_logs = null;
         this.parameter = null;
-        this.AD_PrintFormat_Table_ID = 0;
-        this.AD_PrintFormat_ID = 0;
+        this.VAF_Print_Rpt_Layout_Table_ID = 0;
+        this.VAF_Print_Rpt_Layout_ID = 0;
         this.isReportFormat = false;
         this.isCrystal = false;
         this.totalrecords = 0;
@@ -33,8 +33,8 @@
         this.fileType = VIS.ProcessCtl.prototype.REPORT_TYPE_PDF;
         this.windowNo = 0;
         this.tableName = "";
-        this.AD_Window_ID = 0;
-        this.AD_ReportView_ID = 0;
+        this.VAF_Screen_ID = 0;
+        this.VAF_ReportView_ID = 0;
         this.printFormatTableName = "";
         this.useCrystalReportViewer = false;
         this.isReport = false;
@@ -47,31 +47,31 @@
 
         var o = {
             "Title": this.title,
-            "Process_ID": this.AD_Process_ID,
-            "AD_PInstance_ID": this.AD_PInstance_ID,
+            "Process_ID": this.VAF_Job_ID,
+            "VAF_JInstance_ID": this.VAF_JInstance_ID,
             "Record_ID": this.record_ID,
             "Error": this.error,
             "Summary": this.getSummary(),
             "ClassName": this.className,
 
-            "AD_Table_ID": this.table_ID,
-            "AD_TableName": this.tableName,
-            "AD_User_ID": this.AD_User_ID,
-            "AD_Client_ID": this.AD_Client_ID,
+            "VAF_TableView_ID": this.table_ID,
+            "VAF_TableViewName": this.tableName,
+            "VAF_UserContact_ID": this.VAF_UserContact_ID,
+            "VAF_Client_ID": this.VAF_Client_ID,
             "Batch": this.batch,
             "TimeOut": this.timeout,
-            "AD_PrintFormat_Table_ID": this.AD_PrintFormat_Table_ID,
+            "VAF_Print_Rpt_Layout_Table_ID": this.VAF_Print_Rpt_Layout_Table_ID,
             "PrintFormatTableName": this.printFormatTableName,
-            "AD_PrintFormat_ID": this.AD_PrintFormat_ID,
+            "VAF_Print_Rpt_Layout_ID": this.VAF_Print_Rpt_Layout_ID,
             "SupportPaging": this.supportPaging,
             "DynamicAction": this.dynamicAction,
             "PageSize": this.pageSize,
             "TotalPage": this.totalPage,
             "PageNo": this.pageNo,
             "FileType": this.fileType,
-            "AD_Window_ID": this.AD_Window_ID,
+            "VAF_Screen_ID": this.VAF_Screen_ID,
             "WindowNo": this.windowNo,
-            "AD_ReportView_ID": this.AD_ReportView_ID,
+            "VAF_ReportView_ID": this.VAF_ReportView_ID,
             "UseCrystalReportViewer": this.useCrystalReportViewer,
             "IsReport": this.isReport,
             "IsBackground": this.isBackground,
@@ -100,17 +100,17 @@
         info.className = o.ClassName;
         info.record_ID = o.Record_ID;
         info.error = o.Error;
-        info.AD_PInstance_ID = o.AD_PInstance_ID;
+        info.VAF_JInstance_ID = o.VAF_JInstance_ID;
         info.summary = o.Summary;
-        info.table_ID = o.AD_Table_ID;
-        info.tableName = o.AD_TableName;
-        info.AD_User_ID = o.AD_User_ID;
-        info.AD_Client_ID = o.AD_Client_ID;;
+        info.table_ID = o.VAF_TableView_ID;
+        info.tableName = o.VAF_TableViewName;
+        info.VAF_UserContact_ID = o.VAF_UserContact_ID;
+        info.VAF_Client_ID = o.VAF_Client_ID;;
         info.batch = o.Batch;
         info.timeout = o.TimeOut;
-        info.AD_PrintFormat_Table_ID = o.AD_PrintFormat_Table_ID;
+        info.VAF_Print_Rpt_Layout_Table_ID = o.VAF_Print_Rpt_Layout_Table_ID;
         info.printFormatTableName = o.PrintFormatTableName;
-        info.AD_PrintFormat_ID = o.AD_PrintFormat_ID;
+        info.VAF_Print_Rpt_Layout_ID = o.VAF_Print_Rpt_Layout_ID;
         info.isCrystal = o.IsCrystal;
         info.isReportFormat = o.IsReportFormat;
         info.totalrecords = parseInt(o.TotalRecords);
@@ -119,11 +119,11 @@
         info.dynamicAction = o.DynamicAction;
         info.pageSize = o.PageSize;
         info.title = o.Title;
-        info.AD_Process_ID = o.Process_ID;
+        info.VAF_Job_ID = o.Process_ID;
         info.totalPage = o.TotalPage;
         info.pageNo = o.PageNo;
         info.windowNo = o.WindowNo;
-        info.AD_ReportView_ID = o.AD_ReportView_ID;
+        info.VAF_ReportView_ID = o.VAF_ReportView_ID;
         info.isJasperReport = o.IsJasperReport;
         info.useCrystalReportViewer = o.UseCrystalReportViewer;
         info.isReport = o.IsReport;
@@ -189,20 +189,20 @@
         this.batch = batch;
     };
 
-    ProcessInfo.prototype.getAD_PInstance_ID = function () {
-        return this.AD_PInstance_ID;
+    ProcessInfo.prototype.getVAF_JInstance_ID = function () {
+        return this.VAF_JInstance_ID;
     };
 
-    ProcessInfo.prototype.setAD_PInstance_ID = function (AD_PInstance_ID) {
-        this.AD_PInstance_ID = AD_PInstance_ID;
+    ProcessInfo.prototype.setVAF_JInstance_ID = function (VAF_JInstance_ID) {
+        this.VAF_JInstance_ID = VAF_JInstance_ID;
     };
 
-    ProcessInfo.prototype.getAD_Process_ID = function () {
-        return this.AD_Process_ID;
+    ProcessInfo.prototype.getVAF_Job_ID = function () {
+        return this.VAF_Job_ID;
     };
 
-    ProcessInfo.prototype.setAD_Process_ID = function (AD_Process_ID) {
-        this.AD_Process_ID = AD_Process_ID;
+    ProcessInfo.prototype.setVAF_Job_ID = function (VAF_Job_ID) {
+        this.VAF_Job_ID = VAF_Job_ID;
     };
 
     ProcessInfo.prototype.getClassName = function () {
@@ -219,8 +219,8 @@
         return this.table_ID;
     };
 
-    ProcessInfo.prototype.setTable_ID = function (AD_Table_ID) {
-        this.table_ID = AD_Table_ID;
+    ProcessInfo.prototype.setTable_ID = function (VAF_TableView_ID) {
+        this.table_ID = VAF_TableView_ID;
     };
 
     ProcessInfo.prototype.setTable_Name = function (tableName) {
@@ -256,20 +256,20 @@
         this.title = title;
     };
 
-    ProcessInfo.prototype.setAD_Client_ID = function (AD_Client_ID) {
-        this.AD_Client_ID = AD_Client_ID;
+    ProcessInfo.prototype.setVAF_Client_ID = function (VAF_Client_ID) {
+        this.VAF_Client_ID = VAF_Client_ID;
     };
 
-    ProcessInfo.prototype.getAD_Client_ID = function () {
-        return this.AD_Client_ID;
+    ProcessInfo.prototype.getVAF_Client_ID = function () {
+        return this.VAF_Client_ID;
     };
 
-    ProcessInfo.prototype.setAD_User_ID = function (AD_User_ID) {
-        this.AD_User_ID = AD_User_ID;
+    ProcessInfo.prototype.setVAF_UserContact_ID = function (VAF_UserContact_ID) {
+        this.VAF_UserContact_ID = VAF_UserContact_ID;
     };
 
-    ProcessInfo.prototype.getAD_User_ID = function () {
-        return this.AD_User_ID;
+    ProcessInfo.prototype.getVAF_UserContact_ID = function () {
+        return this.VAF_UserContact_ID;
     };
 
     ProcessInfo.prototype.getParameter = function () {
@@ -288,20 +288,20 @@
         return this.timeout;
     };
 
-    ProcessInfo.prototype.set_AD_PrintFormat_Table_ID = function (AD_PrintFormat_Table_ID) {
-        this.AD_PrintFormat_Table_ID = AD_PrintFormat_Table_ID;
+    ProcessInfo.prototype.set_VAF_Print_Rpt_Layout_Table_ID = function (VAF_Print_Rpt_Layout_Table_ID) {
+        this.VAF_Print_Rpt_Layout_Table_ID = VAF_Print_Rpt_Layout_Table_ID;
     };
 
-    ProcessInfo.prototype.get_AD_PrintFormat_Table_ID = function () {
-        return this.AD_PrintFormat_Table_ID;
+    ProcessInfo.prototype.get_VAF_Print_Rpt_Layout_Table_ID = function () {
+        return this.VAF_Print_Rpt_Layout_Table_ID;
     };
 
-    ProcessInfo.prototype.set_AD_PrintFormat_ID = function (AD_PrintFormat_ID) {
-        this.AD_PrintFormat_ID = AD_PrintFormat_ID;
+    ProcessInfo.prototype.set_VAF_Print_Rpt_Layout_ID = function (VAF_Print_Rpt_Layout_ID) {
+        this.VAF_Print_Rpt_Layout_ID = VAF_Print_Rpt_Layout_ID;
     };
 
-    ProcessInfo.prototype.Get_AD_PrintFormat_ID = function () {
-        return this.AD_PrintFormat_ID;
+    ProcessInfo.prototype.Get_VAF_Print_Rpt_Layout_ID = function () {
+        return this.VAF_Print_Rpt_Layout_ID;
     };
 
     ProcessInfo.prototype.setIsCrystal = function (isCrystal) {
@@ -371,12 +371,12 @@
 
 
 
-    ProcessInfo.prototype.GetAD_ReportView_ID = function () {
-        return this.AD_ReportView_ID;
+    ProcessInfo.prototype.GetVAF_ReportView_ID = function () {
+        return this.VAF_ReportView_ID;
     };
 
-    ProcessInfo.prototype.SetAD_ReportView_ID = function (AD_ReportView_ID) {
-        this.AD_ReportView_ID = AD_ReportView_ID;
+    ProcessInfo.prototype.SetVAF_ReportView_ID = function (VAF_ReportView_ID) {
+        this.VAF_ReportView_ID = VAF_ReportView_ID;
     };
 
     ProcessInfo.prototype.setIsJasperReport = function (isJasperReport) {
@@ -387,11 +387,11 @@
     }
 
 
-    ProcessInfo.prototype.setAD_Window_ID = function (Window_ID) {
-        this.AD_Window_ID = Window_ID;
+    ProcessInfo.prototype.setVAF_Screen_ID = function (Window_ID) {
+        this.VAF_Screen_ID = Window_ID;
     }
-    ProcessInfo.prototype.getAD_Window_ID = function () {
-        return this.AD_Window_ID;
+    ProcessInfo.prototype.getVAF_Screen_ID = function () {
+        return this.VAF_Screen_ID;
     }
 
     ProcessInfo.prototype.setIsBackground = function (Background) {
@@ -562,15 +562,15 @@
 
     ProcessInfo.prototype.dispose = function () {
         this.title = null;
-        this.AD_Process_ID = null;
+        this.VAF_Job_ID = null;
         this.table_ID = null;
         this.tableName = null;
         this.record_ID = null;
-        this.AD_User_ID = null;
-        this.AD_Client_ID == null;
+        this.VAF_UserContact_ID = null;
+        this.VAF_Client_ID == null;
         this.className = null;
 
-        this.AD_PInstance_ID = null;
+        this.VAF_JInstance_ID = null;
         this.summary = null;
         this.error = null;
         this.batch = null;
@@ -578,8 +578,8 @@
         this.timeout = null;
         //private List<ProcessInfoLog> m_logs = null;
         this.parameter = null;
-        this.AD_PrintFormat_Table_ID = null;
-        this.AD_PrintFormat_ID = null;
+        this.VAF_Print_Rpt_Layout_Table_ID = null;
+        this.VAF_Print_Rpt_Layout_ID = null;
         this.isReportFormat = null;
         this.isCrystal = null;
         this.totalrecords = null;
@@ -644,10 +644,10 @@
 	 * 	@param pi process info
 	 */
         setLogFromDB: function (pi) {
-            //	s_log.fine("setLogFromDB - AD_PInstance_ID=" + pi.getAD_PInstance_ID());
+            //	s_log.fine("setLogFromDB - VAF_JInstance_ID=" + pi.getVAF_JInstance_ID());
             var sql = "VIS_144";
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_PInstance_ID", pi.getAD_PInstance_ID());
+            param[0] = new VIS.DB.SqlParam("@VAF_JInstance_ID", pi.getVAF_JInstance_ID());
 
             var dr = null;
             try {

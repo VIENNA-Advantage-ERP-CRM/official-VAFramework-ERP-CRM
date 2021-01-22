@@ -11,20 +11,20 @@ namespace VAdvantage
    public  class CrystalParams
     {
    
-       public int AD_Form_ID
+       public int VAF_Page_ID
        {
            get;
            set;
        }
 
         
-       public int AD_CrystalInstance_ID
+       public int VAF_CrystalInstance_ID
        {
            get;
            set;
        }
         
-       public int AD_Client_ID
+       public int VAF_Client_ID
        {
            get;
            set;

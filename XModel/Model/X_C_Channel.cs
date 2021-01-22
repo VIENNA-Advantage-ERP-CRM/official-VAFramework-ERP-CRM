@@ -70,7 +70,7 @@ static X_C_Channel()
 //static long serialVersionUID 27562514371153L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054364L;
-/** AD_Table_ID=275 */
+/** VAF_TableView_ID=275 */
 public static int Table_ID;
  // =275;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_C_Channel[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 /** Set Print Color.
-@param AD_PrintColor_ID Color used for printing and display */
-public void SetAD_PrintColor_ID (int AD_PrintColor_ID)
+@param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+public void SetVAF_Print_Rpt_Colour_ID (int VAF_Print_Rpt_Colour_ID)
 {
-if (AD_PrintColor_ID <= 0) Set_Value ("AD_PrintColor_ID", null);
+if (VAF_Print_Rpt_Colour_ID <= 0) Set_Value ("VAF_Print_Rpt_Colour_ID", null);
 else
-Set_Value ("AD_PrintColor_ID", AD_PrintColor_ID);
+Set_Value ("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
 }
 /** Get Print Color.
 @return Color used for printing and display */
-public int GetAD_PrintColor_ID() 
+public int GetVAF_Print_Rpt_Colour_ID() 
 {
-Object ii = Get_Value("AD_PrintColor_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

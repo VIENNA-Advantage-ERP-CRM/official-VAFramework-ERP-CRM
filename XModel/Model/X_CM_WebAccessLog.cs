@@ -76,7 +76,7 @@ static X_CM_WebAccessLog()
 //static long serialVersionUID 27562514369241L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052452L;
-/** AD_Table_ID=894 */
+/** VAF_TableView_ID=894 */
 public static int Table_ID;
  // =894;
 
@@ -119,18 +119,18 @@ StringBuilder sb = new StringBuilder ("X_CM_WebAccessLog[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -264,8 +264,8 @@ public String GetIP_Address()
 return (String)Get_Value("IP_Address");
 }
 
-/** LogType AD_Reference_ID=390 */
-public static int LOGTYPE_AD_Reference_ID=390;
+/** LogType VAF_Control_Ref_ID=390 */
+public static int LOGTYPE_VAF_Control_Ref_ID=390;
 /** Ad display = A */
 public static String LOGTYPE_AdDisplay = "A";
 /** Redirect = R */

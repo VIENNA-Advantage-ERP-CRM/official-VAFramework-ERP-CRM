@@ -142,12 +142,12 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //	To User
-                MUser to = new MUser(GetCtx(), entry.GetAD_User_ID(), Get_TrxName());
+                MUser to = new MUser(GetCtx(), entry.GetVAF_UserContact_ID(), Get_TrxName());
                 if (_EMailPDF)
                 {
                     if (to.Get_ID() == 0)
                     {
-                        AddLog(entry.Get_ID(), null, null, "@NotFound@: @AD_User_ID@ - " + bp.GetName());
+                        AddLog(entry.Get_ID(), null, null, "@NotFound@: @VAF_UserContact_ID@ - " + bp.GetName());
                         errors++;
                         continue;
                     }
@@ -166,10 +166,10 @@ namespace VAdvantage.Process
                 if (client.IsMultiLingualDocument())
                 {
                     tableName += "t";
-                    String AD_Language = bp.GetAD_Language();
-                    if (AD_Language != null)
+                    String VAF_Language = bp.GetVAF_Language();
+                    if (VAF_Language != null)
                     {
-                        //language =language.getLanguage(AD_Language);
+                        //language =language.getLanguage(VAF_Language);
                     }
                 }
                // format.SetLanguage(language);
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                     //email.AddAttachment(attachment);
                     //
                     // Get report that is bound on the dunning entry tab of dunning run window.
-                    int ReportProcess_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_ID FROM ad_tab WHERE  export_id='VIS_634'"));
+                    int ReportProcess_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Job_ID FROM vaf_tab WHERE  export_id='VIS_634'"));
                     if (ReportProcess_ID > 0)
                     {
                         
@@ -233,7 +233,7 @@ namespace VAdvantage.Process
                         }
                     }
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, entry.GetAD_User_ID(), email);
+                    MUserMail um = new MUserMail(mText, entry.GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

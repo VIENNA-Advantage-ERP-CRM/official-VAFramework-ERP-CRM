@@ -27,13 +27,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class BPartnerOrgLink : ProcessEngine.SvrProcess
     {
     /**	Existing Org			*/
-	private int			_AD_Org_ID;
+	private int			_VAF_Org_ID;
 	/** Info for New Org		*/
-	private int			_AD_OrgType_ID;
+	private int			_VAF_OrgCategory_ID;
 	/** Business Partner		*/
 	private int			_C_BPartner_ID;
 	/** Role					*/
-	private int			_AD_Role_ID;
+	private int			_VAF_Role_ID;
 	
 	/// <summary>
 	/// Prepare - e.g., get Parameters. 
@@ -48,17 +48,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("AD_Org_ID"))
+			else if (name.Equals("VAF_Org_ID"))
             {
-				_AD_Org_ID = para[i].GetParameterAsInt();
+				_VAF_Org_ID = para[i].GetParameterAsInt();
             }
-			else if (name.Equals("AD_OrgType_ID"))
+			else if (name.Equals("VAF_OrgCategory_ID"))
             {
-				_AD_OrgType_ID = para[i].GetParameterAsInt();
+				_VAF_OrgCategory_ID = para[i].GetParameterAsInt();
             }
-			else if (name.Equals("AD_Role_ID"))
+			else if (name.Equals("VAF_Role_ID"))
             {
-				_AD_Role_ID = para[i].GetParameterAsInt();
+				_VAF_Role_ID = para[i].GetParameterAsInt();
             }
 			else
             {
@@ -75,9 +75,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	protected override String DoIt()
 	{
 		log.Info("C_BPartner_ID=" + _C_BPartner_ID 
-			+ ", AD_Org_ID=" + _AD_Org_ID
-			+ ", AD_OrgType_ID=" + _AD_OrgType_ID
-			+ ", AD_Role_ID=" + _AD_Role_ID);
+			+ ", VAF_Org_ID=" + _VAF_Org_ID
+			+ ", VAF_OrgCategory_ID=" + _VAF_OrgCategory_ID
+			+ ", VAF_Role_ID=" + _VAF_Role_ID);
         if (_C_BPartner_ID == 0)
         {
             throw new Exception("No Business Partner ID");
@@ -101,8 +101,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		
 		//	Create Org
-		Boolean newOrg = _AD_Org_ID == 0; 
-		MOrg org = new MOrg (GetCtx(), _AD_Org_ID, Get_Trx());
+		Boolean newOrg = _VAF_Org_ID == 0; 
+		MOrg org = new MOrg (GetCtx(), _VAF_Org_ID, Get_Trx());
 		if (newOrg)
 		{
 			org.SetValue (bp.GetValue());
@@ -123,11 +123,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "' already linked (to C_BPartner_ID=" + C_BPartner_ID + ")");
             }
 		}
-		_AD_Org_ID = org.GetAD_Org_ID();
+		_VAF_Org_ID = org.GetVAF_Org_ID();
 		
 		//	Update Org Info
 		MOrgInfo oInfo = org.GetInfo();
-		oInfo.SetAD_OrgType_ID (_AD_OrgType_ID);
+		oInfo.SetVAF_OrgCategory_ID (_VAF_OrgCategory_ID);
         if (newOrg)
         {
             oInfo.SetC_Location_ID(C_Location_ID);
@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		MWarehouse wh = null;
 		if (!newOrg)
 		{
-			MWarehouse[] whs = MWarehouse.GetForOrg(GetCtx(), _AD_Org_ID);
+			MWarehouse[] whs = MWarehouse.GetForOrg(GetCtx(), _VAF_Org_ID);
             if (whs != null && whs.Length > 0)
             {
                 wh = whs[0];	//	pick first
@@ -171,10 +171,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		
 		//	Update BPartner
-		bp.SetAD_OrgBP_ID(_AD_Org_ID);
-        if (bp.GetAD_Org_ID() != 0)
+		bp.SetVAF_OrgBP_ID(_VAF_Org_ID);
+        if (bp.GetVAF_Org_ID() != 0)
         {
-            bp.SetClientOrg(bp.GetAD_Client_ID(), 0);	//	Shared BPartner
+            bp.SetClientOrg(bp.GetVAF_Client_ID(), 0);	//	Shared BPartner
         }
 		
 		//	Save BP
@@ -185,14 +185,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		
 		//	Limit to specific Role
-		if (_AD_Role_ID != 0)	
+		if (_VAF_Role_ID != 0)	
 		{
 			Boolean found = false;
-			MRoleOrgAccess[] orgAccesses = MRoleOrgAccess.GetOfOrg (GetCtx(), _AD_Org_ID);
+			MRoleOrgAccess[] orgAccesses = MRoleOrgAccess.GetOfOrg (GetCtx(), _VAF_Org_ID);
 			//	delete all accesses except the specific
 			for (int i = 0; i < orgAccesses.Length; i++)
 			{
-                if (orgAccesses[i].GetAD_Role_ID() == _AD_Role_ID)
+                if (orgAccesses[i].GetVAF_Role_ID() == _VAF_Role_ID)
                 {
                     found = true;
                 }
@@ -204,7 +204,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			//	create access
 			if (!found)
 			{
-				MRoleOrgAccess orgAccess = new MRoleOrgAccess (org, _AD_Role_ID);
+				MRoleOrgAccess orgAccess = new MRoleOrgAccess (org, _VAF_Role_ID);
 				orgAccess.Save();
 			}
 		}

@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /**
         * 	Detail Constructor
         *	@param ctx context
-        *	@param AD_Org_ID org
+        *	@param VAF_Org_ID org
         * 	@param M_Locator_ID locator
         * 	@param M_Product_ID product
         * 	@param M_AttributeSetInstance_ID attribute
@@ -57,10 +57,10 @@ namespace VAdvantage.Model
         * 	@param MovementDate optional date
         *	@param trxName transaction
         */
-        public MProductStockSummary(Ctx ctx, int AD_Org_ID, int M_Product_ID, Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementFromDate, Trx trxName)
+        public MProductStockSummary(Ctx ctx, int VAF_Org_ID, int M_Product_ID, Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementFromDate, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetAD_Org_ID(AD_Org_ID);
+            SetVAF_Org_ID(VAF_Org_ID);
             if (M_Product_ID == 0)
                 throw new ArgumentException("No Product");
             SetM_Product_ID(M_Product_ID);

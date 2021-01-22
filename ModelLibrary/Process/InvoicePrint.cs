@@ -149,19 +149,19 @@ namespace VAdvantage.Process
 		
 		//	Get Info
 		StringBuilder sql = new StringBuilder (
-			"SELECT i.C_Invoice_ID,bp.AD_Language,c.IsMultiLingualDocument,"		//	1..3
+			"SELECT i.C_Invoice_ID,bp.VAF_Language,c.IsMultiLingualDocument,"		//	1..3
 			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MInvoice
-			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.AD_PrintFormat_ID, pf.Invoice_PrintFormat_ID),"	//	4 
+			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.VAF_Print_Rpt_Layout_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
-			+ " bpc.AD_User_ID, i.DocumentNo,"										//	6..7
+			+ " bpc.VAF_UserContact_ID, i.DocumentNo,"										//	6..7
 			+ " bp.C_BPartner_ID "													//	8
 			+ "FROM C_Invoice i"
 			+ " INNER JOIN C_BPartner bp ON (i.C_BPartner_ID=bp.C_BPartner_ID)"
-			+ " LEFT OUTER JOIN AD_User bpc ON (i.AD_User_ID=bpc.AD_User_ID)"
-			+ " INNER JOIN AD_Client c ON (i.AD_Client_ID=c.AD_Client_ID)"
-			+ " INNER JOIN AD_PrintForm pf ON (i.AD_Client_ID=pf.AD_Client_ID)"
+			+ " LEFT OUTER JOIN VAF_UserContact bpc ON (i.VAF_UserContact_ID=bpc.VAF_UserContact_ID)"
+			+ " INNER JOIN VAF_Client c ON (i.VAF_Client_ID=c.VAF_Client_ID)"
+			+ " INNER JOIN VAF_Print_Rpt_Page pf ON (i.VAF_Client_ID=pf.VAF_Client_ID)"
 			+ " INNER JOIN C_DocType dt ON (i.C_DocType_ID=dt.C_DocType_ID)")
-			.Append(" WHERE pf.AD_Org_ID IN (0,i.AD_Org_ID) AND ");	//	more them 1 PF
+			.Append(" WHERE pf.VAF_Org_ID IN (0,i.VAF_Org_ID) AND ");	//	more them 1 PF
         if (_C_Invoice_ID != 0)
         {
             sql.Append("i.C_Invoice_ID=").Append(_C_Invoice_ID);
@@ -224,11 +224,11 @@ namespace VAdvantage.Process
                 }
             }
         }
-		sql.Append(" ORDER BY i.C_Invoice_ID, pf.AD_Org_ID DESC");	//	more than 1 PF record
+		sql.Append(" ORDER BY i.C_Invoice_ID, pf.VAF_Org_ID DESC");	//	more than 1 PF record
 		log.Finer(sql.ToString());
 
 		MPrintFormat format = null;
-		int old_AD_PrintFormat_ID = -1;
+		int old_VAF_Print_Rpt_Layout_ID = -1;
 		int old_C_Invoice_ID = -1;
 		int C_BPartner_ID = 0;
 		int count = 0;
@@ -254,28 +254,28 @@ namespace VAdvantage.Process
                 //Language language = Language.getLoginLanguage();
                 Language language = Env.GetLoginLanguage(GetCtx());
                 //	Base Language
-                //    String AD_Language = rs.getString(2);
-                String AD_Language = Utility.Util.GetValueOfString(idr[1]);
-                //    if (AD_Language != null && "Y".equals(rs.getString(3)))
-                if (AD_Language != null && "Y".Equals(idr[2]))
+                //    String VAF_Language = rs.getString(2);
+                String VAF_Language = Utility.Util.GetValueOfString(idr[1]);
+                //    if (VAF_Language != null && "Y".equals(rs.getString(3)))
+                if (VAF_Language != null && "Y".Equals(idr[2]))
                 {
-                    //language = Language.getLanguage(AD_Language);
-                    language = Language.GetLanguage(AD_Language);
+                    //language = Language.getLanguage(VAF_Language);
+                    language = Language.GetLanguage(VAF_Language);
                 }
 
 
-                //    int AD_PrintFormat_ID = rs.getInt(4);
-                int AD_PrintFormat_ID = Utility.Util.GetValueOfInt(idr[3]);
+                //    int VAF_Print_Rpt_Layout_ID = rs.getInt(4);
+                int VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(idr[3]);
                 //    int copies = rs.getInt(5);
                 int copies = Utility.Util.GetValueOfInt(idr[4]);
                 if (copies == 0)
                 {
                     copies = 1;
                 }
-                //    int AD_User_ID = rs.getInt(6);
-                int AD_User_ID = Utility.Util.GetValueOfInt(idr[5]);
-                //    MUser to = new MUser (getCtx(), AD_User_ID, get_TrxName());
-                MUser to = new MUser(GetCtx(), AD_User_ID, Get_TrxName());
+                //    int VAF_UserContact_ID = rs.getInt(6);
+                int VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[5]);
+                //    MUser to = new MUser (getCtx(), VAF_UserContact_ID, get_TrxName());
+                MUser to = new MUser(GetCtx(), VAF_UserContact_ID, Get_TrxName());
                 //    String DocumentNo = rs.getString(7);
                 String DocumentNo = Utility.Util.GetValueOfString(idr[6]);
                 //    C_BPartner_ID = rs.getInt(8);
@@ -295,17 +295,17 @@ namespace VAdvantage.Process
                     errors++;
                     continue;
                 }
-                if (AD_PrintFormat_ID == 0)
+                if (VAF_Print_Rpt_Layout_ID == 0)
                 {
                     AddLog(C_Invoice_ID, null, null, DocumentNo + " No Print Format");
                     errors++;
                     continue;
                 }
                 //	Get Format & Data
-                if (AD_PrintFormat_ID != old_AD_PrintFormat_ID)
+                if (VAF_Print_Rpt_Layout_ID != old_VAF_Print_Rpt_Layout_ID)
                 {
-                    format = MPrintFormat.Get(GetCtx(), AD_PrintFormat_ID, false);
-                    old_AD_PrintFormat_ID = AD_PrintFormat_ID;
+                    format = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);
+                    old_VAF_Print_Rpt_Layout_ID = VAF_Print_Rpt_Layout_ID;
                 }
 
                 format.SetLanguage(language);
@@ -364,7 +364,7 @@ namespace VAdvantage.Process
 
                     //
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, GetAD_User_ID(), email);
+                    MUserMail um = new MUserMail(mText, GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

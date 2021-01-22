@@ -141,23 +141,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Translation
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns>trl</returns>
-        private MMailTextTrl GetTranslation(String AD_Language)
+        private MMailTextTrl GetTranslation(String VAF_Language)
         {
             MMailTextTrl trl = null;
-            String sql = "SELECT * FROM R_MailText_Trl WHERE R_MailText_ID=@textid AND AD_Language=@lang";
+            String sql = "SELECT * FROM R_MailText_Trl WHERE R_MailText_ID=@textid AND VAF_Language=@lang";
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@textid", GetR_MailText_ID());
-                param[1] = new SqlParameter("@lang", AD_Language);
+                param[1] = new SqlParameter("@lang", VAF_Language);
                 dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param);
                 if (dr.Read())
                 {
                     trl = new MMailTextTrl();
-                    trl.AD_Language = dr["AD_Language"].ToString();
+                    trl.VAF_Language = dr["VAF_Language"].ToString();
                     trl.mailHeader = dr["MailHeader"].ToString();
                     trl.mailText = dr["MailText"].ToString();
                     trl.mailText2 = dr["MailText2"].ToString();
@@ -226,13 +226,13 @@ namespace VAdvantage.Model
                 token = inStr.Substring(0, j);
                 if (token == "Tenant")
                 {
-                    int id = po.GetAD_Client_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_Client WHERE AD_Client_ID=" + id));
+                    int id = po.GetVAF_Client_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_Client WHERE VAF_Client_ID=" + id));
                 }
                 else if (token == "Org")
                 {
-                    int id = po.GetAD_Org_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_ORG WHERE AD_ORG_ID=" + id));
+                    int id = po.GetVAF_Org_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_ORG WHERE VAF_ORG_ID=" + id));
                 }
                 else if (token == "BPName")
                 {
@@ -275,7 +275,7 @@ namespace VAdvantage.Model
                 return "";
 
             MColumn column = (new MTable(GetCtx(), po.Get_Table_ID(), Get_Trx())).GetColumn(variable);
-            if (column.GetAD_Reference_ID() == DisplayType.Location)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Location)
             {
                 StringBuilder sb = new StringBuilder();
                 DataSet ds = DB.ExecuteDataset(@"SELECT l.address1,
@@ -334,7 +334,7 @@ namespace VAdvantage.Model
             }
             
             //Get lookup display column name for ID 
-            if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
+            if (_poInfo != null && _poInfo.getVAF_TableView_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
             {
                 VLookUpInfo lookup = Common.Common.GetColumnLookupInfo(GetCtx(),_poInfo.GetColumnInfo(index)); //create lookup info for column
                 DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
@@ -347,7 +347,7 @@ namespace VAdvantage.Model
 
             
 
-            if (column.GetAD_Reference_ID() == DisplayType.Date)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Date)
             {
                 return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
             }
@@ -407,14 +407,14 @@ namespace VAdvantage.Model
                         SetBPartner(C_BPartner_ID);
                     }
                 }
-                index = po.Get_ColumnIndex("AD_User_ID");
+                index = po.Get_ColumnIndex("VAF_UserContact_ID");
                 if (index > 0)
                 {
                     Object oo = po.Get_Value(index);
                     if (oo != null && oo.GetType() == typeof(int))
                     {
-                        int AD_User_ID = int.Parse(oo.ToString());
-                        SetUser(AD_User_ID);
+                        int VAF_UserContact_ID = int.Parse(oo.ToString());
+                        SetUser(VAF_UserContact_ID);
                     }
                 }
             }
@@ -424,10 +424,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set User for parse
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
-        public void SetUser(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user</param>
+        public void SetUser(int VAF_UserContact_ID)
         {
-            _user = MUser.Get(GetCtx(), AD_User_ID);
+            _user = MUser.Get(GetCtx(), VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -445,13 +445,13 @@ namespace VAdvantage.Model
         private void Translate()
         {
             string language = "";
-            if (_bpartner != null && _bpartner.GetAD_Language() != null)
+            if (_bpartner != null && _bpartner.GetVAF_Language() != null)
             {
-                language = _bpartner.GetAD_Language();
+                language = _bpartner.GetVAF_Language();
             }
-            else if (!Env.IsBaseLanguage(GetCtx().GetAD_Language(), ""))
+            else if (!Env.IsBaseLanguage(GetCtx().GetVAF_Language(), ""))
             {
-                language = GetCtx().GetAD_Language();
+                language = GetCtx().GetVAF_Language();
             }
 
             if (!string.IsNullOrEmpty(language) && language.Length > 0)
@@ -486,7 +486,7 @@ namespace VAdvantage.Model
     class MMailTextTrl
     {
         /** Language			*/
-        public String AD_Language = null;
+        public String VAF_Language = null;
         /** Translated Header	*/
         public String mailHeader = null;
         /** Translated Text		*/

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Access Module 1
  * Purpose        : Role model.
-                    Includes AD_User runtime info for Personal Access 
+                    Includes VAF_UserContact runtime info for Personal Access 
  * Class Used     : context.cs,
  * Created By     : Harwinder 
  * Date           : --
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// intend to store access priviliged
     /// </summary>
-    public class MRole : X_AD_Role
+    public class MRole : X_VAF_Role
     {
 
         #region declaration
@@ -49,14 +49,14 @@ namespace VAdvantage.Model
         //	Access SQL Not Fully Qualified	
         public const bool SQL_NOTQUALIFIED = false;
 
-        //	The AD_User_ID of the SuperUser
+        //	The VAF_UserContact_ID of the SuperUser
         public const int SUPERUSER_USER_ID = 100;
-        //	The AD_User_ID of the System Administrator	
+        //	The VAF_UserContact_ID of the System Administrator	
         public const int SYSTEM_USER_ID = 0;
 
         //  User
-        private int _AD_User_ID = -1;
-        // private int _AD_Role_ID = 0;
+        private int _VAF_UserContact_ID = -1;
+        // private int _VAF_Role_ID = 0;
         // Log						
         private static VLogger s_log = VLogger.GetVLogger(typeof(MRole).FullName);
 
@@ -65,11 +65,11 @@ namespace VAdvantage.Model
         #endregion
 
         /**	Cache						*/
-        private static CCache<int, MRole> s_cache = new CCache<int, MRole>("AD_Role", 10);
+        private static CCache<int, MRole> s_cache = new CCache<int, MRole>("VAF_Role", 10);
         /**	Cache						*/
-        private static CCache<int, String> s_clientcache = new CCache<int, String>("AD_Role_ClientC", 10);
+        private static CCache<int, String> s_clientcache = new CCache<int, String>("VAF_Role_ClientC", 10);
         /**	Cache						*/
-        private static CCache<int, List<String>> s_orgcache = new CCache<int, List<String>>("AD_Role_OrgC", 10);
+        private static CCache<int, List<String>> s_orgcache = new CCache<int, List<String>>("VAF_Role_OrgC", 10);
 
         /// <summary>
         ///Get Default (Client) Role
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         /// <returns>roles of client</returns>
         public static MRole[] GetOfClient(Ctx ctx)
         {
-            String sql = "SELECT * FROM AD_Role WHERE AD_Client_ID=" + ctx.GetAD_Client_ID();
+            String sql = "SELECT * FROM VAF_Role WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             List<MRole> list = new List<MRole>();
             DataSet ds = null;
             try
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
      */
         public static MRole[] GetOf(Ctx ctx, String whereClause)
         {
-            String sql = "SELECT * FROM AD_Role";
+            String sql = "SELECT * FROM VAF_Role";
             if (whereClause != null && whereClause.Length > 0)
                 sql += " WHERE " + whereClause;
             List<MRole> list = new List<MRole>();
@@ -179,24 +179,24 @@ namespace VAdvantage.Model
         //  [MethodImpl(MethodImplOptions.Synchronized)]
         public static MRole GetDefault(Ctx ctx, bool reload)
         {
-            int AD_Role_ID = ctx.GetAD_Role_ID();
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_Role_ID = ctx.GetVAF_Role_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             //if (!Ini.IsClient())	//	none for Server
-            //    AD_User_ID = 0; //Form Preference
+            //    VAF_UserContact_ID = 0; //Form Preference
 
-            MRole role = (MRole)s_cache.Get(AD_Role_ID);
+            MRole role = (MRole)s_cache.Get(VAF_Role_ID);
             lock (_lock)
             {
                 if (reload || role == null)
                 {
-                    role = Get(ctx, AD_Role_ID, AD_User_ID, true);
-                    s_cache[AD_Role_ID] = role;
+                    role = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
+                    s_cache[VAF_Role_ID] = role;
                 }
-                else if (role.GetAD_Role_ID() != AD_Role_ID
-                || role.GetAD_User_ID() != AD_User_ID)
+                else if (role.GetVAF_Role_ID() != VAF_Role_ID
+                || role.GetVAF_UserContact_ID() != VAF_UserContact_ID)
                 {
-                    role = Get(ctx, AD_Role_ID, AD_User_ID, true);
-                    s_cache[AD_Role_ID] = role;
+                    role = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
+                    s_cache[VAF_Role_ID] = role;
                 }
             }
             return role;
@@ -204,16 +204,16 @@ namespace VAdvantage.Model
 
             //if (reload || _defaultRole == null)
             //{
-            //    _defaultRole = Get(ctx, AD_Role_ID, AD_User_ID, reload);
+            //    _defaultRole = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, reload);
             //}
-            //else if (_defaultRole.GetAD_Role_ID() != AD_Role_ID
-            //|| _defaultRole.GetAD_User_ID() != AD_User_ID)
+            //else if (_defaultRole.GetVAF_Role_ID() != VAF_Role_ID
+            //|| _defaultRole.GetVAF_UserContact_ID() != VAF_UserContact_ID)
             //{
-            //    _defaultRole = Get(ctx, AD_Role_ID, AD_User_ID, true);
+            //    _defaultRole = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
             //}
             ////	Update Cache
             //if (reload && _defaultRole != null)
-            //    Get(ctx, AD_Role_ID, AD_User_ID, true);
+            //    Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
             //return _defaultRole;
 
         }
@@ -222,20 +222,20 @@ namespace VAdvantage.Model
         /// Get Role for User
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Role_ID"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="reload"></param>
         /// <returns></returns>
-        public static MRole Get(Ctx ctx, int AD_Role_ID, int AD_User_ID, bool reload)
+        public static MRole Get(Ctx ctx, int VAF_Role_ID, int VAF_UserContact_ID, bool reload)
         {
-            s_log.Info("AD_Role_ID=" + AD_Role_ID + ", AD_User_ID=" + AD_User_ID + ", reload=" + reload);
-            MRole role = new MRole(ctx, AD_Role_ID, null);
-            if (AD_Role_ID == 0)
+            s_log.Info("VAF_Role_ID=" + VAF_Role_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID + ", reload=" + reload);
+            MRole role = new MRole(ctx, VAF_Role_ID, null);
+            if (VAF_Role_ID == 0)
             {
                 Trx trxName = null;
                 role.Load(trxName);			//	special Handling
             }
-            role.SetAD_User_ID(AD_User_ID);
+            role.SetVAF_UserContact_ID(VAF_UserContact_ID);
             role.LoadAccess(reload);
             s_log.Info(role.ToString());
             return role;
@@ -245,14 +245,14 @@ namespace VAdvantage.Model
         /// Get Role For User
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <returns></returns>
-        public static MRole Get(Ctx ctx, int AD_Role_ID)
+        public static MRole Get(Ctx ctx, int VAF_Role_ID)
         {
-            string key = AD_Role_ID.ToString();
+            string key = VAF_Role_ID.ToString();
             Trx trxName = null;
-            MRole role = new MRole(ctx, AD_Role_ID, trxName);
-            if (AD_Role_ID == 0)	//	System Role
+            MRole role = new MRole(ctx, VAF_Role_ID, trxName);
+            if (VAF_Role_ID == 0)	//	System Role
                 role.Load(trxName);	//	special Handling
 
             return role;
@@ -262,12 +262,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="trxName"></param>
-        public MRole(Ctx ctx, int AD_Role_ID, Trx trxName)
-            : base(ctx, AD_Role_ID, trxName)
+        public MRole(Ctx ctx, int VAF_Role_ID, Trx trxName)
+            : base(ctx, VAF_Role_ID, trxName)
         {
-            if (AD_Role_ID == 0)
+            if (VAF_Role_ID == 0)
             {
                 SetIsCanExport(true);
                 SetIsCanReport(true);
@@ -293,12 +293,12 @@ namespace VAdvantage.Model
 
         /// <summary>
         ///	 Get Logged in user
-        ///	 AD_User_ID user requesting info
+        ///	 VAF_UserContact_ID user requesting info
         /// </summary>
         /// <returns></returns>
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            return _AD_User_ID;
+            return _VAF_UserContact_ID;
         }	//
 
         public MRole(Ctx ctx, DataRow dr, Trx trxName)
@@ -310,24 +310,24 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Logged in user
         /// </summary>
-        /// <param name="AD_User_ID"></param>
-        public void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            _AD_User_ID = AD_User_ID;
-        }	//	setAD_User_ID
+            _VAF_UserContact_ID = VAF_UserContact_ID;
+        }	//	setVAF_UserContact_ID
 
         /// <summary>
         /// Check User has access To window against role
         /// </summary>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
-        //public static bool? GetWindowAccess1(int AD_Window_ID)
+        //public static bool? GetWindowAccess1(int VAF_Screen_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcWindow_access == null)
         //    {
         //        _dcWindow_access = new Dictionary<string, string>();
-        //        string strQry = "SELECT AD_Window_ID, IsReadWrite FROM AD_Window_Access WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsActive='Y'";
+        //        string strQry = "SELECT VAF_Screen_ID, IsReadWrite FROM VAF_Screen_Rights WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -343,7 +343,7 @@ namespace VAdvantage.Model
         //            _dcWindow_access = null;
         //        }
         //    }
-        //    if (_dcWindow_access.ContainsKey(AD_Window_ID.ToString()))
+        //    if (_dcWindow_access.ContainsKey(VAF_Screen_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -355,17 +355,17 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Form Access against Role
         /// </summary>
-        /// <param name="AD_Form_ID"></param>
+        /// <param name="VAF_Page_ID"></param>
         /// <returns></returns>
-        //public static bool? GetFormAccess1(int AD_Form_ID)
+        //public static bool? GetFormAccess1(int VAF_Page_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcForm_access == null)
         //    {
         //        _dcForm_access = new Dictionary<string, string>();
 
-        //        string strQry = "SELECT AD_Form_ID, IsReadWrite FROM AD_Form_Access "
-        //         + "WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsActive='Y'";
+        //        string strQry = "SELECT VAF_Page_ID, IsReadWrite FROM VAF_Page_Rights "
+        //         + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
         //            _dcForm_access = null;
         //        }
         //    }
-        //    if (_dcForm_access.ContainsKey(AD_Form_ID.ToString()))
+        //    if (_dcForm_access.ContainsKey(VAF_Page_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -391,16 +391,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Process Access against role
         /// </summary>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <returns></returns>
-        //public static bool? GetProcessAccess1(int AD_Process_ID)
+        //public static bool? GetProcessAccess1(int VAF_Job_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcProcess_access == null)
         //    {
         //        _dcProcess_access = new Dictionary<string, string>();
-        //        string strQry = "SELECT AD_Process_ID, IsReadWrite FROM AD_Process_Access " +
-        //                        " WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsActive='Y'";
+        //        string strQry = "SELECT VAF_Job_ID, IsReadWrite FROM VAF_Job_Rights " +
+        //                        " WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
         //            _dcProcess_access = null;
         //        }
         //    }
-        //    if (_dcProcess_access.ContainsKey(AD_Process_ID.ToString()))
+        //    if (_dcProcess_access.ContainsKey(VAF_Job_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -436,7 +436,7 @@ namespace VAdvantage.Model
         //        _dcWorkflow_access = new Dictionary<string, string>();
 
         //        string strQry = "SELECT AD_Workflow_ID, IsReadWrite FROM AD_Workflow_Access "
-        //         + "WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsActive='Y'";
+        //         + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -471,7 +471,7 @@ namespace VAdvantage.Model
         //    {
         //        _dcTask_access = new Dictionary<string, string>();
         //        string strQry = "SELECT AD_Task_ID, IsReadWrite FROM AD_Task_Access "
-        //         + "WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsActive='Y'";
+        //         + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -499,15 +499,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check User has access To window against role
         /// </summary>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
-        public bool? GetWindowAccess(int AD_Window_ID)
+        public bool? GetWindowAccess(int VAF_Screen_ID)
         {
             bool? blnReturn = null;
             if (_dcWindow_access == null)
             {
                 _dcWindow_access = new Dictionary<int, bool>();
-                string strQry = "SELECT AD_Window_ID, IsReadWrite FROM AD_Window_Access WHERE AD_Role_ID=" + GetCtx().GetAD_Role_ID() + " AND IsActive='Y'";
+                string strQry = "SELECT VAF_Screen_ID, IsReadWrite FROM VAF_Screen_Rights WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
                 IDataReader dr = null;
                 try
                 {
@@ -532,9 +532,9 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (_dcWindow_access.ContainsKey(AD_Window_ID))
+            if (_dcWindow_access.ContainsKey(VAF_Screen_ID))
             {
-                blnReturn = _dcWindow_access[AD_Window_ID];
+                blnReturn = _dcWindow_access[VAF_Screen_ID];
             }
 
             return blnReturn;
@@ -549,17 +549,17 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Form Access against Role
         /// </summary>
-        /// <param name="AD_Form_ID"></param>
+        /// <param name="VAF_Page_ID"></param>
         /// <returns></returns>
-        public bool? GetFormAccess(int AD_Form_ID)
+        public bool? GetFormAccess(int VAF_Page_ID)
         {
             bool? blnReturn = null;
             if (_dcForm_access == null)
             {
                 _dcForm_access = new Dictionary<int, bool>();
 
-                string strQry = "SELECT AD_Form_ID, IsReadWrite FROM AD_Form_Access "
-                 + "WHERE AD_Role_ID=" + GetCtx().GetAD_Role_ID() + " AND IsActive='Y'";
+                string strQry = "SELECT VAF_Page_ID, IsReadWrite FROM VAF_Page_Rights "
+                 + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
                 IDataReader dr = null;
                 try
                 {
@@ -582,9 +582,9 @@ namespace VAdvantage.Model
                     _dcForm_access = null;
                 }
             }
-            if (_dcForm_access.ContainsKey(AD_Form_ID))
+            if (_dcForm_access.ContainsKey(VAF_Page_ID))
             {
-                blnReturn = _dcForm_access[AD_Form_ID];
+                blnReturn = _dcForm_access[VAF_Page_ID];
             }
             return blnReturn;
         }
@@ -604,7 +604,7 @@ namespace VAdvantage.Model
         {
             //	if (newRecord || is_ValueChanged("UserLevel"))
             //	{
-            if (GetAD_Client_ID() == 0)
+            if (GetVAF_Client_ID() == 0)
             {
                 SetUserLevel(USERLEVEL_System);
             }
@@ -635,12 +635,12 @@ namespace VAdvantage.Model
             if (newRecord && success)
             {
                 //	Add Role to SuperUser
-                MUserRoles su = new MUserRoles(GetCtx(), SUPERUSER_USER_ID, GetAD_Role_ID(), Get_TrxName());
+                MUserRoles su = new MUserRoles(GetCtx(), SUPERUSER_USER_ID, GetVAF_Role_ID(), Get_TrxName());
                 su.Save();
                 //Add Role to User
                 if (GetCreatedBy() != SUPERUSER_USER_ID)
                 {
-                    MUserRoles ur = new MUserRoles(GetCtx(), GetCreatedBy(), GetAD_Role_ID(), Get_TrxName());
+                    MUserRoles ur = new MUserRoles(GetCtx(), GetCreatedBy(), GetVAF_Role_ID(), Get_TrxName());
                     ur.Save();
                 }
                 UpdateAccessRecords();
@@ -672,7 +672,7 @@ namespace VAdvantage.Model
 
         protected override bool AfterDelete(bool success)
         {
-            DB.ExecuteQuery("DELETE FROM AD_Role_Group WHERE AD_Role_ID=" + GetAD_Role_ID());
+            DB.ExecuteQuery("DELETE FROM VAF_Role_Group WHERE VAF_Role_ID=" + GetVAF_Role_ID());
             return success;
         }
 
@@ -687,39 +687,39 @@ namespace VAdvantage.Model
                 return "-";
             }
 
-            String roleClientOrgUser = GetAD_Role_ID() + ","
-                + GetAD_Client_ID() + "," + GetAD_Org_ID() + ",'Y', SysDate,"
+            String roleClientOrgUser = GetVAF_Role_ID() + ","
+                + GetVAF_Client_ID() + "," + GetVAF_Org_ID() + ",'Y', SysDate,"
                 + GetUpdatedBy() + ", SysDate," + GetUpdatedBy()
                 + ",'Y' ";	//	IsReadWrite
 
-            String sqlWindow = "INSERT INTO AD_Window_Access "
-                + "(AD_Window_ID, AD_Role_ID,"
-                + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
-                + "SELECT DISTINCT w.AD_Window_ID, " + roleClientOrgUser
-                + "FROM AD_Window w"
-                + " INNER JOIN AD_Tab t ON (w.AD_Window_ID=t.AD_Window_ID)"
-                + " INNER JOIN AD_Table tt ON (t.AD_Table_ID=tt.AD_Table_ID) "
-                + "WHERE t.SeqNo=(SELECT MIN(SeqNo) FROM AD_Tab xt "	// only check first tab
-                    + "WHERE xt.AD_Window_ID=w.AD_Window_ID)"
+            String sqlWindow = "INSERT INTO VAF_Screen_Rights "
+                + "(VAF_Screen_ID, VAF_Role_ID,"
+                + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
+                + "SELECT DISTINCT w.VAF_Screen_ID, " + roleClientOrgUser
+                + "FROM VAF_Screen w"
+                + " INNER JOIN VAF_Tab t ON (w.VAF_Screen_ID=t.VAF_Screen_ID)"
+                + " INNER JOIN VAF_TableView tt ON (t.VAF_TableView_ID=tt.VAF_TableView_ID) "
+                + "WHERE t.SeqNo=(SELECT MIN(SeqNo) FROM VAF_Tab xt "	// only check first tab
+                    + "WHERE xt.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + "AND tt.AccessLevel IN ";
 
-            String sqlProcess = "INSERT INTO AD_Process_Access "
-                + "(AD_Process_ID, AD_Role_ID,"
-                + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
-                + "SELECT DISTINCT p.AD_Process_ID, " + roleClientOrgUser
-                + "FROM AD_Process p "
+            String sqlProcess = "INSERT INTO VAF_Job_Rights "
+                + "(VAF_Job_ID, VAF_Role_ID,"
+                + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
+                + "SELECT DISTINCT p.VAF_Job_ID, " + roleClientOrgUser
+                + "FROM VAF_Job p "
                 + "WHERE AccessLevel IN ";
 
-            String sqlForm = "INSERT INTO AD_Form_Access "
-                + "(AD_Form_ID, AD_Role_ID,"
-                + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
-                + "SELECT f.AD_Form_ID, " + roleClientOrgUser
-                + "FROM AD_Form f "
+            String sqlForm = "INSERT INTO VAF_Page_Rights "
+                + "(VAF_Page_ID, VAF_Role_ID,"
+                + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
+                + "SELECT f.VAF_Page_ID, " + roleClientOrgUser
+                + "FROM VAF_Page f "
                 + "WHERE AccessLevel IN ";
 
             String sqlWorkflow = "INSERT INTO AD_Workflow_Access "
-                + "(AD_Workflow_ID, AD_Role_ID,"
-                + " AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
+                + "(AD_Workflow_ID, VAF_Role_ID,"
+                + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
                 + "SELECT w.AD_Workflow_ID, " + roleClientOrgUser
                 + "FROM AD_Workflow w "
                 + "WHERE AccessLevel IN ";           
@@ -765,13 +765,13 @@ namespace VAdvantage.Model
                 roleAccessLevelWin = roleAccessLevel;
             }
             //
-            String whereDel = " WHERE AD_Role_ID=" + GetAD_Role_ID();
+            String whereDel = " WHERE VAF_Role_ID=" + GetVAF_Role_ID();
             //
-            int winDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Window_Access" + whereDel, null, Get_TrxName());
+            int winDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Screen_Rights" + whereDel, null, Get_TrxName());
             int win = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWindow + roleAccessLevelWin, null, Get_TrxName());
-            int procDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Process_Access" + whereDel, null, Get_TrxName());
+            int procDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Job_Rights" + whereDel, null, Get_TrxName());
             int proc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlProcess + roleAccessLevel, null, Get_TrxName());
-            int formDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Form_Access" + whereDel, null, Get_TrxName());
+            int formDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Page_Rights" + whereDel, null, Get_TrxName());
             int form = CoreLibrary.DataBase.DB.ExecuteQuery(sqlForm + roleAccessLevel, null, Get_TrxName());
             int wfDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Workflow_Access" + whereDel, null, Get_TrxName());
             int wf = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWorkflow + roleAccessLevel, null, Get_TrxName());
@@ -779,16 +779,16 @@ namespace VAdvantage.Model
             // called function to add Document action access
             string daAccess = AddDocActionAccess();
 
-            log.Fine("AD_Window_ID=" + winDel + "+" + win
-                + ", AD_Process_ID=" + procDel + "+" + proc
-                + ", AD_Form_ID=" + formDel + "+" + form
+            log.Fine("VAF_Screen_ID=" + winDel + "+" + win
+                + ", VAF_Job_ID=" + procDel + "+" + proc
+                + ", VAF_Page_ID=" + formDel + "+" + form
                 + ", AD_Workflow_ID=" + wfDel + "+" + wf
                 + daAccess);
 
             LoadAccess(true);
-            return "@AD_Window_ID@ #" + win
-                + " -  @AD_Process_ID@ #" + proc
-                + " -  @AD_Form_ID@ #" + form
+            return "@VAF_Screen_ID@ #" + win
+                + " -  @VAF_Job_ID@ #" + proc
+                + " -  @VAF_Page_ID@ #" + form
                 + " -  @AD_Workflow_ID@ #" + wf
                 + daAccess;
                 
@@ -804,35 +804,35 @@ namespace VAdvantage.Model
             if (IsManual())
                 return "";
 
-            string sqlcheck = "SELECT COUNT(AD_Role_ID) FROM AD_Document_Action_Access WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Role_ID = " + GetAD_Role_ID();
+            string sqlcheck = "SELECT COUNT(VAF_Role_ID) FROM VAF_DocumentAction_Rights WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Role_ID = " + GetVAF_Role_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sqlcheck));
 
             // Check applied if any record found on Document Action Access, then no need to insert all records again, user will do that manually
             if (count <= 0)
             {
-                String sqlDocAction = "INSERT INTO AD_Document_Action_Access "
-                    + "(AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
-                    + "C_DocType_ID , AD_Ref_List_ID, AD_Role_ID) "
+                String sqlDocAction = "INSERT INTO VAF_DocumentAction_Rights "
+                    + "(VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "C_DocType_ID , VAF_CtrlRef_List_ID, VAF_Role_ID) "
                     + "(SELECT "
-                    + GetAD_Client_ID() + ",0,'Y', SysDate,"
+                    + GetVAF_Client_ID() + ",0,'Y', SysDate,"
                     + GetUpdatedBy() + ", SysDate," + GetUpdatedBy()
-                    + ", doctype.C_DocType_ID, action.AD_Ref_List_ID, rol.AD_Role_ID "
-                    + "FROM AD_Client client "
-                    + "INNER JOIN C_DocType doctype ON (doctype.AD_Client_ID=client.AD_Client_ID) "
-                    + "INNER JOIN AD_Ref_List action ON (action.AD_Reference_ID=135) "
-                    + "INNER JOIN AD_Role rol ON (rol.AD_Client_ID=client.AD_Client_ID "
-                    + "AND rol.AD_Role_ID=" + GetAD_Role_ID()
-                    + ") LEFT JOIN AD_Document_Action_Access da ON "
-                    + "(da.AD_Role_ID=" + GetAD_Role_ID()
-                    + " AND da.C_DocType_ID=doctype.C_DocType_ID AND da.AD_Ref_List_ID=action.AD_Ref_List_ID) "
-                    + "WHERE (da.C_DocType_ID IS NULL AND da.AD_Ref_List_ID IS NULL)) ";
+                    + ", doctype.C_DocType_ID, action.VAF_CtrlRef_List_ID, rol.VAF_Role_ID "
+                    + "FROM VAF_Client client "
+                    + "INNER JOIN C_DocType doctype ON (doctype.VAF_Client_ID=client.VAF_Client_ID) "
+                    + "INNER JOIN VAF_CtrlRef_List action ON (action.VAF_Control_Ref_ID=135) "
+                    + "INNER JOIN VAF_Role rol ON (rol.VAF_Client_ID=client.VAF_Client_ID "
+                    + "AND rol.VAF_Role_ID=" + GetVAF_Role_ID()
+                    + ") LEFT JOIN VAF_DocumentAction_Rights da ON "
+                    + "(da.VAF_Role_ID=" + GetVAF_Role_ID()
+                    + " AND da.C_DocType_ID=doctype.C_DocType_ID AND da.VAF_CtrlRef_List_ID=action.VAF_CtrlRef_List_ID) "
+                    + "WHERE (da.C_DocType_ID IS NULL AND da.VAF_CtrlRef_List_ID IS NULL)) ";
 
                 // change done here to assign Document Action access based on setting on Role window
                 int daAccDel = 0;
                 int daAcc = 0;
                 if (IsCheckDocActionAccess())
                 {
-                    daAccDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Document_Action_Access WHERE AD_Role_ID=" + GetAD_Role_ID(), null, Get_TrxName());
+                    daAccDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_DocumentAction_Rights WHERE VAF_Role_ID=" + GetVAF_Role_ID(), null, Get_TrxName());
                     daAcc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlDocAction, null, Get_TrxName());
                 }
 
@@ -844,16 +844,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Process Access against role
          /// </summary>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <returns></returns>
-        public bool? GetProcessAccess(int AD_Process_ID)
+        public bool? GetProcessAccess(int VAF_Job_ID)
         {
             bool? blnReturn = null;
             if (_dcProcess_access == null)
             {
                 _dcProcess_access = new Dictionary<int, bool>();
-                string strQry = "SELECT AD_Process_ID, IsReadWrite FROM AD_Process_Access " +
-                                " WHERE AD_Role_ID=" + GetCtx().GetAD_Role_ID() + " AND IsActive='Y'";
+                string strQry = "SELECT VAF_Job_ID, IsReadWrite FROM VAF_Job_Rights " +
+                                " WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
                 IDataReader dr = null;
                 try
                 {
@@ -876,7 +876,7 @@ namespace VAdvantage.Model
                     _dcProcess_access = null;
                 }
             }
-            if (_dcProcess_access.ContainsKey(AD_Process_ID))
+            if (_dcProcess_access.ContainsKey(VAF_Job_ID))
             {
                 blnReturn = true;
             }
@@ -886,16 +886,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get RoleID from workflow
         /// </summary>
-        /// <param name="AD_Process_ID"></param>
-        /// <param name="Ad_Role_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <returns>true If role exist</returns>
-        public bool? GetProcessAccess(int AD_Process_ID, int Ad_Role_ID)
+        public bool? GetProcessAccess(int VAF_Job_ID, int VAF_Role_ID)
         {
             bool? blnReturn = null;
 
             _dcProcess_access = new Dictionary<int, bool>();
-            string strQry = "SELECT AD_Process_ID, IsReadWrite FROM AD_Process_Access " +
-                            " WHERE AD_Role_ID=" + Ad_Role_ID + " AND IsActive='Y'";
+            string strQry = "SELECT VAF_Job_ID, IsReadWrite FROM VAF_Job_Rights " +
+                            " WHERE VAF_Role_ID=" + VAF_Role_ID + " AND IsActive='Y'";
             IDataReader dr = null;
             try
             {
@@ -918,7 +918,7 @@ namespace VAdvantage.Model
                 _dcProcess_access = null;
             }
 
-            if (_dcProcess_access.ContainsKey(AD_Process_ID))
+            if (_dcProcess_access.ContainsKey(VAF_Job_ID))
             {
                 blnReturn = true;
             }
@@ -943,7 +943,7 @@ namespace VAdvantage.Model
                 _dcWorkflow_access = new Dictionary<string, string>();
 
                 string strQry = "SELECT AD_Workflow_ID, IsReadWrite FROM AD_Workflow_Access "
-                 + "WHERE AD_Role_ID=" + GetCtx().GetAD_Role_ID() + " AND IsActive='Y'";
+                 + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
 
                 IDataReader dr = null;
                 try
@@ -986,7 +986,7 @@ namespace VAdvantage.Model
             {
                 _dcTask_access = new Dictionary<string, string>();
                 string strQry = "SELECT AD_Task_ID, IsReadWrite FROM AD_Task_Access "
-                 + "WHERE AD_Role_ID=" + GetCtx().GetAD_Role_ID() + " AND IsActive='Y'";
+                 + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
                 IDataReader dr = null;
                 try
                 {
@@ -1022,12 +1022,12 @@ namespace VAdvantage.Model
         /// <returns>bool type true if preference type is not None</returns>
         public bool IsShowPreference()
         {
-            return !X_AD_Role.PREFERENCETYPE_None.Equals(GetPreferenceType());
+            return !X_VAF_Role.PREFERENCETYPE_None.Equals(GetPreferenceType());
         }
 
         public bool IsShowVisualEditor()
         {
-            return GetAD_Role_ID() == 0;
+            return GetVAF_Role_ID() == 0;
 
         }
 
@@ -1101,19 +1101,19 @@ namespace VAdvantage.Model
         /// <summary>
         /// check user Table-Access to Table
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="isAccess"></param>
         /// <returns></returns>
-        public bool IsTableAccess(int AD_Table_ID, bool isAccess)
+        public bool IsTableAccess(int VAF_TableView_ID, bool isAccess)
         {
-            if (!IsTableAccessLevel(AD_Table_ID, isAccess))
+            if (!IsTableAccessLevel(VAF_TableView_ID, isAccess))
                 return false;
             LoadTableAccess(false);
             bool hasAccess = true;
 
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_AD_Table_Access.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }
@@ -1121,7 +1121,7 @@ namespace VAdvantage.Model
                 //	If you Exclude Access to a table and select Read Only, 
                 //	you can only read data (otherwise no access).
                 {
-                    if (_tableAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                    if (_tableAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                     {
                         if (isAccess)
                         {
@@ -1131,7 +1131,7 @@ namespace VAdvantage.Model
                         {
                             hasAccess = false;
                         }
-                        log.Fine("Exclude AD_Table_ID=" + AD_Table_ID
+                        log.Fine("Exclude VAF_TableView_ID=" + VAF_TableView_ID
                         + " (ro=" + isAccess + ",TableAccessRO=" + _tableAccess[i].IsReadOnly() + ") = " + hasAccess);
                         return hasAccess;
                     }
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
                 //	you can only read data (otherwise full access).
                 {
                     hasAccess = false;
-                    if (_tableAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                    if (_tableAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                     {
                         if (!isAccess)	//	rw only if not r/o
                         {
@@ -1152,7 +1152,7 @@ namespace VAdvantage.Model
                         {
                             hasAccess = true;
                         }
-                        log.Fine("Include AD_Table_ID=" + AD_Table_ID
+                        log.Fine("Include VAF_TableView_ID=" + VAF_TableView_ID
                         + " (ro=" + isAccess + ",TableAccessRO=" + _tableAccess[i].IsReadOnly() + ") = " + hasAccess);
                         return hasAccess;
                     }
@@ -1161,24 +1161,24 @@ namespace VAdvantage.Model
             }//	for all Table Access
             if (!hasAccess)
             {
-                log.Fine("AD_Table_ID=" + AD_Table_ID
+                log.Fine("VAF_TableView_ID=" + VAF_TableView_ID
                 + "(ro=" + isAccess + ") = " + hasAccess);
                 return hasAccess;
             }
             return hasAccess;
         }
 
-        public bool IsTableReadOnly(int AD_Table_ID)
+        public bool IsTableReadOnly(int VAF_TableView_ID)
         {
             bool readOnly = false;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_AD_Table_Access.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }
 
-                if (_tableAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                if (_tableAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                 {
                     readOnly = _tableAccess[i].IsReadOnly();
                 }
@@ -1192,13 +1192,13 @@ namespace VAdvantage.Model
         /// <summary>
         ///check user column-Access to Column
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
-        /// <param name="AD_Column_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
+        /// <param name="VAF_Column_ID"></param>
         /// <param name="ro"></param>
         /// <returns></returns>
-        public bool IsColumnAccess(int AD_Table_ID, int AD_Column_ID, bool ro)
+        public bool IsColumnAccess(int VAF_TableView_ID, int VAF_Column_ID, bool ro)
         {
-            if (!IsTableAccess(AD_Table_ID, ro))		//	No Access to Table		
+            if (!IsTableAccess(VAF_TableView_ID, ro))		//	No Access to Table		
                 return false;
             LoadColumnAccess(false);
 
@@ -1209,8 +1209,8 @@ namespace VAdvantage.Model
                 //	If you Exclude Access to a column and select Read Only, 
                 //	you can only read data (otherwise no access).
                 {
-                    if (_columnAccess[i].GetAD_Table_ID() == AD_Table_ID
-                        && _columnAccess[i].GetAD_Column_ID() == AD_Column_ID)
+                    if (_columnAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID
+                        && _columnAccess[i].GetVAF_Column_ID() == VAF_Column_ID)
                     {
                         if (ro)		//	just R/O Access requested
                             retValue = _columnAccess[i].IsReadOnly();
@@ -1218,7 +1218,7 @@ namespace VAdvantage.Model
                             retValue = false;
                         if (!retValue)
                         {
-                            log.Fine("Exclude AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID
+                            log.Fine("Exclude VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
                                 + " (ro=" + ro + ",ColumnAccessRO=" + _columnAccess[i].IsReadOnly() + ") = " + retValue);
                         }
                         return retValue;
@@ -1228,10 +1228,10 @@ namespace VAdvantage.Model
                 //	If you Include Access to a column and select Read Only, 
                 //	you can only read data (otherwise full access).
                 {
-                    if (_columnAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                    if (_columnAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                     {
                         retValue = false;
-                        if (_columnAccess[i].GetAD_Column_ID() == AD_Column_ID)
+                        if (_columnAccess[i].GetVAF_Column_ID() == VAF_Column_ID)
                         {
                             if (!ro)	//	rw only if not r/o
                                 retValue = !_columnAccess[i].IsReadOnly();
@@ -1239,7 +1239,7 @@ namespace VAdvantage.Model
                                 retValue = true;
                             if (!retValue)
                             {
-                                log.Fine("Include AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID
+                                log.Fine("Include VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
                                     + " (ro=" + ro + ",ColumnAccessRO=" + _columnAccess[i].IsReadOnly() + ") = " + retValue);
                             }
                             return retValue;
@@ -1249,7 +1249,7 @@ namespace VAdvantage.Model
             }	//	for all Table Access
             if (!retValue)
             {
-                log.Fine("AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID
+                log.Fine("VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
                     + " (ro=" + ro + ") = " + retValue);
             }
             return retValue;
@@ -1258,10 +1258,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Access to Table based on Role User Level Table Access Level
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="isAccess"></param>
         /// <returns></returns>
-        public bool IsTableAccessLevel(int AD_Table_ID, bool isAccess)
+        public bool IsTableAccessLevel(int VAF_TableView_ID, bool isAccess)
         {
             if (isAccess)				//	role can always read
                 return true;
@@ -1275,16 +1275,16 @@ namespace VAdvantage.Model
             try
             {
                 string strRoleAccessLevel = null;
-                _tableAccessLevel.TryGetValue(AD_Table_ID, out strRoleAccessLevel);
+                _tableAccessLevel.TryGetValue(VAF_TableView_ID, out strRoleAccessLevel);
 
                 if (strRoleAccessLevel == null)
                 {
                     // log no access tableid
-                    log.Fine("NO - No AccessLevel - AD_Table_ID=" + AD_Table_ID);
+                    log.Fine("NO - No AccessLevel - VAF_TableView_ID=" + VAF_TableView_ID);
                     return false;
                 }
                 //7
-                if (strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_All))
+                if (strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_All))
                 {
                     return true;
                 }
@@ -1292,22 +1292,22 @@ namespace VAdvantage.Model
                 string userLevel = GetUserLevel().Trim();
 
                 //S,4,6
-                if (userLevel.IndexOf('S') != -1 && (strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_SystemOnly)
-                        || strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_SystemPlusClient)))
+                if (userLevel.IndexOf('S') != -1 && (strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_SystemOnly)
+                        || strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_SystemPlusClient)))
                 {
                     return true;
                 }//8**********************************************************8//
-                if (userLevel.IndexOf('C') != -1 && (strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_ClientOnly)
-                        || strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_SystemPlusClient)))
+                if (userLevel.IndexOf('C') != -1 && (strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_ClientOnly)
+                        || strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_SystemPlusClient)))
                 {
                     return true;
                 }
-                if (userLevel.IndexOf('O') != -1 && (strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_Organization)
-                       || strRoleAccessLevel.Equals(X_AD_Table.ACCESSLEVEL_ClientPlusOrganization)))
+                if (userLevel.IndexOf('O') != -1 && (strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_Organization)
+                       || strRoleAccessLevel.Equals(X_VAF_TableView.ACCESSLEVEL_ClientPlusOrganization)))
                 {
                     return true;
                 }
-                log.Fine("NO - AD_Table_ID=" + AD_Table_ID
+                log.Fine("NO - VAF_TableView_ID=" + VAF_TableView_ID
             + ", UserLevel=" + userLevel + ", AccessLevel=" + strRoleAccessLevel);
                 return false;
             }
@@ -1329,31 +1329,31 @@ namespace VAdvantage.Model
             string userLevel = GetUserLevel().Trim(); //Format 'SCO'
 
             bool retValue = true;
-            if (X_AD_Table.ACCESSLEVEL_All.Equals(strAccesLevel))
+            if (X_VAF_TableView.ACCESSLEVEL_All.Equals(strAccesLevel))
             { retValue = true; }
 
             //	4 - System data 
-            else if (X_AD_Table.ACCESSLEVEL_SystemOnly.Equals(strAccesLevel)
+            else if (X_VAF_TableView.ACCESSLEVEL_SystemOnly.Equals(strAccesLevel)
                         && userLevel.IndexOf('S') == -1)
             { retValue = false; }
 
             //	2 - Client data requires C
-            else if (X_AD_Table.ACCESSLEVEL_ClientOnly.Equals(strAccesLevel)
+            else if (X_VAF_TableView.ACCESSLEVEL_ClientOnly.Equals(strAccesLevel)
                         && userLevel.IndexOf('C') == -1)
             { retValue = false; }
 
             //	1 - Organization data requires O
-            else if (X_AD_Table.ACCESSLEVEL_Organization.Equals(strAccesLevel)
+            else if (X_VAF_TableView.ACCESSLEVEL_Organization.Equals(strAccesLevel)
                          && userLevel.IndexOf('O') == -1)
             { retValue = false; }
 
             //	3 - Client Shared requires C or O
-            else if (X_AD_Table.ACCESSLEVEL_ClientPlusOrganization.Equals(strAccesLevel)
+            else if (X_VAF_TableView.ACCESSLEVEL_ClientPlusOrganization.Equals(strAccesLevel)
                          && (!(userLevel.IndexOf('C') != -1 || userLevel.IndexOf('O') != -1)))
             { retValue = false; }
 
             //	6 - System/Client requires S or C
-            else if (X_AD_Table.ACCESSLEVEL_SystemPlusClient.Equals(strAccesLevel)
+            else if (X_VAF_TableView.ACCESSLEVEL_SystemPlusClient.Equals(strAccesLevel)
                         && (!(userLevel.IndexOf('S') != -1 || userLevel.IndexOf('C') != -1)))
             { retValue = false; }
 
@@ -1364,7 +1364,7 @@ namespace VAdvantage.Model
             //  Notification
             log.SaveWarning("AccessTableNoView",
                 "Required=" + strAccesLevel + "("
-                + GetTableLevelString(Env.GetAD_Language(ctx), strAccesLevel)
+                + GetTableLevelString(Env.GetVAF_Language(ctx), strAccesLevel)
                 + ") != UserLevel=" + userLevel);
             log.Info(ToString());
             return retValue;
@@ -1373,10 +1373,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Returns clear text String of TableLevel
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <param name="TableLevel">level</param>
         /// <returns>info</returns>
-        private String GetTableLevelString(String AD_Language, String TableLevel)
+        private String GetTableLevelString(String VAF_Language, String TableLevel)
         {
             String level = TableLevel + "??";
             if (TableLevel.Equals("1"))
@@ -1403,7 +1403,7 @@ namespace VAdvantage.Model
             {
                 level = "AccessShared";
             }
-            return Msg.GetMsg(AD_Language, level);
+            return Msg.GetMsg(VAF_Language, level);
         }
 
         /// <summary>
@@ -1444,8 +1444,8 @@ namespace VAdvantage.Model
             }
             List<MTableAccess> list = new List<MTableAccess>();
 
-            string sql = "SELECT * FROM AD_Table_Access WHERE " +
-                         " AD_Role_ID = " + GetAD_Role_ID().ToString() + " AND IsActive='Y'";
+            string sql = "SELECT * FROM VAF_TableView_Rights WHERE " +
+                         " VAF_Role_ID = " + GetVAF_Role_ID().ToString() + " AND IsActive='Y'";
 
             DataTable dt = null;
             IDataReader dr = null;
@@ -1499,8 +1499,8 @@ namespace VAdvantage.Model
             _tableAccessLevel = new Dictionary<int, string>(300);
             _tableName = new Dictionary<string, int>(300);
 
-            String sql = "SELECT AD_Table_ID, AccessLevel, TableName "
-                + "FROM AD_Table WHERE IsActive='Y'";
+            String sql = "SELECT VAF_TableView_ID, AccessLevel, TableName "
+                + "FROM VAF_TableView WHERE IsActive='Y'";
             IDataReader dr = null;
             try
             {
@@ -1546,8 +1546,8 @@ namespace VAdvantage.Model
                 return;
             List<MColumnAccess> list = new List<MColumnAccess>();
 
-            string sql = "SELECT * FROM AD_Column_Access "
-                + "WHERE AD_Role_ID=" + GetAD_Role_ID() + " AND IsActive='Y'";
+            string sql = "SELECT * FROM VAF_Column_Rights "
+                + "WHERE VAF_Role_ID=" + GetVAF_Role_ID() + " AND IsActive='Y'";
             DataTable dt = null;
             IDataReader dr = null;
             try
@@ -1601,8 +1601,8 @@ namespace VAdvantage.Model
             List<MRecordAccess> list = new List<MRecordAccess>();
             List<MRecordAccess> dependent = new List<MRecordAccess>();
 
-            string sql = "SELECT * FROM AD_Record_Access "
-                + "WHERE AD_Role_ID=" + GetAD_Role_ID() + " AND IsActive='Y' ORDER BY AD_Table_ID";
+            string sql = "SELECT * FROM VAF_Record_Rights "
+                + "WHERE VAF_Role_ID=" + GetVAF_Role_ID() + " AND IsActive='Y' ORDER BY VAF_TableView_ID";
 
             DataTable dt = null;
             IDataReader dr = null;
@@ -1678,7 +1678,7 @@ namespace VAdvantage.Model
             //    {
             //        if (i > 0)
             //            sb.Append(",");
-            //        sb.Append(_orgAccess[i].AD_Org_ID);
+            //        sb.Append(_orgAccess[i].VAF_Org_ID);
             //    }
             //    GetCtx().SetContext("#User_Org", sb.ToString());
             //}
@@ -1696,8 +1696,8 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void LoadOrgAccessUser(List<OrgAccess> list)
         {
-            string sql = "SELECT * FROM AD_User_OrgAccess "
-                + "WHERE AD_User_ID=" + GetCtx().GetAD_User_ID() + " AND IsActive='Y'";
+            string sql = "SELECT * FROM VAF_UserContact_OrgRights "
+                + "WHERE VAF_UserContact_ID=" + GetCtx().GetVAF_UserContact_ID() + " AND IsActive='Y'";
 
             DataTable dt = null;
             IDataReader dr = null;
@@ -1710,7 +1710,7 @@ namespace VAdvantage.Model
                 foreach (DataRow rs in dt.Rows)
                 {
                     MUserOrgAccess oa = new MUserOrgAccess(GetCtx(), rs, Get_TrxName());
-                    LoadOrgAccessAdd(list, new OrgAccess(oa.GetAD_Client_ID(), oa.GetAD_Org_ID(), oa.IsReadOnly()));
+                    LoadOrgAccessAdd(list, new OrgAccess(oa.GetVAF_Client_ID(), oa.GetVAF_Org_ID(), oa.IsReadOnly()));
                 }
 
             }
@@ -1738,8 +1738,8 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void LoadOrgAccessRole(List<OrgAccess> list)
         {
-            string sql = "SELECT * FROM AD_Role_OrgAccess "
-                + "WHERE AD_Role_ID=" + GetAD_Role_ID() + " AND IsActive='Y'";
+            string sql = "SELECT * FROM VAF_Role_OrgRights "
+                + "WHERE VAF_Role_ID=" + GetVAF_Role_ID() + " AND IsActive='Y'";
             try
             {
                 IDataReader dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
@@ -1748,7 +1748,7 @@ namespace VAdvantage.Model
                 foreach (DataRow rs in dt.Rows)
                 {
                     MRoleOrgAccess oa = new MRoleOrgAccess(GetCtx(), rs, Get_TrxName());
-                    LoadOrgAccessAdd(list, new OrgAccess(oa.GetAD_Client_ID(), oa.GetAD_Org_ID(), oa.IsReadOnly()));
+                    LoadOrgAccessAdd(list, new OrgAccess(oa.GetVAF_Client_ID(), oa.GetVAF_Org_ID(), oa.IsReadOnly()));
                 }
                 dr.Dispose();
                 dt.Dispose();
@@ -1772,22 +1772,22 @@ namespace VAdvantage.Model
             }
             list.Add(oa);
             //	Do we look for trees?
-            if (GetAD_Tree_Org_ID() == 0)
+            if (GetVAF_TreeInfo_Org_ID() == 0)
             {
                 return;
             }
-            //MOrg org = MOrg.Get(GetCtx(), oa.AD_Org_ID);
-            bool isSummary = GetOrgInfo(oa.AD_Org_ID, false) == "Y";
+            //MOrg org = MOrg.Get(GetCtx(), oa.VAF_Org_ID);
+            bool isSummary = GetOrgInfo(oa.VAF_Org_ID, false) == "Y";
             if (!isSummary)
             {
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(GetCtx(), GetAD_Tree_Org_ID(), Get_TrxName());
-            String sql = "SELECT AD_Client_ID, AD_Org_ID FROM AD_Org "
-                + "WHERE IsActive='Y' AND AD_Org_ID IN (SELECT Node_ID FROM "
+            MTree tree = MTree.Get(GetCtx(), GetVAF_TreeInfo_Org_ID(), Get_TrxName());
+            String sql = "SELECT VAF_Client_ID, VAF_Org_ID FROM VAF_Org "
+                + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID=" + tree.GetAD_Tree_ID() + " AND Parent_ID=" + oa.AD_Org_ID + " AND IsActive='Y')";
+                + " WHERE VAF_TreeInfo_ID=" + tree.GetVAF_TreeInfo_ID() + " AND Parent_ID=" + oa.VAF_Org_ID + " AND IsActive='Y')";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -1798,9 +1798,9 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    int AD_Client_ID = Utility.Util.GetValueOfInt(dr[0].ToString());// rs.getInt(1);
-                    int AD_Org_ID = Utility.Util.GetValueOfInt(dr[1].ToString());// rs.getInt(2);
-                    LoadOrgAccessAdd(list, new OrgAccess(AD_Client_ID, AD_Org_ID, oa.readOnly));
+                    int VAF_Client_ID = Utility.Util.GetValueOfInt(dr[0].ToString());// rs.getInt(1);
+                    int VAF_Org_ID = Utility.Util.GetValueOfInt(dr[1].ToString());// rs.getInt(2);
+                    LoadOrgAccessAdd(list, new OrgAccess(VAF_Client_ID, VAF_Org_ID, oa.readOnly));
                 }
             }
             catch (Exception e)
@@ -1827,7 +1827,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        private int GetAD_Table_ID(string tableName)
+        private int GetVAF_TableView_ID(string tableName)
         {
             LoadTableInfo(false);
             int ii = -1;
@@ -1836,7 +1836,7 @@ namespace VAdvantage.Model
             {
                 return ii;
             }
-            //	log.log(Level.WARNING,"getAD_Table_ID - not found (" + tableName + ")");
+            //	log.log(Level.WARNING,"getVAF_TableView_ID - not found (" + tableName + ")");
             return 0;
         }
 
@@ -1925,15 +1925,15 @@ namespace VAdvantage.Model
                     retSQL.Append(documentWhere);
                 }
             }
-            int AD_Table_ID = 0;
+            int VAF_TableView_ID = 0;
             //	** Data Access	**
             for (int i = 0; i < ti.Length; i++)
             {
                 string TableName = ti[i].GetTableName();
-                AD_Table_ID = GetAD_Table_ID(TableName);
+                VAF_TableView_ID = GetVAF_TableView_ID(TableName);
 
                 // Org Access
-                //if (AD_Table_ID != 0 && !IsAccessAllOrgs())
+                //if (VAF_TableView_ID != 0 && !IsAccessAllOrgs())
                 //{
                 //    String TableSynonym = ti[i].GetSynonym();
                 //    if ( String.IsNullOrEmpty( TableSynonym))
@@ -1946,10 +1946,10 @@ namespace VAdvantage.Model
 
 
                 //	Data Table Access
-                if (AD_Table_ID != 0 && !IsTableAccess(AD_Table_ID, !rw))
+                if (VAF_TableView_ID != 0 && !IsTableAccess(VAF_TableView_ID, !rw))
                 {
                     retSQL.Append(" AND 1=3");	//	prevent access at all
-                    log.Fine("No access to AD_Table_ID=" + AD_Table_ID
+                    log.Fine("No access to VAF_TableView_ID=" + VAF_TableView_ID
                       + " - " + TableName + " - " + retSQL);
                     break;	//	no need to check further 
                 }
@@ -1967,8 +1967,8 @@ namespace VAdvantage.Model
                 }
                 keyColumnName += TableName + "_ID";	//	derived from table
 
-                // log.Fine("addAccessSQL - " + TableName + "(" + AD_Table_ID + ") " + keyColumnName);
-                string recordWhere = GetRecordWhere(AD_Table_ID, keyColumnName, rw);
+                // log.Fine("addAccessSQL - " + TableName + "(" + VAF_TableView_ID + ") " + keyColumnName);
+                string recordWhere = GetRecordWhere(VAF_TableView_ID, keyColumnName, rw);
                 if (recordWhere.Length > 0)
                 {
                     retSQL.Append(" AND ").Append(recordWhere);
@@ -1979,7 +1979,7 @@ namespace VAdvantage.Model
             //	Dependent Records (only for main inSql)
             string mainSql = asp.GetMainSql();
             LoadRecordAccess(false);
-            AD_Table_ID = 0;
+            VAF_TableView_ID = 0;
             String whereColumnName = null;
             List<int> includes = new List<int>();
             List<int> excludes = new List<int>();
@@ -2002,10 +2002,10 @@ namespace VAdvantage.Model
                 if (!(charCheck == "," || charCheck == " " || charCheck == ")"))
                     continue;
 
-                if (AD_Table_ID != 0 && AD_Table_ID != _recordDependentAccess[i].GetAD_Table_ID())
+                if (VAF_TableView_ID != 0 && VAF_TableView_ID != _recordDependentAccess[i].GetVAF_TableView_ID())
                     retSQL.Append(GetDependentAccess(whereColumnName, includes, excludes));
 
-                AD_Table_ID = _recordDependentAccess[i].GetAD_Table_ID();
+                VAF_TableView_ID = _recordDependentAccess[i].GetVAF_TableView_ID();
                 //	*** we found the column in the main query
                 if (_recordDependentAccess[i].IsExclude())
                 {
@@ -2036,9 +2036,9 @@ namespace VAdvantage.Model
             //	All Orgs - use Client of Role
             if (IsAccessAllOrgs())
             {
-                if (rw || GetAD_Client_ID() == 0)
-                    return "AD_Client_ID=" + GetAD_Client_ID();
-                return "AD_Client_ID IN (0," + GetAD_Client_ID() + ")";
+                if (rw || GetVAF_Client_ID() == 0)
+                    return "VAF_Client_ID=" + GetVAF_Client_ID();
+                return "VAF_Client_ID IN (0," + GetVAF_Client_ID() + ")";
             }
 
             //	Get Client from Org List
@@ -2050,9 +2050,9 @@ namespace VAdvantage.Model
             //	Positive List
             for (int i = 0; i < _orgAccess.Length; i++)
             {
-                if (!set.Contains(_orgAccess[i].AD_Client_ID.ToString()))
+                if (!set.Contains(_orgAccess[i].VAF_Client_ID.ToString()))
                 {
-                    set.Add(_orgAccess[i].AD_Client_ID.ToString());
+                    set.Add(_orgAccess[i].VAF_Client_ID.ToString());
                 }
             }
             //
@@ -2071,21 +2071,21 @@ namespace VAdvantage.Model
             if (oneOnly)
             {
                 if (sb.Length > 0)
-                    return "AD_Client_ID=" + sb.ToString();
+                    return "VAF_Client_ID=" + sb.ToString();
                 else
                 {
                     log.Log(Level.SEVERE, "No Access Org records");
-                    return "AD_Client_ID=-1";	//	No Access Record
+                    return "VAF_Client_ID=-1";	//	No Access Record
                 }
             }
-            return "AD_Client_ID IN(" + sb.ToString() + ")";
+            return "VAF_Client_ID IN(" + sb.ToString() + ")";
         }	//	getClientWhereValue
 
         /// <summary>
         ///Get Org Where Clause Value 
         /// </summary>
         /// <param name="rw"></param>
-        /// <returns>@return "AD_Org_ID=0" or "AD_Org_ID IN(0,1)" or null (if access all org)</returns>
+        /// <returns>@return "VAF_Org_ID=0" or "VAF_Org_ID IN(0,1)" or null (if access all org)</returns>
         public string GetOrgWhere(bool rw)
         {
             if (IsAccessAllOrgs())
@@ -2099,12 +2099,12 @@ namespace VAdvantage.Model
             //	Positive List
             for (int i = 0; i < _orgAccess.Length; i++)
             {
-                if (!set.Contains(_orgAccess[i].AD_Org_ID.ToString()))
+                if (!set.Contains(_orgAccess[i].VAF_Org_ID.ToString()))
                 {
                     if (!rw)
-                        set.Add(_orgAccess[i].AD_Org_ID.ToString());
+                        set.Add(_orgAccess[i].VAF_Org_ID.ToString());
                     else if (!_orgAccess[i].readOnly)	//	rw
-                        set.Add(_orgAccess[i].AD_Org_ID.ToString());
+                        set.Add(_orgAccess[i].VAF_Org_ID.ToString());
                 }
             }
             //
@@ -2123,14 +2123,14 @@ namespace VAdvantage.Model
             if (oneOnly)
             {
                 if (sb.Length > 0)
-                    return "AD_Org_ID=" + sb.ToString();
+                    return "VAF_Org_ID=" + sb.ToString();
                 else
                 {
                     log.Log(Level.SEVERE, "No Access Org records");
-                    return "AD_Org_ID=-1";	//	No Access Record
+                    return "VAF_Org_ID=-1";	//	No Access Record
                 }
             }
-            return "AD_Org_ID IN(" + sb.ToString() + ")";
+            return "VAF_Org_ID IN(" + sb.ToString() + ")";
         }	//	getOrgWhereValue
 
         /**
@@ -2138,7 +2138,7 @@ namespace VAdvantage.Model
 	 * 
 	 * @param rw
 	 *            read write
-	 * @return "AD_Org_ID=0" or "AD_Org_ID IN(0,1)" or null (if access all org)
+	 * @return "VAF_Org_ID=0" or "VAF_Org_ID IN(0,1)" or null (if access all org)
 	 */
         public String GetOrgWhere(String tableName, bool rw)
         {
@@ -2153,19 +2153,19 @@ namespace VAdvantage.Model
             for (int i = 0; i < _orgAccess.Length; i++)
             {
                 if (!rw)
-                    set.Add(_orgAccess[i].AD_Org_ID.ToString());
+                    set.Add(_orgAccess[i].VAF_Org_ID.ToString());
                 else if (!_orgAccess[i].readOnly) // rw
-                    set.Add(_orgAccess[i].AD_Org_ID.ToString());
+                    set.Add(_orgAccess[i].VAF_Org_ID.ToString());
             }
             //
             if (set.Count == 1)
             {
-                return "COALESCE(" + (tableName == null ? "" : tableName + ".") + "AD_Org_ID,0)=" + set[0];
+                return "COALESCE(" + (tableName == null ? "" : tableName + ".") + "VAF_Org_ID,0)=" + set[0];
             }
             else if (set.Count == 0)
             {
                 log.Log(Level.SEVERE, "No Access Org records");
-                return (tableName == null ? "" : tableName + ".") + "AD_Org_ID=-1"; // No Access Record
+                return (tableName == null ? "" : tableName + ".") + "VAF_Org_ID=-1"; // No Access Record
             }
             StringBuilder sql = new StringBuilder();
             StringBuilder sb = new StringBuilder();
@@ -2186,7 +2186,7 @@ namespace VAdvantage.Model
                     if (sql.Length > 0)
                         sql.Append(" OR ");
 
-                    sql.Append("COALESCE(" + (tableName == null ? "" : tableName + ".") + "AD_Org_ID,0) IN(").Append(sb.ToString()).Append(")");
+                    sql.Append("COALESCE(" + (tableName == null ? "" : tableName + ".") + "VAF_Org_ID,0) IN(").Append(sb.ToString()).Append(")");
                     sb = new StringBuilder();
                 }
             }
@@ -2205,8 +2205,8 @@ namespace VAdvantage.Model
                 return "";
 
             bool hasBPColumn = false;
-            string sql = "SELECT count(*) FROM AD_Table t "
-                            + "INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+            string sql = "SELECT count(*) FROM VAF_TableView t "
+                            + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                             + "WHERE t.TableName='" + TableName
                             + "' AND c.ColumnName='C_BPartner_ID' ";
             try
@@ -2224,22 +2224,22 @@ namespace VAdvantage.Model
             if (!hasBPColumn)
                 return "";
 
-            int AD_User_ID = GetCtx().GetAD_User_ID();
+            int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
 
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
                                         + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-                                        + " WHERE u.AD_User_ID=" + AD_User_ID
+                                        + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
                                         + " AND bp.C_BPartner_ID=" + TableName + ".C_BPartner_ID)"
-                                + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+                                + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
                                         + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-                                        + " WHERE u.AD_User_ID=" + AD_User_ID
+                                        + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
                                         + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
             bool hasUserColumn = false;
-            string sql1 = "SELECT count(*) FROM AD_Table t "
-                            + "INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+            string sql1 = "SELECT count(*) FROM VAF_TableView t "
+                            + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                             + "WHERE t.tableName='" + TableName
-                            + "' AND c.ColumnName='AD_User_ID' ";
+                            + "' AND c.ColumnName='VAF_UserContact_ID' ";
             try
             {
 
@@ -2255,7 +2255,7 @@ namespace VAdvantage.Model
             }
 
             if (hasUserColumn)
-                docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+                docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
             docAccess += ")";
 
             return docAccess;
@@ -2264,11 +2264,11 @@ namespace VAdvantage.Model
         /// <summary>
         ///Return Where clause for Record Access
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="keyColumnName"></param>
         /// <param name="rw"></param>
         /// <returns></returns>
-        private string GetRecordWhere(int AD_Table_ID, string keyColumnName, bool rw)
+        private string GetRecordWhere(int VAF_TableView_ID, string keyColumnName, bool rw)
         {
             LoadRecordAccess(false);
             //
@@ -2277,7 +2277,7 @@ namespace VAdvantage.Model
             //	Role Access
             for (int i = 0; i < _recordAccess.Length; i++)
             {
-                if (_recordAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                if (_recordAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                 {
                     //	NOT IN (x)
                     if (_recordAccess[i].IsExclude())
@@ -2316,10 +2316,10 @@ namespace VAdvantage.Model
             if (!IsPersonalAccess())
             {
                 //Lakhwinder
-                MTable table = MTable.Get(GetCtx(), AD_Table_ID);
-                if (!table.IsView() && table.Haskey(AD_Table_ID))
+                MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
+                if (!table.IsView() && table.Haskey(VAF_TableView_ID))
                 {
-                    string lockedIDs = MPrivateAccess.GetLockedRecordWhere(AD_Table_ID, _AD_User_ID);
+                    string lockedIDs = MPrivateAccess.GetLockedRecordWhere(VAF_TableView_ID, _VAF_UserContact_ID);
                     if (lockedIDs != null)
                     {
                         if (sb.Length > 0)
@@ -2410,21 +2410,21 @@ namespace VAdvantage.Model
         ///UPADATE - Can user Update the record.
         /// Access error info (AccessTableNoUpdate) is saved in the log-yet imolement
         /// </summary>
-        /// <param name="AD_Client_ID">AD_Client_ID comntext to derive client/org/user level</param>
-        /// <param name="AD_Org_ID"></param>
-        /// <param name="AD_Table_ID">AD_Table_ID table</param>
+        /// <param name="VAF_Client_ID">VAF_Client_ID comntext to derive client/org/user level</param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID table</param>
         /// <param name="Record_ID">record id</param>
         /// <param name="createError">createError bool</param>
         /// <returns>true if you can update</returns>
-        public bool CanUpdate(int AD_Client_ID, int AD_Org_ID,
-            int AD_Table_ID, int Record_ID, bool createError)
+        public bool CanUpdate(int VAF_Client_ID, int VAF_Org_ID,
+            int VAF_TableView_ID, int Record_ID, bool createError)
         {
             string userLevel = GetUserLevel().Trim();	//	Format 'SCO'
             bool retValue = true;
             string whatMissing = "";
 
             //	System == Client=0 & Org=0
-            if (AD_Client_ID == 0 && AD_Org_ID == 0
+            if (VAF_Client_ID == 0 && VAF_Org_ID == 0
                 && userLevel.IndexOf('S') == -1)
             {
                 retValue = false;
@@ -2432,10 +2432,10 @@ namespace VAdvantage.Model
             }
 
             //	Client == Client!=0 & Org=0
-            else if (AD_Client_ID != 0 && AD_Org_ID == 0
+            else if (VAF_Client_ID != 0 && VAF_Org_ID == 0
                 && userLevel.IndexOf('C') == -1)
             {
-                if (userLevel.IndexOf('O') == -1 && IsOrgAccess(AD_Org_ID, true))
+                if (userLevel.IndexOf('O') == -1 && IsOrgAccess(VAF_Org_ID, true))
                 { }                 //	Client+Org with access to *
                 else
                 {
@@ -2445,7 +2445,7 @@ namespace VAdvantage.Model
             }
 
             //	Organization == Client!=0 & Org!=0
-            else if (AD_Client_ID != 0 && AD_Org_ID != 0
+            else if (VAF_Client_ID != 0 && VAF_Org_ID != 0
                 && userLevel.IndexOf('O') == -1)
             {
                 retValue = false;
@@ -2454,17 +2454,17 @@ namespace VAdvantage.Model
 
             //	Data Access
             if (retValue)
-                retValue = IsTableAccess(AD_Table_ID, false);
+                retValue = IsTableAccess(VAF_TableView_ID, false);
 
             if (retValue && Record_ID != 0)
-                retValue = IsRecordAccess(AD_Table_ID, Record_ID, false);
+                retValue = IsRecordAccess(VAF_TableView_ID, Record_ID, false);
 
             if (!retValue && createError)
             {
                 //Log Error 
                 log.SaveWarning("AccessTableNoUpdate",
-                    "AD_Client_ID=" + AD_Client_ID
-                    + ", AD_Org_ID=" + AD_Org_ID + ", UserLevel=" + userLevel
+                    "VAF_Client_ID=" + VAF_Client_ID
+                    + ", VAF_Org_ID=" + VAF_Org_ID + ", UserLevel=" + userLevel
                     + " => missing=" + whatMissing);
                 log.Warning(ToString());
             }
@@ -2474,21 +2474,21 @@ namespace VAdvantage.Model
         /// <summary>
         ///	check Access to Org
         /// </summary>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="rw"></param>
         /// <returns>true if access</returns>
-        public bool IsOrgAccess(int AD_Org_ID, bool rw)
+        public bool IsOrgAccess(int VAF_Org_ID, bool rw)
         {
             if (IsAccessAllOrgs())
                 return true;
-            if (AD_Org_ID == 0 && !rw)		//	can always read common org
+            if (VAF_Org_ID == 0 && !rw)		//	can always read common org
                 return true;
             LoadOrgAccess(false);
 
             //	Positive List
             for (int i = 0; i < _orgAccess.Length; i++)
             {
-                if (_orgAccess[i].AD_Org_ID == AD_Org_ID)
+                if (_orgAccess[i].VAF_Org_ID == VAF_Org_ID)
                 {
                     if (!rw)
                         return true;
@@ -2503,20 +2503,20 @@ namespace VAdvantage.Model
         /// <summary>
         ///Access to Record (no check of table)
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="ro"></param>
         /// <returns></returns>
-        public bool IsRecordAccess(int AD_Table_ID, int Record_ID, bool ro)
+        public bool IsRecordAccess(int VAF_TableView_ID, int Record_ID, bool ro)
         {
-            //	if (!isTableAccess(AD_Table_ID, ro))		//	No Access to Table
+            //	if (!isTableAccess(VAF_TableView_ID, ro))		//	No Access to Table
             //		return false;
             LoadRecordAccess(false);
             bool negativeList = true;
             for (int i = 0; i < _recordAccess.Length; i++)
             {
                 MRecordAccess ra = _recordAccess[i];
-                if (ra.Get_Table_ID() != AD_Table_ID)
+                if (ra.Get_Table_ID() != VAF_TableView_ID)
                     continue;
 
                 if (ra.IsExclude())		//	Exclude
@@ -2552,90 +2552,90 @@ namespace VAdvantage.Model
         /// <summary>
         /// Can Report on table
         /// </summary>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <returns>true if access</returns>
-        public bool IsCanReport(int AD_Table_ID)
+        public bool IsCanReport(int VAF_TableView_ID)
         {
             if (!IsCanReport())						//	Role Level block
             {
                 log.Warning("Role denied");
                 return false;
             }
-            if (!IsTableAccess(AD_Table_ID, true))	//	No R/O Access to Table
+            if (!IsTableAccess(VAF_TableView_ID, true))	//	No R/O Access to Table
                 return false;
             //
             bool canReport = true;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_AD_Table_Access.ACCESSTYPERULE_Reporting.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Reporting.Equals(_tableAccess[i].GetAccessTypeRule()))
                     continue;
                 if (_tableAccess[i].IsExclude())		//	Exclude
                 {
-                    if (_tableAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                    if (_tableAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                     {
                         canReport = _tableAccess[i].IsCanReport();
-                        log.Fine("Exclude " + AD_Table_ID + " - " + canReport);
+                        log.Fine("Exclude " + VAF_TableView_ID + " - " + canReport);
                         return canReport;
                     }
                 }
                 else									//	Include
                 {
                     canReport = false;
-                    if (_tableAccess[i].GetAD_Table_ID() == AD_Table_ID)
+                    if (_tableAccess[i].GetVAF_TableView_ID() == VAF_TableView_ID)
                     {
                         canReport = _tableAccess[i].IsCanReport();
-                        log.Fine("Include " + AD_Table_ID + " - " + canReport);
+                        log.Fine("Include " + VAF_TableView_ID + " - " + canReport);
                         return canReport;
                     }
                 }
             }	//	for all Table Access
-            log.Fine(AD_Table_ID + " - " + canReport);
+            log.Fine(VAF_TableView_ID + " - " + canReport);
             return canReport;
         }
 
         /// <summary>
         /// Can Export Table
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <returns> true if access</returns>
         /// <author>raghu</author>
-        public bool IsCanExport(int AD_Table_ID)
+        public bool IsCanExport(int VAF_TableView_ID)
         {
             if (!IsCanExport())						//	Role Level block
             {
                 log.Warning("Role denied");
                 return false;
             }
-            if (!IsTableAccess(AD_Table_ID, true))	//	No R/O Access to Table
+            if (!IsTableAccess(VAF_TableView_ID, true))	//	No R/O Access to Table
             {
                 return false;
             }
-            if (!IsCanReport(AD_Table_ID))			//	We cannot Export if we cannot report
+            if (!IsCanReport(VAF_TableView_ID))			//	We cannot Export if we cannot report
             {
                 return false;
             }
             bool canExport = true;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_AD_Table_Access.ACCESSTYPERULE_Exporting.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Exporting.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }
                 if (_tableAccess[i].IsExclude())		//	Exclude
                 {
                     canExport = _tableAccess[i].IsCanExport();
-                    log.Fine("Exclude " + AD_Table_ID + " - " + canExport);
+                    log.Fine("Exclude " + VAF_TableView_ID + " - " + canExport);
                     return canExport;
                 }
                 else									//	Include
                 {
                     canExport = false;
                     canExport = _tableAccess[i].IsCanExport();
-                    log.Fine("Include " + AD_Table_ID + " - " + canExport);
+                    log.Fine("Include " + VAF_TableView_ID + " - " + canExport);
                     return canExport;
                 }
             }	//	for all Table Access
-            log.Fine(AD_Table_ID + " - " + canExport);
+            log.Fine(VAF_TableView_ID + " - " + canExport);
             return canExport;
         }
 
@@ -2644,7 +2644,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MRole[");
-            sb.Append(GetAD_Role_ID()).Append(",").Append(GetName())
+            sb.Append(GetVAF_Role_ID()).Append(",").Append(GetName())
                 .Append(",UserLevel=").Append(GetUserLevel())
                 .Append(",").Append(GetClientWhere(false))
                 .Append(",").Append(GetOrgWhere(false))
@@ -2657,7 +2657,7 @@ namespace VAdvantage.Model
         public String ToStringX(Ctx ctx)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(Msg.Translate(ctx, "AD_Role_ID")).Append("=").Append(GetName())
+            sb.Append(Msg.Translate(ctx, "VAF_Role_ID")).Append("=").Append(GetName())
                 .Append(" - ").Append(Msg.Translate(ctx, "IsCanExport")).Append("=").Append(IsCanExport())
                 .Append(" - ").Append(Msg.Translate(ctx, "IsCanReport")).Append("=").Append(IsCanReport())
                 .Append(Utility.Env.NL).Append(Utility.Env.NL);
@@ -2719,31 +2719,31 @@ namespace VAdvantage.Model
         {
             if (!IsActive())
             {
-                DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
                 return;
             }
 
             if (!IsUseUserOrgAccess())
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,AD_ORg_ID From ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM AD_Role_OrgAccess WHERE IsActive='Y' AND AD_Role_ID = " + GetAD_Role_ID() + " AND AD_ORg_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]), null, null)) == 0)
+                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM VAF_Role_OrgRights WHERE IsActive='Y' AND VAF_Role_ID = " + GetVAF_Role_ID() + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_ORg_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
                     }
                 }
             }
             else
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,AD_ORg_ID From ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM AD_User_OrgAccess WHERE IsActive='Y' AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_ORg_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]), null, null)) == 0)
+                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM VAF_UserContact_OrgRights WHERE IsActive='Y' AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_ORg_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
                     }
                 }
             }
@@ -2766,7 +2766,7 @@ namespace VAdvantage.Model
                 return options;
 
             // Code Commented // as no need to check records on Document Action Access for validation of Doc Actions in dialog
-            //string sqlcheck = "SELECT COUNT(*) FROM AD_Document_Action_Access WHERE AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+            //string sqlcheck = "SELECT COUNT(*) FROM VAF_DocumentAction_Rights WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
             //int count = Util.GetValueOfInt(DB.ExecuteScalar(sqlcheck));
 
             //if (count == 0)
@@ -2797,11 +2797,11 @@ namespace VAdvantage.Model
                 //param.Add(options[i]);
             }
             //
-            String sql = "SELECT DISTINCT rl.Value FROM AD_Document_Action_Access a"
-                    + " INNER JOIN AD_Ref_List rl ON (rl.AD_Reference_ID=135 and rl.AD_Ref_List_ID=a.AD_Ref_List_ID)"
-                    + " WHERE a.IsActive='Y' AND a.AD_Client_ID=" + clientId + " AND a.C_DocType_ID=" + docTypeId // #1,2
+            String sql = "SELECT DISTINCT rl.Value FROM VAF_DocumentAction_Rights a"
+                    + " INNER JOIN VAF_CtrlRef_List rl ON (rl.VAF_Control_Ref_ID=135 and rl.VAF_CtrlRef_List_ID=a.VAF_CtrlRef_List_ID)"
+                    + " WHERE a.IsActive='Y' AND a.VAF_Client_ID=" + clientId + " AND a.C_DocType_ID=" + docTypeId // #1,2
                         + " AND rl.Value IN (" + sql_values + ")"
-                        + " AND " + GetIncludedRolesWhereClause("a.AD_Role_ID", param)
+                        + " AND " + GetIncludedRolesWhereClause("a.VAF_Role_ID", param)
             ;
             IDataReader dr = null;
             try
@@ -2836,8 +2836,8 @@ namespace VAdvantage.Model
 
         /**
 	 * Get Role Where Clause.
-	 * It will look something like myalias.AD_Role_ID IN (?, ?, ?).
-	 * @param roleColumnSQL role columnname or role column SQL (e.g. myalias.AD_Role_ID) 
+	 * It will look something like myalias.VAF_Role_ID IN (?, ?, ?).
+	 * @param roleColumnSQL role columnname or role column SQL (e.g. myalias.VAF_Role_ID) 
 	 * @param params a list where the method will put SQL parameters.
 	 * 				If null, this method will generate a not parametrized query 
 	 * @return role SQL where clause
@@ -2847,24 +2847,24 @@ namespace VAdvantage.Model
             StringBuilder whereClause = new StringBuilder();
             // if (param != null)
             //{
-            whereClause.Append(GetAD_Role_ID());
-            // param.Add(GetAD_Role_ID());
+            whereClause.Append(GetVAF_Role_ID());
+            // param.Add(GetVAF_Role_ID());
             // }
             // else
             // {
-            //  whereClause.Append(GetAD_Role_ID());
+            //  whereClause.Append(GetVAF_Role_ID());
             //}
             //
             foreach (MRole role in GetIncludedRoles(true))
             {
                 // if (param != null)
                 //  {
-                //      whereClause.Append("," + role.GetAD_Role_ID());
-                //      param.Add(role.GetAD_Role_ID());
+                //      whereClause.Append("," + role.GetVAF_Role_ID());
+                //      param.Add(role.GetVAF_Role_ID());
                 //  }
                 //   else
                 //   {
-                whereClause.Append(",").Append(role.GetAD_Role_ID());
+                whereClause.Append(",").Append(role.GetVAF_Role_ID());
                 // }
             }
             //
@@ -2902,34 +2902,34 @@ namespace VAdvantage.Model
             }
         }
 
-        internal static string GetClientName(int AD_Client_ID)
+        internal static string GetClientName(int VAF_Client_ID)
         {
-            String name = s_clientcache[AD_Client_ID];
+            String name = s_clientcache[VAF_Client_ID];
             if (name == null)
             {
                 name = Util.GetValueOfString(
-                    DB.ExecuteScalar("SELECT Name FROM AD_Client WHERE AD_Client_ID=" + AD_Client_ID));
-                s_clientcache[AD_Client_ID] = name;
+                    DB.ExecuteScalar("SELECT Name FROM VAF_Client WHERE VAF_Client_ID=" + VAF_Client_ID));
+                s_clientcache[VAF_Client_ID] = name;
             }
             return name;
         }
 
-        internal static  string GetOrgInfo(int AD_Org_ID, bool nameOnly)
+        internal static  string GetOrgInfo(int VAF_Org_ID, bool nameOnly)
         {
-            List<String> lst = s_orgcache[AD_Org_ID];
+            List<String> lst = s_orgcache[VAF_Org_ID];
             string retval = "";
             if (lst == null)
             {
                 IDataReader dr = null;
                 try
                 {
-                    dr = DB.ExecuteReader("SELECT Name,IsSummary FROM AD_Org WHERE AD_Org_ID=" + AD_Org_ID);
+                    dr = DB.ExecuteReader("SELECT Name,IsSummary FROM VAF_Org WHERE VAF_Org_ID=" + VAF_Org_ID);
                     lst = new List<string>();
                     if (dr.Read())
                     {
                         lst.Add(dr[0].ToString());
                         lst.Add(dr[1].ToString());
-                        s_orgcache[AD_Org_ID] = lst;
+                        s_orgcache[VAF_Org_ID] = lst;
                     }
                 }
                 finally
@@ -2961,19 +2961,19 @@ namespace VAdvantage.Model
             /// <summary>
             /// Org Access constructor
             /// </summary>
-            /// <param name="ad_Client_ID"></param>
-            /// <param name="ad_Org_ID"></param>
+            /// <param name="vaf_client_ID"></param>
+            /// <param name="vaf_org_ID"></param>
             /// <param name="readoly"></param>
-            public OrgAccess(int ad_Client_ID, int ad_Org_ID, bool readoly)
+            public OrgAccess(int vaf_client_ID, int vaf_org_ID, bool readoly)
             {
-                this.AD_Client_ID = ad_Client_ID;
-                this.AD_Org_ID = ad_Org_ID;
+                this.VAF_Client_ID = vaf_client_ID;
+                this.VAF_Org_ID = vaf_org_ID;
                 this.readOnly = readoly;
             }
             /** Client				*/
-            public int AD_Client_ID = 0;
+            public int VAF_Client_ID = 0;
             /** Organization		*/
-            public int AD_Org_ID = 0;
+            public int VAF_Org_ID = 0;
             /** Read Only			*/
             public bool readOnly = true;
 
@@ -2988,8 +2988,8 @@ namespace VAdvantage.Model
                 if (obj != null && obj.GetType().Equals(typeof(OrgAccess)))
                 {
                     OrgAccess comp = (OrgAccess)obj;
-                    return comp.AD_Client_ID == AD_Client_ID
-                        && comp.AD_Org_ID == AD_Org_ID;
+                    return comp.VAF_Client_ID == VAF_Client_ID
+                        && comp.VAF_Org_ID == VAF_Org_ID;
                 }
                 return false;
             }   //	equals
@@ -3000,15 +3000,15 @@ namespace VAdvantage.Model
             public override String ToString()
             {
                 String clientName = "System";
-                if (AD_Client_ID != 0)
-                    clientName = GetClientName(AD_Client_ID);// VAdvantage.Model.MClient.Get(Env.GetContext(), AD_Client_ID).GetName();
+                if (VAF_Client_ID != 0)
+                    clientName = GetClientName(VAF_Client_ID);// VAdvantage.Model.MClient.Get(Env.GetContext(), VAF_Client_ID).GetName();
                 String orgName = "*";
-                if (AD_Org_ID != 0)
-                    orgName = GetOrgInfo(AD_Org_ID, true);//MOrg.Get(Env.GetContext(), AD_Org_ID).GetName();
+                if (VAF_Org_ID != 0)
+                    orgName = GetOrgInfo(VAF_Org_ID, true);//MOrg.Get(Env.GetContext(), VAF_Org_ID).GetName();
                 StringBuilder sb = new StringBuilder();
-                sb.Append(Msg.Translate(Env.GetContext(), "AD_Client_ID")).Append("=")
+                sb.Append(Msg.Translate(Env.GetContext(), "VAF_Client_ID")).Append("=")
                     .Append(clientName).Append(" - ")
-                    .Append(Msg.Translate(Env.GetContext(), "AD_Org_ID")).Append("=")
+                    .Append(Msg.Translate(Env.GetContext(), "VAF_Org_ID")).Append("=")
                     .Append(orgName);
                 if (readOnly)
                     sb.Append(" r/o");

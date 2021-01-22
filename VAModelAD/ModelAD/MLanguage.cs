@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLanguage
  * Purpose        : To add/delete/update language in "_trl " table according to the system language
- * Class Used     : MLanguage inherits X_AD_Language
+ * Class Used     : MLanguage inherits X_VAF_Language
  * Chronological    Development
  * Raghunandan      6-April-2009 
   ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLanguage : X_AD_Language
+    public class MLanguage : X_VAF_Language
     {
         #region Private Variable
         //Logger
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         /// <returns>number of records deleted/inserted</returns>
         public int Maintain(bool add)
         {
-            String sql = "SELECT TableName FROM AD_Table WHERE TableName LIKE '%_Trl' ORDER BY 1";
+            String sql = "SELECT TableName FROM VAF_TableView WHERE TableName LIKE '%_Trl' ORDER BY 1";
             DataSet ds = null;
             int retNo = 0;
             try
@@ -69,16 +69,16 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        ///Get Language Model from AD_Language
+        ///Get Language Model from VAF_Language
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Language_ID">language e.g. 191</param>
+        /// <param name="VAF_Language_ID">language e.g. 191</param>
         /// <param name="trxName">trx</param>
         /// <returns>language or null</returns>
-        public static MLanguage Get(Ctx ctx, String AD_Language, Trx trxName)
+        public static MLanguage Get(Ctx ctx, String VAF_Language, Trx trxName)
         {
             MLanguage lang = null;
-            String sql = "SELECT * FROM AD_Language WHERE AD_Language='" + AD_Language + "'";
+            String sql = "SELECT * FROM VAF_Language WHERE VAF_Language='" + VAF_Language + "'";
             DataSet ds = null;
             try
             {
@@ -100,16 +100,16 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        ///Get Language Model from AD_Language
+        ///Get Language Model from VAF_Language
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Language_ID">language e.g. 191</param>
+        /// <param name="VAF_Language_ID">language e.g. 191</param>
         /// <param name="trxName">trx</param>
         /// <returns>language or null</returns>
-        public static MLanguage Get(Ctx ctx, int AD_Language_ID, Trx trxName)
+        public static MLanguage Get(Ctx ctx, int VAF_Language_ID, Trx trxName)
         {
             MLanguage lang = null;
-            String sql = "SELECT * FROM AD_Language WHERE AD_Language_ID=" + AD_Language_ID;
+            String sql = "SELECT * FROM VAF_Language WHERE VAF_Language_ID=" + VAF_Language_ID;
             DataSet ds = null;
             try
             {
@@ -138,19 +138,19 @@ namespace VAdvantage.Model
         /// <returns>language</returns>
         public static MLanguage Get(Ctx ctx, VAdvantage.Login.Language lang)
         {
-            return Get(ctx, lang.GetAD_Language());
+            return Get(ctx, lang.GetVAF_Language());
         }
 
         /// <summary>
-        ///Get Language Model from AD_Language
+        ///Get Language Model from VAF_Language
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Language">language e.g. en_US</param>
+        /// <param name="VAF_Language">language e.g. en_US</param>
         /// <returns>language or null</returns>
-        public static MLanguage Get(Ctx ctx, string AD_Language)
+        public static MLanguage Get(Ctx ctx, string VAF_Language)
         {
             MLanguage lang = null;
-            String sql = "SELECT * FROM AD_Language WHERE AD_Language=" + AD_Language;
+            String sql = "SELECT * FROM VAF_Language WHERE VAF_Language=" + VAF_Language;
 
 
             return lang;
@@ -160,12 +160,12 @@ namespace VAdvantage.Model
         ///	Standard Constructor - NO NOT USE
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Language_ID">id</param>
+        /// <param name="VAF_Language_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLanguage(Ctx ctx, int AD_Language_ID, Trx trxName)
-            : base(ctx, AD_Language_ID, trxName)
+        public MLanguage(Ctx ctx, int VAF_Language_ID, Trx trxName)
+            : base(ctx, VAF_Language_ID, trxName)
         {
-            //super (ctx, AD_Language_ID, trxName);
+            //super (ctx, VAF_Language_ID, trxName);
         }
 
 
@@ -194,8 +194,8 @@ namespace VAdvantage.Model
         {
             String baseTable = tableName.Substring(0, tableName.Length - 4);
             String sql = "SELECT c.ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE t.TableName='" + baseTable
                 + "'  AND c.IsTranslated='Y' AND c.IsActive='Y' "
                 + "ORDER BY 1";
@@ -240,38 +240,38 @@ namespace VAdvantage.Model
             }
 
             //	Insert Statement
-            int AD_User_ID = GetCtx().GetAD_User_ID();
+            int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
             String keyColumn = baseTable + "_ID";
             String insert = "";
-            if (baseTable == "AD_Client" || baseTable == "AD_Org")
+            if (baseTable == "VAF_Client" || baseTable == "VAF_Org")
             {
                 insert = "INSERT INTO " + tableName
-                    + "(AD_Language,IsTranslated, AD_Client_ID,AD_Org_ID, "
+                    + "(VAF_Language,IsTranslated, VAF_Client_ID,VAF_Org_ID, "
                     + "CreatedBy,UpdatedBy "
                     + cols.ToString() + ") "
-                    + "SELECT '" + GetAD_Language() + "','N', AD_Client_ID,AD_Org_ID, "
-                    + AD_User_ID + "," + AD_User_ID
+                    + "SELECT '" + GetVAF_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
+                    + VAF_UserContact_ID + "," + VAF_UserContact_ID
                     + cols.ToString()
                     + " FROM " + baseTable
                     + " WHERE " + keyColumn + " NOT IN (SELECT " + keyColumn
                         + " FROM " + tableName
-                        + " WHERE AD_Language='" + GetAD_Language() + "')";
+                        + " WHERE VAF_Language='" + GetVAF_Language() + "')";
             }
             else
             {
                 insert = "INSERT INTO " + tableName
-                    + "(AD_Language,IsTranslated, AD_Client_ID,AD_Org_ID, "
+                    + "(VAF_Language,IsTranslated, VAF_Client_ID,VAF_Org_ID, "
                     + "CreatedBy,UpdatedBy, "
                     + keyColumn + cols.ToString() + ") "
-                    + "SELECT '" + GetAD_Language() + "','N', AD_Client_ID,AD_Org_ID, "
-                    + AD_User_ID + "," + AD_User_ID + ", "
+                    + "SELECT '" + GetVAF_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
+                    + VAF_UserContact_ID + "," + VAF_UserContact_ID + ", "
                     + keyColumn + cols.ToString()
                     + " FROM " + baseTable
                     + " WHERE " + keyColumn + " NOT IN (SELECT " + keyColumn
                         + " FROM " + tableName
-                        + " WHERE AD_Language='" + GetAD_Language() + "')";
-                //	+ " WHERE (" + keyColumn + ",'" + getAD_Language()+ "') NOT IN (SELECT " 
-                //		+ keyColumn + ",AD_Language FROM " + tableName + ")";
+                        + " WHERE VAF_Language='" + GetVAF_Language() + "')";
+                //	+ " WHERE (" + keyColumn + ",'" + getVAF_Language()+ "') NOT IN (SELECT " 
+                //		+ keyColumn + ",VAF_Language FROM " + tableName + ")";
             }
 
             int no = CoreLibrary.DataBase.DB.ExecuteQuery(insert.ToString(), null, Get_TrxName());
@@ -286,7 +286,7 @@ namespace VAdvantage.Model
         private int DeleteTable(String tableName)
         {
             String sql = "DELETE FROM " + tableName
-                + " WHERE AD_Language='" + GetAD_Language() + "'";
+                + " WHERE VAF_Language='" + GetVAF_Language() + "'";
             //int no = DataBase.executeUpdate(sql, Get_TrxName());
             int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
@@ -295,27 +295,27 @@ namespace VAdvantage.Model
 
         public static DataTable GetSystemLanguage()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_Language,Name,Name AS DisplayName FROM VAF_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
             if (ds != null)
                 return ds.Tables[0];
             return null;
         }
 
 
-        private void SetAD_Language_ID()
+        private void SetVAF_Language_ID()
         {
-            int AD_Language_ID = GetAD_Language_ID();
-            if (AD_Language_ID == 0)
+            int VAF_Language_ID = GetVAF_Language_ID();
+            if (VAF_Language_ID == 0)
             {
-                String sql = "SELECT NVL(MAX(AD_Language_ID), 999999) FROM AD_Language WHERE AD_Language_ID > 1000";
-                AD_Language_ID = DB.GetSQLValue(Get_TrxName(), sql);
-                SetAD_Language_ID(AD_Language_ID + 1);
+                String sql = "SELECT NVL(MAX(VAF_Language_ID), 999999) FROM VAF_Language WHERE VAF_Language_ID > 1000";
+                VAF_Language_ID = DB.GetSQLValue(Get_TrxName(), sql);
+                SetVAF_Language_ID(VAF_Language_ID + 1);
             }
         }
 
         protected override bool BeforeSave(bool newRecord)
         {
-            string lang = GetAD_Language();
+            string lang = GetVAF_Language();
 
             if (!lang.Contains("_"))
             {
@@ -333,7 +333,7 @@ namespace VAdvantage.Model
                 return false;
             }
             if (newRecord)
-                SetAD_Language_ID();
+                SetVAF_Language_ID();
             return base.BeforeSave(newRecord);
         }
     }

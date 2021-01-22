@@ -39,8 +39,8 @@
         var maintainVer = maintainVersinos;
 
         this.load = function () {
-            // Parameter - AD_Language - Added to get country from location
-            $root.load(VIS.Application.contextUrl + 'Location/Locations/?windowno=' + windowNo + '&locationId=' + $C_Location_ID + '&AD_Language=' + VIS.context.getContext("#AD_Language"), function (event) {
+            // Parameter - VAF_Language - Added to get country from location
+            $root.load(VIS.Application.contextUrl + 'Location/Locations/?windowno=' + windowNo + '&locationId=' + $C_Location_ID + '&VAF_Language=' + VIS.context.getContext("#VAF_Language"), function (event) {
                 $root.append($busyDiv);
                 setBusy(true);
                 $self.init();

@@ -74,7 +74,7 @@ static X_CM_ChatEntry()
 //static long serialVersionUID 27562514368504L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051715L;
-/** AD_Table_ID=877 */
+/** VAF_TableView_ID=877 */
 public static int Table_ID;
  // =877;
 
@@ -117,24 +117,24 @@ StringBuilder sb = new StringBuilder ("X_CM_ChatEntry[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CM_ChatEntryGrandParent_ID AD_Reference_ID=399 */
-public static int CM_CHATENTRYGRANDPARENT_ID_AD_Reference_ID=399;
+/** CM_ChatEntryGrandParent_ID VAF_Control_Ref_ID=399 */
+public static int CM_CHATENTRYGRANDPARENT_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Grandparent.
 @param CM_ChatEntryGrandParent_ID Link to Grand Parent (root level) */
 public void SetCM_ChatEntryGrandParent_ID (int CM_ChatEntryGrandParent_ID)
@@ -152,8 +152,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CM_ChatEntryParent_ID AD_Reference_ID=399 */
-public static int CM_CHATENTRYPARENT_ID_AD_Reference_ID=399;
+/** CM_ChatEntryParent_ID VAF_Control_Ref_ID=399 */
+public static int CM_CHATENTRYPARENT_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Parent.
 @param CM_ChatEntryParent_ID Link to direct Parent */
 public void SetCM_ChatEntryParent_ID (int CM_ChatEntryParent_ID)
@@ -219,8 +219,8 @@ public String GetCharacterData()
 return (String)Get_Value("CharacterData");
 }
 
-/** ChatEntryType AD_Reference_ID=398 */
-public static int CHATENTRYTYPE_AD_Reference_ID=398;
+/** ChatEntryType VAF_Control_Ref_ID=398 */
+public static int CHATENTRYTYPE_VAF_Control_Ref_ID=398;
 /** Forum (threaded) = F */
 public static String CHATENTRYTYPE_ForumThreaded = "F";
 /** Note (flat) = N */
@@ -255,8 +255,8 @@ public String GetChatEntryType()
 return (String)Get_Value("ChatEntryType");
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -293,8 +293,8 @@ public String GetConfidentialType()
 return (String)Get_Value("ConfidentialType");
 }
 
-/** ModeratorStatus AD_Reference_ID=396 */
-public static int MODERATORSTATUS_AD_Reference_ID=396;
+/** ModeratorStatus VAF_Control_Ref_ID=396 */
+public static int MODERATORSTATUS_VAF_Control_Ref_ID=396;
 /** Not Displayed = N */
 public static String MODERATORSTATUS_NotDisplayed = "N";
 /** Published = P */

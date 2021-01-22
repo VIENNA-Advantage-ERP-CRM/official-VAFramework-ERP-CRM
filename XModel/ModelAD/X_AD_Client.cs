@@ -11,31 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Client
+/** Generated Model for VAF_Client
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Client : PO
+public class X_VAF_Client : PO
 {
-public X_AD_Client (Context ctx, int AD_Client_ID, Trx trxName) : base (ctx, AD_Client_ID, trxName)
+public X_VAF_Client (Context ctx, int VAF_Client_ID, Trx trxName) : base (ctx, VAF_Client_ID, trxName)
 {
-/** if (AD_Client_ID == 0)
-{
-SetAutoArchive (null);	// N
-SetIsCostImmediate (false);	// N
-SetIsMultiLingualDocument (false);
-SetIsPostImmediate (false);	// N
-SetIsServerEMail (false);
-SetIsSmtpAuthorization (false);	// N
-SetIsUseBetaFunctions (true);	// Y
-SetMMPolicy (null);	// F
-SetName (null);
-SetValue (null);
-}
- */
-}
-public X_AD_Client (Ctx ctx, int AD_Client_ID, Trx trxName) : base (ctx, AD_Client_ID, trxName)
-{
-/** if (AD_Client_ID == 0)
+/** if (VAF_Client_ID == 0)
 {
 SetAutoArchive (null);	// N
 SetIsCostImmediate (false);	// N
@@ -50,12 +33,29 @@ SetValue (null);
 }
  */
 }
+public X_VAF_Client (Ctx ctx, int VAF_Client_ID, Trx trxName) : base (ctx, VAF_Client_ID, trxName)
+{
+/** if (VAF_Client_ID == 0)
+{
+SetAutoArchive (null);	// N
+SetIsCostImmediate (false);	// N
+SetIsMultiLingualDocument (false);
+SetIsPostImmediate (false);	// N
+SetIsServerEMail (false);
+SetIsSmtpAuthorization (false);	// N
+SetIsUseBetaFunctions (true);	// Y
+SetMMPolicy (null);	// F
+SetName (null);
+SetValue (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Client (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Client (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_AD_Client (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Client (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Client (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_AD_Client (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Client (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Client (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Client()
+static X_VAF_Client()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,12 +86,12 @@ static X_AD_Client()
 //static long serialVersionUID = 27562514360809L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044020L;
-/** AD_Table_ID=112 */
+/** VAF_TableView_ID=112 */
 public static int Table_ID;
  // =112;
 
-/** TableName=AD_Client */
-public static String Table_Name="AD_Client";
+/** TableName=VAF_Client */
+public static String Table_Name="VAF_Client";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -125,32 +125,32 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Client[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Client[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** AD_Language AD_Reference_ID=327 */
-public static int AD_LANGUAGE_AD_Reference_ID=327;
+/** VAF_Language VAF_Control_Ref_ID=327 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=327;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language != null && AD_Language.Length > 5)
+if (VAF_Language != null && VAF_Language.Length > 5)
 {
 log.Warning("Length > 5 - truncated");
-AD_Language = AD_Language.Substring(0,5);
+VAF_Language = VAF_Language.Substring(0,5);
 }
-Set_Value ("AD_Language", AD_Language);
+Set_Value ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 
-/** AutoArchive AD_Reference_ID=334 */
-public static int AUTOARCHIVE_AD_Reference_ID=334;
+/** AutoArchive VAF_Control_Ref_ID=334 */
+public static int AUTOARCHIVE_VAF_Control_Ref_ID=334;
 /** All (Reports, Documents) = 1 */
 public static String AUTOARCHIVE_AllReportsDocuments = "1";
 /** Documents = 2 */
@@ -381,8 +381,8 @@ public String GetLDAPQuery()
 return (String)Get_Value("LDAPQuery");
 }
 
-/** MMPolicy AD_Reference_ID=335 */
-public static int MMPOLICY_AD_Reference_ID=335;
+/** MMPolicy VAF_Control_Ref_ID=335 */
+public static int MMPOLICY_VAF_Control_Ref_ID=335;
 /** FiFo = F */
 public static String MMPOLICY_FiFo = "F";
 /** LiFo = L */

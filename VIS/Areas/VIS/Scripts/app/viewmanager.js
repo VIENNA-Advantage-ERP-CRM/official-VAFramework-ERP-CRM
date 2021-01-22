@@ -123,7 +123,7 @@
          * @param $panel jquery window object to remove
          */
 
-        function removeShortcut(id, $panel, hid, AD_Window_ID) {
+        function removeShortcut(id, $panel, hid, VAF_Screen_ID) {
 
             dm.unRegisterView(id); //remove from desktop
             if (hid) {
@@ -137,7 +137,7 @@
             windowObjects[id] = null;
             delete windowObjects[id];
             currentFrame = null;
-            if (AD_Window_ID && hideWindow(windw))
+            if (VAF_Screen_ID && hideWindow(windw))
                 return false;
             return true;
         };
@@ -323,10 +323,10 @@
             for (var i = 0; i < s_hiddenWindows.length; i++) {
                 var hidden = s_hiddenWindows[i];
                 //_log.Info(i + ": " + hidden);
-                if (hidden.getAD_Window_ID() == windw.getAD_Window_ID())
+                if (hidden.getVAF_Screen_ID() == windw.getVAF_Screen_ID())
                     return true;	//	already there
             }
-            if (windw.getAD_Window_ID() != 0) {
+            if (windw.getVAF_Screen_ID() != 0) {
                 try {
                     s_hiddenWindows.push(windw);
                     if (s_hiddenWindows.length > 10)
@@ -343,10 +343,10 @@
         /* show window from cache 
         @param AD_window_ID if of window
         */
-        function showWindow(AD_Window_ID) {
+        function showWindow(VAF_Screen_ID) {
             for (var i = 0; i < s_hiddenWindows.length; i++) {
                 var hidden = s_hiddenWindows[i];
-                if (hidden.getAD_Window_ID() == AD_Window_ID) {
+                if (hidden.getVAF_Screen_ID() == VAF_Screen_ID) {
                     s_hiddenWindows.splice(i, 1);// RemoveAt(i);
                     return hidden;
                 }

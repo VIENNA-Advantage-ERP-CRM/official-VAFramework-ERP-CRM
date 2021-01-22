@@ -99,14 +99,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 order.SetC_DocTypeTarget_ID();
             }
-            order.SetAD_Org_ID(rfq.GetAD_Org_ID());
+            order.SetVAF_Org_ID(rfq.GetVAF_Org_ID());
             order.SetBPartner(bp);
             order.SetC_BPartner_Location_ID(rfq.GetC_BPartner_Location_ID());
             order.SetSalesRep_ID(rfq.GetSalesRep_ID());
             //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
             if (bp.GetVA009_PaymentMethod_ID() == 0)
             {
-                DataSet result = GetPaymentMethod(rfq.GetAD_Org_ID());
+                DataSet result = GetPaymentMethod(rfq.GetVAF_Org_ID());
                 if (result != null && result.Tables[0].Rows.Count > 0)
                 {
                     order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -184,7 +184,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             VA009_PaymentMethod_ID = 0;
             //get organisation default 
-            string _sql = "SELECT VA009_PaymentMethod_ID,VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string _sql = "SELECT VA009_PaymentMethod_ID,VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_ORG_ID IN(@param1,0) ORDER BY VAF_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", Org_ID);
             DataSet _ds = DB.ExecuteDataset(_sql, param, Get_TrxName());

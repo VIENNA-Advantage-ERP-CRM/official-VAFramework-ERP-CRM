@@ -20,7 +20,7 @@ public X_T_Transaction (Context ctx, int T_Transaction_ID, Trx trxName) : base (
 {
 /** if (T_Transaction_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
 SetM_Locator_ID (0);
 SetM_Product_ID (0);
@@ -35,7 +35,7 @@ public X_T_Transaction (Ctx ctx, int T_Transaction_ID, Trx trxName) : base (ctx,
 {
 /** if (T_Transaction_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
 SetM_Locator_ID (0);
 SetM_Product_ID (0);
@@ -82,7 +82,7 @@ static X_T_Transaction()
 //static long serialVersionUID 27562514384569L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067780L;
-/** AD_Table_ID=758 */
+/** VAF_TableView_ID=758 */
 public static int Table_ID;
  // =758;
 
@@ -125,17 +125,17 @@ StringBuilder sb = new StringBuilder ("X_T_Transaction[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_Value ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_Value ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -388,8 +388,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** MovementType AD_Reference_ID=189 */
-public static int MOVEMENTTYPE_AD_Reference_ID=189;
+/** MovementType VAF_Control_Ref_ID=189 */
+public static int MOVEMENTTYPE_VAF_Control_Ref_ID=189;
 /** Customer Returns = C+ */
 public static String MOVEMENTTYPE_CustomerReturns = "C+";
 /** Customer Shipment = C- */
@@ -442,8 +442,8 @@ public String GetMovementType()
 return (String)Get_Value("MovementType");
 }
 
-/** Search_InOut_ID AD_Reference_ID=337 */
-public static int SEARCH_INOUT_ID_AD_Reference_ID=337;
+/** Search_InOut_ID VAF_Control_Ref_ID=337 */
+public static int SEARCH_INOUT_ID_VAF_Control_Ref_ID=337;
 /** Set Search Shipment/Receipt.
 @param Search_InOut_ID Material Shipment Document */
 public void SetSearch_InOut_ID (int Search_InOut_ID)
@@ -461,8 +461,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Search_Invoice_ID AD_Reference_ID=336 */
-public static int SEARCH_INVOICE_ID_AD_Reference_ID=336;
+/** Search_Invoice_ID VAF_Control_Ref_ID=336 */
+public static int SEARCH_INVOICE_ID_VAF_Control_Ref_ID=336;
 /** Set Search Invoice.
 @param Search_Invoice_ID Search Invoice Identifier */
 public void SetSearch_Invoice_ID (int Search_Invoice_ID)
@@ -480,8 +480,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Search_Order_ID AD_Reference_ID=290 */
-public static int SEARCH_ORDER_ID_AD_Reference_ID=290;
+/** Search_Order_ID VAF_Control_Ref_ID=290 */
+public static int SEARCH_ORDER_ID_VAF_Control_Ref_ID=290;
 /** Set Search Order.
 @param Search_Order_ID Order Identifier */
 public void SetSearch_Order_ID (int Search_Order_ID)

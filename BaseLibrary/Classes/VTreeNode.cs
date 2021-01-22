@@ -29,11 +29,11 @@ namespace VAdvantage.Classes
         /** Image Indicator				*/
         private string _imageIndicator;
         /** Window ID       */
-        private int _AD_Window_ID;
+        private int _VAF_Screen_ID;
         /** Process ID      */
-        private int _AD_Process_ID;
+        private int _VAF_Job_ID;
         /** Form ID         */
-        private int _AD_Form_ID;
+        private int _VAF_Page_ID;
         /** Workflow ID     */
         private int _AD_Workflow_ID;
         /** Task ID         */
@@ -157,11 +157,11 @@ namespace VAdvantage.Classes
 
             _imageIndicator = node.ImageKey;
 
-            _AD_Window_ID = node.AD_Window_ID;
+            _VAF_Screen_ID = node.VAF_Screen_ID;
 
-            _AD_Process_ID = node.AD_Process_ID;
+            _VAF_Job_ID = node.VAF_Job_ID;
 
-            _AD_Form_ID = node.AD_Form_ID;
+            _VAF_Page_ID = node.VAF_Page_ID;
 
             _AD_Workflow_ID = node.AD_Workflow_ID;
 
@@ -202,11 +202,11 @@ namespace VAdvantage.Classes
 
             _imageIndicator = node.ImageKey;
 
-            _AD_Window_ID = node.AD_Window_ID;
+            _VAF_Screen_ID = node.VAF_Screen_ID;
 
-            _AD_Process_ID = node.AD_Process_ID;
+            _VAF_Job_ID = node.VAF_Job_ID;
 
-            _AD_Form_ID = node.AD_Form_ID;
+            _VAF_Page_ID = node.VAF_Page_ID;
 
             _AD_Workflow_ID = node.AD_Workflow_ID;
 
@@ -275,45 +275,45 @@ namespace VAdvantage.Classes
         /// <summary>
         /// get and set  window id
         /// </summary>
-        public int AD_Window_ID
+        public int VAF_Screen_ID
         {
             get
             {
-                return _AD_Window_ID;
+                return _VAF_Screen_ID;
             }
             set
             {
-                _AD_Window_ID = value;
+                _VAF_Screen_ID = value;
             }
         }
 
         /// <summary>
         /// get and set process Id
         /// </summary>
-        public int AD_Process_ID
+        public int VAF_Job_ID
         {
             get
             {
-                return _AD_Process_ID;
+                return _VAF_Job_ID;
             }
             set
             {
-                _AD_Process_ID = value;
+                _VAF_Job_ID = value;
             }
         }
 
         /// <summary>
         /// get and set form id
         /// </summary>
-        public int AD_Form_ID
+        public int VAF_Page_ID
         {
             get
             {
-                return _AD_Form_ID;
+                return _VAF_Page_ID;
             }
             set
             {
-                this._AD_Form_ID = value;
+                this._VAF_Page_ID = value;
             }
         }
 
@@ -538,7 +538,7 @@ namespace VAdvantage.Classes
 
         // imageIndicator image indicator (W/X/R/P/F/T/B)
         //  Get Node ID
-        //  @return node id (e.g. AD_Menu_ID)
+        //  @return node id (e.g. VAF_MenuConfig_ID)
 
         public int GetNode_ID()
         {
@@ -586,20 +586,20 @@ namespace VAdvantage.Classes
 
             if (ACTION_WINDOW == _imageIndicator)
             {
-                id = AD_Window_ID;
+                id = VAF_Screen_ID;
             }
             else if (ACTION_FORM == _imageIndicator)
             {
-                id = AD_Form_ID;
+                id = VAF_Page_ID;
             }
 
             else if (ACTION_PROCESS == _imageIndicator)
             {
-                id = AD_Process_ID;
+                id = VAF_Job_ID;
             }
             else if (ACTION_REPORT == _imageIndicator)
             {
-                id = AD_Process_ID;
+                id = VAF_Job_ID;
             }
 
             else if (ACTION_WORKFLOW == _imageIndicator)

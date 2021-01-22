@@ -25,7 +25,7 @@ namespace VAdvantage.ReportFormat
                     Assembly asm = Assembly.Load("VARCOMSvc");
                     type = asm.GetType("ViennaAdvantage.Classes.ReportFromatWrapper");
                     ConstructorInfo cinfo = type.GetConstructor(new Type[] { typeof(Ctx), typeof(string), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(string) });
-                    re = (IReportEngine)cinfo.Invoke(new object[] { p_ctx, _pi.GetTitle(), _pi.GetAD_Process_ID(), _pi.GetTable_ID(), _pi.GetRecord_ID(), 0, 0, _pi.GetAD_PInstance_ID(), _pi.GetRecIds() });
+                    re = (IReportEngine)cinfo.Invoke(new object[] { p_ctx, _pi.GetTitle(), _pi.GetVAF_Job_ID(), _pi.GetTable_ID(), _pi.GetRecord_ID(), 0, 0, _pi.GetVAF_JInstance_ID(), _pi.GetRecIds() });
 
                     MethodInfo mInfo = type.GetMethod("Init");
                     totalRecords = Convert.ToInt32(mInfo.Invoke(re, new object[] { IsArabicReportFromOutside }));
@@ -37,7 +37,7 @@ namespace VAdvantage.ReportFormat
                     Assembly asm = Assembly.Load("VARCOMSvc");
                     type = asm.GetType("ViennaAdvantage.Classes.ReportFromatWrapper");
                     ConstructorInfo cinfo = type.GetConstructor(new Type[] { typeof(Ctx), typeof(string), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int) });
-                    re = (IReportEngine)cinfo.Invoke(new object[] { p_ctx, _pi.GetTitle(), _pi.GetAD_Process_ID(), _pi.GetTable_ID(), _pi.GetRecord_ID(), 0, 0, _pi.GetAD_PInstance_ID() });
+                    re = (IReportEngine)cinfo.Invoke(new object[] { p_ctx, _pi.GetTitle(), _pi.GetVAF_Job_ID(), _pi.GetTable_ID(), _pi.GetRecord_ID(), 0, 0, _pi.GetVAF_JInstance_ID() });
 
                     MethodInfo mInfo = type.GetMethod("Init");
                     totalRecords = Convert.ToInt32(mInfo.Invoke(re, new object[] { IsArabicReportFromOutside }));

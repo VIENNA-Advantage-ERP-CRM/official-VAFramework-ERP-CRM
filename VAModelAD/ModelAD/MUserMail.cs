@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MUserMail
  * Purpose        : User Mail Model
- * Class Used     : X_AD_UserMail
+ * Class Used     : X_VAF_UserMailLog
  * Chronological    Development
  * Raghunandan      11-Nov-2009
   ******************************************************/
@@ -29,16 +29,16 @@ using System.IO;
 
 namespace VAdvantage.Model
 {
-    public class MUserMail : X_AD_UserMail
+    public class MUserMail : X_VAF_UserMailLog
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_UserMail_ID">id</param>
+        /// <param name="VAF_UserMailLog_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MUserMail(Ctx ctx, int AD_UserMail_ID, Trx trxName)
-            : base(ctx, AD_UserMail_ID, trxName)
+        public MUserMail(Ctx ctx, int VAF_UserMailLog_ID, Trx trxName)
+            : base(ctx, VAF_UserMailLog_ID, trxName)
         {
 
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         /// User Mail
         /// </summary>
         /// <param name="parent">Request Mail Text</param>
-        /// <param name="AD_User_ID">recipient user</param>
+        /// <param name="VAF_UserContact_ID">recipient user</param>
         /// <param name="mail">email</param>
-        public MUserMail(MMailText parent, int AD_User_ID, EMail mail)
+        public MUserMail(MMailText parent, int VAF_UserContact_ID, EMail mail)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
             SetClientOrg(parent);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetR_MailText_ID(parent.GetR_MailText_ID());
             //
             if (mail.IsSentOK())
@@ -84,14 +84,14 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">Mail message</param>
-        /// <param name="AD_User_ID">recipient user</param>
+        /// <param name="VAF_UserContact_ID">recipient user</param>
         /// <param name="mail"> email</param>
-        public MUserMail(MMailMsg parent, int AD_User_ID, EMail mail)
+        public MUserMail(MMailMsg parent, int VAF_UserContact_ID, EMail mail)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
             SetClientOrg(parent);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetW_MailMsg_ID(parent.GetW_MailMsg_ID());
             //
             if (mail.IsSentOK())
@@ -109,14 +109,14 @@ namespace VAdvantage.Model
         /// New User Mail (no trx)
         /// </summary>
         /// <param name="po">persistent object</param>
-        /// <param name="AD_User_ID">recipient user</param>
+        /// <param name="VAF_UserContact_ID">recipient user</param>
         /// <param name="mail">email</param>
-        public MUserMail(PO po, int AD_User_ID, EMail mail)
+        public MUserMail(PO po, int VAF_UserContact_ID, EMail mail)
             : this(po.GetCtx(), 0, null)
         {
 
             SetClientOrg(po);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetSubject(mail.GetSubject());
             SetMailText(mail.GetMessageCRLF());
             //

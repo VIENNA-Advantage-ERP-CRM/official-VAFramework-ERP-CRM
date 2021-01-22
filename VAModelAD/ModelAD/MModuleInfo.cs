@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MModuleInfo : X_AD_ModuleInfo
+    public class MModuleInfo : X_VAF_ModuleInfo
     {
         public MModuleInfo(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
 
             if (prefix != "")
             {
-                sql = "SELECT COUNT(prefix) FROM AD_ModuleInfo WHERE UPPER(prefix) = '" + prefix + "'";
+                sql = "SELECT COUNT(prefix) FROM VAF_ModuleInfo WHERE UPPER(prefix) = '" + prefix + "'";
                 //prefixCount = Convert.ToInt32(DB.ExecuteScalar(Sql));
             }
             if (IsBeta())
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
             int asmCount = 0;
             if (assemblyname != "")
             {
-                sql = "SELECT COUNT(assemblyname) FROM AD_ModuleInfo WHERE UPPER(assemblyname)='" + assemblyname + "'";
+                sql = "SELECT COUNT(assemblyname) FROM VAF_ModuleInfo WHERE UPPER(assemblyname)='" + assemblyname + "'";
 
                 if (IsBeta())
                 {

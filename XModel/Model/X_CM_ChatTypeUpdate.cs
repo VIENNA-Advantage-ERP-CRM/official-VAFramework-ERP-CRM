@@ -20,7 +20,7 @@ public X_CM_ChatTypeUpdate (Context ctx, int CM_ChatTypeUpdate_ID, Trx trxName) 
 {
 /** if (CM_ChatTypeUpdate_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetCM_ChatType_ID (0);
 SetIsSelfService (false);
 }
@@ -30,7 +30,7 @@ public X_CM_ChatTypeUpdate (Ctx ctx, int CM_ChatTypeUpdate_ID, Trx trxName) : ba
 {
 /** if (CM_ChatTypeUpdate_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetCM_ChatType_ID (0);
 SetIsSelfService (false);
 }
@@ -72,7 +72,7 @@ static X_CM_ChatTypeUpdate()
 //static long serialVersionUID 27562514368551L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051762L;
-/** AD_Table_ID=875 */
+/** VAF_TableView_ID=875 */
 public static int Table_ID;
  // =875;
 
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_CM_ChatTypeUpdate[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

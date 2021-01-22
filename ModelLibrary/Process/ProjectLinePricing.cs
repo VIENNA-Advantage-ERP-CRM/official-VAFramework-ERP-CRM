@@ -73,7 +73,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //
             Boolean isSOTrx = true;
-            MProductPricing pp = new MProductPricing(projectLine.GetAD_Client_ID(), projectLine.GetAD_Org_ID(),
+            MProductPricing pp = new MProductPricing(projectLine.GetVAF_Client_ID(), projectLine.GetVAF_Org_ID(),
                 projectLine.GetM_Product_ID(), project.GetC_BPartner_ID(),
                 projectLine.GetPlannedQty(), isSOTrx);
             pp.SetM_PriceList_ID(project.GetM_PriceList_ID());

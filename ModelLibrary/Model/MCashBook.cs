@@ -57,11 +57,11 @@ namespace VAdvantage.Model
         /**
          * 	Get CashBook for Org and Currency
          *	@param ctx context
-         *	@param AD_Org_ID org
+         *	@param VAF_Org_ID org
          *	@param C_Currency_ID currency
          *	@return cash book or null
          */
-        public static MCashBook Get(Ctx ctx, int AD_Org_ID, int C_Currency_ID)
+        public static MCashBook Get(Ctx ctx, int VAF_Org_ID, int C_Currency_ID)
         {
             //	Try from cache
             //Iterator it = _cache.values().iterator();
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             while (it.MoveNext())
             {
                 MCashBook cb = (MCashBook)it.Current;
-                if (cb.GetAD_Org_ID() == AD_Org_ID && cb.GetC_Currency_ID() == C_Currency_ID)
+                if (cb.GetVAF_Org_ID() == VAF_Org_ID && cb.GetC_Currency_ID() == C_Currency_ID)
                     return cb;
             }
 
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
             //SI_0648_1 : if there are multiple "defaults / no default" with in same org and currency, system will create object of highest ID.
             MCashBook retValue = null;
             String sql = "SELECT * FROM C_CashBook "
-                + " WHERE AD_Org_ID=" + AD_Org_ID + " AND C_Currency_ID=" + C_Currency_ID
+                + " WHERE VAF_Org_ID=" + VAF_Org_ID + " AND C_Currency_ID=" + C_Currency_ID
                 + " ORDER BY IsDefault DESC,  C_CashBook_id DESC";
             DataTable dt = null;
             IDataReader idr = null;
@@ -142,20 +142,20 @@ namespace VAdvantage.Model
         {
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Cashbook_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_Cashbook_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Cashbook_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Cashbook_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='CashBook'");
+                _sql.Append("SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='CashBook'");
                 var relatedtoCashbook = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO cshbkact = null;
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoCashbook)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From C_Cashbook Bp Left Join FRPT_Cashbook_Acct ca On Bp.C_CashBook_ID=ca.C_CashBook_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_CashBook_ID = " + GetC_CashBook_ID());
+                                        _sql.Append("Select COUNT(*) From C_Cashbook Bp Left Join FRPT_Cashbook_Acct ca On Bp.C_CashBook_ID=ca.C_CashBook_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_CashBook_ID = " + GetC_CashBook_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
                                         if (recordFound == 0)
                                         {
                                             cshbkact = MTable.GetPO(GetCtx(), "FRPT_Cashbook_Acct", 0, null);
-                                            cshbkact.Set_ValueNoCheck("AD_Org_ID", 0);
+                                            cshbkact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             cshbkact.Set_ValueNoCheck("C_CashBook_ID", Util.GetValueOfInt(GetC_CashBook_ID()));
                                             cshbkact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             cshbkact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
@@ -251,11 +251,11 @@ namespace VAdvantage.Model
             //Issue ID- SI_0614 in Google Sheet Standard Issues.. On Cashbook currency should not allow to change if any transcation made against Cashbook.
             if (!newRecord && Is_ValueChanged("C_Currency_ID"))
             {
-                string sql = "SELECT SUM(total) AS TOTAL FROM  (SELECT COUNT(*) AS TOTAL FROM C_CashBook_Acct WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_CashBook_ID =" + GetC_CashBook_ID()
-                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_CashLine WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID = " + GetC_CashBook_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_Cash WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_POS WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()
-                               + " UNION ALL  SELECT COUNT(*) as TOTAL from C_CASHBOOKLINE WHERE AD_Client_ID= " + GetAD_Client_ID() + " AND C_CASHBOOK_ID =" + GetC_CashBook_ID() + ")";
+                string sql = "SELECT SUM(total) AS TOTAL FROM  (SELECT COUNT(*) AS TOTAL FROM C_CashBook_Acct WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_CashBook_ID =" + GetC_CashBook_ID()
+                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_CashLine WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND  C_CashBook_ID = " + GetC_CashBook_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_Cash WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_POS WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND  C_CashBook_ID =" + GetC_CashBook_ID()
+                               + " UNION ALL  SELECT COUNT(*) as TOTAL from C_CASHBOOKLINE WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_CASHBOOK_ID =" + GetC_CashBook_ID() + ")";
 
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
                 {

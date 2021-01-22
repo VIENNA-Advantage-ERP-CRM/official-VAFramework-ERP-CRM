@@ -25,18 +25,18 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Client to be monitored
         /// </summary>
-        /// <returns>AD_Client_ID or 0 for ALL</returns>
-        int GetAD_Client_ID();
+        /// <returns>VAF_Client_ID or 0 for ALL</returns>
+        int GetVAF_Client_ID();
 
         /// <summary>
         /// User logged in 
         /// Called before preferences are set
         /// </summary>
-        /// <param name="AD_Org_ID">AD_Org_ID</param>
-        /// <param name="AD_Role_ID">AD_Role_ID</param>
-        /// <param name="AD_User_ID">AD_User_ID</param>
+        /// <param name="VAF_Org_ID">VAF_Org_ID</param>
+        /// <param name="VAF_Role_ID">VAF_Role_ID</param>
+        /// <param name="VAF_UserContact_ID">VAF_UserContact_ID</param>
         /// <returns>error message or null</returns>
-        String Login(int AD_Org_ID, int AD_Role_ID, int AD_User_ID);
+        String Login(int VAF_Org_ID, int VAF_Role_ID, int VAF_UserContact_ID);
 
         /// <summary>
         /// Model Change of a monitored Table.
@@ -131,8 +131,8 @@ namespace VAdvantage.Model
         {
 
             try {
-                //DataSet dsSys = DB.ExecuteDataset("SELECT ModelValidationClass, AD_Client_ID FROM" +
-                //" AD_ModlelValidator WHERE IsActive='Y' AND AD_Client_ID =0 Order By SeqNo ");
+                //DataSet dsSys = DB.ExecuteDataset("SELECT ModelValidationClass, VAF_Client_ID FROM" +
+                //" AD_ModlelValidator WHERE IsActive='Y' AND VAF_Client_ID =0 Order By SeqNo ");
                 //foreach (DataRow dr in dsSys.Tables[0].Rows)
                 //{
                 //    String className = dr["ModelValidationClass"].ToString();
@@ -146,8 +146,8 @@ namespace VAdvantage.Model
                 s_log.Severe("Error loading System ModelValidator" + e.ToString());
             }
 
-            DataSet ds = DB.ExecuteDataset("SELECT ModelValidationClasses, AD_Client_ID FROM" +
-               " AD_Client WHERE IsActive='Y' ");
+            DataSet ds = DB.ExecuteDataset("SELECT ModelValidationClasses, VAF_Client_ID FROM" +
+               " VAF_Client WHERE IsActive='Y' ");
             // Go through all Clients and start Validators
             
             foreach ( DataRow dr in ds.Tables[0].Rows)
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
                 String classNames = dr["ModelValidationClasses"].ToString();
                 if (classNames == null || classNames.Length == 0)
                     continue;
-                LoadValidatorClasses(Util.GetValueOfInt(dr["AD_Client_ID"]), classNames);
+                LoadValidatorClasses(Util.GetValueOfInt(dr["VAF_Client_ID"]), classNames);
             }
         }
 
@@ -246,19 +246,19 @@ namespace VAdvantage.Model
         /// <summary>
         /// Called when Login is complete 
         /// </summary>
-        /// <param name="AD_Client_ID">client id</param>
-        /// <param name="AD_Org_ID">organization Id</param>
-        /// <param name="AD_Role_ID">role id</param>
-        /// <param name="AD_User_ID">user id</param>
+        /// <param name="VAF_Client_ID">client id</param>
+        /// <param name="VAF_Org_ID">organization Id</param>
+        /// <param name="VAF_Role_ID">role id</param>
+        /// <param name="VAF_UserContact_ID">user id</param>
         /// <returns>error message if any</returns>
-        public String LoginComplete(int AD_Client_ID, int AD_Org_ID, int AD_Role_ID, int AD_User_ID)
+        public String LoginComplete(int VAF_Client_ID, int VAF_Org_ID, int VAF_Role_ID, int VAF_UserContact_ID)
         {
             for (int i = 0; i < _validators.Count; i++)
             {
                 ModelValidator validator = (ModelValidator)_validators[i];
-                if (AD_Client_ID == validator.GetAD_Client_ID())
+                if (VAF_Client_ID == validator.GetVAF_Client_ID())
                 {
-                    String error = validator.Login(AD_Org_ID, AD_Role_ID, AD_User_ID);
+                    String error = validator.Login(VAF_Org_ID, VAF_Role_ID, VAF_UserContact_ID);
                     if (error != null && error.Length > 0)
                         return error;
                 }
@@ -272,19 +272,19 @@ namespace VAdvantage.Model
         /// - remove columns
         /// - change dispay sequence
         /// </summary>
-        /// <param name="AD_Client_ID">AD_Client_ID</param>
+        /// <param name="VAF_Client_ID">VAF_Client_ID</param>
         /// <param name="columns">columns</param>
         /// <param name="sqlFrom">sqlFrom</param>
         /// <param name="sqlOrder">sqlOrder</param>
         /// <returns>true if you updated columns, sequence or sql From clause</returns>
-        public bool UpdateInfoColumns(int AD_Client_ID, List<Info_Column> columns,
+        public bool UpdateInfoColumns(int VAF_Client_ID, List<Info_Column> columns,
             StringBuilder sqlFrom, StringBuilder sqlOrder)
         {
             bool retValue = true;
             for (int i = 0; i < _validators.Count; i++)
             {
                 ModelValidator validator = (ModelValidator)_validators[i];
-                if (validator.GetAD_Client_ID() == 0 || validator.GetAD_Client_ID() == AD_Client_ID)
+                if (validator.GetVAF_Client_ID() == 0 || validator.GetVAF_Client_ID() == VAF_Client_ID)
                 {
                     try
                     {
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
             if (po == null || _docValidateListeners.Count == 0)
                 return null;
             //
-            String propertyName = po.Get_TableName() + po.GetAD_Client_ID();
+            String propertyName = po.Get_TableName() + po.GetVAF_Client_ID();
             List<ModelValidator> list = null;
             if (_docValidateListeners.ContainsKey(propertyName))
             {
@@ -329,7 +329,7 @@ namespace VAdvantage.Model
                 try
                 {
                     validator = (ModelValidator)list[i];
-                    if (validator.GetAD_Client_ID() == po.GetAD_Client_ID())
+                    if (validator.GetVAF_Client_ID() == po.GetVAF_Client_ID())
                     {
                         String error = validator.DocValidate(po, docTiming);
                         if (error != null && error.Length > 0)
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
             if (po == null || _modelChangeListeners.Count == 0)
                 return null;
             //
-            String propertyName = po.Get_TableName() + po.GetAD_Client_ID();
+            String propertyName = po.Get_TableName() + po.GetVAF_Client_ID();
             List<ModelValidator> list = null;
             if (_modelChangeListeners.ContainsKey(propertyName))
             {
@@ -372,7 +372,7 @@ namespace VAdvantage.Model
                 try
                 {
                     ModelValidator validator = (ModelValidator)list[i];
-                    if (validator.GetAD_Client_ID() == po.GetAD_Client_ID())
+                    if (validator.GetVAF_Client_ID() == po.GetVAF_Client_ID())
                     {
                         String error = validator.ModelChange(po, changeType);
                         if (error != null && error.Length > 0)
@@ -403,7 +403,7 @@ namespace VAdvantage.Model
             String propertyName =
                 _globalValidators.Contains(listener)
                     ? tableName + "*"
-                    : tableName + listener.GetAD_Client_ID();
+                    : tableName + listener.GetVAF_Client_ID();
 
             if (!_modelChangeListeners.ContainsKey(propertyName))
             {
@@ -425,7 +425,7 @@ namespace VAdvantage.Model
             String propertyName =
                _globalValidators.Contains(listener)
                     ? tableName + "*"
-                    : tableName + listener.GetAD_Client_ID();
+                    : tableName + listener.GetVAF_Client_ID();
             
             if (!_modelChangeListeners.ContainsKey(propertyName))
                 return;
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
             String propertyName =
                 _globalValidators.Contains(listener)
                     ? tableName + "*"
-                    : tableName + listener.GetAD_Client_ID();
+                    : tableName + listener.GetVAF_Client_ID();
 
             if (!_docValidateListeners.ContainsKey(propertyName))
             {
@@ -470,7 +470,7 @@ namespace VAdvantage.Model
             String propertyName =
                _globalValidators.Contains(listener)
                     ? tableName + "*"
-                    : tableName + listener.GetAD_Client_ID();
+                    : tableName + listener.GetVAF_Client_ID();
 
             if (!_docValidateListeners.ContainsKey(propertyName))
                 return;

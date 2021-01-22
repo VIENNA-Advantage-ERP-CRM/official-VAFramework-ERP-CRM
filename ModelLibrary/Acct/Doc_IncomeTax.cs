@@ -134,7 +134,7 @@ namespace ModelLibrary.Acct
 
                 if (total != Env.ZERO)
                 {
-                    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT T_Due_Acct FROM C_Tax_Acct WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT T_Due_Acct FROM C_Tax_Acct WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     MAccount acct = MAccount.Get(GetCtx(), validComID);
                     fact.CreateLine(null, acct,GetC_Currency_ID(), Decimal.Negate(total));
                 }

@@ -98,7 +98,7 @@ static X_C_PaymentProcessor()
 //static long serialVersionUID 27562514373990L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057201L;
-/** AD_Table_ID=398 */
+/** VAF_TableView_ID=398 */
 public static int Table_ID;
  // =398;
 
@@ -141,21 +141,21 @@ StringBuilder sb = new StringBuilder ("X_C_PaymentProcessor[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AD_Sequence_ID AD_Reference_ID=128 */
-public static int AD_SEQUENCE_ID_AD_Reference_ID=128;
+/** VAF_Record_Seq_ID VAF_Control_Ref_ID=128 */
+public static int VAF_RECORD_SEQ_ID_VAF_Control_Ref_ID=128;
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID <= 0) Set_Value ("AD_Sequence_ID", null);
+if (VAF_Record_Seq_ID <= 0) Set_Value ("VAF_Record_Seq_ID", null);
 else
-Set_Value ("AD_Sequence_ID", AD_Sequence_ID);
+Set_Value ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

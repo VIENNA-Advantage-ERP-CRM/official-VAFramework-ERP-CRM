@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WindowLog
+/** Generated Model for VAF_ScreenLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WindowLog : PO
+public class X_VAF_ScreenLog : PO
 {
-public X_AD_WindowLog (Context ctx, int AD_WindowLog_ID, Trx trxName) : base (ctx, AD_WindowLog_ID, trxName)
+public X_VAF_ScreenLog (Context ctx, int VAF_ScreenLog_ID, Trx trxName) : base (ctx, VAF_ScreenLog_ID, trxName)
 {
-/** if (AD_WindowLog_ID == 0)
+/** if (VAF_ScreenLog_ID == 0)
 {
 SetAD_Session_ID (0);
-SetAD_WindowLog_ID (0);
+SetVAF_ScreenLog_ID (0);
 }
  */
 }
-public X_AD_WindowLog (Ctx ctx, int AD_WindowLog_ID, Trx trxName) : base (ctx, AD_WindowLog_ID, trxName)
+public X_VAF_ScreenLog (Ctx ctx, int VAF_ScreenLog_ID, Trx trxName) : base (ctx, VAF_ScreenLog_ID, trxName)
 {
-/** if (AD_WindowLog_ID == 0)
+/** if (VAF_ScreenLog_ID == 0)
 {
 SetAD_Session_ID (0);
-SetAD_WindowLog_ID (0);
+SetVAF_ScreenLog_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_WindowLog_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WindowLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ScreenLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_WindowLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WindowLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ScreenLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_WindowLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WindowLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ScreenLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WindowLog()
+static X_VAF_ScreenLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_WindowLog()
 //static long serialVersionUID 27562514366451L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049662L;
-/** AD_Table_ID=941 */
+/** VAF_TableView_ID=941 */
 public static int Table_ID;
  // =941;
 
-/** TableName=AD_WindowLog */
-public static String Table_Name="AD_WindowLog";
+/** TableName=VAF_ScreenLog */
+public static String Table_Name="VAF_ScreenLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,38 +109,38 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WindowLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ScreenLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -160,17 +160,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window Access.
-@param AD_WindowLog_ID Window Access Log */
-public void SetAD_WindowLog_ID (int AD_WindowLog_ID)
+@param VAF_ScreenLog_ID Window Access Log */
+public void SetVAF_ScreenLog_ID (int VAF_ScreenLog_ID)
 {
-if (AD_WindowLog_ID < 1) throw new ArgumentException ("AD_WindowLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_WindowLog_ID", AD_WindowLog_ID);
+if (VAF_ScreenLog_ID < 1) throw new ArgumentException ("VAF_ScreenLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ScreenLog_ID", VAF_ScreenLog_ID);
 }
 /** Get Window Access.
 @return Window Access Log */
-public int GetAD_WindowLog_ID() 
+public int GetVAF_ScreenLog_ID() 
 {
-Object ii = Get_Value("AD_WindowLog_ID");
+Object ii = Get_Value("VAF_ScreenLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -178,21 +178,21 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_WindowLog_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_ScreenLog_ID().ToString());
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID <= 0) Set_Value ("AD_Window_ID", null);
+if (VAF_Screen_ID <= 0) Set_Value ("VAF_Screen_ID", null);
 else
-Set_Value ("AD_Window_ID", AD_Window_ID);
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

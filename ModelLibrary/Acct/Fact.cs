@@ -167,7 +167,7 @@ namespace VAdvantage.Acct
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int AD_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int VAF_Org_ID)
         {
             //  Data Check
             if (account == null)
@@ -184,9 +184,9 @@ namespace VAdvantage.Acct
             line.SetDocumentInfo(_doc, docLine);
             line.SetPostingType(_postingType);
             line.SetAccount(_acctSchema, account);
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                line.SetAD_Org_ID(AD_Org_ID);
+                line.SetVAF_Org_ID(VAF_Org_ID);
             }
             //  Amounts - one needs to not zero
             if (!line.SetAmtSource(C_Currency_ID, debitAmt, creditAmt))
@@ -272,17 +272,17 @@ namespace VAdvantage.Acct
         /// <param name="account">Account to be used</param>
         /// <param name="C_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
-        /// <param name ="AD_Org_ID">Set Line Org</param>
+        /// <param name ="VAF_Org_ID">Set Line Org</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt, int AD_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt, int VAF_Org_ID)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
-                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value), AD_Org_ID);
+                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value), VAF_Org_ID);
             }
             else
             {
-                return CreateLine(docLine, account, C_Currency_ID, Amt.Value, null, AD_Org_ID);
+                return CreateLine(docLine, account, C_Currency_ID, Amt.Value, null, VAF_Org_ID);
             }
         }
         /// <summary>
@@ -442,7 +442,7 @@ namespace VAdvantage.Acct
                 for (int i = 0; i < _lines.Count; i++)
                 {
                     //FactLine line = (FactLine)_lines[i];
-                    //int key = Utility.Util.GetValueOfInt(line.GetAD_Org_ID());
+                    //int key = Utility.Util.GetValueOfInt(line.GetVAF_Org_ID());
                     //Decimal bal = line.GetSourceBalance();
                     //Decimal oldBal;
                     //if (map.TryGetValue(key, out oldBal))
@@ -455,7 +455,7 @@ namespace VAdvantage.Acct
                     try
                     {
                         FactLine line = (FactLine)_lines[i];
-                        int key = Utility.Util.GetValueOfInt(line.GetAD_Org_ID());
+                        int key = Utility.Util.GetValueOfInt(line.GetVAF_Org_ID());
                         Decimal? bal = line.GetSourceBalance();
                         Decimal? oldBal = null;
                         if (map.TryGetValue(key, out oldBal))
@@ -541,7 +541,7 @@ namespace VAdvantage.Acct
                 for (int i = 0; i < _lines.Count; i++)
                 {
                     FactLine line = (FactLine)_lines[i];
-                    int key = Utility.Util.GetValueOfInt(line.GetAD_Org_ID());
+                    int key = Utility.Util.GetValueOfInt(line.GetVAF_Org_ID());
                     //	Decimal balance = line.getSourceBalance();
                     Balance oldBalance = null;
                     if (map.TryGetValue(key, out oldBalance))
@@ -606,7 +606,7 @@ namespace VAdvantage.Acct
                             }
                         }
                         line.Convert();
-                        line.SetAD_Org_ID(Utility.Util.GetValueOfInt(key));
+                        line.SetVAF_Org_ID(Utility.Util.GetValueOfInt(key));
                         //
                         _lines.Add(line);
                         log.Fine("(" + elementType + ") - " + line);
@@ -864,7 +864,7 @@ namespace VAdvantage.Acct
                     factLine.SetPostingType(_postingType);
                     if (dl.IsOverwriteOrg())	//	set Org explicitly
                     {
-                        factLine.SetAD_Org_ID(dl.GetOrg_ID());
+                        factLine.SetVAF_Org_ID(dl.GetOrg_ID());
                     }
                     //
                     if (Env.Signum(dl.GetAmt()) < 0)

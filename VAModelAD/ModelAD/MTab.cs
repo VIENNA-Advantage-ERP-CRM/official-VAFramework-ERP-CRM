@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTab
  * Purpose        : 
- * Class Used     : MTab class inherits X_AD_Tab class
+ * Class Used     : MTab class inherits X_VAF_Tab class
  * Chronological    Development
  * Raghunandan      14-may-2009
   ******************************************************/
@@ -21,13 +21,13 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTab : X_AD_Tab
+    public class MTab : X_VAF_Tab
     {
         #region Private Variables
-        private static CCache<int, MTab> s_cache = new CCache<int, MTab>("AD_Tab", 20);
+        private static CCache<int, MTab> s_cache = new CCache<int, MTab>("VAF_Tab", 20);
         //The Fields						
         private MField[] _fields = null;
-        //Map of ColumnName and AD_Field_ID	
+        //Map of ColumnName and VAF_Field_ID	
         //The ListDictionary class implements the IDictionary 
         ///interface using a single-linked array. It behaves like a Hashtable
         //private HashMap<String, int> _columnNameField = null;
@@ -50,15 +50,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tab_ID">id</param>
+        /// <param name="VAF_Tab_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MTab(Ctx ctx, int AD_Tab_ID, Trx trxName)
-            : base(ctx, AD_Tab_ID, trxName)
+        public MTab(Ctx ctx, int VAF_Tab_ID, Trx trxName)
+            : base(ctx, VAF_Tab_ID, trxName)
         {
-            if (AD_Tab_ID == 0)
+            if (VAF_Tab_ID == 0)
             {
-                //	setAD_Window_ID (0);
-                //	setAD_Table_ID (0);
+                //	setVAF_Screen_ID (0);
+                //	setVAF_TableView_ID (0);
                 //	setName (null);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetHasTree(false);
@@ -77,15 +77,15 @@ namespace VAdvantage.Model
         ///Get MTab from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tab_ID">id</param>
+        /// <param name="VAF_Tab_ID">id</param>
         /// <returns>MTab</returns>
-        public static MTab Get(Ctx ctx, int AD_Tab_ID)
+        public static MTab Get(Ctx ctx, int VAF_Tab_ID)
         {
-            int key = (int)AD_Tab_ID;
+            int key = (int)VAF_Tab_ID;
             MTab retValue = (MTab)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MTab(ctx, AD_Tab_ID, null);
+            retValue = new MTab(ctx, VAF_Tab_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
         {
             ///this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
-            SetAD_Window_ID(parent.GetAD_Window_ID());
+            SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
             SetEntityType(parent.GetEntityType());
         }
 
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         {
             CopyValues(from, this);
             SetClientOrg(parent);
-            SetAD_Window_ID(parent.GetAD_Window_ID());
+            SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
             SetEntityType(parent.GetEntityType());
         }
 
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         {
             if (_fields != null && !reload)
                 return _fields;
-            String sql = "SELECT * FROM AD_Field WHERE AD_Tab_ID=" + GetAD_Tab_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_Field WHERE VAF_Tab_ID=" + GetVAF_Tab_ID() + " ORDER BY SeqNo";
             List<MField> list = new List<MField>();
             DataSet pstmt = null;
             try
@@ -154,16 +154,16 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Field with ID
         /// </summary>
-        /// <param name="AD_Field_ID">id</param>
+        /// <param name="VAF_Field_ID">id</param>
         /// <returns>field or null</returns>
-        public MField GetField(int AD_Field_ID)
+        public MField GetField(int VAF_Field_ID)
         {
-            if (AD_Field_ID == 0)
+            if (VAF_Field_ID == 0)
                 return null;
             MField[] fields = GetFields(false, Get_Trx());
             for (int i = 0; i < fields.Length; i++)
             {
-                if (fields[i].GetAD_Field_ID() == AD_Field_ID)
+                if (fields[i].GetVAF_Field_ID() == VAF_Field_ID)
                     return fields[i];
             }
             return null;
@@ -176,23 +176,23 @@ namespace VAdvantage.Model
         /// <returns>field or null</returns>
         public MField GetField(string columnName)
         {
-            int AD_Field_ID = GetAD_Field_ID(columnName);
-            return GetField(AD_Field_ID);
+            int VAF_Field_ID = GetVAF_Field_ID(columnName);
+            return GetField(VAF_Field_ID);
         }
 
         /// <summary>
-        ///Get AD_Field_ID in tab
+        ///Get VAF_Field_ID in tab
         /// </summary>
         /// <param name="columnName">name</param>
         /// <returns>id</returns>
-        public int GetAD_Field_ID(string columnName)
+        public int GetVAF_Field_ID(string columnName)
         {
             if (_columnNameField == null)
                 FillColumnNameField();
-            int? AD_Field_ID = _columnNameField[columnName];
-            if (AD_Field_ID == null)
+            int? VAF_Field_ID = _columnNameField[columnName];
+            if (VAF_Field_ID == null)
                 return 0;
-            return (int)AD_Field_ID;
+            return (int)VAF_Field_ID;
         }
 
         /// <summary>
@@ -202,10 +202,10 @@ namespace VAdvantage.Model
         {
             //_columnNameField = IDictionary<string, int>();
             _columnNameField = null;
-            String sql = "SELECT ColumnName, f.AD_Field_ID "
-                + "FROM AD_Field f"
-                + " INNER JOIN AD_Column c ON (f.AD_Column_ID=c.AD_Column_ID) "
-                + "WHERE f.AD_Tab_ID=" + GetAD_Tab_ID();
+            String sql = "SELECT ColumnName, f.VAF_Field_ID "
+                + "FROM VAF_Field f"
+                + " INNER JOIN VAF_Column c ON (f.VAF_Column_ID=c.VAF_Column_ID) "
+                + "WHERE f.VAF_Tab_ID=" + GetVAF_Tab_ID();
             DataSet pstmt = null;
             try
             {
@@ -214,8 +214,8 @@ namespace VAdvantage.Model
                 {
                     DataRow rs = pstmt.Tables[0].Rows[i];
                     string columnName = rs[1].ToString();//.getString(1);
-                    int AD_Field_ID = (int)rs[2];//.getInt(2);
-                    _columnNameField.Add(columnName, AD_Field_ID);
+                    int VAF_Field_ID = (int)rs[2];//.getInt(2);
+                    _columnNameField.Add(columnName, VAF_Field_ID);
                 }
                 pstmt = null;
             }
@@ -232,7 +232,7 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            //	UPDATE AD_Tab SET IsInsertRecord='N' WHERE IsInsertRecord='Y' AND IsReadOnly='Y'
+            //	UPDATE VAF_Tab SET IsInsertRecord='N' WHERE IsInsertRecord='Y' AND IsReadOnly='Y'
             if (IsReadOnly() && IsInsertRecord())
             {
                 SetIsInsertRecord(false);
@@ -265,7 +265,7 @@ namespace VAdvantage.Model
 
             if (currentTab.GetTabLevel() == 0)
                 return null;
-            return MTable.Get(GetCtx(),  tab.GetAD_Table_ID());
+            return MTable.Get(GetCtx(),  tab.GetVAF_TableView_ID());
         }
 
         /// <summary>
@@ -282,19 +282,19 @@ namespace VAdvantage.Model
             // check if there is any change in MaintainVersionOnApproval field on Tab
             if (Is_ValueChanged("MaintainVerOnApproval"))
             {
-                int windowID = GetAD_Window_ID();
+                int windowID = GetVAF_Screen_ID();
                 int SeqNo = GetSeqNo();
                 // Get all tabs from current window which have greater sequence than current tab
-                int[] TabIDs = MTab.GetAllIDs("AD_Tab", "AD_Window_ID = " + windowID + " AND SeqNo > " + SeqNo, Get_TrxName());
+                int[] TabIDs = MTab.GetAllIDs("VAF_Tab", "VAF_Screen_ID = " + windowID + " AND SeqNo > " + SeqNo, Get_TrxName());
                 // if there are tabs with sequence greater than current tab
                 if (TabIDs.Length > 0)
                 {
                     string tabs = string.Join(",", TabIDs);
                     // Update MaintainVerOnApproval field to the value set in current field of current tab in all tabs with greater
                     // sequence of current tab
-                    int updateCount = DB.ExecuteQuery("UPDATE AD_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE AD_Tab_ID IN (" + tabs + ")", null, Get_TrxName());
+                    int updateCount = DB.ExecuteQuery("UPDATE VAF_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE VAF_Tab_ID IN (" + tabs + ")", null, Get_TrxName());
                     if (updateCount < 0)
-                        log.Info("UPDATE AD_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE AD_Tab_ID IN (" + tabs + ")");
+                        log.Info("UPDATE VAF_Tab SET MaintainVerOnApproval = '" + (IsMaintainVerOnApproval() ? "Y" : "N") + "' WHERE VAF_Tab_ID IN (" + tabs + ")");
                 }
             }
             return true;

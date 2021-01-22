@@ -26,7 +26,7 @@ public X_C_PaySchedule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, tr
  added by ->Harwinder */
 static X_C_PaySchedule(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27745177405388L;/** Last Updated Timestamp 5/12/2016 4:51:28 PM */
-public static long updatedMS = 1463052088599L;/** AD_Table_ID=548 */
+public static long updatedMS = 1463052088599L;/** VAF_TableView_ID=548 */
 public static int Table_ID; // =548;
 /** TableName=C_PaySchedule */
 public static String Table_Name="C_PaySchedule";
@@ -75,8 +75,8 @@ public int GetGraceDays() {Object ii = Get_Value("GraceDays");if (ii == null) re
 public void SetIsValid (Boolean IsValid){Set_Value ("IsValid", IsValid);}/** Get Valid.
 @return Element is valid */
 public Boolean IsValid() {Object oo = Get_Value("IsValid");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** NetDay AD_Reference_ID=167 */
-public static int NETDAY_AD_Reference_ID=167;/** Monday = 1 */
+/** NetDay VAF_Control_Ref_ID=167 */
+public static int NETDAY_VAF_Control_Ref_ID=167;/** Monday = 1 */
 public static String NETDAY_Monday = "1";/** Tuesday = 2 */
 public static String NETDAY_Tuesday = "2";/** Wednesday = 3 */
 public static String NETDAY_Wednesday = "3";/** Thursday = 4 */

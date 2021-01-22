@@ -48,10 +48,10 @@
         var selectedItems = [];
 
         var ismobile = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());
-        //var sql = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "AD_Tab_ID"));
+        //var sql = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAF_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
-        var AD_tab_ID = VIS.context.getWindowTabContext(windowNo, 0, "AD_Tab_ID");
-        window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", AD_tab_ID.toString());
+        var vaf_tab_ID = VIS.context.getWindowTabContext(windowNo, 0, "VAF_Tab_ID");
+        window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", vaf_tab_ID.toString());
 
         function initializeComponent() {
             inforoot.css("width", "100%");
@@ -146,9 +146,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "Name";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -171,9 +171,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox("Reference", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox("Reference", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "Reference";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -198,7 +198,7 @@
 
                 ctrl = new VIS.Controls.VDate("TrxFromDate", false, false, true, VIS.DisplayType.Date, VIS.Msg.translate("FromDate"));
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "TrxFromDate";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -224,7 +224,7 @@
 
                 ctrl = new VIS.Controls.VDate("TrxToDate", false, false, true, VIS.DisplayType.Date, VIS.Msg.translate("ToDate"));
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "TrxToDate";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -398,8 +398,8 @@
                 query += " AND VAICNT_InventoryCount_ID = -1";
             }
 
-            sql = "SELECT VAICNT_ScanName,VAICNT_ReferenceNo,DateTrx,VAICNT_InventoryCount_ID FROM VAICNT_InventoryCount WHERE IsActive='Y' AND AD_Client_ID = "
-                + VIS.Utility.Util.getValueOfInt(VIS.context.getAD_Client_ID()) + query;
+            sql = "SELECT VAICNT_ScanName,VAICNT_ReferenceNo,DateTrx,VAICNT_InventoryCount_ID FROM VAICNT_InventoryCount WHERE IsActive='Y' AND VAF_Client_ID = "
+                + VIS.Utility.Util.getValueOfInt(VIS.context.getVAF_Client_ID()) + query;
             
             var _sql = VIS.secureEngine.encrypt(sql);
             if (!pNo) {
@@ -538,9 +538,9 @@
                     //+ " ELSE CASE WHEN (cl.upc = prd.upc) THEN prd.M_Product_ID ELSE CASE WHEN (cl.upc = patr.upc) THEN patr.M_Product_ID END END END AS M_Product_ID,patr.M_AttributeSetInstance_ID,cl.vaicnt_quantity,"
                     //+ " cl.vaicnt_attributeno,ic.VAICNT_ReferenceNo FROM VAICNT_InventoryCount ic INNER JOIN VAICNT_InventoryCountLine cl ON (ic.VAICNT_InventoryCount_ID = cl.VAICNT_InventoryCount_ID)"
                     //+ " LEFT JOIN M_manufacturer mr ON cl.upc = mr.upc LEFT JOIN M_product prd ON cl.upc = prd.upc LEFT JOIN M_ProductAttributes patr ON cl.upc = patr.upc WHERE ic.IsActive = 'Y'"
-                    //+ " AND cl.IsActive = 'Y' AND (cl.upc = mr.upc OR cl.upc = prd.upc OR cl.upc = patr.upc) AND ic.ad_client_id = " + VIS.context.getAD_Client_ID() +
+                    //+ " AND cl.IsActive = 'Y' AND (cl.upc = mr.upc OR cl.upc = prd.upc OR cl.upc = patr.upc) AND ic.vaf_client_id = " + VIS.context.getVAF_Client_ID() +
                     //" AND ic.VAICNT_InventoryCount_ID = " + countID + " ) cnt INNER JOIN M_Product p on cnt.M_Product_ID=p.M_Product_ID LEFT JOIN M_AttributeSet ats on p.M_attributeset_id=ats.M_attributeset_id"
-                    //+ " WHERE p.ad_client_id = " + VIS.context.getAD_Client_ID();
+                    //+ " WHERE p.vaf_client_id = " + VIS.context.getVAF_Client_ID();
                     //}
 
                     //var drProd = VIS.DB.executeReader(_query, null, null);

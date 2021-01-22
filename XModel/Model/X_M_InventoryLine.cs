@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27562514379741L;
         /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
         public static long updatedMS = 1280389062952L;
-        /** AD_Table_ID=322 */
+        /** VAF_TableView_ID=322 */
         public static int Table_ID;
         // =322;
 
@@ -165,8 +165,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** InventoryType AD_Reference_ID=292 */
-        public static int INVENTORYTYPE_AD_Reference_ID = 292;
+        /** InventoryType VAF_Control_Ref_ID=292 */
+        public static int INVENTORYTYPE_VAF_Control_Ref_ID = 292;
         /** Charge Account = C */
         public static String INVENTORYTYPE_ChargeAccount = "C";
         /** Inventory Difference = D */
@@ -298,8 +298,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_Product_ID AD_Reference_ID=171 */
-        public static int M_PRODUCT_ID_AD_Reference_ID = 171;
+        /** M_Product_ID VAF_Control_Ref_ID=171 */
+        public static int M_PRODUCT_ID_VAF_Control_Ref_ID = 171;
         /** Set Product.
         @param M_Product_ID Product, Service, Item */
         public void SetM_Product_ID(int M_Product_ID)
@@ -393,8 +393,8 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
-        /** AdjustmentType AD_Reference_ID=1000164 */
-        public static int ADJUSTMENTTYPE_AD_Reference_ID = 1000164;
+        /** AdjustmentType VAF_Control_Ref_ID=1000164 */
+        public static int ADJUSTMENTTYPE_VAF_Control_Ref_ID = 1000164;
         /** As On Date Count = A */
         public static String ADJUSTMENTTYPE_AsOnDateCount = "A";
         /** Quantity Difference = D */
@@ -576,8 +576,8 @@ namespace VAdvantage.Model
         /** Get Product Container.@return Product Container */
         public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** ReversalDoc_ID AD_Reference_ID=1000209 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 1000209;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=1000209 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 1000209;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

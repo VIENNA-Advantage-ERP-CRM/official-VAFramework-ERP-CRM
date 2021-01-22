@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         public static String ACCESSLEVEL_SystemPlusClient = "6";
         /** All = 7 */
         public static String ACCESSLEVEL_All = "7";
-        /** TableTrxType AD_Reference_ID=493 */
+        /** TableTrxType VAF_Control_Ref_ID=493 */
         /** Mandatory Organization = M */
         public static String TABLETRXTYPE_MandatoryOrganization = "M";
         /** No Organization = N */
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         /** Optional Organization = O */
         public static String TABLETRXTYPE_OptionalOrganization = "O";
         Ctx m_ctx;
-        int _AD_Table_ID;
+        int _VAF_TableView_ID;
         private POInfoColumn[] m_columns = null;
         private string m_TableName = "";
         public bool m_hasKeyColumn;
@@ -69,21 +69,21 @@ namespace VAdvantage.Model
         ///Create Persistent Info
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="baseLanguageOnly"></param>
-        private POInfo(Context ctx, int AD_Table_ID, bool baseLanguageOnly)
+        private POInfo(Context ctx, int VAF_TableView_ID, bool baseLanguageOnly)
         {
             m_ctx = ctx;
-            _AD_Table_ID = AD_Table_ID;
+            _VAF_TableView_ID = VAF_TableView_ID;
 
             bool baseLanguage = baseLanguageOnly ? true : Env.IsBaseLanguage(ctx, "");
             LoadInfo(baseLanguage);
         }   //  
 
-        private POInfo(Ctx ctx, int AD_Table_ID, bool baseLanguageOnly)
+        private POInfo(Ctx ctx, int VAF_TableView_ID, bool baseLanguageOnly)
         {
             m_ctx = ctx;
-            _AD_Table_ID = AD_Table_ID;
+            _VAF_TableView_ID = VAF_TableView_ID;
 
             bool baseLanguage = baseLanguageOnly ? true : Env.IsBaseLanguage(ctx, "");
             LoadInfo(baseLanguage);
@@ -101,25 +101,25 @@ namespace VAdvantage.Model
             List<POInfoColumn> list = new List<POInfoColumn>(20);
 
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT t.TableName, c.ColumnName,c.AD_Reference_ID,"    //  1..3
+            sql.Append("SELECT t.TableName, c.ColumnName,c.VAF_Control_Ref_ID,"    //  1..3
                 + "c.IsMandatory,c.IsUpdateable,c.DefaultValue,"                //  4..6
-                + "e.Name,e.Description, c.AD_Column_ID, "						//  7..9
+                + "e.Name,e.Description, c.VAF_Column_ID, "						//  7..9
                 + "c.IsKey,c.IsParent, "										//	10..11
-                + "c.AD_Reference_Value_ID, vr.Code, "							//	12..13
+                + "c.VAF_Control_Ref_Value_ID, vr.Code, "							//	12..13
                 + "c.FieldLength, c.ValueMin, c.ValueMax, c.IsTranslated, "		//	14..17
                 + "t.AccessLevel, c.ColumnSQL, c.IsEncrypted , c.IsCopy ");				//	18..21
-            sql.Append("FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)"
-                + " LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID)"
-                + " INNER JOIN AD_Element");
+            sql.Append("FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
+                + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID)"
+                + " INNER JOIN VAF_ColumnDic");
             if (!baseLanguage)
                 sql.Append("_Trl");
             sql.Append(" e "
-                + " ON (c.AD_Element_ID=e.AD_Element_ID) "
-                + "WHERE t.AD_Table_ID=" + _AD_Table_ID + " "
+                + " ON (c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID) "
+                + "WHERE t.VAF_TableView_ID=" + _VAF_TableView_ID + " "
                 + " AND c.IsActive='Y'");
             if (!baseLanguage)
-                sql.Append(" AND e.AD_Language='").Append(Env.GetAD_Language(m_ctx)).Append("'");
+                sql.Append(" AND e.VAF_Language='").Append(Env.GetVAF_Language(m_ctx)).Append("'");
 
             IDataReader dr = null;
             try
@@ -130,18 +130,18 @@ namespace VAdvantage.Model
                     if (m_TableName == "")
                         m_TableName = Util.GetValueOfString(dr[0]);
                     string ColumnName = Util.GetValueOfString(dr[1]);
-                    int AD_Reference_ID = Util.GetValueOfInt(dr[2]);
+                    int VAF_Control_Ref_ID = Util.GetValueOfInt(dr[2]);
                     bool IsMandatory = "Y".Equals(dr[3]);
                     bool IsUpdateable = "Y".Equals(dr[4]);
                     string DefaultLogic = Util.GetValueOfString(dr[5]);
                     string Name = Util.GetValueOfString(dr[6]);
                     string Description = Util.GetValueOfString(dr[7]);
-                    int AD_Column_ID = Util.GetValueOfInt(dr[8]);
+                    int VAF_Column_ID = Util.GetValueOfInt(dr[8]);
                     bool IsKey = "Y".Equals(Util.GetValueOfString(dr[9]));
                     if (IsKey)
                         m_hasKeyColumn = true;
                     bool IsParent = "Y".Equals(Util.GetValueOfString(dr[10]));
-                    int AD_Reference_Value_ID = Util.GetValueOfInt(dr[11]);
+                    int VAF_Control_Ref_Value_ID = Util.GetValueOfInt(dr[11]);
                     string ValidationCode = Util.GetValueOfString(dr[12]);
                     int FieldLength = Util.GetValueOfInt(dr[13]);
                     string ValueMin = Util.GetValueOfString(dr[14]);
@@ -153,11 +153,11 @@ namespace VAdvantage.Model
                     bool IsEncrypted = "Y".Equals(Util.GetValueOfString(dr[19]));
                     bool IsCopy = "Y".Equals(Util.GetValueOfString(dr[20]));
                     POInfoColumn col = new POInfoColumn(
-                        AD_Column_ID, ColumnName, ColumnSQL, AD_Reference_ID,
+                        VAF_Column_ID, ColumnName, ColumnSQL, VAF_Control_Ref_ID,
                         IsMandatory, IsUpdateable,
                         DefaultLogic, Name, Description,
                         IsKey, IsParent,
-                        AD_Reference_Value_ID, ValidationCode,
+                        VAF_Control_Ref_Value_ID, ValidationCode,
                         FieldLength, ValueMin, ValueMax,
                         IsTranslated, IsEncrypted, IsCopy);
                     list.Add(col);
@@ -196,20 +196,20 @@ namespace VAdvantage.Model
         /// POInfo Factory
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <returns>POInfo Object</returns>
-        //public static POInfo GetPOInfo(Ctx ctx, int AD_Table_ID)
+        //public static POInfo GetPOInfo(Ctx ctx, int VAF_TableView_ID)
         //{
-        //    int key = AD_Table_ID;
+        //    int key = VAF_TableView_ID;
         //    POInfo retValue = null;
 
         //    s_cache.TryGetValue(key, out  retValue);
         //    if (retValue == null)
         //    {
-        //        retValue = new POInfo(ctx, AD_Table_ID, false);
+        //        retValue = new POInfo(ctx, VAF_TableView_ID, false);
         //        if (retValue.GetColumnCount() == 0)
         //            //	May be run before Language verification
-        //            retValue = new POInfo(ctx, AD_Table_ID, true);
+        //            retValue = new POInfo(ctx, VAF_TableView_ID, true);
         //        else
         //            s_cache.Add(key, retValue);
         //    }
@@ -217,18 +217,18 @@ namespace VAdvantage.Model
         //}   //  getPOInfo
 
 
-        public static POInfo GetPOInfo(Ctx ctx, int AD_Table_ID)
+        public static POInfo GetPOInfo(Ctx ctx, int VAF_TableView_ID)
         {
-            int key = AD_Table_ID;
+            int key = VAF_TableView_ID;
             POInfo retValue = null;
 
             s_cache.TryGetValue(key, out retValue);
             if (retValue == null)
             {
-                retValue = new POInfo(ctx, AD_Table_ID, false);
+                retValue = new POInfo(ctx, VAF_TableView_ID, false);
                 if (retValue.GetColumnCount() == 0)
                     //	May be run before Language verification
-                    retValue = new POInfo(ctx, AD_Table_ID, true);
+                    retValue = new POInfo(ctx, VAF_TableView_ID, true);
                 else
                     s_cache.Add(key, retValue);
             }
@@ -245,7 +245,7 @@ namespace VAdvantage.Model
         //    if (m_columns.Length > 0)
         //    {
         //        _querySQL.Append("SELECT ");
-        //        MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
+        //        MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
         //        // append all columns from table and get comma separated string
         //        _querySQL.Append(tbl.GetSelectColumns());
         //        foreach (var column in m_columns)
@@ -259,7 +259,7 @@ namespace VAdvantage.Model
         //                if (DisplayType.IsLookup(column.DisplayType))
         //                {
         //                    VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-        //                        column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+        //                        column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.VAF_Control_Ref_Value_ID,
         //                        column.IsParent, column.ValidationCode);
 
         //                    if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")
@@ -471,13 +471,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Column Index
         /// </summary>
-        /// <param name="AD_Column_ID">column</param>
+        /// <param name="VAF_Column_ID">column</param>
         /// <returns>index of column with ColumnName or -1 if not found</returns>
-        public int GetColumnIndex(int AD_Column_ID)
+        public int GetColumnIndex(int VAF_Column_ID)
         {
             for (int i = 0; i < m_columns.Length; i++)
             {
-                if (AD_Column_ID == m_columns[i].AD_Column_ID)
+                if (VAF_Column_ID == m_columns[i].VAF_Column_ID)
                     return i;
             }
             return -1;
@@ -638,9 +638,9 @@ namespace VAdvantage.Model
         }  //  validate
 
 
-        public int getAD_Table_ID()
+        public int getVAF_TableView_ID()
         {
-            return _AD_Table_ID;
+            return _VAF_TableView_ID;
         }
 
         /// <summary>
@@ -669,10 +669,10 @@ namespace VAdvantage.Model
         //    Lookup lookup = null;
         //    try
         //    {
-        //        lookup = VLookUpFactory.Get(m_ctx, WindowNo, m_columns[index].AD_Column_ID,
+        //        lookup = VLookUpFactory.Get(m_ctx, WindowNo, m_columns[index].VAF_Column_ID,
         //            m_columns[index].DisplayType,
         //            m_columns[index].ColumnName,
-        //            m_columns[index].AD_Reference_Value_ID,
+        //            m_columns[index].VAF_Control_Ref_Value_ID,
         //            m_columns[index].IsParent, m_columns[index].ValidationCode);
         //    }
         //    catch
@@ -707,8 +707,8 @@ namespace VAdvantage.Model
         //    VLookUpInfo lookup = null;
         //    try
         //    {
-        //        lookup = VLookUpFactory.GetLookUpInfo(m_ctx, WindowNo, m_columns[index].DisplayType, m_columns[index].AD_Column_ID, Env.GetLanguage(m_ctx),
-        //            m_columns[index].ColumnName, m_columns[index].AD_Reference_Value_ID,
+        //        lookup = VLookUpFactory.GetLookUpInfo(m_ctx, WindowNo, m_columns[index].DisplayType, m_columns[index].VAF_Column_ID, Env.GetLanguage(m_ctx),
+        //            m_columns[index].ColumnName, m_columns[index].VAF_Control_Ref_Value_ID,
         //            m_columns[index].IsParent, m_columns[index].ValidationCode);
         //    }
         //    catch
@@ -744,9 +744,9 @@ namespace VAdvantage.Model
             return _TableTrxType;
         }
 
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            return _AD_Table_ID;
+            return _VAF_TableView_ID;
         }
         /// <summary>
         /// 
@@ -771,7 +771,7 @@ namespace VAdvantage.Model
         {
             #region "Declaration"
             /** Column ID		*/
-            public int AD_Column_ID;
+            public int VAF_Column_ID;
             /** Column Name		*/
             public string ColumnName;
             /** Virtual Column 	*/
@@ -801,7 +801,7 @@ namespace VAdvantage.Model
             public bool IsEncrypted;
 
             /** Reference Value	*/
-            public int AD_Reference_Value_ID;
+            public int VAF_Control_Ref_Value_ID;
             /** Validation		*/
             public string ValidationCode;
             public Type ColumnClass;
@@ -824,21 +824,21 @@ namespace VAdvantage.Model
             {
             }
 
-            public POInfoColumn(int ad_Column_ID, string columnName, string columnSQL, int displayType,
+            public POInfoColumn(int vaf_column_ID, string columnName, string columnSQL, int displayType,
                                  bool isMandatory, bool isUpdateable, string defaultLogic,
                                  string columnLabel, string columnDescription,
                                  bool isKey, bool isParent,
-                                 int ad_Reference_Value_ID, string validationCode,
+                                 int VAF_Control_Ref_Value_ID, string validationCode,
                                  int fieldLength, string valueMin, string valueMax,
                                  bool isTranslated, bool isEncrypted, bool isCopy)
             {
 
-                AD_Column_ID = ad_Column_ID;
+                VAF_Column_ID = vaf_column_ID;
                 ColumnName = columnName;
                 ColumnSQL = columnSQL;
                 DisplayType = displayType;
 
-                if (columnName.Equals("AD_Language")
+                if (columnName.Equals("VAF_Language")
                 || columnName.Equals("EntityType")
                 || columnName.Equals("DocBaseType"))
                 {
@@ -869,7 +869,7 @@ namespace VAdvantage.Model
                 IsKey = isKey;
                 IsParent = isParent;
                 //
-                AD_Reference_Value_ID = ad_Reference_Value_ID;
+                VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
                 ValidationCode = validationCode;
                 FieldLength = fieldLength;
                 ValueMin = valueMin;
@@ -901,7 +901,7 @@ namespace VAdvantage.Model
             public POInfoColumn Clone()
             {
              POInfoColumn clone = new POInfoColumn();
-             clone.AD_Column_ID = AD_Column_ID;
+             clone.VAF_Column_ID = VAF_Column_ID;
              clone.ColumnName = ColumnName;
              clone.ColumnSQL = ColumnSQL;
              clone.DisplayType = DisplayType;
@@ -915,7 +915,7 @@ namespace VAdvantage.Model
              clone.ColumnDescription = ColumnDescription;
              clone.IsKey = IsKey;
              clone.IsParent = IsParent;
-             clone.AD_Reference_Value_ID = AD_Reference_Value_ID;
+             clone.VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
              clone.ValidationCode = ValidationCode;
              clone.FieldLength = FieldLength;
              clone.ValueMin = ValueMin;

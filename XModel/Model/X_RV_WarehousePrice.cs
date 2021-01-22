@@ -80,7 +80,7 @@ static X_RV_WarehousePrice()
 ////static long serialVersionUID 27562514382641L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065852L;
-/** AD_Table_ID=639 */
+/** VAF_TableView_ID=639 */
 public static int Table_ID;
  // =639;
 

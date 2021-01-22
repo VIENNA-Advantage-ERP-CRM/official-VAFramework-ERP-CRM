@@ -386,7 +386,7 @@ namespace VAdvantage.Model
         {
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHINVOICE, GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHINVOICE, GetVAF_Org_ID()))
                     return false;
                 SetPosted(false);
                 return MFactAcct.Delete(Table_ID, Get_ID(), Get_TrxName()) >= 0;

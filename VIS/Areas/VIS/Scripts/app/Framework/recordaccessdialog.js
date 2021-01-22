@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
     function RecordAccessDialog() {
-        var _AD_Table_ID = null;
+        var _VAF_TableView_ID = null;
         var _Record_ID = null;
         var root = null;
         var subroot = null;
@@ -48,8 +48,8 @@
         var recordAccessData = null;
         var curIndex = -1;
         var cmdnew = false;
-        this.Load = function (AD_Table_ID, Record_ID) {
-            _AD_Table_ID = AD_Table_ID;
+        this.Load = function (VAF_TableView_ID, Record_ID) {
+            _VAF_TableView_ID = VAF_TableView_ID;
             _Record_ID = Record_ID;
 
             //if (VIS.Application.isRTL) {
@@ -100,7 +100,7 @@
             divRoleInputWrp = $("<div class='input-group vis-input-wrap'>");
             divRoleInputCtrlWrp = $("<div class='vis-control-wrap'>");
 
-            lblRole = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
+            lblRole = $("<label>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'VAF_Role_ID'));
             cmbRole = $("<select class='vis-custom-select'>");
             divRole.append(divRoleInputWrp);
             divRoleInputWrp.append(divRoleInputCtrlWrp);
@@ -181,7 +181,7 @@
             //  root.append(drow4);
             //  btnOk = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>OK</button>");
             //  btnCancel = $("<button  class='VIS_Pref_pass-btn VIS_Pref_btn-pass-click'>Cancel</button>");
-            //  lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'AD_Role_ID'));
+            //  lblRole = $("<lable>").append(VIS.Msg.translate(VIS.Env.getCtx(), 'VAF_Role_ID'));
             //  cmbRole = $("<select>");
 
             // // chkExclude = $("<input type='checkbox' checked >" + VIS.Msg.translate(VIS.Env.getCtx(), 'IsExclude') + "</input>");
@@ -216,7 +216,7 @@
 
         var loadRoles = function () {
 
-            //var sqlRole = VIS.MRole.getDefault().addAccessSQL("SELECT AD_Role_ID, Name FROM AD_Role ORDER BY 2", "AD_Role", VIS.MRole.SQL_NOTQUALIFIED,VIS.MRole.SQL_RW);
+            //var sqlRole = VIS.MRole.getDefault().addAccessSQL("SELECT VAF_Role_ID, Name FROM VAF_Role ORDER BY 2", "VAF_Role", VIS.MRole.SQL_NOTQUALIFIED,VIS.MRole.SQL_RW);
             //var dr = VIS.DB.executeReader(sqlRole, null, null);
             var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRoles", null, null);
             var options = '<option Value="-1"></option>';
@@ -225,7 +225,7 @@
             //}
             if (dr != null) {
                 for (i in dr)
-                    options += ('<option value="' + dr[i].AD_Role_ID + '">' + dr[i].Name + '</option>');
+                    options += ('<option value="' + dr[i].VAF_Role_ID + '">' + dr[i].Name + '</option>');
             }
             cmbRole.append(options);
             options = null;
@@ -234,17 +234,17 @@
 
         };
         var loadRecords = function () {
-            //var sql = "SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
+            //var sql = "SELECT VAF_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM VAF_Record_Rights WHERE VAF_TableView_ID=" + _VAF_TableView_ID + " AND Record_ID=" + _Record_ID + " AND VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
             if (recordAccessData == null) {
                 recordAccessData = [];
             }
             //var dr = VIS.DB.executeReader(sql, null, null);
 
-            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRecordAccess", { "Table_ID": _AD_Table_ID, "Record_ID": _Record_ID }, null);
+            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRecordAccess", { "Table_ID": _VAF_TableView_ID, "Record_ID": _Record_ID }, null);
             var item = null;
             //while (dr.read()) {
             //    item = {};
-            //    item.AD_ROLE_ID = dr.getInt(0);
+            //    item.VAF_ROLE_ID = dr.getInt(0);
             //    item.ISACTIVE = dr.getString(1);
             //    item.ISDEPENDENTENTITIES = dr.getString(2);
             //    item.ISEXCLUDE = dr.getString(3);
@@ -256,7 +256,7 @@
             if (dr != null) {
                 for (var i in dr) {
                     item = {};
-                    item.AD_ROLE_ID = dr[i].AD_ROLE_ID;
+                    item.VAF_ROLE_ID = dr[i].VAF_ROLE_ID;
                     item.ISACTIVE = dr[i].ISACTIVE;
                     item.ISDEPENDENTENTITIES = dr[i].ISDEPENDENTENTITIES;
                     item.ISEXCLUDE = dr[i].ISEXCLUDE;
@@ -291,8 +291,8 @@
                 url: VIS.Application.contextUrl + "RecordAccess/SaveAccess/",
                 dataType: "json",
                 data: {
-                    AD_Role_ID: roleID,
-                    AD_Table_ID: _AD_Table_ID,
+                    VAF_Role_ID: roleID,
+                    VAF_TableView_ID: _VAF_TableView_ID,
                     Record_ID: _Record_ID,
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
@@ -351,7 +351,7 @@
         };
 
         var setLine = function () {
-            cmbRole.val(recordAccessData[curIndex].AD_ROLE_ID);
+            cmbRole.val(recordAccessData[curIndex].VAF_ROLE_ID);
             chkActive.attr('checked', recordAccessData[curIndex].ISACTIVE == 'Y' ? true : false);
             chkExclude.attr('checked', recordAccessData[curIndex].ISEXCLUDE == 'Y' ? true : false);
             chkReadOnly.attr('checked', recordAccessData[curIndex].ISREADONLY == 'Y' ? true : false);
@@ -384,8 +384,8 @@
                 url: VIS.Application.contextUrl + "RecordAccess/DeleteRecord/",
                 dataType: "json",
                 data: {
-                    AD_Role_ID: roleID,
-                    AD_Table_ID: _AD_Table_ID,
+                    VAF_Role_ID: roleID,
+                    VAF_TableView_ID: _VAF_TableView_ID,
                     Record_ID: _Record_ID,
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
@@ -417,7 +417,7 @@
             setLine = null;
             cmdDelete = null;
 
-            _AD_Table_ID = null;
+            _VAF_TableView_ID = null;
             _Record_ID = null;
             drow1 = null;
             drow2 = null;

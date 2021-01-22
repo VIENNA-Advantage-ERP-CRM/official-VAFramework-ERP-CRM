@@ -8,10 +8,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MAlertProcessorLog : X_AD_AlertProcessorLog, ViennaProcessorLog
+    public class MAlertProcessorLog : X_VAF_AlertHandlerLog, ViennaProcessorLog
     {
-        public MAlertProcessorLog(Ctx ctx, int AD_AlertProcessorLog_ID, Trx trx)
-            : base(ctx, AD_AlertProcessorLog_ID, trx)
+        public MAlertProcessorLog(Ctx ctx, int VAF_AlertHandlerLog_ID, Trx trx)
+            : base(ctx, VAF_AlertHandlerLog_ID, trx)
         {
             
         }	//	MAlertProcessorLog
@@ -27,7 +27,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_AlertProcessor_ID(parent.GetAD_AlertProcessor_ID());
+            SetVAF_AlertHandler_ID(parent.GetVAF_AlertHandler_ID());
             SetSummary(summary);
         }	//	MAlertProcessorLog
 

@@ -32,7 +32,7 @@ namespace VAdvantage.Classes
      #region declaration 
        
         private  Context ctx = Utility.Env.GetContext(); // Get Context object
-        private int _AD_Tree_ID;
+        private int _VAF_TreeInfo_ID;
         private bool _editable;
         private bool _clientTree;
         private TreeType treeType;
@@ -47,13 +47,13 @@ namespace VAdvantage.Classes
        /// <summary>
        /// Constructror initilize variable
        /// </summary>
-       /// <param name="AD_Tree_ID">tree id</param>
+       /// <param name="VAF_TreeInfo_ID">tree id</param>
        /// <param name="_editable">_editable or not</param>
        /// <param name="_clientTree"></param>
        /// <param name="menuType">tree type</param>
-        public VTree(int AD_Tree_ID, bool editable, bool clientTree,TreeType menuType)
+        public VTree(int VAF_TreeInfo_ID, bool editable, bool clientTree,TreeType menuType)
         {
-            _AD_Tree_ID = AD_Tree_ID;
+            _VAF_TreeInfo_ID = VAF_TreeInfo_ID;
             _editable = editable;
              treeType = menuType;
         }
@@ -61,11 +61,11 @@ namespace VAdvantage.Classes
         /// <summary>
         /// Initilize tree loading process
         /// </summary>
-        /// <param name="AD_Tree_ID">tree key id</param>
-        public void InitTree(int AD_Tree_ID)
+        /// <param name="VAF_TreeInfo_ID">tree key id</param>
+        public void InitTree(int VAF_TreeInfo_ID)
         {
             //Get Root node info
-            string str = "Select name,description from ad_tree where ad_tree_id =" + AD_Tree_ID;
+            string str = "Select name,description from VAF_TreeInfo where VAF_TreeInfo_id =" + VAF_TreeInfo_ID;
             IDataReader drRoot = DataBase.DB.ExecuteReader(str);
             string strRootName, strDesc;
             drRoot.Read();
@@ -76,9 +76,9 @@ namespace VAdvantage.Classes
             StringBuilder sql = new StringBuilder("SELECT ")
             .Append(" tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive ")
             .Append(" FROM " + GetTableName() + "  tn")
-            .Append(" LEFT OUTER JOIN AD_TreeBar tb ON (tn.AD_Tree_ID=tb.AD_Tree_ID")
-            .Append(" AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=" + ctx.GetAD_User_ID() + ") ")	//	#1
-            .Append(" WHERE tn.AD_Tree_ID=" + AD_Tree_ID);
+            .Append(" LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID")
+            .Append(" AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + ") ")	//	#1
+            .Append(" WHERE tn.VAF_TreeInfo_ID=" + VAF_TreeInfo_ID);
             
             if (!_editable)
             {
@@ -234,9 +234,9 @@ namespace VAdvantage.Classes
 
         private VTreeNode GetNodeDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         {
-            int AD_Window_ID = 0;
-            int AD_Process_ID = 0;
-            int AD_Form_ID = 0;
+            int VAF_Screen_ID = 0;
+            int VAF_Job_ID = 0;
+            int VAF_Page_ID = 0;
             int AD_Workflow_ID = 0;
             int AD_Task_ID = 0;
             int AD_Workbench_ID = 0;
@@ -246,11 +246,11 @@ namespace VAdvantage.Classes
             string strColumnName = "";
             if (treeType == TreeType.MM)
             {
-                strColumnName = "Ad_Menu_Id";
+                strColumnName = "VAF_MenuConfig_Id";
             }
             else
             {
-                strColumnName = "Ad_ORG_ID";
+                strColumnName = "vaf_org_ID";
             }
             
             // Serch For Node details
@@ -279,11 +279,11 @@ namespace VAdvantage.Classes
                     if (treeType == TreeType.MM)
                     {
                         actionColor = dr[index++].ToString();
-                        AD_Window_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Screen_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        AD_Process_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Job_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        AD_Form_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Page_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
                         AD_Workflow_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
@@ -294,16 +294,16 @@ namespace VAdvantage.Classes
                         MRole role = MRole.GetDefault(ctx);
                         if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
                         {
-                            blnAccess = role.GetWindowAccess(AD_Window_ID);
+                            blnAccess = role.GetWindowAccess(VAF_Screen_ID);
                         }
                         else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
                                 || VTreeNode.ACTION_REPORT.Equals(actionColor))
                         {
-                            blnAccess = role.GetProcessAccess(AD_Process_ID);
+                            blnAccess = role.GetProcessAccess(VAF_Job_ID);
                         }
                         else if (VTreeNode.ACTION_FORM.Equals(actionColor))
                         {
-                            blnAccess = role.GetFormAccess(AD_Form_ID);
+                            blnAccess = role.GetFormAccess(VAF_Page_ID);
                         }
                         else if (VTreeNode.ACTION_WORKFLOW.Equals(actionColor))
                         {
@@ -334,9 +334,9 @@ namespace VAdvantage.Classes
             if (retValue != null && treeType == TreeType.MM)
             {
                 // set VTreeNode ID's
-                retValue.AD_Window_ID = AD_Window_ID;
-                retValue.AD_Process_ID = AD_Process_ID;
-                retValue.AD_Form_ID = AD_Form_ID;
+                retValue.VAF_Screen_ID = VAF_Screen_ID;
+                retValue.VAF_Job_ID = VAF_Job_ID;
+                retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.AD_Workflow_ID = AD_Workflow_ID;
                 retValue.AD_Task_ID = AD_Task_ID;
                 retValue.AD_Workbench_ID = AD_Workbench_ID;
@@ -381,57 +381,57 @@ namespace VAdvantage.Classes
 
              if (treeType == TreeType.OO)
             {
-                strSql = "SELECT o.AD_ORG_ID,o.Name,o.Description,o.ISSUMMARY,o.AD_CLIENT_ID,c.NAME as Tenant,o.VALUE as SearchKey,"
+                strSql = "SELECT o.VAF_ORG_ID,o.Name,o.Description,o.ISSUMMARY,o.VAF_CLIENT_ID,c.NAME as Tenant,o.VALUE as SearchKey,"
                     + "(case o.ISACTIVE when 'Y' then 'True' else 'False' end) as Active,"
                     + "(case o.ISSUMMARY when 'Y' then 'True' else 'False' end) as Summary "
-                    + "FROM AD_Role r, AD_Client c"
-                    + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID) "
+                    + "FROM VAF_Role r, VAF_Client c"
+                    + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID) "
                     + "WHERE "
-                    //r.AD_Role_ID=" + DataBase.GlobalVariable.AD_ROLE_ID
+                    //r.VAF_Role_ID=" + DataBase.GlobalVariable.VAF_ROLE_ID
                     //+ " AND 
-                    +"(c.AD_Client_ID=" + ctx.GetAD_Client_ID() + " OR c.ad_client_id=0)"
+                    +"(c.VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " OR c.vaf_client_id=0)"
                     //+ " AND (r.IsAccessAllOrgs='Y' "
-                    //    + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
-                    //        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
-                    //    + "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
-                    //        + "WHERE ua.AD_User_ID=" + ctx.GetAD_User_ID + " AND ua.IsActive='Y'))"
+                    //    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                    //        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
+                    //    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                    //        + "WHERE ua.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID + " AND ua.IsActive='Y'))"
                     //    + ") "
-                    + "ORDER BY o.AD_ORG_ID";
+                    + "ORDER BY o.VAF_ORG_ID";
             }
              else if (treeType == TreeType.MM)
              {
                  //Check Base langugae
-                 bool isBase = Utility.Env.IsBaseLanguage(ctx, "AD_MENU");
+                 bool isBase = Utility.Env.IsBaseLanguage(ctx, "VAF_MENUCONFIG");
                  if (isBase)
                  {
-                     strSql = @"SELECT m.AD_Menu_ID, m.Name,m.Description,m.IsSummary,m.Action, m.AD_Window_ID,
-                       m.AD_Process_ID, m.AD_Form_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
-                       FROM AD_Menu m WHERE";
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
+                       m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                       FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
-                     strSql = @"SELECT m.AD_Menu_ID, t.Name,t.Description,m.IsSummary,m.Action, m.AD_Window_ID,
-                        m.AD_Process_ID, m.AD_Form_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
-                      FROM AD_Menu m, AD_menu_Trl t WHERE m.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "' And";
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
+                        m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                      FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
                  if (!_editable)
                  {
                      strSql += " m.IsActive='Y' AND ";
                  }
                  strSql += @" 
-                       (m.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))
+                       (m.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID AND w.IsBetaFunctionality='N'))
                        AND 
-                       (m.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID AND p.IsBetaFunctionality='N')) 
+                       (m.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID AND p.IsBetaFunctionality='N')) 
                        AND 
-                       (m.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM AD_Form f WHERE m.AD_Form_ID=f.AD_Form_ID AND f.IsBetaFunctionality='N')) ";
+                       (m.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE m.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N')) ";
                  if (!_editable)
                  {
                      strSql += @" AND 
-                       (m.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM AD_Form f WHERE m.AD_Form_ID=f.AD_Form_ID AND f.Classname IS NOT NULL)) ";
+                       (m.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE m.VAF_Page_ID=f.VAF_Page_ID AND f.Classname IS NOT NULL)) ";
                  }
                  if (!_editable)
                  {
-                     strSql += @" And  m.AD_Client_ID in ( " + GetClientId() + ")  AND m.AD_Org_ID in( " + GetOrgID() + ")";
+                     strSql += @" And  m.VAF_Client_ID in ( " + GetClientId() + ")  AND m.VAF_Org_ID in( " + GetOrgID() + ")";
                  }
              }
             IDataReader drTree = DataBase.DB.ExecuteReader(strSql);
@@ -446,7 +446,7 @@ namespace VAdvantage.Classes
         /// <returns>clents ids</returns>
         public string GetClientId()
         {
-                return "0," + ctx.GetAD_Client_ID();
+                return "0," + ctx.GetVAF_Client_ID();
         }
 
         /// <summary>
@@ -455,25 +455,25 @@ namespace VAdvantage.Classes
         /// <returns>org ids</returns>
         public string GetOrgID()
         {
-            if (ctx.GetAD_Role_ID().ToString() != "" && ctx.GetAD_Role_ID().ToString() != "0")
+            if (ctx.GetVAF_Role_ID().ToString() != "" && ctx.GetVAF_Role_ID().ToString() != "0")
             {
-                return "0," + ctx.GetAD_Role_ID().ToString();
+                return "0," + ctx.GetVAF_Role_ID().ToString();
             }
             else
             {
                 string strResult="";
-                string strQuery = "select AD_Org_Id from AD_Org where AD_CLIENT_ID="+ctx.GetAD_Client_ID()
-                    +" or AD_Org_Id=0";
+                string strQuery = "select VAF_Org_Id from VAF_Org where VAF_CLIENT_ID="+ctx.GetVAF_Client_ID()
+                    +" or VAF_Org_Id=0";
                 IDataReader objIDataReader = DataBase.DB.ExecuteReader(strQuery);
                 while (objIDataReader.Read())
                 {
                     if (strResult == "")
                     {
-                        strResult = objIDataReader["AD_Org_Id"].ToString();
+                        strResult = objIDataReader["VAF_Org_Id"].ToString();
                     }
                     else
                     {
-                        strResult = strResult + "," + objIDataReader["AD_Org_Id"].ToString();
+                        strResult = strResult + "," + objIDataReader["VAF_Org_Id"].ToString();
                     }
                 }
                 objIDataReader.Close();
@@ -490,11 +490,11 @@ namespace VAdvantage.Classes
             string strReturn = "";
             if (treeType == TreeType.OO)
             {
-                strReturn= "AD_TREENODE";
+                strReturn= "VAF_TreeInfoChild";
             }
             else
             {
-                strReturn = "AD_TREENODEMM";
+                strReturn = "VAF_TreeInfoChildMenu";
             }
             return strReturn;
         }
@@ -534,11 +534,11 @@ namespace VAdvantage.Classes
         public bool SaveNodeToBar(int iNodeId)
         {
             bool blnReturn = true;
-            string strSql = @"Insert into AD_TreeBar (AD_CLIENT_ID, AD_ORG_ID, AD_TREE_ID, AD_USER_ID, 
+            string strSql = @"Insert into VAF_TreeInfoBar (VAF_CLIENT_ID, VAF_ORG_ID, VAF_TreeInfo_ID, VAF_USERCONTACT_ID, 
                              CREATEDBY, ISACTIVE, NODE_ID,UPDATEDBY) 
-                             values (" + ctx.GetAD_Client_ID() + "," + ctx.GetAD_Org_ID() + @",
-                                     " + _AD_Tree_ID + "," + ctx.GetAD_User_ID() + "," + ctx.GetAD_User_ID() + @",
-                                    " + "'Y'," + iNodeId.ToString() + "," + ctx.GetAD_User_ID() + ")";
+                             values (" + ctx.GetVAF_Client_ID() + "," + ctx.GetVAF_Org_ID() + @",
+                                     " + _VAF_TreeInfo_ID + "," + ctx.GetVAF_UserContact_ID() + "," + ctx.GetVAF_UserContact_ID() + @",
+                                    " + "'Y'," + iNodeId.ToString() + "," + ctx.GetVAF_UserContact_ID() + ")";
             try
             {
 
@@ -562,7 +562,7 @@ namespace VAdvantage.Classes
             string strAction = "";
             //Get row Info From Table Using LINQ agianst Node_ID
             var rowInfo = from en in dt.AsEnumerable()
-                         where en.Field<decimal>("AD_Menu_ID") == Node_ID
+                         where en.Field<decimal>("VAF_MenuConfig_ID") == Node_ID
                          select en;
             
             foreach (DataRow dr in rowInfo)
@@ -584,11 +584,11 @@ namespace VAdvantage.Classes
             string strColumnId = "";
             if (treeType == "MM")
             {
-                strColumnId = "AD_Menu_Id";
+                strColumnId = "VAF_MenuConfig_Id";
             }
             else
             {
-                strColumnId = "AD_Org_Id";
+                strColumnId = "VAF_Org_Id";
             }
 
             string strSummary = "";
@@ -626,8 +626,8 @@ namespace VAdvantage.Classes
         public bool RemoveNodeFromBar(string strNodeId)
         {
             bool blnReturn = true;
-            string strSql = @"Delete from AD_TreeBar Where " +
-                             " AD_TREE_ID = " + _AD_Tree_ID + " and AD_USER_ID=" + ctx.GetAD_User_ID() + " and  NODE_ID=" + strNodeId;
+            string strSql = @"Delete from VAF_TreeInfoBar Where " +
+                             " VAF_TreeInfo_ID = " + _VAF_TreeInfo_ID + " and VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID() + " and  NODE_ID=" + strNodeId;
             try
             {
                 SqlExec.ExecuteQuery.ExecuteNonQuery(strSql);
@@ -658,11 +658,11 @@ namespace VAdvantage.Classes
     //           //if (getTreeType().equals(TREETYPE_Menu) && !isSummary)
     //           //{
 
-    //           AD_Window_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : int.Parse(dt.Rows[i][index].ToString());
+    //           VAF_Screen_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : int.Parse(dt.Rows[i][index].ToString());
     //           index++;
-    //           AD_Process_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
+    //           VAF_Job_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
-    //           AD_Form_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
+    //           VAF_Page_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
     //           AD_Workflow_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
@@ -677,24 +677,24 @@ namespace VAdvantage.Classes
 
     //               if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetWindowAccess(AD_Window_ID);
+    //                   blnAccess = VAF_ROLE.GetWindowAccess(VAF_Screen_ID);
     //               }
     //               else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
     //                       || VTreeNode.ACTION_REPORT.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetProcessAccess(AD_Process_ID);
+    //                   blnAccess = VAF_ROLE.GetProcessAccess(VAF_Job_ID);
     //               }
     //               else if (VTreeNode.ACTION_FORM.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetFormAccess(AD_Form_ID);
+    //                   blnAccess = VAF_ROLE.GetFormAccess(VAF_Page_ID);
     //               }
     //               else if (VTreeNode.ACTION_WORKFLOW.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetWorkflowAccess(AD_Workflow_ID);
+    //                   blnAccess = VAF_ROLE.GetWorkflowAccess(AD_Workflow_ID);
     //               }
     //               else if (VTreeNode.ACTION_TASK.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetTaskAccess(AD_Task_ID);
+    //                   blnAccess = VAF_ROLE.GetTaskAccess(AD_Task_ID);
     //               }
 
     //               if (blnAccess != null)		//	rw or ro for Role 

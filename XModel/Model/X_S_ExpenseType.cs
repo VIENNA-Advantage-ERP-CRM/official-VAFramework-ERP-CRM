@@ -80,7 +80,7 @@ static X_S_ExpenseType()
 //static long serialVersionUID 27562514383550L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066761L;
-/** AD_Table_ID=481 */
+/** VAF_TableView_ID=481 */
 public static int Table_ID;
  // =481;
 

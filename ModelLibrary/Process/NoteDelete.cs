@@ -15,7 +15,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 {
     public class NoteDelete : ProcessEngine.SvrProcess
     {
-        private int p_AD_User_ID = -1;
+        private int p_VAF_UserContact_ID = -1;
 
         //Prepare
         protected override void Prepare()
@@ -26,9 +26,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 String name = para[i].GetParameterName();
                 if ((para[i].GetParameter() == null) || (para[i].GetParameter().ToString() == ""))
                 { }
-                else if (name.Equals("AD_User_ID"))
+                else if (name.Equals("VAF_UserContact_ID"))
                 {
-                    p_AD_User_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
+                    p_VAF_UserContact_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
@@ -43,12 +43,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            log.Info("doIt - AD_User_ID=" + p_AD_User_ID);
+            log.Info("doIt - VAF_UserContact_ID=" + p_VAF_UserContact_ID);
 
-            String sql = "DELETE FROM AD_Note WHERE AD_Client_ID=" + GetAD_Client_ID();
-            if (p_AD_User_ID > 0)
+            String sql = "DELETE FROM VAF_Notice WHERE VAF_Client_ID=" + GetVAF_Client_ID();
+            if (p_VAF_UserContact_ID > 0)
             {
-                sql += " AND AD_User_ID=" + p_AD_User_ID;
+                sql += " AND VAF_UserContact_ID=" + p_VAF_UserContact_ID;
             }
             //
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());

@@ -85,7 +85,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514380980L;
         /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
         public static long updatedMS = 1280389064191L;
-        /** AD_Table_ID=326 */
+        /** VAF_TableView_ID=326 */
         public static int Table_ID;
         // =326;
 
@@ -312,8 +312,8 @@ namespace VAdvantage.Model
 @return Unit of Measure */
         public int GetC_UOM_ID() { Object ii = Get_Value("C_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** ReversalDoc_ID AD_Reference_ID=297 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 297;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=297 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 297;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

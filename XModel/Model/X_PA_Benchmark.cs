@@ -72,7 +72,7 @@ static X_PA_Benchmark()
 //static long serialVersionUID 27562514381591L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064802L;
-/** AD_Table_ID=833 */
+/** VAF_TableView_ID=833 */
 public static int Table_ID;
  // =833;
 
@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_PA_Benchmark[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** AccumulationType AD_Reference_ID=370 */
-public static int ACCUMULATIONTYPE_AD_Reference_ID=370;
+/** AccumulationType VAF_Control_Ref_ID=370 */
+public static int ACCUMULATIONTYPE_VAF_Control_Ref_ID=370;
 /** Average = A */
 public static String ACCUMULATIONTYPE_Average = "A";
 /** Sum = S */

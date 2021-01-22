@@ -101,7 +101,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514376654L;
         /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
         public static long updatedMS = 1280389059865L;
-        /** AD_Table_ID=226 */
+        /** VAF_TableView_ID=226 */
         public static int Table_ID;
         // =226;
 
@@ -316,8 +316,8 @@ namespace VAdvantage.Model
 
 
 
-        /** ElementType AD_Reference_ID=181 */
-        public static int ELEMENTTYPE_AD_Reference_ID = 181;/** Organization = OO */
+        /** ElementType VAF_Control_Ref_ID=181 */
+        public static int ELEMENTTYPE_VAF_Control_Ref_ID = 181;/** Organization = OO */
         public static String ELEMENTTYPE_Organization = "OO";/** Account = AC */
         public static String ELEMENTTYPE_Account = "AC";/** Product = PR */
         public static String ELEMENTTYPE_Product = "PR";/** BPartner = BP */
@@ -512,24 +512,24 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// AD_OrgTrx_ID AD_Reference_ID=130 
+        /// VAF_OrgTrx_ID VAF_Control_Ref_ID=130 
         /// </summary>
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /// <summary>
         ///  Set Trx Organization.
         /// </summary>
-        /// <param name="AD_OrgTrx_ID">Performing or initiating organization</param>
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        /// <param name="VAF_OrgTrx_ID">Performing or initiating organization</param>
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /// <summary>
         /// Get Trx Organization.
         /// </summary>
         /// <returns>Performing or initiating organization</returns>
-        public int GetAD_OrgTrx_ID() { Object ii = Get_Value("AD_OrgTrx_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAF_OrgTrx_ID() { Object ii = Get_Value("VAF_OrgTrx_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
     }
 

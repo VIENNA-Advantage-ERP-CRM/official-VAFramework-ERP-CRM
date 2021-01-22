@@ -78,7 +78,7 @@ static X_M_Freight()
 //static long serialVersionUID 27562514379365L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062576L;
-/** AD_Table_ID=596 */
+/** VAF_TableView_ID=596 */
 public static int Table_ID;
  // =596;
 
@@ -234,8 +234,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetM_Shipper_ID().ToString());
 }
 
-/** To_Country_ID AD_Reference_ID=156 */
-public static int TO_COUNTRY_ID_AD_Reference_ID=156;
+/** To_Country_ID VAF_Control_Ref_ID=156 */
+public static int TO_COUNTRY_ID_VAF_Control_Ref_ID=156;
 /** Set To.
 @param To_Country_ID Receiving Country */
 public void SetTo_Country_ID (int To_Country_ID)
@@ -253,8 +253,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** To_Region_ID AD_Reference_ID=157 */
-public static int TO_REGION_ID_AD_Reference_ID=157;
+/** To_Region_ID VAF_Control_Ref_ID=157 */
+public static int TO_REGION_ID_VAF_Control_Ref_ID=157;
 /** Set To.
 @param To_Region_ID Receiving Region */
 public void SetTo_Region_ID (int To_Region_ID)

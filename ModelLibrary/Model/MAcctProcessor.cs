@@ -49,8 +49,8 @@ namespace VAdvantage.Model
                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                                                       AD_Schedule_ID = (SELECT AD_Schedule_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
+                                                       VAF_Plan_ID = (SELECT VAF_Plan_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
 
                     //list.Add(new MAcctProcessor(ctx, idr, null));
 

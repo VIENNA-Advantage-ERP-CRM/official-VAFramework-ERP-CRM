@@ -98,12 +98,12 @@ namespace VAdvantage.Model
         /// Get Warehouses for Org
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">id</param>
+        /// <param name="VAF_Org_ID">id</param>
         /// <returns>warehouse</returns>
-        public static MWarehouse[] GetForOrg(Ctx ctx, int AD_Org_ID)
+        public static MWarehouse[] GetForOrg(Ctx ctx, int VAF_Org_ID)
         {
             List<MWarehouse> list = new List<MWarehouse>();
-            String sql = "SELECT * FROM M_Warehouse WHERE AD_Org_ID=" + AD_Org_ID + " ORDER BY Created";
+            String sql = "SELECT * FROM M_Warehouse WHERE VAF_Org_ID=" + VAF_Org_ID + " ORDER BY Created";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -231,18 +231,18 @@ namespace VAdvantage.Model
             PO wrhus = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Warehouse_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_Warehouse_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Warehouse_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Warehouse_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Warehouse'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Warehouse'");
                 var relatedtoWarehouse = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -251,7 +251,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoWarehouse)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From M_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.M_Warehouse_ID=ca.M_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.M_Warehouse_ID = " + GetM_Warehouse_ID());
+                                        _sql.Append("Select COUNT(*) From M_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.M_Warehouse_ID=ca.M_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.M_Warehouse_ID = " + GetM_Warehouse_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -280,7 +280,7 @@ namespace VAdvantage.Model
                                         if (recordFound == 0)
                                         {
                                             wrhus = MTable.GetPO(GetCtx(), "FRPT_Warehouse_Acct", 0, null);
-                                            wrhus.Set_ValueNoCheck("AD_Org_ID", 0);
+                                            wrhus.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             wrhus.Set_ValueNoCheck("M_Warehouse_ID", Util.GetValueOfInt(GetM_Warehouse_ID()));
                                             wrhus.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             wrhus.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
@@ -375,19 +375,19 @@ namespace VAdvantage.Model
             MTable tab = MTable.Get(GetCtx(), "M_Warehouse");
             if (tab.Get_ColumnIndex("IsDropShip") > 0)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From M_WareHouse Where AD_Org_ID=" + GetAD_Org_ID() + " AND IsDropShip='Y' AND IsActive='Y'")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From M_WareHouse Where VAF_Org_ID=" + GetVAF_Org_ID() + " AND IsDropShip='Y' AND IsActive='Y'")) > 0)
                 {
                     log.SaveError("Error", Msg.Translate(GetCtx(), "DropShipWarehouse"));
                     return false;
                 }
             }
-            if (GetAD_Org_ID() == 0)
+            if (GetVAF_Org_ID() == 0)
             {
-                int context_AD_Org_ID = GetCtx().GetAD_Org_ID();
-                if (context_AD_Org_ID != 0)
+                int context_VAF_Org_ID = GetCtx().GetVAF_Org_ID();
+                if (context_VAF_Org_ID != 0)
                 {
-                    SetAD_Org_ID(context_AD_Org_ID);
-                    log.Warning("Changed Org to Context=" + context_AD_Org_ID);
+                    SetVAF_Org_ID(context_VAF_Org_ID);
+                    log.Warning("Changed Org to Context=" + context_VAF_Org_ID);
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
 
             // JID_1888 Checks for the duplicate search key
 
-            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
             if (count > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
             }
             //JID_1888 checks for the duplicate name
 
-            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
             if (countName > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "RequiredUniqueName"));

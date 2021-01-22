@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514373660L;
         /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
         public static long updatedMS = 1280389056871L;
-        /** AD_Table_ID=427 */
+        /** VAF_TableView_ID=427 */
         public static int Table_ID;
         // =427;
 
@@ -332,8 +332,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */

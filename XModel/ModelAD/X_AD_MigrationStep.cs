@@ -80,7 +80,7 @@ static X_AD_MigrationStep()
 //static long serialVersionUID = 27562514362235L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045446L;
-/** AD_Table_ID=922 */
+/** VAF_TableView_ID=922 */
 public static int Table_ID;
  // =922;
 
@@ -187,8 +187,8 @@ public String GetCode()
 return (String)Get_Value("Code");
 }
 
-/** DBType AD_Reference_ID=426 */
-public static int DBTYPE_AD_Reference_ID=426;
+/** DBType VAF_Control_Ref_ID=426 */
+public static int DBTYPE_VAF_Control_Ref_ID=426;
 /** IBM DB/2 = D */
 public static String DBTYPE_IBMDB2 = "D";
 /** Enterpise DB = E */
@@ -316,8 +316,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** TimingType AD_Reference_ID=416 */
-public static int TIMINGTYPE_AD_Reference_ID=416;
+/** TimingType VAF_Control_Ref_ID=416 */
+public static int TIMINGTYPE_VAF_Control_Ref_ID=416;
 /** Before Structure = 1 */
 public static String TIMINGTYPE_BeforeStructure = "1";
 /** Before Data = 3 */
@@ -352,8 +352,8 @@ public String GetTimingType()
 return (String)Get_Value("TimingType");
 }
 
-/** Type AD_Reference_ID=101 */
-public static int TYPE_AD_Reference_ID=101;
+/** Type VAF_Control_Ref_ID=101 */
+public static int TYPE_VAF_Control_Ref_ID=101;
 /** Java Script = E */
 public static String TYPE_JavaScript = "E";
 /** Java Language = J */

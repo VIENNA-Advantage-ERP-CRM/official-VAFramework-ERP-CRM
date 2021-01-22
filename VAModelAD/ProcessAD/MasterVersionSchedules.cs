@@ -48,7 +48,7 @@ namespace VAdvantage.Process
         {
             sbSQL.Clear();
             // Query to fetch all tables which ends with "_Ver"
-            sbSQL.Append("SELECT AD_Table_ID, TableName FROM AD_Table WHERE LOWER(TableName) LIKE '%_ver'");
+            sbSQL.Append("SELECT VAF_TableView_ID, TableName FROM VAF_TableView WHERE LOWER(TableName) LIKE '%_ver'");
             ds = DB.ExecuteDataset(sbSQL.ToString(), null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -59,10 +59,10 @@ namespace VAdvantage.Process
                     // Table Name of Version Table
                     sbTblName.Append(Util.GetValueOfString(ds.Tables[0].Rows[i]["TableName"]));
                     // Table ID of Version Table
-                    int VerTableID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"]);
+                    int VerTableID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"]);
 
                     // Check if table name ending with "_Ver" has Column "VersionValidFrom" else move to next table
-                    int columnCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE 
+                    int columnCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE 
                                                                             LOWER(TableName) = '" + sbTblName.ToString().Trim().ToLower() + "') AND ColumnName = 'VersionValidFrom'", null, null));
                     if (columnCount > 0)
                     {
@@ -102,10 +102,10 @@ namespace VAdvantage.Process
                 BaseTblName = BaseTblName.Substring(0, TableName.Length - 4);
             }
             // Master Table ID from Table name
-            int BaseTableID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName = '" + BaseTblName + "'"));
+            int BaseTableID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + BaseTblName + "'"));
 
             // Get Column information of Master Table
-            DataSet dsDBColNames = DB.ExecuteDataset("SELECT ColumnName, AD_Reference_ID, IsUpdateable, IsAlwaysUpdateable FROM AD_Column WHERE AD_Table_ID = " + BaseTableID);
+            DataSet dsDBColNames = DB.ExecuteDataset("SELECT ColumnName, VAF_Control_Ref_ID, IsUpdateable, IsAlwaysUpdateable FROM VAF_Column WHERE VAF_TableView_ID = " + BaseTableID);
 
             if (dsDBColNames != null && dsDBColNames.Tables[0].Rows.Count > 0)
             {
@@ -193,8 +193,8 @@ namespace VAdvantage.Process
 
                     // set client and Organization ID from Version table to Master
                     // as copy PO set these ID's as 0
-                    poDest.SetAD_Client_ID(poSource.GetAD_Client_ID());
-                    poDest.SetAD_Org_ID(poSource.GetAD_Org_ID());
+                    poDest.SetVAF_Client_ID(poSource.GetVAF_Client_ID());
+                    poDest.SetVAF_Org_ID(poSource.GetVAF_Org_ID());
 
                     StringBuilder sbColName = new StringBuilder("");
                     // Loop through all the columns in Master Table
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
                         if (sbColName.ToString().Equals(BaseTblName + "_ID"))
                             continue;
                         // if column is of "Yes-No" type i.e. Reference ID is 20 (Fixed) then set True/False
-                        if (Util.GetValueOfInt(dsDBColNames.Tables[0].Rows[j]["AD_Reference_ID"]) == 20)
+                        if (Util.GetValueOfInt(dsDBColNames.Tables[0].Rows[j]["VAF_Control_Ref_ID"]) == 20)
                         {
                             Object val = false;
                             if (poSource.Get_Value(sbColName.ToString()) != null)
@@ -293,8 +293,8 @@ namespace VAdvantage.Process
         /// </summary>
         public void GetSkipColumns()
         {
-            defcolNames.Add("AD_Client_ID");
-            defcolNames.Add("AD_Org_ID");
+            defcolNames.Add("VAF_Client_ID");
+            defcolNames.Add("VAF_Org_ID");
             defcolNames.Add("Created");
             defcolNames.Add("CreatedBy");
             defcolNames.Add("UpdatedBy");

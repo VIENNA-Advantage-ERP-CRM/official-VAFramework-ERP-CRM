@@ -20,7 +20,7 @@ public X_C_SalesOffice_Trl (Context ctx, int C_SalesOffice_Trl_ID, Trx trxName) 
 {
 /** if (C_SalesOffice_Trl_ID == 0)
 {
-SetAD_Language (null);
+SetVAF_Language (null);
 SetC_SalesOffice_ID (0);
 SetIsTranslated (true);	// Y
 SetName (null);
@@ -32,7 +32,7 @@ public X_C_SalesOffice_Trl (Ctx ctx, int C_SalesOffice_Trl_ID, Trx trxName) : ba
 {
 /** if (C_SalesOffice_Trl_ID == 0)
 {
-SetAD_Language (null);
+SetVAF_Language (null);
 SetC_SalesOffice_ID (0);
 SetIsTranslated (true);	// Y
 SetName (null);
@@ -76,7 +76,7 @@ static X_C_SalesOffice_Trl()
 static long serialVersionUID = 27716737543101L;
 /** Last Updated Timestamp 6/18/2015 12:53:47 PM */
 public static long updatedMS = 1434612226312L;
-/** AD_Table_ID=1000468 */
+/** VAF_TableView_ID=1000468 */
 public static int Table_ID;
  // =1000468;
 
@@ -119,24 +119,24 @@ StringBuilder sb = new StringBuilder ("X_C_SalesOffice_Trl[").Append(Get_ID()).A
 return sb.ToString();
 }
 
-/** AD_Language AD_Reference_ID=106 */
-public static int AD_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language.Length > 10)
+if (VAF_Language.Length > 10)
 {
 log.Warning("Length > 10 - truncated");
-AD_Language = AD_Language.Substring(0,10);
+VAF_Language = VAF_Language.Substring(0,10);
 }
-Set_ValueNoCheck ("AD_Language", AD_Language);
+Set_ValueNoCheck ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Set Sales Office.
 @param C_SalesOffice_ID Sales Office */

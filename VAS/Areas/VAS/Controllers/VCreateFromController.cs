@@ -637,7 +637,7 @@ namespace VIS.Controllers
             //}
             //else
             //{
-            //    sql += "FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + Env.GetAD_Language(ctx) + "') ";
+            //    sql += "FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + Env.GetVAF_Language(ctx) + "') ";
             //}
 
             //sql += "INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
@@ -840,12 +840,12 @@ namespace VIS.Controllers
         private string GetBankAccountsDataSql(string dates, string trxDatess, string trxDatesUnions, string cBPartnerIDs, string DocumentNos, string DocumentNoUnions, string DepositSlips,
             string AuthCodes, string CheckNos, string Amounts, int cBankAccountId)
         {
-            bool countVA034 = Env.IsModuleInstalled("VA034_"); //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
+            bool countVA034 = Env.IsModuleInstalled("VA034_"); //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
             StringBuilder sql = new StringBuilder();
             // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on payment.
             sql.Append("SELECT p.DateAcct AS DateTrx, p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID, c.ISO_Code, p.PayAmt,"
                 // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                + " currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,p.DateAcct,p.C_ConversionType_ID,p.AD_Client_ID,p.AD_Org_ID) AS ConvertedAmt,"   //  #1
+                + " currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,p.DateAcct,p.C_ConversionType_ID,p.VAF_Client_ID,p.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " pay.Description, bp.Name, 'P' AS Type");
 
             if (countVA034)
@@ -890,12 +890,12 @@ namespace VIS.Controllers
             }
             sql.Append(" AND NOT EXISTS (SELECT * FROM C_BankStatementLine l WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)");         //	Voided Bank Statements have 0 StmtAmt
 
-            bool countVA012 = Env.IsModuleInstalled("VA012_");    //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+            bool countVA012 = Env.IsModuleInstalled("VA012_");    //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012)
             {
                 // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on Cash Journal.
                 sql.Append(" UNION SELECT cs.DateAcct AS DateTrx, cl.C_CashLine_ID AS C_Payment_ID, cs.DocumentNo, ba.C_Currency_ID, c.ISO_Code, (-1)*cl.Amount AS PayAmt,"
-                + " currencyConvert((-1)*cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,cs.DateAcct,cl.C_ConversionType_ID,cs.AD_Client_ID,cs.AD_Org_ID) AS ConvertedAmt,"   //  #1
+                + " currencyConvert((-1)*cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,cs.DateAcct,cl.C_ConversionType_ID,cs.VAF_Client_ID,cs.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " cl.Description, Null AS Name, 'C' AS Type");
 
                 if (countVA034)

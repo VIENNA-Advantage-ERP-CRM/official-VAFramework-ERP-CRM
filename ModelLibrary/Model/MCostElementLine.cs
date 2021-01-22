@@ -53,7 +53,7 @@ namespace VAdvantage.Model
                     }
                     sql.Clear();
                     sql.Append(@"SELECT COUNT(*) FROM M_CostElementLine WHERE M_Ref_CostElement =  " + GetM_Ref_CostElement()
-                                 + " AND AD_Client_ID = " + GetAD_Client_ID() + " AND M_CostElement_ID = " + GetM_CostElement_ID() + " AND M_CostElementLine_ID != " + GetM_CostElementLine_ID());
+                                 + " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND M_CostElement_ID = " + GetM_CostElement_ID() + " AND M_CostElementLine_ID != " + GetM_CostElementLine_ID());
                     countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (countRecord > 0)
                     {
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
                         return true;
                     }
                     sql.Clear();
-                    sql.Append(@"SELECT COUNT(*) FROM M_CostElementLine WHERE AD_Client_ID = " + GetAD_Client_ID()
+                    sql.Append(@"SELECT COUNT(*) FROM M_CostElementLine WHERE VAF_Client_ID = " + GetVAF_Client_ID()
                                   + " AND M_CostElement_ID = " + GetM_CostElement_ID()
                                   + " AND CAST(M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND "
                                   + " CostingMethod IN ('A' , 'F' , 'I' , 'L' , 'S' , 'i' , 'p')) AND M_CostElementLine_ID != " + GetM_CostElementLine_ID());

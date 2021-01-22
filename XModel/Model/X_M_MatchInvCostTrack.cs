@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_M_MatchInvCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27793156050767L;/** Last Updated Timestamp 11/19/2017 12:15:34 AM */
-        public static long updatedMS = 1511030733978L;/** AD_Table_ID=1000806 */
+        public static long updatedMS = 1511030733978L;/** VAF_TableView_ID=1000806 */
         public static int Table_ID; // =1000806;
         /** TableName=M_MatchInvCostTrack */
         public static String Table_Name = "M_MatchInvCostTrack";
@@ -118,8 +118,8 @@ namespace VAdvantage.Model
         }/** Get Match Invoice.
 @return Match Shipment/Receipt to Invoice */
         public int GetM_MatchInv_ID() { Object ii = Get_Value("M_MatchInv_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Rev_C_InvoiceLine_ID AD_Reference_ID=1000371 */
-        public static int REV_C_INVOICELINE_ID_AD_Reference_ID = 1000371;/** Set Reverse Invoice Line.
+        /** Rev_C_InvoiceLine_ID VAF_Control_Ref_ID=1000371 */
+        public static int REV_C_INVOICELINE_ID_VAF_Control_Ref_ID = 1000371;/** Set Reverse Invoice Line.
 @param Rev_C_InvoiceLine_ID Reverse Invoice Line */
         public void SetRev_C_InvoiceLine_ID(int Rev_C_InvoiceLine_ID)
         {

@@ -72,7 +72,7 @@ static X_C_ProjectType()
 //static long serialVersionUID 27562514374381L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057592L;
-/** AD_Table_ID=575 */
+/** VAF_TableView_ID=575 */
 public static int Table_ID;
  // =575;
 
@@ -188,8 +188,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** ProjectCategory AD_Reference_ID=288 */
-public static int PROJECTCATEGORY_AD_Reference_ID=288;
+/** ProjectCategory VAF_Control_Ref_ID=288 */
+public static int PROJECTCATEGORY_VAF_Control_Ref_ID=288;
 /** Asset Project = A */
 public static String PROJECTCATEGORY_AssetProject = "A";
 /** General = N */

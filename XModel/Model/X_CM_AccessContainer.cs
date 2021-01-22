@@ -70,7 +70,7 @@ static X_CM_AccessContainer()
 //static long serialVersionUID 27562514367705L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050916L;
-/** AD_Table_ID=888 */
+/** VAF_TableView_ID=888 */
 public static int Table_ID;
  // =888;
 

@@ -22,39 +22,39 @@ namespace VIS.Models
             _ctx = ctx;
         }
 
-        public List<JTable> GetProcessedRequest(int AD_Table_ID, int Record_ID)
+        public List<JTable> GetProcessedRequest(int VAF_TableView_ID, int Record_ID)
         {
-            string m_where = "(AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + ")";
+            string m_where = "(VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + ")";
 
-            if (AD_Table_ID == 114)
+            if (VAF_TableView_ID == 114)
             {// MUser.Table_ID){
-                m_where += " OR AD_User_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
+                m_where += " OR VAF_UserContact_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 291)
+            else if (VAF_TableView_ID == 291)
             {//MBPartner.Table_ID){
                 m_where += " OR C_BPartner_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 259)
+            else if (VAF_TableView_ID == 259)
             {// MOrder.Table_ID){
                 m_where += " OR C_Order_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 318)
+            else if (VAF_TableView_ID == 318)
             {//MInvoice.Table_ID){
                 m_where += " OR C_Invoice_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 335)
+            else if (VAF_TableView_ID == 335)
             {// MPayment.Table_ID){
                 m_where += " OR C_Payment_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 208)
+            else if (VAF_TableView_ID == 208)
             {//MProduct.Table_ID){
                 m_where += " OR M_Product_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 203)
+            else if (VAF_TableView_ID == 203)
             {//MProject.Table_ID){
                 m_where += " OR C_Project_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 539)
+            else if (VAF_TableView_ID == 539)
             {// MAsset.Table_ID){
                 m_where += " OR A_Asset_ID=" + Record_ID;
             }
@@ -73,12 +73,12 @@ namespace VIS.Models
         public List<string> GetZoomTargets(string tableName)
         {
             List<string> zoomTargets = new List<string>();
-            string sql = "SELECT DISTINCT t.AD_Table_ID, t.TableName "
-              + "FROM AD_Table t "
-              + "WHERE EXISTS (SELECT 1 FROM AD_Tab tt "
-                  + "WHERE tt.AD_Table_ID = t.AD_Table_ID AND tt.SeqNo=10) "
-              + " AND t.AD_Table_ID IN "
-                  + "(SELECT AD_Table_ID FROM AD_Column "
+            string sql = "SELECT DISTINCT t.VAF_TableView_ID, t.TableName "
+              + "FROM VAF_TableView t "
+              + "WHERE EXISTS (SELECT 1 FROM VAF_Tab tt "
+                  + "WHERE tt.VAF_TableView_ID = t.VAF_TableView_ID AND tt.SeqNo=10) "
+              + " AND t.VAF_TableView_ID IN "
+                  + "(SELECT VAF_TableView_ID FROM VAF_Column "
                   + "WHERE ColumnName='" + tableName + "_ID') "
               + "AND TableName NOT LIKE 'I\\_%'"
               + "AND TableName NOT LIKE '" + tableName + "' "
@@ -225,13 +225,13 @@ namespace VIS.Models
         /// <param name="targetWhereClause">Where Clause in the format "Record_ID=<value>"</param>
         /// <param name="isSOTrx">Sales contex of window from where zoom is invoked</param>
         /// <returns>PO_zoomWindow_ID</returns>
-        public int GetZoomAD_Window_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx)
+        public int GetZoomVAF_Screen_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx)
         {
             int zoomWindow_ID = 0;
             int PO_zoomWindow_ID = 0;
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT AD_Window_ID, PO_Window_ID "
-                + "FROM AD_Table t "
+            string sql = "SELECT DISTINCT VAF_Screen_ID, PO_Window_ID "
+                + "FROM VAF_TableView t "
                 + "WHERE TableName ='" + targetTableName + "'";
             IDataReader dr = null;
             try
@@ -242,7 +242,7 @@ namespace VIS.Models
                 dr = DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    zoomWindow_ID = Util.GetValueOfInt(dr["AD_Window_ID"].ToString());
+                    zoomWindow_ID = Util.GetValueOfInt(dr["VAF_Screen_ID"].ToString());
                     if (dr["PO_Window_ID"] != null && dr["PO_Window_ID"].ToString().Length > 0)
                         PO_zoomWindow_ID = Util.GetValueOfInt(dr["PO_Window_ID"].ToString());
                 }
@@ -256,25 +256,25 @@ namespace VIS.Models
                     dr.Close();
                 }
                 // fill error log
-                //VAdvantage.Common.ErrorLog.FillErrorLog("ZoomTarget.GetZoomAD_Window_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                //VAdvantage.Common.ErrorLog.FillErrorLog("ZoomTarget.GetZoomVAF_Screen_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
             }
 
 
             if (PO_zoomWindow_ID == 0)
                 return zoomWindow_ID;
 
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
 
             if (targetWhereClause != null && targetWhereClause.Length != 0)
             {
                 List<KeyNamePair> zoomList = new List<KeyNamePair>();
                 zoomList = ZoomTarget.GetZoomTargets(targetTableName, curWindow_ID, targetWhereClause, _ctx);
                 if (zoomList != null && zoomList.Count > 0)
-                    AD_Window_ID = zoomList[0].GetKey();
+                    VAF_Screen_ID = zoomList[0].GetKey();
             }
-            if (AD_Window_ID != 0)
+            if (VAF_Screen_ID != 0)
             {
-                return AD_Window_ID;
+                return VAF_Screen_ID;
             }
 
             if (isSOTrx)
@@ -308,29 +308,29 @@ namespace VIS.Models
             #endregion
 
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                    "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-                + "FROM AD_Table t "
-                + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
+            string sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+                    "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
+                + "FROM VAF_TableView t "
+                + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
             bool baseLanguage = Env.IsBaseLanguage(ctx, "");// GlobalVariable.IsBaseLanguage();
             if (baseLanguage)
             {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+                sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+                sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+                    + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language='" + Env.GetAD_Language(ctx) + "')";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language='" + Env.GetAD_Language(ctx) + "')"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language='" + Env.GetAD_Language(ctx) + "')";
+                sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
+                sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
+                    + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
             }
             sql += "WHERE t.TableName ='" + targetTableName
-                + "' AND w.AD_Window_ID <>" + curWindow_ID
+                + "' AND w.VAF_Screen_ID <>" + curWindow_ID
                 + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+                + " AND (wp.VAF_Screen_ID IS NOT NULL "
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
 
@@ -424,10 +424,11 @@ namespace VIS.Models
                             if (EvaluateWhereClause(columnValues, windowList[i].whereClause))
                             {
                                 //log.Fine("MatchFound : " + windowList[i].windowName);
-                                KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
+                                KeyNamePair pp = new KeyNamePair(windowList[i].VAF_Screen_ID, windowList[i].windowName);
                                 zoomList.Add(pp);
                                 // Use first window found. Ideally there should be just one matching
-                                break;
+                                //this break is remove by karan on 18 jan 2021, to show a record which can exist in more than one window.
+                                //break;
                             }
                         }
                     }
@@ -455,9 +456,9 @@ namespace VIS.Models
         }
 
 
-        public int GetWorkflowWindowID(int AD_Table_ID)
+        public int GetWorkflowWindowID(int VAF_TableView_ID)
         {
-            object windowID = DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID);
+            object windowID = DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID);
             if (windowID != null && windowID != DBNull.Value)
             {
                 return Convert.ToInt32(windowID);
@@ -465,10 +466,10 @@ namespace VIS.Models
             return 0;
         }
 
-        public List<JTable> GetZoomWindowID(int AD_Table_ID)
+        public List<JTable> GetZoomWindowID(int VAF_TableView_ID)
         {
             SqlParamsIn sqlP = new SqlParamsIn();
-            sqlP.sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID;
+            sqlP.sql = "SELECT TableName, VAF_Screen_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
 
             VIS.Helpers.SqlHelper help = new Helpers.SqlHelper();
             return help.ExecuteJDataSet(sqlP);
@@ -476,36 +477,36 @@ namespace VIS.Models
 
         public List<JTable> GetZoomTargetClass(Ctx ctx, string targetTableName, int curWindow_ID)
         {
-            string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                              "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-                          + "FROM AD_Table t "
-                          + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
-            var baseLanguage = Env.IsBaseLanguage(ctx, "AD_Window");
+            string sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+                              "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
+                          + "FROM VAF_TableView t "
+                          + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
+            var baseLanguage = Env.IsBaseLanguage(ctx, "VAF_Screen");
             if (baseLanguage)
             {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+                sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+                sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+                    + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language=@para1)";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language=@para2)"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language=@para3)";
+                sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language=@para1)";
+                sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language=@para2)"
+                    + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language=@para3)";
             }
             sql += "WHERE t.TableName = @para4"
-                + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
+                + " AND w.VAF_Screen_ID <> @para5 AND w.isActive='Y'"
                 + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+                + " AND (wp.VAF_Screen_ID IS NOT NULL "
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
             List<SqlParams> param = new List<SqlParams>();
             if (!baseLanguage)
             {
-                param.Add(new SqlParams() { name = "@para1", value = Env.GetAD_Language(Env.GetCtx()) });
-                param.Add(new SqlParams() { name = "@para2", value = Env.GetAD_Language(Env.GetCtx()) });
-                param.Add(new SqlParams() { name = "@para3", value = Env.GetAD_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para1", value = Env.GetVAF_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para2", value = Env.GetVAF_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para3", value = Env.GetVAF_Language(Env.GetCtx()) });
             }
             param.Add(new SqlParams() { name = "@para4", value = targetTableName });
             param.Add(new SqlParams() { name = "@para5", value = curWindow_ID });
@@ -559,7 +560,7 @@ namespace VIS.Models
             }
             else if (_columnName.Equals("SalesRep_ID"))
             {
-                sql += "SELECT AD_User_ID FROM AD_User WHERE UPPER(Name) LIKE ";
+                sql += "SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE UPPER(Name) LIKE ";
                 sql += DB.TO_STRING(text);
             }
             return sql;
@@ -571,7 +572,7 @@ namespace VIS.Models
             //JID_0932 In validation of locator need to consider organization  
             if (orgId != 0)
             {
-                sql += " AND AD_Org_ID=@org";
+                sql += " AND VAF_Org_ID=@org";
             }
             if (warehouseId != 0)
             {
@@ -615,10 +616,10 @@ namespace VIS.Models
         }
 
 
-        public List<JTable> GetValidAccountCombination(int AD_Client_ID, bool onlyActive)
+        public List<JTable> GetValidAccountCombination(int VAF_Client_ID, bool onlyActive)
         {
             string sql = "SELECT C_ValidCombination_ID, Combination, Description "
-            + "FROM C_ValidCombination WHERE AD_Client_ID=" + AD_Client_ID;
+            + "FROM C_ValidCombination WHERE VAF_Client_ID=" + VAF_Client_ID;
             if (onlyActive)
                 sql += " AND IsActive='Y'";
             sql += " ORDER BY 2";
@@ -641,45 +642,45 @@ namespace VIS.Models
             return help.ExecuteJDataSet(sqlP);
         }
 
-        public string GetDocWhere(int AD_User_ID, string TableName)
+        public string GetDocWhere(int VAF_UserContact_ID, string TableName)
         {
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
             + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-            + " WHERE u.AD_User_ID="
-            + AD_User_ID
+            + " WHERE u.VAF_UserContact_ID="
+            + VAF_UserContact_ID
             + " AND bp.C_BPartner_ID="
             + TableName
             + ".C_BPartner_ID)"
-            + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+            + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
             + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-            + " WHERE u.AD_User_ID="
-            + AD_User_ID
+            + " WHERE u.VAF_UserContact_ID="
+            + VAF_UserContact_ID
             + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
             var hasUserColumn = false;
-            var sql1 = "SELECT count(*) FROM AD_Table t "
-                + "INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+            var sql1 = "SELECT count(*) FROM VAF_TableView t "
+                + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE t.tableName='" + TableName
-                + "' AND c.ColumnName='AD_User_ID' ";
+                + "' AND c.ColumnName='VAF_UserContact_ID' ";
 
             int ret = Util.GetValueOfInt(DB.ExecuteScalar(docAccess));
             hasUserColumn = ret > 0 ? true : false;
 
             if (hasUserColumn)
-                docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+                docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
             docAccess += ")";
             return docAccess;
         }
 
 
-        public string UpdateTree(List<int> oldParentChildren, List<int> newParentChildren, int oldId, int newId, int AD_Tree_ID, string tableName)
+        public string UpdateTree(List<int> oldParentChildren, List<int> newParentChildren, int oldId, int newId, int VAF_TreeInfo_ID, string tableName)
         {
             string sql;
             for (var i = 0; i < oldParentChildren.Count; i++)
             {
                 //StringBuilder sql = new StringBuilder("UPDATE ");
                 sql = "UPDATE " + tableName + " SET Parent_ID=" + oldId + ", SeqNo=" + i + ", Updated=SysDate" +
-                                  " WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Node_ID=" + oldParentChildren[i];
+                                  " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Node_ID=" + oldParentChildren[i];
                 //log.Fine(sql.ToString());
                 DB.ExecuteQuery(sql);
             }
@@ -692,7 +693,7 @@ namespace VIS.Models
                 {
                     sql = "UPDATE " + tableName + " SET Parent_ID=" + newId +
                     ", SeqNo=" + i + ", Updated=SysDate" +
-                     " WHERE AD_Tree_ID=" + AD_Tree_ID +
+                     " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID +
                       " AND Node_ID=" + newParentChildren[i];
                     DB.ExecuteQuery(sql);
                 }
@@ -703,18 +704,18 @@ namespace VIS.Models
 
 
         #region AReport
-        public List<JTable> GetPrintFormats(int AD_Table_ID, int AD_Tab_ID)
+        public List<JTable> GetPrintFormats(int VAF_TableView_ID, int VAF_Tab_ID)
         {
-            string sql = "SELECT AD_PrintFormat_ID, Name, AD_Client_ID "
-                       + "FROM AD_PrintFormat "
-                       + "WHERE AD_Table_ID='" + AD_Table_ID + "' AND IsTableBased='Y' ";
-            if (AD_Tab_ID > 0)
+            string sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, VAF_Client_ID "
+                       + "FROM VAF_Print_Rpt_Layout "
+                       + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' ";
+            if (VAF_Tab_ID > 0)
             {
-                sql = sql + " AND AD_Tab_ID='" + AD_Tab_ID + "' ";
+                sql = sql + " AND VAF_Tab_ID='" + VAF_Tab_ID + "' ";
             }
-            sql = sql + "ORDER BY AD_Client_ID DESC, IsDefault DESC, Name";	//	Own First
+            sql = sql + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name";	//	Own First
             sql = MRole.GetDefault(_ctx).AddAccessSQL(sql,		//	Own First
-                   "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                   "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;
@@ -723,17 +724,17 @@ namespace VIS.Models
 
         }
 
-        public List<JTable> GetShowReportDetails(int AD_Table_ID, int AD_Tab_ID)
+        public List<JTable> GetShowReportDetails(int VAF_TableView_ID, int VAF_Tab_ID)
         {
-            string sql = "SELECT AD_PrintFormat_ID, Name, Description,IsDefault "
-                               + "FROM AD_PrintFormat "
-                               + "WHERE AD_Table_ID=" + AD_Table_ID;
-            if (AD_Tab_ID > 0)
+            string sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, Description,IsDefault "
+                               + "FROM VAF_Print_Rpt_Layout "
+                               + "WHERE VAF_TableView_ID=" + VAF_TableView_ID;
+            if (VAF_Tab_ID > 0)
             {
-                sql = sql + " AND AD_Tab_ID=" + AD_Tab_ID;
+                sql = sql + " AND VAF_Tab_ID=" + VAF_Tab_ID;
             }
             sql = sql + " ORDER BY Name";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;
@@ -747,7 +748,7 @@ namespace VIS.Models
         public List<JTable> GetTrxInfo(int Record_ID, bool isOrder)
         {
             StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
-                        + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.AD_Client_ID,o.AD_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
+                        + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
             if (isOrder)
             {
                 sql.Append("FROM C_Order o"
@@ -762,7 +763,7 @@ namespace VIS.Models
                         + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
                         + "WHERE o.C_Invoice_ID=" + Record_ID + "");
             }
-            sql.Append("GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.AD_Client_ID, o.AD_Org_ID,o.C_CONVERSIONTYPE_ID");
+            sql.Append("GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.C_CONVERSIONTYPE_ID");
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql.ToString();
@@ -777,27 +778,27 @@ namespace VIS.Models
 
             if (ServerValues.IsExportData)
             {
-                sqlArray.Add("SELECT AD_EXPORTDATA_ID,RECORD_ID, AD_ColOne_ID FROM AD_ExportData WHERE AD_Table_ID=" + ServerValues.AD_Table_ID);
+                sqlArray.Add("SELECT VAF_ExportData_ID,RECORD_ID, AD_ColOne_ID FROM VAF_ExportData WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsAttachment)
             {
-                sqlArray.Add("SELECT distinct att.AD_Attachment_ID, att.Record_ID FROM AD_Attachment att  INNER JOIN AD_AttachmentLine al ON (al.AD_Attachment_id=att.AD_Attachment_id)  WHERE att.AD_Table_ID=" + ServerValues.AD_Table_ID);
+                sqlArray.Add("SELECT distinct att.VAF_Attachment_ID, att.Record_ID FROM VAF_Attachment att  INNER JOIN VAF_AttachmentLine al ON (al.VAF_Attachment_id=att.VAF_Attachment_id)  WHERE att.VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsChat)
             {
-                sqlArray.Add("SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE AD_Table_ID=" + ServerValues.AD_Table_ID);
+                sqlArray.Add("SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsPLock)
             {
-                sqlArray.Add("SELECT Record_ID FROM AD_Private_Access WHERE AD_User_ID=" + ServerValues.AD_User_ID + " AND AD_Table_ID=" + ServerValues.AD_Table_ID + " AND IsActive='Y' ORDER BY Record_ID");
+                sqlArray.Add("SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND VAF_TableView_ID=" + ServerValues.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID");
             }
             if (ServerValues.IsSubscribeRecord)
             {
-                sqlArray.Add("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where AD_User_ID=" + ServerValues.AD_User_ID + " AND ad_Table_ID=" + ServerValues.AD_Table_ID);
+                sqlArray.Add("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND vaf_tableview_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsViewDocument)
             {
-                sqlArray.Add("SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND AD_Table_ID =" + ServerValues.AD_Table_ID);
+                sqlArray.Add("SELECT vadms_windowdoclink_id, record_id FROM VADMS_WindowDocLink wdl JOIN vadms_document doc ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID WHERE doc.vadms_docstatus!='DD' AND VAF_TableView_ID =" + ServerValues.VAF_TableView_ID);
             }
 
             string sql = string.Join("~", sqlArray);
@@ -828,7 +829,7 @@ namespace VIS.Models
             int yesCount = 0;
             int tableID = MTable.Get_Table_ID(tableName);
 
-            sql.Append("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName='" + columnSortName + "'");
+            sql.Append("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName='" + columnSortName + "'");
             int colID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
 
 
@@ -840,11 +841,11 @@ namespace VIS.Models
                     sql.Append("UPDATE " + tableName + " SET " + columnSortName + "=0");
                     if (columnYesNoName != null)
                         sql.Append("," + columnYesNoName + "='N'");
-                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetAD_User_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
+                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetAD_Client_ID(),
-                        _ctx.GetAD_Org_ID(), oldValue[columnIDs[i]], 0);
+                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                        _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], 0);
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();
 
@@ -855,11 +856,11 @@ namespace VIS.Models
                     sql.Append("UPDATE " + tableName + " SET " + columnSortName + "=" + (yesCount + 1) + "0");	//	10 steps
                     if (columnYesNoName != null)
                         sql.Append("," + columnYesNoName + "='Y'");
-                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetAD_User_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
+                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetAD_Client_ID(),
-                        _ctx.GetAD_Org_ID(), oldValue[columnIDs[i]], (yesCount + 1) + "0");
+                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                        _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], (yesCount + 1) + "0");
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();
 
@@ -887,7 +888,7 @@ namespace VIS.Models
 
                 if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Organization))
                 {
-                    sql = sql.Append("AD_Org_ID");
+                    sql = sql.Append("VAF_Org_ID");
                     if (value != null)
                     {
                         sql = sql.Append("=").Append(value).Append(" AND ");
@@ -971,7 +972,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
                 {
-                    sql = sql.Append("AD_OrgTrx_ID");
+                    sql = sql.Append("VAF_OrgTrx_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else
@@ -1089,7 +1090,7 @@ namespace VIS.Models
         public List<JTable> GetBankAccountData(int C_BankAccount_ID, DateTime ts)
         {
             var sql = "SELECT p.DateTrx,p.C_Payment_ID,p.DocumentNo, ba.C_Currency_ID,c.ISO_Code,p.PayAmt,"
-               + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,@t,null,p.AD_Client_ID,p.AD_Org_ID),"   //  #1
+               + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,@t,null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
                + " bp.Name,'P' AS Type "
                + "FROM C_BankAccount ba"
                + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
@@ -1101,12 +1102,12 @@ namespace VIS.Models
                + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
                    //	Voided Bank Statements have 0 StmtAmt
                    + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-            var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+            var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012 > 0)
             {
 
                 sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
-                + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,@t,null,cs.AD_Client_ID,cs.AD_Org_ID),"   //  #1
+                + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,@t,null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
                 + " Null AS Name,'C' AS Type FROM C_BankAccount ba"
                 + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
                 + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"
@@ -1144,9 +1145,9 @@ namespace VIS.Models
         /// </summary>
         /// <param name="_ctx"></param>
         /// <param name="Columns"></param>
-        /// <param name="AD_Language"></param>
+        /// <param name="VAF_Language"></param>
         /// <returns></returns>
-        public Dictionary<string, object> GetTranslatedText(Ctx _ctx, List<string> Cols, string AD_Language)
+        public Dictionary<string, object> GetTranslatedText(Ctx _ctx, List<string> Cols, string VAF_Language)
         {
             Dictionary<string, object> translations = new Dictionary<string, object>();
             if (Cols.Count > 0)
@@ -1163,23 +1164,23 @@ namespace VIS.Models
                     System.Data.SqlClient.SqlParameter[] param = null;
 
                     // check if we have to check base Language (i.e. English) else other language to fetch data from translations
-                    if (Env.IsBaseLanguage(_ctx, "AD_Element"))
+                    if (Env.IsBaseLanguage(_ctx, "VAF_ColumnDic"))
                     {
-                        sqlElements = @"SELECT e.ColumnName, NVL(e.Name, '') AS Name FROM AD_Element e WHERE e.ColumnName IN (" + Columns + ")";
+                        sqlElements = @"SELECT e.ColumnName, NVL(e.Name, '') AS Name FROM VAF_ColumnDic e WHERE e.ColumnName IN (" + Columns + ")";
 
-                        sqlMsgs = @"SELECT m.Value, COALESCE(m.MsgText, m.Value) AS Name  FROM AD_Message m WHERE m.Value NOT  IN
-                                (SELECT ColumnName FROM AD_Element WHERE ColumnName IN (" + Columns + @")) AND m.Value IN (" + Columns + ")";
+                        sqlMsgs = @"SELECT m.Value, COALESCE(m.MsgText, m.Value) AS Name  FROM VAF_Msg_Lable m WHERE m.Value NOT  IN
+                                (SELECT ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + Columns + @")) AND m.Value IN (" + Columns + ")";
                     }
                     else
                     {
                         param = new System.Data.SqlClient.SqlParameter[1];
-                        param[0] = new System.Data.SqlClient.SqlParameter("@AD_Language", AD_Language);
+                        param[0] = new System.Data.SqlClient.SqlParameter("@VAF_Language", VAF_Language);
 
-                        sqlElements = @"SELECT e.ColumnName, COALESCE(t.Name, e.Name) AS Name FROM AD_Element e INNER JOIN AD_Element_Trl t ON (e.AD_Element_ID = t.AD_Element_ID)
-                        WHERE  t.AD_Language = @AD_Language AND e.ColumnName IN (" + Columns + ")";
+                        sqlElements = @"SELECT e.ColumnName, COALESCE(t.Name, e.Name) AS Name FROM VAF_ColumnDic e INNER JOIN VAF_ColumnDic_TL t ON (e.VAF_ColumnDic_ID = t.VAF_ColumnDic_ID)
+                        WHERE  t.VAF_Language = @VAF_Language AND e.ColumnName IN (" + Columns + ")";
 
-                        sqlMsgs = @"SELECT m.Value, COALESCE(t.MsgText, m.MsgText) AS Name  FROM AD_Message m LEFT JOIN AD_Message_Trl t ON (m.AD_Message_ID = t.AD_Message_ID) WHERE m.Value NOT  IN
-                            (SELECT ColumnName FROM AD_Element WHERE ColumnName IN (" + Columns + ")) AND m.Value IN (" + Columns + ") AND t.AD_Language = @AD_Language";
+                        sqlMsgs = @"SELECT m.Value, COALESCE(t.MsgText, m.MsgText) AS Name  FROM VAF_Msg_Lable m LEFT JOIN VAF_Msg_Lable_TL t ON (m.VAF_Msg_Lable_ID = t.VAF_Msg_Lable_ID) WHERE m.Value NOT  IN
+                            (SELECT ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + Columns + ")) AND m.Value IN (" + Columns + ") AND t.VAF_Language = @VAF_Language";
                     }
 
                     dsTrl = DB.ExecuteDataset(sqlElements, param, null);
@@ -1218,7 +1219,7 @@ namespace VIS.Models
         {
             List<dynamic> retObj = new List<dynamic>();
             string qry = " SELECT PrimaryColor, OnPrimaryColor, SecondaryColor, OnSecondaryColor " +
-                                " , IsDefault, AD_Theme_ID  FROM AD_Theme WHERE IsActive='Y'";
+                                " , IsDefault, VAF_Theme_ID  FROM VAF_Theme WHERE IsActive='Y'";
             DataSet ds = DB.ExecuteDataset(qry);
 
             if (ds != null && ds.Tables.Count > 0)
@@ -1226,7 +1227,7 @@ namespace VIS.Models
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     dynamic obj = new ExpandoObject();
-                    obj.Id = Util.GetValueOfString(dr["AD_Theme_ID"]);
+                    obj.Id = Util.GetValueOfString(dr["VAF_Theme_ID"]);
                     obj.PColor = Util.GetValueOfString(dr["PrimaryColor"]);
                     obj.OnPColor = Util.GetValueOfString(dr["OnPrimaryColor"]);
                     obj.SColor = Util.GetValueOfString(dr["SecondaryColor"]);
@@ -1260,20 +1261,20 @@ namespace VIS.Models
             string origTableName = TableName.Substring(0, TableName.Length - 4);
             var RecID = od.RID.Value;
             // Get parent table ID
-            int AD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName = '" + origTableName + "'", null, null));
-            MTable tbl = new MTable(ctx, AD_Table_ID, null);
+            int VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + origTableName + "'", null, null));
+            MTable tbl = new MTable(ctx, VAF_TableView_ID, null);
             DataSet dsColumns = null;
             // check if Maintain Version is marked on table
             if (tbl.IsMaintainVersions())
-                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, AD_Column_ID, AD_Reference_ID FROM AD_Column WHERE AD_Table_ID = " + AD_Table_ID);
+                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, VAF_Control_Ref_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID);
             // else get columns on which maintain version is marked
             else
-                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, AD_Column_ID, AD_Reference_ID FROM AD_Column WHERE AD_Table_ID = " + AD_Table_ID + " AND IsMaintainVersions = 'Y'");
+                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, VAF_Control_Ref_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID + " AND IsMaintainVersions = 'Y'");
             // return if maintain version not found either on table or column level
             if (!(dsColumns != null && dsColumns.Tables[0].Rows.Count > 0))
                 return data;
 
-            DataSet dsFields = DB.ExecuteDataset("SELECT Name, AD_Column_ID FROM AD_Field WHERE AD_Tab_ID = " + Util.GetValueOfInt(od.TabID.Value));
+            DataSet dsFields = DB.ExecuteDataset("SELECT Name, VAF_Column_ID FROM VAF_Field WHERE VAF_Tab_ID = " + Util.GetValueOfInt(od.TabID.Value));
             StringBuilder sbSQL = new StringBuilder("");
             // check if table has single key
             if (tbl.IsSingleKey())
@@ -1325,7 +1326,7 @@ namespace VIS.Models
                 if (defColNames.Contains(sbColName.ToString()) || (sbColName.ToString() == origTableName + "_ID") || (sbColName.ToString() == origTableName + "_Ver_ID"))
                     continue;
 
-                if (Util.GetValueOfInt(dsColumns.Tables[0].Rows[i]["AD_Reference_ID"]) == 20)
+                if (Util.GetValueOfInt(dsColumns.Tables[0].Rows[i]["VAF_Control_Ref_ID"]) == 20)
                     dr[sbColName.ToString()] = (Util.GetValueOfString(dr[sbColName.ToString()]) == "Y") ? true : false;
 
                 var val = od[sbColName.ToString().ToLower()];
@@ -1363,13 +1364,13 @@ namespace VIS.Models
             return data;
         }
 
-        public string GetSQLQuery(Ctx m_ctx, int _AD_Table_ID, POInfoColumn[] m_columns)
+        public string GetSQLQuery(Ctx m_ctx, int _VAF_TableView_ID, POInfoColumn[] m_columns)
         {
             StringBuilder _querySQL = new StringBuilder("");
             if (m_columns.Length > 0)
             {
                 _querySQL.Append("SELECT ");
-                MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
+                MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
                 // append all columns from table and get comma separated string
                 _querySQL.Append(tbl.GetSelectColumns());
                 foreach (var column in m_columns)
@@ -1383,7 +1384,7 @@ namespace VIS.Models
                         if (DisplayType.IsLookup(column.DisplayType))
                         {
                             VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-                                column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.VAF_Control_Ref_Value_ID,
                                 column.IsParent, column.ValidationCode);
 
                             if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")

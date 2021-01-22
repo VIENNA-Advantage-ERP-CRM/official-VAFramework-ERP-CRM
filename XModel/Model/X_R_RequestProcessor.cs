@@ -82,7 +82,7 @@ static X_R_RequestProcessor()
 //static long serialVersionUID 27562514383205L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066416L;
-/** AD_Table_ID=420 */
+/** VAF_TableView_ID=420 */
 public static int Table_ID;
  // =420;
 
@@ -125,18 +125,18 @@ StringBuilder sb = new StringBuilder ("X_R_RequestProcessor[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set Schedule.
-@param AD_Schedule_ID Execution Schedule */
-public void SetAD_Schedule_ID (int AD_Schedule_ID)
+@param VAF_Plan_ID Execution Schedule */
+public void SetVAF_Plan_ID (int VAF_Plan_ID)
 {
-if (AD_Schedule_ID <= 0) Set_Value ("AD_Schedule_ID", null);
+if (VAF_Plan_ID <= 0) Set_Value ("VAF_Plan_ID", null);
 else
-Set_Value ("AD_Schedule_ID", AD_Schedule_ID);
+Set_Value ("VAF_Plan_ID", VAF_Plan_ID);
 }
 /** Get Schedule.
 @return Execution Schedule */
-public int GetAD_Schedule_ID() 
+public int GetVAF_Plan_ID() 
 {
-Object ii = Get_Value("AD_Schedule_ID");
+Object ii = Get_Value("VAF_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -196,8 +196,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -374,8 +374,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Supervisor_ID AD_Reference_ID=286 */
-public static int SUPERVISOR_ID_AD_Reference_ID=286;
+/** Supervisor_ID VAF_Control_Ref_ID=286 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=286;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

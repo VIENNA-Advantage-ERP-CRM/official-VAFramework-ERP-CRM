@@ -142,12 +142,12 @@ namespace VAdvantage.Model
         /// <summary>
         /// Overwrite Client/Org if required
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID"> org</param>
-        public new void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID"> org</param>
+        public new void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         {
-            //super.setClientOrg(AD_Client_ID, AD_Org_ID);
-            base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            //super.setClientOrg(VAF_Client_ID, VAF_Org_ID);
+            base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         }	//	setClientOrg
 
         /// <summary>
@@ -364,11 +364,11 @@ namespace VAdvantage.Model
             //
             int C_AcctSchema_ID = GetC_AcctSchema_ID();
             MAcctSchema a = MAcctSchema.Get(GetCtx(), C_AcctSchema_ID);
-            int AD_Client_ID = GetAD_Client_ID();
-            int AD_Org_ID = GetAD_Org_ID();
+            int VAF_Client_ID = GetVAF_Client_ID();
+            int VAF_Org_ID = GetVAF_Org_ID();
 
             Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(C_Currency_ID, a.GetC_Currency_ID(),
-                DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
             log.Fine("rate = " + CurrencyRate);
             //if (CurrencyRate.Value == null)
             //{
@@ -447,7 +447,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
-                PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetGL_Journal_ID(GetGL_Journal_ID());
                 //
                 if (dateAcct != null)
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
-                PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetGL_Journal_ID(GetGL_Journal_ID());
                 //
                 //if (dateAcct != null)
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
-                PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetGL_Journal_ID(GetGL_Journal_ID());
                 if (dateAcct != null)
                 {
@@ -686,7 +686,7 @@ namespace VAdvantage.Model
         private void CreateAssignAccountingSchemaRecord()
         {
             // default conversion type 
-            int C_DefaultCurrencyType_ID = MConversionType.GetDefault(GetAD_Client_ID());
+            int C_DefaultCurrencyType_ID = MConversionType.GetDefault(GetVAF_Client_ID());
 
             // selected accounting schema currency
             int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetC_Currency_ID();
@@ -694,10 +694,10 @@ namespace VAdvantage.Model
             // this query return a record of assigned org accounting schema having same chart of account
             String sql = @"SELECT DISTINCT CA.C_ACCTSCHEMA_ID , Ca.C_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS C_ConversionType_ID , 
   CURRENCYRATE(" + selectedAcctSchemaCurrency + @" , Ca.C_Currency_ID , " + GlobalVariable.TO_DATE(GetDateAcct(), true) +
-  @" , " + C_DefaultCurrencyType_ID + @" , " + GetAD_Client_ID() + " , " + GetAD_Org_ID() + @") AS Rate
+  @" , " + C_DefaultCurrencyType_ID + @" , " + GetVAF_Client_ID() + " , " + GetVAF_Org_ID() + @") AS Rate
 FROM C_AcctSchema CA INNER JOIN FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
 INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
-WHERE CA.ISACTIVE = 'Y' AND ASE.IsActive = 'Y' AND AO.IsActive = 'Y' AND AO.AD_Org_ID IN(0," + GetAD_Org_ID() + @")
+WHERE CA.ISACTIVE = 'Y' AND ASE.IsActive = 'Y' AND AO.IsActive = 'Y' AND AO.VAF_Org_ID IN(0," + GetVAF_Org_ID() + @")
 AND ASE.C_Element_ID = (SELECT C_Element_ID FROM C_AcctSchema_Element WHERE ElementType = 'AC' AND IsActive = 'Y' AND C_AcctSchema_ID = " + GetC_AcctSchema_ID() + @" )
 AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_AcctSchema", true, true);
@@ -710,8 +710,8 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 {
                     // create new record 
                     assignAcctSchema = new MAssignAcctSchema(GetCtx(), 0, Get_Trx());
-                    assignAcctSchema.SetAD_Client_ID(GetAD_Client_ID());
-                    assignAcctSchema.SetAD_Org_ID(GetAD_Org_ID());
+                    assignAcctSchema.SetVAF_Client_ID(GetVAF_Client_ID());
+                    assignAcctSchema.SetVAF_Org_ID(GetVAF_Org_ID());
                     assignAcctSchema.SetGL_Journal_ID(GetGL_Journal_ID());
                     assignAcctSchema.SetC_AcctSchema_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
                     assignAcctSchema.SetC_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]));
@@ -840,7 +840,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -1035,7 +1035,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -1215,7 +1215,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MAssignAcctSchema toAssignAcctSchemaLine = new MAssignAcctSchema(GetCtx(), 0, trxName);
-                PO.CopyValues(fromLines[i], toAssignAcctSchemaLine, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], toAssignAcctSchemaLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toAssignAcctSchemaLine.SetGL_Journal_ID(newJournal_Id);
                 if (!toAssignAcctSchemaLine.Save())
                 {
@@ -1428,7 +1428,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID (Created)</returns>
+        /// <returns>VAF_UserContact_ID (Created)</returns>
         public int GetDoc_User_ID()
         {
             return GetCreatedBy();
@@ -1480,7 +1480,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             }
             //
             MJournal to = new MJournal(ctx, 0, trxName);
-            PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
+            PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("DocumentNo", null);
             // to.Set_ValueNoCheck("C_Period_ID", null);
             to.SetDateAcct(dateDoc);

@@ -56,9 +56,9 @@ namespace VAdvantage.Model
         /// <returns>true if it can be deleted</returns>
         protected override bool BeforeDelete()
         {
-            int AD_Table_ID = Get_Table_ID("GL_ReDistribution");
+            int VAF_TableView_ID = Get_Table_ID("GL_ReDistribution");
 
-            string sql = "SELECT COUNT(Fact_Acct_ID) FROM Fact_Acct WHERE AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Get_ID();
+            string sql = "SELECT COUNT(Fact_Acct_ID) FROM Fact_Acct WHERE VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Get_ID();
             int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
 
             if (no > 0)

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ReportView_Col
+/** Generated Model for VAF_ReportView_Col
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ReportView_Col : PO
+public class X_VAF_ReportView_Col : PO
 {
-public X_AD_ReportView_Col (Context ctx, int AD_ReportView_Col_ID, Trx trxName) : base (ctx, AD_ReportView_Col_ID, trxName)
+public X_VAF_ReportView_Col (Context ctx, int VAF_ReportView_Col_ID, Trx trxName) : base (ctx, VAF_ReportView_Col_ID, trxName)
 {
-/** if (AD_ReportView_Col_ID == 0)
+/** if (VAF_ReportView_Col_ID == 0)
 {
-SetAD_ReportView_Col_ID (0);
-SetAD_ReportView_ID (0);
+SetVAF_ReportView_Col_ID (0);
+SetVAF_ReportView_ID (0);
 SetFunctionColumn (null);
 SetIsGroupFunction (false);
 }
  */
 }
-public X_AD_ReportView_Col (Ctx ctx, int AD_ReportView_Col_ID, Trx trxName) : base (ctx, AD_ReportView_Col_ID, trxName)
+public X_VAF_ReportView_Col (Ctx ctx, int VAF_ReportView_Col_ID, Trx trxName) : base (ctx, VAF_ReportView_Col_ID, trxName)
 {
-/** if (AD_ReportView_Col_ID == 0)
+/** if (VAF_ReportView_Col_ID == 0)
 {
-SetAD_ReportView_Col_ID (0);
-SetAD_ReportView_ID (0);
+SetVAF_ReportView_Col_ID (0);
+SetVAF_ReportView_ID (0);
 SetFunctionColumn (null);
 SetIsGroupFunction (false);
 }
@@ -43,7 +43,7 @@ SetIsGroupFunction (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView_Col (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportView_Col (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_ReportView_Col (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView_Col (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportView_Col (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_ReportView_Col (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView_Col (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ReportView_Col (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ReportView_Col()
+static X_VAF_ReportView_Col()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_ReportView_Col()
 //static long serialVersionUID = 27562514363818L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047029L;
-/** AD_Table_ID=428 */
+/** VAF_TableView_ID=428 */
 public static int Table_ID;
  // =428;
 
-/** TableName=AD_ReportView_Col */
-public static String Table_Name="AD_ReportView_Col";
+/** TableName=VAF_ReportView_Col */
+public static String Table_Name="VAF_ReportView_Col";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,52 +113,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ReportView_Col[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ReportView_Col[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report view Column.
-@param AD_ReportView_Col_ID Report view Column */
-public void SetAD_ReportView_Col_ID (int AD_ReportView_Col_ID)
+@param VAF_ReportView_Col_ID Report view Column */
+public void SetVAF_ReportView_Col_ID (int VAF_ReportView_Col_ID)
 {
-if (AD_ReportView_Col_ID < 1) throw new ArgumentException ("AD_ReportView_Col_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportView_Col_ID", AD_ReportView_Col_ID);
+if (VAF_ReportView_Col_ID < 1) throw new ArgumentException ("VAF_ReportView_Col_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportView_Col_ID", VAF_ReportView_Col_ID);
 }
 /** Get Report view Column.
 @return Report view Column */
-public int GetAD_ReportView_Col_ID() 
+public int GetVAF_ReportView_Col_ID() 
 {
-Object ii = Get_Value("AD_ReportView_Col_ID");
+Object ii = Get_Value("VAF_ReportView_Col_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report View.
-@param AD_ReportView_ID View used to generate this report */
-public void SetAD_ReportView_ID (int AD_ReportView_ID)
+@param VAF_ReportView_ID View used to generate this report */
+public void SetVAF_ReportView_ID (int VAF_ReportView_ID)
 {
-if (AD_ReportView_ID < 1) throw new ArgumentException ("AD_ReportView_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportView_ID", AD_ReportView_ID);
+if (VAF_ReportView_ID < 1) throw new ArgumentException ("VAF_ReportView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportView_ID", VAF_ReportView_ID);
 }
 /** Get Report View.
 @return View used to generate this report */
-public int GetAD_ReportView_ID() 
+public int GetVAF_ReportView_ID() 
 {
-Object ii = Get_Value("AD_ReportView_ID");
+Object ii = Get_Value("VAF_ReportView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,7 +166,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_ReportView_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_ReportView_ID().ToString());
 }
 /** Set Function Column.
 @param FunctionColumn Overwrite Column with Function */

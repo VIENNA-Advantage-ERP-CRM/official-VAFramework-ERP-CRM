@@ -70,7 +70,7 @@ static X_M_Shipper()
 //static long serialVersionUID 27562514381340L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064551L;
-/** AD_Table_ID=253 */
+/** VAF_TableView_ID=253 */
 public static int Table_ID;
  // =253;
 

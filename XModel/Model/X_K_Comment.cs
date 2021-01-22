@@ -76,7 +76,7 @@ static X_K_Comment()
 //static long serialVersionUID 27562514377970L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061181L;
-/** AD_Table_ID=613 */
+/** VAF_TableView_ID=613 */
 public static int Table_ID;
  // =613;
 

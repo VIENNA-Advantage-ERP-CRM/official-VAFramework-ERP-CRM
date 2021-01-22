@@ -76,7 +76,7 @@ static X_AD_WorkbenchWindow()
 //static long serialVersionUID 27562514366796L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050007L;
-/** AD_Table_ID=469 */
+/** VAF_TableView_ID=469 */
 public static int Table_ID;
  // =469;
 
@@ -119,34 +119,34 @@ StringBuilder sb = new StringBuilder ("X_AD_WorkbenchWindow[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -167,18 +167,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID <= 0) Set_Value ("AD_Window_ID", null);
+if (VAF_Screen_ID <= 0) Set_Value ("VAF_Screen_ID", null);
 else
-Set_Value ("AD_Window_ID", AD_Window_ID);
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -219,8 +219,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

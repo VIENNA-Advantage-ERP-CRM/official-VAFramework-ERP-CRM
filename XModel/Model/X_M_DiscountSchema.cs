@@ -78,7 +78,7 @@ static X_M_DiscountSchema()
 //static long serialVersionUID 27562514379083L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062294L;
-/** AD_Table_ID=475 */
+/** VAF_TableView_ID=475 */
 public static int Table_ID;
  // =475;
 
@@ -121,8 +121,8 @@ StringBuilder sb = new StringBuilder ("X_M_DiscountSchema[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 
-/** CumulativeLevel AD_Reference_ID=246 */
-public static int CUMULATIVELEVEL_AD_Reference_ID=246;
+/** CumulativeLevel VAF_Control_Ref_ID=246 */
+public static int CUMULATIVELEVEL_VAF_Control_Ref_ID=246;
 /** Line = L */
 public static String CUMULATIVELEVEL_Line = "L";
 /** Is test a valid value.
@@ -169,8 +169,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DiscountType AD_Reference_ID=247 */
-public static int DISCOUNTTYPE_AD_Reference_ID=247;
+/** DiscountType VAF_Control_Ref_ID=247 */
+public static int DISCOUNTTYPE_VAF_Control_Ref_ID=247;
 /** Breaks = B */
 public static String DISCOUNTTYPE_Breaks = "B";
 /** Combination = C */

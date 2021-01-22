@@ -71,11 +71,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             throw new ArgumentException("Business Partner not found - C_BPartner_ID=" + _C_BPartner_ID);
         }
 		//
-        if (bp.GetAD_OrgBP_ID_Int() == 0)
+        if (bp.GetVAF_OrgBP_ID_Int() == 0)
         {
             throw new ArgumentException("Business Partner not linked to an Organization");
         }
-		bp.SetAD_OrgBP_ID(null);
+		bp.SetVAF_OrgBP_ID(null);
         if (!bp.Save())
         {
             return GetRetrievedError(bp, "Business Partner not changed");

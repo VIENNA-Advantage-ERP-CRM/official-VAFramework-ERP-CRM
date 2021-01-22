@@ -97,14 +97,14 @@ namespace CoreLibrary.DataBase
         /// </summary>
         /// <param name="columnName">the column name in the SQL</param>
         /// <param name="displayType">displayType Display Type</param>
-        /// <param name="AD_Language"></param>
+        /// <param name="VAF_Language"></param>
         /// <returns>TRIM(TO_CHAR(columnName,'999G999G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
         ///     or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
-        public static String TO_CHAR(String columnName, int displayType, String AD_Language)
+        public static String TO_CHAR(String columnName, int displayType, String VAF_Language)
         {
             if (columnName == null || columnName.Length == 0)
                 throw new ArgumentException("Required parameter missing");
-            return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
+            return s_cc.GetDatabase().TO_CHAR(columnName, displayType, VAF_Language);
         }   //  TO_CHAR
 
         /// <summary>
@@ -1214,7 +1214,7 @@ namespace CoreLibrary.DataBase
         static public String MAIN_VERSION = "Release 3.0.0";
         /** Detail Version as date      Used for Client/Server		*/
         static public String DATE_VERSION = "2007-11-26";
-        /** Database Version as date    Compared with AD_System		*/
+        /** Database Version as date    Compared with VAF_System		*/
         static public String DB_VERSION = "2007-11-26";
 
         /** Product Name            */

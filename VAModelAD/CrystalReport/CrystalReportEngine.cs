@@ -24,7 +24,7 @@ namespace VAdvantage.CrystalReport
 {
     public class CrystalReportEngine : IReportEngine
     {
-        private int AD_Process_ID = 0;
+        private int VAF_Job_ID = 0;
         private string reportName = "", imageField = "", imagePathField = "";
         private string SqlQuery = "";
         private bool isIncludeImage = false;
@@ -148,7 +148,7 @@ namespace VAdvantage.CrystalReport
 
                     if (_pi.GetRecord_ID() > 0 && _pi.GetTable_ID() > 0)
                     {
-                        string tableName = DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_TABLE_ID =" + _pi.GetTable_ID()).ToString();
+                        string tableName = DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TABLEVIEW_ID =" + _pi.GetTable_ID()).ToString();
                         sb.Append(tableName).Append("_ID = ").Append(_pi.GetRecord_ID());
                     }
 
@@ -165,7 +165,7 @@ namespace VAdvantage.CrystalReport
                             int paraCount = 1;
                             int incrementCount = 1;
 
-                            string sqla = "SELECT ColumnName, IsRange, AD_Reference_ID FROM AD_Process_Para WHERE IsActive='Y' AND AD_Process_ID=" + _pi.GetAD_Process_ID() + " ORDER BY SEQNO ";
+                            string sqla = "SELECT ColumnName, IsRange, VAF_Control_Ref_ID FROM VAF_Job_Para WHERE IsActive='Y' AND VAF_Job_ID=" + _pi.GetVAF_Job_ID() + " ORDER BY SEQNO ";
                             DataSet dsPara = DB.ExecuteDataset(sqla);
                             List<string> paraList = new List<string>();
                             if (dsPara != null && dsPara.Tables[0].Rows.Count > 0)
@@ -199,7 +199,7 @@ namespace VAdvantage.CrystalReport
 
                                         if (paramValue is DateTime || paramValueTo is DateTime)
                                         {
-                                            if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.Date)
+                                            if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.Date)
                                             {
                                                 if (paramValue != null && paramValueTo != null)
                                                 {
@@ -231,8 +231,8 @@ namespace VAdvantage.CrystalReport
                                                     }
                                                 }
                                             }
-                                            else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.DateTime ||
-                                                Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.Time)
+                                            else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.DateTime ||
+                                                Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.Time)
                                             {
                                                 if (paramValue != null && paramValueTo != null)
                                                 {
@@ -264,7 +264,7 @@ namespace VAdvantage.CrystalReport
                                                     }
                                                 }
                                             }
-                                            //else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.Time)
+                                            //else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.Time)
                                             //{
                                             //    if (paramValue != null && paramValueTo != null)
                                             //    {
@@ -393,7 +393,7 @@ namespace VAdvantage.CrystalReport
 
                             if (pos != null)
                             {
-                                pos.Set_Value("AD_PInstance_ID", _pi.GetAD_PInstance_ID());
+                                pos.Set_Value("VAF_JInstance_ID", _pi.GetVAF_JInstance_ID());
                                 pos.Save();
                             }
 
@@ -503,16 +503,16 @@ namespace VAdvantage.CrystalReport
 
                     string sqlQ = sqls[0].ToUpper();
 
-                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("AD_PINSTANCE_ID"))
+                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                     {
-                        // sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                        // sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         if (sqlQ.Contains("WHERE"))
                         {
-                            sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                            sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         }
                         else
                         {
-                            sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                            sqlQ = sqlQ + " WHERE VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         }
                     }
                     sqlQ = sqlQ.ToLower();
@@ -567,7 +567,7 @@ namespace VAdvantage.CrystalReport
                         byte[] orgLogo = null;
                         if (imgField.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                             if (orglogo != null && orglogo != DBNull.Value)
                             {
                                 orgLogo = (byte[])orglogo;
@@ -575,7 +575,7 @@ namespace VAdvantage.CrystalReport
                         }
                         else if (imgField.Contains("ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,AD_Org_ID FROM AD_OrgInfo WHERE ISACTIVE='Y'");
+                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,VAF_Org_ID FROM VAF_OrgDetail WHERE ISACTIVE='Y'");
                         }
 
                         for (int i_img = 0; i_img <= ds.Tables[0].Rows.Count - 1; i_img++)
@@ -628,11 +628,11 @@ namespace VAdvantage.CrystalReport
                                     }
                                 }
                                 else if (imgField[j_Img].ToUpper() == "ORGLOGO"
-                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("AD_ORG_ID") > 0)
+                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("VAF_ORG_ID") > 0)
                                 {
-                                    if (dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"]) != null)
+                                    if (dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"]) != null)
                                     {
-                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"])[0]["LOGO"];
+                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"])[0]["LOGO"];
                                     }
                                 }
                                 else
@@ -662,7 +662,7 @@ namespace VAdvantage.CrystalReport
                     if (ds.Tables[0].Rows.Count == 0 && imgField1.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                     {
                         byte[] orgLogo = null;
-                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                         if (orglogo != null && orglogo != DBNull.Value)
                         {
                             orgLogo = (byte[])orglogo;
@@ -704,17 +704,17 @@ namespace VAdvantage.CrystalReport
 
                                 //if (sqlQ.ToUpper().Contains("T_CrystalParameters"))
                                 //{
-                                //    sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                                //    sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                 //}
-                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("AD_PINSTANCE_ID"))
+                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                                 {
                                     if (sqlQ.Contains("WHERE"))
                                     {
-                                        sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                                        sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                     }
                                     else
                                     {
-                                        sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                                        sqlQ = sqlQ + " WHERE VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                     }
                                 }
                                 sqlQ = sqlQ.ToLower();
@@ -762,7 +762,7 @@ namespace VAdvantage.CrystalReport
             }
 
             //  execute on this thread/connection
-            //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+            //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
             try
             {
                 //only oracle procedure are supported
@@ -841,7 +841,7 @@ namespace VAdvantage.CrystalReport
                     i++;
                 }
 
-                //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+                //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
                 int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
                 //DataBase.DB.ExecuteQuery(sql, null);
             }
@@ -1025,7 +1025,7 @@ namespace VAdvantage.CrystalReport
 
                     if (_pi.GetRecord_ID() > 0 && _pi.GetTable_ID() > 0)
                     {
-                        string tableName = DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_TABLE_ID =" + _pi.GetTable_ID()).ToString();
+                        string tableName = DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TABLEVIEW_ID =" + _pi.GetTable_ID()).ToString();
                         sb.Append(tableName).Append("_ID = ").Append(_pi.GetRecord_ID());
                     }
 
@@ -1047,7 +1047,7 @@ namespace VAdvantage.CrystalReport
                             int paraCount = 1;
                             int incrementCount = 1;
 
-                            string sqla = "SELECT ColumnName, IsRange, AD_Reference_ID FROM AD_Process_Para WHERE IsActive='Y' AND AD_Process_ID=" + _pi.GetAD_Process_ID() + " ORDER BY SEQNO ";
+                            string sqla = "SELECT ColumnName, IsRange, VAF_Control_Ref_ID FROM VAF_Job_Para WHERE IsActive='Y' AND VAF_Job_ID=" + _pi.GetVAF_Job_ID() + " ORDER BY SEQNO ";
                             DataSet dsPara = DB.ExecuteDataset(sqla);
                             List<string> paraList = new List<string>();
                             List<string> paraRangeList = new List<string>();
@@ -1079,7 +1079,7 @@ namespace VAdvantage.CrystalReport
 
                                         if (paramValue is DateTime || paramValueTo is DateTime)
                                         {
-                                            if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.Date)
+                                            if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.Date)
                                             {
                                                 if (paramValue != null && paramValueTo != null)
                                                 {
@@ -1111,8 +1111,8 @@ namespace VAdvantage.CrystalReport
                                                     }
                                                 }
                                             }
-                                            else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.DateTime ||
-                                                Convert.ToInt32(dsPara.Tables[0].Rows[c]["AD_Reference_ID"]) == DisplayType.Time)
+                                            else if (Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.DateTime ||
+                                                Convert.ToInt32(dsPara.Tables[0].Rows[c]["VAF_Control_Ref_ID"]) == DisplayType.Time)
                                             {
                                                 if (paramValue != null && paramValueTo != null)
                                                 {
@@ -1241,7 +1241,7 @@ namespace VAdvantage.CrystalReport
 
                             if (pos != null)
                             {
-                                pos.Set_Value("AD_PInstance_ID", _pi.GetAD_PInstance_ID());
+                                pos.Set_Value("VAF_JInstance_ID", _pi.GetVAF_JInstance_ID());
                                 pos.Save();
                             }
 
@@ -1258,15 +1258,15 @@ namespace VAdvantage.CrystalReport
                     sql = string.Join(";", sqls);
                     string sqlQ = sqls[0].ToUpper();
 
-                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("AD_PINSTANCE_ID"))
+                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                     {
                         if (sqlQ.Contains("WHERE"))
                         {
-                            sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                            sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         }
                         else
                         {
-                            sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                            sqlQ = sqlQ + " WHERE VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         }
                     }
                     sqlQ = sqlQ.ToLower();
@@ -1290,7 +1290,7 @@ namespace VAdvantage.CrystalReport
                         byte[] orgLogo = null;
                         if (imgField.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                             if (orglogo != null && orglogo != DBNull.Value)
                             {
                                 orgLogo = (byte[])orglogo;
@@ -1298,7 +1298,7 @@ namespace VAdvantage.CrystalReport
                         }
                         else if (imgField.Contains("ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,AD_Org_ID FROM AD_OrgInfo WHERE ISACTIVE='Y'");
+                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,VAF_Org_ID FROM VAF_OrgDetail WHERE ISACTIVE='Y'");
                         }
 
                         for (int i_img = 0; i_img <= ds.Tables[0].Rows.Count - 1; i_img++)
@@ -1351,11 +1351,11 @@ namespace VAdvantage.CrystalReport
                                     }
                                 }
                                 else if (imgField[j_Img].ToUpper() == "ORGLOGO"
-                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("AD_ORG_ID") > 0)
+                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("VAF_ORG_ID") > 0)
                                 {
-                                    if (dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"]) != null)
+                                    if (dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"]) != null)
                                     {
-                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"])[0]["LOGO"];
+                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"])[0]["LOGO"];
                                     }
                                 }
                                 else
@@ -1381,7 +1381,7 @@ namespace VAdvantage.CrystalReport
                     if (ds.Tables[0].Rows.Count == 0 && imgField1.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                     {
                         byte[] orgLogo = null;
-                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                         if (orglogo != null && orglogo != DBNull.Value)
                         {
                             orgLogo = (byte[])orglogo;
@@ -1411,18 +1411,18 @@ namespace VAdvantage.CrystalReport
 
                                 sqlQ = GetObscureSql(sqlQ);
 
-                                //Check if AD_PInstance_ID exist in query, only then apply AD_PInstance_ID in where clause.
+                                //Check if VAF_JInstance_ID exist in query, only then apply VAF_JInstance_ID in where clause.
                                 sqlQ = sqlQ.ToUpper();
 
-                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("AD_PINSTANCE_ID"))
+                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                                 {
                                     if (sqlQ.Contains("WHERE"))
                                     {
-                                        sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                                        sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                     }
                                     else
                                     {
-                                        sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
+                                        sqlQ = sqlQ + " WHERE VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                     }
                                 }
                                 sqlQ = sqlQ.ToLower();
@@ -1474,11 +1474,11 @@ namespace VAdvantage.CrystalReport
             _ctx = ctx;
             _pi = pi;
 
-            //	Get AD_Table_ID and TableName
-            String sql = "SELECT p.AD_Process_ID, p.ReportPath,p.SqlQuery,p.IncludeImage,p.ImageField,p.ImagePathField "
-                + " FROM AD_PInstance pi"
-                + " INNER JOIN AD_Process p ON (pi.AD_Process_ID=p.AD_Process_ID)"
-                + " WHERE pi.AD_PInstance_ID='" + pi.GetAD_PInstance_ID() + "' ";
+            //	Get VAF_TableView_ID and TableName
+            String sql = "SELECT p.VAF_Job_ID, p.ReportPath,p.SqlQuery,p.IncludeImage,p.ImageField,p.ImagePathField "
+                + " FROM VAF_JInstance pi"
+                + " INNER JOIN VAF_Job p ON (pi.VAF_Job_ID=p.VAF_Job_ID)"
+                + " WHERE pi.VAF_JInstance_ID='" + pi.GetVAF_JInstance_ID() + "' ";
 
             IDataReader dr = null;
             try
@@ -1487,7 +1487,7 @@ namespace VAdvantage.CrystalReport
                 //	Just get first 
                 if (dr.Read())
                 {
-                    AD_Process_ID = Utility.Util.GetValueOfInt(dr[0].ToString());		//	required
+                    VAF_Job_ID = Utility.Util.GetValueOfInt(dr[0].ToString());		//	required
                     reportName = dr[1].ToString();
                     SqlQuery = dr[2].ToString();
 
@@ -1529,7 +1529,7 @@ namespace VAdvantage.CrystalReport
                 foreach (MColumn col in cols)
                 {
                     string Name = col.GetColumnName();
-                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
+                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetVAF_TableView_ID(), col.GetVAF_Column_ID(), false))
                     {
                         string obscureColumn = DBFunctionCollections.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
                         sql = sql.Replace(Name, obscureColumn);

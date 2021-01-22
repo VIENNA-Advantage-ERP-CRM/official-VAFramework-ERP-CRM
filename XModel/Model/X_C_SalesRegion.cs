@@ -76,7 +76,7 @@ static X_C_SalesRegion()
 //static long serialVersionUID 27562514375102L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058313L;
-/** AD_Table_ID=230 */
+/** VAF_TableView_ID=230 */
 public static int Table_ID;
  // =230;
 
@@ -211,8 +211,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID=190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=190;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)

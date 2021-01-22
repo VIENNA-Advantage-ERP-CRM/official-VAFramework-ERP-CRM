@@ -72,7 +72,7 @@ static X_I_InOutLineConfirm()
 //static long serialVersionUID 27562514377155L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060366L;
-/** AD_Table_ID=740 */
+/** VAF_TableView_ID=740 */
 public static int Table_ID;
  // =740;
 
@@ -215,8 +215,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetI_InOutLineConfirm_ID().ToString());
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */

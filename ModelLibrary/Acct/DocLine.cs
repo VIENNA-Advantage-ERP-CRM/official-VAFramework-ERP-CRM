@@ -105,9 +105,9 @@ namespace VAdvantage.Acct
         // User Element 9
         private int _UserElement9 = -1;
         // Transaction Organization
-        private int _AD_OrgTrx_ID = -1;
+        private int _VAF_OrgTrx_ID = -1;
         // Organization
-        private int _AD_Org_ID = -1;
+        private int _VAF_Org_ID = -1;
         // Desription
         private String _Description = String.Empty;
         // Line ID
@@ -133,8 +133,8 @@ namespace VAdvantage.Acct
             _doc = doc;
             //
             //  Document Consistency
-            if (_po.GetAD_Org_ID() == 0)
-                _po.SetAD_Org_ID(_doc.GetAD_Org_ID());
+            if (_po.GetVAF_Org_ID() == 0)
+                _po.SetVAF_Org_ID(_doc.GetVAF_Org_ID());
         }
 
         /// <summary>
@@ -585,32 +585,32 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_Org_ID
+        /// Get VAF_Org_ID
         /// </summary>
         /// <returns>org</returns>
-        public int GetAD_Org_ID()
+        public int GetVAF_Org_ID()
         {
-            if (_AD_Org_ID <= 0)
+            if (_VAF_Org_ID <= 0)
             {
-                return _po.GetAD_Org_ID();
+                return _po.GetVAF_Org_ID();
             }
             else
             {
-                return _AD_Org_ID;
+                return _VAF_Org_ID;
             }
         }
 
         /// <summary>
         /// This Function is used to set Organization Value
         /// </summary>
-        /// <param name="AD_Org_ID"></param>
-        public void SetAD_Org_ID(int AD_Org_ID)
+        /// <param name="VAF_Org_ID"></param>
+        public void SetVAF_Org_ID(int VAF_Org_ID)
         {
-            _AD_Org_ID = AD_Org_ID;
+            _VAF_Org_ID = VAF_Org_ID;
         }
 
         /// <summary>
-        /// Get Order AD_Org_ID
+        /// Get Order VAF_Org_ID
         /// </summary>
         /// <returns>order org if defined</returns>
         public int GetOrder_Org_ID()
@@ -618,14 +618,14 @@ namespace VAdvantage.Acct
             int C_OrderLine_ID = GetC_OrderLine_ID();
             if (C_OrderLine_ID != 0)
             {
-                String sql = "SELECT AD_Org_ID FROM C_OrderLine WHERE C_OrderLine_ID=@param1";
-                int AD_Org_ID = DataBase.DB.GetSQLValue(null, sql, C_OrderLine_ID);
-                if (AD_Org_ID > 0)
+                String sql = "SELECT VAF_Org_ID FROM C_OrderLine WHERE C_OrderLine_ID=@param1";
+                int VAF_Org_ID = DataBase.DB.GetSQLValue(null, sql, C_OrderLine_ID);
+                if (VAF_Org_ID > 0)
                 {
-                    return AD_Org_ID;
+                    return VAF_Org_ID;
                 }
             }
-            return GetAD_Org_ID();
+            return GetVAF_Org_ID();
         }
 
         /// <summary>
@@ -829,15 +829,15 @@ namespace VAdvantage.Acct
         /// Get Total Product Costs
         /// </summary>
         /// <param name="as1"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="zeroCostsOK">zero/no costs are OK</param>
         /// <returns>costs</returns>
-        public Decimal GetProductCosts(MAcctSchema as1, int AD_Org_ID, bool zeroCostsOK)
+        public Decimal GetProductCosts(MAcctSchema as1, int VAF_Org_ID, bool zeroCostsOK)
         {
             ProductCost pc = GetProductCost();
             int C_OrderLine_ID = GetC_OrderLine_ID();
             String costingMethod = null;
-            Decimal? costs = pc.GetProductCosts(as1, AD_Org_ID, costingMethod, C_OrderLine_ID, zeroCostsOK);
+            Decimal? costs = pc.GetProductCosts(as1, VAF_Org_ID, costingMethod, C_OrderLine_ID, zeroCostsOK);
             if (costs != null)
             {
                 return costs.Value;
@@ -1060,14 +1060,14 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get TrxOrg
         /// </summary>
-        /// <returns>AD_OrgTrx_ID</returns>
-        public int GetAD_OrgTrx_ID()
+        /// <returns>VAF_OrgTrx_ID</returns>
+        public int GetVAF_OrgTrx_ID()
         {
-            if (_AD_OrgTrx_ID > 0)
+            if (_VAF_OrgTrx_ID > 0)
             {
-                return _AD_OrgTrx_ID;
+                return _VAF_OrgTrx_ID;
             }
-            int index = _po.Get_ColumnIndex("AD_OrgTrx_ID");
+            int index = _po.Get_ColumnIndex("VAF_OrgTrx_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -1082,10 +1082,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// This Function is used to set Transaction Organization
         /// </summary>
-        /// <param name="AD_OrgTrx_ID"></param>
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        /// <param name="VAF_OrgTrx_ID"></param>
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            _AD_OrgTrx_ID = AD_OrgTrx_ID;
+            _VAF_OrgTrx_ID = VAF_OrgTrx_ID;
         }
 
         /// <summary>

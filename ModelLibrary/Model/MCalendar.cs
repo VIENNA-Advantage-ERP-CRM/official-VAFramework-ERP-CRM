@@ -99,18 +99,18 @@ namespace VAdvantage.Model
         /// <returns>MCalendar</returns>
         public static MCalendar GetDefault(Context ctx)
         {
-            return GetDefault(ctx, ctx.GetAD_Client_ID());
+            return GetDefault(ctx, ctx.GetVAF_Client_ID());
         }
 
         /// <summary>
         /// Get Default Calendar for Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">id</param>
+        /// <param name="VAF_Client_ID">id</param>
         /// <returns>MCalendar</returns>
-        public static MCalendar GetDefault(Context ctx, int AD_Client_ID)
+        public static MCalendar GetDefault(Context ctx, int VAF_Client_ID)
         {
-            MClientInfo info = MClientInfo.Get(ctx, AD_Client_ID);
+            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID);
             return Get(ctx, info.GetC_Calendar_ID());
         }
 

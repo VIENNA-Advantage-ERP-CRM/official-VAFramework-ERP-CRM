@@ -184,16 +184,16 @@ namespace VAdvantage.Model
         ///Get Base Type for Table
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <returns>base type or null</returns>
-        public static MDocBaseType GetForTable(Ctx ctx, int AD_Table_ID)
+        public static MDocBaseType GetForTable(Ctx ctx, int VAF_TableView_ID)
         {
             if (s_docBaseTypes == null)
                 GetAll(ctx);
             for (int i = 0; i < s_docBaseTypes.Length; i++)
             {
                 MDocBaseType dbt = s_docBaseTypes[i];
-                if (dbt.GetAD_Table_ID() == AD_Table_ID)
+                if (dbt.GetVAF_TableView_ID() == VAF_TableView_ID)
                     return dbt;
             }
             return null;
@@ -250,12 +250,12 @@ namespace VAdvantage.Model
         ///Get Table ID.
         /// </summary>
         /// <returns>table ID</returns>
-        public new int GetAD_Table_ID()
+        public new int GetVAF_TableView_ID()
         {
             //	Multiple mappings of table->type in FactAcctReset
-            int AD_Table_ID = base.GetAD_Table_ID();
-            if (AD_Table_ID > 0)
-                return AD_Table_ID;
+            int VAF_TableView_ID = base.GetVAF_TableView_ID();
+            if (VAF_TableView_ID > 0)
+                return VAF_TableView_ID;
             //
             String dbt = GetDocBaseType();
             if (dbt.Equals(DOCBASETYPE_SALESORDER) || dbt.Equals(DOCBASETYPE_PURCHASEORDER))
@@ -304,7 +304,7 @@ namespace VAdvantage.Model
                 return X_M_CostUpdate.Table_ID;
             /*********Manafacturing*************/
             //	Error
-            log.Warning("No AD_Table_ID for " + GetName() + " (DocBaseType=" + dbt + ")");
+            log.Warning("No VAF_TableView_ID for " + GetName() + " (DocBaseType=" + dbt + ")");
             return 0;
         }
 
@@ -314,51 +314,51 @@ namespace VAdvantage.Model
         /// <returns>table name</returns>
         public String GetTableName()
         {
-            int AD_Table_ID = GetAD_Table_ID();
-            if (AD_Table_ID == 0)
+            int VAF_TableView_ID = GetVAF_TableView_ID();
+            if (VAF_TableView_ID == 0)
                 return null;
             //
-            if (AD_Table_ID == X_C_Order.Table_ID)
+            if (VAF_TableView_ID == X_C_Order.Table_ID)
                 return X_C_Order.Table_Name;
-            if (AD_Table_ID == X_M_InOut.Table_ID)
+            if (VAF_TableView_ID == X_M_InOut.Table_ID)
                 return X_M_InOut.Table_Name;
-            if (AD_Table_ID == X_C_Invoice.Table_ID)
+            if (VAF_TableView_ID == X_C_Invoice.Table_ID)
                 return X_C_Invoice.Table_Name;
-            if (AD_Table_ID == X_C_Payment.Table_ID)
+            if (VAF_TableView_ID == X_C_Payment.Table_ID)
                 return X_C_Payment.Table_Name;
-            if (AD_Table_ID == X_C_AllocationHdr.Table_ID)
+            if (VAF_TableView_ID == X_C_AllocationHdr.Table_ID)
                 return X_C_AllocationHdr.Table_Name;
-            if (AD_Table_ID == X_C_Cash.Table_ID)
+            if (VAF_TableView_ID == X_C_Cash.Table_ID)
                 return X_C_Cash.Table_Name;
-            if (AD_Table_ID == X_C_BankStatement.Table_ID)
+            if (VAF_TableView_ID == X_C_BankStatement.Table_ID)
                 return X_C_BankStatement.Table_Name;
-            if (AD_Table_ID == X_M_Inventory.Table_ID)
+            if (VAF_TableView_ID == X_M_Inventory.Table_ID)
                 return X_M_Inventory.Table_Name;
-            if (AD_Table_ID == X_M_Movement.Table_ID)
+            if (VAF_TableView_ID == X_M_Movement.Table_ID)
                 return X_M_Movement.Table_Name;
-            if (AD_Table_ID == X_GL_Journal.Table_ID)
+            if (VAF_TableView_ID == X_GL_Journal.Table_ID)
                 return X_GL_Journal.Table_Name;
-            if (AD_Table_ID == X_M_MatchInv.Table_ID)
+            if (VAF_TableView_ID == X_M_MatchInv.Table_ID)
                 return X_M_MatchInv.Table_Name;
-            if (AD_Table_ID == X_M_MatchPO.Table_ID)
+            if (VAF_TableView_ID == X_M_MatchPO.Table_ID)
                 return X_M_MatchPO.Table_Name;
-            if (AD_Table_ID == X_C_ProjectIssue.Table_ID)
+            if (VAF_TableView_ID == X_C_ProjectIssue.Table_ID)
                 return X_C_ProjectIssue.Table_Name;
-            if (AD_Table_ID == X_M_Requisition.Table_ID)
+            if (VAF_TableView_ID == X_M_Requisition.Table_ID)
                 return X_M_Requisition.Table_Name;
 
             /*********Manafacturing*************/
-            if (AD_Table_ID == X_M_WarehouseTask.Table_ID)
+            if (VAF_TableView_ID == X_M_WarehouseTask.Table_ID)
                 return X_M_WarehouseTask.Table_Name;
-            if (AD_Table_ID == X_M_WorkOrder.Table_ID)
+            if (VAF_TableView_ID == X_M_WorkOrder.Table_ID)
                 return X_M_WorkOrder.Table_Name;
-            if (AD_Table_ID == X_M_WorkOrderTransaction.Table_ID)
+            if (VAF_TableView_ID == X_M_WorkOrderTransaction.Table_ID)
                 return X_M_WorkOrderTransaction.Table_Name;
-            if (AD_Table_ID == X_M_CostUpdate.Table_ID)
+            if (VAF_TableView_ID == X_M_CostUpdate.Table_ID)
                 return X_M_CostUpdate.Table_Name;
             /*********Manafacturing*************/
             //
-            return MTable.GetTableName(GetCtx(), AD_Table_ID);
+            return MTable.GetTableName(GetCtx(), VAF_TableView_ID);
         }
 
         /// <summary>
@@ -551,9 +551,9 @@ namespace VAdvantage.Model
         /// <returns>true if can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Table_ID() == 0)
+            if (GetVAF_TableView_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Table_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_TableView_ID"));
                 return false;
             }
             String s = GetAccountingClassname();
@@ -575,7 +575,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MDocBaseType[")
                 .Append(GetName())
-                .Append(",AD_Table_ID=").Append(GetAD_Table_ID())
+                .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
                 .Append(", Class=").Append(GetAccountingClassname())
                 .Append("]");
             return sb.ToString();

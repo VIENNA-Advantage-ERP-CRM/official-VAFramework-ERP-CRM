@@ -62,10 +62,10 @@ namespace VAdvantage.Process
         private int _wordCount = 0;
 
         private String _ExportScope = null;
-        private int _AD_Client_ID = 0;
-        private String _AD_Language = null;
+        private int _VAF_Client_ID = 0;
+        private String _VAF_Language = null;
 
-        internal static List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "AD_SHORTCUT" };
+        internal static List<String> lstTableHasDisplayCol = new List<string>() { "VAF_SCREEN", "AD_FORM", "VAF_Shortcut" };
 
         //XmlDeclaration xmlDec;
 
@@ -83,11 +83,11 @@ namespace VAdvantage.Process
         /// Set Export Scope	
         /// </summary>
         /// <param name="exportScope">exportScope 	</param>
-        /// <param name="AD_Client_ID"> only certain client if id >= 0</param>
-        public void SetExportScope(String exportScope, int AD_Client_ID)
+        /// <param name="VAF_Client_ID"> only certain client if id >= 0</param>
+        public void SetExportScope(String exportScope, int VAF_Client_ID)
         {
             _ExportScope = exportScope;
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }	//	setExportScope
 
         /* Set Prefix */
@@ -105,28 +105,28 @@ namespace VAdvantage.Process
         ///	Get Tenant	 
         /// </summary>
         /// <returns>tenant</returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return _AD_Client_ID;
+            return _VAF_Client_ID;
         }
 
         /// <summary>
         /// You should use method validateLanguage()    
         /// </summary>
         /// <param name="language">language</param>
-        public void SetAD_Language(String language)
+        public void SetVAF_Language(String language)
         {
-            _AD_Language = language;
+            _VAF_Language = language;
         }
 
         /// <summary>
         /// Get Language    
         /// </summary>
         /// <returns>language</returns>
-        public String GetAD_Language()
+        public String GetVAF_Language()
         {
-            return _AD_Language;
-        }	//	getAD_Language
+            return _VAF_Language;
+        }	//	getVAF_Language
 
         /// <summary>
         ///	 	Import Translation.
@@ -137,7 +137,7 @@ namespace VAdvantage.Process
         /// <returns>status message</returns>
         public String ImportTrl(String directory, String Trl_Table)
         {
-            String fileName = directory + "\\" + Trl_Table + "_" + _AD_Language + ".xml";
+            String fileName = directory + "\\" + Trl_Table + "_" + _VAF_Language + ".xml";
             log.Info(fileName);
             FileInfo inn = new FileInfo(fileName);
             if (!inn.Exists)
@@ -154,7 +154,7 @@ namespace VAdvantage.Process
                 bool _isBaseLanguage = false;
                 string _tableName = "";
 
-                TranslationHandler handler = new TranslationHandler(_AD_Client_ID);
+                TranslationHandler handler = new TranslationHandler(_VAF_Client_ID);
                 handler.SetByExportD(_InsertExportID);
 
                 XmlReaderSettings factory = new XmlReaderSettings();
@@ -266,7 +266,7 @@ namespace VAdvantage.Process
         //  /// <returns>status message</returns>
         //  public String ImportTrl(String directory, String Trl_Table)
         //  {
-        //      String fileName = directory + "\\" + Trl_Table + "_" + _AD_Language + ".xml";
+        //      String fileName = directory + "\\" + Trl_Table + "_" + _VAF_Language + ".xml";
         //      log.Info(fileName);
         //      FileInfo inn = new FileInfo(fileName);
         //      if (!inn.Exists)
@@ -282,7 +282,7 @@ namespace VAdvantage.Process
         //          bool _isBaseLanguage = false;
         //          string _tableName = "";
 
-        //          TranslationHandler handler = new TranslationHandler(_AD_Client_ID);
+        //          TranslationHandler handler = new TranslationHandler(_VAF_Client_ID);
         //          handler.SetByExportD(_InsertExportID);
         //          using (XmlReader reader = XmlReader.Create(fileName))
         //          {
@@ -414,13 +414,13 @@ namespace VAdvantage.Process
             if (translationLevel == null)
                 translationLevel = TranslationImportExport.TranslationLevel_All;
 
-            String fileName = directory + "\\" + trlTableName + "_" + _AD_Language + ".xml";
+            String fileName = directory + "\\" + trlTableName + "_" + _VAF_Language + ".xml";
             log.Info(fileName);
             FileInfo ut = new FileInfo(fileName);
 
             String info = "-";
             int words = _wordCount;
-            bool isBaseLanguage = Language.IsBaseLanguage(_AD_Language);
+            bool isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
             String tableName = trlTableName;
             int pos = tableName.IndexOf("_Trl");
             String baseTableName = trlTableName.Substring(0, pos);
@@ -439,7 +439,7 @@ namespace VAdvantage.Process
                 XmlComment xmlcmnt = xmlDoc.CreateComment(DTD);
                 xmlDoc.AppendChild(xmlcmnt);
                 XmlElement document = xmlDoc.CreateElement(XML_TAG_Vienna);
-                document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, _AD_Language);
+                document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, _VAF_Language);
                 document.SetAttribute(XML_ATTRIBUTE_TABLE, baseTableName);// Base_Table);
                 xmlDoc.AppendChild(document);
                 sql = new StringBuilder("SELECT ");
@@ -464,7 +464,7 @@ namespace VAdvantage.Process
                 bool haveWhere = false;
                 if (!isBaseLanguage)
                 {
-                    sql.Append(" WHERE t.AD_Language=@param");
+                    sql.Append(" WHERE t.VAF_Language=@param");
                     haveWhere = true;
                 }
                 if (_IsCentrallyMaintained)
@@ -479,9 +479,9 @@ namespace VAdvantage.Process
                     haveWhere = true;
                 }
 
-                if (_AD_Client_ID >= 0)
+                if (_VAF_Client_ID >= 0)
                 {
-                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.AD_Client_ID=").Append(_AD_Client_ID);
+                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.VAF_Client_ID=").Append(_VAF_Client_ID);
                     haveWhere = true;
                 }
                 String scopeSQL = GetScopeSQL(baseTableName);
@@ -493,7 +493,7 @@ namespace VAdvantage.Process
                 if (!isBaseLanguage)
                 {
                     param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@param", _AD_Language);
+                    param[0] = new SqlParameter("@param", _VAF_Language);
                 }
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), param, null);
                 int rows = 0;
@@ -508,7 +508,7 @@ namespace VAdvantage.Process
                     }
                     foreach (String element in trlColumns)
                     {
-                        if (!baseTableName.Equals("AD_PrintFormatItem"))
+                        if (!baseTableName.Equals("VAF_Print_Rpt_LItem"))
                         {
                             if (translationLevel.Equals(TranslationImportExport.TranslationLevel_LabelOnly)
                                 && element.IndexOf("Name") == -1)
@@ -571,13 +571,13 @@ namespace VAdvantage.Process
             if (translationLevel == null)
                 translationLevel = TranslationImportExport.TranslationLevel_All;
 
-            String fileName = directory + "\\" + trlTableName + "_" + _AD_Language + ".xml";
+            String fileName = directory + "\\" + trlTableName + "_" + _VAF_Language + ".xml";
             log.Info(fileName);
             FileInfo ut = new FileInfo(fileName);
 
             String info = "-";
             int words = _wordCount;
-            bool isBaseLanguage = Language.IsBaseLanguage(_AD_Language);
+            bool isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
             String tableName = trlTableName;
             int pos = tableName.IndexOf("_Trl");
             String baseTableName = trlTableName.Substring(0, pos);
@@ -596,7 +596,7 @@ namespace VAdvantage.Process
                 XmlComment xmlcmnt = xmlDoc.CreateComment(DTD);
                 xmlDoc.AppendChild(xmlcmnt);
                 XmlElement document = xmlDoc.CreateElement(XML_TAG_Vienna);
-                document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, _AD_Language);
+                document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, _VAF_Language);
                 document.SetAttribute(XML_ATTRIBUTE_TABLE, baseTableName);// Base_Table);
                 xmlDoc.AppendChild(document);
                 sql = new StringBuilder("SELECT ");
@@ -621,7 +621,7 @@ namespace VAdvantage.Process
                 bool haveWhere = false;
                 if (!isBaseLanguage)
                 {
-                    sql.Append(" WHERE t.AD_Language=@param");
+                    sql.Append(" WHERE t.VAF_Language=@param");
                     haveWhere = true;
                 }
                 if (_IsCentrallyMaintained)
@@ -636,9 +636,9 @@ namespace VAdvantage.Process
                     haveWhere = true;
                 }
 
-                if (_AD_Client_ID >= 0)
+                if (_VAF_Client_ID >= 0)
                 {
-                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.AD_Client_ID=").Append(_AD_Client_ID);
+                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.VAF_Client_ID=").Append(_VAF_Client_ID);
                     haveWhere = true;
                 }
                 String scopeSQL = GetScopeSQL(baseTableName);
@@ -650,7 +650,7 @@ namespace VAdvantage.Process
                 if (!isBaseLanguage)
                 {
                     param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@param", _AD_Language);
+                    param[0] = new SqlParameter("@param", _VAF_Language);
                 }
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), param, null);
                 int rows = 0;
@@ -665,7 +665,7 @@ namespace VAdvantage.Process
                     }
                     foreach (String element in trlColumns)
                     {
-                        if (!baseTableName.Equals("AD_PrintFormatItem"))
+                        if (!baseTableName.Equals("VAF_Print_Rpt_LItem"))
                         {
                             if (translationLevel.Equals(TranslationImportExport.TranslationLevel_LabelOnly)
                                 && element.IndexOf("Name") == -1)
@@ -720,8 +720,8 @@ namespace VAdvantage.Process
         private String[] GetTrlColumns(String Base_Table)
         {
             _IsCentrallyMaintained = false;
-            String sql = "SELECT TableName FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (c.AD_Table_ID=t.AD_Table_ID AND c.ColumnName='IsCentrallyMaintained') "
+            String sql = "SELECT TableName FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (c.VAF_TableView_ID=t.VAF_TableView_ID AND c.ColumnName='IsCentrallyMaintained') "
                 + "WHERE t.TableName=@param AND c.IsActive='Y'";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
@@ -743,14 +743,14 @@ namespace VAdvantage.Process
             }
 
 
-            bool isBaseLanguage = Language.IsBaseLanguage(_AD_Language);
+            bool isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
 
 
             sql = "SELECT ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE t.TableName=@param"
-                + " AND c.AD_Reference_ID IN (10,14) "
+                + " AND c.VAF_Control_Ref_ID IN (10,14) "
                   + " AND c.ColumnName <> 'Export_ID' "
                 + "ORDER BY IsMandatory DESC, ColumnName";
             List<String> list = new List<String>();
@@ -799,50 +799,50 @@ namespace VAdvantage.Process
                 || !_ExportScope.Equals(TranslationImportExport.ExportScope_SystemUser))
                 return null;
             //	Not translated
-            if (baseTableName.Equals("AD_Table"))
+            if (baseTableName.Equals("VAF_TableView"))
                 return "1=2";
             //	AccessLevel 4=System only
-            if (baseTableName.Equals("AD_Window"))
-                return "o.AD_Window_ID IN (SELECT t.AD_Window_ID FROM AD_Tab tab"
-                    + " INNER JOIN AD_Table tt ON (tab.AD_Table_ID=tt.AD_Table_ID) "
+            if (baseTableName.Equals("VAF_Screen"))
+                return "o.VAF_Screen_ID IN (SELECT t.VAF_Screen_ID FROM VAF_Tab tab"
+                    + " INNER JOIN VAF_TableView tt ON (tab.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Tab"))
-                return "EXISTS (SELECT * FROM AD_Table tt "
-                    + "WHERE o.AD_Table_ID=tt.AD_Table_ID AND tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Field"))
-                return "o.AD_Tab_ID IN (SELECT AD_Tab_ID FROM AD_Tab tab"
-                    + " INNER JOIN AD_Table tt ON (tab.AD_Table_ID=tt.AD_Table_ID) "
+            if (baseTableName.Equals("VAF_Tab"))
+                return "EXISTS (SELECT * FROM VAF_TableView tt "
+                    + "WHERE o.VAF_TableView_ID=tt.VAF_TableView_ID AND tt.AccessLevel <> '4')";
+            if (baseTableName.Equals("VAF_Field"))
+                return "o.VAF_Tab_ID IN (SELECT VAF_Tab_ID FROM VAF_Tab tab"
+                    + " INNER JOIN VAF_TableView tt ON (tab.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Element"))
-                return "o.AD_Element_ID IN (SELECT AD_Element_ID FROM AD_Column c"
-                    + " INNER JOIN AD_Table tt ON (c.AD_Table_ID=tt.AD_Table_ID) "
+            if (baseTableName.Equals("VAF_ColumnDic"))
+                return "o.VAF_ColumnDic_ID IN (SELECT VAF_ColumnDic_ID FROM VAF_Column c"
+                    + " INNER JOIN VAF_TableView tt ON (c.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Process"))
+            if (baseTableName.Equals("VAF_Job"))
                 return "o.AccessLevel <> '4'";
-            if (baseTableName.Equals("AD_Process_Para"))
-                return "o.AD_Process_ID IN (SELECT AD_Process_ID FROM AD_Process WHERE AccessLevel<>'4')";
+            if (baseTableName.Equals("VAF_Job_Para"))
+                return "o.VAF_Job_ID IN (SELECT VAF_Job_ID FROM VAF_Job WHERE AccessLevel<>'4')";
 
             return null;
         }	//	getScopeSQL
 
         /// <summary>
         ///	Validate Language.
-        //Check if AD_Language record exists
+        //Check if VAF_Language record exists
         // Check Trl table records	 
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns> "" if validated - or error message</returns>
-        public String ValidateLanguage(String AD_Language)
+        public String ValidateLanguage(String VAF_Language)
         {
             String sql = "SELECT * "
-                + "FROM AD_Language "
-                + "WHERE AD_Language=@param";
+                + "FROM VAF_Language "
+                + "WHERE VAF_Language=@param";
             MLanguage language = null;
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[1];
             try
             {
-                param[0] = new SqlParameter("@param", AD_Language);
+                param[0] = new SqlParameter("@param", VAF_Language);
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
                     language = new MLanguage(_ctx, idr, null);
@@ -858,14 +858,14 @@ namespace VAdvantage.Process
                 return e.ToString();
             }
 
-            //	No AD_Language Record
+            //	No VAF_Language Record
             if (language == null)
             {
-                log.Log(Level.SEVERE, "Language does not exist: " + AD_Language);
-                return "Language does not exist: " + AD_Language;
+                log.Log(Level.SEVERE, "Language does not exist: " + VAF_Language);
+                return "Language does not exist: " + VAF_Language;
             }
             //	Language exists
-            SetAD_Language(AD_Language);
+            SetVAF_Language(VAF_Language);
             if (language.IsActive())
             {
                 if (language.IsBaseLanguage())
@@ -877,8 +877,8 @@ namespace VAdvantage.Process
 
             else
             {
-                log.Log(Level.SEVERE, "Language not active or not system language: " + AD_Language);
-                return "Language not active or not system language: " + AD_Language;
+                log.Log(Level.SEVERE, "Language not active or not system language: " + VAF_Language);
+                return "Language not active or not system language: " + VAF_Language;
             }
 
             //	Validate Translation
@@ -888,17 +888,17 @@ namespace VAdvantage.Process
         }	//	validateLanguage
 
 
-        public String ValidateLanguage(String AD_Language, bool forceActiveSysLang) //Market special
+        public String ValidateLanguage(String VAF_Language, bool forceActiveSysLang) //Market special
         {
             String sql = "SELECT * "
-                + "FROM AD_Language "
-                + "WHERE AD_Language=@param";
+                + "FROM VAF_Language "
+                + "WHERE VAF_Language=@param";
             MLanguage language = null;
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[1];
             try
             {
-                param[0] = new SqlParameter("@param", AD_Language);
+                param[0] = new SqlParameter("@param", VAF_Language);
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
                     language = new MLanguage(_ctx, idr, null);
@@ -910,14 +910,14 @@ namespace VAdvantage.Process
                 return e.ToString();
             }
 
-            //	No AD_Language Record
+            //	No VAF_Language Record
             if (language == null)
             {
-                log.Log(Level.SEVERE, "Language does not exist: " + AD_Language);
-                return "Language does not exist: " + AD_Language;
+                log.Log(Level.SEVERE, "Language does not exist: " + VAF_Language);
+                return "Language does not exist: " + VAF_Language;
             }
             //	Language exists
-            SetAD_Language(AD_Language);
+            SetVAF_Language(VAF_Language);
             if (language.IsActive())
             {
                 if (language.IsBaseLanguage())
@@ -932,8 +932,8 @@ namespace VAdvantage.Process
                     language.SetIsSystemLanguage(true);
                     if (!language.Save())
                     {
-                        log.Log(Level.SEVERE, "Save[active-SysLang] Error  " + AD_Language);
-                        return "Language not active or not system language[Save Error]: " + AD_Language;
+                        log.Log(Level.SEVERE, "Save[active-SysLang] Error  " + VAF_Language);
+                        return "Language not active or not system language[Save Error]: " + VAF_Language;
                     }
                 }
             }
@@ -941,8 +941,8 @@ namespace VAdvantage.Process
             {
                 if ((!language.IsActive() || !language.IsSystemLanguage()))
                 {
-                    log.Log(Level.SEVERE, "Language not active or not system language: " + AD_Language);
-                    return "Language not active or not system language: " + AD_Language;
+                    log.Log(Level.SEVERE, "Language not active or not system language: " + VAF_Language);
+                    return "Language not active or not system language: " + VAF_Language;
                 }
             }
             //	Validate Translation
@@ -979,7 +979,7 @@ namespace VAdvantage.Process
             }
 
             String sql = "SELECT Name, TableName "
-                + "FROM AD_Table "
+                + "FROM VAF_TableView "
                 + "WHERE TableName LIKE '%_Trl' "
                 + "ORDER BY 1";
             List<String> trlTables = new List<String>();

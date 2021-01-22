@@ -9,11 +9,11 @@ namespace VIS.DataContracts
     public class SaveRecordIn
     {
         public int Record_ID { get; set; }
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public int AD_WIndow_ID { get; set; }
 
-        public int AD_Client_ID { get; set; }
-        public int AD_Org_ID { get; set; }
+        public int VAF_Client_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
 
         public bool CompareDB { get; set; }
         public bool Inserting { get; set; }

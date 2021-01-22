@@ -23,13 +23,13 @@ namespace VAdvantage.Controller
         /** Window No - replicated  */
         public int windowNo;
         /** AD Window - replicated  */
-        public int AD_Window_ID;
+        public int VAF_Screen_ID;
 
-        /** Tab No (not AD_Tab_ID) 0.. */
+        /** Tab No (not VAF_Tab_ID) 0.. */
         public int tabNo;
 
         /**	Tab	ID			*/
-        public int AD_Tab_ID;
+        public int VAF_Tab_ID;
         /**	Tab	ID			*/
         public int Referenced_Tab_ID;
         /** Name			*/
@@ -47,9 +47,9 @@ namespace VAdvantage.Controller
         /** Tree			*/
         public bool HasTree = false;
         /** Table			*/
-        public int AD_Table_ID;
+        public int VAF_TableView_ID;
         /** Primary Parent Column   */
-        public int AD_Column_ID = 0;
+        public int VAF_Column_ID = 0;
         /** Table Name		*/
         public String TableName;
         /** Table is View	*/
@@ -63,7 +63,7 @@ namespace VAdvantage.Controller
         /** Table High Volume	*/
         public bool IsHighVolume = false;
         /** Process			*/
-        public int AD_Process_ID = 0;
+        public int VAF_Job_ID = 0;
         /** Commit Warning	*/
         public String CommitWarning;
         /** Where			*/
@@ -77,7 +77,7 @@ namespace VAdvantage.Controller
         /** Level			*/
         public int TabLevel = 0;
         /** Image			*/
-        public int AD_Image_ID = 0;
+        public int VAF_Image_ID = 0;
         /** Included Tab	*/
         public int Included_Tab_ID = 0;
         /** Replication Type	*/
@@ -86,9 +86,9 @@ namespace VAdvantage.Controller
         /** Sort Tab			*/
         public bool IsSortTab = false;
         /** Column Sort			*/
-        public int AD_ColumnSortOrder_ID = 0;
+        public int VAF_ColumnSortOrder_ID = 0;
         /** Column Displayed	*/
-        public int AD_ColumnSortYesNo_ID = 0;
+        public int VAF_ColumnSortYesNo_ID = 0;
 
         /**	Only Current Days - derived	*/
         public int onlyCurrentDays = 0;
@@ -111,7 +111,7 @@ namespace VAdvantage.Controller
         public bool IsHeaderPanel = false;
 
         /****   Grid Layout   ***/
-        public int AD_HeaderLayout_ID = 0;
+        public int VAF_HeaderLayout_ID = 0;
 
         /****   Header Height   ***/
         public decimal HeaderHeight = 0;
@@ -173,15 +173,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
         public static GridTabVO Create(GridWindowVO wVO, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(wVO.GetCtx(), wVO.windowNo);
-            vo.AD_Window_ID = wVO.AD_Window_ID;
+            vo.VAF_Screen_ID = wVO.VAF_Screen_ID;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -201,7 +201,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateFields(vo, AD_UserDef_Win_ID);
+                CreateFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -232,15 +232,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
         public static GridTabVO CreateEditorTabs(GridWindowVO wVO, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(wVO.GetCtx(), wVO.windowNo);
-            vo.AD_Window_ID = wVO.AD_Window_ID;
+            vo.VAF_Screen_ID = wVO.VAF_Screen_ID;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -260,7 +260,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateEditorFields(vo, AD_UserDef_Win_ID);
+                CreateEditorFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -281,15 +281,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
-        public static GridTabVO Create(Ctx ctx, int windowNo, int AD_Window_Id, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+        public static GridTabVO Create(Ctx ctx, int windowNo, int VAF_Screen_Id, int TabNo, IDataReader dr,
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(ctx, windowNo);
-            vo.AD_Window_ID = AD_Window_Id;
+            vo.VAF_Screen_ID = VAF_Screen_Id;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -309,7 +309,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateFields(vo, AD_UserDef_Win_ID);
+                CreateFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -334,9 +334,9 @@ namespace VAdvantage.Controller
             //	VLogger.get().warning("ShowTrl=" + showTrl + ", showAcct=" + showAcct);
             try
             {
-                vo.AD_Tab_ID = Utility.Util.GetValueOfInt(dr["AD_Tab_ID"]);
+                vo.VAF_Tab_ID = Utility.Util.GetValueOfInt(dr["VAF_Tab_ID"]);
                 vo.Referenced_Tab_ID = Utility.Util.GetValueOfInt(dr["Referenced_Tab_ID"]);
-                vo.ctx.SetContext(vo.windowNo, vo.tabNo, "AD_Tab_ID", vo.AD_Tab_ID.ToString());
+                vo.ctx.SetContext(vo.windowNo, vo.tabNo, "VAF_Tab_ID", vo.VAF_Tab_ID.ToString());
                 vo.Name = Utility.Util.GetValueOfString(dr["Name"]);
                 vo.ctx.SetContext(vo.windowNo, vo.tabNo, "Name", vo.Name);
 
@@ -350,8 +350,8 @@ namespace VAdvantage.Controller
                         showTrl = false;
                     if (!showTrl)
                     {
-                        VLogger.Get().Config("TrlTab Not displayed - AD_Tab_ID="
-                            + vo.AD_Tab_ID + "=" + vo.Name + ", Table=" + vo.TableName
+                        VLogger.Get().Config("TrlTab Not displayed - VAF_Tab_ID="
+                            + vo.VAF_Tab_ID + "=" + vo.Name + ", Table=" + vo.TableName
                             + ", BaseTrl=" + Env.IsBaseTranslation(vo.TableName)
                             + ", MultiLingual=" + Common.Common.IsMultiLingualDocument(vo.ctx));
                         return false;
@@ -360,15 +360,15 @@ namespace VAdvantage.Controller
                 //	Advanced Tab	**
                 if (!showAdvanced && Utility.Util.GetValueOfString(dr["IsAdvancedTab"]).Equals("Y"))
                 {
-                    VLogger.Get().Config("AdvancedTab Not displayed - AD_Tab_ID="
-                        + vo.AD_Tab_ID + " " + vo.Name);
+                    VLogger.Get().Config("AdvancedTab Not displayed - VAF_Tab_ID="
+                        + vo.VAF_Tab_ID + " " + vo.Name);
                     return false;
                 }
                 //	Accounting Info Tab	**
                 if (!showAcct && Utility.Util.GetValueOfString(dr["IsInfoTab"]).Equals("Y"))
                 {
-                    VLogger.Get().Fine("AcctTab Not displayed - AD_Tab_ID="
-                        + vo.AD_Tab_ID + " " + vo.Name);
+                    VLogger.Get().Fine("AcctTab Not displayed - VAF_Tab_ID="
+                        + vo.VAF_Tab_ID + " " + vo.Name);
                     return false;
                 }
 
@@ -379,22 +379,22 @@ namespace VAdvantage.Controller
                 vo.AccessLevel = Utility.Util.GetValueOfString(dr["AccessLevel"]);
                 if (!role.CanView(vo.ctx, vo.AccessLevel) && !DataBase.GlobalVariable.IsVisualEditor)	//	No Access
                 {
-                    VLogger.Get().Fine("No Role Access - AD_Tab_ID=" + vo.AD_Tab_ID + " " + vo.Name);
+                    VLogger.Get().Fine("No Role Access - VAF_Tab_ID=" + vo.VAF_Tab_ID + " " + vo.Name);
                     return false;
                 }	//	Used by MField.getDefault
                 vo.ctx.SetContext(vo.windowNo, vo.tabNo, "AccessLevel", vo.AccessLevel);
 
                 //	Table Access
-                vo.AD_Table_ID = Utility.Util.GetValueOfInt(dr["AD_Table_ID"]);
-                vo.ctx.SetContext(vo.windowNo, vo.tabNo, "AD_Table_ID", vo.AD_Table_ID.ToString());
-                if (!role.IsTableAccess(vo.AD_Table_ID, true) && !DataBase.GlobalVariable.IsVisualEditor)
+                vo.VAF_TableView_ID = Utility.Util.GetValueOfInt(dr["VAF_TableView_ID"]);
+                vo.ctx.SetContext(vo.windowNo, vo.tabNo, "VAF_TableView_ID", vo.VAF_TableView_ID.ToString());
+                if (!role.IsTableAccess(vo.VAF_TableView_ID, true) && !DataBase.GlobalVariable.IsVisualEditor)
                 {
-                    VLogger.Get().Config("No Table Access - AD_Tab_ID="
-                        + vo.AD_Tab_ID + " " + vo.Name);
+                    VLogger.Get().Config("No Table Access - VAF_Tab_ID="
+                        + vo.VAF_Tab_ID + " " + vo.Name);
                     return false;
                 }
 
-                if (role.IsTableReadOnly(vo.AD_Table_ID) && !DataBase.GlobalVariable.IsVisualEditor)
+                if (role.IsTableReadOnly(vo.VAF_TableView_ID) && !DataBase.GlobalVariable.IsVisualEditor)
                 {
                     vo.IsReadOnly = true;
                 }
@@ -422,11 +422,11 @@ namespace VAdvantage.Controller
                     vo.ShowSummaryLevel = true;
 
 
-                vo.AD_Table_ID = Utility.Util.GetValueOfInt(dr["AD_Table_ID"]);
+                vo.VAF_TableView_ID = Utility.Util.GetValueOfInt(dr["VAF_TableView_ID"]);
                 vo.TableName = Utility.Util.GetValueOfString(dr["TableName"]);
                 if (Utility.Util.GetValueOfString(dr["IsView"]).Equals("Y"))
                     vo.IsView = true;
-                vo.AD_Column_ID = Utility.Util.GetValueOfInt(dr["AD_Column_ID"]);   //  Primary Parent Column
+                vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr["VAF_Column_ID"]);   //  Primary Parent Column
 
                 if (Utility.Util.GetValueOfString(dr["IsSecurityEnabled"]).Equals("Y"))
                     vo.IsSecurityEnabled = true;
@@ -446,12 +446,12 @@ namespace VAdvantage.Controller
                 if (vo.OrderByClause == null)
                     vo.OrderByClause = "";
 
-                vo.AD_Process_ID = Utility.Util.GetValueOfInt(dr["AD_Process_ID"]);
+                vo.VAF_Job_ID = Utility.Util.GetValueOfInt(dr["VAF_Job_ID"]);
                 //if (dr.wasNull())
-                //    vo.AD_Process_ID = 0;
-                vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr["AD_Image_ID"]);
+                //    vo.VAF_Job_ID = 0;
+                vo.VAF_Image_ID = Utility.Util.GetValueOfInt(dr["VAF_Image_ID"]);
                 //if (dr.wasNull())
-                //    vo.AD_Image_ID = 0;
+                //    vo.VAF_Image_ID = 0;
                 vo.Included_Tab_ID = Utility.Util.GetValueOfInt(dr["Included_Tab_ID"]);
                 //if (dr.wasNull())
                 //    vo.Included_Tab_ID = 0;
@@ -464,8 +464,8 @@ namespace VAdvantage.Controller
                 vo.IsSortTab = Utility.Util.GetValueOfString(dr["IsSortTab"]).Equals("Y");
                 if (vo.IsSortTab)
                 {
-                    vo.AD_ColumnSortOrder_ID = Utility.Util.GetValueOfInt(dr["AD_ColumnSortOrder_ID"]);
-                    vo.AD_ColumnSortYesNo_ID = Utility.Util.GetValueOfInt(dr["AD_ColumnSortYesNo_ID"]);
+                    vo.VAF_ColumnSortOrder_ID = Utility.Util.GetValueOfInt(dr["VAF_ColumnSortOrder_ID"]);
+                    vo.VAF_ColumnSortYesNo_ID = Utility.Util.GetValueOfInt(dr["VAF_ColumnSortYesNo_ID"]);
                 }
                 //
                 //	Replication Type - set R/O if Reference
@@ -483,7 +483,7 @@ namespace VAdvantage.Controller
                 /***************Worked For Header Panel By Karan*****************/
                 vo.IsHeaderPanel = dr["Isheaderpanel"].Equals("Y");
 
-                vo.AD_HeaderLayout_ID = Util.GetValueOfInt(dr["AD_HeaderLayout_ID"]);
+                vo.VAF_HeaderLayout_ID = Util.GetValueOfInt(dr["VAF_HeaderLayout_ID"]);
 
                 vo.HeaderAlignment = Utility.Util.GetValueOfString(dr["HeaderAlignment"]);
 
@@ -517,29 +517,29 @@ namespace VAdvantage.Controller
         ///  Create Tab Fields
         /// </summary>
         /// <param name="mTabVO"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        private static bool CreateFields(GridTabVO mTabVO, int AD_UserDef_Win_ID)
+        private static bool CreateFields(GridTabVO mTabVO, int VAF_UserCustom_Win_ID)
         {
             mTabVO.fields = new List<GridFieldVO>();
 
-            String sql = GridFieldVO.GetSQL(mTabVO.ctx, AD_UserDef_Win_ID);
-            int AD_Tab_ID = mTabVO.Referenced_Tab_ID;
-            if (AD_Tab_ID == 0)
-                AD_Tab_ID = mTabVO.AD_Tab_ID;
+            String sql = GridFieldVO.GetSQL(mTabVO.ctx, VAF_UserCustom_Win_ID);
+            int VAF_Tab_ID = mTabVO.Referenced_Tab_ID;
+            if (VAF_Tab_ID == 0)
+                VAF_Tab_ID = mTabVO.VAF_Tab_ID;
             IDataReader dr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
                 System.Data.SqlClient.SqlParameter[] param = new System.Data.SqlClient.SqlParameter[1];
-                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", AD_Tab_ID);
-                //pstmt.setInt(1, AD_Tab_ID);
+                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", VAF_Tab_ID);
+                //pstmt.setInt(1, VAF_Tab_ID);
                 dr = DataBase.DB.ExecuteReader(sql, param, null);
                 while (dr.Read())
                 {
                     GridFieldVO voF = GridFieldVO.Create(mTabVO.ctx,
                         mTabVO.windowNo, mTabVO.tabNo,
-                        mTabVO.AD_Window_ID, AD_Tab_ID,
+                        mTabVO.VAF_Screen_ID, VAF_Tab_ID,
                         mTabVO.IsReadOnly, dr);
                     if (voF != null)
                     {
@@ -570,19 +570,19 @@ namespace VAdvantage.Controller
         {
             mTabVO.panels = new List<GridTabPanelVO>();
             String sql = GridTabPanelVO.GetSQL(mTabVO.ctx);
-            int AD_Tab_ID = mTabVO.Referenced_Tab_ID;
-            if (AD_Tab_ID == 0)
-                AD_Tab_ID = mTabVO.AD_Tab_ID;
+            int VAF_Tab_ID = mTabVO.Referenced_Tab_ID;
+            if (VAF_Tab_ID == 0)
+                VAF_Tab_ID = mTabVO.VAF_Tab_ID;
             IDataReader dr = null;
             try
             {
                 System.Data.SqlClient.SqlParameter[] param = new System.Data.SqlClient.SqlParameter[1];
-                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", AD_Tab_ID);
+                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", VAF_Tab_ID);
                 dr = DataBase.DB.ExecuteReader(sql, param, null);
                 while (dr.Read())
                 {
                     GridTabPanelVO voF = GridTabPanelVO.Create(mTabVO.ctx,
-                        mTabVO.windowNo, AD_Tab_ID, dr);
+                        mTabVO.windowNo, VAF_Tab_ID, dr);
                     if (voF != null)
                     {
                         mTabVO.panels.Add(voF);
@@ -609,9 +609,9 @@ namespace VAdvantage.Controller
         /// <param name="mTabVO"></param>
         private static void CreateHeaderPanel(GridTabVO mTabVO)
         {
-            if (mTabVO.AD_HeaderLayout_ID > 0)
+            if (mTabVO.VAF_HeaderLayout_ID > 0)
             {
-                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM AD_GridLayout  WHERE IsActive='Y' AND AD_HeaderLayout_ID=" + mTabVO.AD_HeaderLayout_ID +" ORDER BY SeqNo Asc");
+                DataSet dsGridLayout = DataBase.DB.ExecuteDataset("SELECT * FROM VAF_GridLayout  WHERE IsActive='Y' AND VAF_HeaderLayout_ID=" + mTabVO.VAF_HeaderLayout_ID +" ORDER BY SeqNo Asc");
                 if (dsGridLayout != null && dsGridLayout.Tables[0].Rows.Count > 0)
                 {
                     mTabVO.HeaderItems = new List<HeaderPanelGrid>();
@@ -631,11 +631,11 @@ namespace VAdvantage.Controller
 
                             HeaderPadding = Utility.Util.GetValueOfString(dr["Padding"]),
 
-                            AD_GridLayout_ID = Utility.Util.GetValueOfInt(dr["AD_GridLayout_ID"]),
+                            VAF_GridLayout_ID = Utility.Util.GetValueOfInt(dr["VAF_GridLayout_ID"]),
                         };
 
                         DataSet ds = DataBase.DB.ExecuteDataset("SELECT AlignItems,   ColumnSpan,   Justifyitems,   Rowspan,   Seqno,   Startcolumn,   Startrow," +
-                            " AD_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding FROM Ad_Gridlayoutitems WHERE IsActive      ='Y' AND AD_GridLayout_ID=" + hGrid.AD_GridLayout_ID);
+                            " VAF_GridLayoutItems_ID,BackgroundColor, FontColor, FontSize,padding FROM VAF_GridLayoutitems WHERE IsActive      ='Y' AND VAF_GridLayout_ID=" + hGrid.VAF_GridLayout_ID);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
                             hGrid.HeaderItems = new Dictionary<int, object>();
@@ -643,7 +643,7 @@ namespace VAdvantage.Controller
                             {
                                 hGrid.HeaderItems[Convert.ToInt32(row["SeqNo"])] = new HeaderPanelItemsVO
                                 {
-                                    AD_GridLayoutItems_ID = Convert.ToInt32(row["AD_GridLayoutItems_ID"]),
+                                    VAF_GridLayoutItems_ID = Convert.ToInt32(row["VAF_GridLayoutItems_ID"]),
                                     ColumnSpan = Convert.ToInt32(row["ColumnSpan"]),
                                     AlignItems = Convert.ToString(row["AlignItems"]),
                                     JustifyItems = Convert.ToString(row["JustifyItems"]),
@@ -669,30 +669,30 @@ namespace VAdvantage.Controller
         ///  Create Tab Fields
         /// </summary>
         /// <param name="mTabVO"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        private static bool CreateEditorFields(GridTabVO mTabVO, int AD_UserDef_Win_ID)
+        private static bool CreateEditorFields(GridTabVO mTabVO, int VAF_UserCustom_Win_ID)
         {
             mTabVO.fields = new List<GridFieldVO>();
 
             bool isBase = true;
-            if (!Env.IsBaseLanguage(mTabVO.ctx, "AD_Tab"))
+            if (!Env.IsBaseLanguage(mTabVO.ctx, "VAF_Tab"))
             {
                 isBase = false;
             }
 
             StringBuilder sql = new StringBuilder(" SELECT ")
-           .Append(" t.AD_Window_ID                                                      AS AD_Window_ID         , ")
-           .Append(" f.AD_Tab_ID                                                         AS AD_Tab_ID            , ")
-           .Append(" f.AD_Field_ID                                                       AS AD_Field_ID          , ")
-           .Append(" tbl.AD_Table_ID                                                     AS AD_Table_ID          , ")
-           .Append(" f.AD_Column_ID                                                      AS AD_Column_ID         , ")
-           .Append(" uw.AD_Role_ID                                                       AS UserDef_Role_ID      , ")
-           .Append(" uw.AD_User_ID                                                       AS AD_User_ID           , ")
-           .Append(" uw.AD_UserDef_Win_ID                                                AS AD_UserDef_Win_ID    , ")
+           .Append(" t.VAF_Screen_ID                                                      AS VAF_Screen_ID         , ")
+           .Append(" f.VAF_Tab_ID                                                         AS VAF_Tab_ID            , ")
+           .Append(" f.VAF_Field_ID                                                       AS VAF_Field_ID          , ")
+           .Append(" tbl.VAF_TableView_ID                                                     AS VAF_TableView_ID          , ")
+           .Append(" f.VAF_Column_ID                                                      AS VAF_Column_ID         , ")
+           .Append(" uw.VAF_Role_ID                                                       AS UserDef_Role_ID      , ")
+           .Append(" uw.VAF_UserContact_ID                                                       AS VAF_UserContact_ID           , ")
+           .Append(" uw.VAF_UserCustom_Win_ID                                                AS VAF_UserCustom_Win_ID    , ")
            .Append(" uw.CustomizationName                                                AS CustomizationName    , ")
-           .Append(" u.AD_UserDef_Tab_ID                                                 AS AD_UserDef_Tab_ID    , ")
-           .Append(" u.AD_UserDef_Field_ID                                               AS AD_UserDef_Field_ID  , ");
+           .Append(" u.VAF_UserCustom_Tab_ID                                                 AS VAF_UserCustom_Tab_ID    , ")
+           .Append(" u.VAF_UserCustom_Field_ID                                               AS VAF_UserCustom_Field_ID  , ");
             if (!isBase)
             {
                 sql.Append(" COALESCE(u.Name,trl.Name)                                           AS Name                 , ")
@@ -731,12 +731,12 @@ namespace VAdvantage.Controller
                .Append(" COALESCE(COALESCE(u.IsMandatoryUI,f.IsMandatoryUI),c.IsMandatoryUI) AS IsMandatoryUI        , ")
                .Append(" c.IsIdentifier                                                      AS IsIdentifier         , ")
                .Append(" c.IsTranslated                                                      AS IsTranslated         , ")
-               .Append(" c.AD_Reference_Value_ID                                             AS AD_Reference_Value_ID, ")
+               .Append(" c.VAF_Control_Ref_Value_ID                                             AS VAF_Control_Ref_Value_ID, ")
                .Append(" c.Callout                                                           AS Callout              , ")
                .Append(" c.IsCallout                                                         AS IsCallout            , ")
-               .Append(" COALESCE(f.AD_Reference_ID,c.AD_Reference_ID)                       AS AD_Reference_ID      , ")
-               .Append(" c.AD_Val_Rule_ID                                                    AS AD_Val_Rule_ID       , ")
-               .Append(" c.AD_Process_ID                                                     AS AD_Process_ID        , ")
+               .Append(" COALESCE(f.VAF_Control_Ref_ID,c.VAF_Control_Ref_ID)                       AS VAF_Control_Ref_ID      , ")
+               .Append(" c.VAF_DataVal_Rule_ID                                                    AS VAF_DataVal_Rule_ID       , ")
+               .Append(" c.VAF_Job_ID                                                     AS VAF_Job_ID        , ")
                .Append(" c.IsAlwaysUpdateable                                                AS IsAlwaysUpdateable   , ")
                .Append(" c.ReadOnlyLogic                                                     AS ReadOnlyLogic        , ")
                .Append(" c.IsUpdateable                                                      AS IsUpdateable         , ")
@@ -753,56 +753,56 @@ namespace VAdvantage.Controller
 
             if (isBase)
             {
-                sql.Append(" FROM AD_Field f ");
+                sql.Append(" FROM VAF_Field f ");
             }
             else
             {
-                sql.Append(" FROM AD_Field f ")
-               .Append("  INNER JOIN AD_Field_Trl trl ON f.AD_Field_ID = trl.AD_Field_ID ");
+                sql.Append(" FROM VAF_Field f ")
+               .Append("  INNER JOIN VAF_Field_TL trl ON f.VAF_Field_ID = trl.VAF_Field_ID ");
             }
-            sql.Append(" INNER JOIN AD_Tab t ON (f.AD_Tab_ID = t.AD_Tab_ID) LEFT OUTER JOIN ");
+            sql.Append(" INNER JOIN VAF_Tab t ON (f.VAF_Tab_ID = t.VAF_Tab_ID) LEFT OUTER JOIN ");
 
             if (isBase)
             {
-                sql.Append(" AD_FieldGroup fgt ON (f.AD_FieldGroup_ID = fgt.AD_FieldGroup_ID) ");
+                sql.Append(" VAF_FieldSection fgt ON (f.VAF_FieldSection_ID = fgt.VAF_FieldSection_ID) ");
             }
             else
             {
-                sql.Append(" AD_FieldGroup_Trl fgt ON (f.AD_FieldGroup_ID = fgt.AD_FieldGroup_ID  AND trl.AD_Language  =fgt.AD_Language) ");
+                sql.Append(" VAF_FieldSection_Tl fgt ON (f.VAF_FieldSection_ID = fgt.VAF_FieldSection_ID  AND trl.VAF_Language  =fgt.VAF_Language) ");
             }
-            sql.Append(" LEFT OUTER JOIN AD_Column c  ON (f.AD_Column_ID = c.AD_Column_ID) INNER JOIN AD_Table tbl ON (c.AD_Table_ID = tbl.AD_Table_ID) ")
-               .Append(" INNER JOIN AD_Reference r ON (c.AD_Reference_ID = r.AD_Reference_ID) LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) ")
-               .Append(" LEFT OUTER JOIN AD_UserDef_Field u ON (f.AD_Field_ID=u.AD_Field_ID) LEFT OUTER JOIN AD_UserDef_Tab ut ON (ut.AD_UserDef_Tab_ID=u.AD_UserDef_Tab_ID) ")
-               .Append(" LEFT OUTER JOIN AD_UserDef_Win uw ON (uw.AD_UserDef_Win_ID=ut.AD_UserDef_Win_ID) ")
+            sql.Append(" LEFT OUTER JOIN VAF_Column c  ON (f.VAF_Column_ID = c.VAF_Column_ID) INNER JOIN VAF_TableView tbl ON (c.VAF_TableView_ID = tbl.VAF_TableView_ID) ")
+               .Append(" INNER JOIN VAF_Control_Ref r ON (c.VAF_Control_Ref_ID = r.VAF_Control_Ref_ID) LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) ")
+               .Append(" LEFT OUTER JOIN VAF_UserCustom_Field u ON (f.VAF_Field_ID=u.VAF_Field_ID) LEFT OUTER JOIN VAF_UserCustom_Tab ut ON (ut.VAF_UserCustom_Tab_ID=u.VAF_UserCustom_Tab_ID) ")
+               .Append(" LEFT OUTER JOIN VAF_UserCustom_Win uw ON (uw.VAF_UserCustom_Win_ID=ut.VAF_UserCustom_Win_ID) ")
 
-               .Append(" WHERE f.AD_Tab_ID=@tabID");
+               .Append(" WHERE f.VAF_Tab_ID=@tabID");
 
             if (!isBase)
             {
-                sql.Append(" AND trl.AD_Language='" + Env.GetAD_Language(mTabVO.ctx) + "'");
+                sql.Append(" AND trl.VAF_Language='" + Env.GetVAF_Language(mTabVO.ctx) + "'");
             }
-            if (AD_UserDef_Win_ID != 0)
-                sql.Append(" AND u.AD_UserDef_Win_ID=" + AD_UserDef_Win_ID);
+            if (VAF_UserCustom_Win_ID != 0)
+                sql.Append(" AND u.VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID);
 
             sql.Append(" ORDER BY IsDisplayed DESC, SeqNo");
 
 
-            int AD_Tab_ID = mTabVO.Referenced_Tab_ID;
-            if (AD_Tab_ID == 0)
-                AD_Tab_ID = mTabVO.AD_Tab_ID;
+            int VAF_Tab_ID = mTabVO.Referenced_Tab_ID;
+            if (VAF_Tab_ID == 0)
+                VAF_Tab_ID = mTabVO.VAF_Tab_ID;
             IDataReader dr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
                 System.Data.SqlClient.SqlParameter[] param = new System.Data.SqlClient.SqlParameter[1];
-                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", AD_Tab_ID);
-                //pstmt.setInt(1, AD_Tab_ID);
+                param[0] = new System.Data.SqlClient.SqlParameter("@tabID", VAF_Tab_ID);
+                //pstmt.setInt(1, VAF_Tab_ID);
                 dr = DataBase.DB.ExecuteReader(sql.ToString(), param, null);
                 while (dr.Read())
                 {
                     GridFieldVO voF = GridFieldVO.Create(mTabVO.ctx,
                         mTabVO.windowNo, mTabVO.tabNo,
-                        mTabVO.AD_Window_ID, AD_Tab_ID,
+                        mTabVO.VAF_Screen_ID, VAF_Tab_ID,
                         mTabVO.IsReadOnly, dr);
                     if (voF != null)
                         mTabVO.fields.Add(voF);
@@ -826,17 +826,17 @@ namespace VAdvantage.Controller
         ///Return the SQL statement used for the MTabVO.create
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        public static String GetSQL(Ctx ctx, int AD_UserDef_Win_ID)
+        public static String GetSQL(Ctx ctx, int VAF_UserCustom_Win_ID)
         {
             //  View only returns IsActive='Y'
-            String sql = "SELECT * FROM AD_Tab_v WHERE AD_Window_ID=@windowID";
-            if (!Env.IsBaseLanguage(ctx, "AD_Window"))
-                sql = "SELECT * FROM AD_Tab_vt WHERE AD_Window_ID=@windowID"
-                    + " AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
-            if (AD_UserDef_Win_ID != 0)
-                sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
+            String sql = "SELECT * FROM VAF_Tab_v WHERE VAF_Screen_ID=@windowID";
+            if (!Env.IsBaseLanguage(ctx, "VAF_Screen"))
+                sql = "SELECT * FROM VAF_Tab_vtl WHERE VAF_Screen_ID=@windowID"
+                    + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
+            if (VAF_UserCustom_Win_ID != 0)
+                sql += " AND VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID;
             sql += " ORDER BY SeqNo";
             return sql;
         }
@@ -887,12 +887,12 @@ namespace VAdvantage.Controller
         public GridTabVO Clone(Ctx myCtx, int windowNo)
         {
             GridTabVO clone = new GridTabVO(myCtx, windowNo);
-            clone.AD_Window_ID = AD_Window_ID;
+            clone.VAF_Screen_ID = VAF_Screen_ID;
             clone.tabNo = tabNo;
 
             //
-            clone.AD_Tab_ID = AD_Tab_ID;
-            myCtx.SetContext(windowNo, clone.tabNo, "AD_Tab_ID", clone.AD_Tab_ID.ToString());
+            clone.VAF_Tab_ID = VAF_Tab_ID;
+            myCtx.SetContext(windowNo, clone.tabNo, "VAF_Tab_ID", clone.VAF_Tab_ID.ToString());
             clone.Referenced_Tab_ID = Referenced_Tab_ID;
             clone.Name = Name;
             myCtx.SetContext(windowNo, clone.tabNo, "Name", clone.Name);
@@ -903,32 +903,32 @@ namespace VAdvantage.Controller
             clone.IsInsertRecord = IsInsertRecord;
             clone.HasTree = HasTree;
             clone.ShowSummaryLevel = ShowSummaryLevel;
-            clone.AD_Table_ID = AD_Table_ID;
-            clone.AD_Column_ID = AD_Column_ID;
+            clone.VAF_TableView_ID = VAF_TableView_ID;
+            clone.VAF_Column_ID = VAF_Column_ID;
             clone.TableName = TableName;
             clone.IsView = IsView;
             clone.AccessLevel = AccessLevel;
             clone.IsSecurityEnabled = IsSecurityEnabled;
             clone.IsDeleteable = IsDeleteable;
             clone.IsHighVolume = IsHighVolume;
-            clone.AD_Process_ID = AD_Process_ID;
+            clone.VAF_Job_ID = VAF_Job_ID;
             clone.CommitWarning = CommitWarning;
             clone.WhereClause = WhereClause;
             clone.OrderByClause = OrderByClause;
             clone.ReadOnlyLogic = ReadOnlyLogic;
             clone.DisplayLogic = DisplayLogic;
             clone.TabLevel = TabLevel;
-            clone.AD_Image_ID = AD_Image_ID;
+            clone.VAF_Image_ID = VAF_Image_ID;
             clone.Included_Tab_ID = Included_Tab_ID;
             clone.ReplicationType = ReplicationType;
             myCtx.SetContext(windowNo, clone.tabNo, "AccessLevel", clone.AccessLevel);
-            myCtx.SetContext(windowNo, clone.tabNo, "AD_Table_ID", clone.AD_Table_ID.ToString());
+            myCtx.SetContext(windowNo, clone.tabNo, "VAF_TableView_ID", clone.VAF_TableView_ID.ToString());
             myCtx.SetContext(windowNo, clone.tabNo, "TabLevel", clone.TabLevel.ToString());
 
             //
             clone.IsSortTab = IsSortTab;
-            clone.AD_ColumnSortOrder_ID = AD_ColumnSortOrder_ID;
-            clone.AD_ColumnSortYesNo_ID = AD_ColumnSortYesNo_ID;
+            clone.VAF_ColumnSortOrder_ID = VAF_ColumnSortOrder_ID;
+            clone.VAF_ColumnSortYesNo_ID = VAF_ColumnSortYesNo_ID;
             //  Derived
             clone.onlyCurrentDays = 0;
 
@@ -951,7 +951,7 @@ namespace VAdvantage.Controller
             clone.locationCols = locationCols;
 
             clone.IsHeaderPanel = IsHeaderPanel;
-            clone.AD_HeaderLayout_ID = AD_HeaderLayout_ID;
+            clone.VAF_HeaderLayout_ID = VAF_HeaderLayout_ID;
             clone.HeaderAlignment = HeaderAlignment;
             clone.TabPanelAlignment = TabPanelAlignment;
             clone.HeaderItems = HeaderItems;
@@ -970,7 +970,7 @@ namespace VAdvantage.Controller
             {
                 GridFieldVO field = fields[i];
                 GridFieldVO cloneField = field.Clone(myCtx, windowNo, tabNo,
-                    AD_Window_ID, AD_Tab_ID, IsReadOnly);
+                    VAF_Screen_ID, VAF_Tab_ID, IsReadOnly);
                 if (cloneField == null)
                     return null;
                 clone.fields.Add(cloneField);

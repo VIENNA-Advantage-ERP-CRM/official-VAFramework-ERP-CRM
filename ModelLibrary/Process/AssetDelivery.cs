@@ -179,9 +179,9 @@ namespace VAdvantage.Process
 	private String SendNoGuaranteeMail (int A_Asset_ID, int R_MailText_ID, Trx trxName)
 	{
 		MAsset asset = new MAsset (GetCtx(), A_Asset_ID, trxName);
-		if (asset.GetAD_User_ID() == 0)
+		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
-		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetAD_User_ID(), Get_Trx());
+		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
 		if (_MailText == null || _MailText.GetR_MailText_ID() != R_MailText_ID)
@@ -204,7 +204,7 @@ namespace VAdvantage.Process
 			email.SetMessageText (message);
 		}
 		String msg = email.Send();
-		new MUserMail(_MailText, asset.GetAD_User_ID(), email).Save();
+		new MUserMail(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
 		if (!EMail.SENT_OK.Equals(msg))
 			return "** Not delivered: " + user.GetEMail() + " - " + msg;
 		//
@@ -223,9 +223,9 @@ namespace VAdvantage.Process
 		long start =CommonFunctions.CurrentTimeMillis();
 		//
 		MAsset asset = new MAsset (GetCtx(), A_Asset_ID, Get_Trx());
-		if (asset.GetAD_User_ID() == 0)
+		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
-		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetAD_User_ID(), Get_Trx());
+		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
 		if (asset.GetProductR_MailText_ID() == 0)
@@ -272,11 +272,11 @@ namespace VAdvantage.Process
 				log.Warning("No DowloadURL for A_Asset_ID=" + A_Asset_ID);
 		}
 		String msg = email.Send();
-		new MUserMail(_MailText, asset.GetAD_User_ID(), email).Save();
+		new MUserMail(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
 		if (!EMail.SENT_OK.Equals(msg))
 			return "** Not delivered: " + user.GetEMail() + " - " + msg;
 
-		MAssetDelivery ad = asset.ConfirmDelivery(email, user.GetAD_User_ID());
+		MAssetDelivery ad = asset.ConfirmDelivery(email, user.GetVAF_UserContact_ID());
 		ad.Save();
 		asset.Save();
 		//

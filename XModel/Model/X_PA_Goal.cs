@@ -80,7 +80,7 @@ static X_PA_Goal()
 //static long serialVersionUID 27562514381810L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065021L;
-/** AD_Table_ID=440 */
+/** VAF_TableView_ID=440 */
 public static int Table_ID;
  // =440;
 
@@ -123,34 +123,34 @@ StringBuilder sb = new StringBuilder ("X_PA_Goal[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -254,8 +254,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** MeasureDisplay AD_Reference_ID=367 */
-public static int MEASUREDISPLAY_AD_Reference_ID=367;
+/** MeasureDisplay VAF_Control_Ref_ID=367 */
+public static int MEASUREDISPLAY_VAF_Control_Ref_ID=367;
 /** Total = 0 */
 public static String MEASUREDISPLAY_Total = "0";
 /** Year = 1 */
@@ -295,8 +295,8 @@ public String GetMeasureDisplay()
 return (String)Get_Value("MeasureDisplay");
 }
 
-/** MeasureScope AD_Reference_ID=367 */
-public static int MEASURESCOPE_AD_Reference_ID=367;
+/** MeasureScope VAF_Control_Ref_ID=367 */
+public static int MEASURESCOPE_VAF_Control_Ref_ID=367;
 /** Total = 0 */
 public static String MEASURESCOPE_Total = "0";
 /** Year = 1 */
@@ -408,8 +408,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PA_GoalParent_ID AD_Reference_ID=230 */
-public static int PA_GOALPARENT_ID_AD_Reference_ID=230;
+/** PA_GoalParent_ID VAF_Control_Ref_ID=230 */
+public static int PA_GOALPARENT_ID_VAF_Control_Ref_ID=230;
 /** Set Parent Goal.
 @param PA_GoalParent_ID Parent Goal */
 public void SetPA_GoalParent_ID (int PA_GoalParent_ID)

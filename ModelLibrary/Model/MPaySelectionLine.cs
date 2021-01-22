@@ -139,7 +139,7 @@ namespace VAdvantage.Model
             Decimal DiscountAmt = Env.ZERO;
             Boolean IsSOTrx = false;
             String sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.C_Currency_ID,"
-                    + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.AD_Client_ID, i.AD_Org_ID),"
+                    + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.VAF_Client_ID, i.VAF_Org_ID),"
                 + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
                 + "FROM C_Invoice_v i, C_BankAccount ba "
                 + "WHERE i.C_Invoice_ID=@C_Invoice_ID AND ba.C_BankAccount_ID=@C_BankAccount_ID";	//	#1..2

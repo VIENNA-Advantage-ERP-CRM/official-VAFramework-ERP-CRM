@@ -87,7 +87,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialEntryText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_AD_Reference_ID, GetConfidentialTypeEntry());
+            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
         }	//	GetConfidentialTextEntry
 
         /**

@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportReportLine : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /** Default Report Line Set			*/
         private int _PA_ReportLineSet_ID = 0;
         /**	Delete old Imported				*/
@@ -47,9 +47,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
+                else if (name.Equals("VAF_Client_ID"))
                 {
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("PA_ReportLineSet_ID"))
                 {
@@ -79,7 +79,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -94,8 +94,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_ReportLine "
-                + "SET AD_Client_ID = COALESCE (AD_Client_ID, ").Append(_AD_Client_ID).Append("),"
-                + " AD_Org_ID = COALESCE (AD_Org_ID, 0),"
+                + "SET VAF_Client_ID = COALESCE (VAF_Client_ID, ").Append(_VAF_Client_ID).Append("),"
+                + " VAF_Org_ID = COALESCE (VAF_Org_ID, 0),"
                 + " IsActive = COALESCE (IsActive, 'Y'),"
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -112,7 +112,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE I_ReportLine i "
                     + "SET ReportLineSetName=(SELECT Name FROM PA_ReportLineSet r"
-                    + " WHERE PA_ReportLineSet_ID=").Append(_PA_ReportLineSet_ID).Append(" AND i.AD_Client_ID=r.AD_Client_ID) "
+                    + " WHERE PA_ReportLineSet_ID=").Append(_PA_ReportLineSet_ID).Append(" AND i.VAF_Client_ID=r.VAF_Client_ID) "
                     + "WHERE ReportLineSetName IS NULL AND PA_ReportLineSet_ID IS NULL"
                     + " AND I_IsImported<>'Y'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -121,7 +121,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set PA_ReportLineSet_ID
             sql = new StringBuilder("UPDATE I_ReportLine i "
                 + "SET PA_ReportLineSet_ID=(SELECT PA_ReportLineSet_ID FROM PA_ReportLineSet r"
-                + " WHERE i.ReportLineSetName=r.Name AND i.AD_Client_ID=r.AD_Client_ID) "
+                + " WHERE i.ReportLineSetName=r.Name AND i.VAF_Client_ID=r.VAF_Client_ID) "
                 + "WHERE PA_ReportLineSet_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -146,7 +146,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Validate ElementValue
             sql = new StringBuilder("UPDATE I_ReportLine i "
                 + "SET C_ElementValue_ID=(SELECT C_ElementValue_ID FROM C_ElementValue e"
-                + " WHERE i.ElementValue=e.Value AND i.AD_Client_ID=e.AD_Client_ID) "
+                + " WHERE i.ElementValue=e.Value AND i.VAF_Client_ID=e.VAF_Client_ID) "
                 + "WHERE C_ElementValue_ID IS NULL AND ElementValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -257,10 +257,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //PreparedStatement pstmt_insertLine = DataBase.prepareStatement
                 String _insertLine = "INSERT INTO PA_ReportLine "
                     + "(PA_ReportLine_ID,PA_ReportLineSet_ID,"
-                    + "AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "Name,SeqNo,IsPrinted,IsSummary,LineType)"
                     + "SELECT @param1,PA_ReportLineSet_ID,"
-                    + "AD_Client_ID,AD_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "Name,SeqNo,IsPrinted,IsSummary,LineType "
                     //jz + "FROM I_ReportLine "
                     // + "WHERE PA_ReportLineSet_ID=? AND Name=? AND ROWNUM=1"		//	#2..3
@@ -280,7 +280,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //
                     try
                     {
-                        int PA_ReportLine_ID = DataBase.DB.GetNextID(_AD_Client_ID, "PA_ReportLine", Get_TrxName());
+                        int PA_ReportLine_ID = DataBase.DB.GetNextID(_VAF_Client_ID, "PA_ReportLine", Get_TrxName());
                         if (PA_ReportLine_ID <= 0)
                         {
                             throw new Exception("No NextID (" + PA_ReportLine_ID + ")");
@@ -357,10 +357,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //PreparedStatement pstmt_insertSource = DataBase.prepareStatement
                 String _insertSource = "INSERT INTO PA_ReportSource "
                     + "(PA_ReportSource_ID,"
-                    + "AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "PA_ReportLine_ID,ElementType,C_ElementValue_ID) "
                     + "SELECT @param1,"
-                    + "AD_Client_ID,AD_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "PA_ReportLine_ID,'AC',C_ElementValue_ID "
                     + "FROM I_ReportLine "
                     + "WHERE I_ReportLine_ID=@param2"
@@ -400,7 +400,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         try
                         {
-                            PA_ReportSource_ID = DataBase.DB.GetNextID(_AD_Client_ID, "PA_ReportSource", Get_TrxName());
+                            PA_ReportSource_ID = DataBase.DB.GetNextID(_VAF_Client_ID, "PA_ReportSource", Get_TrxName());
                             if (PA_ReportSource_ID <= 0)
                             {
                                 if (idr != null)

@@ -30,7 +30,7 @@ namespace VAdvantage.ProcessEngine
     public class MPInstanceLog
     {
         #region private Variables
-        private int _AD_PInstance_ID;
+        private int _VAF_JInstance_ID;
         private int _Log_ID;
         private DateTime? _P_Date;
         private int _P_ID;
@@ -41,16 +41,16 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// Full Constructor
         /// </summary>
-        /// <param name="AD_PInstance_ID">instance</param>
+        /// <param name="VAF_JInstance_ID">instance</param>
         /// <param name="Log_ID">log sequence</param>
         /// <param name="P_Date">date</param>
         /// <param name="P_ID">id</param>
         /// <param name="P_Number">number</param>
         /// <param name="msg">msg</param>
-        public MPInstanceLog(int AD_PInstance_ID, int Log_ID, DateTime P_Date,
+        public MPInstanceLog(int VAF_JInstance_ID, int Log_ID, DateTime P_Date,
           int P_ID, Decimal P_Number, String msg)
         {
-            SetAD_PInstance_ID(AD_PInstance_ID);
+            SetVAF_JInstance_ID(VAF_JInstance_ID);
             SetLog_ID(Log_ID);
             SetP_Date(P_Date);
             SetP_ID(P_ID);
@@ -64,7 +64,7 @@ namespace VAdvantage.ProcessEngine
         /// <param name="dr">Data row set</param>
         public MPInstanceLog(DataRow dr)
         {
-            SetAD_PInstance_ID(Utility.Util.GetValueOfInt(dr["AD_PInstance_ID"]));
+            SetVAF_JInstance_ID(Utility.Util.GetValueOfInt(dr["VAF_JInstance_ID"]));
             SetLog_ID(Utility.Util.GetValueOfInt(dr["Log_ID"]));
             SetP_Date(Utility.Util.GetValueOfDateTime(dr["P_Date"]));
             SetP_ID(Utility.Util.GetValueOfInt(dr["P_ID"]));
@@ -106,10 +106,10 @@ namespace VAdvantage.ProcessEngine
         /// <returns>true if saved</returns>
         public bool Save()
         {
-            StringBuilder sql = new StringBuilder("INSERT INTO AD_PInstance_Log "
-                + "(AD_PInstance_ID, Log_ID, P_Date, P_ID, P_Number, msg)"
+            StringBuilder sql = new StringBuilder("INSERT INTO VAF_JInstance_Log "
+                + "(VAF_JInstance_ID, Log_ID, P_Date, P_ID, P_Number, msg)"
                 + " VALUES (");
-            sql.Append(_AD_PInstance_ID).Append(",")
+            sql.Append(_VAF_JInstance_ID).Append(",")
               .Append(_Log_ID).Append(",");
             if (_P_Date == null)
             {
@@ -149,21 +149,21 @@ namespace VAdvantage.ProcessEngine
         }
 
         /// <summary>
-        /// Get AD_PInstance_ID
+        /// Get VAF_JInstance_ID
         /// </summary>
         /// <returns>Instance id</returns>
-        public int GetAD_PInstance_ID()
+        public int GetVAF_JInstance_ID()
         {
-            return _AD_PInstance_ID;
+            return _VAF_JInstance_ID;
         }
 
         /// <summary>
-        /// Set AD_PInstance_ID
+        /// Set VAF_JInstance_ID
         /// </summary>
-        /// <param name="AD_PInstance_ID">instance id</param>
-        public void SetAD_PInstance_ID(int AD_PInstance_ID)
+        /// <param name="VAF_JInstance_ID">instance id</param>
+        public void SetVAF_JInstance_ID(int VAF_JInstance_ID)
         {
-            _AD_PInstance_ID = AD_PInstance_ID;
+            _VAF_JInstance_ID = VAF_JInstance_ID;
         }
 
         /// <summary>

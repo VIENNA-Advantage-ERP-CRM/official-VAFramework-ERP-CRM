@@ -35,8 +35,8 @@
                 baseObj.lblInvoice.getControl().css('display', 'none');
             if (baseObj.cmbInvoice != null)
                 baseObj.cmbInvoice.getControl().css('display', 'none');
-            var AD_Column_ID = 4917;
-            var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, AD_Column_ID, VIS.DisplayType.TableDir);
+            var VAF_Column_ID = 4917;
+            var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, VAF_Column_ID, VIS.DisplayType.TableDir);
 
             // JID_0331: System is allowing to change bank in create lines from in bank account window.
             baseObj.cmbBankAccount = new VIS.Controls.VComboBox("C_BankAccount_ID", true, true, true, lookup, 150, VIS.DisplayType.TableDir, 0);
@@ -72,14 +72,14 @@
     VCreateFromStatement.prototype.initBPartner = function (C_BankAccount_ID) {
         //  load BPartner
         var baseObj = this.$super;
-        var AD_Column_ID = 5398;        //  C_Payment.C_BPartner_ID
+        var VAF_Column_ID = 5398;        //  C_Payment.C_BPartner_ID
         var where = " C_BPartner.C_BPartner_ID IN (SELECT  p.C_BPartner_ID as C_BPartner_ID"
             + " FROM C_Payment p WHERE p.Processed='Y' AND p.IsReconciled='N'"
             + " AND p.DocStatus IN ('CO','CL','RE','VO') AND p.PayAmt<>0"
             + " AND p.C_BankAccount_ID = " + C_BankAccount_ID                           	//  #2
             + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
                 + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0) )";
-        var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), this.windowNo, AD_Column_ID, VIS.DisplayType.Search, "C_BPartner_ID", 0, false, where);
+        var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), this.windowNo, VAF_Column_ID, VIS.DisplayType.Search, "C_BPartner_ID", 0, false, where);
         baseObj.vBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
     }
 
@@ -271,10 +271,10 @@
     //    if (ts == null) {
     //        ts = DateTime.Today.Date;
     //    }
-    //    var countVA034 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
+    //    var countVA034 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
     //    var date = VIS.DB.to_date(ts, true);
     //    var sql = "SELECT  p.DateTrx,p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID,c.ISO_Code,p.PayAmt,"
-    //        + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID," + date + ",null,p.AD_Client_ID,p.AD_Org_ID),"   //  #1
+    //        + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID," + date + ",null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
     //        + " bp.Name,'P' AS Type ";
     //    if (countVA034 > 0)
     //        sql += ", p.va034_depositslipno ";
@@ -304,11 +304,11 @@
     //    }
     //    sql += " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "        //	Voided Bank Statements have 0 StmtAmt
     //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-    //    var countVA012 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+    //    var countVA012 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
     //    if (countVA012 > 0) {
 
     //        sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,  cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
-    //        + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID," + date + ",null,cs.AD_Client_ID,cs.AD_Org_ID),"   //  #1
+    //        + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID," + date + ",null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
     //        + " Null AS Name,'C' AS Type"
 
     //        if (countVA034 > 0)
@@ -427,7 +427,7 @@
         var data = [];
 
         //var sql = "SELECT p.DateTrx,p.C_Payment_ID,p.DocumentNo, ba.C_Currency_ID,c.ISO_Code,p.PayAmt,"
-        //    + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,@t,null,p.AD_Client_ID,p.AD_Org_ID),"   //  #1
+        //    + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,@t,null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
         //    + " bp.Name,'P' AS Type "
         //    + "FROM C_BankAccount ba"
         //    + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
@@ -439,11 +439,11 @@
         //    + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
         //    //	Voided Bank Statements have 0 StmtAmt
         //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-        //var countVA012 = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+        //var countVA012 = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
         //if (countVA012 > 0) {
 
         //    sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
-        //    + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,@t,null,cs.AD_Client_ID,cs.AD_Org_ID),"   //  #1
+        //    + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,@t,null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
         //    + " Null AS Name,'C' AS Type FROM C_BankAccount ba"
         //    + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
         //    + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"

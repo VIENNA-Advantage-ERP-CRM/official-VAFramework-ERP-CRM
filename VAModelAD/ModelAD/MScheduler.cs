@@ -22,7 +22,7 @@ using VAModelAD.Model;
 
 namespace VAdvantage.Model
 {
-    public class MScheduler : X_AD_Scheduler, ViennaProcessor
+    public class MScheduler : X_VAF_JobRun_Plan, ViennaProcessor
     {
         /// <summary>
         /// Get Active
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         {
 
             //List<MScheduler> list = new List<MScheduler>();
-            //String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
+            //String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
             //try
             //{
             //    DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
             // will not be run on the other system having different machine IP.
 
             List<MScheduler> list = new List<MScheduler>();
-            String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
@@ -82,8 +82,8 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
+                                                        VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAF_JobRun_Plan WHERE VAF_JobRun_Plan_ID =" + dr["VAF_JobRun_Plan_ID"] + " )"));
 
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
@@ -113,15 +113,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Scheduler_ID">scheduler id</param>
+        /// <param name="VAF_JobRun_Plan_ID">scheduler id</param>
         /// <param name="trxName">optional transaction name</param>
-        public MScheduler(Ctx ctx, int AD_Scheduler_ID, Trx trxName)
-            : base(ctx, AD_Scheduler_ID, trxName)
+        public MScheduler(Ctx ctx, int VAF_JobRun_Plan_ID, Trx trxName)
+            : base(ctx, VAF_JobRun_Plan_ID, trxName)
         {
 
-            if (AD_Scheduler_ID == 0)
+            if (VAF_JobRun_Plan_ID == 0)
             {
-                //	setAD_Process_ID (0);
+                //	setVAF_Job_ID (0);
                 //	setName (null);
                 SetFrequencyType(FREQUENCYTYPE_Day);
                 SetFrequency(1);
@@ -182,14 +182,14 @@ namespace VAdvantage.Model
         {
             List<MSchedulerLog> list = new List<MSchedulerLog>();
             String sql = "SELECT * "
-                + "FROM AD_SchedulerLog "
-                + "WHERE AD_Scheduler_ID=@scheduleid "
+                + "FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=@scheduleid "
                 + "ORDER BY Created DESC";
 
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -219,8 +219,8 @@ namespace VAdvantage.Model
         {
             if (GetKeepLogDays() < 1)
                 return 0;
-            String sql = "DELETE FROM AD_SchedulerLog "
-                + "WHERE AD_Scheduler_ID=" + GetAD_Scheduler_ID()
+            String sql = "DELETE FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=" + GetVAF_JobRun_Plan_ID()
                 + " AND (Created+" + GetKeepLogDays() + ") < SysDate";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
 
 
             if (m_process == null)
-                m_process = new MProcess(GetCtx(), GetAD_Process_ID(), null);
+                m_process = new MProcess(GetCtx(), GetVAF_Job_ID(), null);
             return m_process;
         }	//	getProcess
 
@@ -250,12 +250,12 @@ namespace VAdvantage.Model
             if (!reload && m_parameter != null)
                 return m_parameter;
             List<MSchedulerPara> list = new List<MSchedulerPara>();
-            String sql = "SELECT * FROM AD_Scheduler_Para WHERE AD_Scheduler_ID=@scheduleid AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Para WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
             DataSet ds = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 ds = new DataSet();
                 ds = DataBase.DB.ExecuteDataset(sql, param);
 
@@ -289,11 +289,11 @@ namespace VAdvantage.Model
             if (!reload && m_recipients != null)
                 return m_recipients;
             List<MSchedulerRecipient> list = new List<MSchedulerRecipient>();
-            String sql = "SELECT * FROM AD_SchedulerRecipient WHERE AD_Scheduler_ID=@scheduleid AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Recipient WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -315,10 +315,10 @@ namespace VAdvantage.Model
         }	//	getRecipients
 
         /// <summary>
-        /// Get Recipient AD_User_IDs
+        /// Get Recipient VAF_UserContact_IDs
         /// </summary>
         /// <returns>array of user IDs</returns>
-        public int[] GetRecipientAD_User_IDs()
+        public int[] GetRecipientVAF_UserContact_IDs()
         {
             List<int> list = new List<int>();
             MSchedulerRecipient[] recipients = GetRecipients(false);
@@ -327,21 +327,21 @@ namespace VAdvantage.Model
                 MSchedulerRecipient recipient = recipients[i];
                 if (!recipient.IsActive())
                     continue;
-                if (recipient.GetAD_User_ID() != 0)
+                if (recipient.GetVAF_UserContact_ID() != 0)
                 {
-                    int ii = recipient.GetAD_User_ID();
+                    int ii = recipient.GetVAF_UserContact_ID();
                     if (!list.Contains(ii))
                         list.Add(ii);
                 }
-                if (recipient.GetAD_Role_ID() != 0)
+                if (recipient.GetVAF_Role_ID() != 0)
                 {
-                    MUserRoles[] urs = MUserRoles.GetOfRole(GetCtx(), recipient.GetAD_Role_ID());
+                    MUserRoles[] urs = MUserRoles.GetOfRole(GetCtx(), recipient.GetVAF_Role_ID());
                     for (int j = 0; j < urs.Length; j++)
                     {
                         MUserRoles ur = urs[j];
                         if (!ur.IsActive())
                             continue;
-                        int ii = ur.GetAD_User_ID();
+                        int ii = ur.GetVAF_UserContact_ID();
                         if (!list.Contains(ii))
                             list.Add(ii);
                     }
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
             int[] recipientIDs = new int[list.Count()];
             recipientIDs = list.ToArray();
             return recipientIDs;
-        }	//	getRecipientAD_User_IDs
+        }	//	getRecipientVAF_UserContact_IDs
 
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace VAdvantage.Model
         /// <returns>Summary</returns>
         public String Execute(Trx trx)
         {
-            //if (GetAD_Form_ID() != 0)
+            //if (GetVAF_Page_ID() != 0)
             //{
             //    return RunCrystalReport();
             //}
@@ -420,18 +420,18 @@ namespace VAdvantage.Model
         private String RunReport(Trx trx)
         {
             log.Info(m_process.ToString());
-            if (!m_process.IsReport() || (m_process.GetAD_PrintFormat_ID() == 0
-                                             && m_process.GetAD_ReportView_ID() == 0
+            if (!m_process.IsReport() || (m_process.GetVAF_Print_Rpt_Layout_ID() == 0
+                                             && m_process.GetVAF_ReportView_ID() == 0
                 //&& !m_process.GetIsCrystalReport()
                                              && m_process.GetIsCrystalReport() == "N"
-                                              && m_process.GetAD_ReportFormat_ID() == 0
+                                              && m_process.GetVAF_ReportLayout_ID() == 0
                                               && !m_process.Get_Value("IsCrystalReport").Equals("B")
                                               && !m_process.Get_Value("IsCrystalReport").Equals("J")
-                                              && m_process.GetAD_ReportMaster_ID() == 0))
-                return "Not a Report AD_Process_ID=" + m_process.GetAD_Process_ID()
+                                              && m_process.GetVAF_ReportMaster_ID() == 0))
+                return "Not a Report VAF_Job_ID=" + m_process.GetVAF_Job_ID()
                     + " - " + m_process.GetName();
             //	Process
-            int AD_Table_ID = 0;
+            int VAF_TableView_ID = 0;
             int Record_ID = 0;
             //
             MPInstance pInstance = new MPInstance(m_process, Record_ID);
@@ -442,11 +442,11 @@ namespace VAdvantage.Model
                 return error;
             }
             //
-            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetAD_Process_ID(), AD_Table_ID, Record_ID);
-            pi.SetAD_User_ID(GetUpdatedBy());
-            pi.SetAD_Client_ID(GetAD_Client_ID());
-            pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
-            pi.SetAD_Org_ID(GetAD_Org_ID());
+            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
+            pi.SetVAF_Client_ID(GetVAF_Client_ID());
+            pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
+            pi.SetVAF_Org_ID(GetVAF_Org_ID());
             if (!m_process.ProcessIt(pi, trx) && pi.GetClassName() != null)
             {
                 string msg = "Process failed: (" + pi.GetClassName() + ") " + pi.GetSummary();
@@ -457,10 +457,10 @@ namespace VAdvantage.Model
             IReportEngine re = null;
 
             //Dynamic Report    
-            if (m_process.GetAD_ReportMaster_ID() > 0)
+            if (m_process.GetVAF_ReportMaster_ID() > 0)
             {
                 String fqClassName = "", asmName = "";
-                DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM AD_ReportMaster WHERE IsActive='Y' AND AD_ReportMaster_ID = " + m_process.GetAD_ReportMaster_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM VAF_ReportMaster WHERE IsActive='Y' AND VAF_ReportMaster_ID = " + m_process.GetVAF_ReportMaster_ID());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
@@ -474,12 +474,12 @@ namespace VAdvantage.Model
                 }
             }
 
-            else if (m_process.GetAD_ReportFormat_ID() > 0)
+            else if (m_process.GetVAF_ReportLayout_ID() > 0)
             {
-                string lang = p_ctx.GetContext("#AD_Language");
+                string lang = p_ctx.GetContext("#VAF_Language");
                 lang = lang.Replace("_", "-");
 
-                if ((m_process.GetAD_ReportFormat_ID() > 0) && (lang == "ar-IQ"))
+                if ((m_process.GetVAF_ReportLayout_ID() > 0) && (lang == "ar-IQ"))
                 {
                     isDocxFile = true;
                     //p_ctx.SetContext("ReportFromSchdular", true);
@@ -506,23 +506,23 @@ namespace VAdvantage.Model
                 //try
                 //{
                 //    log.Log(Level.INFO, "MWFActivity=>BI Report");
-                //    X_AD_Process BIProcess = new X_AD_Process(p_ctx, pi.GetAD_Process_ID(), null);
+                //    X_VAF_Job BIProcess = new X_VAF_Job(p_ctx, pi.GetVAF_Job_ID(), null);
                 //    var Dll = Assembly.Load("VA039");
                 //    var BIReportEngine = Dll.GetType("VA039.Classes.BIReportEngine");
 
                 //    var ctor = BIReportEngine.GetConstructors()[0];
                 //    if (ctor.GetParameters().Length > 2)
                 //    {
-                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetAD_PInstance_ID(), pi });
+                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID(), pi });
                 //    }
                 //    else
                 //    {
-                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetAD_PInstance_ID() });
+                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
                 //    }
 
                 //    //ConstructorInfo conInfo = BIReportEngine.GetConstructor(new[] { typeof(Ctx), typeof(int) });
                 //    //log.Log(Level.INFO, "MWFActivity=>BI Report Cunstructor Call");
-                //    //re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetAD_PInstance_ID() });
+                //    //re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
                 //    log.Log(Level.INFO, "MWFActivity=>BI Report Engine Reference");
                 //}
                 //catch (Exception e)
@@ -537,12 +537,12 @@ namespace VAdvantage.Model
                 //try
                 //{
                 //    log.Log(Level.INFO, "MWFActivity=>Jasper Report");
-                //    X_AD_Process BIProcess = new X_AD_Process(p_ctx, pi.GetAD_Process_ID(), null);
+                //    X_VAF_Job BIProcess = new X_VAF_Job(p_ctx, pi.GetVAF_Job_ID(), null);
                 //    var Dll = Assembly.Load("VA039");
                 //    var JasperReportEngine = Dll.GetType("VA039.Classes.JasperReportEngine");
                 //    ConstructorInfo conInfo = JasperReportEngine.GetConstructor(new[] { typeof(Ctx), typeof(int) });
                 //    log.Log(Level.INFO, "MWFActivity=>Jasper Report Cunstructor Call");
-                //    re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetAD_PInstance_ID() });
+                //    re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
                 //    log.Log(Level.INFO, "MWFActivity=>Jasper Report Engine Reference");
                 //}
                 //catch (Exception e)
@@ -560,20 +560,20 @@ namespace VAdvantage.Model
             //re = ReportEngine_N.Get(GetCtx(), pi);
             if (re == null)
             {
-                string msg = "Cannot create Report AD_Process_ID=" + m_process.GetAD_Process_ID()
+                string msg = "Cannot create Report VAF_Job_ID=" + m_process.GetVAF_Job_ID()
                     + " - " + m_process.GetName();
                 NotifySupervisor(false, msg, null);
                 return msg;
             }
 
             //	Notice
-            int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
-            int[] userIDs = GetRecipientAD_User_IDs();
+            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
+            int[] userIDs = GetRecipientVAF_UserContact_IDs();
             byte[] report = null;
             bool success = false;
             if (re != null)
             {
-                //int reportTable_ID = re.GetPrintFormat().GetAD_Table_ID();
+                //int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
                 if (re is IReportView)
                 {
                     ((IReportView)re).GetView();
@@ -587,19 +587,19 @@ namespace VAdvantage.Model
                 _emails = new List<String>();
                 for (int i = 0; i < userIDs.Length; i++)
                 {
-                    MNote note = new MNote(GetCtx(), AD_Message_ID, userIDs[i], trx);
+                    MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], trx);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-                    //note.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
-                    note.SetClientOrg(GetAD_Client_ID(), 0);
+                    //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+                    note.SetClientOrg(GetVAF_Client_ID(), 0);
                     note.SetTextMsg(GetName());
                     note.SetDescription(GetDescription());
-                    note.SetRecord(AD_Table_ID, Record_ID);
+                    note.SetRecord(VAF_TableView_ID, Record_ID);
                     note.Save();
 
                     if (report != null)
                     {
-                        MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetAD_Note_ID(), Get_TrxName());
-                        attachment.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
+                        MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
+                        attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
 
                         if (isDocxFile)
                         {
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
                         attachment.SetTextMsg(GetName());
                         attachment.Save();
                     }
-                    MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
 
                     success = SendEMail(client, userIDs[i], null, GetName(), GetDescription(), null, true, 0, 0, report);
 
@@ -628,18 +628,18 @@ namespace VAdvantage.Model
         /// Send actual EMail
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="email"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="pdf"></param>
         /// <param name="isHTML"></param>
-        private bool SendEMail(MClient client, int AD_User_ID, String email, String subject,
-            String message, FileInfo pdf, bool isHTML, int AD_Table_ID, int record_ID, byte[] bArray = null)
+        private bool SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
+            String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, byte[] bArray = null)
         {
-            if (AD_User_ID != 0)
+            if (VAF_UserContact_ID != 0)
             {
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
                 email = user.GetEMail();
 
                 if (!user.IsActive() || email == null)
@@ -666,7 +666,7 @@ namespace VAdvantage.Model
                     {
                         if ((isDocxFile))
                         {
-                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
                             {
                                 _emails.Add(email);
                                 return true;
@@ -674,7 +674,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray))
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
                             {
                                 _emails.Add(email);
                                 return true;
@@ -696,14 +696,14 @@ namespace VAdvantage.Model
                         if (isDocxFile)
                         {
                             //, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
-                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
                             {
                                 _emails.Add(email1);
                             }
                         }
                         else
                         {
-                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray))
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
                             {
                                 _emails.Add(email1);
                             }
@@ -723,7 +723,7 @@ namespace VAdvantage.Model
                         if (isDocxFile)
                         {
                             //  //, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
-                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
                             {
                                 _emails.Add(email);
                                 return true;
@@ -731,7 +731,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray))
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
                             {
                                 _emails.Add(email);
                                 return true;
@@ -752,14 +752,14 @@ namespace VAdvantage.Model
                     {
                         if (isDocxFile)
                         {
-                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
                             {
                                 _emails.Add(email1);
                             }
                         }
                         else
                         {
-                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray))
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
                             {
                                 _emails.Add(email1);
                             }
@@ -792,7 +792,7 @@ namespace VAdvantage.Model
         {
             log.Info(m_process.ToString());
             //	Process (see also MWFActivity.performWork
-            int AD_Table_ID = 0;
+            int VAF_TableView_ID = 0;
             int Record_ID = 0;
             //
             MPInstance pInstance = new MPInstance(m_process, Record_ID);
@@ -808,20 +808,20 @@ namespace VAdvantage.Model
             //
 
             Ctx ctx = new Ctx();
-            ctx.SetAD_Client_ID(GetAD_Client_ID());
-            ctx.SetContext("AD_Client_ID", GetAD_Client_ID());
-            ctx.SetAD_Org_ID(GetAD_Org_ID());
-            ctx.SetContext("AD_Org_ID", GetAD_Org_ID());
-            ctx.SetAD_User_ID(GetUpdatedBy());
-            ctx.SetContext("AD_User_ID", GetUpdatedBy());
+            ctx.SetVAF_Client_ID(GetVAF_Client_ID());
+            ctx.SetContext("VAF_Client_ID", GetVAF_Client_ID());
+            ctx.SetVAF_Org_ID(GetVAF_Org_ID());
+            ctx.SetContext("VAF_Org_ID", GetVAF_Org_ID());
+            ctx.SetVAF_UserContact_ID(GetUpdatedBy());
+            ctx.SetContext("VAF_UserContact_ID", GetUpdatedBy());
             ctx.SetContext("#SalesRep_ID", GetUpdatedBy());
 
 
 
-            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetAD_Process_ID(), AD_Table_ID, Record_ID);
-            pi.SetAD_User_ID(GetUpdatedBy());
-            pi.SetAD_Client_ID(GetAD_Client_ID());
-            pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
+            pi.SetVAF_Client_ID(GetVAF_Client_ID());
+            pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
 
             pi.SetLocalCtx(ctx.GetMap());
 
@@ -900,15 +900,15 @@ namespace VAdvantage.Model
 
                         try
                         {
-                            MProcessPara parass = new MProcessPara(GetCtx(), sPara.GetAD_Process_Para_ID(), null);
-                            if (DisplayType.IsLookup(parass.GetAD_Reference_ID()))
+                            MProcessPara parass = new MProcessPara(GetCtx(), sPara.GetVAF_Job_Para_ID(), null);
+                            if (DisplayType.IsLookup(parass.GetVAF_Control_Ref_ID()))
                             {
-                                if (sPara.GetColumnName().ToLower() == "ad_org_id")
+                                if (sPara.GetColumnName().ToLower() == "vaf_org_id")
                                 {
                                     DataSet ds = DB.ExecuteDataset(@"SELECT
-                                                                  (SELECT columnname FROM AD_Column WHERE isidentifier='Y'
-                                                                  AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE tableName='AD_Org' )
-                                                                  ) AS name FROM AD_Org WHERE AD_Org_ID=" + value);
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_Org' )
+                                                                  ) AS name FROM VAF_Org WHERE VAF_Org_ID=" + value);
                                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                                     {
                                         for (int a = 0; a < ds.Tables[0].Rows.Count; a++)
@@ -919,16 +919,16 @@ namespace VAdvantage.Model
                                             }
                                             colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
                                         }
-                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM AD_Org WHERE AD_Org_ID=" + value);
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_Org WHERE VAF_Org_ID=" + value);
                                     }
 
                                 }
-                                else if (sPara.GetColumnName().ToLower() == "ad_client_id")
+                                else if (sPara.GetColumnName().ToLower() == "vaf_client_id")
                                 {
                                     DataSet ds = DB.ExecuteDataset(@"SELECT
-                                                                  (SELECT columnname FROM AD_Column WHERE isidentifier='Y'
-                                                                  AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE tableName='AD_Client' )
-                                                                  ) AS name FROM AD_Client WHERE AD_Client_ID=" + value);
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_Client' )
+                                                                  ) AS name FROM VAF_Client WHERE VAF_Client_ID=" + value);
                                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                                     {
                                         for (int a = 0; a < ds.Tables[0].Rows.Count; a++)
@@ -939,15 +939,15 @@ namespace VAdvantage.Model
                                             }
                                             colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
                                         }
-                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM AD_Client WHERE AD_Client_ID=" + value);
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_Client WHERE VAF_Client_ID=" + value);
                                     }
                                 }
-                                else if (sPara.GetColumnName().ToLower() == "ad_user_id")
+                                else if (sPara.GetColumnName().ToLower() == "VAF_UserContact_id")
                                 {
                                     DataSet ds = DB.ExecuteDataset(@"SELECT
-                                                                  (SELECT columnname FROM AD_Column WHERE isidentifier='Y'
-                                                                  AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE tableName='AD_User' )
-                                                                  ) AS name FROM AD_User WHERE AD_User_ID=" + value);
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_UserContact' )
+                                                                  ) AS name FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
 
                                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                                     {
@@ -959,7 +959,7 @@ namespace VAdvantage.Model
                                             }
                                             colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
                                         }
-                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM AD_User WHERE AD_User_ID=" + value);
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
                                     }
 
                                 }
@@ -1053,9 +1053,9 @@ namespace VAdvantage.Model
             return sb.ToString();
         }	//	fillParameter
 
-        public DateTime[] CheckProcessTime(int AD_SCHEDULE_ID, MScheduler scheduler)
+        public DateTime[] CheckProcessTime(int VAF_Plan_ID, MScheduler scheduler)
         {
-            MSchedule schedule = new MSchedule(GetCtx(), AD_SCHEDULE_ID, Get_TrxName());
+            MSchedule schedule = new MSchedule(GetCtx(), VAF_Plan_ID, Get_TrxName());
             DateTime? dtNextRun;
             bool blNextDate = false;
             try
@@ -1101,7 +1101,7 @@ namespace VAdvantage.Model
         }
 
         /** Scheduler Result		*/
-        private static int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
+        private static int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
 
         private bool NotifySupervisor(bool success, String message, byte[] report)
         {
@@ -1110,7 +1110,7 @@ namespace VAdvantage.Model
             //	Send Mail
             // if (m_supervisor.IsNotificationEMail())
             //{
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
             String subject = client.GetName() + ": " + GetName();
 
             SendEMail(client, GetSupervisor_ID(), null, subject, message, null, false, 0, 0, report);
@@ -1118,10 +1118,10 @@ namespace VAdvantage.Model
             // return true;
             // }
             //	Create Notice
-            MNote note = new MNote(GetCtx(), AD_Message_ID, GetSupervisor_ID(), null);
+            MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetSupervisor_ID(), null);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            //note.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
-            note.SetClientOrg(GetAD_Client_ID(), 0);
+            //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+            note.SetClientOrg(GetVAF_Client_ID(), 0);
             note.SetTextMsg(GetName());
             note.SetDescription(message);
             note.SetRecord(Table_ID, Get_ID());		//	point to this
@@ -1129,8 +1129,8 @@ namespace VAdvantage.Model
             //	Attachment
             if (ok && (report != null))
             {
-                MAttachment attachment = new MAttachment(GetCtx(), X_AD_Note.Table_ID, note.GetAD_Note_ID(), null);
-                attachment.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
+                MAttachment attachment = new MAttachment(GetCtx(), X_VAF_Notice.Table_ID, note.GetVAF_Notice_ID(), null);
+                attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                 // attachment.AddEntry(attachmentFile.FullName);
                 if (isDocxFile)
                 {
@@ -1161,25 +1161,25 @@ namespace VAdvantage.Model
 
         //    System.Globalization.CultureInfo systemCulture = Thread.CurrentThread.CurrentCulture;
 
-        //    if (!string.IsNullOrEmpty(GetCtx().GetAD_Language().Replace('_', '-')))
+        //    if (!string.IsNullOrEmpty(GetCtx().GetVAF_Language().Replace('_', '-')))
         //    {
-        //        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(GetCtx().GetAD_Language().Replace('_', '-'));
-        //        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GetCtx().GetAD_Language().Replace('_', '-'));
+        //        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
+        //        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
         //    }
 
-        //    MForm form = new MForm(GetCtx(), GetAD_Form_ID(), Get_TrxName());
+        //    MForm form = new MForm(GetCtx(), GetVAF_Page_ID(), Get_TrxName());
 
         //    //CrystalParameter para = new CrystalParameter(windowNo);
-        //    int AD_CrystalInstance_ID = 0;
+        //    int VAF_CrystalInstance_ID = 0;
         //    MCrystalInstance instance = null;
         //    try
         //    {
-        //        instance = new MCrystalInstance(Env.GetContext(), GetAD_Form_ID(), 0);
+        //        instance = new MCrystalInstance(Env.GetContext(), GetVAF_Page_ID(), 0);
         //        if (!instance.Save())
         //        {
         //            return Msg.GetMsg(GetCtx(), "");
         //        }
-        //        AD_CrystalInstance_ID = instance.GetAD_CrystalInstance_ID();
+        //        VAF_CrystalInstance_ID = instance.GetVAF_CrystalInstance_ID();
         //    }
         //    catch
         //    {
@@ -1201,7 +1201,7 @@ namespace VAdvantage.Model
         //    }
 
         //    //serviceError = null;
-        //    ProcessInfoParameter[] parameters = ProcessInfoUtil.SetCrystalParameterFromDB(AD_CrystalInstance_ID);
+        //    ProcessInfoParameter[] parameters = ProcessInfoUtil.SetCrystalParameterFromDB(VAF_CrystalInstance_ID);
         //    string _ReportImagePath = "";
         //    string _ReportPath = "";
 
@@ -1368,11 +1368,11 @@ namespace VAdvantage.Model
         //            Thread.CurrentThread.CurrentCulture = systemCulture;
         //            Thread.CurrentThread.CurrentUICulture = systemCulture;
 
-        //            int AD_Table_ID = 0;
+        //            int VAF_TableView_ID = 0;
         //            int Record_ID = 0;
 
-        //            int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
-        //            int[] userIDs = GetRecipientAD_User_IDs();
+        //            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
+        //            int[] userIDs = GetRecipientVAF_UserContact_IDs();
 
         //            bool success = false;
         //            if (report != null)
@@ -1380,20 +1380,20 @@ namespace VAdvantage.Model
         //                _emails = new List<String>();
         //                for (int i = 0; i < userIDs.Length; i++)
         //                {
-        //                    MNote note = new MNote(GetCtx(), AD_Message_ID, userIDs[i], Get_TrxName());
-        //                    note.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
+        //                    MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], Get_TrxName());
+        //                    note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
         //                    note.SetTextMsg(GetName());
         //                    note.SetDescription(GetDescription());
-        //                    note.SetRecord(AD_Table_ID, Record_ID);
+        //                    note.SetRecord(VAF_TableView_ID, Record_ID);
         //                    note.Save();
 
-        //                    MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetAD_Note_ID(), Get_TrxName());
-        //                    attachment.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
+        //                    MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
+        //                    attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
         //                    attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".pdf", report);
         //                    attachment.SetTextMsg(GetName());
         //                    attachment.Save();
 
-        //                    MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+        //                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
 
         //                    success = SendEMail(client, userIDs[i], null, GetName(), GetDescription(), null, true, 0, 0, report);
 
@@ -1431,7 +1431,7 @@ namespace VAdvantage.Model
         //    }
 
         //    //  execute on this thread/connection
-        //    //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+        //    //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
         //    try
         //    {
         //        //only oracle procedure are supported
@@ -1510,7 +1510,7 @@ namespace VAdvantage.Model
         //            i++;
         //        }
 
-        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
         //        int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
         //        //DataBase.DB.ExecuteQuery(sql, null);
         //    }
@@ -1533,7 +1533,7 @@ namespace VAdvantage.Model
         //    }
 
         //    //  execute on this thread/connection
-        //    //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+        //    //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
         //    try
         //    {
         //        //only oracle procedure are supported
@@ -1556,7 +1556,7 @@ namespace VAdvantage.Model
         //            i++;
         //        }
 
-        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
         //        int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
         //        //DataBase.DB.ExecuteQuery(sql, null);
         //    }

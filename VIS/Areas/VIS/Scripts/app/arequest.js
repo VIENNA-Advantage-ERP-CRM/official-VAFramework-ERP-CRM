@@ -42,8 +42,8 @@
     };
 
 
-    function ARequest(invoker, AD_Table_ID, Record_ID, C_BPartner_ID, iBusy, container) {
-        var AD_Window_ID = 232;
+    function ARequest(invoker, VAF_TableView_ID, Record_ID, C_BPartner_ID, iBusy, container) {
+        var VAF_Screen_ID = 232;
         var m_where = '';
         var window = null;
         var tab = null;
@@ -58,30 +58,30 @@
                     return;
                 }
             }
-            m_where = "(AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + ")";
+            m_where = "(VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + ")";
 
-            if (AD_Table_ID == 114) {// MUser.Table_ID){
-                m_where += " OR AD_User_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
+            if (VAF_TableView_ID == 114) {// MUser.Table_ID){
+                m_where += " OR VAF_UserContact_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 291) {//MBPartner.Table_ID){
+            else if (VAF_TableView_ID == 291) {//MBPartner.Table_ID){
                 m_where += " OR C_BPartner_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 259) {// MOrder.Table_ID){
+            else if (VAF_TableView_ID == 259) {// MOrder.Table_ID){
                 m_where += " OR C_Order_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 318) {//MInvoice.Table_ID){
+            else if (VAF_TableView_ID == 318) {//MInvoice.Table_ID){
                 m_where += " OR C_Invoice_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 335) {// MPayment.Table_ID){
+            else if (VAF_TableView_ID == 335) {// MPayment.Table_ID){
                 m_where += " OR C_Payment_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 208) {//MProduct.Table_ID){
+            else if (VAF_TableView_ID == 208) {//MProduct.Table_ID){
                 m_where += " OR M_Product_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 203) {//MProject.Table_ID){
+            else if (VAF_TableView_ID == 203) {//MProject.Table_ID){
                 m_where += " OR C_Project_ID=" + Record_ID;
             }
-            else if (AD_Table_ID == 539) {// MAsset.Table_ID){
+            else if (VAF_TableView_ID == 539) {// MAsset.Table_ID){
                 m_where += " OR A_Asset_ID=" + Record_ID;
             }
             //sql = "SELECT Processed, COUNT(*) "
@@ -97,7 +97,7 @@
                 type: 'Get',
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetProcessedRequest",
-                data: { AD_Table_ID: AD_Table_ID, Record_ID: Record_ID },
+                data: { VAF_TableView_ID: VAF_TableView_ID, Record_ID: Record_ID },
                 success: function (data) {
                     dr = new VIS.DB.DataReader().toJson(data);
                 },
@@ -147,7 +147,7 @@
 
             e.stopImmediatePropagation();
             //var vm=new VIS.viewManager();
-            window = VIS.viewManager.startWindow(AD_Window_ID, null);
+            window = VIS.viewManager.startWindow(VAF_Screen_ID, null);
             window.onLoad = function () {
                 var gc = window.cPanel.curGC;
 
@@ -157,7 +157,7 @@
 
                 gc.onRowInserted = function () {
                     tab = window.cPanel.curTab;
-                    tab.setValue("AD_Table_ID", AD_Table_ID);
+                    tab.setValue("VAF_TableView_ID", VAF_TableView_ID);
                     tab.setValue("Record_ID", Record_ID);
 
                     if (C_BPartner_ID != null && C_BPartner_ID > 0)
@@ -165,27 +165,27 @@
                         tab.setValue("C_BPartner_ID", C_BPartner_ID);
                     }
 
-                    if (AD_Table_ID == 291)// MBPartner.Table_ID)
+                    if (VAF_TableView_ID == 291)// MBPartner.Table_ID)
                         tab.setValue("C_BPartner_ID", Record_ID);
-                    else if (AD_Table_ID == 114)//MUser.Table_ID)
-                        tab.setValue("AD_User_ID", Record_ID);
+                    else if (VAF_TableView_ID == 114)//MUser.Table_ID)
+                        tab.setValue("VAF_UserContact_ID", Record_ID);
                         //
-                    else if (AD_Table_ID == 203)// MProject.Table_ID)
+                    else if (VAF_TableView_ID == 203)// MProject.Table_ID)
                         tab.setValue("C_Project_ID", Record_ID);
-                    else if (AD_Table_ID == 539)// MAsset.Table_ID)
+                    else if (VAF_TableView_ID == 539)// MAsset.Table_ID)
                         tab.setValue("A_Asset_ID", Record_ID);
 
-                    else if (AD_Table_ID == 259)
+                    else if (VAF_TableView_ID == 259)
                         tab.setValue("C_Order_ID", Record_ID);
-                    else if (AD_Table_ID == 318)//MInvoice.Table_ID)
+                    else if (VAF_TableView_ID == 318)//MInvoice.Table_ID)
                         tab.setValue("C_Invoice_ID", Record_ID);
                         //
-                    else if (AD_Table_ID == 208)//MProduct.Table_ID)
+                    else if (VAF_TableView_ID == 208)//MProduct.Table_ID)
                         tab.setValue("M_Product_ID", Record_ID);
-                    else if (AD_Table_ID == 335)//MPayment.Table_ID)
+                    else if (VAF_TableView_ID == 335)//MPayment.Table_ID)
                         tab.setValue("C_Payment_ID", Record_ID);
                         //
-                    else if (AD_Table_ID == 319)// MInOut.Table_ID)
+                    else if (VAF_TableView_ID == 319)// MInOut.Table_ID)
                         tab.setValue("M_InOut_ID", Record_ID);
                 };
 
@@ -208,7 +208,7 @@
             e.stopImmediatePropagation();
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction("(" + m_where + ") AND Processed='N'");
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             var overlay = $('#w2ui-overlay');
             overlay.hide();
             overlay = null;
@@ -219,7 +219,7 @@
             e.stopImmediatePropagation();
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(m_where);
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             var overlay = $('#w2ui-overlay');
             overlay.hide();
             overlay = null;

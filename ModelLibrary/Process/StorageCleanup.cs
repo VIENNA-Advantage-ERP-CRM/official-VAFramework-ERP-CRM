@@ -70,7 +70,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = "SELECT * "
                 + "FROM M_Storage s "
-                + "WHERE AD_Client_ID =" + GetCtx().GetAD_Client_ID()
+                + "WHERE VAF_Client_ID =" + GetCtx().GetVAF_Client_ID()
                 + " AND QtyOnHand < 0"
                 //	Instance Attribute
                 + " AND EXISTS (SELECT * FROM M_Product p"
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             mh.Save();
 
             AddLog(0, null, new Decimal(lines), "@M_Movement_ID@ " + mh.GetDocumentNo() + " ("
-                + MRefList.Get(GetCtx(), MMovement.DOCSTATUS_AD_Reference_ID,
+                + MRefList.Get(GetCtx(), MMovement.DOCSTATUS_VAF_Control_Ref_ID,
                     mh.GetDocStatus(), Get_Trx()) + ")");
 
             EliminateReservation(target);

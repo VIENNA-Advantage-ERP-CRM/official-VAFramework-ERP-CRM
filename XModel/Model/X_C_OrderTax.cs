@@ -78,7 +78,7 @@ static X_C_OrderTax()
 //static long serialVersionUID 27562514373425L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056636L;
-/** AD_Table_ID=314 */
+/** VAF_TableView_ID=314 */
 public static int Table_ID;
  // =314;
 

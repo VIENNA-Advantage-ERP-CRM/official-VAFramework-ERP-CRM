@@ -46,7 +46,7 @@ namespace VIS.Controllers
                     model.Login2Model = (Login2Model)TempData.Peek("Login2Model");
                     bool resetPwd = Util.GetValueOfBool(TempData.Peek("ResetPwd"));
                     bool Is2FAEnabled = Util.GetValueOfBool(TempData.Peek("Is2FAEnabled"));
-                    model.Login1Model.AD_User_ID = Util.GetValueOfInt(TempData.Peek("AD_User_ID"));
+                    model.Login1Model.VAF_UserContact_ID = Util.GetValueOfInt(TempData.Peek("VAF_UserContact_ID"));
                     model.Login1Model.QRFirstTime = Util.GetValueOfBool(TempData.Peek("QRFirstTime"));
                     model.Login1Model.TokenKey2FA = Util.GetValueOfString(TempData.Peek("TokenKey2FA"));
                     model.Login1Model.QRCodeURL = Util.GetValueOfString(TempData.Peek("QRCodeURL"));
@@ -73,7 +73,7 @@ namespace VIS.Controllers
                             // If we got this far, something failed
                             return Json(new { errors = GetErrorsFromModelState() });
                         }
-                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.AD_User_ID);
+                        bool isUpdated = LoginHelper.UpdatePassword(model.Login1Model.NewPassword, model.Login1Model.VAF_UserContact_ID);
                         if (isUpdated)
                         {
                             proceedToLogin2 = 2;
@@ -126,7 +126,7 @@ namespace VIS.Controllers
                         TempData["Login2Model"] = model.Login2Model;
                         TempData["ResetPwd"] = model.Login1Model.ResetPwd;
                         TempData["Is2FAEnabled"] = model.Login1Model.Is2FAEnabled;
-                        TempData["AD_User_ID"] = model.Login1Model.AD_User_ID;
+                        TempData["VAF_UserContact_ID"] = model.Login1Model.VAF_UserContact_ID;
                         TempData["QRFirstTime"] = model.Login1Model.QRFirstTime;
                         TempData["TokenKey2FA"] = model.Login1Model.TokenKey2FA;
                         TempData["QRCodeURL"] = model.Login1Model.QRCodeURL;

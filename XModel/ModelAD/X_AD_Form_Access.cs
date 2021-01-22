@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Form_Access
+/** Generated Model for VAF_Page_Rights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Form_Access : PO
+public class X_VAF_Page_Rights : PO
 {
-public X_AD_Form_Access (Context ctx, int AD_Form_Access_ID, Trx trxName) : base (ctx, AD_Form_Access_ID, trxName)
+public X_VAF_Page_Rights (Context ctx, int VAF_Page_Rights_ID, Trx trxName) : base (ctx, VAF_Page_Rights_ID, trxName)
 {
-/** if (AD_Form_Access_ID == 0)
+/** if (VAF_Page_Rights_ID == 0)
 {
-SetAD_Form_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Page_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
 }
-public X_AD_Form_Access (Ctx ctx, int AD_Form_Access_ID, Trx trxName) : base (ctx, AD_Form_Access_ID, trxName)
+public X_VAF_Page_Rights (Ctx ctx, int VAF_Page_Rights_ID, Trx trxName) : base (ctx, VAF_Page_Rights_ID, trxName)
 {
-/** if (AD_Form_Access_ID == 0)
+/** if (VAF_Page_Rights_ID == 0)
 {
-SetAD_Form_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Page_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsReadWrite (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Page_Rights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Form_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Page_Rights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Form_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Page_Rights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Form_Access()
+static X_VAF_Page_Rights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_Form_Access()
 //static long serialVersionUID = 27562514361420L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044631L;
-/** AD_Table_ID=378 */
+/** VAF_TableView_ID=378 */
 public static int Table_ID;
  // =378;
 
-/** TableName=AD_Form_Access */
-public static String Table_Name="AD_Form_Access";
+/** TableName=VAF_Page_Rights */
+public static String Table_Name="VAF_Page_Rights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Form_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Page_Rights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID < 1) throw new ArgumentException ("AD_Form_ID is mandatory.");
-Set_ValueNoCheck ("AD_Form_ID", AD_Form_ID);
+if (VAF_Page_ID < 1) throw new ArgumentException ("VAF_Page_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Read Write.
 @param IsReadWrite Field is read / write */

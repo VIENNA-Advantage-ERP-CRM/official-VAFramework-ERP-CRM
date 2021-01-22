@@ -96,7 +96,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MPayment payment = CreatePayment(ibs.GetC_Invoice_ID(), ibs.GetC_BPartner_ID(),
                 ibs.GetC_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
                 ibs.GetC_BankAccount_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
-                Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetAD_Org_ID());
+                Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetVAF_Org_ID());
             if (payment == null)
             {
                 throw new SystemException("Could not create Payment");
@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MPayment payment = CreatePayment(bsl.GetC_Invoice_ID(), bsl.GetC_BPartner_ID(),
                 bsl.GetC_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
                 bs.GetC_BankAccount_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
-                bsl.GetDescription(), bsl.GetAD_Org_ID());
+                bsl.GetDescription(), bsl.GetVAF_Org_ID());
             if (payment == null)
             {
                 throw new SystemException("Could not create Payment");
@@ -167,12 +167,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="DateTrx">transaction date</param>
         /// <param name="DateAcct">accounting date</param>
         /// <param name="Description">description</param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <returns>payment</returns>
         private MPayment CreatePayment(int C_Invoice_ID, int C_BPartner_ID,
             int C_Currency_ID, Decimal stmtAmt, Decimal trxAmt,
             int C_BankAccount_ID, DateTime? dateTrx, DateTime? dateAcct,
-            String description, int AD_Org_ID)
+            String description, int VAF_Org_ID)
         {
             //	Trx Amount = Payment overwrites Statement Amount if defined
             Decimal payAmt = trxAmt;
@@ -190,7 +190,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //}
             //
             MPayment payment = new MPayment(GetCtx(), 0, Get_Trx());
-            payment.SetAD_Org_ID(AD_Org_ID);
+            payment.SetVAF_Org_ID(VAF_Org_ID);
             payment.SetC_BankAccount_ID(C_BankAccount_ID);
             payment.SetTenderType(MPayment.TENDERTYPE_Check);
             if (dateTrx != null)

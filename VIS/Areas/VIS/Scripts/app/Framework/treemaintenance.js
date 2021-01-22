@@ -476,13 +476,13 @@
         };
 
         function GetCountOnTreeChanges() {
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -490,9 +490,9 @@
 
 
             TreeTableName();
-            //  var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
+            //  var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND VAF_TreeInfo_ID=" + $treeID;
 
-            var sqlQry = "SELECT Count(*) as Count FROM " + tablename + " WHERE IsActive='Y' AND " + tablename + "_ID  IN (SELECT Node_ID FROM " + tableTreeName + " where AD_Tree_ID=" + $treeID + ")";
+            var sqlQry = "SELECT Count(*) as Count FROM " + tablename + " WHERE IsActive='Y' AND " + tablename + "_ID  IN (SELECT Node_ID FROM " + tableTreeName + " where VAF_TreeInfo_ID=" + $treeID + ")";
 
             sqlQry = VIS.MRole.addAccessSQL(sqlQry, tablename, true, false);
 
@@ -507,7 +507,7 @@
 
             if (bindornot == "false") {
                 if (sqlQry == convertmenuArray.length) {
-                    var sqlQryss = "SELECT node_id  FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
+                    var sqlQryss = "SELECT node_id  FROM " + tableTreeName + " WHERE isactive ='Y' AND VAF_TreeInfo_ID=" + $treeID;
                     sqlQryss = executeDataSet(sqlQryss, null, null);
                     if (sqlQryss != null) {
                         var node_Idss = null;
@@ -553,7 +553,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "TreeMaintenance/BindTree",
                 type: 'Post',
-                data: { treeType: $cmbSelectedType, AD_Tree_ID: $treeID, isAllNodes: $cmbIsallnodes, isSummary: $isSummary },
+                data: { treeType: $cmbSelectedType, VAF_TreeInfo_ID: $treeID, isAllNodes: $cmbIsallnodes, isSummary: $isSummary },
                 success: function (data) {
                     var result = JSON.parse(data);
                     if (result) {
@@ -615,25 +615,25 @@
 
 
         function AskForMoreRecorde() {
-            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             //tree = VIS.DB.executeDataSet(tree, null, null);
             //treeType = tree.tables[0].rows[0].cells["treetype"];
             //var tbname = "";
             //var tablename = "";
             //if (treeType == "PR") {
-            //    tbname = "ad_treenodepr"
+            //    tbname = "VAF_TreeInfoChildProd"
             //}
             //else if (treeType == "BP") {
-            //    tbname = "ad_treenodebp"
+            //    tbname = "VAF_TreeInfoChildBPart"
             //}
             //else if (treeType == "MM") {
-            //    tbname = "ad_treenodemm"
+            //    tbname = "VAF_TreeInfoChildMenu"
             //}
             //else {
-            //    tbname = "ad_treenode"
+            //    tbname = "VAF_TreeInfoChild"
             //}
 
-            //var sqlQry = "SELECT Count(*) as Count FROM " + tbname + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
+            //var sqlQry = "SELECT Count(*) as Count FROM " + tbname + " WHERE isactive ='Y' AND VAF_TreeInfo_ID=" + $treeID;
             //sqlQry = VIS.DB.executeDataSet(sqlQry, null, null);
             //sqlQry = sqlQry.tables[0].rows[0].cells["count"];
 
@@ -689,25 +689,25 @@
             //$bsyDiv[0].style.visibility = "visible";
             $bsyDivTree[0].style.visibility = "visible";
 
-            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             //tree = VIS.DB.executeDataSet(tree, null, null);
             //treeType = tree.tables[0].rows[0].cells["treetype"];
             //var tbname = "";
             //var tablename = "";
             //if (treeType == "PR") {
-            //    tbname = "ad_treenodepr"
+            //    tbname = "VAF_TreeInfoChildProd"
             //}
             //else if (treeType == "BP") {
-            //    tbname = "ad_treenodebp"
+            //    tbname = "VAF_TreeInfoChildBPart"
             //}
             //else if (treeType == "MM") {
-            //    tbname = "ad_treenodemm"
+            //    tbname = "VAF_TreeInfoChildMenu"
             //}
             //else {
-            //    tbname = "ad_treenode"
+            //    tbname = "VAF_TreeInfoChild"
             //}
 
-            //var sqlQry = "SELECT Count(*) as Count FROM " + tbname + " WHERE AD_Tree_ID=" + $treeID;
+            //var sqlQry = "SELECT Count(*) as Count FROM " + tbname + " WHERE VAF_TreeInfo_ID=" + $treeID;
             //sqlQry = VIS.DB.executeDataSet(sqlQry, null, null);
             //sqlQry = sqlQry.tables[0].rows[0].cells["count"];
 
@@ -1310,22 +1310,22 @@
             }
 
 
-            var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
 
 
             if (treeType == "PR") {
-                tbname = "AD_TreeNodePR"
+                tbname = "VAF_TreeInfoChildProd"
             }
             else if (treeType == "BP") {
-                tbname = "AD_TreeNodeBP"
+                tbname = "VAF_TreeInfoChildBPart"
             }
             else if (treeType == "MM") {
-                tbname = "AD_TreeNodeMM"
+                tbname = "VAF_TreeInfoChildMenu"
             }
             else {
-                tbname = "AD_TreeNode"
+                tbname = "VAF_TreeInfoChild"
             }
 
             var $dropTreeDataNodeIDasParentID = $leftTreeKeno.find(".k-state-hover").find(".treechild").attr("data-nodeid");
@@ -1395,7 +1395,7 @@
                     if (ulss.length > 0) {
                         var sequence = 0;
 
-                        var getseqqry = "SELECT seqno FROM " + tbname + "  WHERE AD_Tree_ID=" + $treeID + " AND node_id=" + cNode.find(".treechild").attr("data-nodeid");
+                        var getseqqry = "SELECT seqno FROM " + tbname + "  WHERE VAF_TreeInfo_ID=" + $treeID + " AND node_id=" + cNode.find(".treechild").attr("data-nodeid");
                         var dsss = executeDataSet(getseqqry, null, null);
 
                         if (dsss.tables[0].rows.length > 0) {
@@ -1412,7 +1412,7 @@
 
 
                         var increaseSqe = "update " + tbname + " set seqno=seqno+1,Updated=Sysdate,parent_ID=0 where seqno >=" + sequence +
-                                         " AND (parent_id=0 or parent_id is null)  AND AD_Tree_ID=" + $treeID;
+                                         " AND (parent_id=0 or parent_id is null)  AND VAF_TreeInfo_ID=" + $treeID;
                         executeQuery(increaseSqe, null, null);
 
 
@@ -1425,12 +1425,12 @@
                         var setmoveSeq = $(soursenodes).find(".treechild").attr("data-nodeid");
                         if (getparentornot > 0) {
                             var movedSetSeq = "update " + tbname + " set seqno=" + sequence + ",parent_id=0  where node_id=" + setmoveSeq +
-                                           "   AND AD_Tree_ID=" + $treeID;
+                                           "   AND VAF_TreeInfo_ID=" + $treeID;
                             executeQuery(movedSetSeq, null, null);
                         }
                         else {
                             var movedSetSeq = "update " + tbname + " set seqno=" + sequence + " where node_id=" + setmoveSeq +
-                                           " AND (parent_id=0 or parent_id is null) AND AD_Tree_ID=" + $treeID;
+                                           " AND (parent_id=0 or parent_id is null) AND VAF_TreeInfo_ID=" + $treeID;
                             executeQuery(movedSetSeq, null, null);
                         }
 
@@ -1440,7 +1440,7 @@
 
                         //var nodeidfromcnode = cNode.find(".treechild").attr("data-nodeid");
                         //var movednodeid = $(soursenodes).find(".treechild").attr("data-nodeid");
-                        //var updatesqn = "UPDATE " + tbname + "  SET Updated=Sysdate, seqNo=" + seqnoafterdrop + " WHERE node_id=" + movednodeid + " AND AD_Tree_ID=" + $treeID;
+                        //var updatesqn = "UPDATE " + tbname + "  SET Updated=Sysdate, seqNo=" + seqnoafterdrop + " WHERE node_id=" + movednodeid + " AND VAF_TreeInfo_ID=" + $treeID;
 
                         //VIS.DB.executeQuery(updatesqn, null, null);
 
@@ -1449,7 +1449,7 @@
                         //{
                         //    var sql = "UPDATE ";
                         //    sql += tbname + " SET Parent_ID=0, SeqNo=" + l + ", Updated=SysDate" +
-                        //                    " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + $(ulss[l]).find(".treechild").attr("data-nodeid");
+                        //                    " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + $(ulss[l]).find(".treechild").attr("data-nodeid");
                         //    VIS.DB.executeQuery(sql, null, null);
                         //}
                     }
@@ -1526,7 +1526,7 @@
 
                                 var sql = "UPDATE ";
                                 sql += tbname + " SET Parent_ID=" + pid + ", SeqNo=" + i + ", Updated=SysDate" +
-                                                " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + nd;
+                                                " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + nd;
 
 
                                 executeQuery(sql, null, null);
@@ -1544,7 +1544,7 @@
 
                                 var sql = "UPDATE ";
                                 sql += tbname + " SET Parent_ID=" + pid + ", SeqNo=" + i + ", Updated=SysDate" +
-                                                " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + nd;
+                                                " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + nd;
 
 
                                 executeQuery(sql, null, null);
@@ -1573,7 +1573,7 @@
 
             //            var sql = "UPDATE ";
             //            sql += tbname + " SET Parent_ID=" + pid + ", SeqNo=" + i + ", Updated=SysDate" +
-            //                            " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
+            //                            " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
 
             //            VIS.DB.executeQuery(sql, null, null);
             //        }
@@ -1598,7 +1598,7 @@
 
             //        var sql = "UPDATE ";
             //        sql += tbname + " SET Parent_ID=" + pid + ", SeqNo=" + i + ", Updated=SysDate" +
-            //                        " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
+            //                        " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
 
             //        VIS.DB.executeQuery(sql, null, null);
             //    }
@@ -1609,7 +1609,7 @@
 
             //        var sql = "UPDATE ";
             //        sql += tbname + " SET Parent_ID=" + parentID + ", SeqNo=" + i + ", Updated=SysDate" +
-            //                        " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
+            //                        " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + $(nd).find(".treechild").attr("data-nodeid");
 
             //        VIS.DB.executeQuery(sql, null, null);
             //    }
@@ -1940,7 +1940,7 @@
                     if (nodeItemDelwithdrag.hasClass("selectchangecolor")) {
                         $bsyDiv[0].style.visibility = "visible";
                         TreeTableName();
-                        var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+                        var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
                         var child = executeDataSet(findchilds, null, null);
 
                         if (child != null && child.tables[0].rows.length == 0) {
@@ -2035,7 +2035,7 @@
 
                 //var sql = "UPDATE ";
                 //sql += tbnameofTree + " SET SeqNo=" + l + ", Updated=SysDate" +
-                //                " WHERE AD_Tree_ID=" + $treeID + " AND Parent_ID=" + getParentID + "   AND Node_ID=" + $($ulMid.find("li li")[l]).attr("id");
+                //                " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Parent_ID=" + getParentID + "   AND Node_ID=" + $($ulMid.find("li li")[l]).attr("id");
 
                 //VIS.DB.executeQuery(sql, null, null);
             }
@@ -2058,34 +2058,34 @@
 
         var tbnameofTree = null;
         function getTreeTableName() {
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
             }
 
-            var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
 
 
             if (treeType == "PR") {
-                tbnameofTree = "AD_TreeNodePR";
+                tbnameofTree = "VAF_TreeInfoChildProd";
             }
             else if (treeType == "BP") {
-                tbnameofTree = "AD_TreeNodeBP";
+                tbnameofTree = "VAF_TreeInfoChildBPart";
             }
             else if (treeType == "MM") {
-                tbnameofTree = "AD_TreeNodeMM";
+                tbnameofTree = "VAF_TreeInfoChildMenu";
             }
             else {
-                tbnameofTree = "AD_TreeNode"
+                tbnameofTree = "VAF_TreeInfoChild"
             }
         };
 
@@ -2198,7 +2198,7 @@
                     if (nodeItemDelwithdrag.hasClass("selectchangecolor")) {
                         $bsyDiv[0].style.visibility = "visible";
                         TreeTableName();
-                        var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+                        var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
                         var child = executeDataSet(findchilds, null, null);
 
                         if (child != null && child.tables[0].rows.length == 0) {
@@ -2722,34 +2722,34 @@
 
                     var getAllChildNodeID = [];
                     if (issummary == "true") {
-                        //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                        //var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                         //table_id = VIS.DB.executeDataSet(table_id, null, null);
                         //if (table_id.tables[0].rows.length > 0) {
-                        //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                        //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                         //}
 
-                        //var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                        //var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                         //tablename = VIS.DB.executeDataSet(tablename, null, null);
                         //if (tablename.tables[0].rows.length > 0) {
                         //    tablename = tablename.tables[0].rows[0].cells["tablename"];
                         //}
 
-                        //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                        //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                         //tree = VIS.DB.executeDataSet(tree, null, null);
                         //treeType = tree.tables[0].rows[0].cells["treetype"];
                         //var tbname = "";
 
                         //if (treeType == "PR") {
-                        //    tbname = "ad_treenodepr"
+                        //    tbname = "VAF_TreeInfoChildProd"
                         //}
                         //else if (treeType == "BP") {
-                        //    tbname = "ad_treenodebp"
+                        //    tbname = "VAF_TreeInfoChildBPart"
                         //}
                         //else if (treeType == "MM") {
-                        //    tbname = "ad_treenodemm"
+                        //    tbname = "VAF_TreeInfoChildMenu"
                         //}
                         //else {
-                        //    tbname = "ad_treenode"
+                        //    tbname = "VAF_TreeInfoChild"
                         //}
                         //var sqlqryval = null;
 
@@ -2757,13 +2757,13 @@
 
                         //var sqlqry = "SELECT " + tableTreeName + ".node_id AS node_id FROM " + tablename + " mp" +
                         //             " INNER JOIN " + tableTreeName + " " + tableTreeName + " ON mp." + tablename + "_ID=" + tableTreeName + ".node_id" +
-                        //             "  WHERE " + tableTreeName + ".ad_tree_id=" + $treeID + " AND " + tableTreeName + ".parent_id=" + SummaryID;
+                        //             "  WHERE " + tableTreeName + ".VAF_TreeInfo_id=" + $treeID + " AND " + tableTreeName + ".parent_id=" + SummaryID;
 
                         //sqlqryval = VIS.DB.executeDataSet(sqlqry, null, null);
 
 
-                        ////var sqlGetParent = "SELECT parent_id FROM " + tableTreeName + " WHERE node_id=" + SummaryID + " AND ad_tree_id=" + $treeID;
-                        //var sqlGetParent = "SELECT parent_id FROM " + tableTreeName + " WHERE node_id=" + SummaryID + " AND ad_tree_id=" + $treeID;
+                        ////var sqlGetParent = "SELECT parent_id FROM " + tableTreeName + " WHERE node_id=" + SummaryID + " AND VAF_TreeInfo_id=" + $treeID;
+                        //var sqlGetParent = "SELECT parent_id FROM " + tableTreeName + " WHERE node_id=" + SummaryID + " AND VAF_TreeInfo_id=" + $treeID;
 
                         //var sqlExecute = VIS.DB.executeDataSet(sqlGetParent, null, null);
                         //if (sqlExecute.tables[0].rows.length > 0)
@@ -3176,13 +3176,13 @@
                             //    getNodeIDForIcon.find("span").addClass("glyphicon glyphicon-link");
                             //}
 
-                            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                             //table_id = VIS.DB.executeDataSet(table_id, null, null);
                             //if (table_id.tables[0].rows.length > 0) {
-                            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                             //}
 
-                            //var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                            //var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                             //tablename = VIS.DB.executeDataSet(tablename, null, null);
                             //if (tablename.tables[0].rows.length > 0) {
                             //    tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -3365,7 +3365,7 @@
                         //        var nodeIDD= cEle.find(".treechild").attr("data-nodeid");
                         //     var   sql = "UPDATE ";
                         //     sql += tableTreeName + " SET Parent_ID=" + $dropableItem.attr("data-nodeid") + ", SeqNo=" + v + ", Updated=SysDate" +
-                        //                          " WHERE AD_Tree_ID=" + $treeID + " AND Node_ID=" + nodeIDD;
+                        //                          " WHERE VAF_TreeInfo_ID=" + $treeID + " AND Node_ID=" + nodeIDD;
                         //        queries.push(sql);
                         //    }
                         //}
@@ -3775,13 +3775,13 @@
         var msgShowforbindingWindow = null;
         function CreateRestrictionforDelete() {
             menuArray = [];
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -3789,14 +3789,14 @@
 
             bindornot = "true";
 
-            if (tablename == "AD_Menu") {
-                var rolCheck = "SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + $treeID;
+            if (tablename == "VAF_MenuConfig") {
+                var rolCheck = "SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + $treeID;
                 var checkCount = executeScalar(rolCheck);
                 if (checkCount > 0) {
                     bindornot = "false";
                 }
                 else {
-                    var tenantCheck = "SELECT count(*) FROM AD_ClientInfo WHERE ad_tree_menu_id=" + $treeID;
+                    var tenantCheck = "SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + $treeID;
                     var checktenant = executeScalar(tenantCheck);
                     if (checktenant > 0) {
                         bindornot = "false";
@@ -3806,9 +3806,9 @@
 
             //if(bindornot == false)
             //{
-            var getIdes = "SELECT ad_menu_id FROM AD_Menu WHERE ad_window_id IN (SELECT ad_window_id FROM ad_window WHERE name IN ('Role','Tenant','Tree'))";
+            var getIdes = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_window_id IN (SELECT ad_window_id FROM ad_window WHERE name IN ('Role','Tenant','Tree'))";
 
-            var formID = "SELECT ad_menu_id FROM AD_Menu WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
+            var formID = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
 
 
 
@@ -3817,7 +3817,7 @@
 
             if (ds1 != null && ds1.tables[0].rows.length > 0) {
                 for (var i = 0; i < ds1.tables[0].rows.length; i++) {
-                    menuArray.push(ds1.tables[0].rows[i].cells["ad_menu_id"]);
+                    menuArray.push(ds1.tables[0].rows[i].cells["VAF_MenuConfig_id"]);
                 }
             }
 
@@ -3827,14 +3827,14 @@
 
             if (ds != null && ds.tables[0].rows.length > 0) {
                 for (var i = 0; i < ds.tables[0].rows.length; i++) {
-                    menuArray.push(ds.tables[0].rows[i].cells["ad_menu_id"]);
+                    menuArray.push(ds.tables[0].rows[i].cells["VAF_MenuConfig_id"]);
                 }
             }
             // }
             convertmenuArray = menuArray;
             menuArray = menuArray.toString();
 
-            var getnamebyID = "SELECT name FROM ad_menu WHERE ad_menu_id IN(" + menuArray + ") ORDER BY upper(name)";
+            var getnamebyID = "SELECT name FROM VAF_MenuConfig WHERE VAF_MenuConfig_id IN(" + menuArray + ") ORDER BY upper(name)";
             var dss = executeDataSet(getnamebyID, null, null);
 
             var messagess = "";
@@ -3856,10 +3856,10 @@
         function UpdateRollCheckSeq(idforupdate) {
             TreeTableName();
 
-            var maxSeq = "SELECT MAX(seqno) FROM " + tableTreeName + " WHERE AD_Tree_ID=" + $treeID;
+            var maxSeq = "SELECT MAX(seqno) FROM " + tableTreeName + " WHERE VAF_TreeInfo_ID=" + $treeID;
             var seq = executeScalar(maxSeq);
             seq += 1;
-            var increaseSqe = "update " + tableTreeName + " set seqno=" + seq + ",Updated=Sysdate,parent_ID=0 WHERE AD_Tree_ID=" + $treeID + " AND node_id=" + idforupdate;
+            var increaseSqe = "update " + tableTreeName + " set seqno=" + seq + ",Updated=Sysdate,parent_ID=0 WHERE VAF_TreeInfo_ID=" + $treeID + " AND node_id=" + idforupdate;
 
             executeQuery(increaseSqe, null, null);
 
@@ -3954,7 +3954,7 @@
 
 
                 //TreeTableName();
-                //var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE AD_Tree_ID=" + $treeID;
+                //var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE VAF_TreeInfo_ID=" + $treeID;
                 //sqlQry = VIS.DB.executeDataSet(sqlQry, null, null);
                 //sqlQry = sqlQry.tables[0].rows[0].cells["count"];
 
@@ -4075,11 +4075,11 @@
 
 
         function CreateNewTree() {
-            var sql = "SELECT AD_Window_ID FROM AD_Window WHERE Name='Tree'";
+            var sql = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='Tree'";
             var n_win = executeScalar(sql);
 
             var zoomQuery = new VIS.Query();
-            zoomQuery.addRestriction("AD_Tree_ID", VIS.Query.prototype.EQUAL, $treeID);
+            zoomQuery.addRestriction("VAF_TreeInfo_ID", VIS.Query.prototype.EQUAL, $treeID);
             VIS.viewManager.startWindow(n_win, zoomQuery);
         };
 
@@ -4561,7 +4561,7 @@
                     //{
                     //    $bsyDiv[0].style.visibility = "visible";
                     //    TreeTableName();
-                    //    var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+                    //    var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + GetPIDforItems + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
                     //    var child = VIS.DB.executeDataSet(findchilds, null, null);
 
                     //    if (child != null && child.tables[0].rows.length == 0) {
@@ -4809,26 +4809,26 @@
         function DeleteNodeFromBottom($treeID, selectedItemArray) {
             $bsyDiv[0].style.visibility = "visible";
 
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
-            var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
             var tbname = "";
             if (treeType == "PR") {
-                tbname = "AD_TreeNodePR"
+                tbname = "VAF_TreeInfoChildProd"
             }
             else if (treeType == "BP") {
-                tbname = "AD_TreeNodeBP"
+                tbname = "VAF_TreeInfoChildBPart"
             }
             else if (treeType == "MM") {
-                tbname = "AD_TreeNodeMM"
+                tbname = "VAF_TreeInfoChildMenu"
             }
             else {
-                tbname = "AD_TreeNode"
+                tbname = "VAF_TreeInfoChild"
             }
 
             getIDFromChildLevel = [];
@@ -5282,7 +5282,7 @@
             TreeTableName();
 
 
-            var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + $dragTreeDataNodeID + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+            var findchilds = "Select node_id from " + tableTreeName + " where parent_id=" + $dragTreeDataNodeID + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
             var child = executeDataSet(findchilds, null, null);
 
             if (child != null && child.tables[0].rows.length == 0) {
@@ -5379,33 +5379,33 @@
                 flagDelete = false;
                 $bsyDiv[0].style.visibility = "visible";
 
-                var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                 table_id = executeDataSet(table_id, null, null);
                 if (table_id.tables[0].rows.length > 0) {
-                    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                 }
 
-                var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                 tablename = executeDataSet(tablename, null, null);
                 if (tablename.tables[0].rows.length > 0) {
                     tablename = tablename.tables[0].rows[0].cells["tablename"];
                 }
-                var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                 tree = executeDataSet(tree, null, null);
                 treeType = tree.tables[0].rows[0].cells["treetype"];
                 var tbname = "";
                 // var tablename = "";
                 if (treeType == "PR") {
-                    tbname = "AD_TreeNodePR"
+                    tbname = "VAF_TreeInfoChildProd"
                 }
                 else if (treeType == "BP") {
-                    tbname = "AD_TreeNodeBP"
+                    tbname = "VAF_TreeInfoChildBPart"
                 }
                 else if (treeType == "MM") {
-                    tbname = "AD_TreeNodeMM"
+                    tbname = "VAF_TreeInfoChildMenu"
                 }
                 else {
-                    tbname = "AD_TreeNode"
+                    tbname = "VAF_TreeInfoChild"
                 }
 
                 selectedItemArray = delNodId.toString();
@@ -5423,29 +5423,29 @@
 
                 //var sqlqry = "SELECT " + tbname + ".node_id AS node_id, mp.name as name,mp.issummary as summary  FROM " + tablename + " mp" +
                 //             " INNER JOIN " + tbname + " " + tbname + " ON mp." + tablename + "_ID=" + tbname + ".node_id" +
-                //             "  WHERE " + tbname + ".ad_tree_id=" + $treeID + " AND " + tbname + ".parent_id=" + delNodId;
+                //             "  WHERE " + tbname + ".VAF_TreeInfo_id=" + $treeID + " AND " + tbname + ".parent_id=" + delNodId;
 
                 //sqlqry = VIS.DB.executeDataSet(sqlqry, null, null);
 
 
-                //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                 //tree = VIS.DB.executeDataSet(tree, null, null);
                 //treeType = tree.tables[0].rows[0].cells["treetype"];
                 //var tbname = "";
                 //var tablename = "";
                 //if (treeType == "PR") {
-                //    tbname = "ad_treenodepr"
+                //    tbname = "VAF_TreeInfoChildProd"
                 //}
                 //else if (treeType == "BP") {
-                //    tbname = "ad_treenodebp"
+                //    tbname = "VAF_TreeInfoChildBPart"
                 //}
                 //else if (treeType == "MM") {
-                //    tbname = "ad_treenodemm"
+                //    tbname = "VAF_TreeInfoChildMenu"
                 //}
                 //else {
-                //    tbname = "ad_treenode"
+                //    tbname = "VAF_TreeInfoChild"
                 //}
-                var getfirstParent = "select parent_ID  from " + tbname + " WHERE NODE_ID=" + delNodId + " AND AD_Tree_ID=" + $treeID + " AND IsActive='Y'";
+                var getfirstParent = "select parent_ID  from " + tbname + " WHERE NODE_ID=" + delNodId + " AND VAF_TreeInfo_ID=" + $treeID + " AND IsActive='Y'";
                 getfirstParent = executeDataSet(getfirstParent, null, null);
 
                 $.ajax({
@@ -5502,22 +5502,22 @@
 
                             //if ($chkValueFromDailog == true)
                             //{
-                            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                             //tree = VIS.DB.executeDataSet(tree, null, null);
                             //treeType = tree.tables[0].rows[0].cells["treetype"];
                             //var tbname = "";
                             //var tablename = "";
                             //if (treeType == "PR") {
-                            //    tbname = "ad_treenodepr"
+                            //    tbname = "VAF_TreeInfoChildProd"
                             //}
                             //else if (treeType == "BP") {
-                            //    tbname = "ad_treenodebp"
+                            //    tbname = "VAF_TreeInfoChildBPart"
                             //}
                             //else if (treeType == "MM") {
-                            //    tbname = "ad_treenodemm"
+                            //    tbname = "VAF_TreeInfoChildMenu"
                             //}
                             //else {
-                            //    tbname = "ad_treenode"
+                            //    tbname = "VAF_TreeInfoChild"
                             //}
 
                             gettbnameForAppentintree = tbname;
@@ -5801,7 +5801,7 @@
 
 
 
-        //and tnp.isactive='Y' and tnp.ad_tree_id=0
+        //and tnp.isactive='Y' and tnp.VAF_TreeInfo_id=0
         //long query
         var getIDforwithlongQuery = "";
         function GetAllChildesIDs(tbname, delNodId, $treeID) {
@@ -5845,29 +5845,29 @@
             //});
 
 
-            var childsId = "SELECT tnp.node_id FROM " + tbname + " tnp WHERE  tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + "  AND tnp.parent_id = " + delNodId +
+            var childsId = "SELECT tnp.node_id FROM " + tbname + " tnp WHERE  tnp.isactive='Y' AND tnp.VAF_TreeInfo_id= " + $treeID + "  AND tnp.parent_id = " + delNodId +
 
             " UNION " +
             "SELECT tnp.node_id FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
-              "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "  )" + " AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID +
+              "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.VAF_TreeInfo_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "  )" + " AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID +
 
             " UNION " +
             "SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.parent_id IN" +
               "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.parent_id IN" +
-                "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + " AND tnp.parent_id = " + delNodId + " )  AND tnp.isactive='Y'  AND tnp.ad_tree_id=" + $treeID + "   )  AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " " +
+                "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.VAF_TreeInfo_id= " + $treeID + " AND tnp.parent_id = " + delNodId + " )  AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id=" + $treeID + "   )  AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + " " +
 
             " UNION " +
             "SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.parent_id IN" +
             "(SELECT tnp.node_id  FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
                 "(SELECT tnp.node_id FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
-            "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "   ) AND tnp.isactive='Y'  AND tnp.ad_tree_id=" + $treeID + "   )  AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " )" + "AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "  AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "    " +
+            "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.VAF_TreeInfo_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "   ) AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id=" + $treeID + "   )  AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + " )" + "AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + "  AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + "    " +
 
             " UNION " +
             "SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.parent_id IN" +
             "(SELECT tnp.node_id  FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
                 "(SELECT tnp.node_id  FROM " + tbname + " tnp   WHERE tnp.parent_id IN" +
                     "(SELECT tnp.node_id  FROM " + tbname + " tnp  WHERE tnp.parent_id IN" +
-            "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.ad_tree_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "    ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "  ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.ad_tree_id= " + $treeID + "  ";
+            "(SELECT tnp.node_id FROM " + tbname + " tnp WHERE tnp.isactive='Y' AND tnp.VAF_TreeInfo_id= " + $treeID + " AND tnp.parent_id = " + delNodId + "    ) AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + "  ) AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + " ) AND tnp.isactive='Y'  AND tnp.VAF_TreeInfo_id= " + $treeID + "  ";
 
             childlevel = executeDataSet(childsId, null, null);
 
@@ -6826,7 +6826,7 @@
                                         }
                                         else {
                                             TreeTableName();
-                                            var findparent = "Select parent_id from " + tableTreeName + " where node_id=" + e.target.id + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+                                            var findparent = "Select parent_id from " + tableTreeName + " where node_id=" + e.target.id + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
                                             var parent = executeDataSet(findparent, null, null);
 
                                             if (parent != null && parent.tables[0].rows.length > 0) {
@@ -6972,30 +6972,30 @@
             $bsyDiv[0].style.visibility = "visible";
 
 
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             tree = executeDataSet(tree, null, null);
             treeType = tree.tables[0].rows[0].cells["treetype"];
             var tbname = "";
             if (treeType == "PR") {
-                tbname = "AD_TreeNodePR"
+                tbname = "VAF_TreeInfoChildProd"
             }
             else if (treeType == "BP") {
-                tbname = "AD_TreeNodeBP"
+                tbname = "VAF_TreeInfoChildBPart"
             }
             else if (treeType == "MM") {
-                tbname = "AD_TreeNodeMM"
+                tbname = "VAF_TreeInfoChildMenu"
             }
             else {
-                tbname = "AD_TreeNode"
+                tbname = "VAF_TreeInfoChild"
             }
 
-            var findchild = "Select node_id from " + tbname + " where parent_id=" + selectedItemArray + " AND isactive='Y' and ad_tree_id=" + $treeID + "";
+            var findchild = "Select node_id from " + tbname + " where parent_id=" + selectedItemArray + " AND isactive='Y' and VAF_TreeInfo_id=" + $treeID + "";
             var child = executeDataSet(findchild, null, null);
 
             if (child != null && child.tables[0].rows.length > 0) {
@@ -7102,33 +7102,33 @@
                                     $ulMid.find("li").find("li[data-id='" + selectedItemArray + "']").parent().remove();
 
 
-                                    //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                                    //var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                                     //table_id = VIS.DB.executeDataSet(table_id, null, null);
                                     //if (table_id.tables[0].rows.length > 0) {
-                                    //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                                    //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                                     //}
 
-                                    ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                                    ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                                     ////tablename = VIS.DB.executeDataSet(tablename, null, null);
                                     ////if (tablename.tables[0].rows.length > 0) {
                                     ////    tablename = tablename.tables[0].rows[0].cells["tablename"];
                                     ////}
-                                    //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                                    //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                                     //tree = VIS.DB.executeDataSet(tree, null, null);
                                     //treeType = tree.tables[0].rows[0].cells["treetype"];
                                     //var tbname = "";
                                     //// var tablename = "";
                                     //if (treeType == "PR") {
-                                    //    tbname = "ad_treenodepr"
+                                    //    tbname = "VAF_TreeInfoChildProd"
                                     //}
                                     //else if (treeType == "BP") {
-                                    //    tbname = "ad_treenodebp"
+                                    //    tbname = "VAF_TreeInfoChildBPart"
                                     //}
                                     //else if (treeType == "MM") {
-                                    //    tbname = "ad_treenodemm"
+                                    //    tbname = "VAF_TreeInfoChildMenu"
                                     //}
                                     //else {
-                                    //    tbname = "ad_treenode"
+                                    //    tbname = "VAF_TreeInfoChild"
                                     //}
                                     // if ($chkValueFromDailog == true) {
 
@@ -7301,33 +7301,33 @@
                             $ulMid.find("li").find("li[data-id='" + selectedItemArray + "']").parent().remove();
 
 
-                            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                             //table_id = VIS.DB.executeDataSet(table_id, null, null);
                             //if (table_id.tables[0].rows.length > 0) {
-                            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                             //}
 
-                            ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                            ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                             ////tablename = VIS.DB.executeDataSet(tablename, null, null);
                             ////if (tablename.tables[0].rows.length > 0) {
                             ////    tablename = tablename.tables[0].rows[0].cells["tablename"];
                             ////}
-                            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
                             //tree = VIS.DB.executeDataSet(tree, null, null);
                             //treeType = tree.tables[0].rows[0].cells["treetype"];
                             //var tbname = "";
                             //// var tablename = "";
                             //if (treeType == "PR") {
-                            //    tbname = "ad_treenodepr"
+                            //    tbname = "VAF_TreeInfoChildProd"
                             //}
                             //else if (treeType == "BP") {
-                            //    tbname = "ad_treenodebp"
+                            //    tbname = "VAF_TreeInfoChildBPart"
                             //}
                             //else if (treeType == "MM") {
-                            //    tbname = "ad_treenodemm"
+                            //    tbname = "VAF_TreeInfoChildMenu"
                             //}
                             //else {
-                            //    tbname = "ad_treenode"
+                            //    tbname = "VAF_TreeInfoChild"
                             //}
                             // if ($chkValueFromDailog == true) {
 
@@ -7455,33 +7455,33 @@
 
 
 
-            //            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //            //var table_id = "SELECT vaf_tableview_id FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             //            //table_id = VIS.DB.executeDataSet(table_id, null, null);
             //            //if (table_id.tables[0].rows.length > 0) {
-            //            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+            //            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             //            //}
 
-            //            ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            //            ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             //            ////tablename = VIS.DB.executeDataSet(tablename, null, null);
             //            ////if (tablename.tables[0].rows.length > 0) {
             //            ////    tablename = tablename.tables[0].rows[0].cells["tablename"];
             //            ////}
-            //            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             //            //tree = VIS.DB.executeDataSet(tree, null, null);
             //            //treeType = tree.tables[0].rows[0].cells["treetype"];
             //            //var tbname = "";
             //            //// var tablename = "";
             //            //if (treeType == "PR") {
-            //            //    tbname = "ad_treenodepr"
+            //            //    tbname = "VAF_TreeInfoChildProd"
             //            //}
             //            //else if (treeType == "BP") {
-            //            //    tbname = "ad_treenodebp"
+            //            //    tbname = "VAF_TreeInfoChildBPart"
             //            //}
             //            //else if (treeType == "MM") {
-            //            //    tbname = "ad_treenodemm"
+            //            //    tbname = "VAF_TreeInfoChildMenu"
             //            //}
             //            //else {
-            //            //    tbname = "ad_treenode"
+            //            //    tbname = "VAF_TreeInfoChild"
             //            //}
             //           // if ($chkValueFromDailog == true) {
 
@@ -7523,22 +7523,22 @@
         var ChkSummayOnTreeChange = null;
 
         function GetCountForRestriction() {
-            //var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //var tree = " SELECT treetype FROM VAF_TreeInfo WHERE VAF_TreeInfo_id=" + $treeID;
             //tree = VIS.DB.executeDataSet(tree, null, null);
             //treeType = tree.tables[0].rows[0].cells["treetype"];
             //var tbname = "";
             //var tablename = "";
             //if (treeType == "PR") {
-            //    tbname = "ad_treenodepr"
+            //    tbname = "VAF_TreeInfoChildProd"
             //}
             //else if (treeType == "BP") {
-            //    tbname = "ad_treenodebp"
+            //    tbname = "VAF_TreeInfoChildBPart"
             //}
             //else if (treeType == "MM") {
-            //    tbname = "ad_treenodemm"
+            //    tbname = "VAF_TreeInfoChildMenu"
             //}
             //else {
-            //    tbname = "ad_treenode"
+            //    tbname = "VAF_TreeInfoChild"
             //}
 
 
@@ -7546,7 +7546,7 @@
             TreeTableName();
 
 
-            var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND AD_Tree_ID=" + $treeID;
+            var sqlQry = "SELECT Count(*) as Count FROM " + tableTreeName + " WHERE isactive ='Y' AND VAF_TreeInfo_ID=" + $treeID;
             sqlQry = executeDataSet(sqlQry, null, null);
             sqlQry = sqlQry.tables[0].rows[0].cells["count"];
 
@@ -7654,7 +7654,7 @@
                 $lblMh4.text(selText);
                 selectedNode = $cmbSelectTree.find("option:selected");
                 $cmbSelectedType = selectedNode.attr("data-type");
-                $treeID = selectedNode.val();//AD_Tree_id
+                $treeID = selectedNode.val();//VAF_TreeInfo_id
                 $cmbIsallnodes = selectedNode.attr("data-isallnodes");
 
                 window.setTimeout(function () {

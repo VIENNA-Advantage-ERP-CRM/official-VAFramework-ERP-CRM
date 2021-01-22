@@ -125,9 +125,9 @@ namespace VAdvantage.DataBase
                 }
             }
 
-            if (oraStatement.StartsWith("CREATE UNIQUE INDEX ") && (oraStatement.IndexOf("TO_NCHAR(AD_User_ID)") > 0)) //jz hack number pad
+            if (oraStatement.StartsWith("CREATE UNIQUE INDEX ") && (oraStatement.IndexOf("TO_NCHAR(VAF_UserContact_ID)") > 0)) //jz hack number pad
             {
-                oraStatement = oraStatement.Replace("TO_NCHAR(AD_User_ID)", "TO_CHAR(AD_User_ID,'9999999')::VARCHAR");
+                oraStatement = oraStatement.Replace("TO_NCHAR(VAF_UserContact_ID)", "TO_CHAR(VAF_UserContact_ID,'9999999')::VARCHAR");
             }
 
             if (oraStatement.StartsWith("ALTER TABLE") && (oraStatement.IndexOf(" ADD (") > 0)) //jz remove () for add
@@ -227,7 +227,7 @@ namespace VAdvantage.DataBase
                         + " (" + oraStatement + ") - " + m_convert.GetConversionError());
                 return oraStatement;
             }
-            //  Diagnostics (show changed, but not if AD_Error
+            //  Diagnostics (show changed, but not if VAF_Error
 
             return retValue[0];
 
@@ -283,7 +283,7 @@ namespace VAdvantage.DataBase
             return dateString.ToString();
         }   //  TO_DATE
 
-        public string TO_CHAR(string columnName, int displayType, string AD_Language)
+        public string TO_CHAR(string columnName, int displayType, string VAF_Language)
         {
             StringBuilder retValue = new StringBuilder("CAST (");
             retValue.Append(columnName);
@@ -297,13 +297,13 @@ namespace VAdvantage.DataBase
                     retValue.append(" AS TEXT");
                 else
                     retValue.append(" AS TEXT");			
-                //if (!Language.isDecimalPoint(AD_Language))      //  reversed
+                //if (!Language.isDecimalPoint(VAF_Language))      //  reversed
                 //retValue.append(",'NLS_NUMERIC_CHARACTERS='',.'''");
             }
             else if (DisplayType.isDate(displayType))
             {
                 retValue.append(",'")
-                    .append(Language.getLanguage(AD_Language).getDBdatePattern())
+                    .append(Language.getLanguage(VAF_Language).getDBdatePattern())
                     .append("'");
             }
             retValue.append(")");

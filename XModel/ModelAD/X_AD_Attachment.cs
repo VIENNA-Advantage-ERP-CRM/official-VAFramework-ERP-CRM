@@ -12,30 +12,30 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Attachment
+    /** Generated Model for VAF_Attachment
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Attachment : PO
+    public class X_VAF_Attachment : PO
     {
-        public X_AD_Attachment(Context ctx, int AD_Attachment_ID, Trx trxName)
-            : base(ctx, AD_Attachment_ID, trxName)
+        public X_VAF_Attachment(Context ctx, int VAF_Attachment_ID, Trx trxName)
+            : base(ctx, VAF_Attachment_ID, trxName)
         {
-            /** if (AD_Attachment_ID == 0)
+            /** if (VAF_Attachment_ID == 0)
             {
-            SetAD_Attachment_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Attachment_ID (0);
+            SetVAF_TableView_ID (0);
             SetRecord_ID (0);
             SetTitle (null);
             }
              */
         }
-        public X_AD_Attachment(Ctx ctx, int AD_Attachment_ID, Trx trxName)
-            : base(ctx, AD_Attachment_ID, trxName)
+        public X_VAF_Attachment(Ctx ctx, int VAF_Attachment_ID, Trx trxName)
+            : base(ctx, VAF_Attachment_ID, trxName)
         {
-            /** if (AD_Attachment_ID == 0)
+            /** if (VAF_Attachment_ID == 0)
             {
-            SetAD_Attachment_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Attachment_ID (0);
+            SetVAF_TableView_ID (0);
             SetRecord_ID (0);
             SetTitle (null);
             }
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Attachment(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Attachment(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Attachment(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Attachment(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -64,14 +64,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Attachment(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Attachment(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Attachment()
+        static X_VAF_Attachment()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -80,12 +80,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27562514360668L;
         /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
         public static long updatedMS = 1280389043879L;
-        /** AD_Table_ID=254 */
+        /** VAF_TableView_ID=254 */
         public static int Table_ID;
         // =254;
 
-        /** TableName=AD_Attachment */
-        public static String Table_Name = "AD_Attachment";
+        /** TableName=VAF_Attachment */
+        public static String Table_Name = "VAF_Attachment";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -119,36 +119,36 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Attachment[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Attachment[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Attachment.
-        @param AD_Attachment_ID Attachment for the document */
-        public void SetAD_Attachment_ID(int AD_Attachment_ID)
+        @param VAF_Attachment_ID Attachment for the document */
+        public void SetVAF_Attachment_ID(int VAF_Attachment_ID)
         {
-            if (AD_Attachment_ID < 1) throw new ArgumentException("AD_Attachment_ID is mandatory.");
-            Set_ValueNoCheck("AD_Attachment_ID", AD_Attachment_ID);
+            if (VAF_Attachment_ID < 1) throw new ArgumentException("VAF_Attachment_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Attachment_ID", VAF_Attachment_ID);
         }
         /** Get Attachment.
         @return Attachment for the document */
-        public int GetAD_Attachment_ID()
+        public int GetVAF_Attachment_ID()
         {
-            Object ii = Get_Value("AD_Attachment_ID");
+            Object ii = Get_Value("VAF_Attachment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_ValueNoCheck("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_ValueNoCheck("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -222,8 +222,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** FileLocation AD_Reference_ID=1000154 */
-        public static int FILELOCATION_AD_Reference_ID = 1000154;
+        /** FileLocation VAF_Control_Ref_ID=1000154 */
+        public static int FILELOCATION_VAF_Control_Ref_ID = 1000154;
         /** Database = DB */
         public static String FILELOCATION_Database = "DB";
         /** FTP Location = FT */
@@ -254,8 +254,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("FileLocation");
         }
-        /** CryptAndZipWay AD_Reference_ID=1000155 */
-        public static int CRYPTANDZIPWAY_AD_Reference_ID = 1000155;
+        /** CryptAndZipWay VAF_Control_Ref_ID=1000155 */
+        public static int CRYPTANDZIPWAY_VAF_Control_Ref_ID = 1000155;
         /** Key Encryption And Old Zip = KSZ */
         public static String CRYPTANDZIPWAY_KeyEncryptionAndServerSideZip = "KSZ";
         /** Password Encryption And New Zip = PCZ */

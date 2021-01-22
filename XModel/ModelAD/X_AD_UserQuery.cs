@@ -11,29 +11,29 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_UserQuery
+    /** Generated Model for VAF_UserSearch
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_UserQuery : PO
+    public class X_VAF_UserSearch : PO
     {
-        public X_AD_UserQuery(Context ctx, int AD_UserQuery_ID, Trx trxName)
-            : base(ctx, AD_UserQuery_ID, trxName)
+        public X_VAF_UserSearch(Context ctx, int VAF_UserSearch_ID, Trx trxName)
+            : base(ctx, VAF_UserSearch_ID, trxName)
         {
-            /** if (AD_UserQuery_ID == 0)
+            /** if (VAF_UserSearch_ID == 0)
             {
-            SetAD_Table_ID (0);
-            SetAD_UserQuery_ID (0);
+            SetVAF_TableView_ID (0);
+            SetVAF_UserSearch_ID (0);
             SetName (null);
             }
              */
         }
-        public X_AD_UserQuery(Ctx ctx, int AD_UserQuery_ID, Trx trxName)
-            : base(ctx, AD_UserQuery_ID, trxName)
+        public X_VAF_UserSearch(Ctx ctx, int VAF_UserSearch_ID, Trx trxName)
+            : base(ctx, VAF_UserSearch_ID, trxName)
         {
-            /** if (AD_UserQuery_ID == 0)
+            /** if (VAF_UserSearch_ID == 0)
             {
-            SetAD_Table_ID (0);
-            SetAD_UserQuery_ID (0);
+            SetVAF_TableView_ID (0);
+            SetVAF_UserSearch_ID (0);
             SetName (null);
             }
              */
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_UserQuery(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_UserSearch(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_UserQuery(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_UserSearch(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_UserQuery(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_UserSearch(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_UserQuery()
+        static X_VAF_UserSearch()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,12 +77,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514365573L;
         /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
         public static long updatedMS = 1280389048784L;
-        /** AD_Table_ID=814 */
+        /** VAF_TableView_ID=814 */
         public static int Table_ID;
         // =814;
 
-        /** TableName=AD_UserQuery */
-        public static String Table_Name = "AD_UserQuery";
+        /** TableName=VAF_UserSearch */
+        public static String Table_Name = "VAF_UserSearch";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -116,68 +116,68 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_UserQuery[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_UserSearch[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_Value("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User Query.
-        @param AD_UserQuery_ID Saved User Query */
-        public void SetAD_UserQuery_ID(int AD_UserQuery_ID)
+        @param VAF_UserSearch_ID Saved User Query */
+        public void SetVAF_UserSearch_ID(int VAF_UserSearch_ID)
         {
-            if (AD_UserQuery_ID < 1) throw new ArgumentException("AD_UserQuery_ID is mandatory.");
-            Set_ValueNoCheck("AD_UserQuery_ID", AD_UserQuery_ID);
+            if (VAF_UserSearch_ID < 1) throw new ArgumentException("VAF_UserSearch_ID is mandatory.");
+            Set_ValueNoCheck("VAF_UserSearch_ID", VAF_UserSearch_ID);
         }
         /** Get User Query.
         @return Saved User Query */
-        public int GetAD_UserQuery_ID()
+        public int GetVAF_UserSearch_ID()
         {
-            Object ii = Get_Value("AD_UserQuery_ID");
+            Object ii = Get_Value("VAF_UserSearch_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

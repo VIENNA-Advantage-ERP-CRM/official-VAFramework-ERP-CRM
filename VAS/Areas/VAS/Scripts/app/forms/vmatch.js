@@ -77,9 +77,9 @@
         var selectDivFullWidth = $(window).width() - (minSideWidth);
         var selectDivHeight = $(window).height() - 240;
 
-        var _AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
-        var _AD_Org_ID = VIS.Env.getCtx().getAD_Org_ID();
-        var _by = VIS.Env.getCtx().getAD_User_ID();
+        var _VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
+        var _VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
+        var _by = VIS.Env.getCtx().getVAF_UserContact_ID();
 
         var MATCH_INVOICE = 0;
         var MATCH_SHIPMENT = 1;
@@ -102,9 +102,9 @@
         var isProcess = false;
         //Match Options  
         var _matchOptions = [];
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "C_Invoice_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "C_Order_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Invoice_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Order_ID", false));
 
         // Match Mode 
         var _matchMode = [];
@@ -515,7 +515,7 @@
 
 
             //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir);
-            //$self.cmbMatchFrom = new VIS.Controls.VComboBox("AD_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
+            //$self.cmbMatchFrom = new VIS.Controls.VComboBox("VAF_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
         }
 
@@ -1665,8 +1665,8 @@
             selectDivFullWidth = null;
             selectDivHeight = null;
 
-            _AD_Client_ID = null;
-            _AD_Org_ID = null;
+            _VAF_Client_ID = null;
+            _VAF_Org_ID = null;
             _by = null;
 
             MATCH_INVOICE = null;

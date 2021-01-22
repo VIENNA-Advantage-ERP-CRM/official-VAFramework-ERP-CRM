@@ -20,7 +20,7 @@ public X_T_Replenish (Context ctx, int T_Replenish_ID, Trx trxName) : base (ctx,
 {
 /** if (T_Replenish_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetLevel_Max (0.0);
 SetLevel_Min (0.0);
 SetM_Product_ID (0);
@@ -39,7 +39,7 @@ public X_T_Replenish (Ctx ctx, int T_Replenish_ID, Trx trxName) : base (ctx, T_R
 {
 /** if (T_Replenish_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetLevel_Max (0.0);
 SetLevel_Min (0.0);
 SetM_Product_ID (0);
@@ -90,7 +90,7 @@ static X_T_Replenish()
 //static long serialVersionUID 27562514384318L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067529L;
-/** AD_Table_ID=364 */
+/** VAF_TableView_ID=364 */
 public static int Table_ID;
  // =364;
 
@@ -133,17 +133,17 @@ StringBuilder sb = new StringBuilder ("X_T_Replenish[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -151,7 +151,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
@@ -231,8 +231,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_WarehouseSource_ID AD_Reference_ID=197 */
-public static int M_WAREHOUSESOURCE_ID_AD_Reference_ID=197;
+/** M_WarehouseSource_ID VAF_Control_Ref_ID=197 */
+public static int M_WAREHOUSESOURCE_ID_VAF_Control_Ref_ID=197;
 /** Set Source Warehouse.
 @param M_WarehouseSource_ID Optional Warehouse to replenish from */
 public void SetM_WarehouseSource_ID (int M_WarehouseSource_ID)
@@ -355,8 +355,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** ReplenishType AD_Reference_ID=164 */
-public static int REPLENISHTYPE_AD_Reference_ID=164;
+/** ReplenishType VAF_Control_Ref_ID=164 */
+public static int REPLENISHTYPE_VAF_Control_Ref_ID=164;
 /** Manual = 0 */
 public static String REPLENISHTYPE_Manual = "0";
 /** Reorder below Minimum Level = 1 */
@@ -393,8 +393,8 @@ public String GetReplenishType()
 return (String)Get_Value("ReplenishType");
 }
 
-/** ReplenishmentCreate AD_Reference_ID=329 */
-public static int REPLENISHMENTCREATE_AD_Reference_ID=329;
+/** ReplenishmentCreate VAF_Control_Ref_ID=329 */
+public static int REPLENISHMENTCREATE_VAF_Control_Ref_ID=329;
 /** Inventory Move = MMM */
 public static String REPLENISHMENTCREATE_InventoryMove = "MMM";
 /** Purchase Order = POO */

@@ -111,14 +111,14 @@ namespace ViennaAdvantage.Process
             if (_qtyRange != null && _qtyRange.Equals("="))
             {
                 sqlQry = "INSERT INTO M_Storage "
-                    + "(AD_Client_ID, AD_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
+                    + "(VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
                     + " M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"
                     + " qtyOnHand, QtyReserved, QtyOrdered, DateLastInventory) "
-                    + "SELECT l.AD_CLIENT_ID, l.AD_ORG_ID, 'Y', SysDate, 0,SysDate, 0,"
+                    + "SELECT l.VAF_CLIENT_ID, l.VAF_ORG_ID, 'Y', SysDate, 0,SysDate, 0,"
                     + " l.M_Locator_ID, p.M_Product_ID, 0,"
                     + " 0,0,0,null "
                     + "FROM M_Locator l"
-                    + " INNER JOIN M_Product p ON (l.AD_Client_ID=p.AD_Client_ID) "
+                    + " INNER JOIN M_Product p ON (l.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE l.M_Warehouse_ID=" + _movement.GetM_Warehouse_ID();
                 if (_m_Locator_ID != 0)
                     sqlQry += " AND l.M_Locator_ID=" + _m_Locator_ID;
@@ -227,8 +227,8 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
                     {
                         //Save data on Movement Line
                         _line = new MMovementLine(GetCtx(), 0, Get_Trx());
-                        _line.SetAD_Client_ID(_movement.GetAD_Client_ID());
-                        _line.SetAD_Org_ID(_movement.GetAD_Org_ID());
+                        _line.SetVAF_Client_ID(_movement.GetVAF_Client_ID());
+                        _line.SetVAF_Org_ID(_movement.GetVAF_Org_ID());
                         _line.SetM_Movement_ID(_m_Movement_ID);
                         _line.SetM_Locator_ID(_m_Locator_ID);
                         _line.SetM_LocatorTo_ID(_m_LocatorTo_ID);

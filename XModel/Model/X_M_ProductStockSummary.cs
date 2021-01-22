@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_M_ProductStockSummary() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27760365347817L;/** Last Updated Timestamp 11/4/2016 11:43:51 AM */
-        public static long updatedMS = 1478240031028L;/** AD_Table_ID=1000499 */
+        public static long updatedMS = 1478240031028L;/** VAF_TableView_ID=1000499 */
         public static int Table_ID; // =1000499;
         /** TableName=M_ProductStockSummary */
         public static String Table_Name = "M_ProductStockSummary";

@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportInOutConfirm : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Delete old Imported			*/
         private bool _DeleteOldImported = false;
         /**	Import						*/
@@ -44,8 +44,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _DeleteOldImported = "Y".Equals(para[i].GetParameter());
                 else
@@ -63,7 +63,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("I_InOutLineConfirm_ID=" + _I_InOutLineConfirm_ID);
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	Delete Old Imported
             if (_DeleteOldImported)
@@ -89,8 +89,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client from Name
             sql = new StringBuilder("UPDATE I_InOutLineConfirm i "
-                + "SET AD_Client_ID=COALESCE (AD_Client_ID,").Append(_AD_Client_ID).Append(") "
-                + "WHERE (AD_Client_ID IS NULL OR AD_Client_ID=0)"
+                + "SET VAF_Client_ID=COALESCE (VAF_Client_ID,").Append(_VAF_Client_ID).Append(") "
+                + "WHERE (VAF_Client_ID IS NULL OR VAF_Client_ID=0)"
                 + " AND I_IsImported<>'Y'");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Client from Value=" + no);

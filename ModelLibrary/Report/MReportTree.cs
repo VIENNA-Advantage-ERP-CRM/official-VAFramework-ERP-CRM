@@ -98,16 +98,16 @@ namespace VAdvantage.Report
             _PA_Hierarchy_ID = PA_Hierarchy_ID;
             _ctx = ctx;
             //
-            int AD_Tree_ID = GetAD_Tree_ID();
+            int VAF_TreeInfo_ID = GetVAF_TreeInfo_ID();
             //	Not found
-            if (AD_Tree_ID == 0)
+            if (VAF_TreeInfo_ID == 0)
             {
-                throw new ArgumentException("No AD_Tree_ID for TreeType=" + _TreeType
+                throw new ArgumentException("No VAF_TreeInfo_ID for TreeType=" + _TreeType
                     + ", PA_Hierarchy_ID=" + PA_Hierarchy_ID);
             }
             //
             Boolean clientTree = true;
-            _tree = new MTree(ctx, AD_Tree_ID, true, clientTree, null);
+            _tree = new MTree(ctx, VAF_TreeInfo_ID, true, clientTree, null);
         }	//	MReportTree
 
         /** Optional Hierarchy		*/
@@ -126,53 +126,53 @@ namespace VAdvantage.Report
 
 
         /// <summary>
-        /// Get AD_Tree_ID 
+        /// Get VAF_TreeInfo_ID 
         /// </summary>
         /// <returns>tree</returns>
-        protected int GetAD_Tree_ID()
+        protected int GetVAF_TreeInfo_ID()
         {
             if (_PA_Hierarchy_ID == 0 || _PA_Hierarchy_ID == -1)
             {
-                return GetDefaultAD_Tree_ID();
+                return GetDefaultVAF_TreeInfo_ID();
             }
 
             MHierarchy hierarchy = MHierarchy.Get(_ctx, _PA_Hierarchy_ID);
-            int AD_Tree_ID = hierarchy.GetAD_Tree_ID(_TreeType);
+            int VAF_TreeInfo_ID = hierarchy.GetVAF_TreeInfo_ID(_TreeType);
 
-            if (AD_Tree_ID == 0)
+            if (VAF_TreeInfo_ID == 0)
             {
-                return GetDefaultAD_Tree_ID();
+                return GetDefaultVAF_TreeInfo_ID();
             }
 
-            return AD_Tree_ID;
-        }	//	getAD_Tree_ID
+            return VAF_TreeInfo_ID;
+        }	//	getVAF_TreeInfo_ID
 
         /// <summary>
-        ///	Get Default AD_Tree_ID ,see MTree.getDefaultAD_Tree_ID
+        ///	Get Default VAF_TreeInfo_ID ,see MTree.getDefaultVAF_TreeInfo_ID
         /// </summary>
         /// <returns>tree</returns>
-        protected int GetDefaultAD_Tree_ID()
+        protected int GetDefaultVAF_TreeInfo_ID()
         {
-            int AD_Tree_ID = 0;
-            int AD_Client_ID = _ctx.GetAD_Client_ID();
+            int VAF_TreeInfo_ID = 0;
+            int VAF_Client_ID = _ctx.GetVAF_Client_ID();
 
-            String sql = "SELECT AD_Tree_ID, Name FROM AD_Tree "
-                + "WHERE AD_Client_ID=@param1 AND TreeType=@param2 AND IsActive='Y' AND IsAllNodes='Y' "
-                + "ORDER BY IsDefault DESC, AD_Tree_ID";	//	assumes first is primary tree
+            String sql = "SELECT VAF_TreeInfo_ID, Name FROM VAF_TreeInfo "
+                + "WHERE VAF_Client_ID=@param1 AND TreeType=@param2 AND IsActive='Y' AND IsAllNodes='Y' "
+                + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";	//	assumes first is primary tree
             SqlParameter[] param = new SqlParameter[2];
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                param[0] = new SqlParameter("@param1", AD_Client_ID);
-                //pstmt.setInt(1, AD_Client_ID);
+                param[0] = new SqlParameter("@param1", VAF_Client_ID);
+                //pstmt.setInt(1, VAF_Client_ID);
                 // pstmt.setString(2, _TreeType);
                 param[1] = new SqlParameter("@param2", _TreeType);
                 //ResultSet rs = pstmt.executeQuery();
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
                 {
-                    AD_Tree_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
+                    VAF_TreeInfo_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                 }
                 idr.Close();
             }
@@ -185,8 +185,8 @@ namespace VAdvantage.Report
                  log.Log(VAdvantage.Logging.Level.SEVERE, sql, e);
             }
 
-            return AD_Tree_ID;
-        }	//	getDefaultAD_Tree_ID
+            return VAF_TreeInfo_ID;
+        }	//	getDefaultVAF_TreeInfo_ID
 
         /// <summary>
         ///	Get Account Schema Element Type

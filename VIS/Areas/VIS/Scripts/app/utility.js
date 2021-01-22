@@ -580,7 +580,7 @@
             window_height = height
         };
 
-        function getPreference(ctx, AD_Window_ID, context, system) {
+        function getPreference(ctx, VAF_Screen_ID, context, system) {
             /**************************************************************************
          *	Get Preference.
          *  <pre>
@@ -591,7 +591,7 @@
          *		4)	Accounting settings
          *  </pre>
          *  @param  ctx context
-         *	@param	AD_Window_ID window no
+         *	@param	VAF_Screen_ID window no
          *	@param	context		Entity to search
          *	@param	system		System level preferences (vs. user defined)
          *  @return preference value
@@ -603,7 +603,7 @@
             //
             if (!system)	//	User Preferences
             {
-                retValue = ctx.getContext("P" + AD_Window_ID + "|" + context);//	Window Pref
+                retValue = ctx.getContext("P" + VAF_Screen_ID + "|" + context);//	Window Pref
                 if (retValue.length == 0)
                     retValue = ctx.getContext("P|" + context);  			//	Global Pref
             }
@@ -622,9 +622,9 @@
             if (windowNo > 0)
                 sb += ctx.getWindowContext(windowNo, "WindowName", false) + "  ";
 
-            //sb += ctx.getContext("##AD_User_Name") + "@" +
-            //    ctx.getContext("#AD_Org_Name") + "." +
-            //    ctx.getContext("#AD_Client_Name");
+            //sb += ctx.getContext("##VAF_UserContact_Name") + "@" +
+            //    ctx.getContext("#VAF_Org_Name") + "." +
+            //    ctx.getContext("#VAF_Client_Name");
 
             return sb;
         };
@@ -724,29 +724,29 @@
 
             var lang = "";
             if (typeof (ctx) != "string") {
-                lang = getAD_Language(ctx);
+                lang = getVAF_Language(ctx);
             }
             else {
                 lang = ctx; //string 
             }
-            return getBaseAD_Language() == lang;
+            return getBaseVAF_Language() == lang;
         };	//	isBaseLanguage
 
         /**
-             *  Get System AD_Language
+             *  Get System VAF_Language
              *  @param ctx context
-             *	@return AD_Language eg. en_US
+             *	@return VAF_Language eg. en_US
              */
-        function getAD_Language(ctx) {
+        function getVAF_Language(ctx) {
             if (ctx != null) {
-                var lang = ctx.getContext("#AD_Language");
+                var lang = ctx.getContext("#VAF_Language");
                 if (lang != null && lang.length > 0)
                     return lang;
             }
-            return getBaseAD_Language();
+            return getBaseVAF_Language();
         };	//	getAD
 
-        function getBaseAD_Language() {
+        function getBaseVAF_Language() {
             return "en_US";
         };
 
@@ -802,8 +802,8 @@
             numberCultureValueFormat: numberCultureValueFormat,
             numberDisplay: numberDisplay,
             isBaseLanguage: isBaseLanguage,
-            getAD_Language: getAD_Language,
-            getBaseAD_Language: getBaseAD_Language,
+            getVAF_Language: getVAF_Language,
+            getBaseVAF_Language: getBaseVAF_Language,
             currentTimeMillis: currentTimeMillis,
             signum: signum,
             startBrowser: startBrowser,
@@ -875,9 +875,9 @@
         };
 
 
-        function getGridWindow(windowNo, AD_Window_ID, callback) {
-            VIS.dataContext.getWindowJString({ windowNo: windowNo, AD_Window_ID: AD_Window_ID }, callback);
-            //return getGridWindowFromServer(windowNo, AD_Window_ID);
+        function getGridWindow(windowNo, VAF_Screen_ID, callback) {
+            VIS.dataContext.getWindowJString({ windowNo: windowNo, VAF_Screen_ID: VAF_Screen_ID }, callback);
+            //return getGridWindowFromServer(windowNo, VAF_Screen_ID);
         };
 
         function getGridWindowFromServer(curWindowNo, ID) {
@@ -918,23 +918,23 @@
         function getIsWorkflowProcess() {
             if (s_workflow == null) {
                 s_workflow = false;
-                var AD_Table_ID = 645;	//	AD_WF_Process	
-                if (VIS.MRole.getIsTableAccess(AD_Table_ID, true))	//	RO
+                var VAF_TableView_ID = 645;	//	VAF_WFlow_Handler	
+                if (VIS.MRole.getIsTableAccess(VAF_TableView_ID, true))	//	RO
                     s_workflow = true;
                 else {
-                    AD_Table_ID = 644;	//	AD_WF_Activity	
-                    if (VIS.MRole.getIsTableAccess(AD_Table_ID, true))	//	RO
+                    VAF_TableView_ID = 644;	//	VAF_WFlow_Task	
+                    if (VIS.MRole.getIsTableAccess(VAF_TableView_ID, true))	//	RO
                         s_workflow = true;
                 }
                 //	Get Window
                 if (s_workflow) {
-                    // VIS.DB.executeScalar("SELECT AD_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID, null, function (val) {
+                    // VIS.DB.executeScalar("SELECT VAF_Screen_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID, null, function (val) {
                     //var dr=null;
                     $.ajax({
                         type: 'Get',
                         async: true,
                         url: VIS.Application.contextUrl + "Form/GetWorkflowWindowID",
-                        data: { AD_Table_ID: AD_Table_ID },
+                        data: { VAF_TableView_ID: VAF_TableView_ID },
                         success: function (data) {
                             var val = JSON.parse(data);
                             if (val && !isNaN(val))
@@ -955,33 +955,33 @@
             return s_workflow;
         };
 
-        function startWorkflowProcess(AD_Table_ID, Record_ID) {
+        function startWorkflowProcess(VAF_TableView_ID, Record_ID) {
             //if (Envs.workflowWindowID == 0)
             //{
             //    return;
             //}
             //
             var query = null;
-            if (AD_Table_ID != 0 && Record_ID != 0) {
-                query = new VIS.Query("AD_WF_Process");
-                query.addRestriction("AD_Table_ID", VIS.Query.prototype.EQUAL, AD_Table_ID);
+            if (VAF_TableView_ID != 0 && Record_ID != 0) {
+                query = new VIS.Query("VAF_WFlow_Handler");
+                query.addRestriction("VAF_TableView_ID", VIS.Query.prototype.EQUAL, VAF_TableView_ID);
                 query.addRestriction("Record_ID", VIS.Query.prototype.EQUAL, Record_ID);
                 VIS.viewManager.startWindow(s_workflow_Window_ID, query);
             }
         };
 
-        function zoom(AD_Table_ID, Record_ID) {
+        function zoom(VAF_TableView_ID, Record_ID) {
             var tableName = null;
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             var PO_Window_ID = 0;
 
-            // var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID;
+            // var sql = "SELECT TableName, VAF_Screen_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
             var dr = null;
             $.ajax({
                 type: 'Get',
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetZoomWindowID",
-                data: { AD_Table_ID: AD_Table_ID },
+                data: { VAF_TableView_ID: VAF_TableView_ID },
                 success: function (data) {
                     dr = new VIS.DB.DataReader().toJson(data)
                 },
@@ -990,13 +990,13 @@
             //dr = VIS.DB.executeReader(sql);
             if (dr.read()) {
                 tableName = dr.get(0).toString();
-                AD_Window_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(1));
+                VAF_Screen_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(1));
                 PO_Window_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(2));
             }
             dr.dispose();
 
             //  Nothing to Zoom to
-            if (tableName == null || AD_Window_ID == 0) {
+            if (tableName == null || VAF_Screen_ID == 0) {
                 //log.Info("No window/Form --> open table window and bind a window to that table");
                 return;
             }
@@ -1005,42 +1005,42 @@
             if (PO_Window_ID != 0) {
                 var whereClause = tableName + "_ID=" + Record_ID;
 
-                AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID(tableName, 0, whereClause, true);
+                VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID(tableName, 0, whereClause, true);
 
-                if (AD_Window_ID == 0)
+                if (VAF_Screen_ID == 0)
                     return;
             }
-            VIS.viewManager.startWindow(AD_Window_ID, VIS.Query.prototype.getEqualQuery(tableName + "_ID", Record_ID));
+            VIS.viewManager.startWindow(VAF_Screen_ID, VIS.Query.prototype.getEqualQuery(tableName + "_ID", Record_ID));
         };
 
         // vinay bhatt workflow zoom with window id
-        function wfzoom(AD_Table_ID, Record_ID, AD_WF_Activity_ID) {
+        function wfzoom(VAF_TableView_ID, Record_ID, VAF_WFlow_Task_ID) {
             var tableName = null;
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             var PO_Window_ID = 0;
             var ActivityWindow = 0;
 
             var sql = "VIS_146";
 
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Table_ID", AD_Table_ID);
-            param[1] = new VIS.DB.SqlParam("@AD_WF_Activity_ID", AD_WF_Activity_ID);
+            param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
+            param[1] = new VIS.DB.SqlParam("@VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
             var dr = null;
             dr = executeReader(sql, param);
             if (dr.read()) {
                 tableName = dr.get(0).toString();
-                AD_Window_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(1));
+                VAF_Screen_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(1));
                 PO_Window_ID = VIS.Utility.Util.getValueOfInt(dr.getInt(2));
                 ActivityWindow = VIS.Utility.Util.getValueOfInt(dr.getInt(3));//"1000157"
             }
             else {
-                zoom(AD_Table_ID, Record_ID);
+                zoom(VAF_TableView_ID, Record_ID);
                 return;
             }
             dr.dispose();
 
             //  Nothing to Zoom to
-            if (tableName == null && AD_Window_ID == 0 && (ActivityWindow != null && ActivityWindow != 0)) {
+            if (tableName == null && VAF_Screen_ID == 0 && (ActivityWindow != null && ActivityWindow != 0)) {
                 //log.Info("No window/Form --> open table window and bind a window to that table");
                 return;
             }
@@ -1058,12 +1058,12 @@
             if (PO_Window_ID != 0) {
                 var whereClause = tableName + "_ID=" + Record_ID;
 
-                AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID(tableName, 0, whereClause, true);
+                VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID(tableName, 0, whereClause, true);
 
-                if (AD_Window_ID == 0)
+                if (VAF_Screen_ID == 0)
                     return;
             }
-            VIS.viewManager.startWindow(AD_Window_ID, VIS.Query.prototype.getEqualQuery(tableName + "_ID", Record_ID));
+            VIS.viewManager.startWindow(VAF_Screen_ID, VIS.Query.prototype.getEqualQuery(tableName + "_ID", Record_ID));
         };
         //
 
@@ -1503,7 +1503,7 @@
             //return date;
         },
 
-        to_char: function (columnName, displayType, AD_Language) {
+        to_char: function (columnName, displayType, VAF_Language) {
             var retValue = "TRIM(TO_CHAR(";
             retValue = retValue.concat(columnName);
             //  Numbers

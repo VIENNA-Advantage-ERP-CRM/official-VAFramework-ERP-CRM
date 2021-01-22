@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PInstance
+/** Generated Model for VAF_JInstance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PInstance : PO
+public class X_VAF_JInstance : PO
 {
-public X_AD_PInstance (Context ctx, int AD_PInstance_ID, Trx trxName) : base (ctx, AD_PInstance_ID, trxName)
+public X_VAF_JInstance (Context ctx, int VAF_JInstance_ID, Trx trxName) : base (ctx, VAF_JInstance_ID, trxName)
 {
-/** if (AD_PInstance_ID == 0)
+/** if (VAF_JInstance_ID == 0)
 {
-SetAD_PInstance_ID (0);
-SetAD_Process_ID (0);
+SetVAF_JInstance_ID (0);
+SetVAF_Job_ID (0);
 SetIsProcessing (false);
 SetRecord_ID (0);
 }
  */
 }
-public X_AD_PInstance (Ctx ctx, int AD_PInstance_ID, Trx trxName) : base (ctx, AD_PInstance_ID, trxName)
+public X_VAF_JInstance (Ctx ctx, int VAF_JInstance_ID, Trx trxName) : base (ctx, VAF_JInstance_ID, trxName)
 {
-/** if (AD_PInstance_ID == 0)
+/** if (VAF_JInstance_ID == 0)
 {
-SetAD_PInstance_ID (0);
-SetAD_Process_ID (0);
+SetVAF_JInstance_ID (0);
+SetVAF_Job_ID (0);
 SetIsProcessing (false);
 SetRecord_ID (0);
 }
@@ -43,7 +43,7 @@ SetRecord_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_PInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_PInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_JInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PInstance()
+static X_VAF_JInstance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_PInstance()
 //static long serialVersionUID = 27562514362408L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045619L;
-/** AD_Table_ID=282 */
+/** VAF_TableView_ID=282 */
 public static int Table_ID;
  // =282;
 
-/** TableName=AD_PInstance */
-public static String Table_Name="AD_PInstance";
+/** TableName=VAF_JInstance */
+public static String Table_Name="VAF_JInstance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_JInstance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,36 +135,36 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID < 1) throw new ArgumentException ("AD_Process_ID is mandatory.");
-Set_Value ("AD_Process_ID", AD_Process_ID);
+if (VAF_Job_ID < 1) throw new ArgumentException ("VAF_Job_ID is mandatory.");
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_ValueNoCheck ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_ValueNoCheck ("VAF_Role_ID", null);
 else
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -185,18 +185,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

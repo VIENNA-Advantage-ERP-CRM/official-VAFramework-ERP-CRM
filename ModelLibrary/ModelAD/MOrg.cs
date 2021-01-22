@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Org
+ * Class Used     : X_VAF_Org
  * Chronological Development
  * Veena Pandey     
  ******************************************************/
@@ -18,10 +18,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MOrg : X_AD_Org
+    public class MOrg : X_VAF_Org
     {
         //	Cache
-        private static CCache<int, MOrg> cache = new CCache<int, MOrg>("AD_Org", 20);
+        private static CCache<int, MOrg> cache = new CCache<int, MOrg>("VAF_Org", 20);
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MOrg).FullName);
         //	Org Info
@@ -33,12 +33,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">id</param>
+        /// <param name="VAF_Org_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MOrg(Ctx ctx, int AD_Org_ID, Trx trxName)
-            : base(ctx, AD_Org_ID, trxName)
+        public MOrg(Ctx ctx, int VAF_Org_ID, Trx trxName)
+            : base(ctx, VAF_Org_ID, trxName)
         {
-            if (AD_Org_ID == 0)
+            if (VAF_Org_ID == 0)
             {
                 //	setValue (null);
                 //	setName (null);
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         public MOrg(MClient client, String name)
             : this(client.GetCtx(), 0, client.Get_Trx())
         {
-            SetAD_Client_ID(client.GetAD_Client_ID());
+            SetVAF_Client_ID(client.GetVAF_Client_ID());
             SetValue(name);
             SetName(name);
         }
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         {
             List<MOrg> list = new List<MOrg>();
             //JID_1833 - pick only those org, whose Org unit = False
-            String sql = "SELECT * FROM AD_Org WHERE issummary = 'N' AND IsOrgUnit = 'N' AND IsActive = 'Y' AND AD_Client_ID=" + po.GetAD_Client_ID() + " ORDER BY Value";
+            String sql = "SELECT * FROM VAF_Org WHERE issummary = 'N' AND IsOrgUnit = 'N' AND IsActive = 'Y' AND VAF_Client_ID=" + po.GetVAF_Client_ID() + " ORDER BY Value";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -108,11 +108,11 @@ namespace VAdvantage.Model
         /// Get Org from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">id</param>
+        /// <param name="VAF_Org_ID">id</param>
         /// <returns>MOrg</returns>
-        public static MOrg Get(Ctx ctx, int AD_Org_ID)
+        public static MOrg Get(Ctx ctx, int VAF_Org_ID)
         {
-            int key = AD_Org_ID;
+            int key = VAF_Org_ID;
             MOrg retValue = null;
             if (cache.ContainsKey(key))
             {
@@ -120,10 +120,10 @@ namespace VAdvantage.Model
             }
             if (retValue != null)
                 return retValue;
-            retValue = new MOrg(ctx, AD_Org_ID, null);
-            if (AD_Org_ID == 0)
+            retValue = new MOrg(ctx, VAF_Org_ID, null);
+            if (VAF_Org_ID == 0)
                 retValue.Load((Trx)null);
-            if (retValue.Get_ID() != AD_Org_ID)
+            if (retValue.Get_ID() != VAF_Org_ID)
                 cache.Add(key, retValue);
             return retValue;
         }
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
         public MOrgInfo GetInfo()
         {
             if (info == null)
-                info = MOrgInfo.Get(GetCtx(), GetAD_Org_ID(), Get_Trx());
+                info = MOrgInfo.Get(GetCtx(), GetVAF_Org_ID(), Get_Trx());
             return info;
         }
 
@@ -157,7 +157,7 @@ namespace VAdvantage.Model
         {
             if (linkedBPartner == -1)
             {
-                string sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE AD_OrgBP_ID=" + GetAD_Org_ID();
+                string sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE VAF_OrgBP_ID=" + GetVAF_Org_ID();
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                 int C_BPartner_ID = 0;
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -200,9 +200,9 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "AD_Org_ID=" + GetAD_Org_ID(), Get_Trx());
+                MAccount.UpdateValueDescription(GetCtx(), "VAF_Org_ID=" + GetVAF_Org_ID(), Get_Trx());
                 if ("Y".Equals(GetCtx().GetContext("$Element_OT")))
-                    MAccount.UpdateValueDescription(GetCtx(), "AD_OrgTrx_ID=" + GetAD_Org_ID(), Get_Trx());
+                    MAccount.UpdateValueDescription(GetCtx(), "VAF_OrgTrx_ID=" + GetVAF_Org_ID(), Get_Trx());
             }
 
             if (!newRecord)
@@ -210,15 +210,15 @@ namespace VAdvantage.Model
                 if (!IsSummary())
                 {
 
-                    int orgTableID = MTable.Get_Table_ID("AD_Org");
+                    int orgTableID = MTable.Get_Table_ID("VAF_Org");
 
-                    string sql = "SELECT AD_Tree_ID FROM AD_Tree "
-                      + "WHERE AD_Client_ID=" + GetCtx().GetAD_Client_ID() + " AND AD_Table_ID=" + orgTableID + " AND IsActive='Y' AND IsAllNodes='Y' "
-                      + "ORDER BY IsDefault DESC, AD_Tree_ID";
+                    string sql = "SELECT VAF_TreeInfo_ID FROM VAF_TreeInfo "
+                      + "WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID() + " AND VAF_TableView_ID=" + orgTableID + " AND IsActive='Y' AND IsAllNodes='Y' "
+                      + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";
 
-                    object AD_Tree_ID = DB.ExecuteScalar(sql, null, null);
+                    object VAF_TreeInfo_ID = DB.ExecuteScalar(sql, null, null);
 
-                    DB.ExecuteQuery("Update AD_TreeNode Set Parent_ID = 0 where Parent_ID=" + GetAD_Org_ID() + " AND AD_Tree_ID=" + Util.GetValueOfInt(AD_Tree_ID));
+                    DB.ExecuteQuery("Update VAF_TreeInfoChild Set Parent_ID = 0 where Parent_ID=" + GetVAF_Org_ID() + " AND VAF_TreeInfo_ID=" + Util.GetValueOfInt(VAF_TreeInfo_ID));
 
                 }
             }
@@ -269,7 +269,7 @@ namespace VAdvantage.Model
         internal MAcctSchema GetAcctSchema()
         {
             if (info == null)
-                info = MOrgInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                info = MOrgInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (info != null)
             {
                 int C_AcctSchema_ID = info.GetC_AcctSchema_ID();

@@ -78,7 +78,7 @@ static X_M_ChangeRequest()
 //static long serialVersionUID 27562514378566L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061777L;
-/** AD_Table_ID=800 */
+/** VAF_TableView_ID=800 */
 public static int Table_ID;
  // =800;
 
@@ -255,8 +255,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_FixChangeNotice_ID AD_Reference_ID=351 */
-public static int M_FIXCHANGENOTICE_ID_AD_Reference_ID=351;
+/** M_FixChangeNotice_ID VAF_Control_Ref_ID=351 */
+public static int M_FIXCHANGENOTICE_ID_VAF_Control_Ref_ID=351;
 /** Set Fixed in.
 @param M_FixChangeNotice_ID Fixed in Change Notice */
 public void SetM_FixChangeNotice_ID (int M_FixChangeNotice_ID)

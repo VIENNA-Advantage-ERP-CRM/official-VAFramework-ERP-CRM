@@ -72,7 +72,7 @@ static X_R_RequestProcessorLog()
 //static long serialVersionUID 27562514383252L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066463L;
-/** AD_Table_ID=659 */
+/** VAF_TableView_ID=659 */
 public static int Table_ID;
  // =659;
 

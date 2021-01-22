@@ -139,20 +139,20 @@ namespace VAdvantage.Model
         {
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Product_Category_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_Product_Category_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Product_Category_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Product_Category_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Product'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Product'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO prdctact = null;
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -179,12 +179,12 @@ namespace VAdvantage.Model
                                         //                                        _sql.Append(@"Select Bp.M_Product_Category_ID,ca.Frpt_Acctdefault_Id From M_Product_Category Bp
                                         //                                                                                               Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
                                         //                                                                                                And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                        //                                                        + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID +
+                                        //                                                        + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID +
                                         //                                                        " AND C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
                                         _sql.Append(@"Select count(*) From M_Product_Category Bp
                                                        Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                                       + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID +
+                                                       + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID +
                                                        " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
                                                        " AND Bp.M_Product_Category_ID = " + GetM_Product_Category_ID());
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null , Get_Trx());
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
                                         if (recordFound == 0)
                                         {
                                             prdctact = MTable.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
-                                            prdctact.Set_ValueNoCheck("AD_Org_ID", 0);
+                                            prdctact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             //prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["M_Product_Category_ID"]));
                                             prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(GetM_Product_Category_ID()));
                                             prdctact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

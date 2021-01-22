@@ -65,55 +65,55 @@ namespace VAdvantage.Print
         {
             s_log.Info("" + pi);
             /*****************Manfacturing*******************/
-            int AD_ProcessWorkOrder_ID = Convert.ToInt32(DB.ExecuteScalar("select ad_process_id from ad_process where name='Work Order Print'"));
-            int AD_ProcessWorkOrderTrxn_ID = Convert.ToInt32(DB.ExecuteScalar("select ad_process_id from ad_process where name ='Work Order Transaction Print'"));
-            int AD_ProcessStandardopration_ID = Convert.ToInt32(DB.ExecuteScalar("select ad_process_id from ad_process where name='Standard Operation Print'"));
-            int AD_ProcessRouting_ID = Convert.ToInt32(DB.ExecuteScalar("select ad_process_id from ad_process where name='Routing Print'"));
+            int VAF_JobWorkOrder_ID = Convert.ToInt32(DB.ExecuteScalar("select VAF_Job_id from VAF_Job where name='Work Order Print'"));
+            int VAF_JobWorkOrderTrxn_ID = Convert.ToInt32(DB.ExecuteScalar("select VAF_Job_id from VAF_Job where name ='Work Order Transaction Print'"));
+            int VAF_JobStandardopration_ID = Convert.ToInt32(DB.ExecuteScalar("select VAF_Job_id from VAF_Job where name='Standard Operation Print'"));
+            int VAF_JobRouting_ID = Convert.ToInt32(DB.ExecuteScalar("select VAF_Job_id from VAF_Job where name='Routing Print'"));
             /*****************Manfacturing*******************/
 
 
             /**
              *	Order Print
              */
-            if (pi.GetAD_Process_ID() == 110)			//	C_Order
+            if (pi.GetVAF_Job_ID() == 110)			//	C_Order
                 return StartDocumentPrint(ctx, ReportEngine_N.ORDER, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 116)		//	C_Invoice
+            else if (pi.GetVAF_Job_ID() == 116)		//	C_Invoice
                 return StartDocumentPrint(ctx, ReportEngine_N.INVOICE, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 117)		//	M_InOut
+            else if (pi.GetVAF_Job_ID() == 117)		//	M_InOut
                 return StartDocumentPrint(ctx, ReportEngine_N.SHIPMENT, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 217)		//	C_Project
+            else if (pi.GetVAF_Job_ID() == 217)		//	C_Project
                 return StartDocumentPrint(ctx, ReportEngine_N.PROJECT, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 276)		//	C_RfQResponse
+            else if (pi.GetVAF_Job_ID() == 276)		//	C_RfQResponse
                 return StartDocumentPrint(ctx, ReportEngine_N.RFQ, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 313)		//	C_Payment
+            else if (pi.GetVAF_Job_ID() == 313)		//	C_Payment
                 return StartCheckPrint(ctx, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 290)      // 	Movement
+            else if (pi.GetVAF_Job_ID() == 290)      // 	Movement
                 return StartDocumentPrint(ctx, ReportEngine_N.MOVEMENT, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 291)		//	Inventory
+            else if (pi.GetVAF_Job_ID() == 291)		//	Inventory
                 return StartDocumentPrint(ctx, ReportEngine_N.INVENTORY, pi.GetRecord_ID(), IsDirectPrint);
             /*****************Manfacturing*******************/
 
-            else if (pi.GetAD_Process_ID() == AD_ProcessWorkOrder_ID)		//	M_WorkOrder415
+            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrder_ID)		//	M_WorkOrder415
             {
                 return StartDocumentPrint(ctx, ReportEngine_N.WORKORDER, pi.GetRecord_ID(), IsDirectPrint);
             }
-            else if (pi.GetAD_Process_ID() == AD_ProcessWorkOrderTrxn_ID)		//	M_WorkOrderTransaction 1481
+            else if (pi.GetVAF_Job_ID() == VAF_JobWorkOrderTrxn_ID)		//	M_WorkOrderTransaction 1481
                 return StartDocumentPrint(ctx, ReportEngine_N.WORKORDERTXN, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == AD_ProcessStandardopration_ID)		//	M_StandardOperation//1504
+            else if (pi.GetVAF_Job_ID() == VAF_JobStandardopration_ID)		//	M_StandardOperation//1504
                 return StartDocumentPrint(ctx, ReportEngine_N.STANDARDOPERATION, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == AD_ProcessRouting_ID)		//	M_Routing//1503
+            else if (pi.GetVAF_Job_ID() == VAF_JobRouting_ID)		//	M_Routing//1503
                 return StartDocumentPrint(ctx, ReportEngine_N.ROUTING, pi.GetRecord_ID(), IsDirectPrint);
             /*****************Manfacturing*******************/
             /**
-            else if (pi.AD_Process_ID == 9999999)	//	PaySelection
+            else if (pi.VAF_Job_ID == 9999999)	//	PaySelection
                 return startDocumentPrint(CHECK, pi, IsDirectPrint);
-            else if (pi.AD_Process_ID == 9999999)	//	PaySelection
+            else if (pi.VAF_Job_ID == 9999999)	//	PaySelection
                 return startDocumentPrint(REMITTANCE, pi, IsDirectPrint);
             **/
-            else if (pi.GetAD_Process_ID() == 159)		//	Dunning
+            else if (pi.GetVAF_Job_ID() == 159)		//	Dunning
                 return StartDocumentPrint(ctx, ReportEngine_N.DUNNING, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetAD_Process_ID() == 202			//	Financial Report
-                || pi.GetAD_Process_ID() == 204)			//	Financial Statement
+            else if (pi.GetVAF_Job_ID() == 202			//	Financial Report
+                || pi.GetVAF_Job_ID() == 204)			//	Financial Statement
                 return StartFinReport(ctx, pi);
             /********************
              *	Standard Report
@@ -166,11 +166,11 @@ namespace VAdvantage.Print
 
         static public ReportEngine_N StartFinReport(Ctx ctx, ProcessInfo pi)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             //  Create Query from Parameters
-            String TableName = pi.GetAD_Process_ID() == 202 ? "T_Report" : "T_ReportStatement";
-            Query query = Query.Get(ctx, pi.GetAD_PInstance_ID(), TableName);
+            String TableName = pi.GetVAF_Job_ID() == 202 ? "T_Report" : "T_ReportStatement";
+            Query query = Query.Get(ctx, pi.GetVAF_JInstance_ID(), TableName);
 
             //	Get PrintFormat
             MPrintFormat format = (MPrintFormat)pi.GetTransientObject();

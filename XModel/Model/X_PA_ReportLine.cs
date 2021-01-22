@@ -45,7 +45,7 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
  added by ->Harwinder */
         static X_PA_ReportLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621413794L;/** Last Updated Timestamp 4/1/2016 1:04:57 PM */
-        public static long updatedMS = 1459496097005L;/** AD_Table_ID=448 */
+        public static long updatedMS = 1459496097005L;/** VAF_TableView_ID=448 */
         public static int Table_ID; // =448;
         /** TableName=PA_ReportLine */
         public static String Table_Name = "PA_ReportLine";
@@ -64,8 +64,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_PA_ReportLine[").Append(Get_ID()).Append("]"); return sb.ToString(); }
-        /** AmountType AD_Reference_ID=235 */
-        public static int AMOUNTTYPE_AD_Reference_ID = 235;/** Period Balance = BP */
+        /** AmountType VAF_Control_Ref_ID=235 */
+        public static int AMOUNTTYPE_VAF_Control_Ref_ID = 235;/** Period Balance = BP */
         public static String AMOUNTTYPE_PeriodBalance = "BP";/** Total Balance = BT */
         public static String AMOUNTTYPE_TotalBalance = "BT";/** Year Balance = BY */
         public static String AMOUNTTYPE_YearBalance = "BY";/** Period Credit Only = CP */
@@ -89,8 +89,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         }/** Get Amount Type.
 @return Type of amount to report */
         public String GetAmountType() { return (String)Get_Value("AmountType"); }
-        /** CalculationType AD_Reference_ID=236 */
-        public static int CALCULATIONTYPE_AD_Reference_ID = 236;/** Add (Op1+Op2) = A */
+        /** CalculationType VAF_Control_Ref_ID=236 */
+        public static int CALCULATIONTYPE_VAF_Control_Ref_ID = 236;/** Add (Op1+Op2) = A */
         public static String CALCULATIONTYPE_AddOp1PlusOp2 = "A";/** Percentage (Op1 of Op2) = P */
         public static String CALCULATIONTYPE_PercentageOp1OfOp2 = "P";/** Add Range (Op1 to Op2) = R */
         public static String CALCULATIONTYPE_AddRangeOp1ToOp2 = "R";/** Subtract (Op1-Op2) = S */
@@ -110,8 +110,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
         public String GetDescription() { return (String)Get_Value("Description"); }
-        /** ElementType AD_Reference_ID=181 */
-        public static int ELEMENTTYPE_AD_Reference_ID = 181;/** Account = AC */
+        /** ElementType VAF_Control_Ref_ID=181 */
+        public static int ELEMENTTYPE_VAF_Control_Ref_ID = 181;/** Account = AC */
         public static String ELEMENTTYPE_Account = "AC";/** Activity = AY */
         public static String ELEMENTTYPE_Activity = "AY";/** BPartner = BP */
         public static String ELEMENTTYPE_BPartner = "BP";/** Location From = LF */
@@ -150,8 +150,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_ValueNoCheck("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }
-        /** FRPT_DGLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_DGLINEFORMATTING_AD_Reference_ID = 1000224;/** Set DimensionGroup Line Formatting.
+        /** FRPT_DGLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_DGLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set DimensionGroup Line Formatting.
 @param FRPT_DGLineFormatting DimensionGroup Line Formatting */
         public void SetFRPT_DGLineFormatting(int FRPT_DGLineFormatting) { Set_Value("FRPT_DGLineFormatting", FRPT_DGLineFormatting); }/** Get DimensionGroup Line Formatting.
 @return DimensionGroup Line Formatting */
@@ -165,8 +165,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         }/** Get FRPT_Group_ID.
 @return FRPT_Group_ID */
         public int GetFRPT_Group_ID() { Object ii = Get_Value("FRPT_Group_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_LinkWith AD_Reference_ID=1000192 */
-        public static int FRPT_LINKWITH_AD_Reference_ID = 1000192;/** Ledger Code = C */
+        /** FRPT_LinkWith VAF_Control_Ref_ID=1000192 */
+        public static int FRPT_LINKWITH_VAF_Control_Ref_ID = 1000192;/** Ledger Code = C */
         public static String FRPT_LINKWITH_LedgerCode = "C";/** Ledger Group = G */
         public static String FRPT_LINKWITH_LedgerGroup = "G";/** Is test a valid value.
 @param test testvalue
@@ -188,26 +188,26 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetFRPT_ListTrx(Boolean FRPT_ListTrx) { Set_Value("FRPT_ListTrx", FRPT_ListTrx); }/** Get List Transactions.
 @return List Transactions */
         public Boolean IsFRPT_ListTrx() { Object oo = Get_Value("FRPT_ListTrx"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** FRPT_RowLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_ROWLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Row Line Formatting.
+        /** FRPT_RowLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_ROWLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Row Line Formatting.
 @param FRPT_RowLineFormatting Row Line Formatting */
         public void SetFRPT_RowLineFormatting(int FRPT_RowLineFormatting) { Set_Value("FRPT_RowLineFormatting", FRPT_RowLineFormatting); }/** Get Row Line Formatting.
 @return Row Line Formatting */
         public int GetFRPT_RowLineFormatting() { Object ii = Get_Value("FRPT_RowLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_SourceLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_SOURCELINEFORMATTING_AD_Reference_ID = 1000224;/** Set Source Line Formatting.
+        /** FRPT_SourceLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_SOURCELINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Source Line Formatting.
 @param FRPT_SourceLineFormatting Source Line Formatting */
         public void SetFRPT_SourceLineFormatting(int FRPT_SourceLineFormatting) { Set_Value("FRPT_SourceLineFormatting", FRPT_SourceLineFormatting); }/** Get Source Line Formatting.
 @return Source Line Formatting */
         public int GetFRPT_SourceLineFormatting() { Object ii = Get_Value("FRPT_SourceLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_SubGroupLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_SUBGROUPLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Sub-Group Line Formatting.
+        /** FRPT_SubGroupLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_SUBGROUPLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Sub-Group Line Formatting.
 @param FRPT_SubGroupLineFormatting Sub-Group Line Formatting */
         public void SetFRPT_SubGroupLineFormatting(int FRPT_SubGroupLineFormatting) { Set_Value("FRPT_SubGroupLineFormatting", FRPT_SubGroupLineFormatting); }/** Get Sub-Group Line Formatting.
 @return Sub-Group Line Formatting */
         public int GetFRPT_SubGroupLineFormatting() { Object ii = Get_Value("FRPT_SubGroupLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_TrxLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_TRXLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Trx Line Formatting.
+        /** FRPT_TrxLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_TRXLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Trx Line Formatting.
 @param FRPT_TrxLineFormatting Trx Line Formatting */
         public void SetFRPT_TrxLineFormatting(int FRPT_TrxLineFormatting) { Set_Value("FRPT_TrxLineFormatting", FRPT_TrxLineFormatting); }/** Get Trx Line Formatting.
 @return Trx Line Formatting */
@@ -229,8 +229,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetIsSummary(Boolean IsSummary) { Set_Value("IsSummary", IsSummary); }/** Get Summary Level.
 @return This is a summary entity */
         public Boolean IsSummary() { Object oo = Get_Value("IsSummary"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** LineType AD_Reference_ID=241 */
-        public static int LINETYPE_AD_Reference_ID = 241;/** Calculation = C */
+        /** LineType VAF_Control_Ref_ID=241 */
+        public static int LINETYPE_VAF_Control_Ref_ID = 241;/** Calculation = C */
         public static String LINETYPE_Calculation = "C";/** Segment Value = S */
         public static String LINETYPE_SegmentValue = "S";/** Is test a valid value.
 @param test testvalue
@@ -250,8 +250,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public String GetName() { return (String)Get_Value("Name"); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetName()); }
-        /** Oper_1_ID AD_Reference_ID=240 */
-        public static int OPER_1_ID_AD_Reference_ID = 240;/** Set Operand 1.
+        /** Oper_1_ID VAF_Control_Ref_ID=240 */
+        public static int OPER_1_ID_VAF_Control_Ref_ID = 240;/** Set Operand 1.
 @param Oper_1_ID First operand for calculation */
         public void SetOper_1_ID(int Oper_1_ID)
         {
@@ -261,8 +261,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         }/** Get Operand 1.
 @return First operand for calculation */
         public int GetOper_1_ID() { Object ii = Get_Value("Oper_1_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Oper_2_ID AD_Reference_ID=240 */
-        public static int OPER_2_ID_AD_Reference_ID = 240;/** Set Operand 2.
+        /** Oper_2_ID VAF_Control_Ref_ID=240 */
+        public static int OPER_2_ID_VAF_Control_Ref_ID = 240;/** Set Operand 2.
 @param Oper_2_ID Second operand for calculation */
         public void SetOper_2_ID(int Oper_2_ID)
         {
@@ -280,8 +280,8 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetPA_ReportLine_ID(int PA_ReportLine_ID) { if (PA_ReportLine_ID < 1) throw new ArgumentException("PA_ReportLine_ID is mandatory."); Set_ValueNoCheck("PA_ReportLine_ID", PA_ReportLine_ID); }/** Get Report Line.
 @return Report Line */
         public int GetPA_ReportLine_ID() { Object ii = Get_Value("PA_ReportLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** PostingType AD_Reference_ID=125 */
-        public static int POSTINGTYPE_AD_Reference_ID = 125;/** Actual = A */
+        /** PostingType VAF_Control_Ref_ID=125 */
+        public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;/** Actual = A */
         public static String POSTINGTYPE_Actual = "A";/** Budget = B */
         public static String POSTINGTYPE_Budget = "B";/** Commitment = E */
         public static String POSTINGTYPE_Commitment = "E";/** Reservation = R */

@@ -25,7 +25,7 @@ public X_M_SerNoCtl_No (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, tr
  added by ->Harwinder */
 static X_M_SerNoCtl_No(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27877615678585L;/** Last Updated Timestamp 7/23/2020 7:46:01 AM */
-public static long updatedMS = 1595490361796L;/** AD_Table_ID=1000543 */
+public static long updatedMS = 1595490361796L;/** VAF_TableView_ID=1000543 */
 public static int Table_ID; // =1000543;
 /** TableName=M_SerNoCtl_No */
 public static String Table_Name="M_SerNoCtl_No";

@@ -125,7 +125,7 @@
 
         if (panels && panels.length > 0) {
             var str = [];
-            defPnlId = panels[0].getAD_TabPanel_ID();
+            defPnlId = panels[0].getVAF_TabPanel_ID();
 
             for (var i = 0; i < panels.length; i++) {
                 var iconPath = '';
@@ -135,7 +135,7 @@
                 else {
                     iconPath = 'fa fa-object-group';// 'VIS/Images/base/defPanel.ico';// "fa fa-window-maximize";//'VIS/Images/base/defPanel.ico';
                 }
-                str.push('<li default="' + panels[i].getIsDefault() + '" data-panelid="' + panels[i].getAD_TabPanel_ID() +
+                str.push('<li default="' + panels[i].getIsDefault() + '" data-panelid="' + panels[i].getVAF_TabPanel_ID() +
                     '" data-cname="' + panels[i].getClassName() + '" data-name="' + panels[i].getName() + '"  data-extrainfo="' + panels[i].getExtraInfo() + '" >');
                 if (iconPath.indexOf('.')>-1)
                     str.push('<img alt = "' + panels[i].getName() + '" title = "' + panels[i].getName() +
@@ -146,7 +146,7 @@
                 str.push('</li>');
 
                 if (panels[i].getIsDefault())
-                    defPnlId = panels[i].getAD_TabPanel_ID();
+                    defPnlId = panels[i].getVAF_TabPanel_ID();
             }
         }
         this.setPanelList(str.join(' '),defPnlId);

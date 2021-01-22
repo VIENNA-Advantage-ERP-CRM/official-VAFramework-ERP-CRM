@@ -91,7 +91,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514378315L;
         /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
         public static long updatedMS = 1280389061526L;
-        /** AD_Table_ID=560 */
+        /** VAF_TableView_ID=560 */
         public static int Table_ID;
         // =560;
 
@@ -372,8 +372,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MandatoryType AD_Reference_ID=324 */
-        public static int MANDATORYTYPE_AD_Reference_ID = 324;
+        /** MandatoryType VAF_Control_Ref_ID=324 */
+        public static int MANDATORYTYPE_VAF_Control_Ref_ID = 324;
         /** Not Mandatary = N */
         public static String MANDATORYTYPE_NotMandatary = "N";
         /** When Shipping = S */

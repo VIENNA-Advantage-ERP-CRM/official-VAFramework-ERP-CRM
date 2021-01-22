@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27688047957533L;
         /** Last Updated Timestamp 2014-07-21 11:34:00 AM */
         public static long updatedMS = 1405922640744L;
-        /** AD_Table_ID=1000226 */
+        /** VAF_TableView_ID=1000226 */
         public static int Table_ID;
         // =1000226;
 
@@ -243,8 +243,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Width AD_Reference_ID=1000201 */
-        public static int WIDTH_AD_Reference_ID = 1000201;
+        /** Width VAF_Control_Ref_ID=1000201 */
+        public static int WIDTH_VAF_Control_Ref_ID = 1000201;
         /** 100% = 100 */
         public static String WIDTH_100 = "100";
         /** 25% = 25 */

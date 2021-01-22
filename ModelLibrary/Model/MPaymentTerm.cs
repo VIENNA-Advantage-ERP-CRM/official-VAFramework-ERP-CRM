@@ -282,7 +282,7 @@ namespace VAdvantage.Model
                         //schedule.Save(invoice.Get_Trx());
 
                         MInvoicePaySchedule newSchedule = new MInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
-                        PO.CopyValues(schedule, newSchedule, schedule.GetAD_Client_ID(), schedule.GetAD_Org_ID());
+                        PO.CopyValues(schedule, newSchedule, schedule.GetVAF_Client_ID(), schedule.GetVAF_Org_ID());
 
                         // set references
                         newSchedule.SetVA009_OrderPaySchedule_ID(0);
@@ -308,7 +308,7 @@ namespace VAdvantage.Model
                         {
                             baseCurencyAmt = MConversionRate.Convert(GetCtx(), remainder, invoice.GetC_Currency_ID(),
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
-                                invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                         }
 
                         newSchedule.SetDueAmt(Util.GetValueOfDecimal(remainder));
@@ -473,7 +473,7 @@ namespace VAdvantage.Model
                             // Get Next Business Day if Next Business Days check box is set to true
                             if (payterm.IsNextBusinessDay())
                             {
-                                payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
+                                payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetVAF_Org_ID());
                             }
                             else
                             {
@@ -487,7 +487,7 @@ namespace VAdvantage.Model
                             // check next business days in case of Discount Date                                
                             if (payterm.IsNextBusinessDay())
                             {
-                                payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
+                                payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetVAF_Org_ID());
                             }
                             else
                             {
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
         {
             var runForBaseCurrency = true;
             Dictionary<string, int> baseTypeIds = new Dictionary<string, int>();
-            var dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND C_Currency_ID IS NULL AND AD_Client_ID=" + order.GetAD_Client_ID()
+            var dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND C_Currency_ID IS NULL AND VAF_Client_ID=" + order.GetVAF_Client_ID()
                        + " AND VA009_PaymentBaseType IN ('" + X_C_Order.PAYMENTRULE_Cash + "','" + X_C_Order.PAYMENTRULE_OnCredit + "','" + X_C_Order.PAYMENTRULE_CreditCard + "','" + X_C_Order.PAYMENTRULE_ThirdPartyPayment + "')");
             ///currency id null
             while (dr.Read())
@@ -809,8 +809,8 @@ namespace VAdvantage.Model
             // MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
             MInvoicePaySchedule schedule = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
             schedule.SetVA009_ExecutionStatus("A");
-            schedule.SetAD_Client_ID(invoice.GetAD_Client_ID());
-            schedule.SetAD_Org_ID(invoice.GetAD_Org_ID());
+            schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
+            schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
 
@@ -830,7 +830,7 @@ namespace VAdvantage.Model
                 schedule.SetDueDate(invoice.GetDateAcct());
 
                 decimal dueAmt = MConversionRate.Convert(GetCtx(), payAmt ?? payAmt.Value, payCur, order.GetC_Currency_ID(),
-                                                                    order.GetDateAcct(), order.GetC_ConversionType_ID(), order.GetAD_Client_ID(), order.GetAD_Org_ID());
+                                                                    order.GetDateAcct(), order.GetC_ConversionType_ID(), order.GetVAF_Client_ID(), order.GetVAF_Org_ID());
 
                 if (invoice.GetGrandTotal() < 0)
                 {
@@ -861,7 +861,7 @@ namespace VAdvantage.Model
             schedule.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             //end
 
-            //string _sqlPaymentMthd = "Select va009_paymentmode, va009_paymenttype, va009_paymenttrigger  From va009_paymentmethod where va009_paymentmethod_ID=" + invoice.GetVA009_PaymentMethod_ID() + "   AND IsActive = 'Y' AND AD_Client_ID = " + invoice.GetAD_Client_ID();
+            //string _sqlPaymentMthd = "Select va009_paymentmode, va009_paymenttype, va009_paymenttrigger  From va009_paymentmethod where va009_paymentmethod_ID=" + invoice.GetVA009_PaymentMethod_ID() + "   AND IsActive = 'Y' AND VAF_Client_ID = " + invoice.GetVAF_Client_ID();
             //DataSet dsPayMthd = new DataSet();
             //dsPayMthd = DB.ExecuteDataset(_sqlPaymentMthd);
             //if (dsPayMthd.Tables != null && dsPayMthd.Tables.Count > 0 && dsPayMthd.Tables[0].Rows.Count > 0)
@@ -918,7 +918,7 @@ namespace VAdvantage.Model
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
             MInvoicePaySchedule schedule = null;
             StringBuilder _sql = new StringBuilder();
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + invoice.GetC_PaymentTerm_ID())) < 1)
@@ -955,7 +955,7 @@ namespace VAdvantage.Model
                         // Get Next Business Day if Next Business Days check box is set to true
                         if (payterm.IsNextBusinessDay())
                         {
-                            payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
+                            payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetVAF_Org_ID());
                         }
                         else
                         {
@@ -966,7 +966,7 @@ namespace VAdvantage.Model
                         // check next business days in case of Discount Date
                         if (payterm.IsNextBusinessDay())
                         {
-                            payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
+                            payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetVAF_Org_ID());
                         }
                         else
                         {
@@ -1137,7 +1137,7 @@ namespace VAdvantage.Model
         public DateTime? GetNextBusinessDate(DateTime? DueDate)
         {
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            //return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, GetAD_Org_ID()) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
+            //return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, GetVAF_Org_ID()) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
             return GetNextBusinessDate(DueDate, 0);
         }
 
@@ -1146,9 +1146,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="DueDate">Due Date</param>
         /// <returns>DateTime, Next Business Day</returns>
-        public DateTime? GetNextBusinessDate(DateTime? DueDate, int AD_Org_ID)
+        public DateTime? GetNextBusinessDate(DateTime? DueDate, int VAF_Org_ID)
         {
-            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, AD_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1), AD_Org_ID) : DueDate;
+            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, VAF_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1), VAF_Org_ID) : DueDate;
         }
 
         /// <summary>
@@ -1160,8 +1160,8 @@ namespace VAdvantage.Model
         {
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
             schedule.SetVA009_ExecutionStatus("A");
-            schedule.SetAD_Client_ID(invoice.GetAD_Client_ID());
-            schedule.SetAD_Org_ID(invoice.GetAD_Org_ID());
+            schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
+            schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
 
@@ -1177,7 +1177,7 @@ namespace VAdvantage.Model
                 DateTime? payDueDate = null;
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(dueDate, invoice.GetAD_Org_ID());
+                    payDueDate = GetNextBusinessDate(dueDate, invoice.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1192,7 +1192,7 @@ namespace VAdvantage.Model
                 // check next business days in case of Discount Date                
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())), invoice.GetAD_Org_ID());
+                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())), invoice.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1205,7 +1205,7 @@ namespace VAdvantage.Model
 
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())), invoice.GetAD_Org_ID());
+                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())), invoice.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1255,7 +1255,7 @@ namespace VAdvantage.Model
             //end
 
             string _sqlPaymentMthd = "SELECT VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID="
-                + invoice.GetVA009_PaymentMethod_ID() + " AND IsActive = 'Y' AND AD_Client_ID = " + invoice.GetAD_Client_ID();
+                + invoice.GetVA009_PaymentMethod_ID() + " AND IsActive = 'Y' AND VAF_Client_ID = " + invoice.GetVAF_Client_ID();
             DataSet dsPayMthd = new DataSet();
             dsPayMthd = DB.ExecuteDataset(_sqlPaymentMthd);
             if (dsPayMthd != null && dsPayMthd.Tables != null && dsPayMthd.Tables.Count > 0 && dsPayMthd.Tables[0].Rows.Count > 0)
@@ -1280,14 +1280,14 @@ namespace VAdvantage.Model
         {
             int BaseCurrency = 0;
             //            StringBuilder _sqlBsCrrncy = new StringBuilder();
-            //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
-            //                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
-            //                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
+            //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.C_Currency_ID FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+            //                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN c_invoice i ON c.vaf_client_id    = i.vaf_client_id
+            //                                 WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
             //            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetAD_Client_ID()).GetC_Currency_ID();
+            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetC_Currency_ID();
             if (BaseCurrency != invoice.GetC_Currency_ID())
             {
-                decimal multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                decimal multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 schedule.SetVA009_OpenAmnt(schedule.GetDueAmt() * multiplyRate);
             }
             else
@@ -1305,8 +1305,8 @@ namespace VAdvantage.Model
         /// <param name="_ds">datarow of orderschedule</param>
         private void copyorderschedules(MInvoicePaySchedule schedule, MInvoice invoice, DataRow _ds, Decimal LineTotalAmt, Decimal schedulePercentage)
         {
-            schedule.SetAD_Client_ID(Util.GetValueOfInt(_ds["AD_Client_ID"]));
-            schedule.SetAD_Org_ID(Util.GetValueOfInt(_ds["AD_Org_ID"]));
+            schedule.SetVAF_Client_ID(Util.GetValueOfInt(_ds["VAF_Client_ID"]));
+            schedule.SetVAF_Org_ID(Util.GetValueOfInt(_ds["VAF_Org_ID"]));
             schedule.SetVA009_OrderPaySchedule_ID(Util.GetValueOfInt(_ds["VA009_OrderPaySchedule_ID"]));
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
             schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
@@ -1340,7 +1340,7 @@ namespace VAdvantage.Model
             {
                 baseCurencyAmt = MConversionRate.Convert(GetCtx(), baseCurencyAmt, invoice.GetC_Currency_ID(),
                     GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
-                    invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                    invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
             }
 
             // For reverse record

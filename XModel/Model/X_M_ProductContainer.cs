@@ -29,7 +29,7 @@ public X_M_ProductContainer (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, d
  added by ->Harwinder */
 static X_M_ProductContainer(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27817490194683L;/** Last Updated Timestamp 8/27/2018 3:44:38 PM */
-public static long updatedMS = 1535364877894L;/** AD_Table_ID=1000524 */
+public static long updatedMS = 1535364877894L;/** VAF_TableView_ID=1000524 */
 public static int Table_ID; // =1000524;
 /** TableName=M_ProductContainer */
 public static String Table_Name="M_ProductContainer";
@@ -82,8 +82,8 @@ public void SetName (String Name){if (Name == null) throw new ArgumentException 
 public String GetName() {return (String)Get_Value("Name");}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetName());}
-/** Ref_M_Container_ID AD_Reference_ID=1000205 */
-public static int REF_M_CONTAINER_ID_AD_Reference_ID=1000205;/** Set Parent Container.
+/** Ref_M_Container_ID VAF_Control_Ref_ID=1000205 */
+public static int REF_M_CONTAINER_ID_VAF_Control_Ref_ID=1000205;/** Set Parent Container.
 @param Ref_M_Container_ID Use to store parent container id */
 public void SetRef_M_Container_ID (int Ref_M_Container_ID){if (Ref_M_Container_ID <= 0) Set_Value ("Ref_M_Container_ID", null);else
 Set_Value ("Ref_M_Container_ID", Ref_M_Container_ID);}/** Get Parent Container.

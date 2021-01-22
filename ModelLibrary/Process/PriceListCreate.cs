@@ -81,7 +81,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>error message</returns>
         private String CheckPrerequisites()
         {
-            String clientWhere = " AND AD_Client_ID=" + _plv.GetAD_Client_ID();
+            String clientWhere = " AND VAF_Client_ID=" + _plv.GetVAF_Client_ID();
 
             //	PO Prices must exists
             int no = DataBase.DB.ExecuteQuery("UPDATE M_Product_PO SET PriceList = 0 WHERE PriceList IS NULL" + clientWhere, null, Get_TrxName());
@@ -210,13 +210,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int p2 = M_Pricelist_Version_Base_ID;
                 if (p2 == 0)	//	Create from PO
                 {
-                    p2 = dsLine.GetAD_Client_ID();
+                    p2 = dsLine.GetVAF_Client_ID();
                     sql = "INSERT INTO T_Selection (T_Selection_ID) "
                         + "SELECT DISTINCT po.M_Product_ID "
                         + "FROM M_Product_PO po "
                         + " INNER JOIN M_Product p ON (p.M_Product_ID=po.M_Product_ID)"
                         + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#1
-                        + "WHERE p.AD_Client_ID IN (" + p2 + ", 0)"		//	#2
+                        + "WHERE p.VAF_Client_ID IN (" + p2 + ", 0)"		//	#2
                         + " AND p.IsActive='Y' AND po.IsActive='Y' AND po.IsCurrentVendor='Y'"
                         //	Optional Restrictions
                         + " AND (dl.M_Product_Category_ID IS NULL OR p.M_Product_Category_ID=dl.M_Product_Category_ID)"
@@ -256,7 +256,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int noInserted = 0;
                 sql = "INSERT INTO M_ProductPrice "
                     + "(M_PriceList_Version_ID, M_Product_ID,"
-                    + " AD_Client_ID, AD_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
+                    + " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
                     + " PriceList, PriceStd, PriceLimit) ";
                 //
                 if (M_Pricelist_Version_Base_ID == _M_PriceList_Version_ID)
@@ -267,16 +267,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     /**	Copy and Convert from Product_PO	*/
                     sql += "SELECT plv.M_PriceList_Version_ID, po.M_Product_ID,"
-                        + " plv.AD_Client_ID, plv.AD_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
+                        + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(po.PriceList,"
-                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -po.PriceList),"
+                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
                         //	Price Std
                         + " COALESCE(currencyConvert(po.PriceList,"
-                        + "	po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -po.PriceList),"
+                        + "	po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
                         //	Price Limit
                         + " COALESCE(currencyConvert(po.PricePO,"
-                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -po.PricePO) "
+                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PricePO) "
                         //
                         + "FROM M_Product_PO po"
                         + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1
@@ -290,16 +290,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     /**	Copy and Convert from other PriceList_Version	*/
                     sql += "SELECT plv.M_PriceList_Version_ID, pp.M_Product_ID,"
-                        + " plv.AD_Client_ID, plv.AD_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
+                        + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(pp.PriceList,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -pp.PriceList),"
+                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceList),"
                         //	Price Std
                         + " COALESCE(currencyConvert(pp.PriceStd,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -pp.PriceStd),"
+                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceStd),"
                         //	Price Limit
                         + " COALESCE(currencyConvert(pp.PriceLimit,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.AD_Client_ID, plv.AD_Org_ID), -pp.PriceLimit) "
+                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceLimit) "
                         //
                         + "FROM M_ProductPrice pp"
                         + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1

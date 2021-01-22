@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MModuleProcess:X_AD_ModuleProcess
+    public class MModuleProcess:X_VAF_ModuleProcess
     {
         public MModuleProcess(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
@@ -24,7 +24,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleProcess WHERE AD_Process_ID=" + GetAD_Process_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleProcess WHERE VAF_Job_ID=" + GetVAF_Job_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "ProcessExist"));
                     return false;
@@ -33,10 +33,10 @@ namespace VAdvantage.Model
             else
             {
                 // check if process value changed for previous record
-                if (Is_ValueChanged("AD_Process_ID"))
+                if (Is_ValueChanged("VAF_Job_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleProcess WHERE AD_Process_ID=" + GetAD_Process_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleProcess WHERE VAF_Job_ID=" + GetVAF_Job_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "ProcessExist"));
                         return false;

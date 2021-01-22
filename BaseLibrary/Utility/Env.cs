@@ -173,11 +173,11 @@ namespace VAdvantage.Utility
         ///  </pre>
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Window_ID">window no</param>
+        /// <param name="VAF_Screen_ID">window no</param>
         /// <param name="context">Entity to search</param>
         /// <param name="system">System level preferences (vs. user defined)</param>
         /// <returns>preference value</returns>
-        public static String GetPreference(Ctx ctx, int AD_Window_ID, String context, bool system)
+        public static String GetPreference(Ctx ctx, int VAF_Screen_ID, String context, bool system)
         {
             if (ctx == null || context == null)
                 throw new ArgumentException("Require Context");
@@ -185,7 +185,7 @@ namespace VAdvantage.Utility
             //
             if (!system)	//	User Preferences
             {
-                retValue = ctx.GetContext("P" + AD_Window_ID + "|" + context);//	Window Pref
+                retValue = ctx.GetContext("P" + VAF_Screen_ID + "|" + context);//	Window Pref
                 if (retValue.Length == 0)
                     retValue = ctx.GetContext("P|" + context);  			//	Global Pref
             }
@@ -295,9 +295,9 @@ namespace VAdvantage.Utility
 	    *  Get Base Language code. (e.g. en-US)
 	    *  @return Base Language
 	    */
-        public static String GetBaseAD_Language()
+        public static String GetBaseVAF_Language()
         {
-            return "en_US";// s_languages[0].getAD_Language();
+            return "en_US";// s_languages[0].getVAF_Language();
         }   //  getBase
 
         public static int Scale(Decimal d)
@@ -334,10 +334,10 @@ namespace VAdvantage.Utility
         //*******************Language Issues***********************************************************************
 
         /** Context Language identifier */
-        public const String LANGUAGE = "#AD_Language";
+        public const String LANGUAGE = "#VAF_Language";
         public const String ISRIGHTTOLEFT = "#IsRightToLeft";
 
-        public static String GetAD_Language(Context ctx)
+        public static String GetVAF_Language(Context ctx)
         {
             if (ctx != null)
             {
@@ -345,10 +345,10 @@ namespace VAdvantage.Utility
                 if (lang != null && lang.Length > 0)
                     return lang;
             }
-            return Language.GetBaseAD_Language();
-        }	//	getAD_Language
+            return Language.GetBaseVAF_Language();
+        }	//	getVAF_Language
 
-        public static String GetAD_Language(Ctx ctx)
+        public static String GetVAF_Language(Ctx ctx)
         {
             if (ctx != null)
             {
@@ -356,7 +356,7 @@ namespace VAdvantage.Utility
                 if (lang != null && lang.Length > 0)
                     return lang;
             }
-            return Language.GetBaseAD_Language();
+            return Language.GetBaseVAF_Language();
         }	//
 
         /// <summary>
@@ -411,18 +411,18 @@ namespace VAdvantage.Utility
             return GetLanguage(ctx);
         }
 
-        //public static int GetAD_Language_ID()
+        //public static int GetVAF_Language_ID()
         //{
-        //    string sLang = GetLoginLanguage(Env.GetCtx()).GetAD_Language();
+        //    string sLang = GetLoginLanguage(Env.GetCtx()).GetVAF_Language();
         //    MLanguage language = MLanguage.Get(Env.GetCtx(), sLang, null);
-        //    return language.GetAD_Language_ID();
+        //    return language.GetVAF_Language_ID();
         //}
 
         /// <summary>
         /// Verify Language.
         /// Check that language is supported by the system
         /// </summary>
-        /// <param name="ctx">might be updated with new AD_Language</param>
+        /// <param name="ctx">might be updated with new VAF_Language</param>
         /// <param name="language">language</param>
         /// <returns>Language</returns>
         public static Language VerifyLanguage(Context ctx, Language language)
@@ -431,21 +431,21 @@ namespace VAdvantage.Utility
                 return language;
 
             bool isSystemLanguage = false;
-            List<String> AD_Languages = new List<String>();
-            String sql = "SELECT DISTINCT AD_Language FROM AD_Message_Trl";
+            List<String> VAF_Languages = new List<String>();
+            String sql = "SELECT DISTINCT VAF_Language FROM VAF_Msg_Lable_TL";
             System.Data.IDataReader dr = null;
             try
             {
                 dr = VAdvantage.DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    String AD_Language = dr[0].ToString();
-                    if (AD_Language.Equals(language.GetAD_Language()))
+                    String VAF_Language = dr[0].ToString();
+                    if (VAF_Language.Equals(language.GetVAF_Language()))
                     {
                         isSystemLanguage = true;
                         break;
                     }
-                    AD_Languages.Add(AD_Language);
+                    VAF_Languages.Add(VAF_Language);
                 }
                 dr.Close();
             }
@@ -460,25 +460,25 @@ namespace VAdvantage.Utility
             if (isSystemLanguage)
                 return language;
             //	No Language - set to System
-            if (AD_Languages.Count <= 0)
+            if (VAF_Languages.Count <= 0)
             {
                 return Language.GetBaseLanguage();
             }
 
-            for (int i = 0; i < AD_Languages.Count; i++)
+            for (int i = 0; i < VAF_Languages.Count; i++)
             {
-                String AD_Language = (String)AD_Languages[i];	//	en_US
-                String lang = AD_Language.Substring(0, 2);			//	en
+                String VAF_Language = (String)VAF_Languages[i];	//	en_US
+                String lang = VAF_Language.Substring(0, 2);			//	en
                 //
-                String langCompare = language.GetAD_Language().Substring(0, 2);
+                String langCompare = language.GetVAF_Language().Substring(0, 2);
                 if (lang.Equals(langCompare))
                 {
-                    return Language.GetLanguage(AD_Language);
+                    return Language.GetLanguage(VAF_Language);
                 }
             }
 
             //	We found same language
-            //	if (!"0".equals(Msg.getMsg(AD_Language, "0")))
+            //	if (!"0".equals(Msg.getMsg(VAF_Language, "0")))
 
             return Language.GetBaseLanguage();
         }   //  verifyLanguage
@@ -489,21 +489,21 @@ namespace VAdvantage.Utility
                 return language;
 
             bool isSystemLanguage = false;
-            List<String> AD_Languages = new List<String>();
-            String sql = "SELECT DISTINCT AD_Language FROM AD_Message_Trl";
+            List<String> VAF_Languages = new List<String>();
+            String sql = "SELECT DISTINCT VAF_Language FROM VAF_Msg_Lable_TL";
             System.Data.IDataReader dr = null;
             try
             {
                 dr = VAdvantage.DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    String AD_Language = dr[0].ToString();
-                    if (AD_Language.Equals(language.GetAD_Language()))
+                    String VAF_Language = dr[0].ToString();
+                    if (VAF_Language.Equals(language.GetVAF_Language()))
                     {
                         isSystemLanguage = true;
                         break;
                     }
-                    AD_Languages.Add(AD_Language);
+                    VAF_Languages.Add(VAF_Language);
                 }
                 dr.Close();
             }
@@ -518,25 +518,25 @@ namespace VAdvantage.Utility
             if (isSystemLanguage)
                 return language;
             //	No Language - set to System
-            if (AD_Languages.Count <= 0)
+            if (VAF_Languages.Count <= 0)
             {
                 return Language.GetBaseLanguage();
             }
 
-            for (int i = 0; i < AD_Languages.Count; i++)
+            for (int i = 0; i < VAF_Languages.Count; i++)
             {
-                String AD_Language = (String)AD_Languages[i];	//	en_US
-                String lang = AD_Language.Substring(0, 2);			//	en
+                String VAF_Language = (String)VAF_Languages[i];	//	en_US
+                String lang = VAF_Language.Substring(0, 2);			//	en
                 //
-                String langCompare = language.GetAD_Language().Substring(0, 2);
+                String langCompare = language.GetVAF_Language().Substring(0, 2);
                 if (lang.Equals(langCompare))
                 {
-                    return Language.GetLanguage(AD_Language);
+                    return Language.GetLanguage(VAF_Language);
                 }
             }
 
             //	We found same language
-            //	if (!"0".equals(Msg.getMsg(AD_Language, "0")))
+            //	if (!"0".equals(Msg.getMsg(VAF_Language, "0")))
 
             return Language.GetBaseLanguage();
         }   //  verifyLanguage
@@ -549,23 +549,23 @@ namespace VAdvantage.Utility
         /// <returns>true if base language and table not translated</returns>
         public static bool IsBaseLanguage(Context ctx, String tableName)
         {
-            return Language.IsBaseLanguage(GetAD_Language(ctx));
+            return Language.IsBaseLanguage(GetVAF_Language(ctx));
         }	//	isBaseLanguage
 
         public static bool IsBaseLanguage(Ctx ctx, String tableName)
         {
-            return Language.IsBaseLanguage(GetAD_Language(ctx));
+            return Language.IsBaseLanguage(GetVAF_Language(ctx));
         }	//	isBaseLanguage
 
         /// <summary>
         /// Check Base Language
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <param name="tableName">name of the table</param>
         /// <returns>true if base language</returns>
-        public static bool IsBaseLanguage(String AD_Language, String tableName)
+        public static bool IsBaseLanguage(String VAF_Language, String tableName)
         {
-            return Language.IsBaseLanguage(AD_Language);
+            return Language.IsBaseLanguage(VAF_Language);
         }	//	isBaseLanguage
 
         /// <summary>
@@ -615,9 +615,9 @@ namespace VAdvantage.Utility
             StringBuilder sb = new StringBuilder();
             if (windowNo > 0)
                 sb.Append(ctx.GetContext(windowNo, "WindowName", false)).Append("  ");
-            sb.Append(ctx.GetContext("##AD_User_Name")).Append("@")
-                .Append(ctx.GetContext("#AD_Org_Name")).Append(".")
-                .Append(ctx.GetContext("#AD_Client_Name"))
+            sb.Append(ctx.GetContext("##VAF_UserContact_Name")).Append("@")
+                .Append(ctx.GetContext("#VAF_Org_Name")).Append(".")
+                .Append(ctx.GetContext("#VAF_Client_Name"))
                 .Append(" [").Append(VConnection.Get().ToString()).Append("]");//                   CConnection.get().toString()).append("]");
             return sb.ToString();
         }
@@ -795,8 +795,8 @@ namespace VAdvantage.Utility
         public static int GetColumnID(string tableName, string columnName)
         {
 
-            string sql = " SELECT cl.ad_column_id FROM ad_column cl WHERE cl.ad_table_id=" +
-                     "(SELECT tb.ad_table_id FROM ad_table tb WHERE tb.tablename='" + tableName + "'" +
+            string sql = " SELECT cl.vaf_column_id FROM vaf_column cl WHERE cl.vaf_tableview_id=" +
+                     "(SELECT tb.vaf_tableview_id FROM vaf_tableview tb WHERE tb.tablename='" + tableName + "'" +
                       ") and cl.columnname='" + columnName + "'";
 
             return DB.GetSQLValue(null, sql);
@@ -844,8 +844,8 @@ namespace VAdvantage.Utility
             //    System.Data.IDataReader dr = null;
             //    try
             //    {
-            //        //dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-            //        //                                                     + " VersionNo,VersionID FROM AD_ModuleInfo WHERE prefix='" + prefix + "'");
+            //        //dr = DataBase.DB.ExecuteReader(" SELECT VAF_ModuleInfo_ID,AssemblyName,NameSpace,"
+            //        //                                                     + " VersionNo,VersionID FROM VAF_ModuleInfo WHERE prefix='" + prefix + "'");
             //        //if (dr.Read())
             //        //{
             //        //    aName = dr[1].ToString() + "Svc";
@@ -922,8 +922,8 @@ namespace VAdvantage.Utility
             //    System.Data.IDataReader dr = null;
             //    try
             //    {
-            //        //dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-            //        //                                                     + " VersionNo,VersionID FROM AD_ModuleInfo WHERE prefix='" + prefix + "'");
+            //        //dr = DataBase.DB.ExecuteReader(" SELECT VAF_ModuleInfo_ID,AssemblyName,NameSpace,"
+            //        //                                                     + " VersionNo,VersionID FROM VAF_ModuleInfo WHERE prefix='" + prefix + "'");
             //        //if (dr.Read())
             //        //{
             //        //    aName = dr[1].ToString() + "Svc";
@@ -1060,8 +1060,8 @@ namespace VAdvantage.Utility
             {
                 if (_cacheModules.Count == 0)
                 {
-                    dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-                                                                    + " VersionNo,VersionID,prefix FROM AD_ModuleInfo WHERE Prefix != 'VIS_' AND IsActive='Y' AND AD_Client_ID = 0 ");
+                    dr = DataBase.DB.ExecuteReader(" SELECT VAF_ModuleInfo_ID,AssemblyName,NameSpace,"
+                                                                    + " VersionNo,VersionID,prefix FROM VAF_ModuleInfo WHERE Prefix != 'VIS_' AND IsActive='Y' AND VAF_Client_ID = 0 ");
                     Tuple<string, string, string, string> modules = null;
 
                     while (dr.Read())
@@ -1078,8 +1078,8 @@ namespace VAdvantage.Utility
                     }
                     dr.Close();
 
-                    dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-                                                                    + " VersionNo,VersionID,prefix,Name FROM AD_ModuleInfo WHERE Prefix='VIS_' AND IsActive='Y' AND AD_Client_ID = 0 ");
+                    dr = DataBase.DB.ExecuteReader(" SELECT VAF_ModuleInfo_ID,AssemblyName,NameSpace,"
+                                                                    + " VersionNo,VersionID,prefix,Name FROM VAF_ModuleInfo WHERE Prefix='VIS_' AND IsActive='Y' AND VAF_Client_ID = 0 ");
 
                     while (dr.Read())
                     {
@@ -1120,7 +1120,7 @@ namespace VAdvantage.Utility
                 {
                     int index = name.IndexOf('_');
                     string prefix = name.Substring(0, index + 1);
-                    if (Convert.ToInt32(DataBase.DB.ExecuteScalar(" SELECT count(prefix) FROM AD_ModuleInfo WHERE prefix='" + prefix + "'")) > 0)
+                    if (Convert.ToInt32(DataBase.DB.ExecuteScalar(" SELECT count(prefix) FROM VAF_ModuleInfo WHERE prefix='" + prefix + "'")) > 0)
                     {
                         name = name.Substring(index + 1);
                     }

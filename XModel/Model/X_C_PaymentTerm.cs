@@ -26,7 +26,7 @@ public X_C_PaymentTerm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, tr
  added by ->Harwinder */
 static X_C_PaymentTerm(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27745177343589L;/** Last Updated Timestamp 5/12/2016 4:50:26 PM */
-public static long updatedMS = 1463052026800L;/** AD_Table_ID=113 */
+public static long updatedMS = 1463052026800L;/** VAF_TableView_ID=113 */
 public static int Table_ID; // =113;
 /** TableName=C_PaymentTerm */
 public static String Table_Name="C_PaymentTerm";
@@ -119,8 +119,8 @@ public void SetName (String Name){if (Name == null) throw new ArgumentException 
 public String GetName() {return (String)Get_Value("Name");}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetName());}
-/** NetDay AD_Reference_ID=167 */
-public static int NETDAY_AD_Reference_ID=167;/** Monday = 1 */
+/** NetDay VAF_Control_Ref_ID=167 */
+public static int NETDAY_VAF_Control_Ref_ID=167;/** Monday = 1 */
 public static String NETDAY_Monday = "1";/** Tuesday = 2 */
 public static String NETDAY_Tuesday = "2";/** Wednesday = 3 */
 public static String NETDAY_Wednesday = "3";/** Thursday = 4 */

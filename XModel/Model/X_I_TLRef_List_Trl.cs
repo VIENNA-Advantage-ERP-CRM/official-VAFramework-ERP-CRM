@@ -20,7 +20,7 @@ public X_I_TLRef_List_Trl (Context ctx, int I_TLRef_List_Trl_ID, Trx trxName) : 
 {
 /** if (I_TLRef_List_Trl_ID == 0)
 {
-SetAD_Ref_List_ID (0);
+SetVAF_CtrlRef_List_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLRef_List_Trl (Ctx ctx, int I_TLRef_List_Trl_ID, Trx trxName) : base
 {
 /** if (I_TLRef_List_Trl_ID == 0)
 {
-SetAD_Ref_List_ID (0);
+SetVAF_CtrlRef_List_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -74,7 +74,7 @@ static X_I_TLRef_List_Trl()
 //static long serialVersionUID 27638799905152L;
 /** Last Updated Timestamp 12/28/2012 11:33:08 AM */
 public static long updatedMS = 1356674588363L;
-/** AD_Table_ID=1000416 */
+/** VAF_TableView_ID=1000416 */
 public static int Table_ID;
  // =1000416;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLRef_List_Trl[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Reference List.
-@param AD_Ref_List_ID Reference List based on Table */
-public void SetAD_Ref_List_ID (int AD_Ref_List_ID)
+@param VAF_CtrlRef_List_ID Reference List based on Table */
+public void SetVAF_CtrlRef_List_ID (int VAF_CtrlRef_List_ID)
 {
-if (AD_Ref_List_ID < 1) throw new ArgumentException ("AD_Ref_List_ID is mandatory.");
-Set_ValueNoCheck ("AD_Ref_List_ID", AD_Ref_List_ID);
+if (VAF_CtrlRef_List_ID < 1) throw new ArgumentException ("VAF_CtrlRef_List_ID is mandatory.");
+Set_ValueNoCheck ("VAF_CtrlRef_List_ID", VAF_CtrlRef_List_ID);
 }
 /** Get Reference List.
 @return Reference List based on Table */
-public int GetAD_Ref_List_ID() 
+public int GetVAF_CtrlRef_List_ID() 
 {
-Object ii = Get_Value("AD_Ref_List_ID");
+Object ii = Get_Value("VAF_CtrlRef_List_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

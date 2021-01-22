@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Find
+/** Generated Model for VAF_Search
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Find : PO
+public class X_VAF_Search : PO
 {
-public X_AD_Find (Context ctx, int AD_Find_ID, Trx trxName) : base (ctx, AD_Find_ID, trxName)
+public X_VAF_Search (Context ctx, int VAF_Search_ID, Trx trxName) : base (ctx, VAF_Search_ID, trxName)
 {
-/** if (AD_Find_ID == 0)
+/** if (VAF_Search_ID == 0)
 {
-SetAD_Column_ID (0);
-SetAD_Find_ID (0);
+SetVAF_Column_ID (0);
+SetVAF_Search_ID (0);
 SetAndOr (null);	// A
 SetFind_ID (0.0);
 SetOperation (null);	// ==
@@ -29,12 +29,12 @@ SetValue (null);
 }
  */
 }
-public X_AD_Find (Ctx ctx, int AD_Find_ID, Trx trxName) : base (ctx, AD_Find_ID, trxName)
+public X_VAF_Search (Ctx ctx, int VAF_Search_ID, Trx trxName) : base (ctx, VAF_Search_ID, trxName)
 {
-/** if (AD_Find_ID == 0)
+/** if (VAF_Search_ID == 0)
 {
-SetAD_Column_ID (0);
-SetAD_Find_ID (0);
+SetVAF_Column_ID (0);
+SetVAF_Search_ID (0);
 SetAndOr (null);	// A
 SetFind_ID (0.0);
 SetOperation (null);	// ==
@@ -47,7 +47,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Find (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Search (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_AD_Find (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Find (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Search (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_AD_Find (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Find (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Search (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Find()
+static X_VAF_Search()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,12 +78,12 @@ static X_AD_Find()
 //static long serialVersionUID = 27562514361326L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044537L;
-/** AD_Table_ID=404 */
+/** VAF_TableView_ID=404 */
 public static int Table_ID;
  // =404;
 
-/** TableName=AD_Find */
-public static String Table_Name="AD_Find";
+/** TableName=VAF_Search */
+public static String Table_Name="VAF_Search";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -117,39 +117,39 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Find[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Search[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** AD_Column_ID AD_Reference_ID=251 */
-public static int AD_COLUMN_ID_AD_Reference_ID=251;
+/** VAF_Column_ID VAF_Control_Ref_ID=251 */
+public static int VAF_COLUMN_ID_VAF_Control_Ref_ID=251;
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID < 1) throw new ArgumentException ("AD_Column_ID is mandatory.");
-Set_Value ("AD_Column_ID", AD_Column_ID);
+if (VAF_Column_ID < 1) throw new ArgumentException ("VAF_Column_ID is mandatory.");
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Find.
-@param AD_Find_ID Find */
-public void SetAD_Find_ID (int AD_Find_ID)
+@param VAF_Search_ID Find */
+public void SetVAF_Search_ID (int VAF_Search_ID)
 {
-if (AD_Find_ID < 1) throw new ArgumentException ("AD_Find_ID is mandatory.");
-Set_ValueNoCheck ("AD_Find_ID", AD_Find_ID);
+if (VAF_Search_ID < 1) throw new ArgumentException ("VAF_Search_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Search_ID", VAF_Search_ID);
 }
 /** Get Find.
 @return Find */
-public int GetAD_Find_ID() 
+public int GetVAF_Search_ID() 
 {
-Object ii = Get_Value("AD_Find_ID");
+Object ii = Get_Value("VAF_Search_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -157,11 +157,11 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Find_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Search_ID().ToString());
 }
 
-/** AndOr AD_Reference_ID=204 */
-public static int ANDOR_AD_Reference_ID=204;
+/** AndOr VAF_Control_Ref_ID=204 */
+public static int ANDOR_VAF_Control_Ref_ID=204;
 /** And = A */
 public static String ANDOR_And = "A";
 /** Or = O */
@@ -209,8 +209,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Operation AD_Reference_ID=205 */
-public static int OPERATION_AD_Reference_ID=205;
+/** Operation VAF_Control_Ref_ID=205 */
+public static int OPERATION_VAF_Control_Ref_ID=205;
 /** != = != */
 public static String OPERATION_NotEq = "!=";
 /** < = << */

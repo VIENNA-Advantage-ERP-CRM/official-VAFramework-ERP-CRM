@@ -76,7 +76,7 @@ static X_VAM_ProductFeature()
 //static long serialVersionUID 27562514378237L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061448L;
-/** AD_Table_ID=562 */
+/** VAF_TableView_ID=562 */
 public static int Table_ID;
  // =562;
 
@@ -119,8 +119,8 @@ StringBuilder sb = new StringBuilder ("X_VAM_ProductFeature[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AttributeValueType AD_Reference_ID=326 */
-public static int ATTRIBUTEVALUETYPE_AD_Reference_ID=326;
+/** AttributeValueType VAF_Control_Ref_ID=326 */
+public static int ATTRIBUTEVALUETYPE_VAF_Control_Ref_ID=326;
 /** List = L */
 public static String ATTRIBUTEVALUETYPE_List = "L";
 /** Number = N */

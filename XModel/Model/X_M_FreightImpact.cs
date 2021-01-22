@@ -25,7 +25,7 @@ public X_M_FreightImpact (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, 
  added by ->Harwinder */
 static X_M_FreightImpact(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27824842352455L;/** Last Updated Timestamp 11/20/2018 6:00:35 PM */
-public static long updatedMS = 1542717035666L;/** AD_Table_ID=1000529 */
+public static long updatedMS = 1542717035666L;/** VAF_TableView_ID=1000529 */
 public static int Table_ID; // =1000529;
 /** TableName=M_FreightImpact */
 public static String Table_Name="M_FreightImpact";
@@ -44,11 +44,11 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_M_FreightImpact[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID){if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);else
-Set_Value ("AD_Table_ID", AD_Table_ID);}/** Get Table.
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID){if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);else
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);}/** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() {Object ii = Get_Value("AD_Table_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
+public int GetVAF_TableView_ID() {Object ii = Get_Value("VAF_TableView_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
 @param Export_ID Export */
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
 @return Export */

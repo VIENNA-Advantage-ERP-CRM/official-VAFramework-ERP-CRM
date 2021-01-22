@@ -53,15 +53,15 @@ namespace VAdvantage.Model
 	/// cleanUp
 	/// </summary>
 	/// <param name="trxName">trxname</param>
-	/// <param name="AD_Client_ID">id</param>
-	/// <param name="AD_Table_ID">id</param>
+	/// <param name="VAF_Client_ID">id</param>
+	/// <param name="VAF_TableView_ID">id</param>
 	/// <param name="Record_ID">id</param>
 	/// <returns>Number of records cleaned</returns>
-	public static int CleanUp(Trx trxName, int AD_Client_ID, int AD_Table_ID, int Record_ID)
+	public static int CleanUp(Trx trxName, int VAF_Client_ID, int VAF_TableView_ID, int Record_ID)
 	{
 		StringBuilder sb = new StringBuilder ("DELETE FROM K_Index "
-			+ "WHERE AD_Client_ID=" + AD_Client_ID + " AND "
-			+ "AD_Table_ID=" + AD_Table_ID + " AND "
+			+ "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND "
+			+ "VAF_TableView_ID=" + VAF_TableView_ID + " AND "
 			+ "Record_ID=" + Record_ID);
 		int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, trxName);
 		return no;
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
 	            String name = (String)e.Current;
 	            String value = (String)keyHash[name];//.get(name);
 	            MIndex thisIndex = new MIndex(ctx, 0, trxName);
-	            thisIndex.SetAD_Table_ID(tableID);
+	            thisIndex.SetVAF_TableView_ID(tableID);
 	            if (CMWebProjectID>0)
                 {
 	                thisIndex.SetCM_WebProject_ID(CMWebProjectID);
@@ -214,23 +214,23 @@ namespace VAdvantage.Model
 	/// <param name="runCleanUp">clean old records</param>
 	/// <param name="toBeIndexed">Array of Strings to be indexed</param>
 	/// <param name="ctx">context</param>
-	/// <param name="AD_Client_ID">id</param>
-	/// <param name="AD_Table_ID">id</param>
+	/// <param name="VAF_Client_ID">id</param>
+	/// <param name="VAF_TableView_ID">id</param>
 	/// <param name="Record_ID">id</param>
 	/// <param name="CM_WebProject_ID">webproject</param>
 	/// <param name="lastUpdated">date of last update</param>
 	public static void ReIndex(bool runCleanUp, String[] toBeIndexed, Ctx ctx, 
-		int AD_Client_ID, int AD_Table_ID, int Record_ID, int CM_WebProject_ID, DateTime? lastUpdated) 
+		int VAF_Client_ID, int VAF_TableView_ID, int Record_ID, int CM_WebProject_ID, DateTime? lastUpdated) 
 	{
-		Trx trx = Trx.Get("ReIndex_" + AD_Table_ID + "_" + Record_ID);
+		Trx trx = Trx.Get("ReIndex_" + VAF_TableView_ID + "_" + Record_ID);
 		try {
 			if (!runCleanUp)
 			{
-				MIndex.CleanUp(trx, AD_Client_ID, AD_Table_ID, Record_ID);
+				MIndex.CleanUp(trx, VAF_Client_ID, VAF_TableView_ID, Record_ID);
 			}
 			for (int i=0;i<toBeIndexed.Length;i++) 
             {
-				MIndex.RunIndex(toBeIndexed[i], ctx, trx, AD_Table_ID, Record_ID, 
+				MIndex.RunIndex(toBeIndexed[i], ctx, trx, VAF_TableView_ID, Record_ID, 
 				CM_WebProject_ID, lastUpdated);
 			
             }
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
 	{
 		String sql = "SELECT * FROM K_Index WHERE K_Index_ID IN (" +
 				"SELECT MAX(K_Index_ID) FROM K_Index WHERE " +
-				  "Keyword LIKE @param GROUP BY AD_Table_ID, Record_ID)";
+				  "Keyword LIKE @param GROUP BY VAF_TableView_ID, Record_ID)";
 		System.Collections.Generic.Dictionary<int,MIndex> tTable = new System.Collections.Generic.Dictionary<int,MIndex>();
 		SqlParameter[] param=new SqlParameter[1];
         IDataReader idr=null;

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : TabCreateFields
- * Purpose        : To create/copy the fields from the current table in the ad_field table.
+ * Purpose        : To create/copy the fields from the current table in the vaf_field table.
  * Class Used     : TabCreateFields inherits SvrProcess class
  * Chronological    Development
  * Raghunandan      30-March-2009 
@@ -29,7 +29,7 @@ namespace VAdvantage.Process
     public class TabCreateFields : ProcessEngine.SvrProcess
     {
         //Tab NUmber
-        private int p_AD_Tab_ID = 0;
+        private int p_VAF_Tab_ID = 0;
 
         /// <summary>
         /// function to et parameters
@@ -50,7 +50,7 @@ namespace VAdvantage.Process
             //        // log.log(Level.SEVERE, "Unknown Parameter: " + name);
             //    }
             //}
-            p_AD_Tab_ID = GetRecord_ID();
+            p_VAF_Tab_ID = GetRecord_ID();
             
         }
         /// <summary>
@@ -61,20 +61,20 @@ namespace VAdvantage.Process
         override protected string DoIt()
         {
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
-            MTab tab = new MTab(GetCtx(), p_AD_Tab_ID, Get_Trx());
-            //MTab tab = new MTab(GetCtx(), p_AD_Tab_ID, trx.ToString());
-            if (p_AD_Tab_ID == 0 || tab == null || tab.Get_ID() == 0)
+            MTab tab = new MTab(GetCtx(), p_VAF_Tab_ID, Get_Trx());
+            //MTab tab = new MTab(GetCtx(), p_VAF_Tab_ID, trx.ToString());
+            if (p_VAF_Tab_ID == 0 || tab == null || tab.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@: @AD_Tab_ID@ " + p_AD_Tab_ID);
+                throw new Exception("@NotFound@: @VAF_Tab_ID@ " + p_VAF_Tab_ID);
             }
             //log.info(tab.toString());
             int count = 0;
-            string sql = "SELECT * FROM AD_Column c "
-                + "WHERE NOT EXISTS (SELECT * FROM AD_Field f "
-                    + "WHERE c.AD_Column_ID=f.AD_Column_ID"
-                    + " AND c.AD_Table_ID=@AD_Table_Id"	//	#1
-                    + " AND f.AD_Tab_ID=@AD_Tab_Id)"		//	#2
-                + " AND AD_Table_ID=@AD_Table_Id1"			//	#3
+            string sql = "SELECT * FROM VAF_Column c "
+                + "WHERE NOT EXISTS (SELECT * FROM VAF_Field f "
+                    + "WHERE c.VAF_Column_ID=f.VAF_Column_ID"
+                    + " AND c.VAF_TableView_ID=@VAF_TableView_Id"	//	#1
+                    + " AND f.VAF_Tab_ID=@VAF_Tab_Id)"		//	#2
+                + " AND VAF_TableView_ID=@VAF_TableView_Id1"			//	#3
                 + " AND NOT (Name LIKE 'Created%' OR Name LIKE 'Updated%')"
                 + " AND IsActive='Y' "
                 + "ORDER BY Name desc";
@@ -84,9 +84,9 @@ namespace VAdvantage.Process
             {
 
                 SqlParameter[] param = new SqlParameter[3];
-                param[0] = new SqlParameter("@AD_Table_Id", tab.GetAD_Table_ID());
-                param[1] = new SqlParameter("@AD_Tab_Id", tab.GetAD_Tab_ID());
-                param[2] = new SqlParameter("@AD_Table_Id1", tab.GetAD_Table_ID());
+                param[0] = new SqlParameter("@VAF_TableView_Id", tab.GetVAF_TableView_ID());
+                param[1] = new SqlParameter("@VAF_Tab_Id", tab.GetVAF_Tab_ID());
+                param[2] = new SqlParameter("@VAF_TableView_Id1", tab.GetVAF_TableView_ID());
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param,Get_Trx());
                 //DataSet ds1 = ExecuteQuery.ExecuteDataset(sql);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -104,12 +104,12 @@ namespace VAdvantage.Process
                         field.SetIsDisplayed(false);
                         field.SetMRIsDisplayed("N");
                     }
-                    if (column.GetColumnName().ToString() == "AD_Client_ID")
+                    if (column.GetColumnName().ToString() == "VAF_Client_ID")
                     {
                         field.SetSeqNo(10);
                         field.SetMRSeqNo(10);
                     }
-                    if (column.GetColumnName().ToString()=="AD_Org_ID")
+                    if (column.GetColumnName().ToString()=="VAF_Org_ID")
                     {
                         field.SetIsSameLine(true);
                         field.SetSeqNo(20);

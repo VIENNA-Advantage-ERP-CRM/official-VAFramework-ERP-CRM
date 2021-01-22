@@ -76,7 +76,7 @@ static X_C_GenAttribute()
 //static long serialVersionUID 27667169084760L;
 /** Last Updated Timestamp 11/21/2013 7:52:48 PM */
 public static long updatedMS = 1385043767971L;
-/** AD_Table_ID=1000418 */
+/** VAF_TableView_ID=1000418 */
 public static int Table_ID;
  // =1000418;
 
@@ -119,8 +119,8 @@ StringBuilder sb = new StringBuilder ("X_C_GenAttribute[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** AttributeValueType AD_Reference_ID=326 */
-public static int ATTRIBUTEVALUETYPE_AD_Reference_ID=326;
+/** AttributeValueType VAF_Control_Ref_ID=326 */
+public static int ATTRIBUTEVALUETYPE_VAF_Control_Ref_ID=326;
 /** List = L */
 public static String ATTRIBUTEVALUETYPE_List = "L";
 /** Number = N */

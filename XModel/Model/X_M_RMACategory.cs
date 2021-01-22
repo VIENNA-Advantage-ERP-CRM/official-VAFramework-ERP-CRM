@@ -70,7 +70,7 @@ static X_M_RMACategory()
 //static long serialVersionUID 27562514381058L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064269L;
-/** AD_Table_ID=987 */
+/** VAF_TableView_ID=987 */
 public static int Table_ID;
  // =987;
 

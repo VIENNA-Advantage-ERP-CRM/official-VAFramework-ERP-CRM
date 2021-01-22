@@ -93,7 +93,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514372140L;
         /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
         public static long updatedMS = 1280389055351L;
-        /** AD_Table_ID=188 */
+        /** VAF_TableView_ID=188 */
         public static int Table_ID;
         // =188;
 
@@ -136,8 +136,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AccountSign AD_Reference_ID=118 */
-        public static int ACCOUNTSIGN_AD_Reference_ID = 118;
+        /** AccountSign VAF_Control_Ref_ID=118 */
+        public static int ACCOUNTSIGN_VAF_Control_Ref_ID = 118;
         /** Credit = C */
         public static String ACCOUNTSIGN_Credit = "C";
         /** Debit = D */
@@ -172,8 +172,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("AccountSign");
         }
 
-        /** AccountType AD_Reference_ID=117 */
-        public static int ACCOUNTTYPE_AD_Reference_ID = 117;
+        /** AccountType VAF_Control_Ref_ID=117 */
+        public static int ACCOUNTTYPE_VAF_Control_Ref_ID = 117;
         /** Asset = A */
         public static String ACCOUNTTYPE_Asset = "A";
         /** Expense = E */
@@ -555,8 +555,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** MasterAccountType AD_Reference_ID=1000112 */
-        public static int MASTERACCOUNTTYPE_AD_Reference_ID = 1000112;
+        /** MasterAccountType VAF_Control_Ref_ID=1000112 */
+        public static int MASTERACCOUNTTYPE_VAF_Control_Ref_ID = 1000112;
         /** Bank Account = BA */
         public static String MASTERACCOUNTTYPE_BankAccount = "BA";
         /** BP Group = BG */
@@ -598,8 +598,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("MasterAccountType");
         }
 
-        /** Ref_C_AccountGroup_ID AD_Reference_ID=1000111 */
-        public static int REF_C_ACCOUNTGROUP_ID_AD_Reference_ID = 1000111;
+        /** Ref_C_AccountGroup_ID VAF_Control_Ref_ID=1000111 */
+        public static int REF_C_ACCOUNTGROUP_ID_VAF_Control_Ref_ID = 1000111;
         /** Set MPG Primary Group.
         @param Ref_C_AccountGroup_ID MPG Primary Group */
         public void SetRef_C_AccountGroup_ID(int Ref_C_AccountGroup_ID)
@@ -617,8 +617,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Ref_C_AccountSubGroup_ID AD_Reference_ID=1000110 */
-        public static int REF_C_ACCOUNTSUBGROUP_ID_AD_Reference_ID = 1000110;
+        /** Ref_C_AccountSubGroup_ID VAF_Control_Ref_ID=1000110 */
+        public static int REF_C_ACCOUNTSUBGROUP_ID_VAF_Control_Ref_ID = 1000110;
         /** Set MPG Sub Group.
         @param Ref_C_AccountSubGroup_ID MPG Sub Group */
         public void SetRef_C_AccountSubGroup_ID(int Ref_C_AccountSubGroup_ID)
@@ -636,8 +636,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Ref_C_ElementValue_ID AD_Reference_ID=1000109 */
-        public static int REF_C_ELEMENTVALUE_ID_AD_Reference_ID = 1000109;
+        /** Ref_C_ElementValue_ID VAF_Control_Ref_ID=1000109 */
+        public static int REF_C_ELEMENTVALUE_ID_VAF_Control_Ref_ID = 1000109;
         /** Set Element Value.
         @param Ref_C_ElementValue_ID Element Value */
         public void SetRef_C_ElementValue_ID(int Ref_C_ElementValue_ID)

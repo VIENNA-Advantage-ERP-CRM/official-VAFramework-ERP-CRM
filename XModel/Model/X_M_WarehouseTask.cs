@@ -105,7 +105,7 @@
         //static long serialVersionUID 27581088222092L;
         /** Last Updated Timestamp 3/1/2011 12:31:45 PM */
         public static long updatedMS = 1298962905303L;
-        /** AD_Table_ID=1018 */
+        /** VAF_TableView_ID=1018 */
         public static int Table_ID;
         // =1018;
 
@@ -148,21 +148,21 @@
             return sb.ToString();
         }
 
-        /** AD_User_ID AD_Reference_ID=286 */
-        public static int AD_USER_ID_AD_Reference_ID = 286;
+        /** VAF_UserContact_ID VAF_Control_Ref_ID=286 */
+        public static int VAF_USERCONTACT_ID_VAF_Control_Ref_ID = 286;
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -181,8 +181,8 @@
             return Convert.ToDecimal(bd);
         }
 
-        /** C_DocType_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+        /** C_DocType_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type.
         @param C_DocType_ID Document type or rules */
         public void SetC_DocType_ID(int C_DocType_ID)
@@ -263,8 +263,8 @@
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -321,8 +321,8 @@
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -427,8 +427,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_ActualLocatorTo_ID AD_Reference_ID=446 */
-        public static int M_ACTUALLOCATORTO_ID_AD_Reference_ID = 446;
+        /** M_ActualLocatorTo_ID VAF_Control_Ref_ID=446 */
+        public static int M_ACTUALLOCATORTO_ID_VAF_Control_Ref_ID = 446;
         /** Set Actual Destination Locator.
         @param M_ActualLocatorTo_ID Actual locator where the stock was moved to */
         public void SetM_ActualLocatorTo_ID(int M_ActualLocatorTo_ID)
@@ -446,8 +446,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_ActualLocator_ID AD_Reference_ID=446 */
-        public static int M_ACTUALLOCATOR_ID_AD_Reference_ID = 446;
+        /** M_ActualLocator_ID VAF_Control_Ref_ID=446 */
+        public static int M_ACTUALLOCATOR_ID_VAF_Control_Ref_ID = 446;
         /** Set Actual Source Locator.
         @param M_ActualLocator_ID Actual locator from where the stock was moved */
         public void SetM_ActualLocator_ID(int M_ActualLocator_ID)
@@ -497,8 +497,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_LocatorTo_ID AD_Reference_ID=446 */
-        public static int M_LOCATORTO_ID_AD_Reference_ID = 446;
+        /** M_LocatorTo_ID VAF_Control_Ref_ID=446 */
+        public static int M_LOCATORTO_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator To.
         @param M_LocatorTo_ID Location inventory is moved to */
         public void SetM_LocatorTo_ID(int M_LocatorTo_ID)
@@ -515,8 +515,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_Locator_ID AD_Reference_ID=446 */
-        public static int M_LOCATOR_ID_AD_Reference_ID = 446;
+        /** M_Locator_ID VAF_Control_Ref_ID=446 */
+        public static int M_LOCATOR_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator.
         @param M_Locator_ID Warehouse Locator */
         public void SetM_Locator_ID(int M_Locator_ID)
@@ -533,8 +533,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_Product_ID AD_Reference_ID=162 */
-        public static int M_PRODUCT_ID_AD_Reference_ID = 162;
+        /** M_Product_ID VAF_Control_Ref_ID=162 */
+        public static int M_PRODUCT_ID_VAF_Control_Ref_ID = 162;
         /** Set Product.
         @param M_Product_ID Product, Service, Item */
         public void SetM_Product_ID(int M_Product_ID)
@@ -551,8 +551,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** M_SplitWarehouseTask_ID AD_Reference_ID=477 */
-        public static int M_SPLITWAREHOUSETASK_ID_AD_Reference_ID = 477;
+        /** M_SplitWarehouseTask_ID VAF_Control_Ref_ID=477 */
+        public static int M_SPLITWAREHOUSETASK_ID_VAF_Control_Ref_ID = 477;
         /** Set Split Warehouse Task.
         @param M_SplitWarehouseTask_ID Warehouse Task that this task was split from */
         public void SetM_SplitWarehouseTask_ID(int M_SplitWarehouseTask_ID)

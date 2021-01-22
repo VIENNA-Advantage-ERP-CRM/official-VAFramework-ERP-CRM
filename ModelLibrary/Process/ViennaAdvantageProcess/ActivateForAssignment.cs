@@ -46,7 +46,7 @@ namespace ViennaAdvantage.Process
             VAdvantage.Model.MResource Resource = new VAdvantage.Model.MResource(GetCtx(), S_Resource_id, Get_Trx());
             string sql = "select ProfileType from s_resource where s_resource_id=" + S_Resource_id + "";
             string ProfileType = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sql));
-            VAdvantage.Model.X_AD_User user = new VAdvantage.Model.X_AD_User(GetCtx(), 0, Get_Trx());
+            VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), 0, Get_Trx());
             VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_ID, Get_Trx());
             if (ProfileType == "")
             {
@@ -61,7 +61,7 @@ namespace ViennaAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "ResourceNotSelected");
                 }
 
-                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_Role_ID()) == 0)
+                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_Role_ID()) == 0)
                 {
                     return Msg.GetMsg(GetCtx(), "RoleNotSelected");
                 }
@@ -72,13 +72,13 @@ namespace ViennaAdvantage.Process
                 if (ProfileType == "I")
                 {
 
-                    if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) == 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_User_ID()) == 0)
+                    if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) == 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_UserContact_ID()) == 0)
                     {
                         sql = "select count(*) from c_bpartner where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
-                            bp.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            bp.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            bp.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            bp.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             bp.SetIsEmployee(true);
                             bp.SetName(Resource.GetName());
                             bp.SetEMail(Resource.GetEMail());
@@ -91,8 +91,8 @@ namespace ViennaAdvantage.Process
                             }
 
                             VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
-                            bploc.SetAD_Client_ID(bp.GetAD_Client_ID());
-                            bploc.SetAD_Org_ID(bp.GetAD_Org_ID());
+                            bploc.SetVAF_Client_ID(bp.GetVAF_Client_ID());
+                            bploc.SetVAF_Org_ID(bp.GetVAF_Org_ID());
                             bploc.SetC_BPartner_ID(bp.GetC_BPartner_ID());
                             bploc.SetPhone(Resource.GetMobile());
                             bploc.SetC_Location_ID(Resource.GetC_Location_ID());
@@ -110,12 +110,12 @@ namespace ViennaAdvantage.Process
                             return Msg.GetMsg(GetCtx(), "BPNotSaved," + Resource.GetName() + "AlreadyExists!");
                         }
 
-                        sql = "select count(*) from ad_user where upper(name) = '" + Resource.GetName().ToUpper() + "'";
+                        sql = "select count(*) from VAF_UserContact where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
 
-                            user.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            user.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            user.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            user.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             user.SetC_BPartner_ID(bp.GetC_BPartner_ID());
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
@@ -137,12 +137,12 @@ namespace ViennaAdvantage.Process
                                 //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
-                            int ad_role_id = Resource.GetAD_Role_ID();
-                            VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
-                            userrole.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            userrole.SetAD_Org_ID(Resource.GetAD_Org_ID());
-                            userrole.SetAD_User_ID(user.GetAD_User_ID());
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
+                            VAdvantage.Model.X_VAF_UserContact_Roles userrole = new VAdvantage.Model.X_VAF_UserContact_Roles(GetCtx(), 0, Get_Trx());
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
+                            userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
+                            userrole.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
 
                             if (!userrole.Save())
                             {
@@ -158,13 +158,13 @@ namespace ViennaAdvantage.Process
                             return Msg.GetMsg(GetCtx(), "UserNotSaved" + Resource.GetName() + "AlreadyExists");
                         }
                     }
-                    else if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) != 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_User_ID()) == 0)
+                    else if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) != 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_UserContact_ID()) == 0)
                     {
-                        sql = "select count(*) from ad_user where upper(name) = '" + Resource.GetName().ToUpper() + "'";
+                        sql = "select count(*) from VAF_UserContact where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
-                            user.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            user.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            user.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            user.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             user.SetC_BPartner_ID(Resource.GetC_BPartner_ID());
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
@@ -177,7 +177,7 @@ namespace ViennaAdvantage.Process
                                 //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
                                 return GetRetrievedError( user,  "UserNotSaved"); 
                             }
-                            //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
+                            //string sqlusr = "select name from VAF_UserContact where VAF_UserContact_id=" + user.GetVAF_UserContact_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
                             //GenratePassword(usrname);
                             string usrname = user.GetName();
@@ -190,12 +190,12 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user, "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
-                            VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
-                            userrole.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            userrole.SetAD_Org_ID(Resource.GetAD_Org_ID());
-                            userrole.SetAD_User_ID(user.GetAD_User_ID());
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
+                            VAdvantage.Model.X_VAF_UserContact_Roles userrole = new VAdvantage.Model.X_VAF_UserContact_Roles(GetCtx(), 0, Get_Trx());
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
+                            userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
+                            userrole.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
 
                             if (!userrole.Save())
                             {
@@ -216,13 +216,13 @@ namespace ViennaAdvantage.Process
                 else if (ProfileType == "E")
                 {
 
-                    if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) == 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_User_ID()) == 0)
+                    if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) == 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_UserContact_ID()) == 0)
                     {
                         sql = "select count(*) from c_bpartner where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
-                            bp.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            bp.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            bp.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            bp.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             bp.SetIsVendor(true);
                             bp.SetName(Resource.GetName());
                             bp.SetEMail(Resource.GetEMail());
@@ -244,8 +244,8 @@ namespace ViennaAdvantage.Process
                             }
 
                             VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
-                            bploc.SetAD_Client_ID(bp.GetAD_Client_ID());
-                            bploc.SetAD_Org_ID(bp.GetAD_Org_ID());
+                            bploc.SetVAF_Client_ID(bp.GetVAF_Client_ID());
+                            bploc.SetVAF_Org_ID(bp.GetVAF_Org_ID());
                             bploc.SetC_BPartner_ID(bp.GetC_BPartner_ID());
                             bploc.SetPhone(Resource.GetMobile());
 
@@ -270,12 +270,12 @@ namespace ViennaAdvantage.Process
                             return Msg.GetMsg(GetCtx(), "BPNotSaved," + Resource.GetName() + "AlreadyExists!");
                         }
 
-                        sql = "select count(*) from ad_user where upper(name) = '" + Resource.GetName().ToUpper() + "'";
+                        sql = "select count(*) from VAF_UserContact where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
 
-                            user.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            user.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            user.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            user.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             user.SetC_BPartner_ID(bp.GetC_BPartner_ID());
                             user.SetName(Resource.GetName());
                             user.SetEMail(Resource.GetEMail());
@@ -288,7 +288,7 @@ namespace ViennaAdvantage.Process
                                 //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
                                 return GetRetrievedError( user,  "UserNotSaved"); 
                             }
-                            //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
+                            //string sqlusr = "select name from VAF_UserContact where VAF_UserContact_id=" + user.GetVAF_UserContact_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
                             string usrname = user.GetName();
                             string Password = GenratePassword(usrname);
@@ -300,12 +300,12 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
-                            VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
-                            userrole.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            userrole.SetAD_Org_ID(Resource.GetAD_Org_ID());
-                            userrole.SetAD_User_ID(user.GetAD_User_ID());
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
+                            VAdvantage.Model.X_VAF_UserContact_Roles userrole = new VAdvantage.Model.X_VAF_UserContact_Roles(GetCtx(), 0, Get_Trx());
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
+                            userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
+                            userrole.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
 
                             if (!userrole.Save())
                             {
@@ -323,14 +323,14 @@ namespace ViennaAdvantage.Process
 
 
                     }
-                    else if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) != 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_User_ID()) == 0)
+                    else if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_BPartner_ID()) != 0 && VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_UserContact_ID()) == 0)
                     {
 
-                        sql = "select count(*) from ad_user where upper(name) = '" + Resource.GetName().ToUpper() + "'";
+                        sql = "select count(*) from VAF_UserContact where upper(name) = '" + Resource.GetName().ToUpper() + "'";
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) == 0)
                         {
-                            user.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            user.SetAD_Org_ID(Resource.GetAD_Org_ID());
+                            user.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            user.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             user.SetC_BPartner_ID(Resource.GetC_BPartner_ID());
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
@@ -343,7 +343,7 @@ namespace ViennaAdvantage.Process
                                 //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
                                 return GetRetrievedError( user,  "UserNotSaved"); 
                             }
-                            //string sqlusr = "select name from Ad_user where ad_user_id=" + user.GetAD_User_ID() + "";
+                            //string sqlusr = "select name from VAF_UserContact where VAF_UserContact_id=" + user.GetVAF_UserContact_ID() + "";
                             //string usrname = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlusr));
                             string usrname = user.GetName();
                             string Password = GenratePassword(usrname);
@@ -355,12 +355,12 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
-                            VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
-                            userrole.SetAD_Client_ID(Resource.GetAD_Client_ID());
-                            userrole.SetAD_Org_ID(Resource.GetAD_Org_ID());
-                            userrole.SetAD_User_ID(user.GetAD_User_ID());
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
+                            VAdvantage.Model.X_VAF_UserContact_Roles userrole = new VAdvantage.Model.X_VAF_UserContact_Roles(GetCtx(), 0, Get_Trx());
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
+                            userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
+                            userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
+                            userrole.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
 
                             if (!userrole.Save())
                             {
@@ -388,9 +388,9 @@ namespace ViennaAdvantage.Process
             }
             if (user != null)
             {
-                if (Util.GetValueOfInt(user.GetAD_User_ID()) != 0)
+                if (Util.GetValueOfInt(user.GetVAF_UserContact_ID()) != 0)
                 {
-                    Resource.SetAD_User_ID(user.GetAD_User_ID());
+                    Resource.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                 }
             }
             if (!Resource.Save())

@@ -25,7 +25,7 @@ namespace VAdvantage.Process
     public class ImportProduct : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
 
@@ -43,8 +43,8 @@ namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
                 else if (name.Equals("M_PriceList_Version_ID"))
@@ -65,7 +65,7 @@ namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -80,8 +80,8 @@ namespace VAdvantage.Process
 
             //	Set Client, Org, IaActive, Created/Updated, 	ProductType
             sql = new StringBuilder("UPDATE I_Product "
-                + "SET AD_Client_ID = COALESCE (AD_Client_ID, ").Append(_AD_Client_ID).Append("),"
-                + " AD_Org_ID = COALESCE (AD_Org_ID, 0),"
+                + "SET VAF_Client_ID = COALESCE (VAF_Client_ID, ").Append(_VAF_Client_ID).Append("),"
+                + " VAF_Org_ID = COALESCE (VAF_Org_ID, 0),"
                 + " IsActive = COALESCE (IsActive, 'Y'),"
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
             //	Set Optional BPartner
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_BPartner p"
-                + " WHERE i.BPartner_Value=p.Value AND i.AD_Client_ID=p.AD_Client_ID) "
+                + " WHERE i.BPartner_Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE C_BPartner_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -117,7 +117,7 @@ namespace VAdvantage.Process
             //	EAN/UPC
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product p"
-                + " WHERE i.UPC=p.UPC AND i.AD_Client_ID=p.AD_Client_ID) "
+                + " WHERE i.UPC=p.UPC AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE M_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -126,7 +126,7 @@ namespace VAdvantage.Process
             //	Value
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product p"
-                + " WHERE i.Value=p.Value AND i.AD_Client_ID=p.AD_Client_ID) "
+                + " WHERE i.Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE M_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -136,7 +136,7 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product_po p"
                 + " WHERE i.C_BPartner_ID=p.C_BPartner_ID"
-                + " AND i.VendorProductNo=p.VendorProductNo AND i.AD_Client_ID=p.AD_Client_ID) "
+                + " AND i.VendorProductNo=p.VendorProductNo AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE M_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -145,7 +145,7 @@ namespace VAdvantage.Process
             //	Set Product Category
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET ProductCategory_Value=(SELECT MAX(Value) FROM M_Product_Category"
-                + " WHERE IsDefault='Y' AND AD_Client_ID=").Append(_AD_Client_ID).Append(") "
+                + " WHERE IsDefault='Y' AND VAF_Client_ID=").Append(_VAF_Client_ID).Append(") "
                 + "WHERE ProductCategory_Value IS NULL AND M_Product_Category_ID IS NULL"
                 + " AND M_Product_ID IS NULL"	//	set category only if product not found 
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -154,7 +154,7 @@ namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET M_Product_Category_ID=(SELECT M_Product_Category_ID FROM M_Product_Category c"
-                + " WHERE i.ProductCategory_Value=c.Value AND i.AD_Client_ID=c.AD_Client_ID) "
+                + " WHERE i.ProductCategory_Value=c.Value AND i.VAF_Client_ID=c.VAF_Client_ID) "
                 + "WHERE ProductCategory_Value IS NOT NULL AND M_Product_Category_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -169,7 +169,7 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(strFields[i]).Append(" = (SELECT ").Append(strFields[i]).Append(" FROM M_Product p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.AD_Client_ID=p.AD_Client_ID) "
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE M_Product_ID IS NOT NULL"
                     + " AND ").Append(strFields[i]).Append(" IS NULL"
                     + " AND I_IsImported='N'").Append(clientCheck);
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(numFields[i]).Append(" = (SELECT ").Append(numFields[i]).Append(" FROM M_Product p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.AD_Client_ID=p.AD_Client_ID) "
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE M_Product_ID IS NOT NULL"
                     + " AND (").Append(numFields[i]).Append(" IS NULL OR ").Append(numFields[i]).Append("=0)"
                     + " AND I_IsImported='N'").Append(clientCheck);
@@ -201,7 +201,7 @@ namespace VAdvantage.Process
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(strFieldsPO[i]).Append(" = (SELECT ").Append(strFieldsPO[i])
                     .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.AD_Client_ID=p.AD_Client_ID) "
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE M_Product_ID IS NOT NULL AND C_BPartner_ID IS NOT NULL"
                     + " AND ").Append(strFieldsPO[i]).Append(" IS NULL"
                     + " AND I_IsImported='N'").Append(clientCheck);
@@ -217,7 +217,7 @@ namespace VAdvantage.Process
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(numFieldsPO[i]).Append(" = (SELECT ").Append(numFieldsPO[i])
                     .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.AD_Client_ID=p.AD_Client_ID) "
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE M_Product_ID IS NOT NULL AND C_BPartner_ID IS NOT NULL"
                     + " AND (").Append(numFieldsPO[i]).Append(" IS NULL OR ").Append(numFieldsPO[i]).Append("=0)"
                     + " AND I_IsImported='N'").Append(clientCheck);
@@ -239,14 +239,14 @@ namespace VAdvantage.Process
             //	Set UOM (System/own)
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET X12DE355 = "
-                + "(SELECT MAX(X12DE355) FROM C_UOM u WHERE u.IsDefault='Y' AND u.AD_Client_ID IN (0,i.AD_Client_ID)) "
+                + "(SELECT MAX(X12DE355) FROM C_UOM u WHERE u.IsDefault='Y' AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
                 + "WHERE X12DE355 IS NULL AND C_UOM_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set UOM Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET C_UOM_ID = (SELECT C_UOM_ID FROM C_UOM u WHERE u.X12DE355=i.X12DE355 AND u.AD_Client_ID IN (0,i.AD_Client_ID)) "
+                + "SET C_UOM_ID = (SELECT C_UOM_ID FROM C_UOM u WHERE u.X12DE355=i.X12DE355 AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
                 + "WHERE C_UOM_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -265,8 +265,8 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET ISO_Code=(SELECT ISO_Code FROM C_Currency c"
                 + " INNER JOIN C_AcctSchema a ON (a.C_Currency_ID=c.C_Currency_ID)"
-                + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
-                + " WHERE ci.AD_Client_ID=i.AD_Client_ID) "
+                + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                + " WHERE ci.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE C_Currency_ID IS NULL AND ISO_Code IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -274,7 +274,7 @@ namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET C_Currency_ID=(SELECT C_Currency_ID FROM C_Currency c"
-                + " WHERE i.ISO_Code=c.ISO_Code AND c.AD_Client_ID IN (0,i.AD_Client_ID)) "
+                + " WHERE i.ISO_Code=c.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
                 + "WHERE C_Currency_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -301,7 +301,7 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Value not unique,' "
                 + "WHERE I_IsImported<>'Y'"
-                + " AND Value IN (SELECT Value FROM I_Product ii WHERE i.AD_Client_ID=ii.AD_Client_ID GROUP BY Value HAVING COUNT(*) > 1)").Append(clientCheck);
+                + " AND Value IN (SELECT Value FROM I_Product ii WHERE i.VAF_Client_ID=ii.VAF_Client_ID GROUP BY Value HAVING COUNT(*) > 1)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Not Unique Value=" + no);
@@ -309,7 +309,7 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=UPC not unique,' "
                 + "WHERE I_IsImported<>'Y'"
-                + " AND UPC IN (SELECT UPC FROM I_Product ii WHERE i.AD_Client_ID=ii.AD_Client_ID GROUP BY UPC HAVING COUNT(*) > 1)").Append(clientCheck);
+                + " AND UPC IN (SELECT UPC FROM I_Product ii WHERE i.VAF_Client_ID=ii.VAF_Client_ID GROUP BY UPC HAVING COUNT(*) > 1)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Not Unique UPC=" + no);
@@ -342,7 +342,7 @@ namespace VAdvantage.Process
                 + "WHERE I_IsImported<>'Y'"
                 + " AND C_BPartner_ID IS NOT NULL"
                 + " AND (C_BPartner_ID, VendorProductNo) IN "
-                + " (SELECT C_BPartner_ID, VendorProductNo FROM I_Product ii WHERE i.AD_Client_ID=ii.AD_Client_ID GROUP BY C_BPartner_ID, VendorProductNo HAVING COUNT(*) > 1)")
+                + " (SELECT C_BPartner_ID, VendorProductNo FROM I_Product ii WHERE i.VAF_Client_ID=ii.VAF_Client_ID GROUP BY C_BPartner_ID, VendorProductNo HAVING COUNT(*) > 1)")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -390,12 +390,12 @@ namespace VAdvantage.Process
                 /*	Insert Product from Import
                 PreparedStatement pstmt_insertProduct = conn.prepareStatement
                     ("INSERT INTO M_Product (M_Product_ID,"
-                    + "AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
                     + "UPC,SKU,C_UOM_ID,IsSummary,M_Product_Category_ID,C_TaxCategory_ID,"
                     + "ProductType,ImageURL,DescriptionURL) "
                     + "SELECT ?,"
-                    + "AD_Client_ID,AD_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
                     + "UPC,SKU,C_UOM_ID,'N',M_Product_Category_ID," + C_TaxCategory_ID + ","
                     + "ProductType,ImageURL,DescriptionURL "
@@ -440,14 +440,14 @@ namespace VAdvantage.Process
                 //	Insert Product from Import
                 //PreparedStatement pstmt_insertProductPO = DataBase.prepareStatement
                 String _insertProductPO = "INSERT INTO M_Product_PO (M_Product_ID,C_BPartner_ID, "
-                    + "AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "IsCurrentVendor,C_UOM_ID,C_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised) "
                     + "SELECT @param1,@param2, "
-                    + "AD_Client_ID,AD_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
+                    + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "'Y',C_UOM_ID,C_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"

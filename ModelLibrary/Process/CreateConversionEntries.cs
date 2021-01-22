@@ -96,8 +96,8 @@ namespace VAdvantage.Process
                             if (!String.IsNullOrEmpty(result))
                             {
                                 conversion = new MConversionRate(GetCtx(), 0, trx);
-                                conversion.SetAD_Org_ID(0);
-                                conversion.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+                                conversion.SetVAF_Org_ID(0);
+                                conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);
                                 conversion.SetValidTo(DateTime.Now);
                                 conversion.SetC_ConversionType_ID(defaultconversionType);
@@ -124,8 +124,8 @@ namespace VAdvantage.Process
                             if (!String.IsNullOrEmpty(result))
                             {
                                 conversion = new MConversionRate(GetCtx(), 0, trx);
-                                conversion.SetAD_Org_ID(0);
-                                conversion.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+                                conversion.SetVAF_Org_ID(0);
+                                conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);
                                 conversion.SetValidTo(DateTime.Now);
                                 conversion.SetC_ConversionType_ID(defaultconversionType);

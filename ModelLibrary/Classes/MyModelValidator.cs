@@ -12,7 +12,7 @@ namespace ViennaAdvantageSvc.Classes
 
     class MyModelValidator : ModelValidator
     {
-        int AD_Client_ID = 0;
+        int VAF_Client_ID = 0;
         public string DocValidate(PO po, int docTiming)
         {
             if (po is MOrder)//Morder
@@ -31,21 +31,21 @@ namespace ViennaAdvantageSvc.Classes
             return "";
         }
 
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return AD_Client_ID;
+            return VAF_Client_ID;
         }
 
         public void Initialize(ModelValidationEngine engine, int ClientId)
         {
-            AD_Client_ID = ClientId;
+            VAF_Client_ID = ClientId;
             engine.AddDocValidate("C_Order", this);
             engine.AddDocValidate("C_Invoice", this);
             engine.AddModelChange(X_C_Order.Table_Name, this);
             engine.AddModelChange(X_C_Invoice.Table_Name, this);
         }
 
-        public string Login(int AD_Org_ID, int AD_Role_ID, int AD_User_ID)
+        public string Login(int VAF_Org_ID, int VAF_Role_ID, int VAF_UserContact_ID)
         {
             return "";
         }

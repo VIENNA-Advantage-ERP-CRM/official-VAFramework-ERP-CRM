@@ -76,7 +76,7 @@ static X_C_Campaign()
 //static long serialVersionUID 27562514370965L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054176L;
-/** AD_Table_ID=274 */
+/** VAF_TableView_ID=274 */
 public static int Table_ID;
  // =274;
 
@@ -283,8 +283,8 @@ public int GetC_CampaignType_ID()
     return Convert.ToInt32(ii);
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID = 190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
 /** Set Owner.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID(int SalesRep_ID)

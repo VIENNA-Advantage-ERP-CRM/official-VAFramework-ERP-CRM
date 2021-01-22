@@ -72,7 +72,7 @@ static X_C_AcctProcessorLog()
 //static long serialVersionUID 27562514369413L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052624L;
-/** AD_Table_ID=694 */
+/** VAF_TableView_ID=694 */
 public static int Table_ID;
  // =694;
 

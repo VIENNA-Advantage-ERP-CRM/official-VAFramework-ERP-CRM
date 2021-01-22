@@ -72,7 +72,7 @@ static X_C_BP_Status()
 //static long serialVersionUID 27562514370322L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053533L;
-/** AD_Table_ID=911 */
+/** VAF_TableView_ID=911 */
 public static int Table_ID;
  // =911;
 

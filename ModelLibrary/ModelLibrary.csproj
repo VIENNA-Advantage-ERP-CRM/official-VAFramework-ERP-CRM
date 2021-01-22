@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ModelLibrary</RootNamespace>
     <AssemblyName>ModelLibrary</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -725,7 +725,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <Fakes Include="Fakes\System.Web.Helpers.fakes" />
-    <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Service References\AcctService\AccountService.wsdl" />
     <None Include="Service References\AcctService\ModelLibrary.AcctService.AccountingFileInfo.datasource">

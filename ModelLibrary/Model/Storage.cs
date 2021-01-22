@@ -364,8 +364,8 @@ namespace VAdvantage.Model
                 + " and exists (select 1 from M_STORAGE t "
                                 + " where t.QTYTYPE = 'H' "
                                 + " and t.QTY <> 0 "
-                                + " and s.AD_CLIENT_ID = t.AD_CLIENT_ID "
-                                + " and s.AD_ORG_ID    = t.AD_ORG_ID "
+                                + " and s.VAF_CLIENT_ID = t.VAF_CLIENT_ID "
+                                + " and s.VAF_ORG_ID    = t.VAF_ORG_ID "
                                 + " and s.M_PRODUCT_ID = t.M_PRODUCT_ID "
                                 + " and s.M_LOCATOR_ID = t.M_LOCATOR_ID  "
                                 + " and s.M_AttributeSetInstance_ID = t.M_AttributeSetInstance_ID ) "
@@ -463,8 +463,8 @@ namespace VAdvantage.Model
             //    + " and exists (select 1 from M_STORAGEDETAIL t "
             //                    + " where t.QTYTYPE = 'H' "
             //                    + " and t.QTY <> 0 "
-            //                    + " and s.AD_CLIENT_ID = t.AD_CLIENT_ID "
-            //                    + " and s.AD_ORG_ID    = t.AD_ORG_ID "
+            //                    + " and s.VAF_CLIENT_ID = t.VAF_CLIENT_ID "
+            //                    + " and s.VAF_ORG_ID    = t.VAF_ORG_ID "
             //                    + " and s.M_PRODUCT_ID = t.M_PRODUCT_ID "
             //                    + " and s.M_LOCATOR_ID = t.M_LOCATOR_ID  "
             //                    + " and s.M_AttributeSetInstance_ID = t.M_AttributeSetInstance_ID ) "
@@ -474,8 +474,8 @@ namespace VAdvantage.Model
   " where s.M_PRODUCT_ID =" + M_Product_ID + "  and s.M_LOCATOR_ID =" + M_Locator_ID +
 " AND s.M_AttributeSetInstance_ID > 0 " +
 " AND EXISTS  (SELECT 1     FROM M_STORAGE t WHERE t.qtyonhand <> 0" +
-  " AND s.AD_CLIENT_ID              = t.AD_CLIENT_ID" +
-  " AND s.AD_ORG_ID                 = t.AD_ORG_ID" +
+  " AND s.VAF_CLIENT_ID              = t.VAF_CLIENT_ID" +
+  " AND s.VAF_ORG_ID                 = t.VAF_ORG_ID" +
   " AND s.M_PRODUCT_ID              = t.M_PRODUCT_ID" +
   " AND s.M_LOCATOR_ID              = t.M_LOCATOR_ID" +
   " AND s.M_AttributeSetInstance_ID = t.M_AttributeSetInstance_ID" +

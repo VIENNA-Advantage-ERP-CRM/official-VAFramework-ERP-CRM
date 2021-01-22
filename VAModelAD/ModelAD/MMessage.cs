@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MMessage
  * Purpose        : To return the message from chache
- * Class Used     : X_AD_Message
+ * Class Used     : X_VAF_Msg_Lable
  * Chronological    Development
  * Raghunandan      27-04-2009
   ******************************************************/
@@ -20,10 +20,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MMessage : X_AD_Message
+    public class MMessage : X_VAF_Msg_Lable
     {
         //Cache
-        private static CCache<String, MMessage> _cache = new CCache<String, MMessage>("AD_Message", 100);
+        private static CCache<String, MMessage> _cache = new CCache<String, MMessage>("VAF_Msg_Lable", 100);
 
         //Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MMessage).FullName);
@@ -32,10 +32,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Message_ID">id</param>
+        /// <param name="VAF_Msg_Lable_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMessage(Ctx ctx, int AD_Message_ID, Trx trxName)
-            : base(ctx, AD_Message_ID, trxName)
+        public MMessage(Ctx ctx, int VAF_Msg_Lable_ID, Trx trxName)
+            : base(ctx, VAF_Msg_Lable_ID, trxName)
         {
         }
 
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
             
             if (retValue == null)
             {
-                string sql = "SELECT * FROM AD_Message WHERE Value='" + value + "'";
+                string sql = "SELECT * FROM VAF_Msg_Lable WHERE Value='" + value + "'";
                 DataSet ds = null;
                 try
                 {
@@ -94,15 +94,15 @@ namespace VAdvantage.Model
         ///Get Message (cached)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Message_ID">id</param>
+        /// <param name="VAF_Msg_Lable_ID">id</param>
         /// <returns>message</returns>
-        public static MMessage Get(Ctx ctx, int AD_Message_ID)
+        public static MMessage Get(Ctx ctx, int VAF_Msg_Lable_ID)
         {
-            string key = AD_Message_ID.ToString();
+            string key = VAF_Msg_Lable_ID.ToString();
             MMessage retValue = (MMessage)_cache[key];
             if (retValue == null)
             {
-                retValue = new MMessage(ctx, AD_Message_ID, null);
+                retValue = new MMessage(ctx, VAF_Msg_Lable_ID, null);
                 _cache.Add(key, retValue);
             }
             return retValue;
@@ -113,13 +113,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="Value">message value</param>
-        /// <returns>AD_Message_ID</returns>
-        public static int GetAD_Message_ID(Ctx ctx, string value)
+        /// <returns>VAF_Msg_Lable_ID</returns>
+        public static int GetVAF_Msg_Lable_ID(Ctx ctx, string value)
         {
             MMessage msg = Get(ctx, value);
             if (msg == null)
                 return 0;
-            return msg.GetAD_Message_ID();
+            return msg.GetVAF_Msg_Lable_ID();
         }
 
     }

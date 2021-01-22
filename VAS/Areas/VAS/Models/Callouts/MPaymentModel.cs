@@ -127,7 +127,7 @@ namespace VIS.Models
                 bool countVA027 = Util.GetValueOfBool(paramValue[0]);
                 int bp_BusinessPartner = Util.GetValueOfInt(paramValue[1]);
                 DateTime? asOnDate = Util.GetValueOfDateTime(paramValue[2]);
-                int Client_ID = ctx.GetAD_Client_ID();
+                int Client_ID = ctx.GetVAF_Client_ID();
                 sql.Clear();
                 sql.Append(@"SELECT LTRIM(MAX(SYS_CONNECT_BY_PATH( ConvertPrice, ',')),',') amounts FROM " +
                    "(SELECT ConvertPrice, ROW_NUMBER () OVER (ORDER BY ConvertPrice ) RN, COUNT (*) OVER () CNT FROM " +
@@ -136,13 +136,13 @@ namespace VIS.Models
                    "LEFT JOIN C_Currency C ON C.C_Currency_ID=i.C_Currency_ID " +
                    "LEFT JOIN C_InvoicePaySchedule IPS ON IPS.c_invoice_ID = i.c_invoice_ID " +
                    "WHERE i.docstatus IN ('CO','CL') AND i.IsActive ='Y' AND i.ispaid ='N' " +
-                   "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.c_bpartner_id = " + bp_BusinessPartner + " AND i.AD_Client_ID=" + Client_ID +
+                   "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.c_bpartner_id = " + bp_BusinessPartner + " AND i.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(ips.duedate) <= (CASE WHEN  TRUNC(@param1) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param2) END ) " +
                    " AND TRUNC(ips.duedate) <= TRUNC(@param1) ) " +
                    "UNION SELECT c.iso_code, paymentAvailable(p.C_Payment_ID)*p.MultiplierAP*-1 AS OpenAmt " +
                    "FROM C_Payment_v p LEFT JOIN C_Currency C ON C.C_Currency_ID=p.C_Currency_ID " +
                    "LEFT JOIN c_payment pay ON (p.c_payment_id   =pay.c_payment_ID) WHERE p.IsAllocated  ='N' " +
-                   " AND p.C_BPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " + " AND p.AD_Client_ID=" + Client_ID +
+                   " AND p.C_BPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " + " AND p.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(pay.DateTrx) <= ( CASE WHEN TRUNC(@param3) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param4) END) " +
                    " AND TRUNC(pay.DateTrx) <= TRUNC(@param2) " +
                    ") GROUP BY iso_code ) ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
@@ -168,7 +168,7 @@ namespace VIS.Models
                     WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDR'
                     AND pdc.DocStatus = 'CO' AND pdc.VA027_PAYMENTGENERATED ='N' AND pdc.VA027_PaymentStatus !=3
                     AND (CASE WHEN pdc.VA027_MultiCheque = 'Y' THEN TRUNC(chk.VA027_CheckDate)
-                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param1) AND PDC.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.AD_Client_ID=" + Client_ID +
+                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param1) AND PDC.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
                         @" UNION SELECT c.iso_code, CASE WHEN (pdc.VA027_MultiCheque = 'Y') THEN chk.VA027_ChequeAmount*-1 
                     ELSE pdc.VA027_PayAmt*-1 END AS PdcDue 
                     FROM VA027_PostDatedCheck pdc LEFT JOIN VA027_ChequeDetails chk 
@@ -178,7 +178,7 @@ namespace VIS.Models
                     WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDP' 
                     AND pdc.VA027_PAYMENTGENERATED ='N' AND pdc.VA027_PaymentStatus !=3 
                     AND (CASE WHEN pdc.VA027_MultiCheque = 'Y' THEN TRUNC(chk.VA027_CheckDate)
-                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param2) AND pdc.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.AD_Client_ID=" + Client_ID +
+                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param2) AND pdc.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
                         @") GROUP BY iso_code )) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1");
                     SqlParameter[] param1 = new SqlParameter[2];
                     param1[0] = new SqlParameter("@param1", asOnDate);
@@ -227,6 +227,15 @@ namespace VIS.Models
                 retDic["GrandTotal"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["GrandTotal"]);
                 retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
                 retDic["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
+                //check weather it is PrePayment or not
+                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN C_DocType DT ON o.C_DocTypeTarget_ID = DT.C_DocType_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + C_Order_ID, null, null)).Equals(X_C_DocType.DOCSUBTYPESO_PrepayOrder))
+                {
+                    retDic["IsPrePayOrder"] = true;
+                }
+                else
+                {
+                    retDic["IsPrePayOrder"] = false;
+                }
             }
             return retDic;
         }

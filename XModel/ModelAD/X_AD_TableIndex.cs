@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_TableIndex
+/** Generated Model for VAF_TableViewIndex
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_TableIndex : PO
+public class X_VAF_TableViewIndex : PO
 {
-public X_AD_TableIndex (Context ctx, int AD_TableIndex_ID, Trx trxName) : base (ctx, AD_TableIndex_ID, trxName)
+public X_VAF_TableViewIndex (Context ctx, int VAF_TableViewIndex_ID, Trx trxName) : base (ctx, VAF_TableViewIndex_ID, trxName)
 {
-/** if (AD_TableIndex_ID == 0)
+/** if (VAF_TableViewIndex_ID == 0)
 {
-SetAD_TableIndex_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableViewIndex_ID (0);
+SetVAF_TableView_ID (0);
 SetEntityType (null);
 SetIsCreateConstraint (false);	// N
 SetIsUnique (false);
@@ -29,12 +29,12 @@ SetName (null);
 }
  */
 }
-public X_AD_TableIndex (Ctx ctx, int AD_TableIndex_ID, Trx trxName) : base (ctx, AD_TableIndex_ID, trxName)
+public X_VAF_TableViewIndex (Ctx ctx, int VAF_TableViewIndex_ID, Trx trxName) : base (ctx, VAF_TableViewIndex_ID, trxName)
 {
-/** if (AD_TableIndex_ID == 0)
+/** if (VAF_TableViewIndex_ID == 0)
 {
-SetAD_TableIndex_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableViewIndex_ID (0);
+SetVAF_TableView_ID (0);
 SetEntityType (null);
 SetIsCreateConstraint (false);	// N
 SetIsUnique (false);
@@ -47,7 +47,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TableIndex (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableViewIndex (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_AD_TableIndex (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TableIndex (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableViewIndex (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_AD_TableIndex (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TableIndex (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TableViewIndex (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_TableIndex()
+static X_VAF_TableViewIndex()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,12 +78,12 @@ static X_AD_TableIndex()
 //static long serialVersionUID 27562514364367L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047578L;
-/** AD_Table_ID=909 */
+/** VAF_TableView_ID=909 */
 public static int Table_ID;
  // =909;
 
-/** TableName=AD_TableIndex */
-public static String Table_Name="AD_TableIndex";
+/** TableName=VAF_TableViewIndex */
+public static String Table_Name="VAF_TableViewIndex";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -117,36 +117,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_TableIndex[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TableViewIndex[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table Index.
-@param AD_TableIndex_ID Table Index */
-public void SetAD_TableIndex_ID (int AD_TableIndex_ID)
+@param VAF_TableViewIndex_ID Table Index */
+public void SetVAF_TableViewIndex_ID (int VAF_TableViewIndex_ID)
 {
-if (AD_TableIndex_ID < 1) throw new ArgumentException ("AD_TableIndex_ID is mandatory.");
-Set_ValueNoCheck ("AD_TableIndex_ID", AD_TableIndex_ID);
+if (VAF_TableViewIndex_ID < 1) throw new ArgumentException ("VAF_TableViewIndex_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TableViewIndex_ID", VAF_TableViewIndex_ID);
 }
 /** Get Table Index.
 @return Table Index */
-public int GetAD_TableIndex_ID() 
+public int GetVAF_TableViewIndex_ID() 
 {
-Object ii = Get_Value("AD_TableIndex_ID");
+Object ii = Get_Value("VAF_TableViewIndex_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -168,8 +168,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

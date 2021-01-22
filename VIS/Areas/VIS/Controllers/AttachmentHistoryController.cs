@@ -25,19 +25,19 @@ namespace VIS.Controllers
 
 
         
-        public JsonResult LoadRecordDataCount(string searchText, int _AD_Table_ID, int _Record_ID)
+        public JsonResult LoadRecordDataCount(string searchText, int _VAF_TableView_ID, int _Record_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentHistoryModel model = new AttachmentHistoryModel();
-            return Json(JsonConvert.SerializeObject(model.LoadRecordDataCount(ctx, searchText, _AD_Table_ID, _Record_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.LoadRecordDataCount(ctx, searchText, _VAF_TableView_ID, _Record_ID)), JsonRequestBehavior.AllowGet);
         }
 
         
-        public JsonResult LoadRecordData(string searchText, int _AD_Table_ID, int _Record_ID, int historyPageNo, int pageSize)
+        public JsonResult LoadRecordData(string searchText, int _VAF_TableView_ID, int _Record_ID, int historyPageNo, int pageSize)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentHistoryModel model = new AttachmentHistoryModel();
-            return Json(JsonConvert.SerializeObject(model.LoadRecordData(ctx, searchText, _AD_Table_ID, _Record_ID, historyPageNo, pageSize)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.LoadRecordData(ctx, searchText, _VAF_TableView_ID, _Record_ID, historyPageNo, pageSize)), JsonRequestBehavior.AllowGet);
         }
 
 

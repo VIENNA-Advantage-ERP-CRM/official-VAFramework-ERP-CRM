@@ -21,28 +21,28 @@
             //sql += " nvl(SUBJECT,' ')  as SUBJECT          ,"
             //sql += " nvl(MAILTEXT,' ')     as MAILTEXT    ,"
             //sql += " nvl(CREATED,sysdate)         as CREATED  , "
-            //sql += " AD_CLIENT_ID      ,"
-            //sql += "  AD_ORG_ID         ,"
+            //sql += " VAF_CLIENT_ID      ,"
+            //sql += "  VAF_ORG_ID         ,"
             //sql += " CREATEDBY         ,"
             //sql += "  nvl(ISACTIVE,'Y')         as ISACTIVE ,"
             //sql += " nvl(ISHTML,'Y')          as ISHTML  ,"
-            //sql += "  AD_TEXTTEMPLATE_ID,"
+            //sql += "  VAF_TEXTTEMPLATE_ID,"
             //sql += "  nvl( UPDATED,sysdate)         as UPDATED  ,"
             //sql += "  UPDATEDBY         ,"
-            //sql += "  AD_Window_ID         ,"
+            //sql += "  VAF_Screen_ID         ,"
             //sql += "  nvl(ISDYNAMICCONTENT,'N') as ISDYNAMICCONTENT"
-            //sql += "   FROM AD_TextTemplate"
-            //sql += "   WHERE IsActive='Y' and (AD_Window_ID IS NULL ";
+            //sql += "   FROM VAF_TextTemplate"
+            //sql += "   WHERE IsActive='Y' and (VAF_Screen_ID IS NULL ";
 
             //if (window_ID > 0) {
-            //    sql += " OR AD_Window_ID=" + window_ID;
+            //    sql += " OR VAF_Screen_ID=" + window_ID;
             //}
 
             //sql += ")";
 
-            //sql = MRole.GetDefault(Envs.GetCtx(), false).AddAccessSQL(sqlexec, "ad_texttemplate", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " order by ad_texttemplate_id";
+            //sql = MRole.GetDefault(Envs.GetCtx(), false).AddAccessSQL(sqlexec, "VAF_TextTemplate", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " order by VAF_TextTemplate_id";
 
-            //sql = VIS.MRole.addAccessSQL(sql,"AD_TextTemplate", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
+            //sql = VIS.MRole.addAccessSQL(sql,"VAF_TextTemplate", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO);
             //ds = VIS.DB.executeDataSet(sql);
 
             // Added by Bharat on 12 Dec 2017
@@ -53,14 +53,14 @@
             var index = w2ui['openformatgrid'].getSelection();
             selectedRow = w2ui['openformatgrid'].get(index);
 
-            //var sql = "select name from MailAttachment1 where ad_table_id=(Select AD_Table_ID from AD_Table where tablename='AD_TextTemplate') and record_id=" + selectedRow.ad_texttemplate_ID;
+            //var sql = "select name from MailAttachment1 where vaf_tableview_id=(Select VAF_TableView_ID from VAF_TableView where tablename='VAF_TextTemplate') and record_id=" + selectedRow.VAF_TextTemplate_ID;
             //ds = VIS.DB.executeDataSet(sql);
 
 
             //$.ajax({
             //    type: 'json',
             //    async: false,
-            //    data: { textTemplate_ID: selectedRow.ad_texttemplate_ID },
+            //    data: { textTemplate_ID: selectedRow.VAF_TextTemplate_ID },
             //    url: VIS.Application.contextUrl + "VACOM/Email/SavedAttachmentForFormat",
             //    success: function (json) {
             //        var result = JSON.parse(json);

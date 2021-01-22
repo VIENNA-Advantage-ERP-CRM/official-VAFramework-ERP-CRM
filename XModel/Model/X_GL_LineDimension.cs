@@ -43,7 +43,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_GL_LineDimension() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27751729338550L;/** Last Updated Timestamp 7/27/2016 12:50:21 PM */
-        public static long updatedMS = 1469604021761L;/** AD_Table_ID=1000595 */
+        public static long updatedMS = 1469604021761L;/** VAF_TableView_ID=1000595 */
         public static int Table_ID; // =1000595;
         /** TableName=GL_LineDimension */
         public static String Table_Name = "GL_LineDimension";
@@ -62,15 +62,15 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_GL_LineDimension[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Column.
-@param AD_Column_ID Column in the table */
-        public void SetAD_Column_ID(int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+        public void SetVAF_Column_ID(int VAF_Column_ID)
         {
-            if (AD_Column_ID <= 0) Set_Value("AD_Column_ID", null);
+            if (VAF_Column_ID <= 0) Set_Value("VAF_Column_ID", null);
             else
-                Set_Value("AD_Column_ID", AD_Column_ID);
+                Set_Value("VAF_Column_ID", VAF_Column_ID);
         }/** Get Column.
 @return Column in the table */
-        public int GetAD_Column_ID() { Object ii = Get_Value("AD_Column_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Amount.
+        public int GetVAF_Column_ID() { Object ii = Get_Value("VAF_Column_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Amount.
 @param Amount Amount in a defined currency */
         public void SetAmount(Decimal Amount) { Set_Value("Amount", Amount); }/** Get Amount.
 @return Amount in a defined currency */
@@ -167,8 +167,8 @@ namespace VAdvantage.Model
 
 
 
-        /** LineType AD_Reference_ID=181 */
-        public static int LINETYPE_AD_Reference_ID = 181;/** Organization = OO */
+        /** LineType VAF_Control_Ref_ID=181 */
+        public static int LINETYPE_VAF_Control_Ref_ID = 181;/** Organization = OO */
         public static String LINETYPE_Organization = "OO";/** Account = AC */
         public static String LINETYPE_Account = "AC";/** Product = PR */
         public static String LINETYPE_Product = "PR";/** BPartner = BP */
@@ -225,8 +225,8 @@ namespace VAdvantage.Model
         }/** Get Product.
 @return Product, Service, Item */
         public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Org_ID AD_Reference_ID=130 */
-        public static int ORG_ID_AD_Reference_ID = 130;/** Set Organization.
+        /** Org_ID VAF_Control_Ref_ID=130 */
+        public static int ORG_ID_VAF_Control_Ref_ID = 130;/** Set Organization.
 @param Org_ID Organizational entity within client */
         public void SetOrg_ID(int Org_ID)
         {

@@ -73,48 +73,48 @@ namespace VAdvantage.Model
         }	//	MHierarchy
 
         /// <summary>
-        /// Get AD_Tree_ID based on tree type
+        /// Get VAF_TreeInfo_ID based on tree type
         /// </summary>
         /// <param name="TreeType">Tree Type</param>
         /// <returns>id or 0</returns>
-        public int GetAD_Tree_ID(String TreeType)
+        public int GetVAF_TreeInfo_ID(String TreeType)
         {
             if (MTree.TREETYPE_Activity.Equals(TreeType))
             {
-                return GetAD_Tree_Activity_ID();
+                return GetVAF_TreeInfo_Activity_ID();
             }
             if (MTree.TREETYPE_BPartner.Equals(TreeType))
             {
-                return GetAD_Tree_BPartner_ID();
+                return GetVAF_TreeInfo_BPartner_ID();
             }
             if (MTree.TREETYPE_Campaign.Equals(TreeType))
             {
-                return GetAD_Tree_Campaign_ID();
+                return GetVAF_TreeInfo_Campaign_ID();
             }
             if (MTree.TREETYPE_ElementValue.Equals(TreeType))
             {
-                return GetAD_Tree_Account_ID();
+                return GetVAF_TreeInfo_Account_ID();
             }
             if (MTree.TREETYPE_Organization.Equals(TreeType))
             {
-                return GetAD_Tree_Org_ID();
+                return GetVAF_TreeInfo_Org_ID();
             }
             if (MTree.TREETYPE_Product.Equals(TreeType))
             {
-                return GetAD_Tree_Product_ID();
+                return GetVAF_TreeInfo_Product_ID();
             }
             if (MTree.TREETYPE_Project.Equals(TreeType))
             {
-                return GetAD_Tree_Project_ID();
+                return GetVAF_TreeInfo_Project_ID();
             }
             if (MTree.TREETYPE_SalesRegion.Equals(TreeType))
             {
-                return GetAD_Tree_SalesRegion_ID();
+                return GetVAF_TreeInfo_SalesRegion_ID();
             }
             //
             log.Warning("Not supported: " + TreeType);
             return 0;
-        }	//	getAD_Tree_ID
+        }	//	getVAF_TreeInfo_ID
 
     }	//	MHierarchy
 

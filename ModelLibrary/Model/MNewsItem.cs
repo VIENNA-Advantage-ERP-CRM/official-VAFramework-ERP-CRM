@@ -108,7 +108,7 @@ namespace VAdvantage.Model
 			return success;
 		if (!newRecord)
 		{
-			MIndex.CleanUp(Get_TrxName(), GetAD_Client_ID(), Get_Table_ID(), Get_ID());
+			MIndex.CleanUp(Get_TrxName(), GetVAF_Client_ID(), Get_Table_ID(), Get_ID());
 		}
 		ReIndex(newRecord);
 		return success;
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
 		toBeIndexed[1] = this.GetDescription();
 		toBeIndexed[2] = this.GetTitle();
 		toBeIndexed[3] = this.GetContentHTML();
-		MIndex.ReIndex (newRecord, toBeIndexed, GetCtx(), GetAD_Client_ID(), Get_Table_ID(), Get_ID(), CMWebProjectID, this.GetUpdated());
+		MIndex.ReIndex (newRecord, toBeIndexed, GetCtx(), GetVAF_Client_ID(), Get_Table_ID(), Get_ID(), CMWebProjectID, this.GetUpdated());
 	} // reIndex
 }
 

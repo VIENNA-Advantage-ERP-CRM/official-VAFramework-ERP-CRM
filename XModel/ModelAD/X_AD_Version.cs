@@ -74,7 +74,7 @@ static X_AD_Version()
 //static long serialVersionUID 27562514365871L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049082L;
-/** AD_Table_ID=921 */
+/** VAF_TableView_ID=921 */
 public static int Table_ID;
  // =921;
 
@@ -149,8 +149,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

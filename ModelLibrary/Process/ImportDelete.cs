@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportDelete : ProcessEngine.SvrProcess
     {
         /**	Table be deleted		*/
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
 
         /// <summary>
         /// Process
@@ -36,9 +36,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Table_ID"))
+                if (name.Equals("VAF_TableView_ID"))
                 {
-                    _AD_Table_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAF_TableView_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else
                 {
@@ -54,12 +54,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("AD_Table_ID=" + _AD_Table_ID);
+            log.Info("VAF_TableView_ID=" + _VAF_TableView_ID);
             //	get Table Info
-            MTable table = new MTable(GetCtx(), _AD_Table_ID, Get_TrxName());
+            MTable table = new MTable(GetCtx(), _VAF_TableView_ID, Get_TrxName());
             if (table.Get_ID() == 0)
             {
-                throw new ArgumentException("No AD_Table_ID=" + _AD_Table_ID);
+                throw new ArgumentException("No VAF_TableView_ID=" + _VAF_TableView_ID);
             }
             String tableName = table.GetTableName();
             if (!tableName.StartsWith("I"))
@@ -68,7 +68,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Delete
-            String sql = "DELETE FROM " + tableName + " WHERE AD_Client_ID=" + GetAD_Client_ID();
+            String sql = "DELETE FROM " + tableName + " WHERE VAF_Client_ID=" + GetVAF_Client_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             String msg = Msg.Translate(GetCtx(), tableName + "_ID") + " #" + no;
             return msg;

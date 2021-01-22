@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514379851L;
         /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
         public static long updatedMS = 1280389063062L;
-        /** AD_Table_ID=207 */
+        /** VAF_TableView_ID=207 */
         public static int Table_ID;
         // =207;
 
@@ -297,8 +297,8 @@ namespace VAdvantage.Model
 
         //Added By Mohit VAWMS 20-8-2015
 
-        /* Picking_UOM_ID AD_Reference_ID=114 /
-         public static int PICKING_UOM_ID_AD_Reference_ID = 114;
+        /* Picking_UOM_ID VAF_Control_Ref_ID=114 /
+         public static int PICKING_UOM_ID_VAF_Control_Ref_ID = 114;
         /** Set Picking UOM.
         @param Picking_UOM_ID Picking UOM of locator */
         public void SetPicking_UOM_ID(int Picking_UOM_ID)

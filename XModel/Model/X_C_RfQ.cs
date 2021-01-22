@@ -51,7 +51,7 @@ SetSalesRep_ID (0);} */
  added by ->Harwinder */
         static X_C_RfQ() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27867938076683L;/** Last Updated Timestamp 4/2/2020 1:02:40 PM */
-        public static long updatedMS = 1585812759894L;/** AD_Table_ID=677 */
+        public static long updatedMS = 1585812759894L;/** VAF_TableView_ID=677 */
         public static int Table_ID; // =677;
         /** TableName=C_RfQ */
         public static String Table_Name = "C_RfQ";
@@ -70,15 +70,15 @@ SetSalesRep_ID (0);} */
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_RfQ[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }/** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID() { Object ii = Get_Value("AD_User_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
+        public int GetVAF_UserContact_ID() { Object ii = Get_Value("VAF_UserContact_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
 @param C_BPartner_ID Identifies a Customer/Prospect */
         public void SetC_BPartner_ID(int C_BPartner_ID)
         {
@@ -217,8 +217,8 @@ SetSalesRep_ID (0);} */
         public void SetPublishRfQ(String PublishRfQ) { if (PublishRfQ != null && PublishRfQ.Length > 1) { log.Warning("Length > 1 - truncated"); PublishRfQ = PublishRfQ.Substring(0, 1); } Set_Value("PublishRfQ", PublishRfQ); }/** Get Publish RfQ.
 @return Publish RfQ */
         public String GetPublishRfQ() { return (String)Get_Value("PublishRfQ"); }
-        /** QuoteType AD_Reference_ID=314 */
-        public static int QUOTETYPE_AD_Reference_ID = 314;/** Quote All Lines = A */
+        /** QuoteType VAF_Control_Ref_ID=314 */
+        public static int QUOTETYPE_VAF_Control_Ref_ID = 314;/** Quote All Lines = A */
         public static String QUOTETYPE_QuoteAllLines = "A";/** Quote Selected Lines = S */
         public static String QUOTETYPE_QuoteSelectedLines = "S";/** Quote Total only = T */
         public static String QUOTETYPE_QuoteTotalOnly = "T";/** Is test a valid value.
@@ -247,8 +247,8 @@ SetSalesRep_ID (0);} */
         public void SetRankRfQ(String RankRfQ) { if (RankRfQ != null && RankRfQ.Length > 1) { log.Warning("Length > 1 - truncated"); RankRfQ = RankRfQ.Substring(0, 1); } Set_Value("RankRfQ", RankRfQ); }/** Get Rank RfQ.
 @return Rank RfQ */
         public String GetRankRfQ() { return (String)Get_Value("RankRfQ"); }
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;/** Set Sales Rep.
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;/** Set Sales Rep.
 @param SalesRep_ID Company Agent like Sales Representative, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID) { if (SalesRep_ID < 1) throw new ArgumentException("SalesRep_ID is mandatory."); Set_Value("SalesRep_ID", SalesRep_ID); }/** Get Sales Rep.
 @return Company Agent like Sales Representative, Customer Service Representative, ... */

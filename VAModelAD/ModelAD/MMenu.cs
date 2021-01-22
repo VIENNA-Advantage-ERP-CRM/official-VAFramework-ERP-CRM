@@ -20,7 +20,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MMenu : X_AD_Menu
+    public class MMenu : X_VAF_MenuConfig
     {
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MMenu).FullName);
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         /// <returns>MMenu</returns>
         public static MMenu[] Get(Ctx ctx, string whereClause)
         {
-            string sql = "SELECT * FROM AD_Menu";
+            string sql = "SELECT * FROM VAF_MenuConfig";
             if (whereClause != null && whereClause.Length > 0)
                 sql += " WHERE " + whereClause;
             List<MMenu> list = new List<MMenu>();
@@ -67,12 +67,12 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Menu_ID">id</param>
+        /// <param name="VAF_MenuConfig_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMenu(Ctx ctx, int AD_Menu_ID, Trx trxName)
-            : base(ctx, AD_Menu_ID, trxName)
+        public MMenu(Ctx ctx, int VAF_MenuConfig_ID, Trx trxName)
+            : base(ctx, VAF_MenuConfig_ID, trxName)
         {
-            if (AD_Menu_ID == 0)
+            if (VAF_MenuConfig_ID == 0)
             {
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsReadOnly(false);	// N
@@ -110,19 +110,19 @@ namespace VAdvantage.Model
                 action = "";
             }
             //	Clean up references
-            if (GetAD_Window_ID() != 0 && !action.Equals(ACTION_Window))
-                SetAD_Window_ID(0);
-            if (GetAD_Form_ID() != 0 && !action.Equals(ACTION_Form))
-                SetAD_Form_ID(0);
+            if (GetVAF_Screen_ID() != 0 && !action.Equals(ACTION_Window))
+                SetVAF_Screen_ID(0);
+            if (GetVAF_Page_ID() != 0 && !action.Equals(ACTION_Form))
+                SetVAF_Page_ID(0);
             if (GetAD_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))
                 SetAD_Workflow_ID(0);
             if (GetAD_Workbench_ID() != 0 && !action.Equals(ACTION_Workbench))
                 SetAD_Workbench_ID(0);
             if (GetAD_Task_ID() != 0 && !action.Equals(ACTION_Task))
                 SetAD_Task_ID(0);
-            if (GetAD_Process_ID() != 0
+            if (GetVAF_Job_ID() != 0
                 && !(action.Equals(ACTION_Process) || action.Equals(ACTION_Report)))
-                SetAD_Process_ID(0);
+                SetVAF_Job_ID(0);
             return true;
         }
 

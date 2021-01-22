@@ -180,7 +180,7 @@ namespace VAdvantage.Model
                 return limitPrice;
             bool isSOTrx = true;
             MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), null);
-            MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                 GetM_Product_ID(), _parent.GetC_BPartner_ID(), GetPlannedQty(), isSOTrx);
             pp.SetM_PriceList_ID(_parent.GetM_PriceList_ID());
             pp.SetM_PriceList_Version_ID(_parent.GetM_PriceList_Version_ID());
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             int C_BPartner_ID = GetCtx().GetContextAsInt(windowNo, "C_BPartner_ID");
             Decimal Qty = GetPlannedQty();
             bool IsSOTrx = true;
-            MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     M_Product_ID, C_BPartner_ID, Qty, IsSOTrx);
             pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
             DateTime? date = GetPlannedDate();

@@ -24,9 +24,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportInventory : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Organization to be imported to	*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Locator to be imported to		*/
         private int _M_Locator_ID = 0;
         /**	Default Date					*/
@@ -47,13 +47,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
+                else if (name.Equals("VAF_Client_ID"))
                 {
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("M_Locator_ID"))
                 {
@@ -79,7 +79,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -94,8 +94,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, Location, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_Inventory "
-                  + "SET AD_Client_ID = COALESCE (AD_Client_ID,").Append(_AD_Client_ID).Append("),"
-                  + " AD_Org_ID = COALESCE (AD_Org_ID,").Append(_AD_Org_ID).Append("),");
+                  + "SET VAF_Client_ID = COALESCE (VAF_Client_ID,").Append(_VAF_Client_ID).Append("),"
+                  + " VAF_Org_ID = COALESCE (VAF_Org_ID,").Append(_VAF_Org_ID).Append("),");
             if (_MovementDate != null)
             {
                 sql.Append(" MovementDate = COALESCE (MovementDate,").Append(DataBase.DB.TO_DATE(_MovementDate)).Append("),");
@@ -115,8 +115,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_Inventory o "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Org, '"
-                + "WHERE (AD_Org_ID IS NULL OR AD_Org_ID=0"
-                + " OR EXISTS (SELECT * FROM AD_Org oo WHERE o.AD_Org_ID=oo.AD_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
+                + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0"
+                + " OR EXISTS (SELECT * FROM VAF_Org oo WHERE o.VAF_Org_ID=oo.VAF_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -128,7 +128,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             // if Warehouse key provided, get Warehouse ID
             sql = new StringBuilder("UPDATE I_Inventory i "
                     + "SET M_Warehouse_ID=(SELECT MAX(M_Warehouse_ID) FROM M_Warehouse w"
-                    + " WHERE i.WarehouseValue=w.Value AND i.AD_Client_ID=w.AD_Client_ID) "
+                    + " WHERE i.WarehouseValue=w.Value AND i.VAF_Client_ID=w.VAF_Client_ID) "
                     + "WHERE M_Warehouse_ID IS NULL AND WarehouseValue IS NOT NULL"
                     + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -137,14 +137,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Location
             sql = new StringBuilder("UPDATE I_Inventory i "
                 + "SET M_Locator_ID=(SELECT MAX(M_Locator_ID) FROM M_Locator l"
-                + " WHERE i.LocatorValue=l.Value AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.AD_Client_ID=l.AD_Client_ID) "
+                + " WHERE i.LocatorValue=l.Value AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
                 + "WHERE M_Locator_ID IS NULL AND LocatorValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Locator from Value =" + no);
             sql = new StringBuilder("UPDATE I_Inventory i "
                 + "SET M_Locator_ID=(SELECT MAX(M_Locator_ID) FROM M_Locator l"
-                + " WHERE i.X=l.X AND i.Y=l.Y AND i.Z=l.Z AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.AD_Client_ID=l.AD_Client_ID) "
+                + " WHERE i.X=l.X AND i.Y=l.Y AND i.Z=l.Z AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
                 + "WHERE M_Locator_ID IS NULL AND X IS NOT NULL AND Y IS NOT NULL AND Z IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -186,14 +186,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Product
             sql = new StringBuilder("UPDATE I_Inventory i "
                   + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
-                  + " WHERE i.Value=p.Value AND i.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE i.Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_Product_ID IS NULL AND Value IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_Inventory i "
                   + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
-                  + " WHERE i.UPC=p.UPC AND i.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE i.UPC=p.UPC AND i.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_Product_ID IS NULL AND UPC IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -247,7 +247,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || !MovementDate.Equals(x_MovementDate))
                     {
                         inventory = new MInventory(GetCtx(), 0, Get_TrxName());
-                        inventory.SetClientOrg(imp.GetAD_Client_ID(), imp.GetAD_Org_ID());
+                        inventory.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         inventory.SetDescription("I " + imp.GetM_Warehouse_ID() + " " + MovementDate);
                         inventory.SetM_Warehouse_ID(imp.GetM_Warehouse_ID());
                         inventory.SetMovementDate(MovementDate);

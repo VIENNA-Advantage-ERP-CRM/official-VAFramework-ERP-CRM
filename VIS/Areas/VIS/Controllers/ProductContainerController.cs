@@ -88,16 +88,16 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="container"></param>
         /// <param name="movementDate"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="locator"></param>
         /// <param name="page"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public JsonResult MoveContainer(int container, DateTime? movementDate, int AD_Org_ID, int locator, int page, int size)
+        public JsonResult MoveContainer(int container, DateTime? movementDate, int VAF_Org_ID, int locator, int page, int size)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             ProductContainerModel model = new ProductContainerModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetProductContainerFromTransaction(container, movementDate, AD_Org_ID, locator, page, size)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetProductContainerFromTransaction(container, movementDate, VAF_Org_ID, locator, page, size)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

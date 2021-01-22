@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Scheduler
+/** Generated Model for VAF_JobRun_Plan
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Scheduler : PO
+public class X_VAF_JobRun_Plan : PO
 {
-public X_AD_Scheduler (Context ctx, int AD_Scheduler_ID, Trx trxName) : base (ctx, AD_Scheduler_ID, trxName)
+public X_VAF_JobRun_Plan (Context ctx, int VAF_JobRun_Plan_ID, Trx trxName) : base (ctx, VAF_JobRun_Plan_ID, trxName)
 {
-/** if (AD_Scheduler_ID == 0)
+/** if (VAF_JobRun_Plan_ID == 0)
 {
-SetAD_Process_ID (0);
-SetAD_Scheduler_ID (0);
+SetVAF_Job_ID (0);
+SetVAF_JobRun_Plan_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
 }
  */
 }
-public X_AD_Scheduler (Ctx ctx, int AD_Scheduler_ID, Trx trxName) : base (ctx, AD_Scheduler_ID, trxName)
+public X_VAF_JobRun_Plan (Ctx ctx, int VAF_JobRun_Plan_ID, Trx trxName) : base (ctx, VAF_JobRun_Plan_ID, trxName)
 {
-/** if (AD_Scheduler_ID == 0)
+/** if (VAF_JobRun_Plan_ID == 0)
 {
-SetAD_Process_ID (0);
-SetAD_Scheduler_ID (0);
+SetVAF_Job_ID (0);
+SetVAF_JobRun_Plan_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
@@ -45,7 +45,7 @@ SetSupervisor_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JobRun_Plan (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_AD_Scheduler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JobRun_Plan (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_AD_Scheduler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_JobRun_Plan (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Scheduler()
+static X_VAF_JobRun_Plan()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,12 +76,12 @@ static X_AD_Scheduler()
 ////static long serialVersionUID = 27562514363943L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047154L;
-/** AD_Table_ID=688 */
+/** VAF_TableView_ID=688 */
 public static int Table_ID;
  // =688;
 
-/** TableName=AD_Scheduler */
-public static String Table_Name="AD_Scheduler";
+/** TableName=VAF_JobRun_Plan */
+public static String Table_Name="VAF_JobRun_Plan";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -115,52 +115,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Scheduler[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_JobRun_Plan[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID < 1) throw new ArgumentException ("AD_Process_ID is mandatory.");
-Set_ValueNoCheck ("AD_Process_ID", AD_Process_ID);
+if (VAF_Job_ID < 1) throw new ArgumentException ("VAF_Job_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Schedule.
-@param AD_Schedule_ID Execution Schedule */
-public void SetAD_Schedule_ID (int AD_Schedule_ID)
+@param VAF_Plan_ID Execution Schedule */
+public void SetVAF_Plan_ID (int VAF_Plan_ID)
 {
-if (AD_Schedule_ID <= 0) Set_Value ("AD_Schedule_ID", null);
+if (VAF_Plan_ID <= 0) Set_Value ("VAF_Plan_ID", null);
 else
-Set_Value ("AD_Schedule_ID", AD_Schedule_ID);
+Set_Value ("VAF_Plan_ID", VAF_Plan_ID);
 }
 /** Get Schedule.
 @return Execution Schedule */
-public int GetAD_Schedule_ID() 
+public int GetVAF_Plan_ID() 
 {
-Object ii = Get_Value("AD_Schedule_ID");
+Object ii = Get_Value("VAF_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Scheduler.
-@param AD_Scheduler_ID Schedule Processes */
-public void SetAD_Scheduler_ID (int AD_Scheduler_ID)
+@param VAF_JobRun_Plan_ID Schedule Processes */
+public void SetVAF_JobRun_Plan_ID (int VAF_JobRun_Plan_ID)
 {
-if (AD_Scheduler_ID < 1) throw new ArgumentException ("AD_Scheduler_ID is mandatory.");
-Set_ValueNoCheck ("AD_Scheduler_ID", AD_Scheduler_ID);
+if (VAF_JobRun_Plan_ID < 1) throw new ArgumentException ("VAF_JobRun_Plan_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JobRun_Plan_ID", VAF_JobRun_Plan_ID);
 }
 /** Get Scheduler.
 @return Schedule Processes */
-public int GetAD_Scheduler_ID() 
+public int GetVAF_JobRun_Plan_ID() 
 {
-Object ii = Get_Value("AD_Scheduler_ID");
+Object ii = Get_Value("VAF_JobRun_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -220,8 +220,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -311,8 +311,8 @@ if (oo != null)
 return false;
 }
 
-/** Supervisor_ID AD_Reference_ID=316 */
-public static int SUPERVISOR_ID_AD_Reference_ID=316;
+/** Supervisor_ID VAF_Control_Ref_ID=316 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=316;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)
@@ -330,17 +330,17 @@ return Convert.ToInt32(ii);
 }
 
 /** Set Form.
-@param AD_Form_ID Form or Report */
-public void SetAD_Form_ID(int AD_Form_ID)
+@param VAF_Page_ID Form or Report */
+public void SetVAF_Page_ID(int VAF_Page_ID)
 {
-    if (AD_Form_ID < 1) throw new ArgumentException("AD_Form_ID is mandatory.");
-    Set_ValueNoCheck("AD_Form_ID", AD_Form_ID);
+    if (VAF_Page_ID < 1) throw new ArgumentException("VAF_Page_ID is mandatory.");
+    Set_ValueNoCheck("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Form.
 @return Form or Report */
-public int GetAD_Form_ID()
+public int GetVAF_Page_ID()
 {
-    Object ii = Get_Value("AD_Form_ID");
+    Object ii = Get_Value("VAF_Page_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

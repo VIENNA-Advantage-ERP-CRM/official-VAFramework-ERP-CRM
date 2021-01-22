@@ -322,7 +322,7 @@ namespace VAdvantage.Model
             List<MStorage> list = new List<MStorage>();
             //	Specific Attribute Set Instance
             String sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
-                + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+                + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
                 + "s.QtyOnHand,s.QtyReserved,s.QtyOrdered,s.DateLastInventory "
                 + "FROM M_Storage s"
                 + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
@@ -338,7 +338,7 @@ namespace VAdvantage.Model
             if (allAttributeInstances)
             {
                 sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
-                    + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+                    + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
                     + "s.QtyOnHand,s.QtyReserved,s.QtyOrdered,s.DateLastInventory "
                     + "FROM M_Storage s"
                     + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID)"
@@ -2322,7 +2322,7 @@ namespace VAdvantage.Model
     //        List<MStorage> list = new List<MStorage>();
     //        //	Specific Attribute Set Instance
     //        String sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
-    //            + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+    //            + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
     //            + "s.QtyOnHand,s.QtyReserved,s.QtyOrdered,s.DateLastInventory "
     //            + "FROM M_Storage s"
     //            + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
@@ -2338,7 +2338,7 @@ namespace VAdvantage.Model
     //        if (allAttributeInstances)
     //        {
     //            sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
-    //                + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+    //                + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
     //                + "s.QtyOnHand,s.QtyReserved,s.QtyOrdered,s.DateLastInventory "
     //                + "FROM M_Storage s"
     //                + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID)"

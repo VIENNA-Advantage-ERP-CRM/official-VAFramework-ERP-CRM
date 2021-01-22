@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Val_Rule
+/** Generated Model for VAF_DataVal_Rule
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Val_Rule : PO
+public class X_VAF_DataVal_Rule : PO
 {
-public X_AD_Val_Rule (Context ctx, int AD_Val_Rule_ID, Trx trxName) : base (ctx, AD_Val_Rule_ID, trxName)
+public X_VAF_DataVal_Rule (Context ctx, int VAF_DataVal_Rule_ID, Trx trxName) : base (ctx, VAF_DataVal_Rule_ID, trxName)
 {
-/** if (AD_Val_Rule_ID == 0)
+/** if (VAF_DataVal_Rule_ID == 0)
 {
-SetAD_Val_Rule_ID (0);
+SetVAF_DataVal_Rule_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetType (null);
 }
  */
 }
-public X_AD_Val_Rule (Ctx ctx, int AD_Val_Rule_ID, Trx trxName) : base (ctx, AD_Val_Rule_ID, trxName)
+public X_VAF_DataVal_Rule (Ctx ctx, int VAF_DataVal_Rule_ID, Trx trxName) : base (ctx, VAF_DataVal_Rule_ID, trxName)
 {
-/** if (AD_Val_Rule_ID == 0)
+/** if (VAF_DataVal_Rule_ID == 0)
 {
-SetAD_Val_Rule_ID (0);
+SetVAF_DataVal_Rule_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetType (null);
@@ -43,7 +43,7 @@ SetType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Val_Rule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DataVal_Rule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_Val_Rule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Val_Rule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DataVal_Rule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_Val_Rule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Val_Rule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_DataVal_Rule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Val_Rule()
+static X_VAF_DataVal_Rule()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_Val_Rule()
 //static long serialVersionUID 27562514365699L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048910L;
-/** AD_Table_ID=108 */
+/** VAF_TableView_ID=108 */
 public static int Table_ID;
  // =108;
 
-/** TableName=AD_Val_Rule */
-public static String Table_Name="AD_Val_Rule";
+/** TableName=VAF_DataVal_Rule */
+public static String Table_Name="VAF_DataVal_Rule";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Val_Rule[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_DataVal_Rule[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Dynamic Validation.
-@param AD_Val_Rule_ID Dynamic Validation Rule */
-public void SetAD_Val_Rule_ID (int AD_Val_Rule_ID)
+@param VAF_DataVal_Rule_ID Dynamic Validation Rule */
+public void SetVAF_DataVal_Rule_ID (int VAF_DataVal_Rule_ID)
 {
-if (AD_Val_Rule_ID < 1) throw new ArgumentException ("AD_Val_Rule_ID is mandatory.");
-Set_ValueNoCheck ("AD_Val_Rule_ID", AD_Val_Rule_ID);
+if (VAF_DataVal_Rule_ID < 1) throw new ArgumentException ("VAF_DataVal_Rule_ID is mandatory.");
+Set_ValueNoCheck ("VAF_DataVal_Rule_ID", VAF_DataVal_Rule_ID);
 }
 /** Get Dynamic Validation.
 @return Dynamic Validation Rule */
-public int GetAD_Val_Rule_ID() 
+public int GetVAF_DataVal_Rule_ID() 
 {
-Object ii = Get_Value("AD_Val_Rule_ID");
+Object ii = Get_Value("VAF_DataVal_Rule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,8 +166,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -212,8 +212,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Type AD_Reference_ID=101 */
-public static int TYPE_AD_Reference_ID=101;
+/** Type VAF_Control_Ref_ID=101 */
+public static int TYPE_VAF_Control_Ref_ID=101;
 /** Java Script = E */
 public static String TYPE_JavaScript = "E";
 /** Java Language = J */

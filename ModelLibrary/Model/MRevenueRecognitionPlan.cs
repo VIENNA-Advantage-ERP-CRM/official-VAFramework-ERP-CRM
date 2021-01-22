@@ -100,15 +100,15 @@ namespace VAdvantage.Model
                     FROM	C_InvoiceLine 
                     WHERE 	C_InvoiceLine_ID=:new.C_InvoiceLine_ID;
                     --	Insert
-                    AD_Sequence_Next ('C_ServiceLevel', :new.AD_Client_ID, v_NextNo);
+                    VAF_Record_Seq_Next ('C_ServiceLevel', :new.VAF_Client_ID, v_NextNo);
                     INSERT INTO C_ServiceLevel
                         (C_ServiceLevel_ID, C_RevenueRecognition_Plan_ID,
-                        AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,
+                        VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,
                         M_Product_ID, Description, ServiceLevelInvoiced, ServiceLevelProvided,
                         Processing,Processed)
                     VALUES
                         (v_NextNo, :new.C_RevenueRecognition_Plan_ID,
-                        :new.AD_Client_ID,:new.AD_Org_ID,'Y',SysDate,:new.CreatedBy,SysDate,:new.UpdatedBy,
+                        :new.VAF_Client_ID,:new.VAF_Org_ID,'Y',SysDate,:new.CreatedBy,SysDate,:new.UpdatedBy,
                         v_M_Product_ID, NULL, v_Qty, 0,
                         'N', 'N');
                     **/
@@ -127,8 +127,8 @@ namespace VAdvantage.Model
         public void SetRecognitionPlan(MInvoiceLine invoiceLine, MInvoice invoice, int C_RevenueRecognition_ID, int ToCurrency)
         {
 
-            SetAD_Client_ID(invoice.GetAD_Client_ID());
-            SetAD_Org_ID(invoice.GetAD_Org_ID());
+            SetVAF_Client_ID(invoice.GetVAF_Client_ID());
+            SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             SetC_Currency_ID(ToCurrency);
             SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
             if (invoice.GetC_Currency_ID() != ToCurrency)
             {
-                Amount = MConversionRate.Convert(GetCtx(), Amount, invoice.GetC_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                Amount = MConversionRate.Convert(GetCtx(), Amount, invoice.GetC_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
             }
             SetTotalAmt(Amount);
             SetRecognizedAmt(Env.ZERO);
@@ -158,11 +158,11 @@ namespace VAdvantage.Model
             {
                 sql += @" INNER  JOIN c_invoiceline invl ON invl.c_invoiceline_id = pl.c_invoiceline_id 
                             WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() +
-                        " AND invl.c_invoiceLine_id=" + InvoiceLine_ID + " AND invl.ad_org_id=" + OrgId;
+                        " AND invl.c_invoiceLine_id=" + InvoiceLine_ID + " AND invl.vaf_org_id=" + OrgId;
             }
             else
             {
-                sql += " WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() + " AND pl.ad_org_id=" + OrgId;
+                sql += " WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() + " AND pl.vaf_org_id=" + OrgId;
             }
             DataTable dt = null;
             IDataReader idr = null;

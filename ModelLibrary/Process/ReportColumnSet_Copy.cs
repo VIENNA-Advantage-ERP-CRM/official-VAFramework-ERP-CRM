@@ -81,7 +81,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //MReportColumn[] rcs = rcSet.GetColumns();
             //for (int i = 0; i < rcs.Length; i++)
             //{
-            //    MReportColumn rc = MReportColumn.Copy(GetCtx(), to.GetAD_Client_ID(), to.GetAD_Org_ID(), to_ID, rcs[i], Get_TrxName());
+            //    MReportColumn rc = MReportColumn.Copy(GetCtx(), to.GetVAF_Client_ID(), to.GetVAF_Org_ID(), to_ID, rcs[i], Get_TrxName());
             //    rc.Save();
             //}
             //	Oper 1/2 were set to Null !

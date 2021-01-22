@@ -12,7 +12,7 @@ namespace VAdvantage.Process
     public class TranslationImportExport : ProcessEngine.SvrProcess
     {
         /** The Language				*/
-        private String _AD_Language = null;
+        private String _VAF_Language = null;
 
         private static String Mode_Import = "I";
         private static String Mode_Export = "E";
@@ -26,8 +26,8 @@ namespace VAdvantage.Process
         /** Export Scope		*/
         private String _ExportScope = ExportScope_System;
         /** Optional Specific Table		*/
-        private int _AD_Table_ID = 0;
-        private int _AD_ModuleInfo_ID = 0;    // Added by SUkhwinder on 23 June, 2017 for creating module specific translations.
+        private int _VAF_TableView_ID = 0;
+        private int _VAF_ModuleInfo_ID = 0;    // Added by SUkhwinder on 23 June, 2017 for creating module specific translations.
 
         public static String TranslationLevel_All = "A";
         public static String TranslationLevel_LabelOnly = "L";
@@ -56,18 +56,18 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Language"))
-                    _AD_Language = (String)element.GetParameter();
+                else if (name.Equals("VAF_Language"))
+                    _VAF_Language = (String)element.GetParameter();
                 else if (name.Equals("ImportExport"))
                     _ImportExport = (String)element.GetParameter();
                 else if (name.Equals("ExportScope"))
                     _ExportScope = (String)element.GetParameter();
-                else if (name.Equals("AD_Table_ID"))
-                    _AD_Table_ID = element.GetParameterAsInt();
+                else if (name.Equals("VAF_TableView_ID"))
+                    _VAF_TableView_ID = element.GetParameterAsInt();
                 else if (name.Equals("TranslationLevel"))
                     _TranslationLevel = (String)element.GetParameter();
-                else if (name.Equals("AD_ModuleInfo_ID"))
-                    _AD_ModuleInfo_ID = element.GetParameterAsInt();
+                else if (name.Equals("VAF_ModuleInfo_ID"))
+                    _VAF_ModuleInfo_ID = element.GetParameterAsInt();
                 else if (name.Equals("Directory"))
                     _Directory = (String)element.GetParameter();
                 else if (name.Equals("IsActive"))
@@ -86,16 +86,16 @@ namespace VAdvantage.Process
         /// <returns>string</returns>
         protected override String DoIt()
         {
-            log.Info("AD_Language=" + _AD_Language
+            log.Info("VAF_Language=" + _VAF_Language
                 + ",Mode=" + _ImportExport
                 + ",Scope=" + _ExportScope
-                + ",AD_Table_ID=" + _AD_Table_ID
+                + ",VAF_TableView_ID=" + _VAF_TableView_ID
                 + ",Level=" + _TranslationLevel
                 + ",Directory=" + _Directory);
             //
 
             TranslationMgr t = new TranslationMgr(GetCtx());
-            String msg = t.ValidateLanguage(_AD_Language);
+            String msg = t.ValidateLanguage(_VAF_Language);
             if (msg.Length > 0)
                 throw new Exception("@LanguageSetupError@ - " + msg);
 
@@ -103,10 +103,10 @@ namespace VAdvantage.Process
             //	Mode
             bool imp = Mode_Import.Equals(_ImportExport);
             //	Client
-            int AD_Client_ID = 0;
+            int VAF_Client_ID = 0;
             if (ExportScope_Tenant.Equals(_ExportScope))
-                AD_Client_ID = GetCtx().GetAD_Client_ID();
-            t.SetExportScope(_ExportScope, AD_Client_ID);
+                VAF_Client_ID = GetCtx().GetVAF_Client_ID();
+            t.SetExportScope(_ExportScope, VAF_Client_ID);
 
             //	Directory
             if (Utility.Util.IsEmpty(_Directory))
@@ -115,18 +115,18 @@ namespace VAdvantage.Process
             #region [Module Parameter Check]
             // Added by Sukhwinder on 23 June,2017 for creating translations on the basis of Modules.
             MModuleInfo module = null;
-            if (_AD_ModuleInfo_ID != 0)
+            if (_VAF_ModuleInfo_ID != 0)
             {
-                module = new MModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                module = new MModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
             }
             #endregion
 
             int noWords = 0;
             //	All Tables
-            if (_AD_Table_ID == 0)
+            if (_VAF_TableView_ID == 0)
             {
-                String sql = "SELECT * FROM AD_Table WHERE IsActive='Y' AND IsView='N'"
-                    + " AND TableName LIKE '%_Trl' AND TableName<>'AD_Column_Trl'";
+                String sql = "SELECT * FROM VAF_TableView WHERE IsActive='Y' AND IsView='N'"
+                    + " AND TableName LIKE '%_Trl' AND TableName<>'VAF_Column_TL'";
                 if (ExportScope_Tenant.Equals(_ExportScope))
                     sql += " AND AccessLevel<>'4'";	//	System Only
                 else
@@ -159,7 +159,7 @@ namespace VAdvantage.Process
             }
             else	//	single table
             {
-                MTable table = MTable.Get(GetCtx(), _AD_Table_ID);
+                MTable table = MTable.Get(GetCtx(), _VAF_TableView_ID);
                 msg = null;
 
                 //msg = imp ? t.ImportTrl(_Directory, table.GetTableName()) : t.ExportTrl(_Directory, table.GetTableName(), _TranslationLevel);   // Commented and added following code in IF-ELSE on the basis of Module parameter.(Sukhwinder)

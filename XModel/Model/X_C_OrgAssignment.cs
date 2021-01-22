@@ -20,7 +20,7 @@ public X_C_OrgAssignment (Context ctx, int C_OrgAssignment_ID, Trx trxName) : ba
 {
 /** if (C_OrgAssignment_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_OrgAssignment_ID (0);
 SetOrgAssignmentType (null);
 SetValidFrom (DateTime.Now);
@@ -32,7 +32,7 @@ public X_C_OrgAssignment (Ctx ctx, int C_OrgAssignment_ID, Trx trxName) : base (
 {
 /** if (C_OrgAssignment_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_OrgAssignment_ID (0);
 SetOrgAssignmentType (null);
 SetValidFrom (DateTime.Now);
@@ -76,7 +76,7 @@ static X_C_OrgAssignment()
 //static long serialVersionUID 27562514373441L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056652L;
-/** AD_Table_ID=585 */
+/** VAF_TableView_ID=585 */
 public static int Table_ID;
  // =585;
 
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_C_OrgAssignment[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_Value ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,8 +166,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** OrgAssignmentType AD_Reference_ID=401 */
-public static int ORGASSIGNMENTTYPE_AD_Reference_ID=401;
+/** OrgAssignmentType VAF_Control_Ref_ID=401 */
+public static int ORGASSIGNMENTTYPE_VAF_Control_Ref_ID=401;
 /** Matrix = M */
 public static String ORGASSIGNMENTTYPE_Matrix = "M";
 /** Other = O */

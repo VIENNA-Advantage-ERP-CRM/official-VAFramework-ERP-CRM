@@ -84,7 +84,7 @@ static X_C_BP_Relation()
 //static long serialVersionUID 27562514370259L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053470L;
-/** AD_Table_ID=678 */
+/** VAF_TableView_ID=678 */
 public static int Table_ID;
  // =678;
 
@@ -142,8 +142,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_BPartnerRelation_ID AD_Reference_ID=138 */
-public static int C_BPARTNERRELATION_ID_AD_Reference_ID=138;
+/** C_BPartnerRelation_ID VAF_Control_Ref_ID=138 */
+public static int C_BPARTNERRELATION_ID_VAF_Control_Ref_ID=138;
 /** Set Related Partner.
 @param C_BPartnerRelation_ID Related Business Partner */
 public void SetC_BPartnerRelation_ID (int C_BPartnerRelation_ID)
@@ -160,8 +160,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_BPartnerRelation_Location_ID AD_Reference_ID=159 */
-public static int C_BPARTNERRELATION_LOCATION_ID_AD_Reference_ID=159;
+/** C_BPartnerRelation_Location_ID VAF_Control_Ref_ID=159 */
+public static int C_BPARTNERRELATION_LOCATION_ID_VAF_Control_Ref_ID=159;
 /** Set Related Partner Location.
 @param C_BPartnerRelation_Location_ID Location of the related Business Partner */
 public void SetC_BPartnerRelation_Location_ID (int C_BPartnerRelation_Location_ID)

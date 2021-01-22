@@ -61,8 +61,8 @@
         var m_C_AcctSchema_ID = 0;
         /** Default Charge Tax Category */
         var m_C_TaxCategory_ID = 0;
-        var m_AD_Client_ID = 0;
-        var m_AD_Org_ID = 0;
+        var m_VAF_Client_ID = 0;
+        var m_VAF_Org_ID = 0;
 
         function initializeComponent() {
             setBusy(true);
@@ -187,8 +187,8 @@
         function dynInit() {
             var data = [];
             m_C_AcctSchema_ID = VIS.Env.getCtx().getContextAsInt("$C_AcctSchema_ID");
-            m_AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
-            m_AD_Org_ID = VIS.Env.getCtx().getAD_Org_ID();
+            m_VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
+            m_VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
 
             $.ajax({
                 url: VIS.Application.contextUrl + "VCharge/VChargeLodGrideData",
@@ -196,7 +196,7 @@
                 //async: false,
                 data: {
                     mcAcctSchemaID: m_C_AcctSchema_ID,
-                    mADClientId: m_AD_Client_ID,
+                    mADClientId: m_VAF_Client_ID,
                     //valueSearch: searchValueText,
                     //nameSearch: searchNameText,
                     //chkExpenses: searchChkProp
@@ -248,15 +248,15 @@
         //function dynInit() {
         //    var data = [];
         //    m_C_AcctSchema_ID = VIS.Env.getCtx().getContextAsInt("$C_AcctSchema_ID");
-        //    m_AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
-        //    m_AD_Org_ID = VIS.Env.getCtx().getAD_Org_ID();
+        //    m_VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
+        //    m_VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
 
         //    var sql = "SELECT C_Element_ID FROM C_AcctSchema_Element "
         //                   + "WHERE ElementType='AC' AND C_AcctSchema_ID= " + m_C_AcctSchema_ID;
         //    m_C_Element_ID = VIS.DB.executeScalar(sql, null, null);
         //    if (m_C_Element_ID == 0)
         //        return;
-        //    sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND AD_Client_ID=" + m_AD_Client_ID;
+        //    sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + m_VAF_Client_ID;
         //    m_C_TaxCategory_ID = VIS.DB.executeScalar(sql, null, null);
 
         //    //  Create SQL
@@ -536,7 +536,7 @@
                         dataType: "json",
                         //async: false,
                         data: {
-                            m_AD_Org_ID: m_AD_Org_ID,
+                            m_VAF_Org_ID: m_VAF_Org_ID,
                             value: value,
                             name: name,
                             expense: expense,
@@ -622,8 +622,8 @@
             m_C_Element_ID = null;
             m_C_AcctSchema_ID = null;
             m_C_TaxCategory_ID = null;
-            m_AD_Client_ID = null;
-            m_AD_Org_ID = null;
+            m_VAF_Client_ID = null;
+            m_VAF_Org_ID = null;
 
             $self = null;
             this.getRoot = null;

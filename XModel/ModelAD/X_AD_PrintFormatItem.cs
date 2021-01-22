@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintFormatItem
+/** Generated Model for VAF_Print_Rpt_LItem
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintFormatItem : PO
+public class X_VAF_Print_Rpt_LItem : PO
 {
-public X_AD_PrintFormatItem (Context ctx, int AD_PrintFormatItem_ID, Trx trxName) : base (ctx, AD_PrintFormatItem_ID, trxName)
+public X_VAF_Print_Rpt_LItem (Context ctx, int VAF_Print_Rpt_LItem_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_LItem_ID, trxName)
 {
-/** if (AD_PrintFormatItem_ID == 0)
+/** if (VAF_Print_Rpt_LItem_ID == 0)
 {
-SetAD_PrintFormatItem_ID (0);
-SetAD_PrintFormat_ID (0);
+SetVAF_Print_Rpt_LItem_ID (0);
+SetVAF_Print_Rpt_Layout_ID (0);
 SetFieldAlignmentType (null);	// D
 SetImageIsAttached (false);
 SetIsAveraged (false);
@@ -52,7 +52,7 @@ SetMaxWidth (0);
 SetName (null);
 SetPrintAreaType (null);	// C
 SetPrintFormatType (null);	// F
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_PrintFormatItem WHERE AD_PrintFormat_ID=@AD_PrintFormat_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Print_Rpt_LItem WHERE VAF_Print_Rpt_Layout_ID=@VAF_Print_Rpt_Layout_ID@
 SetSortNo (0);
 SetXPosition (0);
 SetXSpace (0);
@@ -61,12 +61,12 @@ SetYSpace (0);
 }
  */
 }
-public X_AD_PrintFormatItem (Ctx ctx, int AD_PrintFormatItem_ID, Trx trxName) : base (ctx, AD_PrintFormatItem_ID, trxName)
+public X_VAF_Print_Rpt_LItem (Ctx ctx, int VAF_Print_Rpt_LItem_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_LItem_ID, trxName)
 {
-/** if (AD_PrintFormatItem_ID == 0)
+/** if (VAF_Print_Rpt_LItem_ID == 0)
 {
-SetAD_PrintFormatItem_ID (0);
-SetAD_PrintFormat_ID (0);
+SetVAF_Print_Rpt_LItem_ID (0);
+SetVAF_Print_Rpt_Layout_ID (0);
 SetFieldAlignmentType (null);	// D
 SetImageIsAttached (false);
 SetIsAveraged (false);
@@ -97,7 +97,7 @@ SetMaxWidth (0);
 SetName (null);
 SetPrintAreaType (null);	// C
 SetPrintFormatType (null);	// F
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_PrintFormatItem WHERE AD_PrintFormat_ID=@AD_PrintFormat_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Print_Rpt_LItem WHERE VAF_Print_Rpt_Layout_ID=@VAF_Print_Rpt_Layout_ID@
 SetSortNo (0);
 SetXPosition (0);
 SetXSpace (0);
@@ -111,7 +111,7 @@ SetYSpace (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintFormatItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_LItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -119,7 +119,7 @@ public X_AD_PrintFormatItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintFormatItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_LItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -127,13 +127,13 @@ public X_AD_PrintFormatItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintFormatItem (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_LItem (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintFormatItem()
+static X_VAF_Print_Rpt_LItem()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -142,12 +142,12 @@ static X_AD_PrintFormatItem()
 //static long serialVersionUID = 27562514362799L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046010L;
-/** AD_Table_ID=489 */
+/** VAF_TableView_ID=489 */
 public static int Table_ID;
  // =489;
 
-/** TableName=AD_PrintFormatItem */
-public static String Table_Name="AD_PrintFormatItem";
+/** TableName=VAF_Print_Rpt_LItem */
+public static String Table_Name="VAF_Print_Rpt_LItem";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -181,103 +181,103 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintFormatItem[").Append(Get_ID()).Append("-").Append(GetName()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_LItem[").Append(Get_ID()).Append("-").Append(GetName()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Color.
-@param AD_PrintColor_ID Color used for printing and display */
-public void SetAD_PrintColor_ID (int AD_PrintColor_ID)
+@param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+public void SetVAF_Print_Rpt_Colour_ID (int VAF_Print_Rpt_Colour_ID)
 {
-if (AD_PrintColor_ID <= 0) Set_Value ("AD_PrintColor_ID", null);
+if (VAF_Print_Rpt_Colour_ID <= 0) Set_Value ("VAF_Print_Rpt_Colour_ID", null);
 else
-Set_Value ("AD_PrintColor_ID", AD_PrintColor_ID);
+Set_Value ("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
 }
 /** Get Print Color.
 @return Color used for printing and display */
-public int GetAD_PrintColor_ID() 
+public int GetVAF_Print_Rpt_Colour_ID() 
 {
-Object ii = Get_Value("AD_PrintColor_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Font.
-@param AD_PrintFont_ID Maintain Print Font */
-public void SetAD_PrintFont_ID (int AD_PrintFont_ID)
+@param VAF_Print_Rpt_Font_ID Maintain Print Font */
+public void SetVAF_Print_Rpt_Font_ID (int VAF_Print_Rpt_Font_ID)
 {
-if (AD_PrintFont_ID <= 0) Set_Value ("AD_PrintFont_ID", null);
+if (VAF_Print_Rpt_Font_ID <= 0) Set_Value ("VAF_Print_Rpt_Font_ID", null);
 else
-Set_Value ("AD_PrintFont_ID", AD_PrintFont_ID);
+Set_Value ("VAF_Print_Rpt_Font_ID", VAF_Print_Rpt_Font_ID);
 }
 /** Get Print Font.
 @return Maintain Print Font */
-public int GetAD_PrintFont_ID() 
+public int GetVAF_Print_Rpt_Font_ID() 
 {
-Object ii = Get_Value("AD_PrintFont_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Font_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_PrintFormatChild_ID AD_Reference_ID=259 */
-public static int AD_PRINTFORMATCHILD_ID_AD_Reference_ID=259;
+/** VAF_Print_Rpt_LayoutChild_ID VAF_Control_Ref_ID=259 */
+public static int VAF_PRINT_RPT_LAYOUTCHILD_ID_VAF_Control_Ref_ID=259;
 /** Set Included Print Format.
-@param AD_PrintFormatChild_ID Print format that is included here. */
-public void SetAD_PrintFormatChild_ID (int AD_PrintFormatChild_ID)
+@param VAF_Print_Rpt_LayoutChild_ID Print format that is included here. */
+public void SetVAF_Print_Rpt_LayoutChild_ID (int VAF_Print_Rpt_LayoutChild_ID)
 {
-if (AD_PrintFormatChild_ID <= 0) Set_Value ("AD_PrintFormatChild_ID", null);
+if (VAF_Print_Rpt_LayoutChild_ID <= 0) Set_Value ("VAF_Print_Rpt_LayoutChild_ID", null);
 else
-Set_Value ("AD_PrintFormatChild_ID", AD_PrintFormatChild_ID);
+Set_Value ("VAF_Print_Rpt_LayoutChild_ID", VAF_Print_Rpt_LayoutChild_ID);
 }
 /** Get Included Print Format.
 @return Print format that is included here. */
-public int GetAD_PrintFormatChild_ID() 
+public int GetVAF_Print_Rpt_LayoutChild_ID() 
 {
-Object ii = Get_Value("AD_PrintFormatChild_ID");
+Object ii = Get_Value("VAF_Print_Rpt_LayoutChild_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Format Item.
-@param AD_PrintFormatItem_ID Item/Column in the Print format */
-public void SetAD_PrintFormatItem_ID (int AD_PrintFormatItem_ID)
+@param VAF_Print_Rpt_LItem_ID Item/Column in the Print format */
+public void SetVAF_Print_Rpt_LItem_ID (int VAF_Print_Rpt_LItem_ID)
 {
-if (AD_PrintFormatItem_ID < 1) throw new ArgumentException ("AD_PrintFormatItem_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintFormatItem_ID", AD_PrintFormatItem_ID);
+if (VAF_Print_Rpt_LItem_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_LItem_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_LItem_ID", VAF_Print_Rpt_LItem_ID);
 }
 /** Get Print Format Item.
 @return Item/Column in the Print format */
-public int GetAD_PrintFormatItem_ID() 
+public int GetVAF_Print_Rpt_LItem_ID() 
 {
-Object ii = Get_Value("AD_PrintFormatItem_ID");
+Object ii = Get_Value("VAF_Print_Rpt_LItem_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Format.
-@param AD_PrintFormat_ID Data Print Format */
-public void SetAD_PrintFormat_ID (int AD_PrintFormat_ID)
+@param VAF_Print_Rpt_Layout_ID Data Print Format */
+public void SetVAF_Print_Rpt_Layout_ID (int VAF_Print_Rpt_Layout_ID)
 {
-if (AD_PrintFormat_ID < 1) throw new ArgumentException ("AD_PrintFormat_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintFormat_ID", AD_PrintFormat_ID);
+if (VAF_Print_Rpt_Layout_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Layout_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
 }
 /** Get Print Format.
 @return Data Print Format */
-public int GetAD_PrintFormat_ID() 
+public int GetVAF_Print_Rpt_Layout_ID() 
 {
-Object ii = Get_Value("AD_PrintFormat_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -312,8 +312,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** BarcodeType AD_Reference_ID=377 */
-public static int BARCODETYPE_AD_Reference_ID=377;
+/** BarcodeType VAF_Control_Ref_ID=377 */
+public static int BARCODETYPE_VAF_Control_Ref_ID=377;
 /** Code 128 A character set = 28A */
 public static String BARCODETYPE_Code128ACharacterSet = "28A";
 /** Code 128 B character set = 28B */
@@ -401,8 +401,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FieldAlignmentType AD_Reference_ID=253 */
-public static int FIELDALIGNMENTTYPE_AD_Reference_ID=253;
+/** FieldAlignmentType VAF_Control_Ref_ID=253 */
+public static int FIELDALIGNMENTTYPE_VAF_Control_Ref_ID=253;
 /** Block = B */
 public static String FIELDALIGNMENTTYPE_Block = "B";
 /** Center = C */
@@ -872,8 +872,8 @@ if (oo != null)
 return false;
 }
 
-/** LineAlignmentType AD_Reference_ID=254 */
-public static int LINEALIGNMENTTYPE_AD_Reference_ID=254;
+/** LineAlignmentType VAF_Control_Ref_ID=254 */
+public static int LINEALIGNMENTTYPE_VAF_Control_Ref_ID=254;
 /** Center = C */
 public static String LINEALIGNMENTTYPE_Center = "C";
 /** Leading (left) = L */
@@ -976,8 +976,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** PrintAreaType AD_Reference_ID=256 */
-public static int PRINTAREATYPE_AD_Reference_ID=256;
+/** PrintAreaType VAF_Control_Ref_ID=256 */
+public static int PRINTAREATYPE_VAF_Control_Ref_ID=256;
 /** Content = C */
 public static String PRINTAREATYPE_Content = "C";
 /** Footer = F */
@@ -1012,8 +1012,8 @@ public String GetPrintAreaType()
 return (String)Get_Value("PrintAreaType");
 }
 
-/** PrintFormatType AD_Reference_ID=255 */
-public static int PRINTFORMATTYPE_AD_Reference_ID=255;
+/** PrintFormatType VAF_Control_Ref_ID=255 */
+public static int PRINTFORMATTYPE_VAF_Control_Ref_ID=255;
 /** Field = F */
 public static String PRINTFORMATTYPE_Field = "F";
 /** Image = I */
@@ -1118,8 +1118,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ShapeType AD_Reference_ID=333 */
-public static int SHAPETYPE_AD_Reference_ID=333;
+/** ShapeType VAF_Control_Ref_ID=333 */
+public static int SHAPETYPE_VAF_Control_Ref_ID=333;
 /** 3D Rectangle = 3 */
 public static String SHAPETYPE_3DRectangle = "3";
 /** Normal Rectangle = N */

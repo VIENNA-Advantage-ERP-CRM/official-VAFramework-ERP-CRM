@@ -9,7 +9,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MAttachmentLine: X_AD_AttachmentLine
+    public class MAttachmentLine: X_VAF_AttachmentLine
     {
         public MAttachmentLine(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
@@ -17,8 +17,8 @@ namespace VAdvantage.Model
 
         }
 
-        public MAttachmentLine(Ctx ctx, int AD_AttachmentLine_ID, Trx trx)
-            : base(ctx, AD_AttachmentLine_ID, trx)
+        public MAttachmentLine(Ctx ctx, int VAF_AttachmentLine_ID, Trx trx)
+            : base(ctx, VAF_AttachmentLine_ID, trx)
         {
 
         }

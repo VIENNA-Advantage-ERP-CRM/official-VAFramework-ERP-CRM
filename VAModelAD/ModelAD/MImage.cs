@@ -17,13 +17,13 @@ using System.Web;
 
 namespace VAdvantage.Model
 {
-    public class MImage : X_AD_Image
+    public class MImage : X_VAF_Image
     {
         /// <summary>
         ///Get MImage from Cache
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Image_ID"></param>
+        /// <param name="VAF_Image_ID"></param>
         /// <returns></returns>
         private byte[] byteArray;
         public byte[] ByteArray
@@ -41,34 +41,34 @@ namespace VAdvantage.Model
             get { return imageFormat; }
             set { imageFormat = value; }
         }
-        public static MImage Get(Ctx ctx, int AD_Image_ID)
+        public static MImage Get(Ctx ctx, int VAF_Image_ID)
         {
-            if (AD_Image_ID == 0)
-                return new MImage(ctx, AD_Image_ID, null);
+            if (VAF_Image_ID == 0)
+                return new MImage(ctx, VAF_Image_ID, null);
             //
-            int key = AD_Image_ID;
+            int key = VAF_Image_ID;
             MImage retValue = s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MImage(ctx, AD_Image_ID, null);
+            retValue = new MImage(ctx, VAF_Image_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache[key] = retValue;
             return retValue;
         }
 
         /**	Cache						*/
-        private static CCache<int, MImage> s_cache = new CCache<int, MImage>("AD_Image", 20);
+        private static CCache<int, MImage> s_cache = new CCache<int, MImage>("VAF_Image", 20);
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Image_ID"></param>
+        /// <param name="VAF_Image_ID"></param>
         /// <param name="trxName"></param>
-        public MImage(Ctx ctx, int AD_Image_ID, Trx trxName)
-            : base(ctx, AD_Image_ID, trxName)
+        public MImage(Ctx ctx, int VAF_Image_ID, Trx trxName)
+            : base(ctx, VAF_Image_ID, trxName)
         {
-            if (AD_Image_ID < 1)
+            if (VAF_Image_ID < 1)
                 SetName("-");
         }
 
@@ -185,12 +185,12 @@ namespace VAdvantage.Model
                 //}
                 if (!string.IsNullOrEmpty(imageUrl) && !string.IsNullOrEmpty(ImageFormat))
                 {
-                    //imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetAD_Image_ID() + ImageFormat);
-                    imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
-                    int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
+                    //imageUrl = imageUrl.Insert(imageUrl.Length, "/" + GetVAF_Image_ID() + ImageFormat);
+                    imageUrl = "Images/" + GetVAF_Image_ID() + imageFormat;
+                    int count = DB.ExecuteQuery("UPDATE VAF_Image SET IMAGEURL='" + imageUrl + "' WHERE VAF_Image_ID=" + GetVAF_Image_ID());
                 }
 
-                ConvertByteArrayToThumbnail(byteArray, GetAD_Image_ID().ToString() + ImageFormat);
+                ConvertByteArrayToThumbnail(byteArray, GetVAF_Image_ID().ToString() + ImageFormat);
             }
             else if (GetBinaryData() != null)
             {
@@ -198,10 +198,10 @@ namespace VAdvantage.Model
                 if (!string.IsNullOrEmpty(imageUrl) && imageUrl.Contains("."))
                 {
                     imageFormat = imageUrl.Substring(imageUrl.LastIndexOf("."));
-                    imageUrl = "Images/" + GetAD_Image_ID() + imageFormat;
-                    int count = DB.ExecuteQuery("UPDATE AD_IMAGE SET IMAGEURL='" + imageUrl + "' WHERE AD_IMAGE_ID=" + GetAD_Image_ID());
+                    imageUrl = "Images/" + GetVAF_Image_ID() + imageFormat;
+                    int count = DB.ExecuteQuery("UPDATE VAF_Image SET IMAGEURL='" + imageUrl + "' WHERE VAF_Image_ID=" + GetVAF_Image_ID());
                 }
-                ConvertByteArrayToThumbnail(GetBinaryData(), GetAD_Image_ID().ToString() + ImageFormat);
+                ConvertByteArrayToThumbnail(GetBinaryData(), GetVAF_Image_ID().ToString() + ImageFormat);
             }
             return success;
         }
@@ -746,8 +746,8 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             string imageUrl = GetImageURL().ToLower();
             if (!imageUrl.Contains(".") || imageExtensions.IndexOf(imageUrl.Substring(imageUrl.LastIndexOf("."))) < 0)
             {

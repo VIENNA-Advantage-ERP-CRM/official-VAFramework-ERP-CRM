@@ -74,7 +74,7 @@ static X_AD_DesktopWorkbench()
 //static long serialVersionUID = 27562514361122L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044333L;
-/** AD_Table_ID=459 */
+/** VAF_TableView_ID=459 */
 public static int Table_ID;
  // =459;
 

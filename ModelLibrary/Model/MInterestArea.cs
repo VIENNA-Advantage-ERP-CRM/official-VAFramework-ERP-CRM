@@ -30,7 +30,7 @@ namespace VAdvantage.Model
 {
     public class MInterestArea : X_R_InterestArea
     {
-        private int _AD_User_ID = -1;
+        private int _VAF_UserContact_ID = -1;
         private MContactInterest _ci = null;
         /**	Cache						*/
         private static CCache<int, MInterestArea> _cache =
@@ -153,31 +153,31 @@ namespace VAdvantage.Model
 
         /**	Set Subscription info "constructor".
          * 	Create inactive Subscription
-         *	@param AD_User_ID contact
+         *	@param VAF_UserContact_ID contact
          */
-        public void SetSubscriptionInfo(int AD_User_ID)
+        public void SetSubscriptionInfo(int VAF_UserContact_ID)
         {
-            _AD_User_ID = AD_User_ID;
-            _ci = MContactInterest.Get(GetCtx(), GetR_InterestArea_ID(), AD_User_ID,
+            _VAF_UserContact_ID = VAF_UserContact_ID;
+            _ci = MContactInterest.Get(GetCtx(), GetR_InterestArea_ID(), VAF_UserContact_ID,
                 false, Get_TrxName());
         }
 
         /**
-         * 	Set AD_User_ID
-         *	@param AD_User_ID user
+         * 	Set VAF_UserContact_ID
+         *	@param VAF_UserContact_ID user
          */
-        public void SetAD_User_ID(int AD_User_ID)
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            _AD_User_ID = AD_User_ID;
+            _VAF_UserContact_ID = VAF_UserContact_ID;
         }
 
         /**
-         * 	Get AD_User_ID
+         * 	Get VAF_UserContact_ID
          *	@return user
          */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            return _AD_User_ID;
+            return _VAF_UserContact_ID;
         }
 
         /**
@@ -208,7 +208,7 @@ namespace VAdvantage.Model
          */
         public bool IsSubscribed()
         {
-            if (_AD_User_ID <= 0 || _ci == null)
+            if (_VAF_UserContact_ID <= 0 || _ci == null)
                 return false;
             //	We have a BPartner Contact
             return _ci.IsSubscribed();

@@ -74,7 +74,7 @@ static X_C_AcctProcessor()
 //static long serialVersionUID 27562514369382L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052593L;
-/** AD_Table_ID=695 */
+/** VAF_TableView_ID=695 */
 public static int Table_ID;
  // =695;
 
@@ -117,34 +117,34 @@ StringBuilder sb = new StringBuilder ("X_C_AcctProcessor[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set Schedule.
-@param AD_Schedule_ID Execution Schedule */
-public void SetAD_Schedule_ID (int AD_Schedule_ID)
+@param VAF_Plan_ID Execution Schedule */
+public void SetVAF_Plan_ID (int VAF_Plan_ID)
 {
-if (AD_Schedule_ID <= 0) Set_Value ("AD_Schedule_ID", null);
+if (VAF_Plan_ID <= 0) Set_Value ("VAF_Plan_ID", null);
 else
-Set_Value ("AD_Schedule_ID", AD_Schedule_ID);
+Set_Value ("VAF_Plan_ID", VAF_Plan_ID);
 }
 /** Get Schedule.
 @return Execution Schedule */
-public int GetAD_Schedule_ID() 
+public int GetVAF_Plan_ID() 
 {
-Object ii = Get_Value("AD_Schedule_ID");
+Object ii = Get_Value("VAF_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -235,8 +235,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -326,8 +326,8 @@ if (oo != null)
 return false;
 }
 
-/** Supervisor_ID AD_Reference_ID=286 */
-public static int SUPERVISOR_ID_AD_Reference_ID=286;
+/** Supervisor_ID VAF_Control_Ref_ID=286 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=286;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

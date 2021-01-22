@@ -70,7 +70,7 @@ static X_C_Lead()
 //static long serialVersionUID 27562514372971L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056182L;
-/** AD_Table_ID=923 */
+/** VAF_TableView_ID=923 */
 public static int Table_ID;
  // =923;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_C_Lead[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -228,8 +228,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_BPartnerSR_ID AD_Reference_ID=353 */
-public static int C_BPARTNERSR_ID_AD_Reference_ID=353;
+/** C_BPartnerSR_ID VAF_Control_Ref_ID=353 */
+public static int C_BPARTNERSR_ID_VAF_Control_Ref_ID=353;
 /** Set BPartner (Agent).
 @param C_BPartnerSR_ID Business Partner (Agent or Sales Rep) */
 public void SetC_BPartnerSR_ID (int C_BPartnerSR_ID)
@@ -648,8 +648,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** LeadRating AD_Reference_ID=421 */
-public static int LEADRATING_AD_Reference_ID=421;
+/** LeadRating VAF_Control_Ref_ID=421 */
+public static int LEADRATING_VAF_Control_Ref_ID=421;
 /** Hot = 1 */
 public static String LEADRATING_Hot = "1";
 /** Warm = 4 */
@@ -932,8 +932,8 @@ public String GetRemote_Host()
 return (String)Get_Value("Remote_Host");
 }
 
-/** SalesRep_ID AD_Reference_ID=190 */
-public static int SALESREP_ID_AD_Reference_ID=190;
+/** SalesRep_ID VAF_Control_Ref_ID=190 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=190;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)
@@ -1033,8 +1033,8 @@ public String GetURL()
 return (String)Get_Value("URL");
 }
 
-/** Ref_BPartner_ID AD_Reference_ID=138 */
-public static int REF_BPARTNER_ID_AD_Reference_ID = 138;
+/** Ref_BPartner_ID VAF_Control_Ref_ID=138 */
+public static int REF_BPARTNER_ID_VAF_Control_Ref_ID = 138;
 /** Set Ref_BPartner_ID.
 @param Ref_BPartner_ID Ref_BPartner_ID */
 public void SetRef_BPartner_ID(int Ref_BPartner_ID)
@@ -1052,8 +1052,8 @@ public int GetRef_BPartner_ID()
     return Convert.ToInt32(ii);
 }
 
-/** Status AD_Reference_ID=424 */
-public static int STATUS_AD_Reference_ID = 424;
+/** Status VAF_Control_Ref_ID=424 */
+public static int STATUS_VAF_Control_Ref_ID = 424;
 /** New = 10 */
 public static String STATUS_New = "10";
 /** Intro Mail Sent = 11 */

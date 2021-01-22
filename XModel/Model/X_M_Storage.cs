@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514381371L;
         /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
         public static long updatedMS = 1280389064582L;
-        /** AD_Table_ID=250 */
+        /** VAF_TableView_ID=250 */
         public static int Table_ID;
         // =250;
 
@@ -266,8 +266,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("QtyType");
         }
-        /** QtyType AD_Reference_ID=533 */
-        public static int QTYTYPE_AD_Reference_ID = 533;
+        /** QtyType VAF_Control_Ref_ID=533 */
+        public static int QTYTYPE_VAF_Control_Ref_ID = 533;
         /** Allocated = A */
         public static String QTYTYPE_Allocated = "A";
         /** Dedicated = D */
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
 ////static long serialVersionUID 27562514381371L;
 ///** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 //public static long updatedMS = 1280389064582L;
-///** AD_Table_ID=250 */
+///** VAF_TableView_ID=250 */
 //public static int Table_ID;
 // // =250;
 

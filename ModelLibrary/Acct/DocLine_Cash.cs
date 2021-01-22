@@ -36,7 +36,7 @@ namespace VAdvantage.Acct
         // Cash Type               
         private String _CashType = "";
 
-        //  AD_Reference_ID=217
+        //  VAF_Control_Ref_ID=217
         // Charge - C		
         public static String CASHTYPE_CHARGE = "C";
         // Difference - D	

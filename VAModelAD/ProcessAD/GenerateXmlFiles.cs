@@ -1,5 +1,5 @@
 ﻿/* 
- * Create Xml Files Against Data In AD_Module_DB_Schema Table Filer By Module
+ * Create Xml Files Against Data In VAF_Module_DB_Schema Table Filer By Module
  * Used Table name as Xml File name 
  * Directory is fixed having name 'ModuleXMLFiles'
  * next Module name used as folder for xml files
@@ -22,9 +22,9 @@ namespace VAdvantage.Process
     {
         #region Declaration
         //Foreign ID 
-        int AD_ModuleInfo_ID = 0;
+        int VAF_ModuleInfo_ID = 0;
         //ID
-        int AD_Module_DB_Schema_ID = 0;
+        int VAF_Module_DB_Schema_ID = 0;
         //Replace Space with Underscore
         string Module_Name = "";
         string prefix = "";
@@ -45,15 +45,15 @@ namespace VAdvantage.Process
 
         protected override void Prepare()
         {
-            AD_Module_DB_Schema_ID = GetRecord_ID();
+            VAF_Module_DB_Schema_ID = GetRecord_ID();
 
-            IDataReader dr = DB.ExecuteReader(@" SELECT AD_ModuleInfo_ID,Name,Prefix,VersionId,versionNo FROM AD_ModuleInfo 
-                                                WHERE AD_ModuleInfo_ID = 
-                                                (SELECT AD_ModuleInfo_ID FROM AD_Module_DB_Schema 
-                                                  WHERE AD_Module_DB_Schema_ID =" + AD_Module_DB_Schema_ID + ")");
+            IDataReader dr = DB.ExecuteReader(@" SELECT VAF_ModuleInfo_ID,Name,Prefix,VersionId,versionNo FROM VAF_ModuleInfo 
+                                                WHERE VAF_ModuleInfo_ID = 
+                                                (SELECT VAF_ModuleInfo_ID FROM VAF_Module_DB_Schema 
+                                                  WHERE VAF_Module_DB_Schema_ID =" + VAF_Module_DB_Schema_ID + ")");
             if (dr.Read())
             {
-                AD_ModuleInfo_ID = Util.GetValueOfInt(dr[0]);
+                VAF_ModuleInfo_ID = Util.GetValueOfInt(dr[0]);
                 Module_Name = dr[1].ToString();//.Replace(' ', '_');
                 prefix = dr[2].ToString();
                 versionId = dr[3].ToString();
@@ -74,12 +74,12 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            if (string.IsNullOrEmpty(Module_Name) || AD_ModuleInfo_ID < 1)
+            if (string.IsNullOrEmpty(Module_Name) || VAF_ModuleInfo_ID < 1)
             {
                 throw new ArgumentNullException("Empty Module Name");
             }
 
-            IDataReader dr = DB.ExecuteReader("SELECT DISTINCT TableName FROM AD_Module_DB_Schema WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID);
+            IDataReader dr = DB.ExecuteReader("SELECT DISTINCT TableName FROM VAF_Module_DB_Schema WHERE VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID);
             while (dr.Read())
             {
                 lstTables.Add(dr[0].ToString());
@@ -115,9 +115,9 @@ namespace VAdvantage.Process
             {
                 tableName = lstTables[t];
 
-                ds = DB.ExecuteDataset(" SELECT t.* FROM " + tableName + " t INNER JOIN AD_Module_DB_Schema db "
+                ds = DB.ExecuteDataset(" SELECT t.* FROM " + tableName + " t INNER JOIN VAF_Module_DB_Schema db "
                                     + " ON t." + GetKeyColumnName(tableName) + " = db.Record_ID WHERE db.TableName = '" + tableName + "' "
-                                    + " AND db.AD_ModuleInfo_ID = " + AD_ModuleInfo_ID);
+                                    + " AND db.VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID);
 
 
                 sw = new StreamWriter(pathFolder + "\\" + tableName + ".xml");
@@ -135,11 +135,11 @@ namespace VAdvantage.Process
         private void CreateModuleSchemaFiles()
         {
             //1. Create DB_Schema xml
-            DataSet ds = DB.ExecuteDataset(" SELECT AD_Table_ID,TableName,Record_ID FROM AD_Module_DB_Schema WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID + " ORDER BY AD_Module_DB_Schema_ID desc");
-            StreamWriter sw = new StreamWriter(pathFolder + "\\" + "AD_Module_DB_Schema.xml");
+            DataSet ds = DB.ExecuteDataset(" SELECT VAF_TableView_ID,TableName,Record_ID FROM VAF_Module_DB_Schema WHERE VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID + " ORDER BY VAF_Module_DB_Schema_ID desc");
+            StreamWriter sw = new StreamWriter(pathFolder + "\\" + "VAF_Module_DB_Schema.xml");
             if (ds.Tables.Count > 0)
             {
-                ds.Tables[0].TableName = "AD_Module_DB_Schema";
+                ds.Tables[0].TableName = "VAF_Module_DB_Schema";
             }
             ds.WriteXml(sw, XmlWriteMode.WriteSchema);
             sw.Close();
@@ -147,11 +147,11 @@ namespace VAdvantage.Process
 
             //2. DB Script
 
-            ds = DB.ExecuteDataset(" SELECT * FROM AD_Module_DBScript WHERE IsActive='Y' AND  AD_ModuleInfo_ID = " + AD_ModuleInfo_ID +" ORDER BY AD_Module_DBScript_ID");
-            sw = new StreamWriter(pathFolder + "\\" + "AD_Module_DBScript.xml");
+            ds = DB.ExecuteDataset(" SELECT * FROM VAF_Module_DBScript WHERE IsActive='Y' AND  VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID +" ORDER BY VAF_Module_DBScript_ID");
+            sw = new StreamWriter(pathFolder + "\\" + "VAF_Module_DBScript.xml");
             if (ds.Tables.Count > 0)
             {
-                ds.Tables[0].TableName = "AD_Module_DBScript";
+                ds.Tables[0].TableName = "VAF_Module_DBScript";
             }
             ds.WriteXml(sw, XmlWriteMode.WriteSchema);
             sw.Close();
@@ -160,7 +160,7 @@ namespace VAdvantage.Process
         }
         private void CreateXML(string tableName)
         {
-            DataSet ds = DB.ExecuteDataset(" SELECT * FROM " + tableName + " WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID);
+            DataSet ds = DB.ExecuteDataset(" SELECT * FROM " + tableName + " WHERE VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID);
             StreamWriter sw = new StreamWriter(pathFolder + "\\" + tableName + ".xml");
             if (ds.Tables.Count > 0)
             {
@@ -174,9 +174,9 @@ namespace VAdvantage.Process
 
         private string GetKeyColumnName(string tableName)
         {
-            /* SpecialCase For AD_Ref_Table*/
-            if (tableName == "AD_Ref_Table")
-                return "AD_Reference_ID";
+            /* SpecialCase For VAF_CtrlRef_Table*/
+            if (tableName == "VAF_CtrlRef_Table")
+                return "VAF_Control_Ref_ID";
             else
                 return tableName + "_ID";
         }

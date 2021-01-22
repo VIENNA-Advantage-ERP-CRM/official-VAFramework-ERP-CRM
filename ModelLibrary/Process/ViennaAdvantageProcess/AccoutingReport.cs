@@ -29,7 +29,7 @@ namespace ViennaAdvantage.Process
         private DateTime? _DateAcct_To = null;
         private DateTime? _DateAcct_Yearly = null;
         /**	Org Parameter					*/
-        //private int _AD_Org_ID = 0;
+        //private int _VAF_Org_ID = 0;
         /**	Account Parameter				*/
         private int _Account_ID = 0;
         int GL_budget_id = 0;
@@ -47,14 +47,14 @@ namespace ViennaAdvantage.Process
         private int _C_SalesRegion_ID = 0;
         /**	Campaign Parameter				*/
         private int _C_Campaign_ID = 0;
-       // private int AD_OrgTrx_ID = 0;
+       // private int VAF_OrgTrx_ID = 0;
 
         /** Posting Type					*/
        // private String _PostingType = "A";
         /** Hierarchy						*/
        // private int _PA_Hierarchy_ID = 0;
 
-        private int _AD_OrgTrx_ID = 0;
+        private int _VAF_OrgTrx_ID = 0;
         private string _AccountType = "";
         private string _SummaryLevel = "";
         private string _LedgerType = "";
@@ -89,20 +89,20 @@ namespace ViennaAdvantage.Process
        // int _NoOfRecord = 0;
         string IsIntermediate = "N";
         private static String _Insert = @"INSERT INTO  T_Statement "
-             + "( parent_id, AccountType,M_PRODUCT_ID,C_BPARTNER_ID,C_CAMPAIGN_ID,C_PROJECT_ID,C_ACTIVITY_ID,C_SALESREGION_ID,C_LOCFROM_ID,C_LOCTO_ID,USER1_ID,USER2_ID,USERELEMENT1_ID,USERELEMENT2_ID,node_id,AD_Client_ID, AD_Org_ID,"
+             + "( parent_id, AccountType,M_PRODUCT_ID,C_BPARTNER_ID,C_CAMPAIGN_ID,C_PROJECT_ID,C_ACTIVITY_ID,C_SALESREGION_ID,C_LOCFROM_ID,C_LOCTO_ID,USER1_ID,USER2_ID,USERELEMENT1_ID,USERELEMENT2_ID,node_id,VAF_Client_ID, VAF_Org_ID,"
              + "  LedgerCode, LedgerName, CrMonVal ,"
              + "  TPMonValue,  TotalValue,ISSUMMARY,isintermediatecode)";
 
         //private static String _InsertAccount = @"INSERT INTO  T_Statement "
-        //     + "( Ad_client_id, Ad_Org_id,ACCGRPNAME,C_ACCOUNTGROUP_ID,ACCGRPNAME,PARENTID,NODEID)";
+        //     + "( vaf_client_id, vaf_org_id,ACCGRPNAME,C_ACCOUNTGROUP_ID,ACCGRPNAME,PARENTID,NODEID)";
         #endregion
 
         protected override string DoIt()
         {
             String sql1 = @"Select startdate from c_period where c_period_id=" + _C_Period_ID;
             DateTime? startdate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql1));
-            sql1 = @"select clfn.c_acctschema1_id from ad_client cl join ad_clientinfo clfn  on (cl.ad_client_id=clfn.ad_client_id)
-                     where cl.ad_client_id=" + GetAD_Client_ID();
+            sql1 = @"select clfn.c_acctschema1_id from vaf_client cl join VAF_ClientDetail clfn  on (cl.vaf_client_id=clfn.vaf_client_id)
+                     where cl.vaf_client_id=" + GetVAF_Client_ID();
             int c_acctschema_id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             FinBalance.UpdateBalance(GetCtx(), c_acctschema_id, startdate, Get_Trx(), 0, this);
             if (_LedgerType == "N")
@@ -137,11 +137,11 @@ namespace ViennaAdvantage.Process
             _msql.Append(_Insert);
 
             _m_OuterSql.Append(@"SELECT distinct t1.parent_id,t1.AccountType,t1.M_PRODUCT_ID,t1.C_BPARTNER_ID,t1.C_CAMPAIGN_ID,t1.C_PROJECT_ID,t1.C_ACTIVITY_ID,t1.C_SALESREGION_ID,
-    t1.C_LOCFROM_ID,t1.C_LOCTO_ID,t1.USER1_ID,t1.USER2_ID,t1.USERELEMENT1_ID,t1.USERELEMENT2_ID,t1.node_id,t1.ad_client_id,t1.ad_org_id,t1.value AS value,t1.name as name,nvl(max(t2.Currentamount),0) AS Currentamount,(nvl(max(t1.Total),0)-nvl(max(t2.Currentamount),0)) AS Previous,
+    t1.C_LOCFROM_ID,t1.C_LOCTO_ID,t1.USER1_ID,t1.USER2_ID,t1.USERELEMENT1_ID,t1.USERELEMENT2_ID,t1.node_id,t1.vaf_client_id,t1.vaf_org_id,t1.value AS value,t1.name as name,nvl(max(t2.Currentamount),0) AS Currentamount,(nvl(max(t1.Total),0)-nvl(max(t2.Currentamount),0)) AS Previous,
                    (nvl(max(t2.Currentamount),0)+((nvl(max(t1.Total),0)-nvl(max(t2.Currentamount),0)))) AS totalamount,t1.IsSummary as IsSummary,t1.isintermediatecode from ");
             _m_CaseSql.Append(@"(SELECT * from (Select distinct    c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
-         f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,a.parent_id,max(c.issummary) as IsSummary,c.isintermediatecode, a.node_id,c.ad_client_id,c.ad_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (NVL((SUM(f.amtacctdr)),0)-NVL((SUM(f.amtacctcr)),0)) ELSE (NVL((SUM(f.amtacctcr)),0)-NVL((SUM(f.amtacctdr)),0)) END AS Total");
-            sql.Append(" FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id  INNER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id and f.GL_budget_id is null");
+         f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,a.parent_id,max(c.issummary) as IsSummary,c.isintermediatecode, a.node_id,c.vaf_client_id,c.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (NVL((SUM(f.amtacctdr)),0)-NVL((SUM(f.amtacctcr)),0)) ELSE (NVL((SUM(f.amtacctcr)),0)-NVL((SUM(f.amtacctdr)),0)) END AS Total");
+            sql.Append(" FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id  INNER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id and f.GL_budget_id is null");
             SetDateAcct();
             _msql.Append(_m_OuterSql);
             _msql.Append(_m_CaseSql);
@@ -153,7 +153,7 @@ namespace ViennaAdvantage.Process
             _msql.Append(" t1 Inner join");
             _m_CaseSql = new StringBuilder();
             _m_CaseSql.Append(@"(SELECT * From (Select distinct  c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
-               f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,a.parent_id,max(c.issummary) AS IsSummary,c.isintermediatecode, a.node_id,c.ad_client_id,c.ad_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (NVL((SUM(f.amtacctdr)),0)-NVL((SUM(f.amtacctcr)),0)) ELSE (NVL((SUM(f.amtacctcr)),0)-NVL((SUM(f.amtacctdr)),0)) END AS Currentamount");
+               f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,a.parent_id,max(c.issummary) AS IsSummary,c.isintermediatecode, a.node_id,c.vaf_client_id,c.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (NVL((SUM(f.amtacctdr)),0)-NVL((SUM(f.amtacctcr)),0)) ELSE (NVL((SUM(f.amtacctcr)),0)-NVL((SUM(f.amtacctdr)),0)) END AS Currentamount");
             _msql.Append(_m_CaseSql);
             _msql.Append(sql);
             m_datesql = new StringBuilder();
@@ -162,26 +162,26 @@ namespace ViennaAdvantage.Process
             m_parameterWhere = new StringBuilder();
             Createsql(false);
             _msql.Append(m_parameterWhere);
-            _msql.Append(" t2  ON (t1.value=t2.value) group by t1.parent_id, t1.AccountType,t1.M_PRODUCT_ID,  t1.C_BPARTNER_ID,  t1.C_CAMPAIGN_ID,  t1.C_PROJECT_ID,  t1.C_ACTIVITY_ID,  t1.C_SALESREGION_ID,  t1.C_LOCFROM_ID,  t1.C_LOCTO_ID,  t1.USER1_ID,  t1.USER2_ID,  t1.USERELEMENT1_ID,  t1.USERELEMENT2_ID,  t1.node_id,  t1.ad_client_id,  t1.ad_org_id,  t1.value     ,  t1.name  ,  t1.IsSummary,t1.isintermediatecode");
+            _msql.Append(" t2  ON (t1.value=t2.value) group by t1.parent_id, t1.AccountType,t1.M_PRODUCT_ID,  t1.C_BPARTNER_ID,  t1.C_CAMPAIGN_ID,  t1.C_PROJECT_ID,  t1.C_ACTIVITY_ID,  t1.C_SALESREGION_ID,  t1.C_LOCFROM_ID,  t1.C_LOCTO_ID,  t1.USER1_ID,  t1.USER2_ID,  t1.USERELEMENT1_ID,  t1.USERELEMENT2_ID,  t1.node_id,  t1.vaf_client_id,  t1.vaf_org_id,  t1.value     ,  t1.name  ,  t1.IsSummary,t1.isintermediatecode");
             //_msql.Append(" ");
             //_msql.Append(sql);
             //_msql.Append(sql);
-            //            sql.Append(@" SELECT   t1.parent_id,t1.node_id,t1.ad_client_id,t1.ad_org_id,t1.Created,t1.CreatedBy,t1.Updated,t1.UpdatedBy,t1.value as value, t1.name name,t2.Currentamount as Currentamount,(t1.Total-t2.Currentamount) as Previous,(t2.Currentamount+((t1.Total-t2.Currentamount))) as totalamount,
+            //            sql.Append(@" SELECT   t1.parent_id,t1.node_id,t1.vaf_client_id,t1.vaf_org_id,t1.Created,t1.CreatedBy,t1.Updated,t1.UpdatedBy,t1.value as value, t1.name name,t2.Currentamount as Currentamount,(t1.Total-t2.Currentamount) as Previous,(t2.Currentamount+((t1.Total-t2.Currentamount))) as totalamount,
             //               t1.C_BPartner_ID,t1.M_Product_ID,t1.C_Project_ID,t1.C_Activity_ID,
             //            t1.C_SalesRegion_ID,t1.C_Campaign_ID,t1.C_LocFrom_ID,t1.C_LocTo_ID  ,t1.User1_ID,t1.User2_ID,t1.UserElement1_ID,t1.UserElement2_ID,t1.ACCOUNTTYPE
-            //            FROM(SELECT  g.gl_budget_id,a.parent_id,a.node_id,f.ad_client_id,f.ad_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,c.value AS value,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE,
+            //            FROM(SELECT  g.gl_budget_id,a.parent_id,a.node_id,f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,c.value AS value,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE,
             //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID, c.name,CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr))
-            //          Else (SUM(f.amtacctcr)-SUM(f.amtacctdr))END AS Total FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
-            //        ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id)  WHERE c.ad_client_id=" + GetCtx().GetAD_Client_ID() + "");
+            //          Else (SUM(f.amtacctcr)-SUM(f.amtacctdr))END AS Total FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
+            //        ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id)  WHERE c.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + "");
             //              SetDateAcct();
             //              sql.Append("  AND f.DATEACCT BETWEEN " + GlobalVariable.TO_DATE(_DateAcct_Yearly, true) + " AND " + GlobalVariable.TO_DATE(_DateAcct_To, true) + "");
             //            //AND f.DATEACCT BETWEEN '01-Jan-13' AND '31-Dec-13'
-            //              sql.Append(@"GROUP BY a.parent_id,a.node_id,c.value, c.name,c.AccountType, f.ad_client_id,f.ad_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,
+            //              sql.Append(@"GROUP BY a.parent_id,a.node_id,c.value, c.name,c.AccountType, f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,
             //            f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID,g.gl_budget_id) t1 inner JOIN (SELECT g.gl_budget_id,a.parent_id,a.node_id,c.value AS value,c.name, cASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr))
             //          else (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Currentamount,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE,
-            //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
-            //       ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id) WHERE f.ad_client_id=" + GetCtx().GetAD_Client_ID() + "  AND f.DATEACCT BETWEEN " + GlobalVariable.TO_DATE(_DateAcct_From, true) + " and " + GlobalVariable.TO_DATE(_DateAcct_To, true) + @"
-            //          GROUP BY c.value,c.name,c.AccountType,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE, f.ad_client_id,f.ad_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,
+            //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
+            //       ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id) WHERE f.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + "  AND f.DATEACCT BETWEEN " + GlobalVariable.TO_DATE(_DateAcct_From, true) + " and " + GlobalVariable.TO_DATE(_DateAcct_To, true) + @"
+            //          GROUP BY c.value,c.name,c.AccountType,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE, f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,
             //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID,a.parent_id,a.node_id,g.gl_budget_id) t2 ON (t1.value=t2.value) ");
             no = DB.ExecuteQuery(_msql.ToString(), null, null);
             if (no == 0)
@@ -195,11 +195,11 @@ namespace ViennaAdvantage.Process
             }
             log.Fine("#" + no + " (Account_ID=" + _Account_ID + ")");
             //            _sqlAccount.Append(_InsertAccount);
-            //            _sqlAccount.Append(@"SELECT asg.ad_client_id as ad_client_id,asg.ad_org_id as ad_org_id,ag.name as accountGroupname,asg.c_accountgroup_id as c_accountgroup_id, asg.name AS AccountsubGroupName,
+            //            _sqlAccount.Append(@"SELECT asg.vaf_client_id as vaf_client_id,asg.vaf_org_id as vaf_org_id,ag.name as accountGroupname,asg.c_accountgroup_id as c_accountgroup_id, asg.name AS AccountsubGroupName,
             //                    nvl(asg.c_accountsubgroup_id_1,0)as parent_id,asg.c_accountsubgroup_id as node_id
             //                    from c_accountgroup ag left outer  join c_accountsubgroup asg on (ag.c_accountgroup_id=asg.c_accountgroup_id)
             //                    left outer join c_accountsubgroup asg1 on (asg1.c_accountsubgroup_id = asg.c_accountsubgroup_id)
-            //                    where ag.ad_client_id="+GetCtx().GetAD_Client_ID());
+            //                    where ag.vaf_client_id="+GetCtx().GetVAF_Client_ID());
             //            _NoOfRecord = DB.ExecuteQuery(_msql.ToString(), null, null);
             //            if (_NoOfRecord == 0)
             //            {
@@ -209,7 +209,7 @@ namespace ViennaAdvantage.Process
             // if (_SummaryLevel == "N" || _LedgerType=="A")
             if (_LedgerType == "N" || _LedgerType == "A")
             {
-                sqlnew = "Select * from t_statement where issummary='N' and ad_client_id=" + GetCtx().GetAD_Client_ID();
+                sqlnew = "Select * from t_statement where issummary='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                 DataSet dsrecord = DB.ExecuteDataset(sqlnew, null, null);
                 if (dsrecord.Tables[0].Rows.Count > 0)
                 {
@@ -218,9 +218,9 @@ namespace ViennaAdvantage.Process
                         GL_budget_id = 0;
                         _Parent_id = Util.GetValueOfInt(dsrecord.Tables[0].Rows[i]["PARENT_ID"]);
                         _Node_id = Util.GetValueOfInt(dsrecord.Tables[0].Rows[i]["NODE_ID"]);
-                        sqlnew = "select GL_budget_id from fact_acct_balance where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and account_id=" + _Node_id + " and GL_budget_id is not null";
+                        sqlnew = "select GL_budget_id from fact_acct_balance where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and account_id=" + _Node_id + " and GL_budget_id is not null";
                         GL_budget_id = Util.GetValueOfInt(DB.ExecuteScalar(sqlnew, null, null));
-                        sqlnew = "select sum(amtacctdr) as Debit,sum(amtacctcr) as Credit from fact_acct_balance where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and account_id=" + _Node_id + " and GL_budget_id is not null";
+                        sqlnew = "select sum(amtacctdr) as Debit,sum(amtacctcr) as Credit from fact_acct_balance where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and account_id=" + _Node_id + " and GL_budget_id is not null";
                         DataSet dsglbudget = DB.ExecuteDataset(sqlnew, null, null);
                         if (dsglbudget.Tables[0].Rows.Count > 0)
                         {
@@ -231,7 +231,7 @@ namespace ViennaAdvantage.Process
                                 _Gl_Totalvalue = _Gl_Totalvalue + _Gl_budgetvalue;
                             }
                         }
-                        sqlnew = "Select TOTALVALUE from t_statement where  ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + _Node_id;
+                        sqlnew = "Select TOTALVALUE from t_statement where  vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
                         _totalBudgetValue = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlnew, null, null));
                         if (_Gl_budgetvalue != 0)
                         {
@@ -241,21 +241,21 @@ namespace ViennaAdvantage.Process
                         {
                             _totalBudgetValue = 0;
                         }
-                        _sqlUpdate = "Update t_statement set GL_budget_id=" + GL_budget_id + ",BUDGETVAL=" + _Gl_budgetvalue + ",VARINPERCENT=" + _totalBudgetValue + "  where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + _Node_id;
+                        _sqlUpdate = "Update t_statement set GL_budget_id=" + GL_budget_id + ",BUDGETVAL=" + _Gl_budgetvalue + ",VARINPERCENT=" + _totalBudgetValue + "  where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
                         int count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
 
                         if (!_ListOfParentId.Contains(_Parent_id))
                         {
 
                             _ListOfParentId.Add(_Parent_id);
-                            sqlcount = "select sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from t_statement where parent_id=" + _Parent_id + " and ISSUMMARY='N' and ad_client_id=" + GetCtx().GetAD_Client_ID();
+                            sqlcount = "select sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from t_statement where parent_id=" + _Parent_id + " and ISSUMMARY='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                             DataSet dscountotal = DB.ExecuteDataset(sqlcount, null, null);
                             if (dscountotal.Tables[0].Rows.Count > 0)
                             {
                                 _totalAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]);
                                 _currentAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]);
                                 _PreviousAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]);
-                                _sqlUpdate = "Update t_statement set TOTALVALUE=" + _totalAmount + ",TPMONVALUE=" + _PreviousAmount + ",CRMONVAL=" + _currentAmount + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + _Parent_id;
+                                _sqlUpdate = "Update t_statement set TOTALVALUE=" + _totalAmount + ",TPMONVALUE=" + _PreviousAmount + ",CRMONVAL=" + _currentAmount + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Parent_id;
                                 count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                 if (count != -1)
                                 {
@@ -282,7 +282,7 @@ namespace ViennaAdvantage.Process
             if (_LedgerType == "S" || _LedgerType == "A")
             //if(_SummaryLevel=="Y" || _LedgerType=="A")
             {
-                sqlnew = "Select * from  t_statement where ad_client_id=" + GetCtx().GetAD_Client_ID();
+                sqlnew = "Select * from  t_statement where vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                 DataSet dsrecord1 = DB.ExecuteDataset(sqlnew, null, null);
                 Decimal BudgetValue = 0;
                 //for (int l = 0; l < dsrecord1.Tables[0].Rows.Count; l++)
@@ -354,7 +354,7 @@ namespace ViennaAdvantage.Process
                                                                                             {
                                                                                                 BudgetValue = Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["BudgetValue"]);
                                                                                             }
-                                                                                            _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
+                                                                                            _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
                                                                                             int count5 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                                         }
                                                                                     }
@@ -374,7 +374,7 @@ namespace ViennaAdvantage.Process
                                                                                 {
                                                                                     BudgetValue = Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["BudgetValue"]);
                                                                                 }
-                                                                                _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
+                                                                                _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
                                                                                 int count5 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                             }
 
@@ -394,7 +394,7 @@ namespace ViennaAdvantage.Process
                                                                     {
                                                                         BudgetValue = Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["BudgetValue"]);
                                                                     }
-                                                                    _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
+                                                                    _sqlUpdate = "Update  t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
                                                                     int count4 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                 }
                                                             }
@@ -415,7 +415,7 @@ namespace ViennaAdvantage.Process
                                                         {
                                                             BudgetValue = Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["BudgetValue"]);
                                                         }
-                                                        _sqlUpdate = "Update t_statement set budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
+                                                        _sqlUpdate = "Update t_statement set budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
                                                         int count3 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                     }
                                                 }
@@ -433,7 +433,7 @@ namespace ViennaAdvantage.Process
                                             {
                                                 BudgetValue = Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["BudgetValue"]);
                                             }
-                                            _sqlUpdate = "Update t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
+                                            _sqlUpdate = "Update t_statement set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
                                             int count2 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                         }
                                         //}
@@ -452,7 +452,7 @@ namespace ViennaAdvantage.Process
                                 {
                                     BudgetValue = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["BudgetValue"]);
                                 }
-                                _sqlUpdate = "Update t_statement set  budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]) + " where ad_client_id=" + GetCtx().GetAD_Client_ID() + " and node_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
+                                _sqlUpdate = "Update t_statement set  budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
                                 int count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                             }
                             //}
@@ -476,10 +476,10 @@ namespace ViennaAdvantage.Process
         private void Createsql(bool totalQty)
         {
 
-            //            m_parameterWhere.Append(@"SELECT distinct t1.parent_id,t1.ad_client_id,t1.ad_org_id,t1.value AS value,t1.parent_id ,t1.node_id,t1.name as name,t2.Currentamount    AS Currentamount,(nvl(t1.Total,0)-nvl(t2.Currentamount,0)) AS Previous,
+            //            m_parameterWhere.Append(@"SELECT distinct t1.parent_id,t1.vaf_client_id,t1.vaf_org_id,t1.value AS value,t1.parent_id ,t1.node_id,t1.name as name,t2.Currentamount    AS Currentamount,(nvl(t1.Total,0)-nvl(t2.Currentamount,0)) AS Previous,
             //                   (nvl(t2.Currentamount,0)+((nvl(t1.Total,0)-nvl(t2.Currentamount,0)))) AS totalamount from ");
 
-            //            m_parameterWhere.Append(@"(Select distinct  a.parent_id,max(c.issummary), a.node_id,f.ad_client_id,f.ad_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr)) ELSE (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Total  FROM ad_treenode a INNER JOIN c_elementvalue c
+            //            m_parameterWhere.Append(@"(Select distinct  a.parent_id,max(c.issummary), a.node_id,f.vaf_client_id,f.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr)) ELSE (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Total  FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c
             //                       ON c.c_elementvalue_id = a.node_id  LEFT OUTER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id ");
             //            SetDateAcct();
             //            sql.Append(" and f.DATEACCT BETWEEN " + _DateAcct_Yearly + " AND " + _DateAcct_To + " ");
@@ -539,9 +539,9 @@ namespace ViennaAdvantage.Process
             {
                 m_parameterWhere.Append(" and UserElement2_ID=" + _UserElement2_ID + "");
             }
-            if (_AD_OrgTrx_ID != 0)
+            if (_VAF_OrgTrx_ID != 0)
             {
-                m_parameterWhere.Append(" and AD_OrgTrx_ID=" + _AD_OrgTrx_ID + "");
+                m_parameterWhere.Append(" and VAF_OrgTrx_ID=" + _VAF_OrgTrx_ID + "");
             }
             if (_AccountType != "")
             {
@@ -550,7 +550,7 @@ namespace ViennaAdvantage.Process
             if (_LedgerType == "A" || _LedgerType == "")
             {
                 _LedgerType = "A";
-                m_parameterWhere.Append(" ) WHERE c.ad_client_id=" + GetCtx().GetAD_Client_ID() + " ");
+                m_parameterWhere.Append(" ) WHERE c.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " ");
             }
             else
             {
@@ -564,11 +564,11 @@ namespace ViennaAdvantage.Process
                 }
                 if (IsIntermediate == "Y")
                 {
-                    m_parameterWhere.Append(" ) WHERE  c.issummary='" + _SummaryLevel + "' and c.ad_client_id=" + GetCtx().GetAD_Client_ID() + "  ");
+                    m_parameterWhere.Append(" ) WHERE  c.issummary='" + _SummaryLevel + "' and c.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + "  ");
                 }
                 if (IsIntermediate == "N")
                 {
-                    m_parameterWhere.Append(" ) WHERE  c.issummary='" + _SummaryLevel + "' and c.ad_client_id=" + GetCtx().GetAD_Client_ID() + " AND c.isintermediatecode='N' ");
+                    m_parameterWhere.Append(" ) WHERE  c.issummary='" + _SummaryLevel + "' and c.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " AND c.isintermediatecode='N' ");
                 }
             }
             GroupBy(totalQty);
@@ -579,12 +579,12 @@ namespace ViennaAdvantage.Process
         {
             if (totalQty)
             {
-                m_parameterWhere.Append(@" GROUP BY a.parent_id, c.AccountType,a.node_id,c.value,  c.name,c.AccountType,c.ad_client_id,c.ad_org_id,c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
+                m_parameterWhere.Append(@" GROUP BY a.parent_id, c.AccountType,a.node_id,c.value,  c.name,c.AccountType,c.vaf_client_id,c.vaf_org_id,c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
                                f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,c.isintermediatecode)abc where abc.total!=0)");
             }
             else
             {
-                m_parameterWhere.Append(@" GROUP BY a.parent_id, c.AccountType,a.node_id,c.value,  c.name,c.AccountType,c.ad_client_id,c.ad_org_id,c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
+                m_parameterWhere.Append(@" GROUP BY a.parent_id, c.AccountType,a.node_id,c.value,  c.name,c.AccountType,c.vaf_client_id,c.vaf_org_id,c.AccountType,f.M_PRODUCT_ID,f.C_BPARTNER_ID,f.C_CAMPAIGN_ID,f.C_PROJECT_ID,f.C_ACTIVITY_ID,f.C_SALESREGION_ID,
                                f.C_LOCFROM_ID,f.C_LOCTO_ID,f.USER1_ID,f.USER2_ID,f.USERELEMENT1_ID,f.USERELEMENT2_ID,c.isintermediatecode)abc where abc.Currentamount!=0)");
             }
         }
@@ -595,12 +595,12 @@ namespace ViennaAdvantage.Process
 
         private void CreateView()
         {
-            string _sqlview = @"CREATE OR REPLACE FORCE VIEW STATEMENT_V  as SELECT ad_client_id,    accounttype,    ad_org_id,    GL_Budget_ID ,    M_PRODUCT_ID ,    C_BPARTNER_ID ,    C_CAMPAIGN_ID ,    C_PROJECT_ID ,    C_ACTIVITY_ID ,    C_SALESREGION_ID ,    C_LOCFROM_ID ,    C_LOCTO_ID ,    USER1_ID ,    USER2_ID ,    USERELEMENT1_ID,    USERELEMENT2_ID ,    C_PERIOD_ID,    ledgertype              AS LedgerType,    issummary               AS ShowSummaryLevel,    NVL(budgetval,0)   AS budgetval,    NVL(varinpercent,0)AS varinpercent,    LEDGERNAME         AS LEDGER,    NVL(crmonval,0)    AS crmonval,    NVL(tpmonvalue,0)  AS tpmonvalue,    NVL(totalvalue,0)  AS totalvalue,    ledgercode,    SUBSTR(ledgercode,1,1)  AS ledgercode1,    SUBSTR(ledgercode,2,2)  AS ledgercode2,    SUBSTR(ledgercode,4,2)  AS ledgercode3,    SUBSTR(ledgercode,6,2)  AS ledgercode4,    SUBSTR(ledgercode,8,2)  AS ledgercode5,    SUBSTR(ledgercode,10,2) AS ledgercode6,    SUBSTR(ledgercode,12,2) AS ledgercode7,    ledgercode              AS Statement_V_ID  FROM t_statement  order by ledgercode";
+            string _sqlview = @"CREATE OR REPLACE FORCE VIEW STATEMENT_V  as SELECT vaf_client_id,    accounttype,    vaf_org_id,    GL_Budget_ID ,    M_PRODUCT_ID ,    C_BPARTNER_ID ,    C_CAMPAIGN_ID ,    C_PROJECT_ID ,    C_ACTIVITY_ID ,    C_SALESREGION_ID ,    C_LOCFROM_ID ,    C_LOCTO_ID ,    USER1_ID ,    USER2_ID ,    USERELEMENT1_ID,    USERELEMENT2_ID ,    C_PERIOD_ID,    ledgertype              AS LedgerType,    issummary               AS ShowSummaryLevel,    NVL(budgetval,0)   AS budgetval,    NVL(varinpercent,0)AS varinpercent,    LEDGERNAME         AS LEDGER,    NVL(crmonval,0)    AS crmonval,    NVL(tpmonvalue,0)  AS tpmonvalue,    NVL(totalvalue,0)  AS totalvalue,    ledgercode,    SUBSTR(ledgercode,1,1)  AS ledgercode1,    SUBSTR(ledgercode,2,2)  AS ledgercode2,    SUBSTR(ledgercode,4,2)  AS ledgercode3,    SUBSTR(ledgercode,6,2)  AS ledgercode4,    SUBSTR(ledgercode,8,2)  AS ledgercode5,    SUBSTR(ledgercode,10,2) AS ledgercode6,    SUBSTR(ledgercode,12,2) AS ledgercode7,    ledgercode              AS Statement_V_ID  FROM t_statement  order by ledgercode";
             DB.ExecuteQuery(_sqlview, null, null);
         }
         private void CreateViewAsTree()
         {
-            string _sqlview = @"CREATE OR REPLACE FORCE VIEW STATEMENT_V AS  SELECT ad_client_id,    accounttype,    ad_org_id,    GL_Budget_ID ,    M_PRODUCT_ID ,    C_BPARTNER_ID ,    C_CAMPAIGN_ID ,    C_PROJECT_ID ,    C_ACTIVITY_ID ,    C_SALESREGION_ID ,    C_LOCFROM_ID ,    C_LOCTO_ID ,   USER1_ID ,    USER2_ID ,    USERELEMENT1_ID,    USERELEMENT2_ID ,    C_PERIOD_ID,    ledgertype AS LedgerType,    '.'    || LPAD (' ', LEVEL * 3)    || LEDGERNAME      AS LEDGER,    issummary               AS ShowSummaryLevel,    NVL(budgetval,0)   AS budgetval,    NVL(varinpercent,0)AS varinpercent,   NVL(crmonval,0)    AS crmonval,    NVL(tpmonvalue,0)  AS tpmonvalue,    NVL(totalvalue,0)  AS  totalvalue,     ledgercode,    SUBSTR( ledgercode,1,1)  AS  ledgercode1,    SUBSTR( ledgercode,2,2)  AS  ledgercode2,    SUBSTR( ledgercode,4,2)  AS  ledgercode3,    SUBSTR( ledgercode,6,2)  AS  ledgercode4,    SUBSTR( ledgercode,8,2)  AS  ledgercode5,    SUBSTR( ledgercode,10,2) AS  ledgercode6,   SUBSTR( ledgercode,12,2) AS  ledgercode7,     ledgercode              AS  Statement_V_ID  FROM  t_statement    START WITH parent_id =0    CONNECT BY parent_id = PRIOR node_id  ORDER SIBLINGS BY  ledgercode";
+            string _sqlview = @"CREATE OR REPLACE FORCE VIEW STATEMENT_V AS  SELECT vaf_client_id,    accounttype,    vaf_org_id,    GL_Budget_ID ,    M_PRODUCT_ID ,    C_BPARTNER_ID ,    C_CAMPAIGN_ID ,    C_PROJECT_ID ,    C_ACTIVITY_ID ,    C_SALESREGION_ID ,    C_LOCFROM_ID ,    C_LOCTO_ID ,   USER1_ID ,    USER2_ID ,    USERELEMENT1_ID,    USERELEMENT2_ID ,    C_PERIOD_ID,    ledgertype AS LedgerType,    '.'    || LPAD (' ', LEVEL * 3)    || LEDGERNAME      AS LEDGER,    issummary               AS ShowSummaryLevel,    NVL(budgetval,0)   AS budgetval,    NVL(varinpercent,0)AS varinpercent,   NVL(crmonval,0)    AS crmonval,    NVL(tpmonvalue,0)  AS tpmonvalue,    NVL(totalvalue,0)  AS  totalvalue,     ledgercode,    SUBSTR( ledgercode,1,1)  AS  ledgercode1,    SUBSTR( ledgercode,2,2)  AS  ledgercode2,    SUBSTR( ledgercode,4,2)  AS  ledgercode3,    SUBSTR( ledgercode,6,2)  AS  ledgercode4,    SUBSTR( ledgercode,8,2)  AS  ledgercode5,    SUBSTR( ledgercode,10,2) AS  ledgercode6,   SUBSTR( ledgercode,12,2) AS  ledgercode7,     ledgercode              AS  Statement_V_ID  FROM  t_statement    START WITH parent_id =0    CONNECT BY parent_id = PRIOR node_id  ORDER SIBLINGS BY  ledgercode";
             DB.ExecuteQuery(_sqlview, null, null);
         }
         private void CreateBalanceLine()
@@ -662,15 +662,15 @@ namespace ViennaAdvantage.Process
             {
                 sql.Append(" and e.UserElement2_ID=" + _UserElement2_ID + "");
             }
-            if (_AD_OrgTrx_ID != 0)
+            if (_VAF_OrgTrx_ID != 0)
             {
-                sql.Append(" and e.AD_OrgTrx_ID=" + _AD_OrgTrx_ID + "");
+                sql.Append(" and e.VAF_OrgTrx_ID=" + _VAF_OrgTrx_ID + "");
             }
             if (_AccountType != "")
             {
                 sql.Append(" and e.AccountType=" + _AccountType + "");
             }
-            //if (_GL_Budget_ID == 0 && _C_BPartner_ID == 0 && _AD_OrgTrx_ID == 0 && _UserElement2_ID == 0 && _UserElement1_ID == 0 && _User1_ID == 0 && _User2_ID == 0 &&
+            //if (_GL_Budget_ID == 0 && _C_BPartner_ID == 0 && _VAF_OrgTrx_ID == 0 && _UserElement2_ID == 0 && _UserElement1_ID == 0 && _User1_ID == 0 && _User2_ID == 0 &&
             //    _C_LocFrom_ID == 0 && _C_LocTo_ID == 0 && _C_SalesRegion_ID == 0 && _C_Activity_ID == 0 && _C_Campaign_ID == 0 && _C_Project_ID == 0 && _C_BPartner_ID == 0 &&
             //    _GL_Budget_ID == 0 && _M_Product_ID =0)
             //{
@@ -739,15 +739,15 @@ namespace ViennaAdvantage.Process
             {
                 sql.Append(" and UserElement2_ID=" + _UserElement2_ID + "");
             }
-            if (_AD_OrgTrx_ID != 0 )
+            if (_VAF_OrgTrx_ID != 0 )
             {
-                sql.Append(" and AD_OrgTrx_ID=" + _AD_OrgTrx_ID + "");
+                sql.Append(" and VAF_OrgTrx_ID=" + _VAF_OrgTrx_ID + "");
             }
             if (_AccountType != "")
             {
                 sql.Append(" and AccountType=" + _AccountType + "");
             }
-            //if (_GL_Budget_ID == 0 && _C_BPartner_ID == 0 && _AD_OrgTrx_ID == 0 && _UserElement2_ID == 0 && _UserElement1_ID == 0 && _User1_ID == 0 && _User2_ID == 0 &&
+            //if (_GL_Budget_ID == 0 && _C_BPartner_ID == 0 && _VAF_OrgTrx_ID == 0 && _UserElement2_ID == 0 && _UserElement1_ID == 0 && _User1_ID == 0 && _User2_ID == 0 &&
             //    _C_LocFrom_ID == 0 && _C_LocTo_ID == 0 && _C_SalesRegion_ID == 0 && _C_Activity_ID == 0 && _C_Campaign_ID == 0 && _C_Project_ID == 0 && _C_BPartner_ID == 0 &&
             //    _GL_Budget_ID == 0 && _M_Product_ID =0)
             //{
@@ -829,9 +829,9 @@ namespace ViennaAdvantage.Process
                 {
                     _UserElement2_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("AD_OrgTrx_ID"))
+                else if (name.Equals("VAF_OrgTrx_ID"))
                 {
-                    _AD_OrgTrx_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    _VAF_OrgTrx_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("AccountType"))
                 {

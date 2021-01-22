@@ -20,7 +20,7 @@ public X_CM_ChatType (Context ctx, int CM_ChatType_ID, Trx trxName) : base (ctx,
 {
 /** if (CM_ChatType_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetCM_ChatType_ID (0);
 SetName (null);
 }
@@ -30,7 +30,7 @@ public X_CM_ChatType (Ctx ctx, int CM_ChatType_ID, Trx trxName) : base (ctx, CM_
 {
 /** if (CM_ChatType_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetCM_ChatType_ID (0);
 SetName (null);
 }
@@ -72,7 +72,7 @@ static X_CM_ChatType()
 //static long serialVersionUID 27562514368535L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051746L;
-/** AD_Table_ID=874 */
+/** VAF_TableView_ID=874 */
 public static int Table_ID;
  // =874;
 
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_CM_ChatType[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -162,8 +162,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** ModerationType AD_Reference_ID=395 */
-public static int MODERATIONTYPE_AD_Reference_ID=395;
+/** ModerationType VAF_Control_Ref_ID=395 */
+public static int MODERATIONTYPE_VAF_Control_Ref_ID=395;
 /** After Publishing = A */
 public static String MODERATIONTYPE_AfterPublishing = "A";
 /** Before Publishing = B */

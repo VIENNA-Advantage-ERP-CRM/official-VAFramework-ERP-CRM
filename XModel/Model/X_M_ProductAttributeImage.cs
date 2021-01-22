@@ -26,7 +26,7 @@ public X_M_ProductAttributeImage (Ctx ctx, IDataReader dr, Trx trxName) : base(c
  added by ->Harwinder */
 static X_M_ProductAttributeImage(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27757178044507L;/** Last Updated Timestamp 9/28/2016 2:22:07 PM */
-public static long updatedMS = 1475052727718L;/** AD_Table_ID=1001001 */
+public static long updatedMS = 1475052727718L;/** VAF_TableView_ID=1001001 */
 public static int Table_ID; // =1001001;
 /** TableName=M_ProductAttributeImage */
 public static String Table_Name="M_ProductAttributeImage";
@@ -45,11 +45,11 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_M_ProductAttributeImage[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID){if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);else
-Set_Value ("AD_Image_ID", AD_Image_ID);}/** Get Image.
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID){if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);else
+Set_Value ("VAF_Image_ID", VAF_Image_ID);}/** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() {Object ii = Get_Value("AD_Image_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
+public int GetVAF_Image_ID() {Object ii = Get_Value("VAF_Image_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
 @param Export_ID Export */
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
 @return Export */

@@ -17,13 +17,13 @@ namespace VIS.Classes
 
     public class AcctViewerDataTabel
     {
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public string TableName { get; set; }
     }
 
     public class AcctViewerDataOrg
     {
-        public int AD_Org_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
         public string OrgName { get; set; }
     }
 

@@ -40,15 +40,15 @@ namespace VAdvantage.Model
         /// Get Chats Of Table - of client in context
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <returns> array of chats</returns>
-        public static MChat[] GetOfTable(Ctx ctx, int AD_Table_ID)
+        public static MChat[] GetOfTable(Ctx ctx, int VAF_TableView_ID)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             List<MChat> list = new List<MChat>();
             //
             String sql = "SELECT * FROM CM_Chat "
-                + "WHERE AD_Client_ID=" + AD_Client_ID + " AND AD_Table_ID=" + AD_Table_ID + " ORDER BY Record_ID";
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " ORDER BY Record_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -82,16 +82,16 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">AD_Table_ID table</param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID table</param>
         /// <param name="Record_ID">Record_ID record</param>
         /// <param name="Description">Description description</param>
         /// <param name="trxName">trxName transaction</param>
-        public MChat(Ctx ctx, int AD_Table_ID, int Record_ID,
+        public MChat(Ctx ctx, int VAF_TableView_ID, int Record_ID,
         String Description, Trx trxName)
             : this(ctx, 0, trxName)
         {
             //set tableID
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             //set record id
             SetRecord_ID(Record_ID);
             //set discription
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
             if (CM_Chat_ID == 0)
             {
                 //set table id
-                //  SetAD_Table_ID(0);
+                //  SetVAF_TableView_ID(0);
                 // SetRecord_ID(0);
                 SetConfidentialType(CONFIDENTIALTYPE_PublicInformation);//set confidential type 
                 SetModerationType(MODERATIONTYPE_NotModerated);//set modrate
@@ -191,7 +191,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                base.SetDescription(GetAD_Table_ID() + "#" + GetRecord_ID());
+                base.SetDescription(GetVAF_TableView_ID() + "#" + GetRecord_ID());
             }
         }
 
@@ -259,7 +259,7 @@ namespace VAdvantage.Model
         "<td>&nbsp;</td>" +
       "</tr>" +
       "<tr>" +
-        "<td width='76px' class='grey'>" + GetCtx().GetAD_User_Name() + " :</td>" +//Show the Login User Name
+        "<td width='76px' class='grey'>" + GetCtx().GetVAF_UserContact_Name() + " :</td>" +//Show the Login User Name
         "<td width='100%' Style='text-align:left' ><hr /></td>" +
       "</tr>" +
       "<tr>" +
@@ -281,11 +281,11 @@ namespace VAdvantage.Model
                     //{
 
                     //    //_createdDate
-                    //    data += ctx.GetAD_User_Name() + ":__________\n  " + _createdDate.Date+"\n\n" + entry.GetCharacterData();
+                    //    data += ctx.GetVAF_UserContact_Name() + ":__________\n  " + _createdDate.Date+"\n\n" + entry.GetCharacterData();
                     //}
                     //else
                     //{
-                    //    data1 += "\n\n" + ctx.GetAD_User_Name() + ":_____________________\n        " + _createdDate.Date + "\n\n" + entry.GetCharacterData();
+                    //    data1 += "\n\n" + ctx.GetVAF_UserContact_Name() + ":_____________________\n        " + _createdDate.Date + "\n\n" + entry.GetCharacterData();
                     //}
                 }
             }

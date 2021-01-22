@@ -42,8 +42,8 @@
                 if (this.selectedRow.recordversion > 1) {
                     this.selectedRow.RID = this.record_ID;
                     this.selectedRow.TName = this.curTab.vo.TableName;
-                    this.selectedRow.TabID = this.curTab.vo.AD_Tab_ID;
-                    this.selectedRow.TblID = this.curTab.vo.AD_Table_ID;
+                    this.selectedRow.TabID = this.curTab.vo.VAF_Tab_ID;
+                    this.selectedRow.TblID = this.curTab.vo.VAF_TableView_ID;
                     var self = this;
                     $.ajax({
                         type: 'POST',

@@ -98,9 +98,9 @@ namespace VAdvantage.Print
             //if (m_valid && m_barcode != null)
             //{
             //    p_info = "BarCodeType=" + type;
-            //    if (item.GetAD_PrintFont_ID() != 0)
+            //    if (item.GetVAF_Print_Rpt_Font_ID() != 0)
             //    {
-            //        MPrintFont mFont = MPrintFont.Get(item.GetAD_PrintFont_ID());
+            //        MPrintFont mFont = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
             //        if (mFont != null)
             //        {
             //            m_barcode.FontName = mFont.GetFont().Name;

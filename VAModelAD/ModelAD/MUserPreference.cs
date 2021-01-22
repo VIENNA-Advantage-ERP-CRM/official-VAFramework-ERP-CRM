@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_UserPreference
+ * Class Used     : X_VAF_UserPref_Info
  * Chronological Development
  * 
  * Veena Pandey     15-May-2009
@@ -22,7 +22,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// User Preference Model
     /// </summary>
-    public class MUserPreference : X_AD_UserPreference
+    public class MUserPreference : X_VAF_UserPref_Info
     {
         //	Logger						
         private static VLogger _log = VLogger.GetVLogger(typeof(MUserPreference).FullName);
@@ -31,12 +31,12 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_UserPreference_ID">id</param>
+        /// <param name="VAF_UserPref_Info_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MUserPreference(Ctx ctx, int AD_UserPreference_ID, Trx trxName)
-            : base(ctx, AD_UserPreference_ID, trxName)
+        public MUserPreference(Ctx ctx, int VAF_UserPref_Info_ID, Trx trxName)
+            : base(ctx, VAF_UserPref_Info_ID, trxName)
         {
-            if (AD_UserPreference_ID == 0)
+            if (VAF_UserPref_Info_ID == 0)
             {
                 SetIsAutoCommit(true);
                 SetIsShowAcct(false);
@@ -62,10 +62,10 @@ namespace VAdvantage.Model
         /// <param name="user">user </param>
         /// <param name="createNew">create new if not found</param>
         /// <returns>user preference</returns>
-        public static MUserPreference GetOfUser(X_AD_User user, bool createNew)
+        public static MUserPreference GetOfUser(X_VAF_UserContact user, bool createNew)
         {
             MUserPreference retValue = null;
-            String sql = "SELECT * FROM AD_UserPreference WHERE AD_User_ID='" + user.GetAD_User_ID() + "'";
+            String sql = "SELECT * FROM VAF_UserPref_Info WHERE VAF_UserContact_ID='" + user.GetVAF_UserContact_ID() + "'";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             {
                 retValue = new MUserPreference(user.GetCtx(), 0, null);
                 retValue.SetClientOrg(user);
-                retValue.SetAD_User_ID(user.GetAD_User_ID());
+                retValue.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                 retValue.Save();
             }
             return retValue;
@@ -93,9 +93,9 @@ namespace VAdvantage.Model
         public static MUserPreference GetOfUser(PO user, bool createNew)
         {
             MUserPreference retValue = null;
-            int AD_User_ID = (int)user.Get_Value("AD_User_ID");
+            int VAF_UserContact_ID = (int)user.Get_Value("VAF_UserContact_ID");
 
-            String sql = "SELECT * FROM AD_UserPreference WHERE AD_User_ID='" + AD_User_ID + "'";
+            String sql = "SELECT * FROM VAF_UserPref_Info WHERE VAF_UserContact_ID='" + VAF_UserContact_ID + "'";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
             {
                 retValue = new MUserPreference(user.GetCtx(), 0, null);
                 retValue.SetClientOrg(user);
-                retValue.SetAD_User_ID(AD_User_ID);
+                retValue.SetVAF_UserContact_ID(VAF_UserContact_ID);
                 retValue.Save();
             }
             return retValue;
@@ -123,13 +123,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set User
         /// </summary>
-        /// <param name="AD_User_ID">user id</param>
-        public new void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user id</param>
+        public new void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID == 0)
-                Set_ValueNoCheck("AD_User_ID", 0);
+            if (VAF_UserContact_ID == 0)
+                Set_ValueNoCheck("VAF_UserContact_ID", 0);
             else
-                base.SetAD_User_ID(AD_User_ID);
+                base.SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MUserPreference[")
                 .Append(Get_ID())
-                .Append(",AD_User_ID=").Append(GetAD_User_ID())
+                .Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
                 .Append(",AutoCommit=").Append(IsAutoCommit())
                 .Append(",ShowAcct=").Append(IsShowAcct())
                 .Append(",ShowAdv=").Append(IsShowAdvanced())

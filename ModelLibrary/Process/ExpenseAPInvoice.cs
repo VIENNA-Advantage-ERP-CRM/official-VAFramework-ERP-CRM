@@ -82,7 +82,7 @@ namespace VAdvantage.Process
             StringBuilder sql = new StringBuilder("SELECT * "
                 + "FROM S_TimeExpense e "
                 + "WHERE e.Processed='Y'"
-                + " AND e.AD_Client_ID=@param1");				//	#1
+                + " AND e.VAF_Client_ID=@param1");				//	#1
             if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
             {
                 index++;
@@ -119,8 +119,8 @@ namespace VAdvantage.Process
             {
                 //pstmt = DataBase.prepareStatement (sql.toString (), get_TrxName());
                 int par = 0;
-                //pstmt.setInt(par++, getAD_Client_ID());
-                param[0] = new SqlParameter("@param1", GetAD_Client_ID());
+                //pstmt.setInt(par++, getVAF_Client_ID());
+                param[0] = new SqlParameter("@param1", GetVAF_Client_ID());
                 if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
                 {
                     par++;
@@ -139,7 +139,7 @@ namespace VAdvantage.Process
                     //pstmt.setTimestamp (par++, _DateTo);
                     param[par] = new SqlParameter("@param4", _DateTo);
                 }
-                //ResultSet rs = pstmt.executeQuery (); 
+                //ResultSet rs = pstmt.executeQuery ();
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -162,17 +162,6 @@ namespace VAdvantage.Process
                             log.Info("New Invoice for " + bp);
                             invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
 
-
-                            invoice.SetBPartner(bp);
-                            if (invoice.GetC_BPartner_Location_ID() == 0)
-                            {
-                                log.Log(Level.SEVERE, "No BP Location: " + bp);
-                                AddLog(0, te.GetDateReport(),
-                                    null, "No Location: " + te.GetDocumentNo() + " " + bp.GetName());
-                                invoice = null;
-                                break;
-                            }
-
                             // Siddheshwar: added a code to check for payment method if null
                             if (bp.GetVA009_PO_PaymentMethod_ID() <= 0)
                             {
@@ -191,7 +180,6 @@ namespace VAdvantage.Process
                                         {
                                             bpNameNoPM += bp.GetName() + ", ";
                                         }
-                                        return Msg.GetMsg(GetCtx(), "NoPayMethEmp") + bpNameNoPM;
                                     }
 
                                 }
@@ -201,24 +189,15 @@ namespace VAdvantage.Process
 
                                 }
 
+
                             }
                             else
                             {
-                                //JID_1783_1 if active paymentMethod not found ,then dont create the invoice.
-
-                                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID=" + bp.GetVA009_PO_PaymentMethod_ID(), null, Get_Trx())).Equals("Y"))
-                                {
-                                    invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
-                                }
-                                else
-                                {
-                                    return Msg.GetMsg(GetCtx(), "IsActivePaymentMethodInv"); ;
-                                }
+                                invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                             }
+                            //Checking Payment Term
 
-                            // Checking  payment term
-
-                            if (bp.GetPO_PaymentTerm_ID() <= 0)
+                            if (bp.GetC_PaymentTerm_ID() <= 0)
                             {
                                 payterm = GetPaymentTerm(te);
                                 if (payterm <= 0)
@@ -236,7 +215,6 @@ namespace VAdvantage.Process
                                             bpNamePT += bp.GetName() + ", ";
 
                                         }
-                                        return Msg.GetMsg(GetCtx(), "NoPayTerm") + bpNamePT;
                                     }
 
                                 }
@@ -250,39 +228,31 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                //JID_1783_1 if active paymentTerm not found ,then dont create the invoice.
-                                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_PaymentTerm WHERE C_PaymentTerm_ID=" + bp.GetPO_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
-                                {
-                                    invoice.SetC_PaymentTerm_ID(bp.GetPO_PaymentTerm_ID());
-                                }
-                                else
-                                {
-                                    return Msg.GetMsg(GetCtx(), "IsActivePaymentTermInv"); ;
-                                }
+                                invoice.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
                             }
 
-
-                            invoice.SetIsExpenseInvoice(true); //added by arpit asked by Surya Sir on DEC 28,2015                          
-                            invoice.SetClientOrg(te.GetAD_Client_ID(), te.GetAD_Org_ID());
+                            
+                            invoice.SetIsExpenseInvoice(true); //added by arpit asked by Surya Sir on DEC 28,2015
+                            invoice.SetClientOrg(te.GetVAF_Client_ID(), te.GetVAF_Org_ID());
 
                             //invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the document type where Expense Invoice checkbox is true.
                             // String qry = "SELECT C_DocType_ID FROM C_DocType "
-                            //+ "WHERE AD_Client_ID=@param1 AND DocBaseType=@param2"
+                            //+ "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2"
                             //+ " AND IsActive='Y' AND IsExpenseInvoice = 'Y' "
                             //+ "ORDER BY C_DocType_ID DESC ,   IsDefault DESC";
                             String qry = "SELECT C_DocType_ID FROM C_DocType "
-                      + "WHERE AD_Client_ID=" + GetAD_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
-                      + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") "
-                      + " ORDER BY AD_Org_ID Desc, C_DocType_ID DESC ,   IsDefault DESC";
+                      + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
+                      + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") "
+                      + " ORDER BY VAF_Org_ID Desc, C_DocType_ID DESC ,   IsDefault DESC";
 
-                            //int C_DocType_ID = DB.GetSQLValue(null, qry, GetAD_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
+                            //int C_DocType_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
                             int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                             if (C_DocType_ID <= 0)
                             {
                                 log.Log(Level.SEVERE, "Not found for AC_Client_ID="
-                                    + GetAD_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
+                                    + GetVAF_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
                                 return Msg.GetMsg(GetCtx(), "NoDocTypeExpInvoice");
                             }
                             else
@@ -295,7 +265,15 @@ namespace VAdvantage.Process
                             //commented by Arpit on Jan 4,2015       Mentis issue no.   0000310
                             //invoice.SetDocumentNo(te.GetDocumentNo());
                             //
-
+                            invoice.SetBPartner(bp);
+                            if (invoice.GetC_BPartner_Location_ID() == 0)
+                            {
+                                log.Log(Level.SEVERE, "No BP Location: " + bp);
+                                AddLog(0, te.GetDateReport(),
+                                    null, "No Location: " + te.GetDocumentNo() + " " + bp.GetName());
+                                invoice = null;
+                                break;
+                            }
                             invoice.SetM_PriceList_ID(te.GetM_PriceList_ID());
                             invoice.SetSalesRep_ID(te.GetDoc_User_ID());
                             String descr = Msg.Translate(GetCtx(), "S_TimeExpense_ID")
@@ -466,8 +444,7 @@ namespace VAdvantage.Process
         /// <returns></returns>
         public int GetPaymentMethod(MTimeExpense te)
         {
-            //JID_1783_1 add isActive Check
-            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_Client_ID= " + te.GetAD_Client_ID() + " AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") AND IsActive='Y' ORDER BY AD_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") ORDER BY VAF_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
             pm = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry));
             return pm;
         }
@@ -479,8 +456,7 @@ namespace VAdvantage.Process
         /// <returns></returns>
         public int GetPaymentTerm(MTimeExpense te)
         {
-            //JID_1783_1 add isActive Check
-            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_Client_ID= " + te.GetAD_Client_ID() + "  AND AD_Org_ID IN(0, " + te.GetAD_Org_ID() + " ) AND IsActive='Y' ORDER BY AD_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Org_ID IN(0, " + te.GetVAF_Org_ID() + ") ORDER BY VAF_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
             pt = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry1));
             return pt;
         }

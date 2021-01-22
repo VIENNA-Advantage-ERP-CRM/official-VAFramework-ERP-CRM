@@ -76,8 +76,8 @@ namespace VIS.Helpers
 
             int Record_ID = gTableIn.Record_ID;
             string tableName = gTableIn.TableName;
-            int AD_Client_ID = gTableIn.AD_Client_ID;
-            int AD_Org_ID = gTableIn.AD_Org_ID;
+            int VAF_Client_ID = gTableIn.VAF_Client_ID;
+            int VAF_Org_ID = gTableIn.VAF_Org_ID;
 
             key = ctx.GetSecureKey();
 
@@ -157,8 +157,8 @@ namespace VIS.Helpers
 
             CultureInfo currentCultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");// Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseAD_Language());
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");// Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseVAF_Language());
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseVAF_Language());
 
 
 
@@ -218,7 +218,7 @@ namespace VIS.Helpers
              */
                 //	Constants for Created/Updated(By)
                 DateTime now = DateTime.Now;
-                int user = ctx.GetAD_User_ID();
+                int user = ctx.GetVAF_UserContact_ID();
 
                 /**
                  *	for every column
@@ -329,7 +329,7 @@ namespace VIS.Helpers
                                 if (!newDocNo && docNo != null && docNo.Length > 0)
                                     insertDoc = docNo;
                                 else //  get a number from DocType or Table
-                                    insertDoc = MSequence.GetDocumentNo(AD_Client_ID, tableName, null, ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
+                                    insertDoc = MSequence.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
                                 //m_tableName, false, null);	//	no trx
                                 /****************************************Check********************************************************/
                             }
@@ -371,7 +371,7 @@ namespace VIS.Helpers
                         if (value == null || value.Length == 0)
                         {
                             /***************************************Check**************************************************/
-                            value = MSequence.GetDocumentNo(AD_Client_ID, tableName, null, ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
+                            value = MSequence.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
                             //  No Value
                             if (value == null || value.Length == 0)
                             {
@@ -524,7 +524,7 @@ namespace VIS.Helpers
                                         //	rs.updateInt (colRs, iii.intValue()); 		// 	***
                                     }
                                 }
-                                catch (Exception) //  could also be a String (AD_Language, AD_Message)
+                                catch (Exception) //  could also be a String (VAF_Language, VAF_Msg_Lable)
                                 {
                                     if (manualUpdate)
                                         CreateUpdateSql(columnName, GlobalVariable.TO_STRING((string)newVal));
@@ -835,7 +835,7 @@ namespace VIS.Helpers
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
             var m_fields = inn.Fields;
-            int AD_Table_ID = inn.AD_Table_ID;
+            int VAF_TableView_ID = inn.VAF_TableView_ID;
             string whereClause = inn.WhereClause;
             string SQL_Select = inn.SelectSQL;
             bool inserting = inn.Inserting;
@@ -843,7 +843,7 @@ namespace VIS.Helpers
             List<String> UnqFields = inn.UnqFields;
 
             // Table ID of the table where record need to be Inserted/Updated
-            int InsAD_Table_ID = AD_Table_ID;
+            int InsVAF_TableView_ID = VAF_TableView_ID;
             // Record ID from table where record need to be Inserted/Updated
             int InsRecord_ID = Record_ID;
 
@@ -935,7 +935,7 @@ namespace VIS.Helpers
 
             //        //Check value in DB 
             //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
-            //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+            //            + "' AND VAF_Client_ID=" + ctx.GetVAF_Client_ID()));
 
 
             //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
@@ -970,9 +970,9 @@ namespace VIS.Helpers
             if (inn.MaintainVersions)
             {
                 // trx = Trx.Get("VISHistory"+System.DateTime.Now.Ticks);
-                // Get Version table ID from AD_Table
-                InsAD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName = '" + inn.TableName + "_Ver'"));
-                if (InsAD_Table_ID <= 0)
+                // Get Version table ID from VAF_TableView
+                InsVAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + inn.TableName + "_Ver'"));
+                if (InsVAF_TableView_ID <= 0)
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;
@@ -982,16 +982,16 @@ namespace VIS.Helpers
                 }
 
                 InsRecord_ID = Util.GetValueOfInt(inn.VerRecID);
-                versionInfo.AD_Table_ID = AD_Table_ID;
+                versionInfo.VAF_TableView_ID = VAF_TableView_ID;
                 versionInfo.Record_ID = Record_ID;
-                versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
+                versionInfo.VAF_Screen_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
 
                 versionInfo.IsLatestVersion = false;
 
                 // check whether any Document Value type workflow is attached with Version table
-                hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
+                hasDocValWF = GetDocValueWF(ctx, ctx.GetVAF_Client_ID(), InsVAF_TableView_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
 
                 // check applied, no need to check save in case of backdate entry
@@ -1005,7 +1005,7 @@ namespace VIS.Helpers
                         trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
                         ctx.SetContext("VerifyVersionRecord", "Y");
                         int parentWinID = inn.AD_WIndow_ID;
-                        PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, parentWinID, inn.AD_Table_ID, true, out parentWinID);
+                        PO poMas = GetPO(ctx, VAF_TableView_ID, Record_ID, whereClause, trxMas, parentWinID, inn.VAF_TableView_ID, true, out parentWinID);
                         //	No Persistent Object
 
                         if (poMas == null)
@@ -1113,7 +1113,7 @@ namespace VIS.Helpers
             }
 
             int Ver_Window_ID = 0;
-            PO po = GetPO(ctx, InsAD_Table_ID, InsRecord_ID, whereClause, trx, inn.AD_WIndow_ID, inn.AD_Table_ID, inn.MaintainVersions, out Ver_Window_ID);
+            PO po = GetPO(ctx, InsVAF_TableView_ID, InsRecord_ID, whereClause, trx, inn.AD_WIndow_ID, inn.VAF_TableView_ID, inn.MaintainVersions, out Ver_Window_ID);
             //	No Persistent Object
             if (po == null)
             {
@@ -1121,17 +1121,17 @@ namespace VIS.Helpers
             }
 
             // vinay bhatt window id
-            po.SetAD_Window_ID(inn.AD_WIndow_ID);
+            po.SetVAF_Screen_ID(inn.AD_WIndow_ID);
             //      
             // check and set field values based on Master Versions 
             // else execute normally
             bool hasSingleKey = true;
             if (inn.MaintainVersions)
             {
-                MTable tblParent = new MTable(ctx, AD_Table_ID, trx);
+                MTable tblParent = new MTable(ctx, VAF_TableView_ID, trx);
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
-                po.SetAD_Window_ID(Ver_Window_ID);
+                po.SetVAF_Screen_ID(Ver_Window_ID);
                 if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey, versionInfo.IsLatestVersion))
                     return;
             }
@@ -1186,7 +1186,7 @@ namespace VIS.Helpers
             if (inn.MaintainVersions)
             {
                 var masDet = po.GetMasterDetails();
-                po = GetPO(ctx, AD_Table_ID, masDet.Record_ID, whereClause, trx, inn.AD_WIndow_ID, inn.AD_Table_ID, true, out Ver_Window_ID);
+                po = GetPO(ctx, VAF_TableView_ID, masDet.Record_ID, whereClause, trx, inn.AD_WIndow_ID, inn.VAF_TableView_ID, true, out Ver_Window_ID);
                 //	No Persistent Object
                 if (po == null)
                 {
@@ -1199,10 +1199,10 @@ namespace VIS.Helpers
             {
                 MTree tre = new MTree(ctx, inn.TreeID, null);
 
-                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
+                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
                 DB.ExecuteQuery(sql, null, trx);
 
-                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID(), null, trx);
+                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID(), null, trx);
             }
 
             //ErrorLog.FillErrorLog("Table Object", whereClause, "information", VAdvantage.Framework.Message.MessageType.INFORMATION);
@@ -1324,22 +1324,22 @@ namespace VIS.Helpers
         /// check Document Value workflow in Tenant Only
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="_trx"></param>
         /// <returns>true/false</returns>
-        public bool GetDocValueWF(Ctx ctx, int AD_Client_ID, int AD_Table_ID, Trx _trx)
+        public bool GetDocValueWF(Ctx ctx, int VAF_Client_ID, int VAF_TableView_ID, Trx _trx)
         {
             String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
-                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND AD_Table_ID = " + AD_Table_ID + " AND AD_Client_ID = " + AD_Client_ID
-                + " ORDER BY AD_Client_ID, AD_Table_ID";
+                + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND VAF_TableView_ID = " + VAF_TableView_ID + " AND VAF_Client_ID = " + VAF_Client_ID
+                + " ORDER BY VAF_Client_ID, VAF_TableView_ID";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
         }
 
-        private PO GetPO(Ctx ctx, int AD_Table_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int AD_Window_ID)
+        private PO GetPO(Ctx ctx, int VAF_TableView_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int VAF_Screen_ID)
         {
-            MTable table = MTable.Get(ctx, AD_Table_ID);
+            MTable table = MTable.Get(ctx, VAF_TableView_ID);
             PO po = null;
             if (table.IsSingleKey() || Record_ID == 0)
             {
@@ -1349,18 +1349,18 @@ namespace VIS.Helpers
             {
                 po = table.GetPO(ctx, whereClause, trx);
             }
-            AD_Window_ID = table.GetAD_Window_ID();
+            VAF_Screen_ID = table.GetVAF_Screen_ID();
             // Change to get Window ID based on the current window as there can be multiple windows 
 
             // created on one table, so in case of versioning fetched window ID with Name and Tab name
 
             if (isMaintainVer)
             {
-                StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Window WHERE AD_Window_ID = " + CurrWindow_ID)));
-                sbwName.Append(" Version_" + Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Tab WHERE AD_Window_ID = " + CurrWindow_ID + " AND AD_Table_ID = " + CurrTable_ID + " ORDER BY TabLevel")));
-                int VerWin_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE Name='" + sbwName.ToString() + "'", null, trx));
+                StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Screen WHERE VAF_Screen_ID = " + CurrWindow_ID)));
+                sbwName.Append(" Version_" + Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Tab WHERE VAF_Screen_ID = " + CurrWindow_ID + " AND VAF_TableView_ID = " + CurrTable_ID + " ORDER BY TabLevel")));
+                int VerWin_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='" + sbwName.ToString() + "'", null, trx));
                 if (VerWin_ID > 0)
-                    AD_Window_ID = VerWin_ID;
+                    VAF_Screen_ID = VerWin_ID;
             }
             return po;
         }
@@ -1395,7 +1395,7 @@ namespace VIS.Helpers
                     continue;
                 String columnName = field.ColumnName;
 
-                //bool isClientOrgId = columnName == "AD_Client_ID" || columnName == "AD_Org_ID";
+                //bool isClientOrgId = columnName == "VAF_Client_ID" || columnName == "VAF_Org_ID";
 
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1405,6 +1405,11 @@ namespace VIS.Helpers
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
                 }
+
+                if (value == DBNull.Value)
+                    value = null;
+                if (oldValue == DBNull.Value)
+                    oldValue = null;
 
                 //	RowID
                 if (DisplayType.IsDate(field.DisplayType))
@@ -1438,7 +1443,7 @@ namespace VIS.Helpers
                     if (columnName.ToLower() == "created" || columnName.ToLower() == "updated")
                         value = System.DateTime.Now;
                     if (columnName.ToLower() == "createdby" || columnName.ToLower() == "updatedby")
-                        value = ctx.GetAD_User_ID();
+                        value = ctx.GetVAF_UserContact_ID();
                     if (!po.Set_ValueNoCheck(columnName, value))
                     {
                         outt.IsError = true;
@@ -1874,7 +1879,7 @@ namespace VIS.Helpers
         {
             DeleteRecordOut outt = new DeleteRecordOut();
 
-            MTable table = MTable.Get(ctx, dInn.AD_Table_ID);
+            MTable table = MTable.Get(ctx, dInn.VAF_TableView_ID);
             PO po = null;
 
             List<int> singleKeyWhere = dInn.SingleKeyWhere;
@@ -2017,7 +2022,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
+        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int VAF_TableView_ID, List<string> obscureFields)
         {
             WindowRecordOut retVal = new WindowRecordOut();
 
@@ -2029,12 +2034,12 @@ namespace VIS.Helpers
             JTable obj = null;
 
             MSession session = MSession.Get(ctx, true);
-            session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
+            session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 sqlCount, rowCount);
 
             if (sqlIn.tree_id > 0)
             {
-                SetTreeRecordSql(ctx, AD_Table_ID, sqlIn);
+                SetTreeRecordSql(ctx, VAF_TableView_ID, sqlIn);
             }
 
 
@@ -2145,11 +2150,11 @@ namespace VIS.Helpers
         /// Set Tree Record sql in if query is for on demnad tree records
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="sqlIn"></param>
-        private void SetTreeRecordSql(Ctx ctx, int AD_Table_ID, SqlParamsIn sqlIn)
+        private void SetTreeRecordSql(Ctx ctx, int VAF_TableView_ID, SqlParamsIn sqlIn)
         {
-            string tableName = MTable.GetTableName(ctx, AD_Table_ID);
+            string tableName = MTable.GetTableName(ctx, VAF_TableView_ID);
             MTree tree = new MTree(ctx, sqlIn.tree_id, null);
 
             if (sqlIn.tree_id > 0)
@@ -2157,7 +2162,7 @@ namespace VIS.Helpers
 
                 GetChildNodesID(sqlIn.treeNode_ID, tree.GetNodeTableName(), sqlIn.tree_id, tableName);
 
-                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + sqlIn.tree_id;
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND VAF_TreeInfo_ID=" + sqlIn.tree_id;
 
                 string sqlQuery = sqlIn.sql;
                 string sqlDirect = sqlIn.sqlDirect;
@@ -2180,7 +2185,7 @@ namespace VIS.Helpers
             }
             else
             {
-                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
 
                 string sqlQuery = sqlIn.sql;
                 string sqlDirect = sqlIn.sqlDirect;
@@ -2285,18 +2290,18 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
+        internal object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int VAF_TableView_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
             List<JTable> outO = new List<JTable>();
             JTable obj = null;
 
 
             MSession session = MSession.Get(ctx, true);
-            session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
+            session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 sqlCount, rowCount);
 
 
-            string tableName = MTable.GetTableName(ctx, AD_Table_ID);
+            string tableName = MTable.GetTableName(ctx, VAF_TableView_ID);
 
             MTree tree = new MTree(ctx, treeID, null);
 
@@ -2305,7 +2310,7 @@ namespace VIS.Helpers
 
                 GetChildNodesID(treeNodeID, tree.GetNodeTableName(), treeID, tableName);
 
-                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + treeID;
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND VAF_TreeInfo_ID=" + treeID;
 
                 string sqlQuery = sqlIn.sql;
 
@@ -2323,7 +2328,7 @@ namespace VIS.Helpers
             }
             else
             {
-                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND (Parent_ID = " + treeNodeID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND (Parent_ID = " + treeNodeID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
 
                 string sqlQuery = sqlIn.sql;
 
@@ -2421,10 +2426,10 @@ namespace VIS.Helpers
             }
 
 
-            //  string sql = "SELECT node_ID FROM " + tableName + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID = " + currentnode + " AND NODE_ID IN (SELECT " + adtableName + "_ID FROM " + adtableName + " WHERE ISActive='Y' AND IsSummary='Y')";
+            //  string sql = "SELECT node_ID FROM " + tableName + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + currentnode + " AND NODE_ID IN (SELECT " + adtableName + "_ID FROM " + adtableName + " WHERE ISActive='Y' AND IsSummary='Y')";
 
 
-            string sql = "SELECT pr.node_ID FROM " + tableName + "   pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id  WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND mp.ISActive='Y' AND mp.IsSummary='Y'";
+            string sql = "SELECT pr.node_ID FROM " + tableName + "   pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id  WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds == null || ds.Tables[0].Rows.Count > 0)
@@ -2440,14 +2445,14 @@ namespace VIS.Helpers
         int strtreeNodesCount = 1;
         private void GetChildNodesCount(int currentnode, string tableName, int treeID, string adtableName, string whereClause, bool ShowSummaryNodes)
         {
-            //string sql = "SELECT count(*) FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND AD_Tree_ID=" + treeID;
+            //string sql = "SELECT count(*) FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND VAF_TreeInfo_ID=" + treeID;
             //var count = DB.ExecuteScalar(sql);
             //if (count != null && count != DBNull.Value)
             //{
             //    strtreeNodesCount += Util.GetValueOfInt(count);
             //}
 
-            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
+            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             //DataSet ds = DB.ExecuteDataset(sql);
             //if (ds == null || ds.Tables[0].Rows.Count > 0)
@@ -2459,9 +2464,9 @@ namespace VIS.Helpers
             //}
 
 
-            //string sql = "SELECT Node_ID, IsSummary FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND AD_Tree_ID=" + treeID;
+            //string sql = "SELECT Node_ID, IsSummary FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND VAF_TreeInfo_ID=" + treeID;
 
-            string sqls = "SELECT node_ID, " + adtableName + ".IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " " + adtableName + " on pr.Node_ID=" + adtableName + "." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode;
+            string sqls = "SELECT node_ID, " + adtableName + ".IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " " + adtableName + " on pr.Node_ID=" + adtableName + "." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode;
             if (whereClause.Length > 0)
             {
                 sqls = sqls + " AND " + whereClause;
@@ -2473,11 +2478,11 @@ namespace VIS.Helpers
                 strtreeNodesCount += countDs.Tables[0].Rows.Count;
             }
 
-            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
+            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             //DataSet ds = DB.ExecuteDataset(sql);
 
-            sqls = "SELECT node_ID, mp.IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " ";
+            sqls = "SELECT node_ID, mp.IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " ";
             countDs = DB.ExecuteDataset(sqls);
 
             DataRow[] rows = countDs.Tables[0].Select("IsSummary='Y'");
@@ -2500,10 +2505,10 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal int GetRecordCountForTreeNode(string whereClause, Ctx ctx, int AD_Table_ID, int treeID, int treeNodeID, int windowNo, bool ShowSummaryNodes)
+        internal int GetRecordCountForTreeNode(string whereClause, Ctx ctx, int VAF_TableView_ID, int treeID, int treeNodeID, int windowNo, bool ShowSummaryNodes)
         {
             MSession session = MSession.Get(ctx, true);
-            session.QueryLog(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(), AD_Table_ID,
+            session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 "", 0);
 
             MTree tree = new MTree(ctx, treeID, null);
@@ -2517,15 +2522,15 @@ namespace VIS.Helpers
                 strtreeNodesCount = 0;
             }
 
-            if (tree != null && tree.GetAD_Tree_ID() > 0)
+            if (tree != null && tree.GetVAF_TreeInfo_ID() > 0)
             {
                 if (treeNodeID > 0)
                 {
-                    GetChildNodesCount(treeNodeID, tree.GetNodeTableName(), treeID, MTable.GetTableName(ctx, AD_Table_ID), whereClause, ShowSummaryNodes);
+                    GetChildNodesCount(treeNodeID, tree.GetNodeTableName(), treeID, MTable.GetTableName(ctx, VAF_TableView_ID), whereClause, ShowSummaryNodes);
                 }
                 else
                 {
-                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MTable.GetTableName(ctx, AD_Table_ID) + "_ID FROM " + MTable.GetTableName(ctx, AD_Table_ID) + " WHERE  IsSummary='N' ";
+                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MTable.GetTableName(ctx, VAF_TableView_ID) + "_ID FROM " + MTable.GetTableName(ctx, VAF_TableView_ID) + " WHERE  IsSummary='N' ";
 
                     if (whereClause.Length > 0)
                     {
@@ -2591,9 +2596,9 @@ namespace VIS.Helpers
                 return outt;
 
             //Data
-            String sql = "SELECT AD_Column_ID, Updated, UpdatedBy, OldValue, NewValue "
-                + " FROM AD_ChangeLog "
-                + " WHERE AD_Table_ID=" + dse.AD_Table_ID + " AND Record_ID=" + Record_ID
+            String sql = "SELECT VAF_Column_ID, Updated, UpdatedBy, OldValue, NewValue "
+                + " FROM VAF_AlterLog "
+                + " WHERE VAF_TableView_ID=" + dse.VAF_TableView_ID + " AND Record_ID=" + Record_ID
                 + " ORDER BY Updated DESC";
             try
             {
@@ -2618,7 +2623,7 @@ namespace VIS.Helpers
 
             List<String> columnNames = new List<String>();
             outt.Headers = new List<string>();
-            outt.Headers.Add(Msg.Translate(ctx, "AD_Column_ID"));
+            outt.Headers.Add(Msg.Translate(ctx, "VAF_Column_ID"));
             outt.Headers.Add(Msg.Translate(ctx, "NewValue"));
             outt.Headers.Add(Msg.Translate(ctx, "OldValue"));
             outt.Headers.Add(Msg.Translate(ctx, "UpdatedBy"));
@@ -2627,13 +2632,13 @@ namespace VIS.Helpers
             return outt;
         }
 
-        private RecordRow AddLine(int AD_Column_ID, DateTime? Updated, int UpdatedBy,
+        private RecordRow AddLine(int VAF_Column_ID, DateTime? Updated, int UpdatedBy,
          String OldValue, String NewValue, Ctx ctx)
         {
             var line = new RecordRow();
             //	Column
-            MColumn column = MColumn.Get(ctx, AD_Column_ID);
-            line.AD_Column_ID = column.GetName();
+            MColumn column = MColumn.Get(ctx, VAF_Column_ID);
+            line.VAF_Column_ID = column.GetName();
             //
             if (OldValue != null && OldValue.Equals(MChangeLog.NULL))
                 OldValue = null;
@@ -2644,11 +2649,11 @@ namespace VIS.Helpers
             //
             try
             {
-                if (DisplayType.IsText(column.GetAD_Reference_ID()))
+                if (DisplayType.IsText(column.GetVAF_Control_Ref_ID()))
                 {
                     ;
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.YesNo)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.YesNo)
                 {
                     if (OldValue != null)
                     {
@@ -2661,7 +2666,7 @@ namespace VIS.Helpers
                         showNewValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Amount)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Amount)
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_amtFormat.GetFormat(), OldValue);//.fo
@@ -2670,46 +2675,46 @@ namespace VIS.Helpers
                         showNewValue = String.Format(_amtFormat.GetFormat(), NewValue);//.ToString(_amtFormat.GetFormat());//  m_amtFormat
                     //.format (new BigDecimal (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Integer)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Integer)
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_intFormat.GetFormat(), OldValue);//.ToString(_intFormat.GetFormat());// m_intFormat.format (new Integer (OldValue));
                     if (NewValue != null)
                         showNewValue = String.Format(_intFormat.GetFormat(), NewValue);//.ToString(_intFormat.GetFormat());//m_intFormat.format (new Integer (NewValue));
                 }
-                else if (DisplayType.IsNumeric(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsNumeric(column.GetVAF_Control_Ref_ID()))
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_numberFormat.GetFormat(), OldValue);//.ToString(_numberFormat.GetFormat());//m_numberFormat.format (new BigDecimal (OldValue));
                     if (NewValue != null)
                         showNewValue = String.Format(_numberFormat.GetFormat(), NewValue);//.ToString(_numberFormat.GetFormat()); //m_numberFormat.format (new BigDecimal (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Date)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Date)
                 {
                     if (OldValue != null)
                         showOldValue = _dateFormat.Format(OldValue);// m_dateFormat.format (Timestamp.valueOf (OldValue));
                     if (NewValue != null)
                         showNewValue = _dateFormat.Format(NewValue);// m_dateFormat.format (Timestamp.valueOf (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.DateTime)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.DateTime)
                 {
                     if (OldValue != null)
                         showOldValue = _dateTimeFormat.Format(OldValue);// (Timestamp.valueOf (OldValue));
                     if (NewValue != null)
                         showNewValue = _dateTimeFormat.Format(NewValue);// (Timestamp.valueOf (NewValue));
                 }
-                else if (DisplayType.IsLookup(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsLookup(column.GetVAF_Control_Ref_ID()))
                 {
                     MLookup lookup = VAdvantage.Classes.VLookUpFactory.Get(ctx, 0,
-                        AD_Column_ID, column.GetAD_Reference_ID(),
+                        VAF_Column_ID, column.GetVAF_Control_Ref_ID(),
                          column.GetColumnName(),
-                        column.GetAD_Reference_Value_ID(),
+                        column.GetVAF_Control_Ref_Value_ID(),
                         column.IsParent(), null);
 
                     if (OldValue != null)
                     {
                         Object key = OldValue;
-                        if (column.GetAD_Reference_ID() != DisplayType.List
+                        if (column.GetVAF_Control_Ref_ID() != DisplayType.List
                             && column.GetColumnName().EndsWith("_ID"))
                         {
                             try
@@ -2727,7 +2732,7 @@ namespace VIS.Helpers
                     if (NewValue != null)
                     {
                         Object key = NewValue;
-                        if (column.GetAD_Reference_ID() != DisplayType.List
+                        if (column.GetVAF_Control_Ref_ID() != DisplayType.List
                             && column.GetColumnName().EndsWith("_ID"))
                         {
                             try
@@ -2743,7 +2748,7 @@ namespace VIS.Helpers
                             showNewValue = pp.GetName();
                     }
                 }
-                else if (DisplayType.IsLOB(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsLOB(column.GetVAF_Control_Ref_ID()))
                 {
                 }
 
@@ -2769,7 +2774,7 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID, Ctx ctx)
+        internal static CardViewData GetCardViewDetail(int VAF_Screen_ID, int VAF_Tab_ID, Ctx ctx)
         {
             CardViewData cv = new CardViewData();
             cv.IncludedCols = new List<int>();
@@ -2777,8 +2782,8 @@ namespace VIS.Helpers
 
             int AD_CV_ID = -1;
 
-            string sql = "SELECT AD_CardView_ID,AD_Field_ID FROM AD_CardView WHERE AD_Window_ID = " + AD_Window_ID + " AND AD_Tab_ID = " + AD_Tab_ID + " AND AD_USER_ID=" + ctx.GetAD_User_ID()
-                            + " AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " ORDER BY AD_USER_ID  ";
+            string sql = "SELECT VAF_CardView_ID,VAF_Field_ID FROM VAF_CardView WHERE VAF_Screen_ID = " + VAF_Screen_ID + " AND VAF_Tab_ID = " + VAF_Tab_ID + " AND VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID()
+                            + " AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " ORDER BY VAF_USERCONTACT_ID  ";
             IDataReader dr = null;
             try
             {
@@ -2787,26 +2792,26 @@ namespace VIS.Helpers
                 {
                     AD_CV_ID = Convert.ToInt32(dr[0]);
                     cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
-                    cv.AD_CardView_ID = AD_CV_ID;
+                    cv.VAF_CardView_ID = AD_CV_ID;
                 }
                 else
                 {
                     dr.Close();
-                    sql = "SELECT c.AD_CardView_ID, c.AD_Field_ID  FROM AD_CardView c INNER JOIN AD_CardView_Role r ON r.AD_Cardview_ID = r.AD_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
-                                 + " c.AD_Tab_ID=" + AD_Tab_ID + " AND r.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND c.AD_User_ID IS NULL";
+                    sql = "SELECT c.VAF_CardView_ID, c.VAF_Field_ID  FROM VAF_CardView c INNER JOIN VAF_CardView_Role r ON r.VAF_CardView_ID = r.VAF_CardView_ID WHERE c.VAF_Screen_ID=" + VAF_Screen_ID + " AND "
+                                 + " c.VAF_Tab_ID=" + VAF_Tab_ID + " AND r.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND c.VAF_UserContact_ID IS NULL";
                     dr = DB.ExecuteReader(sql);
                     if (dr.Read())
                     {
                         AD_CV_ID = Convert.ToInt32(dr[0]);
                         cv.FieldGroupID = VAdvantage.Utility.Util.GetValueOfInt(dr[1]);
-                        cv.AD_CardView_ID = AD_CV_ID;
+                        cv.VAF_CardView_ID = AD_CV_ID;
                     }
                 }
                 dr.Close();
 
                 if (AD_CV_ID > 0)
                 {
-                    sql = "SELECT AD_Field_ID FROM AD_CardView_Column WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
+                    sql = "SELECT VAF_Field_ID FROM VAF_CardView_Column WHERE IsActive='Y' AND VAF_CardView_ID = " + AD_CV_ID + " ORDER BY SeqNo";
                     dr = DB.ExecuteReader(sql);
                     while (dr.Read())
                     {
@@ -2816,7 +2821,7 @@ namespace VIS.Helpers
                 }
                 if (AD_CV_ID > 0)
                 {
-                    sql = "SELECT ConditionValue,Color  FROM AD_CardView_Condition WHERE IsActive='Y' AND AD_CardView_ID = " + AD_CV_ID + " ORDER BY AD_CardView_Condition_ID ";
+                    sql = "SELECT ConditionValue,Color  FROM VAF_CardView_Condition WHERE IsActive='Y' AND VAF_CardView_ID = " + AD_CV_ID + " ORDER BY VAF_CardView_Condition_ID ";
                     dr = DB.ExecuteReader(sql);
                     while (dr.Read())
                     {
@@ -2856,13 +2861,13 @@ namespace VIS.Helpers
         //    OracleParameter pNodeID = new OracleParameter("nodeID", node_ID);
         //    cmd.Parameters.Add(pNodeID);
 
-        //    OracleParameter pAdLanguage = new OracleParameter("adlanguage", ctx.GetAD_Language());
+        //    OracleParameter pAdLanguage = new OracleParameter("adlanguage", ctx.GetVAF_Language());
         //    cmd.Parameters.Add(pAdLanguage);
 
         //    OracleParameter pNodeTableName = new OracleParameter("nodeTableName", tree.GetNodeTableName());
         //    cmd.Parameters.Add(pNodeTableName);
 
-        //    string tableName = MTable.GetTableName(ctx, tree.GetAD_Table_ID());
+        //    string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
 
         //    OracleParameter pRecordTableName = new OracleParameter("recordTableName", tableName);
         //    cmd.Parameters.Add(pRecordTableName);
@@ -2931,8 +2936,8 @@ namespace VIS.Helpers
 
             object otput = "";
 
-            string tableName = MTable.GetTableName(ctx, tree.GetAD_Table_ID());
-            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetAD_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
+            string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
+            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetVAF_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
 
             otput = DB.ExecuteScalar(sql, null, null);
 
@@ -2956,30 +2961,30 @@ namespace VIS.Helpers
 
         }
 
-        public void InsertUpdateDefaultSearch(Ctx _ctx, int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
+        public void InsertUpdateDefaultSearch(Ctx _ctx, int VAF_Tab_ID, int VAF_TableView_ID, int VAF_UserContact_ID, int? VAF_UserSearch_ID)
         {
 
-            if (AD_UserQuery_ID == 0 || AD_UserQuery_ID == null)
+            if (VAF_UserSearch_ID == 0 || VAF_UserSearch_ID == null)
             {
-                DB.ExecuteQuery("DELETE FROM AD_DefaultUserQuery WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND AD_User_ID=" + AD_User_ID);
+                DB.ExecuteQuery("DELETE FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID);
                 return;
             }
 
 
-            string sql = "SELECT AD_DefaultUserQuery_ID FROM AD_DefaultUserQuery WHERE AD_Tab_ID=" + AD_Tab_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND AD_User_ID=" + AD_User_ID;
+            string sql = "SELECT VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID;
             object id = DB.ExecuteScalar(sql);
-            int AD_DefaultUserQuery_ID = 0;
+            int VAF_DefaultUserQuery_ID = 0;
             if (id != null && id != DBNull.Value)
             {
-                AD_DefaultUserQuery_ID = Convert.ToInt32(id);
+                VAF_DefaultUserQuery_ID = Convert.ToInt32(id);
             }
 
 
-            X_AD_DefaultUserQuery userQuery = new X_AD_DefaultUserQuery(_ctx, AD_DefaultUserQuery_ID, null);
-            userQuery.SetAD_Tab_ID(AD_Tab_ID);
-            userQuery.SetAD_Table_ID(AD_Table_ID);
-            userQuery.SetAD_User_ID(AD_User_ID);
-            userQuery.SetAD_UserQuery_ID(Convert.ToInt32(AD_UserQuery_ID));
+            X_VAF_DefaultUserQuery userQuery = new X_VAF_DefaultUserQuery(_ctx, VAF_DefaultUserQuery_ID, null);
+            userQuery.SetVAF_Tab_ID(VAF_Tab_ID);
+            userQuery.SetVAF_TableView_ID(VAF_TableView_ID);
+            userQuery.SetVAF_UserContact_ID(VAF_UserContact_ID);
+            userQuery.SetVAF_UserSearch_ID(Convert.ToInt32(VAF_UserSearch_ID));
             userQuery.Save();
 
 

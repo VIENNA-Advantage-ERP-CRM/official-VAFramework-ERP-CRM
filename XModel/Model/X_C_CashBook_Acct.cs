@@ -80,7 +80,7 @@ static X_C_CashBook_Acct()
 //static long serialVersionUID 27562514371090L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054301L;
-/** AD_Table_ID=409 */
+/** VAF_TableView_ID=409 */
 public static int Table_ID;
  // =409;
 

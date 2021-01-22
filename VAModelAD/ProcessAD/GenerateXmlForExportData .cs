@@ -31,7 +31,7 @@ namespace VAdvantage.Process
         //string Database_Schema = "DataBaseSchema";
 
 
-        private int _AD_ModuleInfo_ID = 0;
+        private int _VAF_ModuleInfo_ID = 0;
 
         private String _FilePath = "";
 
@@ -47,7 +47,7 @@ namespace VAdvantage.Process
 
         private DataSet ds; //Stores all the fetched records
 
-        String[] _ExceptionTables = new String[] { "AD_Role", "AD_User" };   //Stores tables which are not be included
+        String[] _ExceptionTables = new String[] { "VAF_Role", "VAF_UserContact" };   //Stores tables which are not be included
 
         // lock for simultaneous process
         private object _lock = new object();
@@ -57,12 +57,12 @@ namespace VAdvantage.Process
         /// </summary>
         protected override void Prepare()
         {
-            //            int _AD_ExportData_ID = GetRecord_ID();
-            //            IDataReader dr = DB.ExecuteReader(@" SELECT AD_ModuleInfo_ID from ad_ExportDAta 
-            //                                                  WHERE AD_ExportData_ID =" + _AD_ExportData_ID);
+            //            int _VAF_ExportData_ID = GetRecord_ID();
+            //            IDataReader dr = DB.ExecuteReader(@" SELECT VAF_ModuleInfo_ID from VAF_ExportData 
+            //                                                  WHERE VAF_ExportData_ID =" + _VAF_ExportData_ID);
 
             //            if (dr.Read())
-            //                _AD_ModuleInfo_ID = Convert.ToInt32(dr[0].ToString());
+            //                _VAF_ModuleInfo_ID = Convert.ToInt32(dr[0].ToString());
             //            dr.Close();
 
             ProcessInfoParameter[] para = GetParameter();
@@ -73,9 +73,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_ModuleInfo_ID"))
+                else if (name.Equals("VAF_ModuleInfo_ID"))
                 {
-                    _AD_ModuleInfo_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    _VAF_ModuleInfo_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace VAdvantage.Process
                 //Parse through the marked record one by one
                 foreach (ExportDataRecords exportdata in _ExportRecordList)
                 {
-                    MTable currentTable = MTable.Get(GetCtx(), exportdata.AD_Table_ID);
+                    MTable currentTable = MTable.Get(GetCtx(), exportdata.VAF_TableView_ID);
                     if (currentTable == null)   //should not be null
                     {
                         continue;   //skip the record and move further for next record
@@ -141,7 +141,7 @@ namespace VAdvantage.Process
                 }
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
                 prefix = module.GetPrefix();
                 Module_Name = module.GetName();
                 versionNo = module.GetVersionNo();
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
         }
 
         String ModulePath = String.Empty;
-        X_AD_ModuleInfo module = null;
+        X_VAF_ModuleInfo module = null;
 
         private String ManageExportID(int PrimaryKey, String tableName, String refTable)
         {
@@ -221,11 +221,11 @@ namespace VAdvantage.Process
                     refTable = tableName;
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
                 if (expID == -1)
                 {
                     throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
@@ -252,11 +252,11 @@ namespace VAdvantage.Process
                 //    refTable = tableName;
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), tableName, null);
+                int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
                 if (expID == -1)
                 {
                     throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
@@ -313,13 +313,13 @@ namespace VAdvantage.Process
             string tableName = _tableName;
 
             //check if the record is already exported. 
-            var res = _ExecutedRecordList.Where((a) => a.AD_Table_ID == refRecord.AD_Table_ID)
+            var res = _ExecutedRecordList.Where((a) => a.VAF_TableView_ID == refRecord.VAF_TableView_ID)
                                          .Where((a) => a.Record_ID == refRecord.Record_ID);
 
             //if (res.Count() <= 0)
             {
                 _ExecutedRecordList.Add(refRecord);
-                String chkRef = "SELECT * FROM AD_Reference WHERE IsActive = 'Y' AND AD_Reference_ID =" + refVID;
+                String chkRef = "SELECT * FROM VAF_Control_Ref WHERE IsActive = 'Y' AND VAF_Control_Ref_ID =" + refVID;
                 String ValidationType = "";
                 DataSet tmpDS = DB.ExecuteDataset(chkRef);
                 if (tmpDS.Tables[0].Rows[0]["ValidationType"] != DBNull.Value)
@@ -333,11 +333,11 @@ namespace VAdvantage.Process
 
                 DataSet tempRefDS = tmpDS.Copy();
 
-                if (!String.IsNullOrEmpty(ValidationType)) //if reference entry is found, chck furhter for ad_ref_list records
+                if (!String.IsNullOrEmpty(ValidationType)) //if reference entry is found, chck furhter for VAF_CtrlRef_List records
                 {
-                    String refTableName = ValidationType.Equals("L") ? "AD_Ref_List" : "AD_Ref_Table";
+                    String refTableName = ValidationType.Equals("L") ? "VAF_CtrlRef_List" : "VAF_CtrlRef_Table";
 
-                    tmpDS = DB.ExecuteDataset(GetSql(refTableName, refVID, "AD_Reference_ID"));
+                    tmpDS = DB.ExecuteDataset(GetSql(refTableName, refVID, "VAF_Control_Ref_ID"));
                     tmpDS.Tables[0].TableName = refTableName;
 
                     for (int a = 0; a < tmpDS.Tables[0].Rows.Count; a++)
@@ -348,14 +348,14 @@ namespace VAdvantage.Process
                             int PrimaryID = 0;
                             if (ValidationType.Equals("T"))
                             {
-                                tempStore = "AD_Reference_ID";
+                                tempStore = "VAF_Control_Ref_ID";
                                 PrimaryID = int.Parse(tmpDS.Tables[0].Rows[a][tempStore].ToString());
 
                                 refTable = new MRefTable(GetCtx(), tmpDS.Tables[0].Rows[a], null);
 
                                 if (tmpDS.Tables[0].Rows[a]["Export_ID"].Equals(DBNull.Value))
                                 {
-                                    tmpDS.Tables[0].Rows[a]["Export_ID"] = ManageExportID(refVID, tableName, "AD_Ref_Table");
+                                    tmpDS.Tables[0].Rows[a]["Export_ID"] = ManageExportID(refVID, tableName, "VAF_CtrlRef_Table");
                                 }
                             }
                             else
@@ -402,7 +402,7 @@ namespace VAdvantage.Process
             {
 
                 //check if the record is already exported. 
-                var res = _ExecutedRecordList.Where((a) => a.AD_Table_ID == exportdata.AD_Table_ID)
+                var res = _ExecutedRecordList.Where((a) => a.VAF_TableView_ID == exportdata.VAF_TableView_ID)
                                              .Where((a) => a.Record_ID == exportdata.Record_ID)
                                              .Where((a) => a.AD_ColOne_ID == exportdata.AD_ColOne_ID);
 
@@ -425,7 +425,7 @@ namespace VAdvantage.Process
                             if (columns.Length > 0)
                             {
 
-                                string sql = GetSql(currentTable.GetAD_Table_ID(), currentTable.GetTableName(), exportdata);
+                                string sql = GetSql(currentTable.GetVAF_TableView_ID(), currentTable.GetTableName(), exportdata);
 
                                 DataSet tmpDS = DB.ExecuteDataset(sql, null);
 
@@ -434,7 +434,7 @@ namespace VAdvantage.Process
                                     //sql = sql.Substring(sql.IndexOf("WHERE"));
                                     if (tmpDS != null)
                                     {
-                                        deleteSqlExp.Add("delete from AD_ExportData Where record_ID = " + exportdata.Record_ID + " and ad_table_id = " + exportdata.AD_Table_ID + " and ad_Moduleinfo_id = " + _AD_ModuleInfo_ID);
+                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and VAF_ModuleInfo_id = " + _VAF_ModuleInfo_ID);
                                     }
                                     return "";
                                 }
@@ -449,11 +449,11 @@ namespace VAdvantage.Process
                                 for (int cols = 0; cols <= columns.Length - 1; cols++)
                                 {
                                     string colName = columns[cols].GetColumnName();
-                                    int refVID = columns[cols].GetAD_Reference_Value_ID();
-                                    int refID = columns[cols].GetAD_Reference_ID();
+                                    int refVID = columns[cols].GetVAF_Control_Ref_Value_ID();
+                                    int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
-                                    if (tableName == "AD_Workflow" && colName == "AD_WF_Node_ID")
+                                    if (tableName == "AD_Workflow" && colName == "VAF_WFlow_Node_ID")
                                     {
                                         continue;
                                     }
@@ -470,7 +470,7 @@ namespace VAdvantage.Process
                                                     {
                                                         MTable fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
                                                         if (fkTable != null)
-                                                            GetForeignData(fkTable, new ExportDataRecords() { AD_Table_ID = fkTable.GetAD_Table_ID(), Record_ID = Convert.ToInt32(colValue) });
+                                                            GetForeignData(fkTable, new ExportDataRecords() { VAF_TableView_ID = fkTable.GetVAF_TableView_ID(), Record_ID = Convert.ToInt32(colValue) });
                                                     }
                                                 }
                                             }
@@ -478,16 +478,16 @@ namespace VAdvantage.Process
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
                                             Object colValue = tmpDS.Tables[0].Rows[0][colName];
-                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, AD_Table_ID = MTable.Get_Table_ID("AD_Reference") }, "AD_Reference");
+                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
 
                                             if (refTable != null && colValue != null && colValue.ToString() != "")
                                             {
 
                                                 try
                                                 {
-                                                    MTable tbl = MTable.Get(GetCtx(), refTable.GetAD_Table_ID());
+                                                    MTable tbl = MTable.Get(GetCtx(), refTable.GetVAF_TableView_ID());
 
-                                                    //string tName  =  MTable.GetTableName(GetCtx(), refTable.GetAD_Table_ID());
+                                                    //string tName  =  MTable.GetTableName(GetCtx(), refTable.GetVAF_TableView_ID());
                                                     string cName = MColumn.GetColumnName(GetCtx(), refTable.GetColumn_Key_ID());
 
                                                     int recordId;
@@ -505,7 +505,7 @@ namespace VAdvantage.Process
 
                                                     ds.AddOrCopy(temp, tbl.GetTableName(), recordId, 0, null, rowNum++);
 
-                                                    GetForeignData(tbl, new ExportDataRecords() { AD_Table_ID = tbl.GetAD_Table_ID(), Record_ID = recordId });
+                                                    GetForeignData(tbl, new ExportDataRecords() { VAF_TableView_ID = tbl.GetVAF_TableView_ID(), Record_ID = recordId });
 
                                                 }
                                                 catch (Exception ex)
@@ -527,7 +527,7 @@ namespace VAdvantage.Process
                             MColumn[] columns = currentTable.GetColumns(true); //Fetch column details
                             if (columns.Length > 0)
                             {
-                                string sql = GetSql(currentTable.GetAD_Table_ID(), currentTable.GetTableName(), exportdata);
+                                string sql = GetSql(currentTable.GetVAF_TableView_ID(), currentTable.GetTableName(), exportdata);
 
                                 DataSet tmpDS = DB.ExecuteDataset(sql, null);
 
@@ -536,7 +536,7 @@ namespace VAdvantage.Process
                                     //sql = sql.Substring(sql.IndexOf("WHERE"));
                                     if (tmpDS != null)
                                     {
-                                        deleteSqlExp.Add("delete from AD_ExportData Where record_ID = " + exportdata.Record_ID + " and ad_table_id = " + exportdata.AD_Table_ID + " and ad_Moduleinfo_id = " + _AD_ModuleInfo_ID);
+                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and VAF_ModuleInfo_id = " + _VAF_ModuleInfo_ID);
                                     }
                                     return "";
                                 }
@@ -544,16 +544,16 @@ namespace VAdvantage.Process
 
                                 if (tmpDS.Tables[0].Rows[0]["Export_ID"].Equals(DBNull.Value))
                                 {
-                                    tmpDS.Tables[0].Rows[0]["Export_ID"] = ManageExportID(exportdata.Record_ID, exportdata.AD_ColOne_ID, tableName, currentTable.GetAD_Table_ID());
+                                    tmpDS.Tables[0].Rows[0]["Export_ID"] = ManageExportID(exportdata.Record_ID, exportdata.AD_ColOne_ID, tableName, currentTable.GetVAF_TableView_ID());
                                 }
 
-                                ds.AddOrCopy(tmpDS, tableName, exportdata.Record_ID, exportdata.AD_ColOne_ID, GetParentColumns(currentTable.GetAD_Table_ID()), rowNum++);     //add or copy 
+                                ds.AddOrCopy(tmpDS, tableName, exportdata.Record_ID, exportdata.AD_ColOne_ID, GetParentColumns(currentTable.GetVAF_TableView_ID()), rowNum++);     //add or copy 
 
                                 for (int cols = 0; cols <= columns.Length - 1; cols++)
                                 {
                                     string colName = columns[cols].GetColumnName();
-                                    int refVID = columns[cols].GetAD_Reference_Value_ID();
-                                    int refID = columns[cols].GetAD_Reference_ID();
+                                    int refVID = columns[cols].GetVAF_Control_Ref_Value_ID();
+                                    int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     if (!columns[cols].IsStandardColumn() && !columns[cols].IsKey())
                                     {
@@ -568,14 +568,14 @@ namespace VAdvantage.Process
                                                     {
                                                         MTable fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
                                                         if (fkTable != null)
-                                                            GetForeignData(fkTable, new ExportDataRecords() { AD_Table_ID = fkTable.GetAD_Table_ID(), Record_ID = Convert.ToInt32(colValue) });
+                                                            GetForeignData(fkTable, new ExportDataRecords() { VAF_TableView_ID = fkTable.GetVAF_TableView_ID(), Record_ID = Convert.ToInt32(colValue) });
                                                     }
                                                 }
                                             }
                                         }
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
-                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, AD_Table_ID = MTable.Get_Table_ID("AD_Reference") }, "AD_Reference");
+                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
                                         }
                                         else
                                         {
@@ -637,8 +637,8 @@ namespace VAdvantage.Process
 
         string[] GetParentColumns(int _TableID)
         {
-            //string _Sql = "select columnname from AD_field_V where ad_table_id=" + _TableID + " and isparent='Y' order by isdisplayed desc, seqno";
-            //string _Sql = "SELECT * FROM AD_Column WHERE AD_Table_ID=" + _TableID + " ORDER BY ColumnName";
+            //string _Sql = "select columnname from vaf_field_V where vaf_tableview_id=" + _TableID + " and isparent='Y' order by isdisplayed desc, seqno";
+            //string _Sql = "SELECT * FROM VAF_Column WHERE VAF_TableView_ID=" + _TableID + " ORDER BY ColumnName";
             //return DB.ExecuteDataset(_Sql);
             string[] keyColumns = new MTable(GetCtx(), _TableID, null).GetKeyColumns();
             return keyColumns;
@@ -681,17 +681,17 @@ namespace VAdvantage.Process
         {
             List<ExportDataRecords> list = new List<ExportDataRecords>();
 
-            String _sql = "SELECT AD_Table_ID, Record_ID,AD_ColOne_ID FROM AD_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID ";
+            String _sql = "SELECT VAF_TableView_ID, Record_ID,AD_ColOne_ID FROM VAF_ExportData WHERE IsActive = 'Y' AND VAF_ModuleInfo_ID = @VAF_ModuleInfo_ID ";
 
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@AD_ModuleInfo_ID", _AD_ModuleInfo_ID);
+            param[0] = new SqlParameter("@VAF_ModuleInfo_ID", _VAF_ModuleInfo_ID);
 
             IDataReader dr = DB.ExecuteReader(_sql, param);
 
             while (dr.Read())
             {
                 ExportDataRecords records = new ExportDataRecords();
-                records.AD_Table_ID = int.Parse(dr["AD_Table_ID"].ToString());
+                records.VAF_TableView_ID = int.Parse(dr["VAF_TableView_ID"].ToString());
                 records.Record_ID = int.Parse(dr["Record_ID"].ToString());
                 if (dr["AD_ColOne_ID"] != DBNull.Value && dr["AD_ColOne_ID"] != null)
                 {
@@ -719,15 +719,15 @@ namespace VAdvantage.Process
     /// </summary>
     public class ExportDataRecords
     {
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
 
         /// <summary>
         /// Stores the table ID to be exported
         /// </summary>
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
-            get { return _AD_Table_ID; }
-            set { _AD_Table_ID = value; }
+            get { return _VAF_TableView_ID; }
+            set { _VAF_TableView_ID = value; }
         }
 
         private int _Record_ID = 0;

@@ -42,7 +42,7 @@ namespace VIS.Models
 
         //Dictionary<MAttribute, KeyValuePair<MAttributeInstance, MAttributeValue[]>> attributesList = new Dictionary<MAttribute, KeyValuePair<MAttributeInstance, MAttributeValue[]>>(4);
 
-        public AttributesObjects LoadInit(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int AD_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
+        public AttributesObjects LoadInit(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int VAF_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
         {
 
             AttributesObjects obj = new AttributesObjects();
@@ -233,7 +233,7 @@ namespace VIS.Models
                     {
                         if (MRole.GetDefault(ctx).IsTableAccess(MLot.Table_ID, false) && MRole.GetDefault(ctx).IsTableAccess(MLotCtl.Table_ID, false))
                         {
-                            if (!_masi.IsExcludeLot(AD_Column_ID, IsSOTrx))//_windowNoParent
+                            if (!_masi.IsExcludeLot(VAF_Column_ID, IsSOTrx))//_windowNoParent
                             {
                                 //column 1
                                 //obj.tableStucture += "<td></td>";
@@ -283,7 +283,7 @@ namespace VIS.Models
                 {
                     if (MRole.GetDefault(ctx).IsTableAccess(MSerNoCtl.Table_ID, false))
                     {
-                        if (!_masi.IsExcludeSerNo(AD_Column_ID, IsSOTrx))//_windowNoParent
+                        if (!_masi.IsExcludeSerNo(VAF_Column_ID, IsSOTrx))//_windowNoParent
                         {
                             //column 1
                             //obj.tableStucture += "<td></td>";
@@ -390,10 +390,10 @@ namespace VIS.Models
         /// <param name="_productWindow"></param>
         /// <param name="windowNo"></param>
         /// <param name="ctx"></param>
-        /// <param name="AD_Column_ID"></param>
+        /// <param name="VAF_Column_ID"></param>
         /// <param name="attrcode"></param>
         /// <returns></returns>
-        public Dictionary<String, String> GetAttribute(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int AD_Column_ID, string attrcode)
+        public Dictionary<String, String> GetAttribute(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int VAF_Column_ID, string attrcode)
         {
             Dictionary<String, String> attrValues = new Dictionary<String, String>();
 
@@ -411,20 +411,20 @@ namespace VIS.Models
                 Msg.GetMsg("PAttributeNoAttributeSet", null);
                 return null; ;
             }
-            string attrCodeQry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID = 559 AND ColumnName = 'Value'";
+            string attrCodeQry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID = 559 AND ColumnName = 'Value'";
             int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
             bool hasValue = codeCount > 0 ? true : false;
 
             // JID_1388: On ASI Control if we select attribute form existing instance same is not showing on control.
             if (hasValue)
             {
-                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value='" + attrcode + "'";
+                attrsetQry = @"SELECT M_AttributeSet_ID FROM M_AttributeSetInstance WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND Value='" + attrcode + "'";
 
             }
             else
             {
                 attrsetQry = @"SELECT ats.M_AttributeSet_ID FROM M_ProductAttributes patr LEFT JOIN  M_AttributeSetInstance ats 
-                        ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) where patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "'";
+                        ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) where patr.VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND patr.UPC='" + attrcode + "'";
             }
             attributeSet = Util.GetValueOfInt(DB.ExecuteScalar(attrsetQry));
             if (attributeSet != aset.Get_ID())
@@ -457,14 +457,14 @@ namespace VIS.Models
                 {
                     attrQry = @"SELECT ats.VAM_ProductFeature_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_AttributeSetInstance ast INNER JOIN M_AttributeInstance ats 
                     ON (ast.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN VAM_ProductFeature att ON ats.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID
-                    WHERE ast.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
+                    WHERE ast.VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
                 }
                 else
                 {
                     attrQry = @"SELECT ats.VAM_ProductFeature_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_ProductAttributes patr INNER JOIN M_AttributeInstance ats 
                     ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN M_attributesetinstance ast ON (patr.M_AttributeSetInstance_ID=ast.M_AttributeSetInstance_ID)
                     INNER JOIN VAM_ProductFeature att ON ats.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID
-                    WHERE patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
+                    WHERE patr.VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
                 }
                 DataSet ds = null;
                 try
@@ -521,10 +521,10 @@ namespace VIS.Models
         /// <param name="_productWindow">IS Opened from Product Window</param>
         /// <param name="windowNo">Window No</param>
         /// <param name="ctx">Context</param>
-        /// <param name="AD_Column_ID">Column ID</param>
+        /// <param name="VAF_Column_ID">Column ID</param>
         /// <param name="attrcode">Attribute Code</param>
         /// <returns>List of String Data</returns>
-        public List<String> GetAttributeInstance(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int AD_Column_ID, string attrcode)
+        public List<String> GetAttributeInstance(int _M_AttributeSetInstance_ID, int _M_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int VAF_Column_ID, string attrcode)
         {
             List<String> attrValues = new List<String>();
 
@@ -542,7 +542,7 @@ namespace VIS.Models
                 Msg.GetMsg("PAttributeNoAttributeSet", null);
                 return null; ;
             }
-            string attrCodeQry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID = 559 AND ColumnName = 'Value'";
+            string attrCodeQry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID = 559 AND ColumnName = 'Value'";
             int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
             bool hasValue = codeCount > 0 ? true : false;
             if (hasValue)
@@ -912,7 +912,7 @@ namespace VIS.Models
                 // JID_1070 : work done for Edit Attribute Set Inastance
                 MAttributeSetInstance _masi = new MAttributeSetInstance(ctx, m_attributeSetInstance_ID, product.GetM_AttributeSet_ID(), trx);
 
-                string attrCodeQry = "SELECT Count(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = 559 AND ColumnName = 'Value'";
+                string attrCodeQry = "SELECT Count(VAF_Column_ID) FROM VAF_Column WHERE VAF_TableView_ID = 559 AND ColumnName = 'Value'";
                 int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
                 bool hasValue = codeCount > 0 ? true : false;
                 aset = _masi.GetMAttributeSet();
@@ -927,25 +927,25 @@ namespace VIS.Models
                     qryAttr = new StringBuilder();
                     if (hasValue)
                     {
-                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value = '" + strAttrCode + "'");
+                        qryAttr.Append(@"SELECT Count(M_AttributeSetInstance_ID) FROM M_AttributeSetInstance WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND Value = '" + strAttrCode + "'");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
                         {
                             qryAttr.Clear();
-                            qryAttr.Append("SELECT M_AttributeSetInstance_ID FROM M_AttributeSetInstance WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value = '" + strAttrCode + "'");
+                            qryAttr.Append("SELECT M_AttributeSetInstance_ID FROM M_AttributeSetInstance WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND Value = '" + strAttrCode + "'");
                             attributeID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         }
                     }
                     else
                     {
                         qryAttr.Append(@"SELECT Count(M_Product_ID) FROM M_Product prd LEFT JOIN M_ProductAttributes patr on (prd.M_Product_ID=patr.M_Product_ID) " +
-                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE prd.AD_Client_ID = " + ctx.GetAD_Client_ID()
+                        " LEFT JOIN M_Manufacturer muf on (prd.M_Product_ID=muf.M_Product_ID) WHERE prd.VAF_Client_ID = " + ctx.GetVAF_Client_ID()
                         + " AND (patr.UPC = '" + strAttrCode + "' OR prd.UPC = '" + strAttrCode + "' OR muf.UPC = '" + strAttrCode + "')");
                         prdAttributes = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                         if (prdAttributes != 0)
                         {
                             qryAttr.Clear();
-                            qryAttr.Append("SELECT M_ProductAttributes_ID FROM M_ProductAttributes WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND UPC = '" + strAttrCode + "'");
+                            qryAttr.Append("SELECT M_ProductAttributes_ID FROM M_ProductAttributes WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND UPC = '" + strAttrCode + "'");
                             pAttribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(qryAttr.ToString()));
                             if (pAttribute_ID != 0)
                             {
@@ -1240,7 +1240,7 @@ namespace VIS.Models
                         }
 
                         // Create new Attribute Set Instance in * Organization
-                        _masi.SetAD_Org_ID(0);
+                        _masi.SetVAF_Org_ID(0);
                         if (!_masi.Save())
                         {
                             obj.Error = Msg.GetMsg(ctx, "NotSaved") + " - " + MAttributeSetInstance.Table_Name;
@@ -1295,7 +1295,7 @@ namespace VIS.Models
                         if (pAttribute_ID == 0)
                         {
                             MProductAttributes pAttr = new MProductAttributes(ctx, 0, trx);
-                            pAttr.SetAD_Org_ID(product.GetAD_Org_ID());
+                            pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                             pAttr.SetUPC("");
                             pAttr.SetM_Product_ID(mProductId);
                             pAttr.SetM_AttributeSetInstance_ID(mAttributeSetInstanceId);
@@ -1335,7 +1335,7 @@ namespace VIS.Models
                         if (attributeID == 0 && strAttrCode != "")
                         {
                             MProductAttributes pAttr = new MProductAttributes(ctx, 0, trx);
-                            pAttr.SetAD_Org_ID(product.GetAD_Org_ID());
+                            pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                             pAttr.SetUPC(strAttrCode);
                             pAttr.SetM_Product_ID(mProductId);
                             pAttr.SetM_AttributeSetInstance_ID(mAttributeSetInstanceId);
@@ -1439,7 +1439,7 @@ namespace VIS.Models
             String mandatory = "";
             var _masi = MAttributeSetInstance.Get(ctx, 0, mProductId);
             MProduct product = MProduct.Get(ctx, mProductId);
-            string attrCodeQry = "SELECT Count(*) FROM AD_Column WHERE AD_Table_ID = 559 AND ColumnName = 'Value'";
+            string attrCodeQry = "SELECT Count(*) FROM VAF_Column WHERE VAF_TableView_ID = 559 AND ColumnName = 'Value'";
             int codeCount = Util.GetValueOfInt(DB.ExecuteScalar(attrCodeQry));
             bool hasValue = codeCount > 0 ? true : false;
             aset = _masi.GetMAttributeSet();
@@ -1821,7 +1821,7 @@ namespace VIS.Models
                     if (pAttribute_ID == 0)
                     {
                         MProductAttributes pAttr = new MProductAttributes(ctx, 0, null);
-                        pAttr.SetAD_Org_ID(product.GetAD_Org_ID());
+                        pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                         if (strAttrCodeC != "")
                         {
                             pAttr.SetUPC(strAttrCodeC);
@@ -1859,7 +1859,7 @@ namespace VIS.Models
                     if (attributeID == 0 && strAttrCode != "")
                     {
                         MProductAttributes pAttr = new MProductAttributes(ctx, 0, null);
-                        pAttr.SetAD_Org_ID(product.GetAD_Org_ID());
+                        pAttr.SetVAF_Org_ID(product.GetVAF_Org_ID());
                         pAttr.SetUPC(strAttrCode);
                         pAttr.SetM_Product_ID(mProductId);
                         pAttr.SetM_AttributeSetInstance_ID(mAttributeSetInstanceId);
@@ -1957,7 +1957,7 @@ namespace VIS.Models
         // Added by Bharat on 01 June 2017
         public int CheckUniqueLot(Ctx ctx)
         {
-            string sql = "SELECT Count(AD_Column_ID) FROM AD_Column WHERE ColumnName = 'UniqueLot' AND AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'M_AttributeSet')";
+            string sql = "SELECT Count(VAF_Column_ID) FROM VAF_Column WHERE ColumnName = 'UniqueLot' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'M_AttributeSet')";
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return count;
         }
@@ -1967,10 +1967,10 @@ namespace VIS.Models
         {
             int Count = 0;
             string sql = "SELECT COUNT(M_Product_ID) FROM M_Storage s INNER JOIN M_Locator l ON (l.M_Locator_ID = s.M_Locator_ID) "
-                       + " INNER JOIN M_warehouse w ON (w.M_warehouse_ID = l.M_Warehouse_ID) WHERE AD_Client_ID = " + ctx.GetAD_Client_ID();
+                       + " INNER JOIN M_warehouse w ON (w.M_warehouse_ID = l.M_Warehouse_ID) WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID();
 
             StringBuilder sqlWhere = new StringBuilder();
-            var AD_Org_ID = Env.GetCtx().GetContextAsInt(windowNoParent, "AD_Org_ID");
+            var VAF_Org_ID = Env.GetCtx().GetContextAsInt(windowNoParent, "VAF_Org_ID");
             var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM M_AttributeSet aSet INNER JOIN M_Product mp on mp.M_AttributeSet_ID = aset.M_AttributeSet_ID"
                 + " WHERE mp.M_Product_ID = " + mProductId;
 
@@ -1979,7 +1979,7 @@ namespace VIS.Models
             {
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0][0]) == "Y")
                 {
-                    sqlWhere.Append(" OR s.AD_Org_ID = " + AD_Org_ID);
+                    sqlWhere.Append(" OR s.VAF_Org_ID = " + VAF_Org_ID);
                 }
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0][1]) == "Y")
                 {
@@ -1988,7 +1988,7 @@ namespace VIS.Models
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0][2]) == "Y")
                 {
                     int M_Warehouse_ID = 0;
-                    string sqlMovement = "SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + Env.GetCtx().GetContextAsInt(windowNoParent, "BaseTable_ID");
+                    string sqlMovement = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + Env.GetCtx().GetContextAsInt(windowNoParent, "BaseTable_ID");
                     string tableName = Util.GetValueOfString(DB.ExecuteScalar(sqlMovement, null, null));
                     if (tableName != "")
                     {

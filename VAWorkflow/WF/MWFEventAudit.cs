@@ -21,7 +21,7 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 namespace VAdvantage.WF
 {
-    public class MWFEventAudit : X_AD_WF_EventAudit
+    public class MWFEventAudit : X_VAF_WFlow_EventLog
     {
         //	Logger			
         private static VLogger _log = VLogger.GetVLogger(typeof(MWFEventAudit).FullName);
@@ -30,19 +30,19 @@ namespace VAdvantage.WF
         /// Get Event Audit for node
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Process_ID">process</param>
-        /// <param name="AD_WF_Node_ID">optional node</param>
+        /// <param name="VAF_WFlow_Handler_ID">process</param>
+        /// <param name="VAF_WFlow_Node_ID">optional node</param>
         /// <returns>event audit or null</returns>
-        public static MWFEventAudit[] Get(Ctx ctx, int AD_WF_Process_ID, int AD_WF_Node_ID)
+        public static MWFEventAudit[] Get(Ctx ctx, int VAF_WFlow_Handler_ID, int VAF_WFlow_Node_ID)
         {
             List<MWFEventAudit> list = new List<MWFEventAudit>();
-            String sql = "SELECT * FROM AD_WF_EventAudit "
-                + "WHERE AD_WF_Process_ID=" + AD_WF_Process_ID;
-            if (AD_WF_Node_ID > 0)
+            String sql = "SELECT * FROM VAF_WFlow_EventLog "
+                + "WHERE VAF_WFlow_Handler_ID=" + VAF_WFlow_Handler_ID;
+            if (VAF_WFlow_Node_ID > 0)
             {
-                sql += " AND AD_WF_Node_ID=" + AD_WF_Node_ID;
+                sql += " AND VAF_WFlow_Node_ID=" + VAF_WFlow_Node_ID;
             }
-            sql += " ORDER BY AD_WF_EventAudit_ID";
+            sql += " ORDER BY VAF_WFlow_EventLog_ID";
             DataSet ds = null;
             try
             {
@@ -68,21 +68,21 @@ namespace VAdvantage.WF
         /// Get Event Audit for node
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="AD_WF_Process_ID">process</param>
+        /// <param name="VAF_WFlow_Handler_ID">process</param>
         /// <returns>event audit or null</returns>
-        public static MWFEventAudit[] Get(Ctx ctx, int AD_WF_Process_ID)
+        public static MWFEventAudit[] Get(Ctx ctx, int VAF_WFlow_Handler_ID)
         {
-            return Get(ctx, AD_WF_Process_ID, 0);
+            return Get(ctx, VAF_WFlow_Handler_ID, 0);
         }
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="AD_WF_EventAudit_ID">id</param>
+        /// <param name="VAF_WFlow_EventLog_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFEventAudit(Ctx ctx, int AD_WF_EventAudit_ID, Trx trxName)
-            : base(ctx, AD_WF_EventAudit_ID, trxName)
+        public MWFEventAudit(Ctx ctx, int VAF_WFlow_EventLog_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_EventLog_ID, trxName)
         {
 
         }
@@ -105,12 +105,12 @@ namespace VAdvantage.WF
         public MWFEventAudit(MWFActivity activity)
             : base(activity.GetCtx(), 0, activity.Get_TrxName())
         {
-            SetAD_WF_Process_ID(activity.GetAD_WF_Process_ID());
-            SetAD_WF_Node_ID(activity.GetAD_WF_Node_ID());
-            SetAD_Table_ID(activity.GetAD_Table_ID());
+            SetVAF_WFlow_Handler_ID(activity.GetVAF_WFlow_Handler_ID());
+            SetVAF_WFlow_Node_ID(activity.GetVAF_WFlow_Node_ID());
+            SetVAF_TableView_ID(activity.GetVAF_TableView_ID());
             SetRecord_ID(activity.GetRecord_ID());
-            SetAD_WF_Responsible_ID(activity.GetAD_WF_Responsible_ID());
-            SetAD_User_ID(activity.GetAD_User_ID());
+            SetVAF_WFlow_Incharge_ID(activity.GetVAF_WFlow_Incharge_ID());
+            SetVAF_UserContact_ID(activity.GetVAF_UserContact_ID());
             SetWFState(activity.GetWFState());
             SetEventType(EVENTTYPE_ProcessCreated);
             SetElapsedTimeMS(Utility.Env.ZERO);
@@ -136,7 +136,7 @@ namespace VAdvantage.WF
         /// <returns>node name</returns>
         public String GetNodeName()
         {
-            MWFNode node = MWFNode.Get(GetCtx(), GetAD_WF_Node_ID());
+            MWFNode node = MWFNode.Get(GetCtx(), GetVAF_WFlow_Node_ID());
             if (node.Get_ID() == 0)
                 return "?";
             return node.GetName(true);

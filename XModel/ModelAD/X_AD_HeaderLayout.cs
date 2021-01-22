@@ -1,34 +1,34 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for AD_HeaderLayout
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_HeaderLayout
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_HeaderLayout : PO{public X_AD_HeaderLayout (Context ctx, int AD_HeaderLayout_ID, Trx trxName) : base (ctx, AD_HeaderLayout_ID, trxName){/** if (AD_HeaderLayout_ID == 0){SetAD_HeaderLayout_ID (0);} */
-}public X_AD_HeaderLayout (Ctx ctx, int AD_HeaderLayout_ID, Trx trxName) : base (ctx, AD_HeaderLayout_ID, trxName){/** if (AD_HeaderLayout_ID == 0){SetAD_HeaderLayout_ID (0);} */
+public class X_VAF_HeaderLayout : PO{public X_VAF_HeaderLayout (Context ctx, int VAF_HeaderLayout_ID, Trx trxName) : base (ctx, VAF_HeaderLayout_ID, trxName){/** if (VAF_HeaderLayout_ID == 0){SetVAF_HeaderLayout_ID (0);} */
+}public X_VAF_HeaderLayout (Ctx ctx, int VAF_HeaderLayout_ID, Trx trxName) : base (ctx, VAF_HeaderLayout_ID, trxName){/** if (VAF_HeaderLayout_ID == 0){SetVAF_HeaderLayout_ID (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_HeaderLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_HeaderLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_HeaderLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_HeaderLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_HeaderLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAF_HeaderLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_HeaderLayout(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAF_HeaderLayout(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27858187911942L;/** Last Updated Timestamp 12/11/2019 4:39:55 PM */
-public static long updatedMS = 1576062595153L;/** AD_Table_ID=1000537 */
+public static long updatedMS = 1576062595153L;/** VAF_TableView_ID=1000537 */
 public static int Table_ID; // =1000537;
-/** TableName=AD_HeaderLayout */
-public static String Table_Name="AD_HeaderLayout";
+/** TableName=VAF_HeaderLayout */
+public static String Table_Name="VAF_HeaderLayout";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(4);/** AccessLevel
 @return 4 - System 
 */
@@ -43,13 +43,13 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_AD_HeaderLayout[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Header Layout.
-@param AD_HeaderLayout_ID Header Layout */
-public void SetAD_HeaderLayout_ID (int AD_HeaderLayout_ID){if (AD_HeaderLayout_ID < 1) throw new ArgumentException ("AD_HeaderLayout_ID is mandatory.");Set_ValueNoCheck ("AD_HeaderLayout_ID", AD_HeaderLayout_ID);}/** Get Header Layout.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_HeaderLayout[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Header Layout.
+@param VAF_HeaderLayout_ID Header Layout */
+public void SetVAF_HeaderLayout_ID (int VAF_HeaderLayout_ID){if (VAF_HeaderLayout_ID < 1) throw new ArgumentException ("VAF_HeaderLayout_ID is mandatory.");Set_ValueNoCheck ("VAF_HeaderLayout_ID", VAF_HeaderLayout_ID);}/** Get Header Layout.
 @return Header Layout */
-public int GetAD_HeaderLayout_ID() {Object ii = Get_Value("AD_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** Alignment AD_Reference_ID=1000223 */
-public static int ALIGNMENT_AD_Reference_ID=1000223;/** Horizontal = H */
+public int GetVAF_HeaderLayout_ID() {Object ii = Get_Value("VAF_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+/** Alignment VAF_Control_Ref_ID=1000223 */
+public static int ALIGNMENT_VAF_Control_Ref_ID=1000223;/** Horizontal = H */
 public static String ALIGNMENT_Horizontal = "H";/** Vertical = V */
 public static String ALIGNMENT_Vertical = "V";/** Is test a valid value.
 @param test testvalue

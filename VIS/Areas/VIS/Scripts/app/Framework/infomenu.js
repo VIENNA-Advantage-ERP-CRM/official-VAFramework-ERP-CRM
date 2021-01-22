@@ -33,7 +33,7 @@
                 var infoWinMenu = data.result;
 
                 for (var item in infoWinMenu) {
-                    var li = $("<li data-id='" + infoWinMenu[item].AD_InfoWindow_ID + "' >");
+                    var li = $("<li data-id='" + infoWinMenu[item].VAF_QuickSearchWindow_ID + "' >");
                     li.append(infoWinMenu[item].Name);
                     $menu.append(li);
                 }

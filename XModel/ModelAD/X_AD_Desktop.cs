@@ -70,7 +70,7 @@ static X_AD_Desktop()
 //static long serialVersionUID = 27562514361107L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044318L;
-/** AD_Table_ID=458 */
+/** VAF_TableView_ID=458 */
 public static int Table_ID;
  // =458;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_AD_Desktop[").Append(Get_ID()).Append("
 return sb.ToString();
 }
 /** Set System Color.
-@param AD_Color_ID Color for backgrounds or indicators */
-public void SetAD_Color_ID (int AD_Color_ID)
+@param VAF_Colour_ID Color for backgrounds or indicators */
+public void SetVAF_Colour_ID (int VAF_Colour_ID)
 {
-if (AD_Color_ID <= 0) Set_Value ("AD_Color_ID", null);
+if (VAF_Colour_ID <= 0) Set_Value ("VAF_Colour_ID", null);
 else
-Set_Value ("AD_Color_ID", AD_Color_ID);
+Set_Value ("VAF_Colour_ID", VAF_Colour_ID);
 }
 /** Get System Color.
 @return Color for backgrounds or indicators */
-public int GetAD_Color_ID() 
+public int GetVAF_Colour_ID() 
 {
-Object ii = Get_Value("AD_Color_ID");
+Object ii = Get_Value("VAF_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -144,18 +144,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);
+if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);
 else
-Set_Value ("AD_Image_ID", AD_Image_ID);
+Set_Value ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

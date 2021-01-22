@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27629734074384L;
         /** Last Updated Timestamp 9/14/2012 1:15:57 PM */
         public static long updatedMS = 1347608757595L;
-        /** AD_Table_ID=1000001 */
+        /** VAF_TableView_ID=1000001 */
         public static int Table_ID;
         // =1000001;
 
@@ -118,32 +118,32 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(Decimal? AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(Decimal? VAF_TableView_ID)
         {
-            Set_Value("AD_Table_ID", (Decimal?)AD_Table_ID);
+            Set_Value("VAF_TableView_ID", (Decimal?)VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public Decimal GetAD_Table_ID()
+        public Decimal GetVAF_TableView_ID()
         {
-            Object bd = Get_Value("AD_Table_ID");
+            Object bd = Get_Value("VAF_TableView_ID");
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

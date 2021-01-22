@@ -147,7 +147,7 @@
 
             callingFromOutsideofWindow = isWindowForm;
             if (!callingFromOutsideofWindow) {
-                currentTable_ID = _curtab.gridTable.AD_Table_ID;
+                currentTable_ID = _curtab.gridTable.VAF_TableView_ID;
                 // this is data source for multiView Records
                 rowsSource = _curGC.getSelectedRows();
 
@@ -281,7 +281,7 @@
         function loadView() {
             var datainit = {
                 windowNo: self.windowNo,
-                language: VIS.Env.getAD_Language(VIS.Env.getCtx())
+                language: VIS.Env.getVAF_Language(VIS.Env.getCtx())
             };
 
             $.ajax({
@@ -698,7 +698,7 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                //var sql = "Select AD_User_ID,email from ad_user where isEmail='Y' AND c_bpartner_ID=" + bpID[i];
+                //var sql = "Select VAF_UserContact_ID,email from VAF_UserContact where isEmail='Y' AND c_bpartner_ID=" + bpID[i];
                 //var ds = VIS.DB.executeDataSet(sql);
                 var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Email/GetUser", { "BPartner_ID": bpID[i] }, null);
                 var isBroken = false;
@@ -2035,7 +2035,7 @@
 
 
                 $bsyDiv[0].style.visibility = "visible";
-                var datainit = { mails: VIS.Utility.encodeText(mails), AD_User_ID: ctx.getAD_User_ID(), AD_Client_ID: ctx.getAD_Client_ID(), AD_Org_ID: ctx.getAD_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment), fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()), notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo) };
+                var datainit = { mails: VIS.Utility.encodeText(mails), VAF_UserContact_ID: ctx.getVAF_UserContact_ID(), VAF_Client_ID: ctx.getVAF_Client_ID(), VAF_Org_ID: ctx.getVAF_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment), fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()), notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo) };
                 $.ajax({
                     url: VIS.Application.contextUrl + "Email/SendMail",
                     data: datainit,
@@ -2122,7 +2122,7 @@
                 datatype: "json",
                 type: "post",
                 cache: false,
-                data: { subject: subj, AD_Table_ID: currentTable_ID, html: VIS.Utility.encodeText(html), values: JSON.stringify(values) },
+                data: { subject: subj, VAF_TableView_ID: currentTable_ID, html: VIS.Utility.encodeText(html), values: JSON.stringify(values) },
                 success: function (data) {
                     $bsyDiv[0].style.visibility = "hidden";
                     VIS.ADialog.info("Saved");
@@ -2264,14 +2264,14 @@
 
 
 
-        var openFormatClientID = ctx.getAD_Client_ID();
+        var openFormatClientID = ctx.getVAF_Client_ID();
         var onOkOpentn = false;
         var getMailFormat = null;
         var openCallAgain = 0;
         function open(e) {
             var openDailogshow = 0;
             openCallAgain = 0;
-            var mailformat = new VIS.Openmailformat(_curGC.gTab.getAD_Window_ID(), isEmail);
+            var mailformat = new VIS.Openmailformat(_curGC.gTab.getVAF_Screen_ID(), isEmail);
             getMailFormat = mailformat;
 
             if (!isEmail) {
@@ -2304,11 +2304,11 @@
                 var selectedRow = mailformat.getSelectedRow();
                 if (selectedRow != null && selectedRow != undefined) {
                     // changes done by Bharat on 27 Sep 2018 to habdle issue of open text format
-                    selectedTemplateID = selectedRow.AD_TEXTTEMPLATE_ID;
-                    openFormatClientID = selectedRow.AD_CLIENT_ID;
+                    selectedTemplateID = selectedRow.VAF_TEXTTEMPLATE_ID;
+                    openFormatClientID = selectedRow.VAF_CLIENT_ID;
                     $subject.val(selectedRow.SUBJECT);
 
-                    if (openFormatClientID != ctx.getAD_Client_ID()) {
+                    if (openFormatClientID != ctx.getVAF_Client_ID()) {
 
                         $btnHdrSave.css("opacity", "0.4");
                     }
@@ -2327,7 +2327,7 @@
 
                     }
 
-                    if (selectedRow.AD_Window_ID != null && selectedRow.AD_Window_ID != undefined && selectedRow.AD_Window_ID > 0) {
+                    if (selectedRow.VAF_Screen_ID != null && selectedRow.VAF_Screen_ID != undefined && selectedRow.VAF_Screen_ID > 0) {
                         saveForAllWindows = false;
                     }
                     else {
@@ -2359,7 +2359,7 @@
 
         function save(e) {
 
-            if (openFormatClientID != ctx.getAD_Client_ID()) {
+            if (openFormatClientID != ctx.getVAF_Client_ID()) {
                 return;
             }
 
@@ -2393,14 +2393,14 @@
         function saveFormat(id) {
             var inputData = {
                 id: id,
-                AD_Client_ID: ctx.getAD_Client_ID(),
-                AD_Org_ID: ctx.getAD_Org_ID(),
+                VAF_Client_ID: ctx.getVAF_Client_ID(),
+                VAF_Org_ID: ctx.getVAF_Org_ID(),
                 name: VIS.Utility.encodeText(formatName),
                 isDynamic: $dynamicDisplay.prop("checked"),
                 subject: VIS.Utility.encodeText($subject.val()),
                 text: VIS.Utility.encodeText($textAreakeno.value()),
                 saveforAll: saveForAllWindows,
-                AD_Window_ID: _curtab.getAD_Window_ID(),
+                VAF_Screen_ID: _curtab.getVAF_Screen_ID(),
                 folderName: folder,
                 attachmentID: attachmentID
             };
@@ -2411,7 +2411,7 @@
                 data: inputData,
                 success: function (data) {
                     selectedTemplateID = parseInt(data);
-                    openFormatClientID = ctx.getAD_Client_ID();
+                    openFormatClientID = ctx.getVAF_Client_ID();
                     $btnHdrSave.css("opacity", "1");
                     $SubjectTextChange = 0;
 

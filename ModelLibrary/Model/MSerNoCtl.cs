@@ -95,9 +95,9 @@ namespace VAdvantage.Model
                         + "FROM M_SerNoCtl_No y, M_SerNoCtl s "
                         + "WHERE y.M_SerNoCtl_ID = s.M_SerNoCtl_ID "
                         + "AND s.M_SerNoCtl_ID = " + GetM_SerNoCtl_ID()
-                        + " AND y.AD_Org_ID = @param1"
+                        + " AND y.VAF_Org_ID = @param1"
                         + " AND s.IsActive='Y' "
-                        + "ORDER BY s.AD_Client_ID DESC";
+                        + "ORDER BY s.VAF_Client_ID DESC";
             }
             else
             {
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
                         + "FROM M_SerNoCtl s "
                         + "WHERE s.M_SerNoCtl_ID = " + GetM_SerNoCtl_ID()
                         + " AND s.IsActive='Y' "
-                        + "ORDER BY s.AD_Client_ID DESC";
+                        + "ORDER BY s.VAF_Client_ID DESC";
             }
 
             int docOrg_ID = 0;
@@ -151,7 +151,7 @@ namespace VAdvantage.Model
 
                     // Update current next on Serial No Control.
                     if (isUseOrgLevel)
-                        updateSQL = "UPDATE M_SerNoCtl_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE M_SerNoCtl_ID= " + GetM_SerNoCtl_ID() + " AND AD_Org_ID=" + docOrg_ID;
+                        updateSQL = "UPDATE M_SerNoCtl_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE M_SerNoCtl_ID= " + GetM_SerNoCtl_ID() + " AND VAF_Org_ID=" + docOrg_ID;
                     else
                         updateSQL = "UPDATE M_SerNoCtl SET CurrentNext = CurrentNext + " + incrementNo + " WHERE M_SerNoCtl_ID=" + GetM_SerNoCtl_ID();
 
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
 
                         X_M_SerNoCtl_No seqno = new X_M_SerNoCtl_No(po.GetCtx(), 0, null);
                         seqno.SetM_SerNoCtl_ID(GetM_SerNoCtl_ID());
-                        seqno.SetAD_Org_ID(docOrg_ID);
+                        seqno.SetVAF_Org_ID(docOrg_ID);
                         seqno.SetCurrentNext(startNo + incrementNo);
                         seqno.Save();
                     }

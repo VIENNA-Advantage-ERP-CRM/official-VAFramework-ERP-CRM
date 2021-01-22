@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_PA_ReportSource() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621498829L;/** Last Updated Timestamp 4/1/2016 1:06:22 PM */
-        public static long updatedMS = 1459496182040L;/** AD_Table_ID=450 */
+        public static long updatedMS = 1459496182040L;/** VAF_TableView_ID=450 */
         public static int Table_ID; // =450;
         /** TableName=PA_ReportSource */
         public static String Table_Name = "PA_ReportSource";
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         }/** Get Campaign.
 @return Marketing Campaign */
         public int GetC_Campaign_ID() { Object ii = Get_Value("C_Campaign_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** C_ElementValue_ID AD_Reference_ID=182 */
-        public static int C_ELEMENTVALUE_ID_AD_Reference_ID = 182;/** Set Account Element.
+        /** C_ElementValue_ID VAF_Control_Ref_ID=182 */
+        public static int C_ELEMENTVALUE_ID_VAF_Control_Ref_ID = 182;/** Set Account Element.
 @param C_ElementValue_ID Account Element */
         public void SetC_ElementValue_ID(int C_ElementValue_ID)
         {
@@ -129,8 +129,8 @@ namespace VAdvantage.Model
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
         public String GetDescription() { return (String)Get_Value("Description"); }
-        /** ElementType AD_Reference_ID=181 */
-        public static int ELEMENTTYPE_AD_Reference_ID = 181;/** Account = AC */
+        /** ElementType VAF_Control_Ref_ID=181 */
+        public static int ELEMENTTYPE_VAF_Control_Ref_ID = 181;/** Account = AC */
         public static String ELEMENTTYPE_Account = "AC";/** Activity = AY */
         public static String ELEMENTTYPE_Activity = "AY";/** BPartner = BP */
         public static String ELEMENTTYPE_BPartner = "BP";/** Location From = LF */
@@ -180,8 +180,8 @@ namespace VAdvantage.Model
         }/** Get Product.
 @return Product, Service, Item */
         public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Org_ID AD_Reference_ID=322 */
-        public static int ORG_ID_AD_Reference_ID = 322;/** Set Organization.
+        /** Org_ID VAF_Control_Ref_ID=322 */
+        public static int ORG_ID_VAF_Control_Ref_ID = 322;/** Set Organization.
 @param Org_ID Organizational entity within client */
         public void SetOrg_ID(int Org_ID)
         {

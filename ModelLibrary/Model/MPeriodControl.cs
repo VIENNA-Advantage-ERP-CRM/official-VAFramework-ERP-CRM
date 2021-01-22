@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="period">parent</param>
         /// <param name="docBaseType">doc base type</param>
         public MPeriodControl(MPeriod period, String docBaseType)
-            : this(period.GetCtx(), period.GetAD_Client_ID(), period.GetC_Period_ID(), docBaseType, 
+            : this(period.GetCtx(), period.GetVAF_Client_ID(), period.GetC_Period_ID(), docBaseType, 
                 period.Get_TrxName())
         {
         }
@@ -63,14 +63,14 @@ namespace VAdvantage.Model
         /// New Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="VAF_Client_ID">client id</param>
         /// <param name="C_Period_ID">period id</param>
         /// <param name="docBaseType">doc base type</param>
         /// <param name="trxName">transaction</param>
-        public MPeriodControl(Ctx ctx, int AD_Client_ID, int C_Period_ID, String docBaseType, Trx trxName)
+        public MPeriodControl(Ctx ctx, int VAF_Client_ID, int C_Period_ID, String docBaseType, Trx trxName)
             : this(ctx, 0, trxName)
         {
-            SetClientOrg(AD_Client_ID, 0);
+            SetClientOrg(VAF_Client_ID, 0);
             SetC_Period_ID(C_Period_ID);
             SetDocBaseType(docBaseType);
         }

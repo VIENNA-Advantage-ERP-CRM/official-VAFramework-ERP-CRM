@@ -11,25 +11,25 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_OrgInfo
+    /** Generated Model for VAF_OrgDetail
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_OrgInfo : PO
+    public class X_VAF_OrgDetail : PO
     {
-        public X_AD_OrgInfo(Context ctx, int AD_OrgInfo_ID, Trx trxName)
-            : base(ctx, AD_OrgInfo_ID, trxName)
+        public X_VAF_OrgDetail(Context ctx, int VAF_OrgDetail_ID, Trx trxName)
+            : base(ctx, VAF_OrgDetail_ID, trxName)
         {
-            /** if (AD_OrgInfo_ID == 0)
+            /** if (VAF_OrgDetail_ID == 0)
             {
             SetDUNS (null);	// ?
             SetTaxID (null);
             }
              */
         }
-        public X_AD_OrgInfo(Ctx ctx, int AD_OrgInfo_ID, Trx trxName)
-            : base(ctx, AD_OrgInfo_ID, trxName)
+        public X_VAF_OrgDetail(Ctx ctx, int VAF_OrgDetail_ID, Trx trxName)
+            : base(ctx, VAF_OrgDetail_ID, trxName)
         {
-            /** if (AD_OrgInfo_ID == 0)
+            /** if (VAF_OrgDetail_ID == 0)
             {
             SetDUNS (null);	// ?
             SetTaxID (null);
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_OrgInfo(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_OrgDetail(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_OrgInfo(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_OrgDetail(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_OrgInfo(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_OrgDetail(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_OrgInfo()
+        static X_VAF_OrgDetail()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -75,12 +75,12 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27716672496371L;
         /** Last Updated Timestamp 6/17/2015 6:49:41 PM */
         public static long updatedMS = 1434547179582L;
-        /** AD_Table_ID=228 */
+        /** VAF_TableView_ID=228 */
         public static int Table_ID;
         // =228;
 
-        /** TableName=AD_OrgInfo */
-        public static String Table_Name = "AD_OrgInfo";
+        /** TableName=VAF_OrgDetail */
+        public static String Table_Name = "VAF_OrgDetail";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -114,22 +114,22 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_OrgInfo[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_OrgDetail[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Organization Type.
-        @param AD_OrgType_ID Organization Type allows you to categorize your organizations */
-        public void SetAD_OrgType_ID(int AD_OrgType_ID)
+        @param VAF_OrgCategory_ID Organization Type allows you to categorize your organizations */
+        public void SetVAF_OrgCategory_ID(int VAF_OrgCategory_ID)
         {
-            if (AD_OrgType_ID <= 0) Set_Value("AD_OrgType_ID", null);
+            if (VAF_OrgCategory_ID <= 0) Set_Value("VAF_OrgCategory_ID", null);
             else
-                Set_Value("AD_OrgType_ID", AD_OrgType_ID);
+                Set_Value("VAF_OrgCategory_ID", VAF_OrgCategory_ID);
         }
         /** Get Organization Type.
         @return Organization Type allows you to categorize your organizations */
-        public int GetAD_OrgType_ID()
+        public int GetVAF_OrgCategory_ID()
         {
-            Object ii = Get_Value("AD_OrgType_ID");
+            Object ii = Get_Value("VAF_OrgCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -261,8 +261,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Parent_Org_ID AD_Reference_ID=130 */
-        public static int PARENT_ORG_ID_AD_Reference_ID = 130;
+        /** Parent_Org_ID VAF_Control_Ref_ID=130 */
+        public static int PARENT_ORG_ID_VAF_Control_Ref_ID = 130;
         /** Set Parent Organization.
         @param Parent_Org_ID Parent (superior) Organization  */
         public void SetParent_Org_ID(int Parent_Org_ID)
@@ -297,8 +297,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Phone");
         }
 
-        /** Supervisor_ID AD_Reference_ID=286 */
-        public static int SUPERVISOR_ID_AD_Reference_ID = 286;
+        /** Supervisor_ID VAF_Control_Ref_ID=286 */
+        public static int SUPERVISOR_ID_VAF_Control_Ref_ID = 286;
         /** Set Supervisor.
         @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
         public void SetSupervisor_ID(int Supervisor_ID)
@@ -334,8 +334,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TaxID");
         }
 
-        /** VATAX_TaxRule AD_Reference_ID=1000168 */
-        public static int VATAX_TAXRULE_AD_Reference_ID = 1000168;
+        /** VATAX_TaxRule VAF_Control_Ref_ID=1000168 */
+        public static int VATAX_TAXRULE_VAF_Control_Ref_ID = 1000168;
         /** Tax Type = T */
         public static String VATAX_TAXRULE_TaxType = "T";
         /** Zip = Z */

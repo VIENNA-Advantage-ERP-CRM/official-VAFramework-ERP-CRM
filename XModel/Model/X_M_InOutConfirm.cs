@@ -86,7 +86,7 @@ static X_M_InOutConfirm()
 //static long serialVersionUID 27562514379600L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062811L;
-/** AD_Table_ID=727 */
+/** VAF_TableView_ID=727 */
 public static int Table_ID;
  // =727;
 
@@ -159,8 +159,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ConfirmType AD_Reference_ID=320 */
-public static int CONFIRMTYPE_AD_Reference_ID=320;
+/** ConfirmType VAF_Control_Ref_ID=320 */
+public static int CONFIRMTYPE_VAF_Control_Ref_ID=320;
 /** Drop Ship Confirm = DS */
 public static String CONFIRMTYPE_DropShipConfirm = "DS";
 /** Pick/QA Confirm = PC */
@@ -250,8 +250,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -308,8 +308,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */

@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27636141469534L;
         /** Last Updated Timestamp 11/27/2012 5:05:52 PM */
         public static long updatedMS = 1354016152745L;
-        /** AD_Table_ID=224 */
+        /** VAF_TableView_ID=224 */
         public static int Table_ID;
         // =224;
 
@@ -213,8 +213,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Period_ID AD_Reference_ID=275 */
-        public static int C_PERIOD_ID_AD_Reference_ID = 275;
+        /** C_Period_ID VAF_Control_Ref_ID=275 */
+        public static int C_PERIOD_ID_VAF_Control_Ref_ID = 275;
         /** Set Period.
         @param C_Period_ID Period of the Calendar */
         public void SetC_Period_ID(int C_Period_ID)
@@ -304,8 +304,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -362,8 +362,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -573,8 +573,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** PostingType AD_Reference_ID=125 */
-        public static int POSTINGTYPE_AD_Reference_ID = 125;
+        /** PostingType VAF_Control_Ref_ID=125 */
+        public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;
         /** Actual = A */
         public static String POSTINGTYPE_Actual = "A";
         /** Budget = B */

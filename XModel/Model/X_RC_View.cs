@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27706189007700L;
         /** Last Updated Timestamp 2/16/2015 10:44:50 AM */
         public static long updatedMS = 1424063690911L;
-        /** AD_Table_ID=1000235 */
+        /** VAF_TableView_ID=1000235 */
         public static int Table_ID;
         // =1000235;
 
@@ -116,88 +116,88 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User Query.
-        @param AD_UserQuery_ID Saved User Query */
-        public void SetAD_UserQuery_ID(int AD_UserQuery_ID)
+        @param VAF_UserSearch_ID Saved User Query */
+        public void SetVAF_UserSearch_ID(int VAF_UserSearch_ID)
         {
-            if (AD_UserQuery_ID <= 0) Set_Value("AD_UserQuery_ID", null);
+            if (VAF_UserSearch_ID <= 0) Set_Value("VAF_UserSearch_ID", null);
             else
-                Set_Value("AD_UserQuery_ID", AD_UserQuery_ID);
+                Set_Value("VAF_UserSearch_ID", VAF_UserSearch_ID);
         }
         /** Get User Query.
         @return Saved User Query */
-        public int GetAD_UserQuery_ID()
+        public int GetVAF_UserSearch_ID()
         {
-            Object ii = Get_Value("AD_UserQuery_ID");
+            Object ii = Get_Value("VAF_UserSearch_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** BG_Color_ID AD_Reference_ID=266 */
-        public static int BG_COLOR_ID_AD_Reference_ID = 266;
+        /** BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set BG Color.
         @param BG_Color_ID BG Color */
         public void SetBG_Color_ID(int BG_Color_ID)
@@ -249,8 +249,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
 
-        /** Font_Color_ID AD_Reference_ID=266 */
-        public static int FONT_COLOR_ID_AD_Reference_ID = 266;
+        /** Font_Color_ID VAF_Control_Ref_ID=266 */
+        public static int FONT_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Font Color.
         @param Font_Color_ID Font Color */
         public void SetFont_Color_ID(int Font_Color_ID)
@@ -268,8 +268,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** HeaderBG_Color_ID AD_Reference_ID=266 */
-        public static int HEADERBG_COLOR_ID_AD_Reference_ID = 266;
+        /** HeaderBG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int HEADERBG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Header BG Color.
         @param HeaderBG_Color_ID Header BG Color */
         public void SetHeaderBG_Color_ID(int HeaderBG_Color_ID)
@@ -287,8 +287,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** HeaderFont_Color_ID AD_Reference_ID=266 */
-        public static int HEADERFONT_COLOR_ID_AD_Reference_ID = 266;
+        /** HeaderFont_Color_ID VAF_Control_Ref_ID=266 */
+        public static int HEADERFONT_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Header Font Color.
         @param HeaderFont_Color_ID Header Font Color */
         public void SetHeaderFont_Color_ID(int HeaderFont_Color_ID)

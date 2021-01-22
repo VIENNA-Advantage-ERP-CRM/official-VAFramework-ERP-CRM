@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514377343L;
         /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
         public static long updatedMS = 1280389060554L;
-        /** AD_Table_ID=591 */
+        /** VAF_TableView_ID=591 */
         public static int Table_ID;
         // =591;
 
@@ -118,37 +118,37 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
-        @param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        @param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }
         /** Get Trx Organization.
         @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            Object ii = Get_Value("AD_OrgTrx_ID");
+            Object ii = Get_Value("VAF_OrgTrx_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -204,8 +204,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BPartnerValue");
         }
 
-        /** BillTo_ID AD_Reference_ID=159 */
-        public static int BILLTO_ID_AD_Reference_ID = 159;
+        /** BillTo_ID VAF_Control_Ref_ID=159 */
+        public static int BILLTO_ID_VAF_Control_Ref_ID = 159;
         /** Set Invoice To.
         @param BillTo_ID Bill to Address */
         public void SetBillTo_ID(int BillTo_ID)
@@ -637,8 +637,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("I_ErrorMsg");
         }
 
-        /** I_IsImported AD_Reference_ID=420 */
-        public static int I_ISIMPORTED_AD_Reference_ID = 420;
+        /** I_IsImported VAF_Control_Ref_ID=420 */
+        public static int I_ISIMPORTED_VAF_Control_Ref_ID = 420;
         /** Error = E */
         public static String I_ISIMPORTED_Error = "E";
         /** No = N */
@@ -804,8 +804,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Name");
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -1028,8 +1028,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SKU");
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)

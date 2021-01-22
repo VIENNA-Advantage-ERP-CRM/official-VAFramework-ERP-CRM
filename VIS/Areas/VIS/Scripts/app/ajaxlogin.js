@@ -71,7 +71,7 @@
                     if (json.step2) {
                         //TODO init 
                         showLogin2();
-                        user = json.ctx.AD_User_ID;
+                        user = json.ctx.VAF_UserContact_ID;
 
                         /*Set context form local Ini */
 

@@ -48,7 +48,7 @@
             //var pairs = [];
 
             var display = ("s.DocumentNo||' - '||")
-                .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getVAF_Language(VIS.Env.getCtx())));
             // New column added to fill invoice which drop ship is true
             // Added by Vivek on 09/10/2017 advised by Pradeep
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
@@ -97,7 +97,7 @@
 
         //    //	Display
         //    var display = ("s.DocumentNo||' - '||")
-        //        .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getAD_Language(VIS.Env.getCtx())));
+        //        .concat(VIS.DB.to_char("s.MovementDate", VIS.DisplayType.Date, VIS.Env.getVAF_Language(VIS.Env.getCtx())));
 
         //    //var sql = ("SELECT s.M_InOut_ID,").concat(display)
         //    //    .concat(" FROM M_InOut s "
@@ -235,7 +235,7 @@
             isBaseLangage = "FROM C_UOM uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
         }
         else {
-            isBaseLangage = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID)  INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "') ";
+            isBaseLangage = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID)  INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "') ";
         }
         if (M_Product_ID != null) {
             mProductIDs = " AND l.M_Product_ID=" + M_Product_ID;
@@ -318,7 +318,7 @@
     //        sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
     //    }
     //    else {
-    //        sql = sql.concat("FROM C_UOM_Trl uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("') ");
+    //        sql = sql.concat("FROM C_UOM_Trl uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
     //    }
     //    sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
     //        .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) ")
@@ -439,7 +439,7 @@
             isBaseLanguageUmo = "FROM C_UOM uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
         }
         else {
-            isBaseLanguageUmo = "FROM C_UOM_Trl uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "') ";
+            isBaseLanguageUmo = "FROM C_UOM_Trl uom INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "') ";
         }
 
 
@@ -503,7 +503,7 @@
     //        sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
     //    }
     //    else {
-    //        sql = sql.concat("FROM C_UOM_Trl uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("') ");
+    //        sql = sql.concat("FROM C_UOM_Trl uom ").concat("INNER JOIN M_InOutLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
     //    }
     //    sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ").concat(
     //            "LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) ").concat("WHERE l.M_InOut_ID=" + M_InOut_ID) // #1

@@ -23,16 +23,16 @@ namespace VAdvantage.Model
     /// <summary>
     /// Scheduler Parameter Model
     /// </summary>
-    public class MSchedulerPara : X_AD_Scheduler_Para
+    public class MSchedulerPara : X_VAF_JobRun_Para
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Scheduler_Para_ID">scheduler para id</param>
+        /// <param name="VAF_JobRun_Para_ID">scheduler para id</param>
         /// <param name="trxName">optinal trans name</param>
-        public MSchedulerPara(Ctx ctx, int AD_Scheduler_Para_ID, Trx trxName)
-            : base(ctx, AD_Scheduler_Para_ID, trxName)
+        public MSchedulerPara(Ctx ctx, int VAF_JobRun_Para_ID, Trx trxName)
+            : base(ctx, VAF_JobRun_Para_ID, trxName)
         {
             
         }	//	MSchedulerPara
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         public String GetColumnName()
         {
             if (m_parameter == null)
-                m_parameter = MProcessPara.Get(GetCtx(), GetAD_Process_Para_ID());
+                m_parameter = MProcessPara.Get(GetCtx(), GetVAF_Job_Para_ID());
             return m_parameter.GetColumnName();
         }	//	getColumnName
 
@@ -71,8 +71,8 @@ namespace VAdvantage.Model
         public int GetDisplayType()
         {
             if (m_parameter == null)
-                m_parameter = MProcessPara.Get(GetCtx(), GetAD_Process_Para_ID());
-            return m_parameter.GetAD_Reference_ID();
+                m_parameter = MProcessPara.Get(GetCtx(), GetVAF_Job_Para_ID());
+            return m_parameter.GetVAF_Control_Ref_ID();
         }	//	getDisplayType
 
         /// <summary>

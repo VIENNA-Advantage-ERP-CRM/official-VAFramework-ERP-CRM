@@ -25,43 +25,43 @@ namespace VAdvantage.Login
         /**	Logger			*/
         private static Logger log = Logger.GetLogger(typeof(Language).FullName);
 
-        public static String AD_Language_en_US = "en_US"; //base language
-        private static String AD_Language_en_GB = "en_GB";//y
-        private static String AD_Language_en_AU = "en_AU";//y
-        private static String AD_Language_ca_ES = "ca_ES";//y
-        private static String AD_Language_hr_HR = "hr_HR";//y
-        private static String AD_Language_de_DE = "de_DE";//y
-        private static String AD_Language_it_IT = "it_IT";//y
-        private static String AD_Language_es_ES = "es_ES";//y
-        private static String AD_Language_es_MX = "es_MX";//y
-        private static String AD_Language_fr_FR = "fr_FR";//y
-        private static String AD_Language_bg_BG = "bg_BG";//y
-        private static String AD_Language_th_TH = "th_TH";//n
-        private static String AD_Language_pl_PL = "pl_PL";//y
-        private static String AD_Language_zh_TW = "zh_TW";//y
-        private static String AD_Language_nl_NL = "nl_NL";//y
-        private static String AD_Language_no_NO = "nb_NO"; //not supported (no is supported instead)
-        private static String AD_Language_pt_BR = "pt_BR";//y
-        private static String AD_Language_ru_RU = "ru_RU";//y
-        private static String AD_Language_sl_SI = "sl_SI";//y
-        private static String AD_Language_sv_SE = "sv_SE";//y
-        private static String AD_Language_vi_VN = "vi_VN";//y
-        private static String AD_Language_zh_CN = "zh_CN";//y
-        private static String AD_Language_da_DK = "da_DK";//y
-        private static String AD_Language_ml_ML = "ms-BN";
-        private static String AD_Language_fa_IR = "fa_IR";//y
-        private static String AD_Language_fi_FI = "fi_FI";//y
-        private static String AD_Language_ro_RO = "ro_RO";//y
-        private static String AD_Language_ja_JP = "ja_JP";//y
-        private static String AD_Language_in_ID = "id_ID"; //y
-        private static String AD_Language_ar_TN = "ar_TN"; //y
-        private static String AD_Language_ar_IQ = "ar_IQ"; //y
-        private static String AD_Language_ar_KU = "ar_KU"; //y
-        private static String AD_Language_zh_HK = "zh_HK";//y
-        private static String AD_Language_es_UY = "es_UY"; //y
-        private static String AD_Language_ar_SA = "ar_SA"; //y
-        private static String AD_Language_en_IN = "en_IN"; //y
-        private static String AD_Language_sq_AL = "sq_AL"; //y
+        public static String VAF_Language_en_US = "en_US"; //base language
+        private static String VAF_Language_en_GB = "en_GB";//y
+        private static String VAF_Language_en_AU = "en_AU";//y
+        private static String VAF_Language_ca_ES = "ca_ES";//y
+        private static String VAF_Language_hr_HR = "hr_HR";//y
+        private static String VAF_Language_de_DE = "de_DE";//y
+        private static String VAF_Language_it_IT = "it_IT";//y
+        private static String VAF_Language_es_ES = "es_ES";//y
+        private static String VAF_Language_es_MX = "es_MX";//y
+        private static String VAF_Language_fr_FR = "fr_FR";//y
+        private static String VAF_Language_bg_BG = "bg_BG";//y
+        private static String VAF_Language_th_TH = "th_TH";//n
+        private static String VAF_Language_pl_PL = "pl_PL";//y
+        private static String VAF_Language_zh_TW = "zh_TW";//y
+        private static String VAF_Language_nl_NL = "nl_NL";//y
+        private static String VAF_Language_no_NO = "nb_NO"; //not supported (no is supported instead)
+        private static String VAF_Language_pt_BR = "pt_BR";//y
+        private static String VAF_Language_ru_RU = "ru_RU";//y
+        private static String VAF_Language_sl_SI = "sl_SI";//y
+        private static String VAF_Language_sv_SE = "sv_SE";//y
+        private static String VAF_Language_vi_VN = "vi_VN";//y
+        private static String VAF_Language_zh_CN = "zh_CN";//y
+        private static String VAF_Language_da_DK = "da_DK";//y
+        private static String VAF_Language_ml_ML = "ms-BN";
+        private static String VAF_Language_fa_IR = "fa_IR";//y
+        private static String VAF_Language_fi_FI = "fi_FI";//y
+        private static String VAF_Language_ro_RO = "ro_RO";//y
+        private static String VAF_Language_ja_JP = "ja_JP";//y
+        private static String VAF_Language_in_ID = "id_ID"; //y
+        private static String VAF_Language_ar_TN = "ar_TN"; //y
+        private static String VAF_Language_ar_IQ = "ar_IQ"; //y
+        private static String VAF_Language_ar_KU = "ar_KU"; //y
+        private static String VAF_Language_zh_HK = "zh_HK";//y
+        private static String VAF_Language_es_UY = "es_UY"; //y
+        private static String VAF_Language_ar_SA = "ar_SA"; //y
+        private static String VAF_Language_en_IN = "en_IN"; //y
+        private static String VAF_Language_sq_AL = "sq_AL"; //y
 
 
         static private CCache<int, Language> _languages = new CCache<int, Language>("loginlang", 10);
@@ -69,77 +69,77 @@ namespace VAdvantage.Login
 
         //{
         //        new Language 
-        //            ("English", AD_Language_en_US, new System.Globalization.CultureInfo("en-US") ,  null, "", MediaSize.NA.LETTER),
+        //            ("English", VAF_Language_en_US, new System.Globalization.CultureInfo("en-US") ,  null, "", MediaSize.NA.LETTER),
         //        new Language
-        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR)", AD_Language_ar_TN,new System.Globalization.CultureInfo("ar-TN") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR)", VAF_Language_ar_TN,new System.Globalization.CultureInfo("ar-TN") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
         //        new Language
-        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-Iraq)", AD_Language_ar_IQ,new System.Globalization.CultureInfo("ar-IQ") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-Iraq)", VAF_Language_ar_IQ,new System.Globalization.CultureInfo("ar-IQ") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 (BG)", AD_Language_bg_BG, new System.Globalization.CultureInfo("bg-BG") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 (BG)", VAF_Language_bg_BG, new System.Globalization.CultureInfo("bg-BG") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Catal\u00e0", AD_Language_ca_ES,new System.Globalization.CultureInfo("ca-ES") ,   null, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("Catal\u00e0", VAF_Language_ca_ES,new System.Globalization.CultureInfo("ca-ES") ,   null, "dd/MM/yyyy", MediaSize.ISO.A4),
         //        new Language
-        //            ("Deutsch", AD_Language_de_DE, new System.Globalization.CultureInfo("de-DE") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Deutsch", VAF_Language_de_DE, new System.Globalization.CultureInfo("de-DE") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
         //		new Language 
-        //            ("Dansk", AD_Language_da_DK,  new System.Globalization.CultureInfo("da-DK") ,   false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Dansk", VAF_Language_da_DK,  new System.Globalization.CultureInfo("da-DK") ,   false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("English (AU)", AD_Language_en_AU,  new System.Globalization.CultureInfo("en-AU") ,  null, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("English (AU)", VAF_Language_en_AU,  new System.Globalization.CultureInfo("en-AU") ,  null, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("English (UK)", AD_Language_en_GB,  new System.Globalization.CultureInfo("en-GB") ,    null, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("English (UK)", VAF_Language_en_GB,  new System.Globalization.CultureInfo("en-GB") ,    null, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Espa\u00f1ol", AD_Language_es_ES,new System.Globalization.CultureInfo("es-ES") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("Espa\u00f1ol", VAF_Language_es_ES,new System.Globalization.CultureInfo("es-ES") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Espa\u00f1ol (MX)", AD_Language_es_MX,  new System.Globalization.CultureInfo("es-MX") ,  false, "dd/MM/yyyy", MediaSize.NA.LETTER),
+        //            ("Espa\u00f1ol (MX)", VAF_Language_es_MX,  new System.Globalization.CultureInfo("es-MX") ,  false, "dd/MM/yyyy", MediaSize.NA.LETTER),
         //        new Language 
-        //            ("Espa\u00f1ol (UY)", AD_Language_es_UY, new System.Globalization.CultureInfo("es-UY") ,    false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("Espa\u00f1ol (UY)", VAF_Language_es_UY, new System.Globalization.CultureInfo("es-UY") ,    false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Farsi", AD_Language_fa_IR, new System.Globalization.CultureInfo("fa-IR") ,    false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Farsi", VAF_Language_fa_IR, new System.Globalization.CultureInfo("fa-IR") ,    false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Finnish", AD_Language_fi_FI,  new System.Globalization.CultureInfo("fi-FI") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Finnish", VAF_Language_fi_FI,  new System.Globalization.CultureInfo("fi-FI") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Fran\u00e7ais", AD_Language_fr_FR, new System.Globalization.CultureInfo("fr-FR") ,    null, "", MediaSize.ISO.A4),
+        //            ("Fran\u00e7ais", VAF_Language_fr_FR, new System.Globalization.CultureInfo("fr-FR") ,    null, "", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Hrvatski", AD_Language_hr_HR, new System.Globalization.CultureInfo("hr-HR") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Hrvatski", VAF_Language_hr_HR, new System.Globalization.CultureInfo("hr-HR") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Indonesia Bahasa", AD_Language_in_ID, new System.Globalization.CultureInfo("id-ID") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Indonesia Bahasa", VAF_Language_in_ID, new System.Globalization.CultureInfo("id-ID") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         // 	new Language 
-        //            ("Italiano", AD_Language_it_IT, new System.Globalization.CultureInfo("it-IT") ,    null, "", MediaSize.ISO.A4),
+        //            ("Italiano", VAF_Language_it_IT, new System.Globalization.CultureInfo("it-IT") ,    null, "", MediaSize.ISO.A4),
         //  new Language 
-        //            ("\u65e5\u672c\u8a9e (JP)", AD_Language_ja_JP, new System.Globalization.CultureInfo("ja-JP") ,  null, "", MediaSize.ISO.A4),
+        //            ("\u65e5\u672c\u8a9e (JP)", VAF_Language_ja_JP, new System.Globalization.CultureInfo("ja-JP") ,  null, "", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Malay", AD_Language_ml_ML,new System.Globalization.CultureInfo("ms-BN") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Malay", VAF_Language_ml_ML,new System.Globalization.CultureInfo("ms-BN") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Nederlands", AD_Language_nl_NL, new System.Globalization.CultureInfo("nl-NL") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Nederlands", VAF_Language_nl_NL, new System.Globalization.CultureInfo("nl-NL") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Norsk", AD_Language_no_NO, new System.Globalization.CultureInfo("nb-NO") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("Norsk", VAF_Language_no_NO, new System.Globalization.CultureInfo("nb-NO") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Polski", AD_Language_pl_PL, new System.Globalization.CultureInfo("pl-PL") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Polski", VAF_Language_pl_PL, new System.Globalization.CultureInfo("pl-PL") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Portuguese (BR)", AD_Language_pt_BR, new System.Globalization.CultureInfo("pt-BR") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("Portuguese (BR)", VAF_Language_pt_BR, new System.Globalization.CultureInfo("pt-BR") ,  false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Rom\u00e2n\u0103", AD_Language_ro_RO,new System.Globalization.CultureInfo("ro-RO") ,   false, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Rom\u00e2n\u0103", VAF_Language_ro_RO,new System.Globalization.CultureInfo("ro-RO") ,   false, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("\u0420\u0443\u0441\u0441\u043a\u0438\u0439 (Russian)", AD_Language_ru_RU, new System.Globalization.CultureInfo("ru-RU") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("\u0420\u0443\u0441\u0441\u043a\u0438\u0439 (Russian)", VAF_Language_ru_RU, new System.Globalization.CultureInfo("ru-RU") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Slovenski", AD_Language_sl_SI, new System.Globalization.CultureInfo("sl-SI") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Slovenski", VAF_Language_sl_SI, new System.Globalization.CultureInfo("sl-SI") ,  null, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Svenska", AD_Language_sv_SE, new System.Globalization.CultureInfo("sv-SE") ,    false, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("Svenska", VAF_Language_sv_SE, new System.Globalization.CultureInfo("sv-SE") ,    false, "dd.MM.yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("\u0e44\u0e17\u0e22 (TH)", AD_Language_th_TH, new System.Globalization.CultureInfo("th-TH") ,   false, "dd/MM/yyyy", MediaSize.ISO.A4),
+        //            ("\u0e44\u0e17\u0e22 (TH)", VAF_Language_th_TH, new System.Globalization.CultureInfo("th-TH") ,   false, "dd/MM/yyyy", MediaSize.ISO.A4),
         //  new Language 
-        //            ("Vi\u1EC7t Nam", AD_Language_vi_VN, new System.Globalization.CultureInfo("vi-VN") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
+        //            ("Vi\u1EC7t Nam", VAF_Language_vi_VN, new System.Globalization.CultureInfo("vi-VN") ,  false, "dd-MM-yyyy", MediaSize.ISO.A4),
         //		new Language 
-        //            ("\u7b80\u4f53\u4e2d\u6587 (CN)", AD_Language_zh_CN, new System.Globalization.CultureInfo("zh-CN") ,   null, "yyyy-MM-dd", MediaSize.ISO.A4),
+        //            ("\u7b80\u4f53\u4e2d\u6587 (CN)", VAF_Language_zh_CN, new System.Globalization.CultureInfo("zh-CN") ,   null, "yyyy-MM-dd", MediaSize.ISO.A4),
         //  new Language 
-        //            ("\u7e41\u9ad4\u4e2d\u6587 (TW)", AD_Language_zh_TW, new System.Globalization.CultureInfo("zh-TW") ,  null, null, MediaSize.ISO.A4),                
+        //            ("\u7e41\u9ad4\u4e2d\u6587 (TW)", VAF_Language_zh_TW, new System.Globalization.CultureInfo("zh-TW") ,  null, null, MediaSize.ISO.A4),                
 
         //            new Language
-        //            ("Khurdi", AD_Language_ar_KU,new System.Globalization.CultureInfo("ar-IQ") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4)
+        //            ("Khurdi", VAF_Language_ar_KU,new System.Globalization.CultureInfo("ar-IQ") ,   true, "dd.MM.yyyy", MediaSize.ISO.A4)
         //          ,
         //		new Language 
-        //            ("\u7b80\u4f53\u4e2d\u6587 (Hongkong)", AD_Language_zh_HK, new System.Globalization.CultureInfo("zh-HK") ,   null, "yyyy-MM-dd", MediaSize.ISO.A4),
+        //            ("\u7b80\u4f53\u4e2d\u6587 (Hongkong)", VAF_Language_zh_HK, new System.Globalization.CultureInfo("zh-HK") ,   null, "yyyy-MM-dd", MediaSize.ISO.A4),
         //            new Language 
-        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-SA)", AD_Language_ar_SA, new System.Globalization.CultureInfo("ar-SA") ,   null, "dd.MM.yyyy", MediaSize.ISO.A4),
+        //            ("\uFE94\uFEF4\uFE91\uFEAE\uFECC\uFEDF\uFE8D (AR-SA)", VAF_Language_ar_SA, new System.Globalization.CultureInfo("ar-SA") ,   null, "dd.MM.yyyy", MediaSize.ISO.A4),
         //};
 
         // [MethodImpl(MethodImplOptions.Synchronized)]
@@ -160,7 +160,7 @@ namespace VAdvantage.Login
 
                 langList.Clear();
                 DataTable dt = dtLang;// MLanguage.GetSystemLanguage();
-                _languages.Add(0, new Language("English", AD_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
+                _languages.Add(0, new Language("English", VAF_Language_en_US, new System.Globalization.CultureInfo("en-US"), null, "", MediaSize.NA.LETTER));
                 langList.Add(new ValueNamePair("en_US", "English"));
                 _loginLanguage = _languages[0];
                 if (dt != null)
@@ -169,12 +169,12 @@ namespace VAdvantage.Login
                     {
                         try
                         {
-                            var cul = new System.Globalization.CultureInfo(row["AD_Language"].ToString().Replace("_", "-"));
+                            var cul = new System.Globalization.CultureInfo(row["VAF_Language"].ToString().Replace("_", "-"));
                             _languages.Add(_languages.Count, new Language
-                            (row["Name"].ToString(), row["AD_Language"].ToString(),
+                            (row["Name"].ToString(), row["VAF_Language"].ToString(),
                             cul, cul.NumberFormat.NumberDecimalSeparator == ".", cul.DateTimeFormat.ShortDatePattern, MediaSize.ISO.A4));
 
-                            langList.Add(new ValueNamePair(row["AD_Language"].ToString(), row["DisplayName"].ToString()));
+                            langList.Add(new ValueNamePair(row["VAF_Language"].ToString(), row["DisplayName"].ToString()));
                         }
                         catch
                         {
@@ -236,7 +236,7 @@ namespace VAdvantage.Login
             {
                 if (lang.Equals(_languages[i].GetName())
                     || lang.Equals(_languages[i].GetLanguageCode())
-                    || lang.Equals(_languages[i].GetAD_Language()))
+                    || lang.Equals(_languages[i].GetVAF_Language()))
                     return _languages[i];
             }
 
@@ -260,7 +260,7 @@ namespace VAdvantage.Login
             if (langInfo == null || langInfo.Length == 0
                 || langInfo.Equals(lang.GetName())
                 || langInfo.Equals(lang.GetLanguageCode())
-                || langInfo.Equals(lang.GetAD_Language()))
+                || langInfo.Equals(lang.GetVAF_Language()))
                 return true;
             return false;
         }   //  isBaseLanguage
@@ -281,10 +281,10 @@ namespace VAdvantage.Login
         /// Get Base Language code. (e.g. en-US)
         /// </summary>
         /// <returns>Base Language</returns>
-        public static String GetBaseAD_Language()
+        public static String GetBaseVAF_Language()
         {
             var lang = GetBaseLanguage();
-            return lang.GetAD_Language();
+            return lang.GetVAF_Language();
         }   //  getBase
 
 
@@ -303,29 +303,29 @@ namespace VAdvantage.Login
         ///  Get Application Dictionary Language (system supported).
         ///  <example>e.g - en-US</example>
         /// </summary>
-        /// <returns>AD_Language</returns>
-        //public String GetAD_Language(string langInfo)
+        /// <returns>VAF_Language</returns>
+        //public String GetVAF_Language(string langInfo)
         //{
-        //    return GetLanguage(langInfo).GetAD_Language();
-        //}   //  getAD_Language
+        //    return GetLanguage(langInfo).GetVAF_Language();
+        //}   //  getVAF_Language
 
 
         /// <summary>
         /// Get Supported Language
         /// </summary>
         /// <param name="culture">Locale</param>
-        /// <returns>AD_Language</returns>
-        //public static String GetAD_Language(System.Globalization.CultureInfo culture)
+        /// <returns>VAF_Language</returns>
+        //public static String GetVAF_Language(System.Globalization.CultureInfo culture)
         //{
         //    if (culture != null)
         //    {
         //        for (int i = 0; i < _languages.Length; i++)
         //        {
         //            if (culture.Equals(_languages[i].GetCulture()))
-        //                return _languages[i].GetAD_Language();
+        //                return _languages[i].GetVAF_Language();
         //        }
         //    }
-        //    return _loginLanguage.GetAD_Language();
+        //    return _loginLanguage.GetVAF_Language();
         //}   //  getLocale
 
 
@@ -379,7 +379,7 @@ namespace VAdvantage.Login
         /// Define Language with A4 and default decimal point and date format
         /// </summary>
         /// <param name="name">displayed value, e.g. English</param>
-        /// <param name="AD_Language">
+        /// <param name="VAF_Language">
         /// the code of system supported langauge, e.g. en_US
         /// <para>
         /// (might be different than Locale - i.e. if the system does not support the language)
@@ -389,12 +389,12 @@ namespace VAdvantage.Login
         /// <param name="decimalPoint">true if Decimal Point - if null, derived from Locale</param>
         /// <param name="appDatePattern">Java date pattern as not all locales are defined - if null, derived from Locale</param>
         /// <param name="mediaSize">default media size</param>
-        //public Language(String name, String AD_Language, System.Globalization.CultureInfo culture, Boolean? decimalPoint, String appDatePattern)
+        //public Language(String name, String VAF_Language, System.Globalization.CultureInfo culture, Boolean? decimalPoint, String appDatePattern)
         //{
-        //    if (name == null || AD_Language == null)
+        //    if (name == null || VAF_Language == null)
         //        throw new ArgumentException("Language - parameter is null");
         //    _name = name;
-        //    _AD_Language = AD_Language;
+        //    _VAF_Language = VAF_Language;
         //    _culture = culture;
 
         //    //
@@ -402,12 +402,12 @@ namespace VAdvantage.Login
         //    SetDateFormat(appDatePattern);
         //}
 
-        public Language(String name, String AD_Language, System.Globalization.CultureInfo culture, Boolean? decimalPoint, String appDatePattern, MediaSize mediaSize)
+        public Language(String name, String VAF_Language, System.Globalization.CultureInfo culture, Boolean? decimalPoint, String appDatePattern, MediaSize mediaSize)
         {
-            if (name == null || AD_Language == null)
+            if (name == null || VAF_Language == null)
                 throw new ArgumentException("Language - parameter is null");
             _name = name;
-            _AD_Language = AD_Language;
+            _VAF_Language = VAF_Language;
             _culture = culture;
 
             //
@@ -439,15 +439,15 @@ namespace VAdvantage.Login
         /// Define Language with A4 and default decimal point and date format
         /// </summary>
         /// <param name="name">displayed value, e.g. English</param>
-        /// <param name="AD_Language">
+        /// <param name="VAF_Language">
         /// the code of system supported langauge, e.g. en_US
         /// <para>
         /// (might be different than Locale - i.e. if the system does not support the language)
         /// </para>
         /// </param>
         /// <param name="locale">the Locale, e.g. Locale.US</param>
-        //public Language(String name, String AD_Language, System.Globalization.CultureInfo culture)
-        //    : this(name, AD_Language, culture, false, "")
+        //public Language(String name, String VAF_Language, System.Globalization.CultureInfo culture)
+        //    : this(name, VAF_Language, culture, false, "")
         //{
         //}	//	Language
 
@@ -455,7 +455,7 @@ namespace VAdvantage.Login
         //Name					
         private String _name = "";
         //Language (key)			
-        private String _AD_Language;
+        private String _VAF_Language;
 
         private System.Globalization.CultureInfo _culture;
 
@@ -481,25 +481,25 @@ namespace VAdvantage.Login
         /// Get Application Dictionary Language (system supported).
         /// e.g. en-US
         /// </summary>
-        /// <returns>AD_Language</returns>
-        public String GetAD_Language()
+        /// <returns>VAF_Language</returns>
+        public String GetVAF_Language()
         {
-            return _AD_Language;
-        }   //  getAD_Language
+            return _VAF_Language;
+        }   //  getVAF_Language
 
 
         /// <summary>
         /// Set Application Dictionary Language (system supported).
         /// </summary>
-        /// <param name="AD_Language">AD_Language e.g. en-US</param>
-        public void SetAD_Language(String AD_Language)
+        /// <param name="VAF_Language">VAF_Language e.g. en-US</param>
+        public void SetVAF_Language(String VAF_Language)
         {
-            if (AD_Language != null)
+            if (VAF_Language != null)
             {
-                _AD_Language = AD_Language;
+                _VAF_Language = VAF_Language;
                 log.Config(ToString());
             }
-        }   //  getAD_Language
+        }   //  getVAF_Language
 
 
         /// <summary>
@@ -557,7 +557,7 @@ namespace VAdvantage.Login
         public static String GetName(String langInfo)
         {
             return GetLanguage(langInfo).GetName();
-        }   //  getAD_Language
+        }   //  getVAF_Language
 
 
         /// <summary>
@@ -714,7 +714,7 @@ namespace VAdvantage.Login
         ///// <returns>hashcode</returns>
         //public int HashCode()
         //{
-        //    return _AD_Language.GetHashCode();
+        //    return _VAF_Language.GetHashCode();
         //}	//	hashcode
 
         /// <summary>
@@ -723,21 +723,21 @@ namespace VAdvantage.Login
         /// <returns>hashcode</returns>
         //public override int GetHashCode()
         //{
-        //    return _AD_Language.GetHashCode();
+        //    return _VAF_Language.GetHashCode();
         //}
 
         /// <summary>
         /// Equals.
-        /// Two languages are equal, if they have the same AD_Language
+        /// Two languages are equal, if they have the same VAF_Language
         /// </summary>
         /// <param name="obj">compare</param>
-        /// <returns>true if AD_Language is the same</returns>
+        /// <returns>true if VAF_Language is the same</returns>
         public override bool Equals(Object obj)
         {
             if (obj.GetType() == typeof(Language))
             {
                 Language cmp = (Language)obj;
-                if (cmp.GetAD_Language().Equals(_AD_Language))
+                if (cmp.GetVAF_Language().Equals(_VAF_Language))
                     return true;
             }
             return false;
@@ -761,7 +761,7 @@ namespace VAdvantage.Login
         //        languageName = RESOURCE_LOCATION;
         //    Type typeLang = Type.GetType(languageName);
         //    if (typeLang == null)   //try again with full name
-        //        typeLang = Type.GetType(RESOURCE_LOCATION + "_" + GetAD_Language());
+        //        typeLang = Type.GetType(RESOURCE_LOCATION + "_" + GetVAF_Language());
         //    if (typeLang != null)
         //    {
         //        if (typeLang.IsClass)
@@ -797,7 +797,7 @@ namespace VAdvantage.Login
         {
             //StringBuilder sb = new StringBuilder("Language=[");
             //sb.Append(_name).Append(",Culture=").Append(_culture.ToString())
-            //    .Append(",AD_Language=").Append(_AD_Language)
+            //    .Append(",VAF_Language=").Append(_VAF_Language)
             //    .Append(",DatePattern=").Append(GetDBdatePattern())
             //    .Append(",DecimalPoint=").Append(IsDecimalPoint())
             //    .Append("]");
@@ -807,7 +807,7 @@ namespace VAdvantage.Login
 
         public static DataTable GetSystemLanguage()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_Language,Name,Name AS DisplayName FROM VAF_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
             if (ds != null)
                 return ds.Tables[0];
             return null;

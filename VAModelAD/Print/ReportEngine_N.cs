@@ -35,17 +35,17 @@ namespace VAdvantage.Print
             {
                 try
                 {
-                    string sqlTable = "select tablename from ad_table where ad_table_id = " + info.GetAD_Table_ID();
+                    string sqlTable = "select tablename from vaf_tableview where vaf_tableview_id = " + info.GetVAF_TableView_ID();
                     tableName = Util.GetValueOfString(DB.ExecuteScalar(sqlTable, null, null));
                     if (tableName != null || tableName != "")
                     {
-                        string orgSql = "select ad_org_id from " + tableName + " where  " + tableName + "_ID = " + info.GetRecord_ID();
-                        _ad_org_id = Util.GetValueOfInt(DB.ExecuteScalar(orgSql, null, null));
+                        string orgSql = "select vaf_org_id from " + tableName + " where  " + tableName + "_ID = " + info.GetRecord_ID();
+                        _vaf_org_id = Util.GetValueOfInt(DB.ExecuteScalar(orgSql, null, null));
                     }
                 }
                 catch
                 {
-                    _ad_org_id = -1;
+                    _vaf_org_id = -1;
                 }
             }
 
@@ -86,7 +86,7 @@ namespace VAdvantage.Print
         private View m_view = null;
 
         //******************//
-        private int _ad_org_id = -1;
+        private int _vaf_org_id = -1;
 
         public void SetPrintFormat(MPrintFormat pf)
         {
@@ -163,7 +163,7 @@ namespace VAdvantage.Print
 
             //actaull calling for the reports happens here
            // m_layout = new LayoutEngine(m_printFormat, m_printData, m_query);
-            m_layout = new LayoutEngine(m_printFormat, m_printData, m_query,_ad_org_id);
+            m_layout = new LayoutEngine(m_printFormat, m_printData, m_query,_vaf_org_id);
             html = m_layout.GetRptHtml();
             //	Printer
             String printerName = m_printFormat.GetPrinterName();
@@ -683,27 +683,27 @@ namespace VAdvantage.Print
         /// <returns>same class object</returns>
         static public ReportEngine_N Get(Ctx ctx, ProcessInfo pi)
         {
-            int AD_Client_ID = (int)pi.GetAD_Client_ID();
+            int VAF_Client_ID = (int)pi.GetVAF_Client_ID();
             //
-            int AD_Table_ID = 0;
-            int AD_ReportView_ID = 0;
+            int VAF_TableView_ID = 0;
+            int VAF_ReportView_ID = 0;
             String TableName = null;
             String whereClause = "";
             String orderbyClause = "";
-            int AD_PrintFormat_ID = 0;
+            int VAF_Print_Rpt_Layout_ID = 0;
             bool IsForm = false;
             int Client_ID = -1;
 
-            //	Get AD_Table_ID and TableName
-            String sql = "SELECT rv.AD_ReportView_ID,rv.WhereClause, "
-                + " t.AD_Table_ID,t.TableName, pf.AD_PrintFormat_ID, pf.IsForm, pf.AD_Client_ID, rv.OrderByClause "
-                + "FROM AD_PInstance pi"
-                + " INNER JOIN AD_Process p ON (pi.AD_Process_ID=p.AD_Process_ID)"
-                + " INNER JOIN AD_ReportView rv ON (p.AD_ReportView_ID=rv.AD_ReportView_ID)"
-                + " INNER JOIN AD_Table t ON (rv.AD_Table_ID=t.AD_Table_ID)"
-                + " LEFT OUTER JOIN AD_PrintFormat pf ON (p.AD_ReportView_ID=pf.AD_ReportView_ID AND pf.AD_Client_ID IN (0,'" + AD_Client_ID + "')) "
-                + "WHERE pi.AD_PInstance_ID='" + pi.GetAD_PInstance_ID() + "' "		//	#2
-                + "ORDER BY pf.AD_Client_ID DESC, pf.IsDefault DESC";	//	own first
+            //	Get VAF_TableView_ID and TableName
+            String sql = "SELECT rv.VAF_ReportView_ID,rv.WhereClause, "
+                + " t.VAF_TableView_ID,t.TableName, pf.VAF_Print_Rpt_Layout_ID, pf.IsForm, pf.VAF_Client_ID, rv.OrderByClause "
+                + "FROM VAF_JInstance pi"
+                + " INNER JOIN VAF_Job p ON (pi.VAF_Job_ID=p.VAF_Job_ID)"
+                + " INNER JOIN VAF_ReportView rv ON (p.VAF_ReportView_ID=rv.VAF_ReportView_ID)"
+                + " INNER JOIN VAF_TableView t ON (rv.VAF_TableView_ID=t.VAF_TableView_ID)"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Layout pf ON (p.VAF_ReportView_ID=pf.VAF_ReportView_ID AND pf.VAF_Client_ID IN (0,'" + VAF_Client_ID + "')) "
+                + "WHERE pi.VAF_JInstance_ID='" + pi.GetVAF_JInstance_ID() + "' "		//	#2
+                + "ORDER BY pf.VAF_Client_ID DESC, pf.IsDefault DESC";	//	own first
             IDataReader dr = null;
             try
             {
@@ -711,15 +711,15 @@ namespace VAdvantage.Print
                 //	Just get first 
                 if (dr.Read())
                 {
-                    AD_ReportView_ID = Utility.Util.GetValueOfInt(dr[0].ToString());		//	required
+                    VAF_ReportView_ID = Utility.Util.GetValueOfInt(dr[0].ToString());		//	required
                     whereClause = dr[1].ToString();
                     orderbyClause = dr["OrderByClause"].ToString();
                     if (string.IsNullOrEmpty(whereClause))
                         whereClause = "";
                     //
-                    AD_Table_ID = Utility.Util.GetValueOfInt(dr[2].ToString());
+                    VAF_TableView_ID = Utility.Util.GetValueOfInt(dr[2].ToString());
                     TableName = dr[3].ToString();			//	required for query
-                    AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[4].ToString());		//	required
+                    VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[4].ToString());		//	required
                     IsForm = "Y".Equals(dr[5].ToString());	//	required
                     Client_ID = Utility.Util.GetValueOfInt(dr[6].ToString());
                 }
@@ -734,15 +734,15 @@ namespace VAdvantage.Print
                 log.Log(Level.SEVERE, "(1) - " + sql, e1);
             }
             //	Nothing found
-            if (AD_ReportView_ID == 0)
+            if (VAF_ReportView_ID == 0)
             {
                 //	Check Print format in Report Directly
-                sql = "SELECT t.AD_Table_ID,t.TableName, pf.AD_PrintFormat_ID, pf.IsForm "
-                    + "FROM AD_PInstance pi"
-                    + " INNER JOIN AD_Process p ON (pi.AD_Process_ID=p.AD_Process_ID)"
-                    + " INNER JOIN AD_PrintFormat pf ON (p.AD_PrintFormat_ID=pf.AD_PrintFormat_ID)"
-                    + " INNER JOIN AD_Table t ON (pf.AD_Table_ID=t.AD_Table_ID) "
-                    + "WHERE pi.AD_PInstance_ID='" + pi.GetAD_PInstance_ID() + "'";
+                sql = "SELECT t.VAF_TableView_ID,t.TableName, pf.VAF_Print_Rpt_Layout_ID, pf.IsForm "
+                    + "FROM VAF_JInstance pi"
+                    + " INNER JOIN VAF_Job p ON (pi.VAF_Job_ID=p.VAF_Job_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Layout pf ON (p.VAF_Print_Rpt_Layout_ID=pf.VAF_Print_Rpt_Layout_ID)"
+                    + " INNER JOIN VAF_TableView t ON (pf.VAF_TableView_ID=t.VAF_TableView_ID) "
+                    + "WHERE pi.VAF_JInstance_ID='" + pi.GetVAF_JInstance_ID() + "'";
                 IDataReader idr = null;
                 try
                 {
@@ -750,11 +750,11 @@ namespace VAdvantage.Print
                     while (idr.Read())
                     {
                         whereClause = "";
-                        AD_Table_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
+                        VAF_TableView_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
                         TableName = idr[1].ToString();			//	required for query
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(idr[2].ToString());		//	required
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(idr[2].ToString());		//	required
                         IsForm = "Y".Equals(idr[3].ToString());	//	required
-                        Client_ID = AD_Client_ID;
+                        Client_ID = VAF_Client_ID;
                     }
                     idr.Close();
                 }
@@ -766,7 +766,7 @@ namespace VAdvantage.Print
                     }
                     log.Severe(e.ToString());
                 }
-                if (AD_PrintFormat_ID == 0)
+                if (VAF_Print_Rpt_Layout_ID == 0)
                 {
                     return null;
                 }
@@ -777,7 +777,7 @@ namespace VAdvantage.Print
             if (IsForm && pi.GetRecord_ID() != 0)	//	Form = one record
                 query = Query.GetEqualQuery(TableName + "_ID", pi.GetRecord_ID());
             else
-                query = Query.Get(ctx, pi.GetAD_PInstance_ID(), TableName);
+                query = Query.Get(ctx, pi.GetVAF_JInstance_ID(), TableName);
 
             //  Add to static where clause from ReportView
             if (whereClause.Length != 0)
@@ -793,13 +793,13 @@ namespace VAdvantage.Print
             //Object so = pi.getSerializableObject();
             //if (so instanceof MPrintFormat)
             //	format = (MPrintFormat)so;
-            if (format == null && AD_PrintFormat_ID != 0)
+            if (format == null && VAF_Print_Rpt_Layout_ID != 0)
             {
                 //	We have a PrintFormat with the correct Client
-                if (Client_ID == AD_Client_ID)
-                    format = MPrintFormat.Get(ctx, AD_PrintFormat_ID, false);
+                if (Client_ID == VAF_Client_ID)
+                    format = MPrintFormat.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
                 else
-                    format = MPrintFormat.CopyToClient(ctx, AD_PrintFormat_ID, AD_Client_ID);
+                    format = MPrintFormat.CopyToClient(ctx, VAF_Print_Rpt_Layout_ID, VAF_Client_ID);
             }
             if (format != null)
             {
@@ -813,15 +813,15 @@ namespace VAdvantage.Print
                 format = null;
             }
             //	Create Format
-            if (format == null && AD_ReportView_ID != 0)
-                format = MPrintFormat.CreateFromReportView(ctx, AD_ReportView_ID, pi.GetTitle());
+            if (format == null && VAF_ReportView_ID != 0)
+                format = MPrintFormat.CreateFromReportView(ctx, VAF_ReportView_ID, pi.GetTitle());
             if (format == null)
                 return null;
             //
             PrintInfo info = new PrintInfo(pi);
-            info.SetAD_Table_ID(AD_Table_ID);
+            info.SetVAF_TableView_ID(VAF_TableView_ID);
 
-            if (AD_ReportView_ID > 0)
+            if (VAF_ReportView_ID > 0)
             {
                 format.IsGridReport = true;
                 format.PageNo = 1;
@@ -945,7 +945,7 @@ namespace VAdvantage.Print
             }	//	Order
             //
             //	String JobName = DOC_BASETABLES[type] + "_Print";
-            int AD_PrintFormat_ID = 0;
+            int VAF_Print_Rpt_Layout_ID = 0;
             int C_BPartner_ID = 0;
             String DocumentNo = null;
             int copies = 1;
@@ -957,147 +957,147 @@ namespace VAdvantage.Print
             String sql = null;
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
-                    + "	c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
+                    + "	c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
                     + "FROM C_PaySelectionCheck d"
                     + " INNER JOIN C_PaySelection ps ON (d.C_PaySelection_ID=ps.C_PaySelection_ID)"
                     + " INNER JOIN C_BankAccountDoc bad ON (ps.C_BankAccount_ID=bad.C_BankAccount_ID AND d.PaymentRule=bad.PaymentRule)"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
                     + "WHERE d.C_PaySelectionCheck_ID=@recordid";		//	info from BankAccount
             else if (type == DUNNING)
                 sql = "SELECT dl.Dunning_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,dr.DunningDate "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,dr.DunningDate "
                     + "FROM C_DunningRunEntry d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID)"
                     + " INNER JOIN C_DunningRun dr ON (d.C_DunningRun_ID=dr.C_DunningRun_ID)"
                     + " INNER JOIN C_DunningLevel dl ON (dl.C_DunningLevel_ID=dr.C_DunningLevel_ID) "
                     + "WHERE d.C_DunningRunEntry_ID=@recordid";			//	info from Dunning
             else if (type == REMITTANCE)
                 sql = "SELECT pf.Remittance_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "
                     + "FROM C_PaySelectionCheck d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (c.AD_Client_ID=pf.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
                     + "WHERE d.C_PaySelectionCheck_ID=@recordid"		//	info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) ORDER BY pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == PROJECT)
                 sql = "SELECT pf.Project_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.Value "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.Value "
                     + "FROM C_Project d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (c.AD_Client_ID=pf.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
                     + " LEFT OUTER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
                     + "WHERE d.C_Project_ID=@recordid"					//	info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) ORDER BY pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == RFQ)
-                sql = "SELECT COALESCE(t.AD_PrintFormat_ID, pf.AD_PrintFormat_ID),"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,rr.Name "
+                sql = "SELECT COALESCE(t.VAF_Print_Rpt_Layout_ID, pf.VAF_Print_Rpt_Layout_ID),"
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,rr.Name "
                     + "FROM C_RfQResponse rr"
                     + " INNER JOIN C_RfQ r ON (rr.C_RfQ_ID=r.C_RfQ_ID)"
                     + " INNER JOIN C_RfQ_Topic t ON (r.C_RfQ_Topic_ID=t.C_RfQ_Topic_ID)"
-                    + " INNER JOIN AD_Client c ON (rr.AD_Client_ID=c.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (rr.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (rr.C_BPartner_ID=bp.C_BPartner_ID),"
-                    + " AD_PrintFormat pf "
-                    + "WHERE pf.AD_Client_ID IN (0,rr.AD_Client_ID)"
-                    + " AND pf.AD_Table_ID=725 AND pf.IsTableBased='N'"	//	from RfQ PrintFormat
+                    + " VAF_Print_Rpt_Layout pf "
+                    + "WHERE pf.VAF_Client_ID IN (0,rr.VAF_Client_ID)"
+                    + " AND pf.VAF_TableView_ID=725 AND pf.IsTableBased='N'"	//	from RfQ PrintFormat
                     + " AND rr.C_RfQResponse_ID=@recordid "				//	Info from RfQTopic
-                    + "ORDER BY t.AD_PrintFormat_ID, pf.AD_Client_ID DESC, pf.AD_Org_ID DESC";
+                    + "ORDER BY t.VAF_Print_Rpt_Layout_ID, pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == MOVEMENT)
                 sql = "SELECT pf.Movement_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0) "
                     + "FROM M_Movement d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
                     + "WHERE d.M_Movement_ID=@recordid"                 //  info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) AND pf.Movement_PrintFormat_ID IS NOT NULL "
-                    + "ORDER BY pf.AD_Client_ID DESC, pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Movement_PrintFormat_ID IS NOT NULL "
+                    + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == INVENTORY)
                 sql = "SELECT pf.Inventory_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0) "
                     + "FROM M_Inventory d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
                     + "WHERE d.M_Inventory_ID=@recordid"                 //  info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) AND pf.Inventory_PrintFormat_ID IS NOT NULL "
-                    + "ORDER BY pf.AD_Client_ID DESC,  pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Inventory_PrintFormat_ID IS NOT NULL "
+                    + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             /****************Manfacturing***********************/
             else if (type == WORKORDER)
-                sql = "SELECT COALESCE(dt.AD_PrintFormat_ID,pf.WorkOrder_PrintFormat_ID), "
+                sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrder_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
-                    + " dt.AD_PrintFormat_ID "
+                    + " dt.VAF_Print_Rpt_Layout_ID "
                     + "FROM M_WorkOrder d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
                     + "WHERE d.M_WorkOrder_ID=@recordid"                 //  info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) "
-                    + "ORDER BY pf.AD_Client_ID DESC,  pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
+                    + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == WORKORDERTXN)
-                sql = "SELECT COALESCE(dt.AD_PrintFormat_ID,pf.WorkOrderTxn_PrintFormat_ID), "
+                sql = "SELECT COALESCE(dt.VAF_Print_Rpt_Layout_ID,pf.WorkOrderTxn_PrintFormat_ID), "
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "
-                    + " dt.AD_PrintFormat_ID "
+                    + " dt.VAF_Print_Rpt_Layout_ID "
                     + "FROM M_WorkOrderTransaction d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
                     + "WHERE d.M_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) "
-                    + "ORDER BY pf.AD_Client_ID DESC,  pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
+                    + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             else if (type == STANDARDOPERATION)
                 sql = "SELECT pf.StdOperation_PrintFormat_ID, "
                     + " c.IsMultiLingualDocument"
                     + " FROM M_StandardOperation d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " INNER JOIN M_Operation op ON (d.M_Operation_ID=op.M_Operation_ID) "
                     + " WHERE d.M_StandardOperation_ID=@recordid" // info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) "
-                    + "ORDER BY pf.AD_Client_ID DESC, pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
+                    + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == ROUTING)
                 sql = "SELECT pf.Routing_PrintFormat_ID, "
                     + " c.IsMultiLingualDocument"
                     + " FROM M_Routing d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (d.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN M_RoutingOperation ro ON (d.M_Routing_ID=ro.M_Routing_ID) "
                     + " WHERE d.M_Routing_ID=@recordid" // info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) "
-                    + "ORDER BY pf.AD_Client_ID DESC, pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
+                    + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == TASKLIST)
                 sql = " SELECT dt.DocBaseType, pf.RPL_TList_PrintFormat_ID, " 			//1..2
                     + " pf.PUT_TList_PrintFormat_ID, pf.PCK_CluTList_PrintFormat_ID, "	//3..4
                     + " pf.PCK_OrdTList_PrintFormat_ID, M.PickMethod, "					//5..6
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0), "		//7..8
-                    + " dt.AD_PrintFormat_ID"											//9
+                    + " dt.VAF_Print_Rpt_Layout_ID"											//9
                     + " FROM M_TaskList M "
-                    + " INNER JOIN AD_Client c ON (M.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (M.AD_Client_ID=pf.AD_Client_ID OR pf.AD_Client_ID=0)"
+                    + " INNER JOIN VAF_Client c ON (M.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (M.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN C_DocType dt ON (M.C_DocType_ID=dt.C_DocType_ID) "
                     + " WHERE M.M_TaskList_ID=@recordid"
-                    + " AND pf.AD_Org_ID IN (0,M.AD_Org_ID) "
-                    + " ORDER BY pf.AD_Client_ID DESC,  pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,M.VAF_Org_ID) "
+                    + " ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             /****************Manfacturing***********************/
             else	//	Get PrintFormat from Org or 0 of document client
             {
                 sql = "SELECT pf.Order_PrintFormat_ID,pf.Shipment_PrintFormat_ID,"		//	1..2
                     //	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see InvoicePrint
-                    + " COALESCE (bp.Invoice_PrintFormat_ID,dt.AD_PrintFormat_ID,pf.Invoice_PrintFormat_ID)," // 3
+                    + " COALESCE (bp.Invoice_PrintFormat_ID,dt.VAF_Print_Rpt_Layout_ID,pf.Invoice_PrintFormat_ID)," // 3
                     + " pf.Project_PrintFormat_ID, pf.Remittance_PrintFormat_ID,"		//	4..5
-                    + " c.IsMultiLingualDocument, bp.AD_Language,"						//	6..7
+                    + " c.IsMultiLingualDocument, bp.VAF_Language,"						//	6..7
                     + " COALESCE(dt.DocumentCopies,0)+COALESCE(bp.DocumentCopies,1), " 	// 	8
-                    + " dt.AD_PrintFormat_ID,bp.C_BPartner_ID,d.DocumentNo "			//	9..11
+                    + " dt.VAF_Print_Rpt_Layout_ID,bp.C_BPartner_ID,d.DocumentNo "			//	9..11
                     + "FROM " + DOC_BASETABLES[type] + " d"
-                    + " INNER JOIN AD_Client c ON (d.AD_Client_ID=c.AD_Client_ID)"
-                    + " INNER JOIN AD_PrintForm pf ON (c.AD_Client_ID=pf.AD_Client_ID)"
+                    + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
+                    + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID)"
                     + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
                     + "WHERE d." + DOC_IDS[type] + "=@recordid"			//	info from PrintForm
-                    + " AND pf.AD_Org_ID IN (0,d.AD_Org_ID) "
-                    + "ORDER BY pf.AD_Org_ID DESC";
+                    + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
+                    + "ORDER BY pf.VAF_Org_ID DESC";
             }
             //
             IDataReader dr=null;
@@ -1111,12 +1111,12 @@ namespace VAdvantage.Print
                     if (type == CHECK || type == DUNNING || type == REMITTANCE
                         || type == PROJECT || type == RFQ)
                     {
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);// rs.getInt(1);
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[0]);// rs.getInt(1);
                         copies = 1;
                         //	Set Language when enabled
-                        String AD_Language = Utility.Util.GetValueOfString(dr[2]);// rs.getString(3);
-                        if (AD_Language != null)// && "Y".equals(rs.getString(2)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[2]);// rs.getString(3);
+                        if (VAF_Language != null)// && "Y".equals(rs.getString(2)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                         C_BPartner_ID = Utility.Util.GetValueOfInt(dr[3]);// rs.getInt(4);
                         if (type == DUNNING)
                         {
@@ -1128,7 +1128,7 @@ namespace VAdvantage.Print
                     }
                     else if (type == MOVEMENT || type == INVENTORY)
                     {
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);// rs.getInt(1);
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[0]);// rs.getInt(1);
                         copies = Utility.Util.GetValueOfInt(dr[2]);// rs.getInt(3);
                         if (copies == 0)
                             copies = 1;
@@ -1136,25 +1136,25 @@ namespace VAdvantage.Print
                     /******************Manufacturing**************/
                     else if (type == WORKORDER || type == WORKORDERTXN)
                     {
-                        int pfAD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[3]);
-                        if (AD_PrintFormat_ID == 0)
-                            AD_PrintFormat_ID = pfAD_PrintFormat_ID;
+                        int pfVAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[0]);
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[3]);
+                        if (VAF_Print_Rpt_Layout_ID == 0)
+                            VAF_Print_Rpt_Layout_ID = pfVAF_Print_Rpt_Layout_ID;
 
                         copies = Utility.Util.GetValueOfInt(dr[2]);
                         if (copies == 0)
                             copies = 1;
-                        String AD_Language = Utility.Util.GetValueOfString(dr[1]);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[1]);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                     }
                     else if (type == STANDARDOPERATION || type == ROUTING)
                     {
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[0]);
                         copies = 1;
-                        /*String AD_Language = rs.getString(2);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6))) // IsMultiLingualDocument
-                        language = Language.getLanguage(AD_Language);*/
+                        /*String VAF_Language = rs.getString(2);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6))) // IsMultiLingualDocument
+                        language = Language.getLanguage(VAF_Language);*/
                     }
                     else if (type == TASKLIST)
                     {
@@ -1167,26 +1167,26 @@ namespace VAdvantage.Print
                         copies = Utility.Util.GetValueOfInt(dr[7]);
                         if (copies == 0)
                             copies = 1;
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[8]);
-                        if (AD_PrintFormat_ID == 0)
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[8]);
+                        if (VAF_Print_Rpt_Layout_ID == 0)
                         {
                             if (docBaseType.ToUpper().Equals("RPL"))
                             {
-                                AD_PrintFormat_ID = replFormatID;
+                                VAF_Print_Rpt_Layout_ID = replFormatID;
                             }
                             else if (docBaseType.ToUpper().Equals("PUT"))
                             {
-                                AD_PrintFormat_ID = putFormatID;
+                                VAF_Print_Rpt_Layout_ID = putFormatID;
                             }
                             else if (docBaseType.ToUpper().Equals("PCK"))
                             {
                                 if (pmethod.ToUpper().Equals("C"))
                                 {
-                                    AD_PrintFormat_ID = cpickFormatID;
+                                    VAF_Print_Rpt_Layout_ID = cpickFormatID;
                                 }
                                 else
                                 {
-                                    AD_PrintFormat_ID = opickFormatID;
+                                    VAF_Print_Rpt_Layout_ID = opickFormatID;
                                 }
                             }
                         }
@@ -1196,14 +1196,14 @@ namespace VAdvantage.Print
                     else
                     {
                         //	Set PrintFormat
-                        AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[type]);// rs.getInt(type + 1);
-                        if (Utility.Util.GetValueOfInt(dr[8].ToString()) != 0)		//	C_DocType.AD_PrintFormat_ID
-                            AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[8].ToString());// rs.getInt(9);
+                        VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[type]);// rs.getInt(type + 1);
+                        if (Utility.Util.GetValueOfInt(dr[8].ToString()) != 0)		//	C_DocType.VAF_Print_Rpt_Layout_ID
+                            VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[8].ToString());// rs.getInt(9);
                         copies = Utility.Util.GetValueOfInt(dr[7].ToString());// rs.getInt(8);
                         //	Set Language when enabled
-                        String AD_Language = Utility.Util.GetValueOfString(dr[6].ToString());// rs.getString(7);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[6].ToString());// rs.getString(7);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                         C_BPartner_ID = Utility.Util.GetValueOfInt(dr[9]);// rs.getInt(10);
                         DocumentNo = Utility.Util.GetValueOfString(dr[10]);// rs.getString(11);
                     }
@@ -1218,14 +1218,14 @@ namespace VAdvantage.Print
                 }
                 log.Log(Level.SEVERE, "Record_ID=" + Record_ID + ", SQL=" + sql, e);
             }
-            if (AD_PrintFormat_ID == 0)
+            if (VAF_Print_Rpt_Layout_ID == 0)
             {
                 log.Log(Level.SEVERE, "No PrintFormat found for Type=" + type + ", Record_ID=" + Record_ID);
                 return null;
             }
 
             //	Get Format & Data
-            MPrintFormat format = MPrintFormat.Get(ctx, AD_PrintFormat_ID, false);
+            MPrintFormat format = MPrintFormat.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
             format.SetLanguage(language);		//	BP Language if Multi-Lingual
             //	if (!Env.isBaseLanguage(language, DOC_TABLES[type]))
             format.SetTranslationLanguage(language);
@@ -1233,7 +1233,7 @@ namespace VAdvantage.Print
 
             /*   Set Culture according to BPartner Language */
 
-            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetAD_Language().Replace('_','-'));
+            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetVAF_Language().Replace('_','-'));
 
             
 
@@ -1247,7 +1247,7 @@ namespace VAdvantage.Print
             //	query
             Query query = new Query(DOC_TABLES[type]);
             query.AddRestriction(DOC_IDS[type], Query.EQUAL, Utility.Util.GetValueOfInt(Record_ID));
-            //	log.config( "ReportCtrl.startDocumentPrint - " + format, query + " - " + language.getAD_Language());
+            //	log.config( "ReportCtrl.startDocumentPrint - " + format, query + " - " + language.getVAF_Language());
             //
             if (DocumentNo == null || DocumentNo.Length == 0)
                 DocumentNo = "DocPrint";
@@ -1309,14 +1309,14 @@ namespace VAdvantage.Print
                     if (item.IsTypePrintFormat())
                     {
                         //isAnyHasChild = true;
-                        int AD_Column_ID = item.GetAD_Column_ID();
-                        m_printFormat = MPrintFormat.Get(GetCtx(), item.GetAD_PrintFormatChild_ID(), true);
-                        Object obj = m_printData.GetNode(AD_Column_ID, false);
+                        int VAF_Column_ID = item.GetVAF_Column_ID();
+                        m_printFormat = MPrintFormat.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), true);
+                        Object obj = m_printData.GetNode(VAF_Column_ID, false);
 
                         PrintDataElement dataElement = (PrintDataElement)obj;
                         String recordString = dataElement.GetValueKey();
 
-                        Query query = new Query(m_printFormat.GetAD_Table_ID());
+                        Query query = new Query(m_printFormat.GetVAF_TableView_ID());
                         query.AddRestriction(item.GetColumnName(), Query.EQUAL, int.Parse(recordString));
                         m_printFormat.SetTranslationViewQuery(query);
 
@@ -1346,7 +1346,7 @@ namespace VAdvantage.Print
                                 CreateCSVvalue(sb, delimiter, m_printFormat.GetItem(col).GetPrintName(language));
                             else
                             {
-                                Object obj = m_printData.GetNode(item.GetAD_Column_ID(), false);
+                                Object obj = m_printData.GetNode(item.GetVAF_Column_ID(), false);
                                 String data = "";
                                 if (obj == null)
                                 {
@@ -1442,7 +1442,7 @@ namespace VAdvantage.Print
         public bool CreateHTML(StreamWriter writer, bool onlyTable, Language language)
         {
             MPrintTableFormat tf = m_printFormat.GetTableFormat();
-            MPrintFont printFont = MPrintFont.Get(m_printFormat.GetAD_PrintFont_ID());
+            MPrintFont printFont = MPrintFont.Get(m_printFormat.GetVAF_Print_Rpt_Font_ID());
             tf.SetStandard_Font(printFont.GetFont());
             StringBuilder sb = new StringBuilder(@"<html><head><title>Report : " + m_printData.GetTableName() + "</title></head><body>");
 
@@ -1456,9 +1456,9 @@ namespace VAdvantage.Print
                 for (int col = 0; col < m_printFormat.GetItemCount(); col++)
                 {
                     MPrintFormatItem item = m_printFormat.GetItem(col);
-                    if (item.GetAD_PrintFont_ID() != 0)
+                    if (item.GetVAF_Print_Rpt_Font_ID() != 0)
                     {
-                        MPrintFont font = MPrintFont.Get(item.GetAD_PrintFont_ID());
+                        MPrintFont font = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                     }
                     if (item.IsPrinted())
                     {
@@ -1479,7 +1479,7 @@ namespace VAdvantage.Print
                                 sb.Append("</tr>").Append(CreateDataRow(tf, item, true));
 
                             sb.Append("<td" + CreateDataRow(tf, item, false) + ">");
-                            Object obj = m_printData.GetNode(item.GetAD_Column_ID(), false);
+                            Object obj = m_printData.GetNode(item.GetVAF_Column_ID(), false);
                             if (obj == null)
                                 sb.Append(@"&nbsp;");
                             else if (obj.GetType() == typeof(PrintDataElement))

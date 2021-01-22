@@ -116,18 +116,18 @@ namespace VAdvantage.Model
             //while (it.MoveNext())
             //{
             //    MPeriod period = it.Current;
-            //    if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
+            //    if (period.GetVAF_Client_ID() == ctx.GetVAF_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
             //        return period;
             //}
 
             ////	Get it from DB
             //MPeriod retValue = null;
-            //int AD_Client_ID = ctx.GetAD_Client_ID();
+            //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
             //    + "FROM C_Period "
             //    + "WHERE C_Year_ID IN "
             //        + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= "
-            //            + "(SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=@clientid))"
+            //            + "(SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE  IsActive = 'Y' AND VAF_Client_ID=@clientid))"
             //    + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
             //    + " AND IsActive='Y' AND PeriodType='S'";
             //try
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             //    DateTime? dt = ((DateTime?)dateAcct).Value.Date;
 
             //    SqlParameter[] param = new SqlParameter[2];
-            //    param[0] = new SqlParameter("@clientid", AD_Client_ID);
+            //    param[0] = new SqlParameter("@clientid", VAF_Client_ID);
             //    param[1] = new SqlParameter("@dateAcc", TimeUtil.GetDay((DateTime?)dateAcct));
 
             //    DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
@@ -159,7 +159,7 @@ namespace VAdvantage.Model
             //}
             //if (retValue == null)
             //{
-            //    _log.Warning("No Standard Period for " + dateAcct + " (AD_Client_ID=" + AD_Client_ID + ")");
+            //    _log.Warning("No Standard Period for " + dateAcct + " (VAF_Client_ID=" + VAF_Client_ID + ")");
             //}
             //return retValue;
 
@@ -171,9 +171,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>active Period or null</returns>
-        public static MPeriod Get(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        public static MPeriod Get(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
             if (dateAcct == null)
                 return null;
@@ -183,18 +183,18 @@ namespace VAdvantage.Model
             //while (it.MoveNext())
             //{
             //    MPeriod period = it.Current;
-            //    if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
+            //    if (period.GetVAF_Client_ID() == ctx.GetVAF_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
             //        return period;
             //}
 
             // Get Calender ID
             StringBuilder qry = new StringBuilder("");
             int Calender_ID = 0;
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, AD_Org_ID, null);
+                MOrgInfo orgInfo = MOrgInfo.Get(ctx, VAF_Org_ID, null);
                 if (orgInfo.Get_ColumnIndex("C_Calendar_ID") >= 0)
                 {
                     Calender_ID = orgInfo.GetC_Calendar_ID();
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
 
             if (Calender_ID == 0)
             {
-                qry.Append("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=" + AD_Client_ID);
+                qry.Append("SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE  IsActive = 'Y' AND VAF_Client_ID=" + VAF_Client_ID);
                 Calender_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
             }
 
@@ -249,7 +249,7 @@ namespace VAdvantage.Model
             }
             if (retValue == null)
             {
-                _log.Warning("No Standard Period for " + dateAcct + " (AD_Client_ID=" + AD_Client_ID + ")");
+                _log.Warning("No Standard Period for " + dateAcct + " (VAF_Client_ID=" + VAF_Client_ID + ")");
             }
             return retValue;
         }
@@ -277,11 +277,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>C_Period_ID or 0</returns>
-        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
-            MPeriod period = Get(ctx, dateAcct, AD_Org_ID);
+            MPeriod period = Get(ctx, dateAcct, VAF_Org_ID);
             if (period == null)
                 return 0;
             return period.GetC_Period_ID();
@@ -297,22 +297,22 @@ namespace VAdvantage.Model
         public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct)
         {
             //MPeriod retValue = null;
-            //int AD_Client_ID = ctx.GetAD_Client_ID();
+            //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
             //    + "FROM C_Period "
             //    + "WHERE C_Year_ID IN "
             //        + "(SELECT p.C_Year_ID "
-            //        + "FROM AD_ClientInfo c"
+            //        + "FROM VAF_ClientDetail c"
             //        + " INNER JOIN C_Year y ON (c.C_Calendar_ID=y.C_Calendar_ID)"
             //        + " INNER JOIN C_Period p ON (y.C_Year_ID=p.C_Year_ID) "
-            //        + "WHERE c.AD_Client_ID=@clientid"
+            //        + "WHERE c.VAF_Client_ID=@clientid"
             //        + "	AND @date BETWEEN StartDate AND EndDate)"
             //    + " AND IsActive='Y' AND PeriodType='S' "
             //    + "ORDER BY StartDate";
             //try
             //{
             //    SqlParameter[] param = new SqlParameter[2];
-            //    param[0] = new SqlParameter("@clientid", AD_Client_ID);
+            //    param[0] = new SqlParameter("@clientid", VAF_Client_ID);
             //    param[1] = new SqlParameter("@date", dateAcct);
 
             //    DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
@@ -336,20 +336,20 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
-        /// <param name="AD_Org_ID">Organization</param>
+        /// <param name="VAF_Org_ID">Organization</param>
         /// <returns>active first Period</returns>
-        public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
             MPeriod retValue = null;
 
             // Get Calender ID
             string qry;
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             int Calender_ID = 0;
 
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, AD_Org_ID, null);
+                MOrgInfo orgInfo = MOrgInfo.Get(ctx, VAF_Org_ID, null);
                 if (orgInfo.Get_ColumnIndex("C_Calendar_ID") >= 0)
                 {
                     Calender_ID = orgInfo.GetC_Calendar_ID();
@@ -358,7 +358,7 @@ namespace VAdvantage.Model
 
             if (Calender_ID == 0)
             {
-                qry = "SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=" + AD_Client_ID;
+                qry = "SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE  IsActive = 'Y' AND VAF_Client_ID=" + VAF_Client_ID;
                 Calender_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
             }
 
@@ -435,7 +435,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>period controls</returns>
-        public MPeriodControl[] GetPeriodControls(bool requery, int AD_Org_ID)
+        public MPeriodControl[] GetPeriodControls(bool requery, int VAF_Org_ID)
         {
             if (_controls != null && !requery)
                 return _controls;
@@ -444,9 +444,9 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM C_PeriodControl "
                 + "WHERE IsActive = 'Y' AND C_Period_ID=" + GetC_Period_ID();
 
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                sql += " AND AD_Org_ID IN (0, " + AD_Org_ID + ") ORDER BY AD_Org_ID DESC";
+                sql += " AND VAF_Org_ID IN (0, " + VAF_Org_ID + ") ORDER BY VAF_Org_ID DESC";
             }
 
             try
@@ -495,11 +495,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="docBaseType">Document Base Type</param>
         /// <returns>period control or null</returns>
-        public MPeriodControl GetPeriodControl(String docBaseType, int AD_Org_ID)
+        public MPeriodControl GetPeriodControl(String docBaseType, int VAF_Org_ID)
         {
             if (docBaseType == null)
                 return null;
-            GetPeriodControls(false, AD_Org_ID);
+            GetPeriodControls(false, VAF_Org_ID);
             for (int i = 0; i < _controls.Length; i++)
             {
                 //	log.fine("getPeriodControl - " + 1 + " - " + _controls[i]);
@@ -580,7 +580,7 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                //	SELECT Value FROM AD_Ref_List WHERE AD_Reference_ID=183
+                //	SELECT Value FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=183
                 MDocType[] types = MDocType.GetOfClient(GetCtx());
                 int count = 0;
                 List<String> baseTypes = new List<String>();
@@ -591,7 +591,7 @@ namespace VAdvantage.Model
                     if (baseTypes.Contains(docBaseType))
                         continue;
                     MPeriodControl pc = new MPeriodControl(this, docBaseType);
-                    pc.SetAD_Org_ID(GetAD_Org_ID());
+                    pc.SetVAF_Org_ID(GetVAF_Org_ID());
                     if (pc.Save())
                         count++;
                     baseTypes.Add(docBaseType);
@@ -737,9 +737,9 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
         /// <param name="docBaseType">base type</param>
-        /// <param name="AD_Org_ID">Optional Organization</param>
+        /// <param name="VAF_Org_ID">Optional Organization</param>
         /// <returns>true if open</returns>
-        public static bool IsOpen(Ctx ctx, DateTime? dateAcct, String docBaseType, int AD_Org_ID)
+        public static bool IsOpen(Ctx ctx, DateTime? dateAcct, String docBaseType, int VAF_Org_ID)
         {
             if (dateAcct == null)
             {
@@ -752,13 +752,13 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MPeriod period = MPeriod.Get(ctx, dateAcct, AD_Org_ID);
+            MPeriod period = MPeriod.Get(ctx, dateAcct, VAF_Org_ID);
             if (period == null)
             {
                 _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
                 return false;
             }
-            bool open = (period.IsOpen(docBaseType, dateAcct, AD_Org_ID) == null);
+            bool open = (period.IsOpen(docBaseType, dateAcct, VAF_Org_ID) == null);
             if (!open)
             {
                 _log.Warning(period.GetName() + ": Not open for " + docBaseType + " (" + dateAcct + ")");
@@ -781,7 +781,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MAcctSchema mas = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+            MAcctSchema mas = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             if (mas != null && mas.IsAutoPeriodControl())
             {
                 //	if (as.getC_Period_ID() == getC_Period_ID())
@@ -1005,14 +1005,14 @@ namespace VAdvantage.Model
         /// performance, ensure that the list of orgs does not contain duplicates.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <param name="orgs"></param>
         /// <param name="DateAcct">accounting date</param>
         /// <param name="DocBaseType">document base type</param>
         /// <returns>error message or null</returns>
         /// <date>07-March-2011</date>
         /// <writer>raghu</writer>
-        public static String IsOpen(Ctx ctx, int AD_Client_ID, List<int> orgs, DateTime? DateAcct,
+        public static String IsOpen(Ctx ctx, int VAF_Client_ID, List<int> orgs, DateTime? DateAcct,
                 String DocBaseType)
         {
             if (DateAcct == null)
@@ -1020,9 +1020,9 @@ namespace VAdvantage.Model
             if (DocBaseType == null)
                 return "@NotFound@ @DocBaseType@";
 
-            MAcctSchema as1 = MClient.Get(ctx, AD_Client_ID).GetAcctSchema();
+            MAcctSchema as1 = MClient.Get(ctx, VAF_Client_ID).GetAcctSchema();
             if (as1 == null)
-                return "@NotFound@ @C_AcctSchema_ID@ for AD_Client_ID=" + AD_Client_ID;
+                return "@NotFound@ @C_AcctSchema_ID@ for VAF_Client_ID=" + VAF_Client_ID;
             if (as1.IsAutoPeriodControl())
             {
                 if (as1.IsAutoPeriodControlOpen(DateAcct))
@@ -1032,7 +1032,7 @@ namespace VAdvantage.Model
             }
 
             //	Get all Calendars in line with Organizations
-            MClientInfo clientInfo = MClientInfo.Get(ctx, AD_Client_ID, null);
+            MClientInfo clientInfo = MClientInfo.Get(ctx, VAF_Client_ID, null);
             List<int> orgCalendars = new List<int>();
             List<int> calendars = new List<int>();
             foreach (int org in orgs)
@@ -1056,12 +1056,12 @@ namespace VAdvantage.Model
                 int C_Calendar_ID = calendars[i];
                 MPeriod period = MPeriod.GetOfCalendar(ctx, C_Calendar_ID, DateAcct);
                 //	First Org for Calendar
-                int AD_Org_ID = 0;
+                int VAF_Org_ID = 0;
                 for (int j = 0; j < orgCalendars.Count; j++)
                 {
                     if (orgCalendars[j] == C_Calendar_ID)
                     {
-                        AD_Org_ID = orgs[j];
+                        VAF_Org_ID = orgs[j];
                         break;
                     }
                 }
@@ -1071,17 +1071,17 @@ namespace VAdvantage.Model
                     String date = DisplayType.GetDateFormat(DisplayType.Date).Format(DateAcct);
                     if (cal != null)
                         return "@NotFound@ @C_Period_ID@: " + date
-                        + " - " + MOrg.Get(ctx, AD_Org_ID).GetName()
+                        + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> " + cal.GetName();
                     else
                         return "@NotFound@ @C_Period_ID@: " + date
-                        + " - " + MOrg.Get(ctx, AD_Org_ID).GetName()
+                        + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> C_Calendar_ID=" + C_Calendar_ID;
                 }
                 String error = period.IsOpen(DocBaseType, DateAcct);
                 if (error != null)
                     return error
-                    + " - " + MOrg.Get(ctx, AD_Org_ID).GetName()
+                    + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
                     + " -> " + MCalendar.Get(ctx, C_Calendar_ID).GetName();
             }
             return null;	//	open
@@ -1103,7 +1103,7 @@ namespace VAdvantage.Model
             //    return "@C_Period_ID@ <> @IsActive@";
             //}
 
-            //MAcctSchema as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+            //MAcctSchema as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             //if (as1 != null && as1.IsAutoPeriodControl())
             //{
             //    if (!as1.IsAutoPeriodControlOpen(dateAcct))
@@ -1147,7 +1147,7 @@ namespace VAdvantage.Model
         /// <returns>error message or null</returns>
         /// <date>07-March-2011</date>
         /// <writer>raghu</writer>
-        public String IsOpen(String DocBaseType, DateTime? dateAcct, int AD_Org_ID)
+        public String IsOpen(String DocBaseType, DateTime? dateAcct, int VAF_Org_ID)
         {
             if (!IsActive())
             {
@@ -1157,13 +1157,13 @@ namespace VAdvantage.Model
 
             MAcctSchema as1 = null;
 
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                as1 = MOrg.Get(GetCtx(), AD_Org_ID).GetAcctSchema();
+                as1 = MOrg.Get(GetCtx(), VAF_Org_ID).GetAcctSchema();
             }
             else
             {
-                as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+                as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             }
             if (as1 != null && as1.IsAutoPeriodControl())
             {
@@ -1185,7 +1185,7 @@ namespace VAdvantage.Model
                 log.Warning(GetName() + " - No DocBaseType");
                 return "@NotFound@ @DocBaseType@";
             }
-            MPeriodControl pc = GetPeriodControl(DocBaseType, AD_Org_ID);
+            MPeriodControl pc = GetPeriodControl(DocBaseType, VAF_Org_ID);
             if (pc == null)
             {
                 log.Warning(GetName() + " - Period Control not found for " + DocBaseType);

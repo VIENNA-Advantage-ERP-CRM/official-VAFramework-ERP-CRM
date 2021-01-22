@@ -85,7 +85,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721596364918L;
         /** Last Updated Timestamp 8/13/2015 6:34:08 PM */
         public static long updatedMS = 1439471048129L;
-        /** AD_Table_ID=313 */
+        /** VAF_TableView_ID=313 */
         public static int Table_ID;
         // =313;
 
@@ -189,8 +189,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** DTD001_ChargeType AD_Reference_ID=1000312 */
-        public static int DTD001_CHARGETYPE_AD_Reference_ID = 1000312;
+        /** DTD001_ChargeType VAF_Control_Ref_ID=1000312 */
+        public static int DTD001_CHARGETYPE_VAF_Control_Ref_ID = 1000312;
         /** AVL = AVL */
         public static String DTD001_CHARGETYPE_AVL = "AVL";
         /** Indemnity = IDM */

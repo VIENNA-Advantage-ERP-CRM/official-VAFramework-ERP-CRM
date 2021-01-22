@@ -1,7 +1,7 @@
 ﻿; (function (VIS, $) {
 
     // PAttributesForm form declraion for constructor class
-    function PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, C_BPartner_ID, proWindow, AD_Column_ID, pwindowNo) {
+    function PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, C_BPartner_ID, proWindow, VAF_Column_ID, pwindowNo) {
         this.onClose = null;
         var $self = this;
         var $root = $("<div style='position:relative'>");
@@ -33,23 +33,23 @@
         var IsSOTrx = false;
         var IsInternalUse = false;
         this.log = VIS.Logging.VLogger.getVLogger("PAttributesForm");
-        this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", C_BPartner_ID=" + C_BPartner_ID + ", ProductW=" + productWindow + ", Column=" + AD_Column_ID);
+        this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", C_BPartner_ID=" + C_BPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
 
         //constructor load
         mAttributeSetInstanceId = M_AttributeSetInstance_ID;
         mProductId = M_Product_ID;
         cBPartnerId = C_BPartner_ID;
         productWindow = proWindow;
-        adColumnId = AD_Column_ID;
+        adColumnId = VAF_Column_ID;
         windowNoParent = pwindowNo;
         mLocatorId = M_Locator_ID;
         if (windowNoParent != -1) {
-            //winQry = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "AD_Tab_ID"));
+            //winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID"));
             //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry, null, null));
 
             // Added by Bharat on 01 May 2017 to remove client side queries
-            var AD_tab_ID = VIS.context.getWindowTabContext(windowNoParent, 0, "AD_Tab_ID");
-            window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", AD_tab_ID.toString());
+            var vaf_tab_ID = VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID");
+            window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", vaf_tab_ID.toString());
             windowName = VIS.context.getContext(windowNoParent, "WindowName");
             IsSOTrx = VIS.context.isSOTrx(windowNoParent);
             IsInternalUse = VIS.context.getWindowTabContext(windowNoParent, 0, "IsInternalUse");
@@ -154,7 +154,7 @@
                     mProductId: mProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
-                    AD_Column_ID: AD_Column_ID,
+                    VAF_Column_ID: VAF_Column_ID,
                     window_ID: window_ID,
                     IsSOTrx: IsSOTrx,
                     IsInternalUse: IsInternalUse
@@ -226,7 +226,7 @@
             else if (chkNewEdit.prop("checked")) {
                 var text = txtLotString.val();
                 flag = false;
-                //var sql = "select count(*) from ad_column where columnname = 'UniqueLot' and ad_table_id = (select ad_table_id from ad_table where tablename = 'M_AttributeSet')";
+                //var sql = "select count(*) from vaf_column where columnname = 'UniqueLot' and vaf_tableview_id = (select vaf_tableview_id from vaf_tableview where tablename = 'M_AttributeSet')";
                 //var count = VIS.DB.executeScalar(sql);
                 var count = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/CheckUniqueLot", null, null);
                 if (count > 0) {
@@ -573,10 +573,10 @@
                 }
 
                 //sql = "SELECT COUNT(*) FROM M_Storage s INNER JOIN M_Locator l ON (l.M_Locator_ID = s.M_Locator_ID) "
-                //       + " inner join M_warehouse w ON (w.M_warehouse_ID = l.M_Warehouse_ID) WHERE AD_Client_ID = " + VIS.context.getAD_Client_ID();
+                //       + " inner join M_warehouse w ON (w.M_warehouse_ID = l.M_Warehouse_ID) WHERE VAF_Client_ID = " + VIS.context.getVAF_Client_ID();
 
                 //var sqlWhere = "";
-                //var AD_Org_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "AD_Org_ID");
+                //var VAF_Org_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "VAF_Org_ID");
 
                 //var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM M_AttributeSet aSet INNER JOIN M_Product mp on mp.M_AttributeSet_ID = aset.M_AttributeSet_ID"
                 //    + " WHERE mp.M_Product_ID = " + mProductId;
@@ -584,14 +584,14 @@
                 //dr = VIS.DB.executeReader(sqlChk, null);
                 //if (dr.read()) {
                 //    if (dr.getString(0).toUpper() == "Y") {
-                //        sqlWhere = sqlWhere.concat(" OR s.AD_Org_ID = " + AD_Org_ID);
+                //        sqlWhere = sqlWhere.concat(" OR s.VAF_Org_ID = " + VAF_Org_ID);
                 //    }
                 //    if (dr.getString(1).toUpper() == "Y") {
                 //        sqlWhere = sqlWhere.concat(" OR s.M_Product_ID = " + mProductId);
                 //    }
                 //    if (dr.getString(2).toUpper() == "Y") {
                 //        var M_Warehouse_ID = 0;
-                //        var sqlMovement = "SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + VIS.Env.getCtx().getContext(windowNoParent, "BaseTable_ID");
+                //        var sqlMovement = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + VIS.Env.getCtx().getContext(windowNoParent, "BaseTable_ID");
                 //        var innerdr = VIS.DB.executeReader(sqlMovement, null);
                 //        if (innerdr.read()) {
                 //            if (innerdr.getString(0).toUpper() == "M_MOVEMENT") {
@@ -658,7 +658,7 @@
                     mProductId: mProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
-                    AD_Column_ID: AD_Column_ID,
+                    VAF_Column_ID: VAF_Column_ID,
                     attrcode: attrCode
                 },
                 success: function (data) {

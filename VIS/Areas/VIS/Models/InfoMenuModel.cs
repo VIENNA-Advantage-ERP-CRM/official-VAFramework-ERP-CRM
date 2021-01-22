@@ -32,12 +32,12 @@ namespace VIS.Models
             string sql = "";
             if (isBaseLanguage)
             {
-                sql = "SELECT Name, AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y' ORDER BY Name ASC";
+                sql = "SELECT Name, VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WHERE IsActive='Y' ORDER BY Name ASC";
             }
             else
             {
-                sql = @" SELECT WT.Name, W.AD_InfoWindow_ID FROM AD_InfoWindow W
-                            INNER JOIN AD_InfoWindow_Trl WT ON (W.AD_InfoWindow_ID=WT.AD_InfoWindow_ID AND WT.ad_language='" + ctx.GetAD_Language() + @"')
+                sql = @" SELECT WT.Name, W.VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WVAF_InviteUser
+                            INNER JOIN VAF_QuickSearchWindow_TL WT ON (W.VAF_QuickSearchWindow_ID=WT.VAF_QuickSearchWindow_ID AND WT.VAF_Language='" + ctx.GetVAF_Language() + @"')
                             WHERE W.IsActive='Y' ORDER BY WT.Name ASC";
             }
 
@@ -49,12 +49,12 @@ namespace VIS.Models
             //menu.Append("<ul>");
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                //   menu.Append("<OPTION>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["AD_InfoWindow_ID"] + "</OPTION>");
-                //menu.Append("<li>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["AD_InfoWindow_ID"] + "</li>");
+                //   menu.Append("<OPTION>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["VAF_QuickSearchWindow_ID"] + "</OPTION>");
+                //menu.Append("<li>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["VAF_QuickSearchWindow_ID"] + "</li>");
                 item = new InfoWin();
                 item.Name = (ds.Tables[0].Rows[i]["Name"]).ToString();
-                item.AD_InfoWindow_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_InfoWindow_ID"]);
-                ////menu.Add((Convert.ToInt32(ds.Tables[0].Rows[i]["AD_InfoWindow_ID"])), (ds.Tables[0].Rows[i]["Name"]).ToString());
+                item.VAF_QuickSearchWindow_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_QuickSearchWindow_ID"]);
+                ////menu.Add((Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_QuickSearchWindow_ID"])), (ds.Tables[0].Rows[i]["Name"]).ToString());
                 menu.Add(item);
             }
             //menu.Append("</SELECT>");
@@ -70,7 +70,7 @@ namespace VIS.Models
             get;
             set;
         }
-        public int AD_InfoWindow_ID
+        public int VAF_QuickSearchWindow_ID
         {
             get;
             set;

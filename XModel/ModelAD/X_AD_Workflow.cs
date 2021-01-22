@@ -94,7 +94,7 @@ static X_AD_Workflow()
 //static long serialVersionUID 27562514366827L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050038L;
-/** AD_Table_ID=117 */
+/** VAF_TableView_ID=117 */
 public static int Table_ID;
  // =117;
 
@@ -137,50 +137,50 @@ StringBuilder sb = new StringBuilder ("X_AD_Workflow[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Node.
-@param AD_WF_Node_ID Workflow Node (activity), step or process */
-public void SetAD_WF_Node_ID (int AD_WF_Node_ID)
+@param VAF_WFlow_Node_ID Workflow Node (activity), step or process */
+public void SetVAF_WFlow_Node_ID (int VAF_WFlow_Node_ID)
 {
-if (AD_WF_Node_ID <= 0) Set_Value ("AD_WF_Node_ID", null);
+if (VAF_WFlow_Node_ID <= 0) Set_Value ("VAF_WFlow_Node_ID", null);
 else
-Set_Value ("AD_WF_Node_ID", AD_WF_Node_ID);
+Set_Value ("VAF_WFlow_Node_ID", VAF_WFlow_Node_ID);
 }
 /** Get Node.
 @return Workflow Node (activity), step or process */
-public int GetAD_WF_Node_ID() 
+public int GetVAF_WFlow_Node_ID() 
 {
-Object ii = Get_Value("AD_WF_Node_ID");
+Object ii = Get_Value("VAF_WFlow_Node_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Responsible.
-@param AD_WF_Responsible_ID Responsible for Workflow Execution */
-public void SetAD_WF_Responsible_ID (int AD_WF_Responsible_ID)
+@param VAF_WFlow_Incharge_ID Responsible for Workflow Execution */
+public void SetVAF_WFlow_Incharge_ID (int VAF_WFlow_Incharge_ID)
 {
-if (AD_WF_Responsible_ID <= 0) Set_Value ("AD_WF_Responsible_ID", null);
+if (VAF_WFlow_Incharge_ID <= 0) Set_Value ("VAF_WFlow_Incharge_ID", null);
 else
-Set_Value ("AD_WF_Responsible_ID", AD_WF_Responsible_ID);
+Set_Value ("VAF_WFlow_Incharge_ID", VAF_WFlow_Incharge_ID);
 }
 /** Get Workflow Responsible.
 @return Responsible for Workflow Execution */
-public int GetAD_WF_Responsible_ID() 
+public int GetVAF_WFlow_Incharge_ID() 
 {
-Object ii = Get_Value("AD_WF_Responsible_ID");
+Object ii = Get_Value("VAF_WFlow_Incharge_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -216,8 +216,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AccessLevel AD_Reference_ID=5 */
-public static int ACCESSLEVEL_AD_Reference_ID=5;
+/** AccessLevel VAF_Control_Ref_ID=5 */
+public static int ACCESSLEVEL_VAF_Control_Ref_ID=5;
 /** Organization = 1 */
 public static String ACCESSLEVEL_Organization = "1";
 /** Client only = 2 */
@@ -352,8 +352,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** DurationUnit AD_Reference_ID=299 */
-public static int DURATIONUNIT_AD_Reference_ID=299;
+/** DurationUnit VAF_Control_Ref_ID=299 */
+public static int DURATIONUNIT_VAF_Control_Ref_ID=299;
 /** Day = D */
 public static String DURATIONUNIT_Day = "D";
 /** Month = M */
@@ -393,8 +393,8 @@ public String GetDurationUnit()
 return (String)Get_Value("DurationUnit");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -506,8 +506,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PublishStatus AD_Reference_ID=310 */
-public static int PUBLISHSTATUS_AD_Reference_ID=310;
+/** PublishStatus VAF_Control_Ref_ID=310 */
+public static int PUBLISHSTATUS_VAF_Control_Ref_ID=310;
 /** Released = R */
 public static String PUBLISHSTATUS_Released = "R";
 /** Test = T */
@@ -631,8 +631,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** WorkflowType AD_Reference_ID=328 */
-public static int WORKFLOWTYPE_AD_Reference_ID=328;
+/** WorkflowType VAF_Control_Ref_ID=328 */
+public static int WORKFLOWTYPE_VAF_Control_Ref_ID=328;
 /** General = G */
 public static String WORKFLOWTYPE_General = "G";
 /** Document Process = P */

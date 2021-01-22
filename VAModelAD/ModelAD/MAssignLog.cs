@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAssignLog
  * Purpose        : Assignment Log Model
- * Class Used     : X_AD_AssignLog
+ * Class Used     : X_VAF_AllotLog
  * Chronological    Development
  * Deepak           12-Feb-2010
   ******************************************************/
@@ -22,17 +22,17 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAssignLog : X_AD_AssignLog
+    public class MAssignLog : X_VAF_AllotLog
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_AssignLog_ID">id</param>
+        /// <param name="VAF_AllotLog_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAssignLog(Ctx ctx, int AD_AssignLog_ID, Trx trxName)
-            : base(ctx, AD_AssignLog_ID, trxName)
+        public MAssignLog(Ctx ctx, int VAF_AllotLog_ID, Trx trxName)
+            : base(ctx, VAF_AllotLog_ID, trxName)
         {
 
         }
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(parent);
-            SetAD_AssignTarget_ID(parent.GetAD_AssignTarget_ID());
+            SetVAF_AllotTarget_ID(parent.GetVAF_AllotTarget_ID());
         }	//	MAssignLog
 
     }

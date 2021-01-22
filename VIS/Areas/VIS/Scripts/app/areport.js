@@ -110,17 +110,17 @@
     };
 
 
-    function AReport(AD_Table_ID, query, AD_Tab_ID, windowNo, curTab, treeID, treeNodeID, IsSummary) {
+    function AReport(VAF_TableView_ID, query, VAF_Tab_ID, windowNo, curTab, treeID, treeNodeID, IsSummary) {
 
 
-        var AD_Client_ID = null;
+        var VAF_Client_ID = null;
         var sql = null;
         var dr = null;
         var list = null;
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
-        var windowID = curTab.getAD_Window_ID();
-        var AD_Table_ID = AD_Table_ID;
+        var windowID = curTab.getVAF_Screen_ID();
+        var VAF_TableView_ID = VAF_TableView_ID;
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
         if (treeNodeID > 0) {
@@ -132,24 +132,24 @@
         if (!IsSummary) {
             rv.showSummary(IsSummary);
         }
-        if (AD_Table_ID) {
-            rv.setAD_Table_ID(AD_Table_ID);
+        if (VAF_TableView_ID) {
+            rv.setVAF_TableView_ID(VAF_TableView_ID);
         }
 
 
 
 
-        var getPrintFormats = function (AD_Table_ID) {
-            AD_Client_ID = VIS.context.getAD_Client_ID();
-            //sql = "SELECT AD_PrintFormat_ID, Name, AD_Client_ID "
-            //       + "FROM AD_PrintFormat "
-            //       + "WHERE AD_Table_ID='" + AD_Table_ID + "' AND IsTableBased='Y' ";
-            //if (AD_Tab_ID > 0) {
-            //    sql = sql + " AND AD_Tab_ID='" + AD_Tab_ID + "' ";
+        var getPrintFormats = function (VAF_TableView_ID) {
+            VAF_Client_ID = VIS.context.getVAF_Client_ID();
+            //sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, VAF_Client_ID "
+            //       + "FROM VAF_Print_Rpt_Layout "
+            //       + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' ";
+            //if (VAF_Tab_ID > 0) {
+            //    sql = sql + " AND VAF_Tab_ID='" + VAF_Tab_ID + "' ";
             //}
-            //sql = sql + "ORDER BY AD_Client_ID DESC, IsDefault DESC, Name";	//	Own First
+            //sql = sql + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name";	//	Own First
             //sql = VIS.MRole.getDefault().addAccessSQL(sql,		//	Own First
-            //       "AD_PrintFormat", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
+            //       "VAF_Print_Rpt_Layout", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
 
 
 
@@ -164,7 +164,7 @@
                     type: 'Get',
                     async: false,
                     url: VIS.Application.contextUrl + "Form/GetPrintFormats",
-                    data: { AD_Table_ID: AD_Table_ID, AD_Tab_ID: AD_Tab_ID },
+                    data: { VAF_TableView_ID: VAF_TableView_ID, VAF_Tab_ID: VAF_Tab_ID },
                     success: function (data) {
                         dr = new VIS.DB.DataReader().toJson(data);
                     },
@@ -172,7 +172,7 @@
 
                 //dr = executeReader(sql, null, null);
                 while (dr.read()) {
-                    if (VIS.Utility.Util.getValueOfInt(dr.get(2).toString()) == AD_Client_ID) {
+                    if (VIS.Utility.Util.getValueOfInt(dr.get(2).toString()) == VAF_Client_ID) {
                         pp = {};
                         pp.Key = VIS.Utility.Util.getValueOfInt(dr.get(0));
                         pp.Name = dr.getString(1);
@@ -182,28 +182,28 @@
                 dr.close();
 
                 if (list.length == 0) {
-                    if (pp == null) launchReport(null, AD_Table_ID, AD_Table_ID);		//	calls launch
-                    else launchReport(pp, 0, AD_Table_ID);
+                    if (pp == null) launchReport(null, VAF_TableView_ID, VAF_TableView_ID);		//	calls launch
+                    else launchReport(pp, 0, VAF_TableView_ID);
                 }
-                else launchReport(list[0], 0, AD_Table_ID);
+                else launchReport(list[0], 0, VAF_TableView_ID);
             }
             catch (e) { dr.close(); }
         };
 
 
 
-        var launchReport = function (pp, Ad_Table_ID, TableID) {
+        var launchReport = function (pp, vaf_tableview_ID, TableID) {
             var queryInfo = [];
             queryInfo.push(query.getTableName());
             queryInfo.push(query.getWhereClause(true));
-            if (AD_Tab_ID) {
-                queryInfo.push(AD_Tab_ID.toString());
+            if (VAF_Tab_ID) {
+                queryInfo.push(VAF_Tab_ID.toString());
             }
             var id = null;
             if (pp != null) id = pp.Key;
-            else id = Ad_Table_ID;
+            else id = vaf_tableview_ID;
 
-            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (Ad_Table_ID > 0 && AD_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id, windowID);
+            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (vaf_tableview_ID > 0 && VAF_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id, windowID);
 
 
             $.ajax({
@@ -215,7 +215,7 @@
                 //    id: id,
                 //    queryInfo: JSON.stringify(queryInfo),
                 //    code: query.getCode(0),
-                //    isCreateNew: (Ad_Table_ID > 0 && AD_Tab_ID > 0),
+                //    isCreateNew: (vaf_tableview_ID > 0 && VAF_Tab_ID > 0),
                 //    nProcessInfo: JSON.stringify(""),
                 //    pdf: false,
                 //    csv: false,
@@ -223,7 +223,7 @@
                 //    treeID: tree_ID,
                 //    pageNo: 1,
                 //    showSummary: IsSummary,
-                //    AD_PInstance_ID: 0
+                //    VAF_JInstance_ID: 0
                 //},
                 success: function (data) {
                     if (data == null) {
@@ -239,7 +239,7 @@
                     if (d.HTML && d.HTML.length > 0) { //report
 
                         //rv.show(d.HTML, id, pp, TableID, queryInfo, query.getCode(0));
-                        rv.show(d.HTML, d.AD_PrintFormat_ID, pp, TableID, queryInfo, query.getCode(0), dres.pSetting);
+                        rv.show(d.HTML, d.VAF_Print_Rpt_Layout_ID, pp, TableID, queryInfo, query.getCode(0), dres.pSetting);
                         rv.setReportBytes(d.Report);
                         rv.setIteration(dres.pSetting.TotalPage);
 
@@ -251,7 +251,7 @@
                 }
             });
         };
-        getPrintFormats(AD_Table_ID);
+        getPrintFormats(VAF_TableView_ID);
     };
 
 
@@ -279,9 +279,9 @@
         var $cmbPages = null;
         var cFrame = null;
         var html = null;
-        var AD_PrintFormat_ID = null;
+        var VAF_Print_Rpt_Layout_ID = null;
         var processInfo = null;
-        var Ad_Table_ID = null;
+        var vaf_tableview_ID = null;
         var queryInfo = null;
         var code = null;
         var height = VIS.Env.getScreenHeight() - 50;
@@ -302,22 +302,22 @@
         var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
         var IsSummary = true;
         var pi = null;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab.getVAF_Screen_ID();
 
-        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID, AD_Window_ID) {
+        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, VAF_JInstance_ID, pageNO, fileType, VAF_Print_Rpt_Layout_ID, VAF_Screen_ID) {
 
             if (!pi) {
-                pi = new VIS.ProcessInfo("", 0, Ad_Table_ID, 0);
-                pi.setAD_User_ID(VIS.context.getAD_User_ID());
-                pi.setAD_Client_ID(VIS.context.getAD_Client_ID());
+                pi = new VIS.ProcessInfo("", 0, vaf_tableview_ID, 0);
+                pi.setVAF_UserContact_ID(VIS.context.getVAF_UserContact_ID());
+                pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
             }
-            pi.setTable_ID(Ad_Table_ID);
-            pi.setAD_PInstance_ID(ad_PInstance_ID);
+            pi.setTable_ID(vaf_tableview_ID);
+            pi.setVAF_JInstance_ID(VAF_JInstance_ID);
             pi.setPageNo(pageNO);
             pi.setFileType(fileType);
-            pi.set_AD_PrintFormat_ID(ad_PrintFormat_ID);
-            pi.setAD_Window_ID(AD_Window_ID);
-            if (AD_Window_ID > 0) {
+            pi.set_VAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);
+            pi.setVAF_Screen_ID(VAF_Screen_ID);
+            if (VAF_Screen_ID > 0) {
                 pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_WINDOW);
             }
             else {
@@ -346,15 +346,15 @@
             tree_ID = treeID;
         }
 
-        this.setAD_Table_ID = function (AD_Table_ID) {
-            Ad_Table_ID = AD_Table_ID;
+        this.setVAF_TableView_ID = function (VAF_TableView_ID) {
+            vaf_tableview_ID = VAF_TableView_ID;
         };
 
         this.showSummary = function (isSummary) {
             IsSummary = isSummary;
         };
 
-        this.setAD_Window_ID = function (windowID) {
+        this.setVAF_Screen_ID = function (windowID) {
             windowID = windowID;
         }
 
@@ -368,16 +368,16 @@
         };
 
         // to Archive Document
-        this.archiveDocument = function (queryInfo, Ad_Table_ID, reportBytes) {
+        this.archiveDocument = function (queryInfo, vaf_tableview_ID, reportBytes) {
             setBusy(true);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
                 dataType: "json",
                 type: "post",
                 data: {
-                    AD_Process_ID: 0,
+                    VAF_Job_ID: 0,
                     Name: queryInfo[0],
-                    AD_Table_ID: Ad_Table_ID,
+                    VAF_TableView_ID: vaf_tableview_ID,
                     Record_ID: 0,
                     C_BPartner_ID: 0,
                     isReport: true,
@@ -447,14 +447,14 @@
         };
         this.dispose = function () {
         };
-        this.show = function (content, _AD_PrintFormat_ID, _processInfo, _Ad_Table_ID, _queryInfo, _code, pagesetting) {
+        this.show = function (content, _VAF_Print_Rpt_Layout_ID, _processInfo, _vaf_tableview_ID, _queryInfo, _code, pagesetting) {
 
             processInfo = _processInfo;
-            Ad_Table_ID = _Ad_Table_ID;
+            vaf_tableview_ID = _vaf_tableview_ID;
             queryInfo = _queryInfo;
-            AD_PrintFormat_ID = _AD_PrintFormat_ID;
+            VAF_Print_Rpt_Layout_ID = _VAF_Print_Rpt_Layout_ID;
             code = _code;
-            canExport = VIS.MRole.getDefault().getIsCanExport(Ad_Table_ID);
+            canExport = VIS.MRole.getDefault().getIsCanExport(vaf_tableview_ID);
             if (isPrint != true) {
                 if (canExport) {
                     btnSaveCsv.css('display', 'inline-flex');
@@ -662,9 +662,9 @@
                 printReport();
             });
             btnCustomize.on('click', function () {
-                //var AD_Window_ID = 240;		// hardcoded               
+                //var VAF_Screen_ID = 240;		// hardcoded               
                 var zoomQuery = new VIS.Query();
-                zoomQuery.addRestriction("AD_PrintFormat_ID", VIS.Query.prototype.EQUAL, AD_PrintFormat_ID);
+                zoomQuery.addRestriction("VAF_Print_Rpt_Layout_ID", VIS.Query.prototype.EQUAL, VAF_Print_Rpt_Layout_ID);
                 VIS.viewManager.startWindow(240, zoomQuery);
             });
             btnRequery.on('click', function () {
@@ -726,8 +726,8 @@
                 if (btn.data("isdefbtn") == "yes") {
                     var sql = "VIS_102";
                     var param = [];
-                    param[0] = new VIS.DB.SqlParam("@Ad_Table_ID", Ad_Table_ID);
-                    param[1] = new VIS.DB.SqlParam("@AD_Tab_ID", curTab.getAD_Tab_ID());
+                    param[0] = new VIS.DB.SqlParam("@vaf_tableview_ID", vaf_tableview_ID);
+                    param[1] = new VIS.DB.SqlParam("@VAF_Tab_ID", curTab.getVAF_Tab_ID());
                     executeQuery(sql, param);
 
                     var sql = "VIS_103";
@@ -745,13 +745,13 @@
                     }
                     return;
                 }
-                AD_PrintFormat_ID = id;
+                VAF_Print_Rpt_Layout_ID = id;
                 subContentPane.empty();
                 subContentPane.css('width', '0px');
                 setBusy(true);
                 var isCreateNew = false;
                 if (id == -1) {
-                    id = Ad_Table_ID;
+                    id = vaf_tableview_ID;
                     isCreateNew = true;
                 }
 
@@ -774,7 +774,7 @@
                     //    treeID: tree_ID,
                     //    pageNo: cmbPage.val(),
                     //    showSummary: IsSummary,
-                    //    AD_PInstance_ID: 0
+                    //    VAF_JInstance_ID: 0
                     //},
                     success: function (data) {
                         if (data == null) {
@@ -792,7 +792,7 @@
                         reportBytes = d.Report;
                         resetPageCtrls(dres.pSetting);
 
-                        AD_PrintFormat_ID = d.AD_PrintFormat_ID;
+                        VAF_Print_Rpt_Layout_ID = d.VAF_Print_Rpt_Layout_ID;
                         setBusy(false);
                     }
                 });
@@ -815,16 +815,16 @@
             });
 
             btnArchive.on('click', function () {
-                self.archiveDocument(queryInfo, Ad_Table_ID, reportBytes);
+                self.archiveDocument(queryInfo, vaf_tableview_ID, reportBytes);
                 //setBusy(true);
                 //$.ajax({
                 //    url: VIS.Application.contextUrl + "JsonData/ArchiveDoc/",
                 //    dataType: "json",
                 //    type: "post",
                 //    data: {
-                //        AD_Process_ID: 0,
+                //        VAF_Job_ID: 0,
                 //        Name: queryInfo[0],
-                //        AD_Table_ID: Ad_Table_ID,
+                //        VAF_TableView_ID: vaf_tableview_ID,
                 //        Record_ID: 0,
                 //        C_BPartner_ID: 0,
                 //        isReport: true,
@@ -844,10 +844,10 @@
 
             //        pageNo = $cmbPages.val();
             //        var data = {
-            //            AD_Process_ID: pCtl.pi.getAD_Process_ID(),
+            //            VAF_Job_ID: pCtl.pi.getVAF_Job_ID(),
             //            Name: pCtl.pi.getTitle(),
-            //            AD_PInstance_ID: pCtl.pi.getAD_PInstance_ID(),
-            //            AD_Table_ID: pCtl.pi.getTable_ID(),
+            //            VAF_JInstance_ID: pCtl.pi.getVAF_JInstance_ID(),
+            //            VAF_TableView_ID: pCtl.pi.getTable_ID(),
             //            Record_ID: pCtl.pi.getRecord_ID(),
             //            pageNumber: pageNo,
             //            page_Size: PAGE_SIZE,
@@ -875,10 +875,10 @@
             //        pageNo = $cmbPages.val();
 
             //        var data = {
-            //            AD_Process_ID: pCtl.pi.getAD_Process_ID(),
+            //            VAF_Job_ID: pCtl.pi.getVAF_Job_ID(),
             //            Name: pCtl.pi.getTitle(),
-            //            AD_PInstance_ID: pCtl.pi.getAD_PInstance_ID(),
-            //            AD_Table_ID: pCtl.pi.getTable_ID(),
+            //            VAF_JInstance_ID: pCtl.pi.getVAF_JInstance_ID(),
+            //            VAF_TableView_ID: pCtl.pi.getTable_ID(),
             //            Record_ID: pCtl.pi.getRecord_ID(),
             //            pageNumber: pageNo,
             //            page_Size: PAGE_SIZE,
@@ -929,18 +929,18 @@
         var launchReport = function (pNo) {
 
             //var id = null;
-            //if (AD_PrintFormat_ID > 0) {
-            //    id = AD_PrintFormat_ID;
+            //if (VAF_Print_Rpt_Layout_ID > 0) {
+            //    id = VAF_Print_Rpt_Layout_ID;
             //}
             //else if (processInfo != null) {
             //    id = processInfo.Key;
             //}
             //else {
-            //    id = Ad_Table_ID;
+            //    id = vaf_tableview_ID;
             //}
             setBusy(true);
 
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", AD_PrintFormat_ID, windowID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", VAF_Print_Rpt_Layout_ID, windowID);
 
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
@@ -948,7 +948,7 @@
                 data: data,
                 type: 'POST',
                 //data: {
-                //    id: AD_PrintFormat_ID,
+                //    id: VAF_Print_Rpt_Layout_ID,
                 //    queryInfo: JSON.stringify(queryInfo),
                 //    code: code,
                 //    isCreateNew: false,
@@ -959,7 +959,7 @@
                 //    treeID: tree_ID,
                 //    pageNo: pNo,
                 //    showSummary: IsSummary,
-                //    AD_PInstance_ID: 0
+                //    VAF_JInstance_ID: 0
                 //},
                 success: function (data) {
                     if (data == null) {
@@ -985,15 +985,15 @@
             setBusy(true);
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
-            //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, AD_PrintFormat_ID, windowID);
+            //else id = vaf_tableview_ID;
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, VAF_Print_Rpt_Layout_ID, windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
                 data: data,
                 type: 'POST',
                 //data: {
-                //    id: AD_PrintFormat_ID,
+                //    id: VAF_Print_Rpt_Layout_ID,
                 //    queryInfo: JSON.stringify(queryInfo),
                 //    code: code,
                 //    isCreateNew: false,
@@ -1004,7 +1004,7 @@
                 //    treeID: tree_ID,
                 //    pageNo: pNo,
                 //    showSummary: IsSummary,
-                //    AD_PInstance_ID: 0
+                //    VAF_JInstance_ID: 0
                 //},
                 success: function (data) {
                     if (data == null) {
@@ -1062,15 +1062,15 @@
             setBusy(true);
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
-            //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, AD_PrintFormat_ID, windowID);
+            //else id = vaf_tableview_ID;
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, VAF_Print_Rpt_Layout_ID, windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
                 data: data,
                 type: 'POST',
                 //data: {
-                //    id: AD_PrintFormat_ID,
+                //    id: VAF_Print_Rpt_Layout_ID,
                 //    queryInfo: JSON.stringify(queryInfo),
                 //    code: code,
                 //    isCreateNew: false,
@@ -1081,7 +1081,7 @@
                 //    treeID: tree_ID,
                 //    pageNo: pNo,
                 //    showSummary: IsSummary,
-                //    AD_PInstance_ID: 0
+                //    VAF_JInstance_ID: 0
                 //},
                 success: function (data) {
                     if (data == null) {
@@ -1136,14 +1136,14 @@
             if (isPrint != true) {
                 $menu.empty();
 
-                //var sql = "SELECT AD_PrintFormat_ID, Name, Description,IsDefault "
-                //            + "FROM AD_PrintFormat "
-                //            + "WHERE AD_Table_ID=" + Ad_Table_ID;
-                //if (curTab.getAD_Tab_ID() > 0) {
-                //    sql = sql + " AND AD_Tab_ID=" + curTab.getAD_Tab_ID();
+                //var sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, Description,IsDefault "
+                //            + "FROM VAF_Print_Rpt_Layout "
+                //            + "WHERE VAF_TableView_ID=" + vaf_tableview_ID;
+                //if (curTab.getVAF_Tab_ID() > 0) {
+                //    sql = sql + " AND VAF_Tab_ID=" + curTab.getVAF_Tab_ID();
                 //}
                 //sql = sql + " ORDER BY Name";
-                //sql = VIS.MRole.getDefault().addAccessSQL(sql, "AD_PrintFormat", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
+                //sql = VIS.MRole.getDefault().addAccessSQL(sql, "VAF_Print_Rpt_Layout", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
 
                 var dr = null;
                 var checkName = [];
@@ -1157,7 +1157,7 @@
                         type: 'Get',
                         async: false,
                         url: VIS.Application.contextUrl + "Form/GetShowReportDetails",
-                        data: { AD_Table_ID: Ad_Table_ID, AD_Tab_ID: curTab.getAD_Tab_ID() },
+                        data: { VAF_TableView_ID: vaf_tableview_ID, VAF_Tab_ID: curTab.getVAF_Tab_ID() },
                         success: function (data) {
                             dr = new VIS.DB.DataReader().toJson(data);
                         },
@@ -1313,9 +1313,9 @@
         cFrame.show();
     };
 
-    function APrint(AD_Process_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
+    function APrint(VAF_Job_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
         //var overla = null;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab.getVAF_Screen_ID();
         $menu.off("click");
         $menu.on("click", "LI", function (e) {
             var filetype = $(e.target).data("val");
@@ -1327,7 +1327,7 @@
                 url: VIS.Application.contextUrl + "JsonData/GetReportFileTypes/",
                 dataType: "json",
                 data: {
-                    AD_Process_ID: AD_Process_ID
+                    VAF_Job_ID: VAF_Job_ID
                 },
                 success: function (data) {
                     if (data == null) {
@@ -1382,7 +1382,7 @@
             //});
             var sqlQry = "VIS_149";
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+            param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
             var isCrystalReport = executeScalar(sqlQry, param);
 
             if (isCrystalReport == "Y" && VIS.context.getIsUseCrystalReportViewer()) {
@@ -1471,9 +1471,9 @@
                     url: VIS.Application.contextUrl + "JsonData/GeneratePrint/",
                     dataType: "json",
                     data: {
-                        AD_Process_ID: AD_Process_ID,
+                        VAF_Job_ID: VAF_Job_ID,
                         Name: 'Print',
-                        AD_Table_ID: table_ID,
+                        VAF_TableView_ID: table_ID,
                         Record_ID: record_ID,
                         WindowNo: WindowNo,
                         filetype: filetype,
@@ -1508,17 +1508,17 @@
                         ////    }
                         ////};
 
-                        ////this.pi.getAD_PInstance_ID = function () {
-                        ////    return d.AD_PInstance_ID;
+                        ////this.pi.getVAF_JInstance_ID = function () {
+                        ////    return d.VAF_JInstance_ID;
                         ////};
 
-                        ////this.pi.getAD_Process_ID = function () {
-                        ////    return d.AD_Process_ID;
+                        ////this.pi.getVAF_Job_ID = function () {
+                        ////    return d.VAF_Job_ID;
                         ////};
 
 
                         ////this.pi.getTable_ID = function () {
-                        ////    return d.AD_Table_ID;
+                        ////    return d.VAF_TableView_ID;
                         ////};
 
 
@@ -1532,14 +1532,14 @@
                         }
                         else if (d.IsTelerikReport) {
                             if (window.KJS) {
-                                var tc = new KJS.TelerikContainer(d.AD_PInstance_ID, table_ID);
+                                var tc = new KJS.TelerikContainer(d.VAF_JInstance_ID, table_ID);
                                 tc.show();
                                 this.unlock();
                             }
                         }
                         else if (VIS.context.getIsUseCrystalReportViewer()) {
                             //var pdfViewer = new VIS.PdfViewer(null, null, true);
-                            //var apro = new VIS.AProcess(d.AD_Process_ID);
+                            //var apro = new VIS.AProcess(d.VAF_Job_ID);
                             var repV = new VIS.ReportViewerContainer(d);
                             repV.show();
 
@@ -1560,9 +1560,9 @@
                     url: VIS.Application.contextUrl + "JsonData/GenerateMultiPrint/",
                     dataType: "json",
                     data: {
-                        AD_Process_ID: AD_Process_ID,
+                        VAF_Job_ID: VAF_Job_ID,
                         Name: 'Print',
-                        AD_Table_ID: table_ID,
+                        VAF_TableView_ID: table_ID,
                         RecIDs: recIds,
                         WindowNo: WindowNo,
                         filetype: filetype,
@@ -1591,7 +1591,7 @@
                             //var showPaging = d.IsReportFormat && d.TotalRecords > 0 && VIS.MRole.getDefault().getIsCanExport(table_ID);
                             //var rv = new VIS.ReportViewer(WindowNo, curTab, true,showPaging,d.TotalRecords, this.PAGE_SIZE);
 
-                            //rv.show(d.HTML, d.AD_PrintFormat_ID, null, table_ID, null, null);
+                            //rv.show(d.HTML, d.VAF_Print_Rpt_Layout_ID, null, table_ID, null, null);
                             //var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
                             //$object.attr("src", VIS.Application.contextUrl + d.ReportFilePath);
 
@@ -1624,11 +1624,11 @@
             $root.append(bsyDiv);
             setBusy(true);
             var $object = $("<iframe style = 'width:100%;height:99.4%;' pluginspage='http://www.adobe.com/products/acrobat/readstep2.html'>");
-            if (reportInfo.pi && reportInfo.pi.getAD_PInstance_ID()) {
-                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.pi.getAD_PInstance_ID() + '&pid=' + reportInfo.pi.getAD_Process_ID() + '&tid=' + reportInfo.pi.getTable_ID() + '&rid=' + reportInfo.pi.getRecord_ID());
+            if (reportInfo.pi && reportInfo.pi.getVAF_JInstance_ID()) {
+                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.pi.getVAF_JInstance_ID() + '&pid=' + reportInfo.pi.getVAF_Job_ID() + '&tid=' + reportInfo.pi.getTable_ID() + '&rid=' + reportInfo.pi.getRecord_ID());
             }
             else {
-                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.AD_PInstance_ID + '&pid=' + reportInfo.AD_Process_ID + '&tid=' + reportInfo.AD_Table_ID + '&rid=' + reportInfo.RecordID);
+                $object.attr("src", VIS.Application.contextUrl + 'Areas/VIS/WebPages/CrystalReprotViewer.aspx?title=rpt&aid=' + reportInfo.VAF_JInstance_ID + '&pid=' + reportInfo.VAF_Job_ID + '&tid=' + reportInfo.VAF_TableView_ID + '&rid=' + reportInfo.RecordID);
             }
             $root.append($object);
         };

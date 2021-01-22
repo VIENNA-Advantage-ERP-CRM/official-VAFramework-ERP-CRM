@@ -25,7 +25,7 @@ public X_C_DimAmtLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trx
  added by ->Harwinder */
 static X_C_DimAmtLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27753729039653L;/** Last Updated Timestamp 8/19/2016 4:18:42 PM */
-public static long updatedMS = 1471603722864L;/** AD_Table_ID=1000761 */
+public static long updatedMS = 1471603722864L;/** VAF_TableView_ID=1000761 */
 public static int Table_ID; // =1000761;
 /** TableName=C_DimAmtLine */
 public static String Table_Name="C_DimAmtLine";
@@ -44,11 +44,11 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_DimAmtLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID){if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);else
-Set_Value ("AD_Column_ID", AD_Column_ID);}/** Get Column.
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID){if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);else
+Set_Value ("VAF_Column_ID", VAF_Column_ID);}/** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() {Object ii = Get_Value("AD_Column_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Amount.
+public int GetVAF_Column_ID() {Object ii = Get_Value("VAF_Column_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Amount.
 @param Amount Amount in a defined currency */
 public void SetAmount (Decimal? Amount){if (Amount == null) throw new ArgumentException ("Amount is mandatory.");Set_Value ("Amount", (Decimal?)Amount);}/** Get Amount.
 @return Amount in a defined currency */

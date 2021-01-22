@@ -49,7 +49,7 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
  added by ->Harwinder */
         static X_PA_ReportColumn() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621420744L;/** Last Updated Timestamp 4/1/2016 1:05:03 PM */
-        public static long updatedMS = 1459496103955L;/** AD_Table_ID=446 */
+        public static long updatedMS = 1459496103955L;/** VAF_TableView_ID=446 */
         public static int Table_ID; // =446;
         /** TableName=PA_ReportColumn */
         public static String Table_Name = "PA_ReportColumn";
@@ -68,8 +68,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_PA_ReportColumn[").Append(Get_ID()).Append("]"); return sb.ToString(); }
-        /** AmountType AD_Reference_ID=235 */
-        public static int AMOUNTTYPE_AD_Reference_ID = 235;/** Period Balance = BP */
+        /** AmountType VAF_Control_Ref_ID=235 */
+        public static int AMOUNTTYPE_VAF_Control_Ref_ID = 235;/** Period Balance = BP */
         public static String AMOUNTTYPE_PeriodBalance = "BP";/** Total Balance = BT */
         public static String AMOUNTTYPE_TotalBalance = "BT";/** Year Balance = BY */
         public static String AMOUNTTYPE_YearBalance = "BY";/** Period Credit Only = CP */
@@ -165,8 +165,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Sales Region.
 @return Sales coverage region */
         public int GetC_SalesRegion_ID() { Object ii = Get_Value("C_SalesRegion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** CalculationType AD_Reference_ID=236 */
-        public static int CALCULATIONTYPE_AD_Reference_ID = 236;/** Add (Op1+Op2) = A */
+        /** CalculationType VAF_Control_Ref_ID=236 */
+        public static int CALCULATIONTYPE_VAF_Control_Ref_ID = 236;/** Add (Op1+Op2) = A */
         public static String CALCULATIONTYPE_AddOp1PlusOp2 = "A";/** Percentage (Op1 of Op2) = P */
         public static String CALCULATIONTYPE_PercentageOp1OfOp2 = "P";/** Add Range (Op1 to Op2) = R */
         public static String CALCULATIONTYPE_AddRangeOp1ToOp2 = "R";/** Subtract (Op1-Op2) = S */
@@ -182,8 +182,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Calculation.
 @return Calculation */
         public String GetCalculationType() { return (String)Get_Value("CalculationType"); }
-        /** ColumnType AD_Reference_ID=237 */
-        public static int COLUMNTYPE_AD_Reference_ID = 237;
+        /** ColumnType VAF_Control_Ref_ID=237 */
+        public static int COLUMNTYPE_VAF_Control_Ref_ID = 237;
        
         /** Calculation = C */
         public static String COLUMNTYPE_Calculation = "C";
@@ -221,8 +221,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         {
             return (String)Get_Value("ColumnType");
         }
-        /** CurrencyType AD_Reference_ID=238 */
-        public static int CURRENCYTYPE_AD_Reference_ID = 238;/** Accounting Currency = A */
+        /** CurrencyType VAF_Control_Ref_ID=238 */
+        public static int CURRENCYTYPE_VAF_Control_Ref_ID = 238;/** Accounting Currency = A */
         public static String CURRENCYTYPE_AccountingCurrency = "A";/** Source Currency = S */
         public static String CURRENCYTYPE_SourceCurrency = "S";/** Is test a valid value.
 @param test testvalue
@@ -240,8 +240,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
         public String GetDescription() { return (String)Get_Value("Description"); }
-        /** ElementType AD_Reference_ID=181 */
-        public static int ELEMENTTYPE_AD_Reference_ID = 181;/** Account = AC */
+        /** ElementType VAF_Control_Ref_ID=181 */
+        public static int ELEMENTTYPE_VAF_Control_Ref_ID = 181;/** Account = AC */
         public static String ELEMENTTYPE_Account = "AC";/** Activity = AY */
         public static String ELEMENTTYPE_Activity = "AY";/** BPartner = BP */
         public static String ELEMENTTYPE_BPartner = "BP";/** Location From = LF */
@@ -288,8 +288,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public void SetFRPT_AccumlatedStartToPeriod(Boolean FRPT_AccumlatedStartToPeriod) { Set_Value("FRPT_AccumlatedStartToPeriod", FRPT_AccumlatedStartToPeriod); }/** Get Accumlated Start To Period.
 @return Accumlated Start To Period */
         public Boolean IsFRPT_AccumlatedStartToPeriod() { Object oo = Get_Value("FRPT_AccumlatedStartToPeriod"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** FRPT_AmountType AD_Reference_ID=1000194 */
-        public static int FRPT_AMOUNTTYPE_AD_Reference_ID = 1000194;/** Balance = B */
+        /** FRPT_AmountType VAF_Control_Ref_ID=1000194 */
+        public static int FRPT_AMOUNTTYPE_VAF_Control_Ref_ID = 1000194;/** Balance = B */
         public static String FRPT_AMOUNTTYPE_Balance = "B";/** Credit = C */
         public static String FRPT_AMOUNTTYPE_Credit = "C";/** Debit = D */
         public static String FRPT_AMOUNTTYPE_Debit = "D";/** Quantity = Q */
@@ -306,14 +306,14 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Amount Type.
 @return Amount Type */
         public String GetFRPT_AmountType() { return (String)Get_Value("FRPT_AmountType"); }
-        /** FRPT_DGLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_DGLINEFORMATTING_AD_Reference_ID = 1000224;/** Set DimensionGroup Line Formatting.
+        /** FRPT_DGLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_DGLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set DimensionGroup Line Formatting.
 @param FRPT_DGLineFormatting DimensionGroup Line Formatting */
         public void SetFRPT_DGLineFormatting(int FRPT_DGLineFormatting) { Set_Value("FRPT_DGLineFormatting", FRPT_DGLineFormatting); }/** Get DimensionGroup Line Formatting.
 @return DimensionGroup Line Formatting */
         public int GetFRPT_DGLineFormatting() { Object ii = Get_Value("FRPT_DGLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_Period AD_Reference_ID=1000193 */
-        public static int FRPT_PERIOD_AD_Reference_ID = 1000193;/** Month = MO */
+        /** FRPT_Period VAF_Control_Ref_ID=1000193 */
+        public static int FRPT_PERIOD_VAF_Control_Ref_ID = 1000193;/** Month = MO */
         public static String FRPT_PERIOD_Month = "MO";/** Total = TO */
         public static String FRPT_PERIOD_Total = "TO";/** Year = YE */
         public static String FRPT_PERIOD_Year = "YE";/** Year Period Group = YP */
@@ -330,8 +330,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Period.
 @return Period */
         public String GetFRPT_Period() { return (String)Get_Value("FRPT_Period"); }
-        /** FRPT_PeriodGroupIdentifier AD_Reference_ID=1000202 */
-        public static int FRPT_PERIODGROUPIDENTIFIER_AD_Reference_ID = 1000202;/** Current = C */
+        /** FRPT_PeriodGroupIdentifier VAF_Control_Ref_ID=1000202 */
+        public static int FRPT_PERIODGROUPIDENTIFIER_VAF_Control_Ref_ID = 1000202;/** Current = C */
         public static String FRPT_PERIODGROUPIDENTIFIER_Current = "C";/** Fixed = F */
         public static String FRPT_PERIODGROUPIDENTIFIER_Fixed = "F";/** Next = N */
         public static String FRPT_PERIODGROUPIDENTIFIER_Next = "N";/** Previous = P */
@@ -369,26 +369,26 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public void SetFRPT_RelativePeriod2(int FRPT_RelativePeriod2) { Set_Value("FRPT_RelativePeriod2", FRPT_RelativePeriod2); }/** Get Relative Period2.
 @return Relative Period2 */
         public int GetFRPT_RelativePeriod2() { Object ii = Get_Value("FRPT_RelativePeriod2"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_RowLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_ROWLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Row Line Formatting.
+        /** FRPT_RowLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_ROWLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Row Line Formatting.
 @param FRPT_RowLineFormatting Row Line Formatting */
         public void SetFRPT_RowLineFormatting(int FRPT_RowLineFormatting) { Set_Value("FRPT_RowLineFormatting", FRPT_RowLineFormatting); }/** Get Row Line Formatting.
 @return Row Line Formatting */
         public int GetFRPT_RowLineFormatting() { Object ii = Get_Value("FRPT_RowLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_SourceLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_SOURCELINEFORMATTING_AD_Reference_ID = 1000224;/** Set Source Line Formatting.
+        /** FRPT_SourceLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_SOURCELINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Source Line Formatting.
 @param FRPT_SourceLineFormatting Source Line Formatting */
         public void SetFRPT_SourceLineFormatting(int FRPT_SourceLineFormatting) { Set_Value("FRPT_SourceLineFormatting", FRPT_SourceLineFormatting); }/** Get Source Line Formatting.
 @return Source Line Formatting */
         public int GetFRPT_SourceLineFormatting() { Object ii = Get_Value("FRPT_SourceLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_SubGroupLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_SUBGROUPLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Sub-Group Line Formatting.
+        /** FRPT_SubGroupLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_SUBGROUPLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Sub-Group Line Formatting.
 @param FRPT_SubGroupLineFormatting Sub-Group Line Formatting */
         public void SetFRPT_SubGroupLineFormatting(int FRPT_SubGroupLineFormatting) { Set_Value("FRPT_SubGroupLineFormatting", FRPT_SubGroupLineFormatting); }/** Get Sub-Group Line Formatting.
 @return Sub-Group Line Formatting */
         public int GetFRPT_SubGroupLineFormatting() { Object ii = Get_Value("FRPT_SubGroupLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FRPT_TrxLineFormatting AD_Reference_ID=1000224 */
-        public static int FRPT_TRXLINEFORMATTING_AD_Reference_ID = 1000224;/** Set Trx Line Formatting.
+        /** FRPT_TrxLineFormatting VAF_Control_Ref_ID=1000224 */
+        public static int FRPT_TRXLINEFORMATTING_VAF_Control_Ref_ID = 1000224;/** Set Trx Line Formatting.
 @param FRPT_TrxLineFormatting Trx Line Formatting */
         public void SetFRPT_TrxLineFormatting(int FRPT_TrxLineFormatting) { Set_Value("FRPT_TrxLineFormatting", FRPT_TrxLineFormatting); }/** Get Trx Line Formatting.
 @return Trx Line Formatting */
@@ -425,8 +425,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public String GetName() { return (String)Get_Value("Name"); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetName()); }
-        /** Oper_1_ID AD_Reference_ID=239 */
-        public static int OPER_1_ID_AD_Reference_ID = 239;/** Set Operand 1.
+        /** Oper_1_ID VAF_Control_Ref_ID=239 */
+        public static int OPER_1_ID_VAF_Control_Ref_ID = 239;/** Set Operand 1.
 @param Oper_1_ID First operand for calculation */
         public void SetOper_1_ID(int Oper_1_ID)
         {
@@ -436,8 +436,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Operand 1.
 @return First operand for calculation */
         public int GetOper_1_ID() { Object ii = Get_Value("Oper_1_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Oper_2_ID AD_Reference_ID=239 */
-        public static int OPER_2_ID_AD_Reference_ID = 239;/** Set Operand 2.
+        /** Oper_2_ID VAF_Control_Ref_ID=239 */
+        public static int OPER_2_ID_VAF_Control_Ref_ID = 239;/** Set Operand 2.
 @param Oper_2_ID Second operand for calculation */
         public void SetOper_2_ID(int Oper_2_ID)
         {
@@ -447,8 +447,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Operand 2.
 @return Second operand for calculation */
         public int GetOper_2_ID() { Object ii = Get_Value("Oper_2_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Org_ID AD_Reference_ID=130 */
-        public static int ORG_ID_AD_Reference_ID = 130;/** Set Organization.
+        /** Org_ID VAF_Control_Ref_ID=130 */
+        public static int ORG_ID_VAF_Control_Ref_ID = 130;/** Set Organization.
 @param Org_ID Organizational entity within client */
         public void SetOrg_ID(int Org_ID)
         {
@@ -466,8 +466,8 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public void SetPA_ReportColumn_ID(int PA_ReportColumn_ID) { if (PA_ReportColumn_ID < 1) throw new ArgumentException("PA_ReportColumn_ID is mandatory."); Set_ValueNoCheck("PA_ReportColumn_ID", PA_ReportColumn_ID); }/** Get Report Column.
 @return Column in Report */
         public int GetPA_ReportColumn_ID() { Object ii = Get_Value("PA_ReportColumn_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** PostingType AD_Reference_ID=125 */
-        public static int POSTINGTYPE_AD_Reference_ID = 125;/** Actual = A */
+        /** PostingType VAF_Control_Ref_ID=125 */
+        public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;/** Actual = A */
         public static String POSTINGTYPE_Actual = "A";/** Budget = B */
         public static String POSTINGTYPE_Budget = "B";/** Commitment = E */
         public static String POSTINGTYPE_Commitment = "E";/** Reservation = R */

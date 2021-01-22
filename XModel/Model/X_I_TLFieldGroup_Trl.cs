@@ -20,7 +20,7 @@ public X_I_TLFieldGroup_Trl (Context ctx, int I_TLFieldGroup_Trl_ID, Trx trxName
 {
 /** if (I_TLFieldGroup_Trl_ID == 0)
 {
-SetAD_FieldGroup_ID (0);
+SetVAF_FieldSection_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLFieldGroup_Trl (Ctx ctx, int I_TLFieldGroup_Trl_ID, Trx trxName) : 
 {
 /** if (I_TLFieldGroup_Trl_ID == 0)
 {
-SetAD_FieldGroup_ID (0);
+SetVAF_FieldSection_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -74,7 +74,7 @@ static X_I_TLFieldGroup_Trl()
 //static long serialVersionUID 27638799875337L;
 /** Last Updated Timestamp 12/28/2012 11:32:38 AM */
 public static long updatedMS = 1356674558548L;
-/** AD_Table_ID=1000409 */
+/** VAF_TableView_ID=1000409 */
 public static int Table_ID;
  // =1000409;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLFieldGroup_Trl[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set Field Group.
-@param AD_FieldGroup_ID Logical grouping of fields */
-public void SetAD_FieldGroup_ID (int AD_FieldGroup_ID)
+@param VAF_FieldSection_ID Logical grouping of fields */
+public void SetVAF_FieldSection_ID (int VAF_FieldSection_ID)
 {
-if (AD_FieldGroup_ID < 1) throw new ArgumentException ("AD_FieldGroup_ID is mandatory.");
-Set_ValueNoCheck ("AD_FieldGroup_ID", AD_FieldGroup_ID);
+if (VAF_FieldSection_ID < 1) throw new ArgumentException ("VAF_FieldSection_ID is mandatory.");
+Set_ValueNoCheck ("VAF_FieldSection_ID", VAF_FieldSection_ID);
 }
 /** Get Field Group.
 @return Logical grouping of fields */
-public int GetAD_FieldGroup_ID() 
+public int GetVAF_FieldSection_ID() 
 {
-Object ii = Get_Value("AD_FieldGroup_ID");
+Object ii = Get_Value("VAF_FieldSection_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

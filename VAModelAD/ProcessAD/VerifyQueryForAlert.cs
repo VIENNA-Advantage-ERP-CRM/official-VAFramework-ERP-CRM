@@ -15,18 +15,18 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             string msg = "";
-            X_AD_AlertRuleCondition AlertCondition = new X_AD_AlertRuleCondition(GetCtx(), GetRecord_ID(), null);
+            X_VAF_AlertSettingCondition AlertCondition = new X_VAF_AlertSettingCondition(GetCtx(), GetRecord_ID(), null);
             try
             {
                 if (AlertCondition.GetSqlQuery().ToLower().Trim().StartsWith("select"))
                 {
-                    if (AlertCondition.GetReturnValueType() == X_AD_AlertRuleCondition.RETURNVALUETYPE_Number)
+                    if (AlertCondition.GetReturnValueType() == X_VAF_AlertSettingCondition.RETURNVALUETYPE_Number)
                     {
 
                         Convert.ToDecimal(DB.ExecuteScalar(AlertCondition.GetSqlQuery()));
                         msg = "Success";
                     }
-                    else if (AlertCondition.GetReturnValueType() == X_AD_AlertRuleCondition.RETURNVALUETYPE_String)
+                    else if (AlertCondition.GetReturnValueType() == X_VAF_AlertSettingCondition.RETURNVALUETYPE_String)
                     {
                         Convert.ToString(DB.ExecuteScalar(AlertCondition.GetSqlQuery()));
                         msg = "Success";

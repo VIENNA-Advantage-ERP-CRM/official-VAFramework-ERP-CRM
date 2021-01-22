@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_DeletedUserLog
+    /** Generated Model for VAF_DeletedUserLog
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_DeletedUserLog : PO
+    public class X_VAF_DeletedUserLog : PO
     {
-        public X_AD_DeletedUserLog(Context ctx, int AD_DeletedUserLog_ID, Trx trxName)
-            : base(ctx, AD_DeletedUserLog_ID, trxName)
+        public X_VAF_DeletedUserLog(Context ctx, int VAF_DeletedUserLog_ID, Trx trxName)
+            : base(ctx, VAF_DeletedUserLog_ID, trxName)
         {
-            /** if (AD_DeletedUserLog_ID == 0)
+            /** if (VAF_DeletedUserLog_ID == 0)
             {
-            SetAD_DeletedUserLog_ID (0);
+            SetVAF_DeletedUserLog_ID (0);
             }
              */
         }
-        public X_AD_DeletedUserLog(Ctx ctx, int AD_DeletedUserLog_ID, Trx trxName)
-            : base(ctx, AD_DeletedUserLog_ID, trxName)
+        public X_VAF_DeletedUserLog(Ctx ctx, int VAF_DeletedUserLog_ID, Trx trxName)
+            : base(ctx, VAF_DeletedUserLog_ID, trxName)
         {
-            /** if (AD_DeletedUserLog_ID == 0)
+            /** if (VAF_DeletedUserLog_ID == 0)
             {
-            SetAD_DeletedUserLog_ID (0);
+            SetVAF_DeletedUserLog_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_DeletedUserLog(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_DeletedUserLog(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_DeletedUserLog(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_DeletedUserLog(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_DeletedUserLog(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_DeletedUserLog(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_DeletedUserLog()
+        static X_VAF_DeletedUserLog()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -73,12 +73,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27628349880386L;
         /** Last Updated Timestamp 8/29/2012 12:46:03 PM */
         public static long updatedMS = 1346224563597L;
-        /** AD_Table_ID=1000363 */
+        /** VAF_TableView_ID=1000363 */
         public static int Table_ID;
         // =1000363;
 
-        /** TableName=AD_DeletedUserLog */
-        public static String Table_Name = "AD_DeletedUserLog";
+        /** TableName=VAF_DeletedUserLog */
+        public static String Table_Name = "VAF_DeletedUserLog";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -112,53 +112,53 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_DeletedUserLog[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_DeletedUserLog[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
-        /** Set AD_DeletedUserLog_ID.
-        @param AD_DeletedUserLog_ID AD_DeletedUserLog_ID */
-        public void SetAD_DeletedUserLog_ID(int AD_DeletedUserLog_ID)
+        /** Set VAF_DeletedUserLog_ID.
+        @param VAF_DeletedUserLog_ID VAF_DeletedUserLog_ID */
+        public void SetVAF_DeletedUserLog_ID(int VAF_DeletedUserLog_ID)
         {
-            if (AD_DeletedUserLog_ID < 1) throw new ArgumentException("AD_DeletedUserLog_ID is mandatory.");
-            Set_ValueNoCheck("AD_DeletedUserLog_ID", AD_DeletedUserLog_ID);
+            if (VAF_DeletedUserLog_ID < 1) throw new ArgumentException("VAF_DeletedUserLog_ID is mandatory.");
+            Set_ValueNoCheck("VAF_DeletedUserLog_ID", VAF_DeletedUserLog_ID);
         }
-        /** Get AD_DeletedUserLog_ID.
-        @return AD_DeletedUserLog_ID */
-        public int GetAD_DeletedUserLog_ID()
+        /** Get VAF_DeletedUserLog_ID.
+        @return VAF_DeletedUserLog_ID */
+        public int GetVAF_DeletedUserLog_ID()
         {
-            Object ii = Get_Value("AD_DeletedUserLog_ID");
+            Object ii = Get_Value("VAF_DeletedUserLog_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set AD_GmailConfiguration_ID.
-        @param AD_GmailConfiguration_ID AD_GmailConfiguration_ID */
-        public void SetAD_GmailConfiguration_ID(int AD_GmailConfiguration_ID)
+        /** Set VAF_GmailConfiguration_ID.
+        @param VAF_GmailConfiguration_ID VAF_GmailConfiguration_ID */
+        public void SetVAF_GmailConfiguration_ID(int VAF_GmailConfiguration_ID)
         {
-            if (AD_GmailConfiguration_ID <= 0) Set_Value("AD_GmailConfiguration_ID", null);
+            if (VAF_GmailConfiguration_ID <= 0) Set_Value("VAF_GmailConfiguration_ID", null);
             else
-                Set_Value("AD_GmailConfiguration_ID", AD_GmailConfiguration_ID);
+                Set_Value("VAF_GmailConfiguration_ID", VAF_GmailConfiguration_ID);
         }
-        /** Get AD_GmailConfiguration_ID.
-        @return AD_GmailConfiguration_ID */
-        public int GetAD_GmailConfiguration_ID()
+        /** Get VAF_GmailConfiguration_ID.
+        @return VAF_GmailConfiguration_ID */
+        public int GetVAF_GmailConfiguration_ID()
         {
-            Object ii = Get_Value("AD_GmailConfiguration_ID");
+            Object ii = Get_Value("VAF_GmailConfiguration_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

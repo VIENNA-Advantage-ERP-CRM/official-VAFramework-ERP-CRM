@@ -55,7 +55,7 @@ namespace ViennaAdvantageServer.Process
 
         protected override String DoIt()
         {
-            string Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID+" and isactive='Y' and Ad_Org_id="+GetCtx().GetAD_Org_ID();
+            string Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID+" and isactive='Y' and vaf_org_id="+GetCtx().GetVAF_Org_ID();
             IDataReader dr =DB.ExecuteReader(Sql);
             try
             {
@@ -72,7 +72,7 @@ namespace ViennaAdvantageServer.Process
 
                 dr.Close();
 
-                Sql = "Select C_Project_ID From C_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                Sql = "Select C_Project_ID From C_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {
@@ -86,7 +86,7 @@ namespace ViennaAdvantageServer.Process
                 }
                 dr.Close();
 
-                Sql = "Select C_BPartner_ID From C_BPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and Ad_Org_id=" + GetCtx().GetAD_Org_ID();
+                Sql = "Select C_BPartner_ID From C_BPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {

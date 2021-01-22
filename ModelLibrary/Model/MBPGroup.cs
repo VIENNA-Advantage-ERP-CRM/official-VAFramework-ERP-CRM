@@ -50,15 +50,15 @@ namespace VAdvantage.Model
          */
         public static MBPGroup GetDefault(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
-            int key = AD_Client_ID;
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
+            int key = VAF_Client_ID;
             MBPGroup retValue = (MBPGroup)_cacheDefault[key];
             if (retValue != null)
                 return retValue;
 
             DataTable dt = null;
             String sql = "SELECT * FROM C_BP_Group g "
-                + "WHERE IsDefault='Y' AND AD_Client_ID= " + AD_Client_ID
+                + "WHERE IsDefault='Y' AND VAF_Client_ID= " + VAF_Client_ID
                 + " ORDER BY IsActive DESC";
             IDataReader idr = null;
             try
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
 
             if (retValue == null)
             {
-                _log.Warning("No Default BP Group for AD_Client_ID=" + AD_Client_ID);
+                _log.Warning("No Default BP Group for VAF_Client_ID=" + VAF_Client_ID);
             }
             return retValue;
         }
@@ -216,26 +216,26 @@ namespace VAdvantage.Model
         {
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_BP_Group_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_BP_Group_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_BP_Group_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Customer'");
+                _sql.Append("SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Customer'");
                 var relatedtoCustomer = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Vendor'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Vendor'");
                 var relatedtoVendor = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Employee'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Employee'");
                 var relatedtoEmployee = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO gpact = null;
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -244,7 +244,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -259,8 +259,8 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoCustomer || _relatedTo == relatedtoEmployee || _relatedTo == relatedtoVendor)
                                     {
                                         _sql.Clear();
-                                        //_sql.Append("Select Bp.C_BP_Group_ID,ca.Frpt_Acctdefault_Id From C_BP_Group Bp Left Join FRPT_BP_Group_Acct ca On Bp.C_BP_Group_ID=ca.C_BP_Group_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID);
-                                        _sql.Append("Select COUNT(*) From C_BP_Group Bp Left Join FRPT_BP_Group_Acct ca On Bp.C_BP_Group_ID=ca.C_BP_Group_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_BP_Group_ID = " + GetC_BP_Group_ID());
+                                        //_sql.Append("Select Bp.C_BP_Group_ID,ca.Frpt_Acctdefault_Id From C_BP_Group Bp Left Join FRPT_BP_Group_Acct ca On Bp.C_BP_Group_ID=ca.C_BP_Group_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID);
+                                        _sql.Append("Select COUNT(*) From C_BP_Group Bp Left Join FRPT_BP_Group_Acct ca On Bp.C_BP_Group_ID=ca.C_BP_Group_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_BP_Group_ID = " + GetC_BP_Group_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         // ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
                                             gpact = MTable.GetPO(GetCtx(), "FRPT_BP_Group_Acct", 0, null);
                                             //gpact.Set_ValueNoCheck("C_BP_Group_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["C_BP_Group_ID"]));
                                             gpact.Set_ValueNoCheck("C_BP_Group_ID", Util.GetValueOfInt(GetC_BP_Group_ID()));
-                                            gpact.Set_ValueNoCheck("AD_Org_ID", 0);
+                                            gpact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             gpact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             gpact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
                                             gpact.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
@@ -297,7 +297,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                object table = DB.ExecuteScalar("SELECT count(*) from AD_Table WHERE TableName='C_BP_Group_Acct'");
+                object table = DB.ExecuteScalar("SELECT count(*) from VAF_TableView WHERE TableName='C_BP_Group_Acct'");
                 if (table == null || table == DBNull.Value || table == "" || Convert.ToInt16(table) == 0)
                 {
                     return success;

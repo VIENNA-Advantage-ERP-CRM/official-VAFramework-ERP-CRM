@@ -107,8 +107,8 @@ namespace VIS.Models
         {
             List<PaymentSelection> objPSelection = new List<PaymentSelection>();
             StringBuilder sql = new StringBuilder("SELECT C_PaySelection_ID, Name || ' - ' || " + DB.TO_CHAR("TotalAmt",
-                      DisplayType.Number, ctx.GetAD_Language()) + " AS NAME FROM C_PaySelection "
-                      + "WHERE AD_Client_ID=" + ctx.GetAD_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
+                      DisplayType.Number, ctx.GetVAF_Language()) + " AS NAME FROM C_PaySelection "
+                      + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
             if (!_printCheck)
             {
                 sql.Append(" AND EXISTS (SELECT * FROM C_PaySelectionCheck psc" +
@@ -271,26 +271,26 @@ namespace VIS.Models
             }
 
             int table_ID = 0;
-            int AD_Process_ID = 0;
+            int VAF_Job_ID = 0;
             string sql = "";
             int paymentTable_ID = 0;
-            int paymentAD_Process_ID = 0;
+            int paymentVAF_Job_ID = 0;
             try
             {
 
-                sql = "select ad_table_id from ad_table where tablename = 'C_PaySelectionCheck'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
                 table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                //sql = "select ad_process_id from ad_process where value = 'CheckPrint'";
-                sql = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
-                AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //sql = "select VAF_Job_id from VAF_Job where value = 'CheckPrint'";
+                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
+                VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_table_id from ad_table where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
-                paymentAD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                // int paymentAD_Process_ID = 313;
+                sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
+                paymentVAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                // int paymentVAF_Job_ID = 313;
             }
             catch
             {
@@ -301,9 +301,9 @@ namespace VIS.Models
             //{
 
             //    int record_ID = Util.GetValueOfInt(checkID);
-            //  VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(null, AD_Process_ID, table_ID, Util.GetValueOfInt(check_ID[j]));
-            //    pi.SetAD_User_ID(ctx.GetAD_User_ID());
-            //    pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            //  VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(null, VAF_Job_ID, table_ID, Util.GetValueOfInt(check_ID[j]));
+            //    pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
+            //    pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    byte[] reportData = null;
             //    string result="";
             //    pctrl = new VAdvantage.ProcessEngine.ProcessCtl(ctx,null, pi, null);
@@ -366,18 +366,18 @@ namespace VIS.Models
         public string VPayPrintRemittance(Ctx ctx, List<int> payment_ID)
         {
             int table_ID = 0;
-            int AD_Process_ID = 0;
+            int VAF_Job_ID = 0;
             string sql = "";
             int paymentTable_ID = 0;
-            int paymentAD_Process_ID = 0;
+            int paymentVAF_Job_ID = 0;
             VAdvantage.ProcessEngine.ProcessCtl pctrl = null;
             try
             {
-                sql = "select ad_table_id from ad_table where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
-                paymentAD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
+                paymentVAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             }
             catch
@@ -388,9 +388,9 @@ namespace VIS.Models
             //{
             //    byte[] reportData = null;
             //    string result = "";
-            //    VAdvantage.ProcessEngine.ProcessInfo pin = new VAdvantage.ProcessEngine.ProcessInfo(null, paymentAD_Process_ID, paymentTable_ID, Util.GetValueOfInt(payment_ID[l]));
-            //    pin.SetAD_User_ID(ctx.GetAD_User_ID());
-            //    pin.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            //    VAdvantage.ProcessEngine.ProcessInfo pin = new VAdvantage.ProcessEngine.ProcessInfo(null, paymentVAF_Job_ID, paymentTable_ID, Util.GetValueOfInt(payment_ID[l]));
+            //    pin.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
+            //    pin.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    pctrl = new VAdvantage.ProcessEngine.ProcessCtl(ctx,null, pin, null);
             //    pctrl.Process(pin, ctx,out reportData, out result);              
             //}
@@ -632,7 +632,7 @@ namespace VIS.Models
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, AD_User c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
+                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
                 + "WHERE bp.C_BPartner_ID=?"        // #1
                 + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
                 + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
@@ -641,7 +641,7 @@ namespace VIS.Models
                 + " AND a.C_Country_ID=cc.C_Country_ID "
                 */
                 + "FROM C_BPartner bp "
-                + "LEFT OUTER JOIN AD_User c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
+                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
                 + "INNER JOIN C_BPartner_Location l ON (bp.C_BPartner_ID=l.C_BPartner_ID) "
                 + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
                 + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
@@ -715,7 +715,7 @@ namespace VIS.Models
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, AD_User c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
+                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
                 + "WHERE bp.C_BPartner_ID=?"        // #1
                 + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
                 + " AND bp.C_BPartner_ID=l.C_BPartner_ID"

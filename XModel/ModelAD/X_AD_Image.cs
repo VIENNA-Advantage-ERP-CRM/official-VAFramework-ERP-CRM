@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Image
+/** Generated Model for VAF_Image
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Image : PO
+public class X_VAF_Image : PO
 {
-public X_AD_Image (Context ctx, int AD_Image_ID, Trx trxName) : base (ctx, AD_Image_ID, trxName)
+public X_VAF_Image (Context ctx, int VAF_Image_ID, Trx trxName) : base (ctx, VAF_Image_ID, trxName)
 {
-/** if (AD_Image_ID == 0)
+/** if (VAF_Image_ID == 0)
 {
-SetAD_Image_ID (0);
+SetVAF_Image_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 }
  */
 }
-public X_AD_Image (Ctx ctx, int AD_Image_ID, Trx trxName) : base (ctx, AD_Image_ID, trxName)
+public X_VAF_Image (Ctx ctx, int VAF_Image_ID, Trx trxName) : base (ctx, VAF_Image_ID, trxName)
 {
-/** if (AD_Image_ID == 0)
+/** if (VAF_Image_ID == 0)
 {
-SetAD_Image_ID (0);
+SetVAF_Image_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Image (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Image (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Image (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Image (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Image (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Image (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Image (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Image (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Image()
+static X_VAF_Image()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_Image()
 //static long serialVersionUID = 27562514361436L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044647L;
-/** AD_Table_ID=461 */
+/** VAF_TableView_ID=461 */
 public static int Table_ID;
  // =461;
 
-/** TableName=AD_Image */
-public static String Table_Name="AD_Image";
+/** TableName=VAF_Image */
+public static String Table_Name="VAF_Image";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Image[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Image[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID < 1) throw new ArgumentException ("AD_Image_ID is mandatory.");
-Set_ValueNoCheck ("AD_Image_ID", AD_Image_ID);
+if (VAF_Image_ID < 1) throw new ArgumentException ("VAF_Image_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -159,8 +159,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

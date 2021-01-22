@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721491778707L;
         /** Last Updated Timestamp 8/12/2015 1:31:03 PM */
         public static long updatedMS = 1439366461918L;
-        /** AD_Table_ID=445 */
+        /** VAF_TableView_ID=445 */
         public static int Table_ID;
         // =445;
 
@@ -124,18 +124,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Print Format.
-        @param AD_PrintFormat_ID Data Print Format */
-        public void SetAD_PrintFormat_ID(int AD_PrintFormat_ID)
+        @param VAF_Print_Rpt_Layout_ID Data Print Format */
+        public void SetVAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
-            if (AD_PrintFormat_ID <= 0) Set_Value("AD_PrintFormat_ID", null);
+            if (VAF_Print_Rpt_Layout_ID <= 0) Set_Value("VAF_Print_Rpt_Layout_ID", null);
             else
-                Set_Value("AD_PrintFormat_ID", AD_PrintFormat_ID);
+                Set_Value("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
         }
         /** Get Print Format.
         @return Data Print Format */
-        public int GetAD_PrintFormat_ID()
+        public int GetVAF_Print_Rpt_Layout_ID()
         {
-            Object ii = Get_Value("AD_PrintFormat_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

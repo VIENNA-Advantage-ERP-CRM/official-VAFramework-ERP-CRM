@@ -70,7 +70,7 @@ static X_C_CampaignTargetList()
 //static long serialVersionUID 27609521540537L;
 /** Last Updated Timestamp 1/24/2012 2:40:23 PM */
 public static long updatedMS = 1327396223748L;
-/** AD_Table_ID=1000251 */
+/** VAF_TableView_ID=1000251 */
 public static int Table_ID;
  // =1000251;
 

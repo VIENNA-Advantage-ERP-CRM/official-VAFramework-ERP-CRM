@@ -70,7 +70,7 @@ static X_C_ResourceTime()
 //static long serialVersionUID 27617312401352L;
 /** Last Updated Timestamp 4/23/2012 6:48:04 PM */
 public static long updatedMS = 1335187084563L;
-/** AD_Table_ID=1000337 */
+/** VAF_TableView_ID=1000337 */
 public static int Table_ID;
  // =1000337;
 

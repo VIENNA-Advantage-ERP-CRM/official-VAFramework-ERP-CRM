@@ -37,7 +37,7 @@ namespace VIS.Models
         public List<InfoRefList> GetDimensionType(Ctx ctx)
         {
             List<InfoRefList> list = new List<InfoRefList>();
-            int Reference_ID = Convert.ToInt32(VAdvantage.DataBase.DB.ExecuteScalar("SELECT AD_Reference_Value_ID FROM AD_Column WHERE Export_ID='VIS_2663'"));
+            int Reference_ID = Convert.ToInt32(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE Export_ID='VIS_2663'"));
             ValueNamePair[] refList = MRefList.GetList(Reference_ID, true, ctx);
             InfoRefList itm = null;// new InfoRefList();
             // itm.Key = "";
@@ -73,12 +73,12 @@ namespace VIS.Models
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
-                Sql = "SELECT DISTINCT C_AcctSchema.Name,C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema C_AcctSchema INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.Ad_Client_ID=C_AcctSchema.Ad_Client_ID " +
+                Sql = "SELECT DISTINCT C_AcctSchema.Name,C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema C_AcctSchema INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.vaf_client_ID=C_AcctSchema.vaf_client_ID " +
                     " AND FRPT_AssignedOrg.C_Acctschema_ID=C_AcctSchema.c_acctschema_id INNER JOIN C_Currency c ON C_AcctSchema.C_Currency_ID = c.C_Currency_ID " +
                     " WHERE  C_AcctSchema.isactive='Y' AND C_AcctSchema.costing='N' AND";
                 if (OrgID != 0)
                 {
-                    Sql += "(FRPT_AssignedOrg.AD_Org_ID=" + OrgID + " OR FRPT_AssignedOrg.AD_Org_ID=0)";
+                    Sql += "(FRPT_AssignedOrg.VAF_Org_ID=" + OrgID + " OR FRPT_AssignedOrg.VAF_Org_ID=0)";
                 }
                 else
                 {
@@ -222,7 +222,7 @@ namespace VIS.Models
                     if (CheckUpdateMaxAmount(RecordId, TotalAmount, acctSchemaID, LineAmount))
                     {
                         objDimAmt.SetAmount(TotalAmount);
-                        //objDimAmt.SetAD_Table_ID(AD_TableId);
+                        //objDimAmt.SetVAF_TableView_ID(VAF_TableViewId);
                         // objDimAmt.SetRecord_ID(AD_RecordID);
                         if (!objDimAmt.Save(trx))
                         {
@@ -288,7 +288,7 @@ namespace VIS.Models
                                 }
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
-                                     elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { Sql += " and AD_Column_ID=" + oldDimensionName; }//User Element 1 to User Element 9
+                                     elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { Sql += " and VAF_Column_ID=" + oldDimensionName; }//User Element 1 to User Element 9
 
                             dimAmtLineId = Convert.ToInt32(DB.ExecuteScalar(Sql));
 
@@ -328,7 +328,7 @@ namespace VIS.Models
                                 objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
-                                     elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { objDimAmtLine.SetAD_Column_ID(dimensionValue); }//User Element 1 to User Element 9
+                                     elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { objDimAmtLine.SetVAF_Column_ID(dimensionValue); }//User Element 1 to User Element 9
                             if (!objDimAmtLine.Save(trx))
                             {
                                 error = true;
@@ -477,7 +477,7 @@ namespace VIS.Models
         //                            Sql += " and cl.c_elementvalue_id=" + mod.DimensionNameVal;
         //                        }//User List 1//User List 2
         //                        else if (mod.DimensionTypeVal == "X1" || mod.DimensionTypeVal == "X2" || mod.DimensionTypeVal == "X3" || mod.DimensionTypeVal == "X4" || mod.DimensionTypeVal == "X5" || mod.DimensionTypeVal == "X6" ||
-        //                                 mod.DimensionTypeVal == "X7" || mod.DimensionTypeVal == "X8" || mod.DimensionTypeVal == "X9") { Sql += " and cl.AD_Column_ID=" + mod.DimensionNameVal; }//User Element 1 to User Element 9
+        //                                 mod.DimensionTypeVal == "X7" || mod.DimensionTypeVal == "X8" || mod.DimensionTypeVal == "X9") { Sql += " and cl.VAF_Column_ID=" + mod.DimensionNameVal; }//User Element 1 to User Element 9
 
         //                        dimAmtLineId = Convert.ToInt32(DB.ExecuteScalar(Sql));
         //                    }
@@ -509,7 +509,7 @@ namespace VIS.Models
         //                        objDimAmtLine.SetC_ElementValue_ID(mod.DimensionNameVal);
         //                    }//User List 1//User List 2
         //                    else if (elementType[i] == "X1" || elementType[i] == "X2" || elementType[i] == "X3" || elementType[i] == "X4" || elementType[i] == "X5" || elementType[i] == "X6" ||
-        //                             elementType[i] == "X7" || elementType[i] == "X8" || elementType[i] == "X9") { objDimAmtLine.SetAD_Column_ID(mod.DimensionNameVal); }//User Element 1 to User Element 9
+        //                             elementType[i] == "X7" || elementType[i] == "X8" || elementType[i] == "X9") { objDimAmtLine.SetVAF_Column_ID(mod.DimensionNameVal); }//User Element 1 to User Element 9
         //                    if (!objDimAmtLine.Save(trx))
         //                    {
         //                        checkTran = false;
@@ -569,13 +569,13 @@ namespace VIS.Models
                 if (tempDimensionID != 0)
                 {
                     string uQuery = "select main.TableName," + DBFunctionCollection.ListAggregationAmountDimesnionLine("listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId)") + " AS ColName from " +
-                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.ad_column_id as ColId from c_dimamtaccttype ct " +
+                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.vaf_column_id as ColId from c_dimamtaccttype ct " +
                          "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
                          "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
-                         "inner join ad_column col1 on col1.ad_column_id=se.ad_column_id " +
-                         "inner join ad_table tab on tab.ad_table_id=col1.ad_table_id " +
-                         "inner join ad_column col2 on col2.ad_table_id=tab.ad_table_id and col2.isidentifier='Y' " +
-                         "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.ad_column_id)  main " +
+                         "inner join vaf_column col1 on col1.vaf_column_id=se.vaf_column_id " +
+                         "inner join vaf_tableview tab on tab.vaf_tableview_id=col1.vaf_tableview_id " +
+                         "inner join vaf_column col2 on col2.vaf_tableview_id=tab.vaf_tableview_id and col2.isidentifier='Y' " +
+                         "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.vaf_column_id)  main " +
                          "group by main.TableName";
                     DataSet dsUelement = DB.ExecuteDataset(uQuery);
                     if (dsUelement != null && dsUelement.Tables[0].Rows.Count > 0)
@@ -584,7 +584,7 @@ namespace VIS.Models
                         uElementColumn = Convert.ToString(dsUelement.Tables[0].Rows[0][1]);
                     }
 
-                    string sql = "SELECT distinct COALESCE(cl.ad_column_id,cl.C_ELEMENTVALUE_ID,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
+                    string sql = "SELECT distinct COALESCE(cl.vaf_column_id,cl.C_ELEMENTVALUE_ID,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
                                   " cl.amount,ct.c_acctschema_id,ct.elementtype,rl.Name as DimensionType, " +
                                    " COALESCE(o.name ";
                     if (uElementColumn != "")
@@ -598,21 +598,21 @@ namespace VIS.Models
                     //    sql += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                     //       "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                     //       " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                    //       " left join ad_ref_list adref on adref.value=ct.elementtype " +
-                    //       " left join ad_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                    //       " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                    //       " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     //}
                     //else
                     //{
                     sql += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                        "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                        " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                       " inner join ad_ref_list adref on adref.value=ct.elementtype " +
-                       " inner join ad_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                       " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                       " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
                     // }
                     if (uElementTable != "")
                     {
-                        sql += " LEFT JOIN " + uElementTable + " ac ON cl.ad_column_ID=ac." + uElementTable + "_ID ";
+                        sql += " LEFT JOIN " + uElementTable + " ac ON cl.vaf_column_ID=ac." + uElementTable + "_ID ";
                     }
 
                     sql +=
@@ -625,7 +625,7 @@ namespace VIS.Models
                        " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
-                       " LEFT JOIN AD_org o ON cl.org_id=o.AD_org_id " +
+                       " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
                        " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId;
                     if (DimensionLineID != 0)
                     {
@@ -650,19 +650,19 @@ namespace VIS.Models
                         sqlcount += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                            "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                            " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                           " left join ad_ref_list adref on adref.value=ct.elementtype " +
-                           " left join ad_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                           " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                           " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     }
                     else
                     {
                         sqlcount += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                            "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                            " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                           " inner join ad_ref_list adref on adref.value=ct.elementtype " +
-                           " inner join ad_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                           " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                           " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
                     }
-                    sqlcount += " LEFT JOIN ad_column ac ON cl.ad_column_ID=ac.ad_column_ID " +
+                    sqlcount += " LEFT JOIN vaf_column ac ON cl.vaf_column_ID=ac.vaf_column_ID " +
                        " LEFT JOIN c_activity act ON cl.c_activity_id=act.c_activity_id " +
                        " LEFT JOIN C_BPARTNER cb ON cl.C_BPARTNER_ID=cb.C_BPARTNER_ID " +
                        " LEFT JOIN C_CAMPAIGN cc ON cl.C_CAMPAIGN_ID=cc.C_CAMPAIGN_ID " +
@@ -672,7 +672,7 @@ namespace VIS.Models
                        " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
-                       " LEFT JOIN AD_org o ON cl.org_id=o.AD_org_id " +
+                       " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
                        " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + "  ) main";//order by  ct.c_acctschema_id
 
                     DataSet Record = DB.ExecuteDataset(sqlcount);

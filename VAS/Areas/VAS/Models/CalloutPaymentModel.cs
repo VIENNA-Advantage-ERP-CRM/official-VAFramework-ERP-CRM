@@ -31,7 +31,7 @@ namespace VIS.Models
         // Payment callout- Invoice selection
         public bool CheckedModuleInfo(string Prefix)
         {
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='" + Prefix + "'  AND IsActive = 'Y'", null, null)) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='" + Prefix + "'  AND IsActive = 'Y'", null, null)) > 0)
             {
                 return true;
             }

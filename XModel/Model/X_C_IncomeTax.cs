@@ -70,7 +70,7 @@ static X_C_IncomeTax()
 //static long serialVersionUID 27681650386553L;
 /** Last Updated Timestamp 5/8/2014 10:27:50 AM */
 public static long updatedMS = 1399525069764L;
-/** AD_Table_ID=1000441 */
+/** VAF_TableView_ID=1000441 */
 public static int Table_ID;
  // =1000441;
 
@@ -266,8 +266,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -323,8 +323,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */

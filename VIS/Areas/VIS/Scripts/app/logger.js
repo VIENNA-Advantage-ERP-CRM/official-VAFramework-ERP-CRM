@@ -695,7 +695,7 @@ Logger.prototype.saveError = function (msg,err) {
 }
 Logger.prototype.saveError = function (msg, err, issueError)
 {
-   // _lastError = new ValueNamePair(AD_Message, message);
+   // _lastError = new ValueNamePair(VAF_Msg_Lable, message);
     //  print it
 if (issueError)
     this.warning(msg+" "+err.message);

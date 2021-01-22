@@ -26,7 +26,7 @@ public X_C_TeamMember (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trx
  added by ->Harwinder */
 static X_C_TeamMember(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27757001023343L;/** Last Updated Timestamp 9/26/2016 1:11:46 PM */
-public static long updatedMS = 1474875706554L;/** AD_Table_ID=1000427 */
+public static long updatedMS = 1474875706554L;/** VAF_TableView_ID=1000427 */
 public static int Table_ID; // =1000427;
 /** TableName=C_TeamMember */
 public static String Table_Name="C_TeamMember";
@@ -45,11 +45,11 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_TeamMember[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-public void SetAD_User_ID (int AD_User_ID){if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);else
-Set_Value ("AD_User_ID", AD_User_ID);}/** Get User/Contact.
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID){if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);else
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);}/** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-public int GetAD_User_ID() {Object ii = Get_Value("AD_User_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Team Member.
+public int GetVAF_UserContact_ID() {Object ii = Get_Value("VAF_UserContact_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Team Member.
 @param C_TeamMember_ID Team Member */
 public void SetC_TeamMember_ID (int C_TeamMember_ID){if (C_TeamMember_ID < 1) throw new ArgumentException ("C_TeamMember_ID is mandatory.");Set_ValueNoCheck ("C_TeamMember_ID", C_TeamMember_ID);}/** Get Team Member.
 @return Team Member */

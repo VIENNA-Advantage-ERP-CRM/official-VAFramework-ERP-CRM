@@ -9,7 +9,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.ProcessEngine
 {
-    public class MCrystalInstancePara : X_AD_CrystalInstance_Para
+    public class MCrystalInstancePara : X_VAF_CrystalInstance_Para
     {
         /// <summary>
         /// Persistency Constructor
@@ -33,7 +33,7 @@ namespace VAdvantage.ProcessEngine
         public MCrystalInstancePara(Ctx ctx, int AD_CrystalInstace_ID, int SeqNo)
             : base(ctx, 0, null)
         {
-            SetAD_CrystalInstance_ID(AD_CrystalInstace_ID);
+            SetVAF_CrystalInstance_ID(AD_CrystalInstace_ID);
             SetSeqNo(SeqNo);
         }
 
@@ -45,7 +45,7 @@ namespace VAdvantage.ProcessEngine
         public MCrystalInstancePara(MCrystalInstance instance, int SeqNo)
             : base(instance.GetCtx(), 0, instance.Get_TrxName())
         {
-            SetAD_CrystalInstance_ID(instance.GetAD_CrystalInstance_ID());
+            SetVAF_CrystalInstance_ID(instance.GetVAF_CrystalInstance_ID());
             SetSeqNo(SeqNo);
         }
 

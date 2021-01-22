@@ -70,7 +70,7 @@ static X_C_CampaignType()
 //static long serialVersionUID = 27610475597010L;
 /** Last Updated Timestamp 2/4/2012 3:41:20 PM */
 public static long updatedMS = 1328350280221L;
-/** AD_Table_ID=1000258 */
+/** VAF_TableView_ID=1000258 */
 public static int Table_ID;
  // =1000258;
 

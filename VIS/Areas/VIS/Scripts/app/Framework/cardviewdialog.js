@@ -5,12 +5,12 @@
         var mTab = gc.getMTab();
         var cardView = gc.vCardView;
         //var gridWindow = aPanel.gridWindow;
-        var AD_Window_ID = mTab.getAD_Window_ID();
-        var AD_Tab_ID = mTab.getAD_Tab_ID();
+        var VAF_Screen_ID = mTab.getVAF_Screen_ID();
+        var VAF_Tab_ID = mTab.getVAF_Tab_ID();
         var tabName = mTab.getName();
         var WindowName = aPanel.curGC.aPanel.$parentWindow.getName();
-        var AD_CardView_ID = cardView.getAD_CardView_ID();
-        var AD_GroupField_ID = cardView.getField_Group_ID();
+        var VAF_CardView_ID = cardView.getVAF_CardView_ID();
+        var VAF_GroupField_ID = cardView.getField_Group_ID();
         var cardViewInfo = 0;
         var roleInfo = 0;
         var btnRight = null;
@@ -26,17 +26,17 @@
         var lastSelectCardViewColumnFieldItem = null;
         var windowFieldindex = 0;
         var cardViewColumnFieldindex = -1;
-        var WindowAD_Field_ID = 0;
-        var cardViewColumnAD_Field_ID = 0;
-        var cardViewColumnAD_Field_ID = 0;
-        var AD_CardViewColumn_ID = 0;
+        var WindowVAF_Field_ID = 0;
+        var cardViewColumnVAF_Field_ID = 0;
+        var cardViewColumnVAF_Field_ID = 0;
+        var VAF_CardViewColumn_ID = 0;
         var columnFieldArray = [];
         var cardViewColArray = [];
         var cardViewArray = [];
         var seqNo = 0;
         var FieldName = "";
         var count = 0;
-        var AD_User_ID = 0;
+        var VAF_UserContact_ID = 0;
         var isNewRecord = false;
         var CardViewName = "";
 
@@ -65,11 +65,11 @@
         var cardViewUserID = 0;
         var txtCardViewName = null;
         var FieldName = "";
-        var orginalAD_CardView_ID = 0;
+        var orginalVAF_CardView_ID = 0;
         var orginalcardViewUserID = 0;
         var orginalIncludedCols = [];
-        var orginalAD_GroupField_ID = 0;
-        var loginUserName = VIS.context.getAD_User_Name();
+        var orginalVAF_GroupField_ID = 0;
+        var loginUserName = VIS.context.getVAF_UserContact_Name();
         var lableCardViewName = null;
         var ddlCardView = null;
         var btnNew = null;
@@ -117,7 +117,7 @@
             }
 
             for (var i = 0; i < cardView.fields.length; i++) {
-                orginalIncludedCols.push(cardView.fields[i].getAD_Field_ID());
+                orginalIncludedCols.push(cardView.fields[i].getVAF_Field_ID());
             }
         };
 
@@ -294,7 +294,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: { ad_Window_ID: AD_Window_ID, ad_Tab_ID: AD_Tab_ID },
+                data: { ad_Window_ID: VAF_Screen_ID, vaf_tab_ID: VAF_Tab_ID },
                 success: function (data) {
                     dbResult = JSON.parse(data);
                     cardViewInfo = dbResult[0].lstCardViewData;
@@ -304,8 +304,8 @@
                     if (cardViewInfo != null && cardViewInfo.length > 0) {
 
                         for (var i = 0; i < cardViewInfo.length; i++) {
-                            // AD_CardView_ID = cardViewInfo[0].CardViewID;
-                            cmbCardView.append("<Option ad_user_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " ad_field_id=" + cardViewInfo[i].AD_GroupField_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
+                            // VAF_CardView_ID = cardViewInfo[0].CardViewID;
+                            cmbCardView.append("<Option VAF_UserContact_id=" + cardViewInfo[i].UserID + " cardviewid=" + cardViewInfo[i].CardViewID + " vaf_field_id=" + cardViewInfo[i].VAF_GroupField_ID + "> " + w2utils.encodeTags(cardViewInfo[i].CardViewName) + "</Option>");
                         }
                     }
                     else {
@@ -314,22 +314,22 @@
                         btnEdit.trigger("click");
                         btnDelete.prop("disabled", true);
                     }
-                    cmbCardView.find("[cardviewid='" + AD_CardView_ID + "']").attr("selected", "selected");
+                    cmbCardView.find("[cardviewid='" + VAF_CardView_ID + "']").attr("selected", "selected");
 
-                    orginalAD_CardView_ID = AD_CardView_ID;
+                    orginalVAF_CardView_ID = VAF_CardView_ID;
 
-                    //cardViewUserID = cmbCardView.find(":selected").attr("ad_user_id");
+                    //cardViewUserID = cmbCardView.find(":selected").attr("VAF_UserContact_id");
                     try {
                         if (!isDelete) {
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
-                            AD_User_ID = cardViewUserID;
+                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("VAF_UserContact_id"));
+                            VAF_UserContact_ID = cardViewUserID;
                             orginalcardViewUserID = cardViewUserID;
                         }
                         else {
-                            orginalAD_CardView_ID = cmbCardView.find(":selected").attr("cardviewid");
-                            AD_GroupField_ID = cmbCardView.find(":selected").attr("ad_field_id");
-                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("ad_user_id"));
-                            AD_CardView_ID = orginalAD_CardView_ID;
+                            orginalVAF_CardView_ID = cmbCardView.find(":selected").attr("cardviewid");
+                            VAF_GroupField_ID = cmbCardView.find(":selected").attr("vaf_field_id");
+                            cardViewUserID = parseInt(cmbCardView.find(":selected").attr("VAF_UserContact_id"));
+                            VAF_CardView_ID = orginalVAF_CardView_ID;
                         }
                     }
                     catch (e) {
@@ -341,7 +341,7 @@
                         // FillUserList(cmbUser);
                         FillRoleList(ulRole);
                     }
-                    if (AD_User_ID > 0) {
+                    if (VAF_UserContact_ID > 0) {
                         ulRole.attr('disabled', 'disabled');
                     }
                 }, error: function (errorThrown) {
@@ -362,14 +362,14 @@
 
             var sel = cmbCardView.find(":selected");
             if (sel.length > 0) {
-                AD_CardView_ID = parseInt(sel.attr("cardviewid"));
-                cardViewUserID = parseInt(sel.attr("ad_user_id"));
+                VAF_CardView_ID = parseInt(sel.attr("cardviewid"));
+                cardViewUserID = parseInt(sel.attr("VAF_UserContact_id"));
             }
 
             //  txtCardViewName.val(sel.data('name'));
             changeHeader();
             FillTextControl();
-            if (AD_CardView_ID > 0) {
+            if (VAF_CardView_ID > 0) {
                 FillColumnInclude(true, false);
 
             } else {
@@ -400,21 +400,21 @@
                         continue;
                     }
                     if ((VIS.DisplayType.IsLookup(tabField[i].getDisplayType()) && tabField[i].getLookup() && tabField[i].getLookup().getIsValidated()) || (tabField[i].getDisplayType() == VIS.DisplayType.YesNo)) {
-                        cmbGroupField.append("<Option FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
+                        cmbGroupField.append("<Option FieldID=" + tabField[i].getVAF_Field_ID() + "> " + tabField[i].getHeader() + "</Option>");
                     }
                 }
             }
-            if (AD_GroupField_ID != null && AD_GroupField_ID > 0) {
+            if (VAF_GroupField_ID != null && VAF_GroupField_ID > 0) {
                 var result = jQuery.grep(tabField, function (value) {
-                    return value.getAD_Field_ID() == AD_GroupField_ID;
+                    return value.getVAF_Field_ID() == VAF_GroupField_ID;
                 });
-                cmbGroupField.find("[FieldID='" + AD_GroupField_ID + "']").attr("selected", "selected");
-                orginalAD_GroupField_ID = cmbGroupField.find(":selected").attr("fieldid");
+                cmbGroupField.find("[FieldID='" + VAF_GroupField_ID + "']").attr("selected", "selected");
+                orginalVAF_GroupField_ID = cmbGroupField.find(":selected").attr("fieldid");
             }
 
             if (cmbGroupField != null) {
                 cmbGroupField.on("change", function () {
-                    AD_GroupField_ID = parseInt($(this).find(":selected").attr("fieldid"));
+                    VAF_GroupField_ID = parseInt($(this).find(":selected").attr("fieldid"));
                 });
             }
         };
@@ -443,14 +443,14 @@
 
                     if (cardView.hasIncludedCols && !isShowAllColumn) {
                         var result = jQuery.grep(columnFieldArray, function (value) {
-                            return value == tabField[i].getAD_Field_ID();
+                            return value == tabField[i].getVAF_Field_ID();
                         });
                         if (result.length > 0) {
 
                             continue;
                         }
                     }
-                    ulLeftColumns.append("<li index=" + i + " FieldID=" + tabField[i].getAD_Field_ID() + "> " + tabField[i].getHeader() + "</li>");
+                    ulLeftColumns.append("<li index=" + i + " FieldID=" + tabField[i].getVAF_Field_ID() + "> " + tabField[i].getHeader() + "</li>");
                 }
             }
 
@@ -524,18 +524,18 @@
             }
             if (cmbUser != null) {
                 cmbUser.on("change", function () {
-                    //if (cardViewUserID != VIS.context.getAD_User_ID() && AD_CardView_ID == 0) {
+                    //if (cardViewUserID != VIS.context.getVAF_UserContact_ID() && VAF_CardView_ID == 0) {
                     //    isNewRecord = true;
                     //}
                     //if (VIS.MRole.isAdministrator) {
-                    //    AD_User_ID = parseInt($(this).find(":selected").attr("ad_user_id"));
-                    //    if (cardViewUserID != AD_User_ID) {
+                    //    VAF_UserContact_ID = parseInt($(this).find(":selected").attr("VAF_UserContact_id"));
+                    //    if (cardViewUserID != VAF_UserContact_ID) {
                     //        isNewRecord = true;
                     //        txtCardViewName.val(txtCardViewName.val() + $(this).find(":selected").text());
                     //    }
                     //}
                     //else {
-                    //    AD_User_ID = VIS.context.getAD_User_ID();
+                    //    VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
                     //}
 
                 });
@@ -551,7 +551,7 @@
                     lastSelectWindowFieldItem = $(this);
                     //windowFieldindex = $(this).attr("index");
                     windowFieldindex = $(this).index();
-                    WindowAD_Field_ID = $(this).attr("FieldID");
+                    WindowVAF_Field_ID = $(this).attr("FieldID");
                     FieldName = $(this).text();
                 });
             }
@@ -567,19 +567,19 @@
                     lastSelectCardViewColumnFieldItem = $(this);
                     //cardViewColumnFieldindex = $(this).attr("index");
                     cardViewColumnFieldindex = $(this).index();
-                    cardViewColumnAD_Field_ID = $(this).attr("FieldID");
-                    AD_CardViewColumn_ID = $(this).attr("cardviewcolumnid");
+                    cardViewColumnVAF_Field_ID = $(this).attr("FieldID");
+                    VAF_CardViewColumn_ID = $(this).attr("cardviewcolumnid");
                     FieldName = $(this).text();
                     seqNo = $(this).attr("seqno");
                 });
             }
             if (btnRight != null) {
                 btnRight.on("click", function (e) {
-                    if (parseInt(WindowAD_Field_ID) <= 0) {
+                    if (parseInt(WindowVAF_Field_ID) <= 0) {
                         return;
                     }
-                    ulCardViewColumnField.append("<li seqno=" + 0 + " index=" + count + "  FieldID=" + WindowAD_Field_ID + "> " + FieldName + "</li>");
-                    WindowAD_Field_ID = 0;
+                    ulCardViewColumnField.append("<li seqno=" + 0 + " index=" + count + "  FieldID=" + WindowVAF_Field_ID + "> " + FieldName + "</li>");
+                    WindowVAF_Field_ID = 0;
                     ulWindowField.children().eq(windowFieldindex).remove();
                     e.stopPropagation();
                     e.preventDefault();
@@ -588,13 +588,13 @@
             }
             if (btnLeft != null) {
                 btnLeft.on("click", function (e) {
-                    if (parseInt(cardViewColumnAD_Field_ID) <= 0) {
+                    if (parseInt(cardViewColumnVAF_Field_ID) <= 0) {
                         return;
                     }
                     ulCardViewColumnField.children().eq(cardViewColumnFieldindex).remove();
                     var lastIndex = ulWindowField.children().length + 1;
-                    ulWindowField.append("<li seqno=" + 0 + " index=" + lastIndex + "  FieldID=" + cardViewColumnAD_Field_ID + "> " + FieldName + "</li>");
-                    cardViewColumnAD_Field_ID = 0;
+                    ulWindowField.append("<li seqno=" + 0 + " index=" + lastIndex + "  FieldID=" + cardViewColumnVAF_Field_ID + "> " + FieldName + "</li>");
+                    cardViewColumnVAF_Field_ID = 0;
                     cardViewColumnFieldindex = -1;
                     e.stopPropagation();
                     e.preventDefault();
@@ -616,7 +616,7 @@
                     //  preElement.attr("index", parseInt(cardViewColumnFieldindex));
                     cardViewColumnFieldindex = currenIndex;
                     //  cardViewColArray.splice(currenIndex, 0, currentColArray);
-                    //  ReloadCardViewColumns($("#CardViewColumnField"), currentColArray.AD_Field_ID);
+                    //  ReloadCardViewColumns($("#CardViewColumnField"), currentColArray.VAF_Field_ID);
                     e.stopPropagation();
                     e.preventDefault();
                 });
@@ -641,11 +641,11 @@
 
             if (ulRole != null) {
                 ulRole.on("click", "li", function () {
-                    var roleID = $(this).attr("ad_role_id");
+                    var roleID = $(this).attr("VAF_Role_id");
                     if (!$(this).find("input").is(":checked")) {
                         $(this).find("input").prop("checked", false);
                         for (var i = 0; i < LstRoleID.length; i++) {
-                            if (LstRoleID[i].AD_Role_ID == roleID) {
+                            if (LstRoleID[i].VAF_Role_ID == roleID) {
                                 LstRoleID.splice(i, 1);
                             }
 
@@ -653,7 +653,7 @@
                     }
                     else {
                         $(this).find("input").prop("checked", true);
-                        LstRoleID.push({ AD_Role_ID: parseInt(roleID) });
+                        LstRoleID.push({ VAF_Role_ID: parseInt(roleID) });
                     }
 
                 });
@@ -694,7 +694,7 @@
                             }
 
                         }
-                        else if (!isNewRecord && (AD_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
+                        else if (!isNewRecord && (VAF_CardView_ID < 1 && VIS.MRole.isAdministrator)) {
                             VIS.ADialog.error("ClickNew", true, "");
                             IsBusy(false);
                             return false;
@@ -704,18 +704,18 @@
 
 
                         var retVal = {};
-                        retVal.FieldGroupID = AD_GroupField_ID;
+                        retVal.FieldGroupID = VAF_GroupField_ID;
                         retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
                         if (!retVal.IncludedCols) {
                             return false;
                         }
                         retVal.Conditions = strConditionArray;
-                        retVal.AD_CardView_ID = AD_CardView_ID;
-                        if (isNewRecord && parseInt(AD_User_ID) < 0) {
-                            retVal.FieldGroupID = orginalAD_GroupField_ID;
+                        retVal.VAF_CardView_ID = VAF_CardView_ID;
+                        if (isNewRecord && parseInt(VAF_UserContact_ID) < 0) {
+                            retVal.FieldGroupID = orginalVAF_GroupField_ID;
                             retVal.IncludedCols = orginalIncludedCols;
                             retVal.Conditions = strConditionArray;
-                            retVal.AD_CardView_ID = orginalAD_CardView_ID;
+                            retVal.VAF_CardView_ID = orginalVAF_CardView_ID;
                         }
                         cardView.setCardViewData(retVal);
                         if (gc.isCardRow)
@@ -742,8 +742,8 @@
                         FillTextControl();
                         FillGroupFields();
                         FillColumnInclude(true, false);
-                        if (cardViewUserID == VIS.context.getAD_User_ID()) {
-                            AD_User_ID = 0;
+                        if (cardViewUserID == VIS.context.getVAF_UserContact_ID()) {
+                            VAF_UserContact_ID = 0;
                             cardViewUserID = 0;
                         }
                     }
@@ -950,17 +950,17 @@
             }
 
         };
-        var ReloadCardViewColumns = function (ulRoot, ad_Field_ID) {
+        var ReloadCardViewColumns = function (ulRoot, vaf_field_ID) {
             if (ulRoot != null) {
                 ulRoot.children().remove();
             }
             for (var i = 0; i < cardViewColArray.length; i++) {
-                ulRoot.append("<li seqno=" + cardViewColArray[i].SeqNo + " index=" + i + " FieldID=" + cardViewColArray[i].AD_Field_ID + "> " + cardViewColArray[i].FieldName + "</li>");
+                ulRoot.append("<li seqno=" + cardViewColArray[i].SeqNo + " index=" + i + " FieldID=" + cardViewColArray[i].VAF_Field_ID + "> " + cardViewColArray[i].FieldName + "</li>");
             }
-            if (ad_Field_ID > 0) {
-                lastSelectCardViewColumnFieldItem = ulRoot.find("[fieldid='" + ad_Field_ID + "']");
-                //ulRoot.find("[fieldid='" + ad_Field_ID + "']").css("background-color", "#1aa0ed");
-                ulRoot.find("[fieldid='" + ad_Field_ID + "']").addClass('vis-cv-liselected');
+            if (vaf_field_ID > 0) {
+                lastSelectCardViewColumnFieldItem = ulRoot.find("[fieldid='" + vaf_field_ID + "']");
+                //ulRoot.find("[fieldid='" + vaf_field_ID + "']").css("background-color", "#1aa0ed");
+                ulRoot.find("[fieldid='" + vaf_field_ID + "']").addClass('vis-cv-liselected');
             }
         };
         var ReloadWindowFieldsColumn = function (ulRoot, result) {
@@ -969,12 +969,12 @@
             }
             for (var i = 0; i < result.length; i++) {
                 var item = jQuery.grep(cardViewColArray, function (value) {
-                    return value.AD_Field_ID == result[i].getAD_Field_ID();
+                    return value.VAF_Field_ID == result[i].getVAF_Field_ID();
                 });
                 if (item.length > 0) {
                     continue;
                 }
-                ulRoot.append("<li index=" + i + " FieldID=" + result[i].getAD_Field_ID() + "> " + result[i].getHeader() + "</li>");
+                ulRoot.append("<li index=" + i + " FieldID=" + result[i].getVAF_Field_ID() + "> " + result[i].getHeader() + "</li>");
             }
         };
         var FillCardViewColumns = function (ulRoot, isReload) {
@@ -984,9 +984,9 @@
             cardViewColArray = [];
             cardViewColumns = [];
             columnFieldArray = [];
-            if (isReload && (AD_CardView_ID > 0 || typeof (AD_CardView_ID) == "undefined")) {
-                if (typeof (AD_CardView_ID) == "undefined") {
-                    AD_CardView_ID = 0;
+            if (isReload && (VAF_CardView_ID > 0 || typeof (VAF_CardView_ID) == "undefined")) {
+                if (typeof (VAF_CardView_ID) == "undefined") {
+                    VAF_CardView_ID = 0;
                 }
                 var url = VIS.Application.contextUrl + "CardView/GetCardViewColumns";
                 $.ajax({
@@ -995,25 +995,25 @@
                     url: url,
                     dataType: "json",
                     contentType: 'application/json; charset=utf-8',
-                    data: { ad_CardView_ID: AD_CardView_ID },
+                    data: { VAF_CardView_ID: VAF_CardView_ID },
                     success: function (data) {
                         dbResult = JSON.parse(data);
                         var CVColumns = dbResult[0].lstCardViewData;
                         LstCardViewCondition = dbResult[0].lstCardViewConditonData;
                         if (CVColumns != null && CVColumns.length > 0) {
-                            AD_GroupField_ID = CVColumns[0].AD_GroupField_ID;
+                            VAF_GroupField_ID = CVColumns[0].VAF_GroupField_ID;
                             cardViewUserID = CVColumns[0].UserID;
                             for (var i = 0; i < CVColumns.length; i++) {
-                                if (CVColumns[i].AD_Field_ID == 0) {
+                                if (CVColumns[i].VAF_Field_ID == 0) {
                                     continue;
                                 }
                                 var fieldItem = jQuery.grep(totalTabFileds, function (value) {
-                                    return value.getAD_Field_ID() == CVColumns[i].AD_Field_ID
+                                    return value.getVAF_Field_ID() == CVColumns[i].VAF_Field_ID
                                 });
                                 if (fieldItem.length > 0) {
-                                    columnFieldArray.push(fieldItem[0].getAD_Field_ID());
+                                    columnFieldArray.push(fieldItem[0].getVAF_Field_ID());
                                 }
-                                ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + CVColumns[i].AD_Field_ID + "> " + CVColumns[i].FieldName + "</li>");
+                                ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + CVColumns[i].VAF_Field_ID + "> " + CVColumns[i].FieldName + "</li>");
                             }
                         }
                         if (LstCardViewCondition != null && LstCardViewCondition.length > 0) {
@@ -1037,15 +1037,15 @@
                 if (includedFields != null && includedFields.length > 0) {
                     for (var i = 0; i < includedFields.length; i++) {
                         fieldItem = jQuery.grep(totalTabFileds, function (value) {
-                            return value.getAD_Field_ID() == includedFields[i].getAD_Field_ID()
+                            return value.getVAF_Field_ID() == includedFields[i].getVAF_Field_ID()
                         });
                         if (fieldItem.length > 0) {
-                            columnFieldArray.push(fieldItem[0].getAD_Field_ID());
+                            columnFieldArray.push(fieldItem[0].getVAF_Field_ID());
                         }
 
-                        cardViewColArray.push({ AD_Field_ID: includedFields[i].getAD_Field_ID(), CardViewID: AD_CardView_ID, SeqNo: 0, FieldName: includedFields[i].getHeader() });
-                        //ulRoot.append("<li seqno=" + cardViewColumns[i].SeqNo + " index=" + i + " CardViewColumnID=" + cardViewColumns[i].AD_CardViewColumn_ID + " FieldID=" + cardViewColumns[i].AD_Field_ID + "> " + dbResult[i].FieldName + "</li>");
-                        ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + includedFields[i].getAD_Field_ID() + "> " + includedFields[i].getHeader() + "</li>");
+                        cardViewColArray.push({ VAF_Field_ID: includedFields[i].getVAF_Field_ID(), CardViewID: VAF_CardView_ID, SeqNo: 0, FieldName: includedFields[i].getHeader() });
+                        //ulRoot.append("<li seqno=" + cardViewColumns[i].SeqNo + " index=" + i + " CardViewColumnID=" + cardViewColumns[i].VAF_CardViewColumn_ID + " FieldID=" + cardViewColumns[i].VAF_Field_ID + "> " + dbResult[i].FieldName + "</li>");
+                        ulRoot.append("<li seqno=" + 0 + " index=" + i + " CardViewColumnID=" + 0 + " FieldID=" + includedFields[i].getVAF_Field_ID() + "> " + includedFields[i].getHeader() + "</li>");
                     }
                 }
             }
@@ -1058,27 +1058,27 @@
                 if (isNewRecord) {
                     cardViewName = txtCardViewName.val();
                     if (LstRoleID == null || LstRoleID.length <= 0) {
-                        if (AD_User_ID != VIS.context.getAD_User_ID()) {
+                        if (VAF_UserContact_ID != VIS.context.getVAF_UserContact_ID()) {
                             if (!confirm(VIS.Msg.getMsg("CardViewWarning"))) {
-                                AD_User_ID = 0;
+                                VAF_UserContact_ID = 0;
                                 return false;
                             }
-                            AD_User_ID = VIS.context.getAD_User_ID();
+                            VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
                         }
                         else
-                            AD_User_ID = 0;
+                            VAF_UserContact_ID = 0;
                     }
-                    else AD_User_ID = 0;
+                    else VAF_UserContact_ID = 0;
                 } else {
                     cardViewName = txtCardViewName.val();
-                    if (AD_User_ID == cardViewUserID) {
-                        // if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0){
-                        //     AD_CardView_ID = orginalAD_CardView_ID;
+                    if (VAF_UserContact_ID == cardViewUserID) {
+                        // if (orginalVAF_CardView_ID > 0 && orginalcardViewUserID > 0){
+                        //     VAF_CardView_ID = orginalVAF_CardView_ID;
                         //     cardViewUserID = orginalcardViewUserID;
                         //}
                     }
                     else {
-                        AD_User_ID = 0;
+                        VAF_UserContact_ID = 0;
                     }
                 }
             }
@@ -1086,13 +1086,13 @@
 
                 if (!cardViewUserID || cardViewUserID < 1) {
                     isNewRecord = true;
-                    AD_User_ID = VIS.context.getAD_User_ID();
+                    VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
                 }
 
                 if (isNewRecord) {
-                    if (orginalAD_CardView_ID > 0 && orginalcardViewUserID > 0) {
+                    if (orginalVAF_CardView_ID > 0 && orginalcardViewUserID > 0) {
                         isNewRecord = false;
-                        AD_CardView_ID = orginalAD_CardView_ID;
+                        VAF_CardView_ID = orginalVAF_CardView_ID;
                         cardViewUserID = orginalcardViewUserID;
                         cardViewName = cmbCardView.find(":selected").text() + " (" + defaultMsg + ")";
                     }
@@ -1112,13 +1112,13 @@
             var includeCols = [];
             for (var i = 0; i < len; i++) {
                 var f = {};
-                f.AD_Field_ID = ulCardViewColumnField.children().eq(i).attr("fieldid");
-                f.CardViewID = AD_CardView_ID;
+                f.VAF_Field_ID = ulCardViewColumnField.children().eq(i).attr("fieldid");
+                f.CardViewID = VAF_CardView_ID;
                 cardViewColArray.push(f);
-                includeCols.push(parseInt(f.AD_Field_ID));
+                includeCols.push(parseInt(f.VAF_Field_ID));
             }
 
-            cardViewArray.push({ AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID, UserID: AD_User_ID, AD_GroupField_ID: AD_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: AD_CardView_ID });
+            cardViewArray.push({ VAF_Screen_ID: VAF_Screen_ID, VAF_Tab_ID: VAF_Tab_ID, UserID: VAF_UserContact_ID, VAF_GroupField_ID: VAF_GroupField_ID, isNewRecord: isNewRecord, CardViewName: cardViewName, CardViewID: VAF_CardView_ID });
             var url = VIS.Application.contextUrl + "CardView/SaveCardViewColumns";
             $.ajax({
                 type: "POST",
@@ -1129,7 +1129,7 @@
                 data: JSON.stringify({ 'lstCardView': cardViewArray, 'lstCardViewColumns': cardViewColArray, 'LstRoleID': LstRoleID, 'lstCardViewCondition': strConditionArray }),
                 success: function (data) {
                     var result = JSON.parse(data);
-                    AD_CardView_ID = result;
+                    VAF_CardView_ID = result;
                     IsBusy(false);
                 }, error: function (errorThrown) {
                     alert(errorThrown.statusText);
@@ -1149,7 +1149,7 @@
                 url: url,
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ 'ad_CardView_ID': AD_CardView_ID }),
+                data: JSON.stringify({ 'VAF_CardView_ID': VAF_CardView_ID }),
                 success: function (data) {
                     var result = JSON.parse(data);
 
@@ -1162,12 +1162,12 @@
         var FillUserList = function (root) {
             if (root != null)
             { root.children().remove(); }
-            root.append("<Option ad_user_id=" + -1 + " ></Option>");
+            root.append("<Option VAF_UserContact_id=" + -1 + " ></Option>");
             for (var i = 0; i < userInfo.length; i++) {
-                root.append("<Option ad_user_id=" + userInfo[i].AD_User_ID + " > " + userInfo[i].UserName + "</Option>");
+                root.append("<Option VAF_UserContact_id=" + userInfo[i].VAF_UserContact_ID + " > " + userInfo[i].UserName + "</Option>");
             }
             if (cardViewUserID > 0)
-                cmbUser.find("[ad_user_id='" + cardViewUserID + "']").attr("selected", "selected");
+                cmbUser.find("[VAF_UserContact_id='" + cardViewUserID + "']").attr("selected", "selected");
         };
 
 
@@ -1181,21 +1181,21 @@
             if (root != null)
             { root.children().remove(); }
             for (var i = 0; i < roleInfo.length; i++) {
-                root.append("<li ad_role_id=" + roleInfo[i].AD_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
+                root.append("<li VAF_Role_id=" + roleInfo[i].VAF_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
             }
             for (var i = 0; i < LstCardViewRole.length; i++) {
                 if (LstCardViewRole[i] == null) {
                     continue;
                 }
                 for (var j = 0; j < LstCardViewRole[i].length; j++) {
-                    if (LstCardViewRole[i][j].AD_CardView_ID == AD_CardView_ID) {
-                        root.find("[ad_role_id='" + LstCardViewRole[i][j].AD_Role_ID + "']").find("input").prop('checked', true);
-                        LstRoleID.push({ AD_Role_ID: LstCardViewRole[i][j].AD_Role_ID });
+                    if (LstCardViewRole[i][j].VAF_CardView_ID == VAF_CardView_ID) {
+                        root.find("[VAF_Role_id='" + LstCardViewRole[i][j].VAF_Role_ID + "']").find("input").prop('checked', true);
+                        LstRoleID.push({ VAF_Role_ID: LstCardViewRole[i][j].VAF_Role_ID });
                     }
                 }
             }
             //if (cardViewUserID > 0)
-            //    root.find("[ad_role_id='" + cardViewUserID + "']").attr("selected", "selected");
+            //    root.find("[VAF_Role_id='" + cardViewUserID + "']").attr("selected", "selected");
         };
         var changeHeader = function () {
             if (cardViewUserID > 0) {
@@ -1255,7 +1255,7 @@
                 // get field's column name
                 var columnName = field.getColumnName();
                 if (field.getDisplayType() == VIS.DisplayType.Button) {
-                    if (field.getAD_Reference_Value_ID() == 0)
+                    if (field.getVAF_Control_Ref_Value_ID() == 0)
                         continue;
                     if (columnName.endsWith("_ID"))
                         field.setDisplayType(VIS.DisplayType.Table);
@@ -1599,28 +1599,28 @@
                     }
 
                 }
-                else if (!isNewRecord && ((AD_CardView_ID < 1 && (cmbCardView.val() == "" || cmbCardView.val() == null)) && VIS.MRole.isAdministrator)) {
+                else if (!isNewRecord && ((VAF_CardView_ID < 1 && (cmbCardView.val() == "" || cmbCardView.val() == null)) && VIS.MRole.isAdministrator)) {
                     VIS.ADialog.error("ClickNew", true, "");
                     return false;
                 }
 
-                //if (AD_GroupField_ID <= 0) {
+                //if (VAF_GroupField_ID <= 0) {
                 //    VIS.ADialog.error("FillMandatory", true, "GroupField");
                 //    return false;
                 //}
                 var retVal = {};
-                retVal.FieldGroupID = AD_GroupField_ID;
+                retVal.FieldGroupID = VAF_GroupField_ID;
                 retVal.IncludedCols = SaveCardViewColumn(cardViewColArray);
                 if (!retVal.IncludedCols) {
                     return false;
                 }
                 retVal.Conditions = [];
-                retVal.AD_CardView_ID = AD_CardView_ID;
-                if (VIS.MRole.isAdministrator && AD_User_ID < 1 && orginalAD_CardView_ID > 0) {
-                    //retVal.FieldGroupID = orginalAD_GroupField_ID;
+                retVal.VAF_CardView_ID = VAF_CardView_ID;
+                if (VIS.MRole.isAdministrator && VAF_UserContact_ID < 1 && orginalVAF_CardView_ID > 0) {
+                    //retVal.FieldGroupID = orginalVAF_GroupField_ID;
                     //retVal.IncludedCols = orginalIncludedCols;
                     retVal.Conditions = [];
-                    retVal.AD_CardView_ID = orginalAD_CardView_ID;
+                    retVal.VAF_CardView_ID = orginalVAF_CardView_ID;
                 }
                 cardView.setCardViewData(retVal);
                 if (gc.isCardRow)

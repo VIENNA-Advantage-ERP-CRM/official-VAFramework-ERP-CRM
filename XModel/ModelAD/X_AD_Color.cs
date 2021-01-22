@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Color
+/** Generated Model for VAF_Colour
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Color : PO
+public class X_VAF_Colour : PO
 {
-public X_AD_Color (Context ctx, int AD_Color_ID, Trx trxName) : base (ctx, AD_Color_ID, trxName)
+public X_VAF_Colour (Context ctx, int VAF_Colour_ID, Trx trxName) : base (ctx, VAF_Colour_ID, trxName)
 {
-/** if (AD_Color_ID == 0)
+/** if (VAF_Colour_ID == 0)
 {
-SetAD_Color_ID (0);
+SetVAF_Colour_ID (0);
 SetAlpha (0);
 SetBlue (0);
 SetColorType (null);
@@ -32,11 +32,11 @@ SetRed (0);
 }
  */
 }
-public X_AD_Color (Ctx ctx, int AD_Color_ID, Trx trxName) : base (ctx, AD_Color_ID, trxName)
+public X_VAF_Colour (Ctx ctx, int VAF_Colour_ID, Trx trxName) : base (ctx, VAF_Colour_ID, trxName)
 {
-/** if (AD_Color_ID == 0)
+/** if (VAF_Colour_ID == 0)
 {
-SetAD_Color_ID (0);
+SetVAF_Colour_ID (0);
 SetAlpha (0);
 SetBlue (0);
 SetColorType (null);
@@ -53,7 +53,7 @@ SetRed (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Color (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Colour (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_AD_Color (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Color (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Colour (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_AD_Color (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Color (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Colour (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Color()
+static X_VAF_Colour()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,12 +84,12 @@ static X_AD_Color()
 //static long serialVersionUID = 27562514360950L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044161L;
-/** AD_Table_ID=457 */
+/** VAF_TableView_ID=457 */
 public static int Table_ID;
  // =457;
 
-/** TableName=AD_Color */
-public static String Table_Name="AD_Color";
+/** TableName=VAF_Colour */
+public static String Table_Name="VAF_Colour";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -123,37 +123,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Color[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Colour[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set System Color.
-@param AD_Color_ID Color for backgrounds or indicators */
-public void SetAD_Color_ID (int AD_Color_ID)
+@param VAF_Colour_ID Color for backgrounds or indicators */
+public void SetVAF_Colour_ID (int VAF_Colour_ID)
 {
-if (AD_Color_ID < 1) throw new ArgumentException ("AD_Color_ID is mandatory.");
-Set_ValueNoCheck ("AD_Color_ID", AD_Color_ID);
+if (VAF_Colour_ID < 1) throw new ArgumentException ("VAF_Colour_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Colour_ID", VAF_Colour_ID);
 }
 /** Get System Color.
 @return Color for backgrounds or indicators */
-public int GetAD_Color_ID() 
+public int GetVAF_Colour_ID() 
 {
-Object ii = Get_Value("AD_Color_ID");
+Object ii = Get_Value("VAF_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);
+if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);
 else
-Set_Value ("AD_Image_ID", AD_Image_ID);
+Set_Value ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -214,8 +214,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ColorType AD_Reference_ID=243 */
-public static int COLORTYPE_AD_Reference_ID=243;
+/** ColorType VAF_Control_Ref_ID=243 */
+public static int COLORTYPE_VAF_Control_Ref_ID=243;
 /** Normal (Flat) = F */
 public static String COLORTYPE_NormalFlat = "F";
 /** Gradient = G */
@@ -407,8 +407,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** StartPoint AD_Reference_ID=248 */
-public static int STARTPOINT_AD_Reference_ID=248;
+/** StartPoint VAF_Control_Ref_ID=248 */
+public static int STARTPOINT_VAF_Control_Ref_ID=248;
 /** North = 1 */
 public static String STARTPOINT_North = "1";
 /** North East = 2 */

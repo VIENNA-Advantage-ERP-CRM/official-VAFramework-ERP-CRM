@@ -91,7 +91,7 @@ using System.Data;
         //static long serialVersionUID 27617992279669L;
         /** Last Updated Timestamp 5/1/2012 3:39:23 PM */
         public static long updatedMS = 1335866962880L;
-        /** AD_Table_ID=486 */
+        /** VAF_TableView_ID=486 */
         public static int Table_ID;
         // =486;
 
@@ -134,18 +134,18 @@ using System.Data;
             return sb.ToString();
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -164,8 +164,8 @@ using System.Data;
             return Convert.ToDecimal(bd);
         }
 
-        /** C_BPartner_ID AD_Reference_ID=277 */
-        public static int C_BPARTNER_ID_AD_Reference_ID = 277;
+        /** C_BPartner_ID VAF_Control_Ref_ID=277 */
+        public static int C_BPARTNER_ID_VAF_Control_Ref_ID = 277;
         /** Set Customer/Prospect.
         @param C_BPartner_ID Identifies a Customer/Prospect */
         public void SetC_BPartner_ID(int C_BPartner_ID)
@@ -212,8 +212,8 @@ using System.Data;
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -270,8 +270,8 @@ using System.Data;
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -488,8 +488,8 @@ using System.Data;
         {
             return (DateTime?)Get_Value("ToDate");
         }
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)

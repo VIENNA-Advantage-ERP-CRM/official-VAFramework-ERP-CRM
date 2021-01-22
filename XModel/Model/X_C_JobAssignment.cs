@@ -20,7 +20,7 @@ public X_C_JobAssignment (Context ctx, int C_JobAssignment_ID, Trx trxName) : ba
 {
 /** if (C_JobAssignment_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_JobAssignment_ID (0);
 SetC_Job_ID (0);
 SetJobAssignmentType (null);	// P
@@ -32,7 +32,7 @@ public X_C_JobAssignment (Ctx ctx, int C_JobAssignment_ID, Trx trxName) : base (
 {
 /** if (C_JobAssignment_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetC_JobAssignment_ID (0);
 SetC_Job_ID (0);
 SetJobAssignmentType (null);	// P
@@ -76,7 +76,7 @@ static X_C_JobAssignment()
 //static long serialVersionUID 27562514372704L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055915L;
-/** AD_Table_ID=791 */
+/** VAF_TableView_ID=791 */
 public static int Table_ID;
  // =791;
 
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_C_JobAssignment[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -187,8 +187,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** JobAssignmentType AD_Reference_ID=400 */
-public static int JOBASSIGNMENTTYPE_AD_Reference_ID=400;
+/** JobAssignmentType VAF_Control_Ref_ID=400 */
+public static int JOBASSIGNMENTTYPE_VAF_Control_Ref_ID=400;
 /** Other = O */
 public static String JOBASSIGNMENTTYPE_Other = "O";
 /** Primary = P */

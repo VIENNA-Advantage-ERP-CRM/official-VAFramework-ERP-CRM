@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ExcelImportMapping
+/** Generated Model for VAF_ExcelImportMapping
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ExcelImportMapping : PO
+    public class X_VAF_ExcelImportMapping : PO
 {
-public X_AD_ExcelImportMapping (Context ctx, int AD_ExcelImportMapping_ID, Trx trxName) : base (ctx, AD_ExcelImportMapping_ID, trxName)
+public X_VAF_ExcelImportMapping (Context ctx, int VAF_ExcelImportMapping_ID, Trx trxName) : base (ctx, VAF_ExcelImportMapping_ID, trxName)
 {
-/** if (AD_ExcelImportMapping_ID == 0)
+/** if (VAF_ExcelImportMapping_ID == 0)
 {
-SetAD_ExcelImportMapping_ID (0);
-SetAD_ExcelImport_ID (0);
+SetVAF_ExcelImportMapping_ID (0);
+SetVAF_ExcelImport_ID (0);
 }
  */
 }
-public X_AD_ExcelImportMapping (Ctx ctx, int AD_ExcelImportMapping_ID, Trx trxName) : base (ctx, AD_ExcelImportMapping_ID, trxName)
+public X_VAF_ExcelImportMapping (Ctx ctx, int VAF_ExcelImportMapping_ID, Trx trxName) : base (ctx, VAF_ExcelImportMapping_ID, trxName)
 {
-/** if (AD_ExcelImportMapping_ID == 0)
+/** if (VAF_ExcelImportMapping_ID == 0)
 {
-SetAD_ExcelImportMapping_ID (0);
-SetAD_ExcelImport_ID (0);
+SetVAF_ExcelImportMapping_ID (0);
+SetVAF_ExcelImport_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_ExcelImport_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImportMapping (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExcelImportMapping (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ExcelImportMapping (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImportMapping (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExcelImportMapping (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ExcelImportMapping (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImportMapping (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ExcelImportMapping (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ExcelImportMapping()
+static X_VAF_ExcelImportMapping()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_ExcelImportMapping()
 //static long serialVersionUID = 27623011438779L;
 /** Last Updated Timestamp 6/28/2012 5:52:02 PM */
 public static long updatedMS = 1340886121990L;
-/** AD_Table_ID=1000044 */
+/** VAF_TableView_ID=1000044 */
 public static int Table_ID;
  // =1000044;
 
-/** TableName=AD_ExcelImportMapping */
-public static String Table_Name="AD_ExcelImportMapping";
+/** TableName=VAF_ExcelImportMapping */
+public static String Table_Name="VAF_ExcelImportMapping";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,84 +109,84 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ExcelImportMapping[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ExcelImportMapping[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Excel Import Mapping.
-@param AD_ExcelImportMapping_ID Excel Import Mapping */
-public void SetAD_ExcelImportMapping_ID (int AD_ExcelImportMapping_ID)
+@param VAF_ExcelImportMapping_ID Excel Import Mapping */
+public void SetVAF_ExcelImportMapping_ID (int VAF_ExcelImportMapping_ID)
 {
-if (AD_ExcelImportMapping_ID < 1) throw new ArgumentException ("AD_ExcelImportMapping_ID is mandatory.");
-Set_ValueNoCheck ("AD_ExcelImportMapping_ID", AD_ExcelImportMapping_ID);
+if (VAF_ExcelImportMapping_ID < 1) throw new ArgumentException ("VAF_ExcelImportMapping_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ExcelImportMapping_ID", VAF_ExcelImportMapping_ID);
 }
 /** Get Excel Import Mapping.
 @return Excel Import Mapping */
-public int GetAD_ExcelImportMapping_ID() 
+public int GetVAF_ExcelImportMapping_ID() 
 {
-Object ii = Get_Value("AD_ExcelImportMapping_ID");
+Object ii = Get_Value("VAF_ExcelImportMapping_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Excel Import.
-@param AD_ExcelImport_ID Excel Import */
-public void SetAD_ExcelImport_ID (int AD_ExcelImport_ID)
+@param VAF_ExcelImport_ID Excel Import */
+public void SetVAF_ExcelImport_ID (int VAF_ExcelImport_ID)
 {
-if (AD_ExcelImport_ID < 1) throw new ArgumentException ("AD_ExcelImport_ID is mandatory.");
-Set_ValueNoCheck ("AD_ExcelImport_ID", AD_ExcelImport_ID);
+if (VAF_ExcelImport_ID < 1) throw new ArgumentException ("VAF_ExcelImport_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ExcelImport_ID", VAF_ExcelImport_ID);
 }
 /** Get Excel Import.
 @return Excel Import */
-public int GetAD_ExcelImport_ID() 
+public int GetVAF_ExcelImport_ID() 
 {
-Object ii = Get_Value("AD_ExcelImport_ID");
+Object ii = Get_Value("VAF_ExcelImport_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tab.
-@param AD_Tab_ID Tab within a Window */
-public void SetAD_Tab_ID (int AD_Tab_ID)
+@param VAF_Tab_ID Tab within a Window */
+public void SetVAF_Tab_ID (int VAF_Tab_ID)
 {
-if (AD_Tab_ID <= 0) Set_Value ("AD_Tab_ID", null);
+if (VAF_Tab_ID <= 0) Set_Value ("VAF_Tab_ID", null);
 else
-Set_Value ("AD_Tab_ID", AD_Tab_ID);
+Set_Value ("VAF_Tab_ID", VAF_Tab_ID);
 }
 /** Get Tab.
 @return Tab within a Window */
-public int GetAD_Tab_ID() 
+public int GetVAF_Tab_ID() 
 {
-Object ii = Get_Value("AD_Tab_ID");
+Object ii = Get_Value("VAF_Tab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

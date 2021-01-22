@@ -74,7 +74,7 @@ static X_PA_GoalRestriction()
 //static long serialVersionUID 27562514381857L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065068L;
-/** AD_Table_ID=832 */
+/** VAF_TableView_ID=832 */
 public static int Table_ID;
  // =832;
 
@@ -149,8 +149,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** GoalRestrictionType AD_Reference_ID=368 */
-public static int GOALRESTRICTIONTYPE_AD_Reference_ID=368;
+/** GoalRestrictionType VAF_Control_Ref_ID=368 */
+public static int GOALRESTRICTIONTYPE_VAF_Control_Ref_ID=368;
 /** Business Partner = B */
 public static String GOALRESTRICTIONTYPE_BusinessPartner = "B";
 /** Product Category = C */
@@ -245,8 +245,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Org_ID AD_Reference_ID=322 */
-public static int ORG_ID_AD_Reference_ID=322;
+/** Org_ID VAF_Control_Ref_ID=322 */
+public static int ORG_ID_VAF_Control_Ref_ID=322;
 /** Set Organization.
 @param Org_ID Organizational entity within client */
 public void SetOrg_ID (int Org_ID)

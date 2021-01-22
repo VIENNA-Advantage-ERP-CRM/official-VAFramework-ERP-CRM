@@ -82,7 +82,7 @@ static X_C_BPartner_Location()
 //static long serialVersionUID 27562514370542L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053753L;
-/** AD_Table_ID=293 */
+/** VAF_TableView_ID=293 */
 public static int Table_ID;
  // =293;
 
@@ -185,8 +185,8 @@ Object ii = Get_Value("C_SalesRegion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** CreditStatusSettingOn AD_Reference_ID=1000178 */
-public static int CREDITSTATUSSETTINGON_AD_Reference_ID = 1000178;
+/** CreditStatusSettingOn VAF_Control_Ref_ID=1000178 */
+public static int CREDITSTATUSSETTINGON_VAF_Control_Ref_ID = 1000178;
 /** Customer Header = CH */
 public static String CREDITSTATUSSETTINGON_CustomerHeader = "CH";
 /** Customer Location = CL */
@@ -218,8 +218,8 @@ public String GetCreditStatusSettingOn()
     return (String)Get_Value("CreditStatusSettingOn");
 }
 
-/** CreditValidation AD_Reference_ID=1000179 */
-public static int CREDITVALIDATION_AD_Reference_ID = 1000179;
+/** CreditValidation VAF_Control_Ref_ID=1000179 */
+public static int CREDITVALIDATION_VAF_Control_Ref_ID = 1000179;
 /** Stop SO = A */
 public static String CREDITVALIDATION_StopSO = "A";
 /** Stop Shipment = B */
@@ -434,8 +434,8 @@ public String GetPhone2()
 {
 return (String)Get_Value("Phone2");
 }
-/** SOCreditStatus AD_Reference_ID=289 */
-public static int SOCREDITSTATUS_AD_Reference_ID = 289;
+/** SOCreditStatus VAF_Control_Ref_ID=289 */
+public static int SOCREDITSTATUS_VAF_Control_Ref_ID = 289;
 /** Credit Hold = H */
 public static String SOCREDITSTATUS_CreditHold = "H";
 /** Credit OK = O */

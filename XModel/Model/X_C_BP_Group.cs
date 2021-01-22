@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721585812198L;
         /** Last Updated Timestamp 8/13/2015 3:38:16 PM */
         public static long updatedMS = 1439460495409L;
-        /** AD_Table_ID=394 */
+        /** VAF_TableView_ID=394 */
         public static int Table_ID;
         // =394;
 
@@ -124,18 +124,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Print Color.
-        @param AD_PrintColor_ID Color used for printing and display */
-        public void SetAD_PrintColor_ID(int AD_PrintColor_ID)
+        @param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+        public void SetVAF_Print_Rpt_Colour_ID(int VAF_Print_Rpt_Colour_ID)
         {
-            if (AD_PrintColor_ID <= 0) Set_Value("AD_PrintColor_ID", null);
+            if (VAF_Print_Rpt_Colour_ID <= 0) Set_Value("VAF_Print_Rpt_Colour_ID", null);
             else
-                Set_Value("AD_PrintColor_ID", AD_PrintColor_ID);
+                Set_Value("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
         }
         /** Get Print Color.
         @return Color used for printing and display */
-        public int GetAD_PrintColor_ID()
+        public int GetVAF_Print_Rpt_Colour_ID()
         {
-            Object ii = Get_Value("AD_PrintColor_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -271,8 +271,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** M_DiscountSchema_ID AD_Reference_ID=325 */
-        public static int M_DISCOUNTSCHEMA_ID_AD_Reference_ID = 325;
+        /** M_DiscountSchema_ID VAF_Control_Ref_ID=325 */
+        public static int M_DISCOUNTSCHEMA_ID_VAF_Control_Ref_ID = 325;
         /** Set Discount Schema.
         @param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
         public void SetM_DiscountSchema_ID(int M_DiscountSchema_ID)
@@ -346,8 +346,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** PO_DiscountSchema_ID AD_Reference_ID=325 */
-        public static int PO_DISCOUNTSCHEMA_ID_AD_Reference_ID = 325;
+        /** PO_DiscountSchema_ID VAF_Control_Ref_ID=325 */
+        public static int PO_DISCOUNTSCHEMA_ID_VAF_Control_Ref_ID = 325;
         /** Set PO Discount Schema.
         @param PO_DiscountSchema_ID Schema to calculate the purchase trade discount percentage */
         public void SetPO_DiscountSchema_ID(int PO_DiscountSchema_ID)
@@ -365,8 +365,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PO_PriceList_ID AD_Reference_ID=166 */
-        public static int PO_PRICELIST_ID_AD_Reference_ID = 166;
+        /** PO_PriceList_ID VAF_Control_Ref_ID=166 */
+        public static int PO_PRICELIST_ID_VAF_Control_Ref_ID = 166;
         /** Set Purchase Pricelist.
         @param PO_PriceList_ID Price List used by this Business Partner */
         public void SetPO_PriceList_ID(int PO_PriceList_ID)
@@ -384,8 +384,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PO_ReturnPolicy_ID AD_Reference_ID=431 */
-        public static int PO_RETURNPOLICY_ID_AD_Reference_ID = 431;
+        /** PO_ReturnPolicy_ID VAF_Control_Ref_ID=431 */
+        public static int PO_RETURNPOLICY_ID_VAF_Control_Ref_ID = 431;
         /** Set Vendor Return Policy.
         @param PO_ReturnPolicy_ID Vendor Return Policy */
         public void SetPO_ReturnPolicy_ID(int PO_ReturnPolicy_ID)
@@ -417,8 +417,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** PriorityBase AD_Reference_ID=350 */
-        public static int PRIORITYBASE_AD_Reference_ID = 350;
+        /** PriorityBase VAF_Control_Ref_ID=350 */
+        public static int PRIORITYBASE_VAF_Control_Ref_ID = 350;
         /** Higher = H */
         public static String PRIORITYBASE_Higher = "H";
         /** Lower = L */
@@ -452,8 +452,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("PriorityBase");
         }
 
-        /** VAHRUAE_BPGroupType AD_Reference_ID=1000199 */
-        public static int VAHRUAE_BPGROUPTYPE_AD_Reference_ID = 1000199;
+        /** VAHRUAE_BPGroupType VAF_Control_Ref_ID=1000199 */
+        public static int VAHRUAE_BPGROUPTYPE_VAF_Control_Ref_ID = 1000199;
         /** All = A */
         public static String VAHRUAE_BPGROUPTYPE_All = "A";
         /** Employee = E */
@@ -489,8 +489,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VAHRUAE_BPGroupType");
         }
 
-        /** VAHRUAE_GOSIRule_ID AD_Reference_ID=1000195 */
-        public static int VAHRUAE_GOSIRULE_ID_AD_Reference_ID = 1000195;
+        /** VAHRUAE_GOSIRule_ID VAF_Control_Ref_ID=1000195 */
+        public static int VAHRUAE_GOSIRULE_ID_VAF_Control_Ref_ID = 1000195;
         /** Set GOSI Rule.
         @param VAHRUAE_GOSIRule_ID GOSI Rule */
         public void SetVAHRUAE_GOSIRule_ID(int VAHRUAE_GOSIRule_ID)
@@ -508,8 +508,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAHRUAE_IndeminityRule_ID AD_Reference_ID=1000196 */
-        public static int VAHRUAE_INDEMINITYRULE_ID_AD_Reference_ID = 1000196;
+        /** VAHRUAE_IndeminityRule_ID VAF_Control_Ref_ID=1000196 */
+        public static int VAHRUAE_INDEMINITYRULE_ID_VAF_Control_Ref_ID = 1000196;
         /** Set Indemnity Rule.
         @param VAHRUAE_IndeminityRule_ID Indemnity Rule */
         public void SetVAHRUAE_IndeminityRule_ID(int VAHRUAE_IndeminityRule_ID)

@@ -42,10 +42,10 @@ namespace VAdvantage.Classes
         /** Validation flag */
         public bool isValidated = false;
 
-        /**	AD_Column_Info or AD_Process_Para	*/
+        /**	VAF_Column_Info or VAF_Job_Para	*/
         public int column_ID;
-        /** Real AD_Reference_ID				*/
-        public int AD_Reference_Value_ID;
+        /** Real VAF_Control_Ref_ID				*/
+        public int VAF_Control_Ref_Value_ID;
         /** CreadedBy?updatedBy					*/
         public bool isCreadedUpdatedBy = false;
 
@@ -95,17 +95,17 @@ namespace VAdvantage.Classes
         }
 
         /// <summary>
-        /// Get first AD_Reference_ID of a matching Reference Name.
+        /// Get first VAF_Control_Ref_ID of a matching Reference Name.
         /// Can have SQL LIKE place holders.
         /// (This is more a development tool than used for production)
         /// </summary>
         /// <param name="ReferenceName">reference name</param>
-        /// <returns>AD_Reference_ID</returns>
-        public static int GetAD_Reference_ID(String ReferenceName)
+        /// <returns>VAF_Control_Ref_ID</returns>
+        public static int GetVAF_Control_Ref_ID(String ReferenceName)
         {
             int RetValue = 0;
-            String sql = "SELECT AD_Reference_ID,Name,ValidationType,IsActive "
-                + "FROM AD_Reference WHERE Name LIKE @name";
+            String sql = "SELECT VAF_Control_Ref_ID,Name,ValidationType,IsActive "
+                + "FROM VAF_Control_Ref WHERE Name LIKE @name";
 
             IDataReader dr = null;
             try
@@ -127,7 +127,7 @@ namespace VAdvantage.Classes
                     RefName = dr[1].ToString();
                     ValidationType = dr[2].ToString();
                     IsActive = dr[3].ToString().Equals("Y");
-                    VLogger.Get().Config("AD_Reference Name=" + RefName + ", ID=" + id + ", Type=" + ValidationType + ", Active=" + IsActive);
+                    VLogger.Get().Config("VAF_Control_Ref Name=" + RefName + ", ID=" + id + ", Type=" + ValidationType + ", Active=" + IsActive);
                 }
                 dr.Close();
                 dr = null;
@@ -146,18 +146,18 @@ namespace VAdvantage.Classes
 
 
         /// <summary>
-        ///  Get first AD_Column_ID of matching ColumnName.
+        ///  Get first VAF_Column_ID of matching ColumnName.
         ///  Can have SQL LIKE place holders.
         ///  (This is more a development tool than used for production)
         /// </summary>
         /// <param name="ColumnName">column name</param>
-        /// <returns>AD_Column_ID</returns>
-        public static int GetAD_Column_ID(String columnName)
+        /// <returns>VAF_Column_ID</returns>
+        public static int GetVAF_Column_ID(String columnName)
         {
             int RetValue = 0;
-            String sql = "SELECT c.AD_Column_ID,c.ColumnName,t.tableName "
-                + "FROM AD_Column c, AD_Table t "
-                + "WHERE c.ColumnName LIKE @name AND c.AD_Table_ID=t.AD_Table_ID";
+            String sql = "SELECT c.VAF_Column_ID,c.ColumnName,t.tableName "
+                + "FROM VAF_Column c, VAF_TableView t "
+                + "WHERE c.ColumnName LIKE @name AND c.VAF_TableView_ID=t.VAF_TableView_ID";
             IDataReader dr = null;
             try
             {
@@ -208,15 +208,15 @@ namespace VAdvantage.Classes
         /// </summary>
         /// <param name="columnName">coumn name</param>
         /// <param name="isTranslated">translated</param>
-        /// <param name="AD_Reference_ID">display type</param>
-        /// <param name="AD_Reference_Value_ID">list/table ref id</param>
+        /// <param name="VAF_Control_Ref_ID">display type</param>
+        /// <param name="VAF_Control_Ref_Value_ID">list/table ref id</param>
         public LookupDisplayColumn(string columnName, bool isTranslated,
-            int AD_Reference_ID, int AD_Reference_Value_ID)
+            int VAF_Control_Ref_ID, int VAF_Control_Ref_Value_ID)
         {
             ColumnName = columnName;
             IsTranslated = isTranslated;
-            DisplayType = AD_Reference_ID;
-            AD_Ref_Val_ID = AD_Reference_Value_ID;
+            DisplayType = VAF_Control_Ref_ID;
+            AD_Ref_Val_ID = VAF_Control_Ref_Value_ID;
         }	//
 
         /** Column Name		*/

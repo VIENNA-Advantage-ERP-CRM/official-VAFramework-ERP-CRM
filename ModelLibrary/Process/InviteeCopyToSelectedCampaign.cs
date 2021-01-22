@@ -55,7 +55,7 @@ namespace VAdvantage.Process
                 //StringBuilder _sql = new StringBuilder();
                 _sql.Clear();
                 _sql.Append(@"Select * From C_InviteeList ");
-                _sql.Append(@" Where IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + " AND AD_Org_ID = " + GetAD_Org_ID());
+                _sql.Append(@" Where IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID());
                 if (_Campaign_ID > 0)
                 {
                     _sql.Append("  And C_Campaign_ID=" + _SelectedCampaign);
@@ -75,10 +75,10 @@ namespace VAdvantage.Process
                         int _recordID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
 
                         invi = new X_C_InviteeList(Env.GetCtx(), _recordID, null);
-                        invi.SetAD_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Client_ID"]));
-                        invi.SetAD_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Org_ID"]));
+                        invi.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
+                        invi.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
                         invi.SetC_Campaign_ID(_Campaign_ID);
-                        invi.SetAD_User_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]));
+                        invi.SetVAF_UserContact_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                         invi.SetName(Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]));
                         invi.SetC_Lead_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Lead_ID"]));
                         invi.SetPhone(Util.GetValueOfString(ds.Tables[0].Rows[i]["Phone"]));

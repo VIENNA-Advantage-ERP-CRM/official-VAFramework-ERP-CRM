@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MColumnAccess
  * Purpose        : Column Access Model
- * Class Used     : X_AD_Column_Access
+ * Class Used     : X_VAF_Column_Rights
  * Chronological    Development
  * Raghunandan     26-Aug-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MColumnAccess : X_AD_Column_Access
+    public class MColumnAccess : X_VAF_Column_Rights
     {
         //	TableName			
         private String _tableName;
@@ -81,9 +81,9 @@ namespace VAdvantage.Model
         {
             if (_columnName == null)
             {
-                String sql = "SELECT t.TableName,c.ColumnName, t.AD_Table_ID "
-                    + "FROM AD_Table t INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
-                    + "WHERE AD_Column_ID='" + GetAD_Column_ID() + "'";
+                String sql = "SELECT t.TableName,c.ColumnName, t.VAF_TableView_ID "
+                    + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
+                    + "WHERE VAF_Column_ID='" + GetVAF_Column_ID() + "'";
                 IDataReader dr = null;
                 try
                 {
@@ -93,9 +93,9 @@ namespace VAdvantage.Model
                     {
                         _tableName = dr[0].ToString();
                         _columnName = dr[1].ToString();
-                        if (Utility.Util.GetValueOfInt(dr[2].ToString()) != GetAD_Table_ID())
+                        if (Utility.Util.GetValueOfInt(dr[2].ToString()) != GetVAF_TableView_ID())
                         {
-                            log.Log(Level.SEVERE, "AD_Table_ID inconsistent - Access=" + GetAD_Table_ID() + " - Table=" + Utility.Util.GetValueOfInt(dr[2].ToString()));
+                            log.Log(Level.SEVERE, "VAF_TableView_ID inconsistent - Access=" + GetVAF_TableView_ID() + " - Table=" + Utility.Util.GetValueOfInt(dr[2].ToString()));
                         }
                     }
                     dr.Close();
@@ -129,9 +129,9 @@ namespace VAdvantage.Model
             String inn = Msg.GetMsg(Env.GetContext(), "Include");
             String ex = Msg.GetMsg(Env.GetContext(), "Exclude");
             StringBuilder sb = new StringBuilder();
-            sb.Append(Msg.Translate(ctx, "AD_Table_ID"))
+            sb.Append(Msg.Translate(ctx, "VAF_TableView_ID"))
                 .Append("=").Append(GetTableName(ctx)).Append(", ")
-                .Append(Msg.Translate(ctx, "AD_Column_ID"))
+                .Append(Msg.Translate(ctx, "VAF_Column_ID"))
                 .Append("=").Append(GetColumnName(ctx))
                 .Append(" (").Append(Msg.Translate(ctx, "IsReadOnly")).Append("=").Append(IsReadOnly())
                 .Append(") - ").Append(IsExclude() ? ex : inn);
@@ -145,9 +145,9 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MColumnAccess[");
-            sb.Append("AD_Role_ID=").Append(GetAD_Role_ID())
-                .Append(",AD_Table_ID=").Append(GetAD_Table_ID())
-                .Append(",AD_Column_ID=").Append(GetAD_Column_ID())
+            sb.Append("VAF_Role_ID=").Append(GetVAF_Role_ID())
+                .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
+                .Append(",VAF_Column_ID=").Append(GetVAF_Column_ID())
                 .Append(",Exclude=").Append(IsExclude());
             sb.Append("]");
             return sb.ToString();

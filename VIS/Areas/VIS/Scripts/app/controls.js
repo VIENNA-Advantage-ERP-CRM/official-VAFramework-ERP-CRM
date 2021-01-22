@@ -4,7 +4,7 @@
     /**
      *	System Display Types.
      *  <pre>
-     *	SELECT AD_Reference_ID, Name FROM AD_Reference WHERE ValidationType = 'D'
+     *	SELECT VAF_Control_Ref_ID, Name FROM VAF_Control_Ref WHERE ValidationType = 'D'
      *  </pre>
      */
 
@@ -252,9 +252,9 @@
 
             if (displayType == VIS.DisplayType.Button) {
 
-                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getAD_Form_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
+                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getVAF_Job_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getVAF_Page_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
                 btn.setField(mField);
-                btn.setReferenceKey(mField.getAD_Reference_Value_ID());
+                btn.setReferenceKey(mField.getVAF_Control_Ref_Value_ID());
                 ctrl = btn;
             }
 
@@ -416,7 +416,7 @@
                 var txt = new VLabel(mField.getHelp(), columnName, false, true);
                 //VAdvantage.Controls.VButton button = new VAdvantage.Controls.VButton();
                 //button.SetAttribute(mField, columnName, mandatory, isReadOnly, isUpdateable,
-                //                    mField.GetHeader(), mField.GetDescription(), mField.GetHelp(), mField.GetAD_Process_ID());
+                //                    mField.GetHeader(), mField.GetDescription(), mField.GetHelp(), mField.GetVAF_Job_ID());
                 txt.setField(mField);
                 ctrl = txt;
             }
@@ -513,8 +513,8 @@
                 return "<i class='" + mField.getFontClass() + "'> </i>";
             }
 
-            if (mField.getAD_Image_ID() > 0) {
-                return "<img src='" + VIS.Application.contextUrl + "Images/Thumb16x16/" + mField.getAD_Image_ID() + ".jpg' > ";
+            if (mField.getVAF_Image_ID() > 0) {
+                return "<img src='" + VIS.Application.contextUrl + "Images/Thumb16x16/" + mField.getVAF_Image_ID() + ".jpg' > ";
             }
         }
 
@@ -1117,14 +1117,14 @@
      *  @param text text
      *  @param description description
      *  @param help help
-     *  @param AD_Process_ID process to start
+     *  @param VAF_Job_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, AD_Form_ID, isBGProcess, isAskUserBGProcess) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, VAF_Job_ID, isLink, isRightLink, VAF_Page_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
-        this.AD_Process_ID = AD_Process_ID;
-        this.AD_Form_ID = AD_Form_ID;
+        this.VAF_Job_ID = VAF_Job_ID;
+        this.VAF_Page_ID = VAF_Page_ID;
         this.description = description;
         this.help = help;
         this.text = text;
@@ -1217,13 +1217,13 @@
             if (!self.isReadOnly) {
                 var sqlQry = "VIS_81";
                 var param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+                param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
                 isReport = executeScalar(sqlQry, param);
 
 
                 sqlQry = "VIS_149";
                 param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+                param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
                 var isCrystalReport = executeScalar(sqlQry, param);
 
                 if (isCrystalReport == "Y" && VIS.context.getIsUseCrystalReportViewer()) {
@@ -1280,7 +1280,7 @@
             $ctrl = null;
             self = null;
             //this.actionListner = null;
-            this.AD_Process_ID = null;
+            this.VAF_Job_ID = null;
             this.description = null;
             this.help = null;
             this.setText = null;
@@ -1350,9 +1350,9 @@
 
     /**
      *	Fill m_Values with Ref_List values
-     *  @param AD_Reference_ID reference
+     *  @param VAF_Control_Ref_ID reference
      */
-    VButton.prototype.readReference = function (AD_Reference_ID) {
+    VButton.prototype.readReference = function (VAF_Control_Ref_ID) {
         this.values = {};
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
@@ -1361,7 +1361,7 @@
             SQL = "VIS_148";
         }
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
         try {
             var dr = executeReader(SQL, param);
             while (dr.read()) {
@@ -1376,14 +1376,14 @@
     };	//	readReferenc
     /**
      *  Return process id
-     *  @return ad_process_id
+     *  @return VAF_Job_id
      */
     VButton.prototype.getProcess_ID = function () {
-        return this.AD_Process_ID;
+        return this.VAF_Job_ID;
     };
 
-    VButton.prototype.getAD_Form_ID = function () {
-        return this.AD_Form_ID;
+    VButton.prototype.getVAF_Page_ID = function () {
+        return this.VAF_Page_ID;
     };
 
     /**
@@ -1559,7 +1559,7 @@
         var disabled = false;
         if (lookup != null) {
 
-            if ((lookup.getDisplayType() == VIS.DisplayType.List && VIS.context.getAD_Role_ID() == 0)
+            if ((lookup.getDisplayType() == VIS.DisplayType.List && VIS.context.getVAF_Role_ID() == 0)
                 || lookup.getDisplayType() != VIS.DisplayType.List)     //  only system admins can change lists, so no need to zoom for others
             {
                 isZoom = true;
@@ -1576,9 +1576,9 @@
             }
 
             if ((this.lookup &&
-                (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                (this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact.VAF_UserContact_id"
+                    || this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact_id"))
+                || columnName === "VAF_UserContact_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -1727,11 +1727,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_83";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {
@@ -1752,12 +1752,12 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
 
             // No target record to be zoomed - then zoom querry set null to show all records.
@@ -1767,12 +1767,12 @@
 
 
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
 
             //setCursor(Cursor.getDefaultCursor());
         };
@@ -2254,9 +2254,9 @@
             }
 
             if ((this.lookup &&
-                (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                (this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact.VAF_UserContact_id"
+                    || this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact_id"))
+                || columnName === "VAF_UserContact_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -2516,8 +2516,8 @@
                 ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
             }
             else if (_columnName.equals("SalesRep_ID")) {
-                _tableName = "AD_User";
-                _keyColumnName = "AD_User_ID";
+                _tableName = "VAF_UserContact";
+                _keyColumnName = "VAF_UserContact_ID";
             }
 
             $.ajax({
@@ -2558,15 +2558,15 @@
             //	Check if it is a Table Reference
             var dr = null;
             if (_lookup != null && _lookup instanceof VIS.MLookup) {
-                var AD_Reference_ID = _lookup.getAD_Reference_Value_ID();
-                if (AD_Reference_ID != 0) {
+                var VAF_Control_Ref_ID = _lookup.getVAF_Control_Ref_Value_ID();
+                if (VAF_Control_Ref_ID != 0) {
 
                     // Commented 10 Aug 2015 For : not searching based on the identifiers
                     var tblQuery = "VIS_84";
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                         dr = executeReader(tblQuery, param);
 
                         while (dr.read()) {
@@ -2599,7 +2599,7 @@
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                         param[1] = new VIS.DB.SqlParam("@colname", _columnName);
                         dr = executeReader(query, param);
 
@@ -2646,16 +2646,16 @@
 
                     // Commented 10 Aug 2015 For : not searching based on the identifiers
                     //var query = "SELECT kc.ColumnName, dc.ColumnName, t.TableName "
-                    //    + "FROM AD_Ref_Table rt"
-                    //    + " INNER JOIN AD_Column kc ON (rt.Column_Key_ID=kc.AD_Column_ID)"
-                    //    + " INNER JOIN AD_Column dc ON (rt.Column_Display_ID=dc.AD_Column_ID)"
-                    //    + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID) "
-                    //    + "WHERE rt.AD_Reference_ID=@refid";
+                    //    + "FROM VAF_CtrlRef_Table rt"
+                    //    + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
+                    //    + " INNER JOIN VAF_Column dc ON (rt.Column_Display_ID=dc.VAF_Column_ID)"
+                    //    + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID) "
+                    //    + "WHERE rt.VAF_Control_Ref_ID=@refid";
                     //var displayColumnName = null;
 
                     //try {
                     //    var param = [];
-                    //    param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                    //    param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                     //    dr = VIS.DB.executeReader(query, param);
                     //    while (dr.read()) {
                     //        _keyColumnName = dr.get(0);
@@ -2879,7 +2879,7 @@
             }
             // Get info window from field if exist.
             else if (self.getField() != null & infoWinID == 0) {
-                infoWinID = self.getField().getAD_InfoWindow_ID();
+                infoWinID = self.getField().getVAF_QuickSearchWindow_ID();
             }
             var InfoWindow = null;
 
@@ -2897,14 +2897,14 @@
                 var M_Warehouse_ID = 0, M_PriceList_ID = 0, window_ID = 0;
 
                 //
-                var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                if (AD_Reference_ID > 0) {
+                var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                if (VAF_Control_Ref_ID > 0) {
                     query = "VIS_87";
                     var displayColumnName = null;
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         dr = executeReader(query, param);
                         while (dr.read()) {
                             _keyColumnName = dr.getString(0);//.Table.rows[0].cells['ColumnName']; [0].ToString();
@@ -2929,11 +2929,11 @@
                 }
 
                 // Added by Bharat    For Product Info
-                //VIS.context.getContext(self.lookup.windowNo, "0|AD_Tab_ID", true)
-                //query = "SELECT AD_Window_ID FROM AD_Window WHERE Name = '" + VIS.context.getContext(self.lookup.windowNo, "WindowName") + "'";
+                //VIS.context.getContext(self.lookup.windowNo, "0|VAF_Tab_ID", true)
+                //query = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name = '" + VIS.context.getContext(self.lookup.windowNo, "WindowName") + "'";
                 query = "VIS_88";
                 var param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", VIS.context.getContext(self.lookup.windowNo, "0|AD_Tab_ID", true));
+                param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", VIS.context.getContext(self.lookup.windowNo, "0|VAF_Tab_ID", true));
 
                 window_ID = executeScalar(query, param);
                 if (_keyColumnName.equals("M_Product_ID") && window_ID) {
@@ -3113,11 +3113,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_90";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {
@@ -3138,23 +3138,23 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
 
 
 
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
 
             //setCursor(Cursor.getDefaultCursor());
 
@@ -4156,11 +4156,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_91";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {
@@ -4181,20 +4181,20 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             //setCursor(Cursor.getDefaultCursor());
 
         });
@@ -4216,9 +4216,9 @@
     VLocator.prototype.getOnlyWarehouseID = function () {
         var ctx = VIS.Env.getCtx();
         // gwu: do not restrict locators by warehouse when in Import Inventory Transactions window 
-        var AD_Table_ID = ctx.getContext(this.windowNum, "0|AD_Table_ID", true);
+        var VAF_TableView_ID = ctx.getContext(this.windowNum, "0|VAF_TableView_ID", true);
         // Import Inventory Transactions
-        if ("572" == AD_Table_ID) {
+        if ("572" == VAF_TableView_ID) {
             return 0;
         }
         var only_Warehouse = ctx.getContext(this.windowNum, "M_Warehouse_ID", true);
@@ -4238,9 +4238,9 @@
 
         var ctx = VIS.Env.getCtx();
         // gwu: do not restrict locators by product when in Import Inventory Transactions window 
-        var AD_Table_ID = ctx.getContext(this.windowNum, "0|AD_Table_ID", true);
+        var VAF_TableView_ID = ctx.getContext(this.windowNum, "0|VAF_TableView_ID", true);
         // Import Inventory Transactions
-        if ("572" == AD_Table_ID) {
+        if ("572" == VAF_TableView_ID) {
             return 0;
         }
 
@@ -4345,7 +4345,7 @@
         /**	No Instance Key					*/
         this.NO_INSTANCE = 0;
         /**	Calling Window Info	*/
-        this.AD_Column_ID = 0;
+        this.VAF_Column_ID = 0;
         var colName = "M_AttributeSetInstance_ID";
         var focus = false;
 
@@ -4482,8 +4482,8 @@
             var M_Product_ID = VIS.Env.getCtx().getTabRecordContext(windowNop, tabNo, "M_Product_ID");
             var M_ProductBOM_ID = VIS.context.getTabRecordContext(windowNop, tabNo, "M_ProductBOM_ID");
             var M_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Locator_ID");
-            self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", AD_Column_ID=" + self.AD_Column_ID);
-            var productWindow = self.AD_Column_ID == 8418;		//	HARDCODED
+            self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", VAF_Column_ID=" + self.VAF_Column_ID);
+            var productWindow = self.VAF_Column_ID == 8418;		//	HARDCODED
 
             //	Exclude ability to enter ASI
             var exclude = true;
@@ -4502,7 +4502,7 @@
                     async: false,
                     data: {
                         productId: M_Product_ID,
-                        adColumn: self.AD_Column_ID,
+                        adColumn: self.VAF_Column_ID,
                         windowNo: windowNop,
                     },
                     success: function (data) {
@@ -4522,7 +4522,7 @@
                 VIS.ADialog.info("VIS_PAttributeNotFound", null, null, null);
             }
             else {
-                var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.C_BPartner_ID, productWindow, self.AD_Column_ID, windowNop);
+                var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.C_BPartner_ID, productWindow, self.VAF_Column_ID, windowNop);
                 if (obj.hasAttribute) {
                     obj.showDialog();
                 }
@@ -4598,7 +4598,7 @@
     VPAttribute.prototype.setField = function (mField) {
         if (mField != null) {
             this.windowNo = mField.getWindowNo();
-            this.AD_Column_ID = mField.getAD_Column_ID();
+            this.VAF_Column_ID = mField.getVAF_Column_ID();
         }
         this.mField = mField;
     }
@@ -4707,8 +4707,8 @@
 
             var getTbID_s = 0;
 
-            if (self != null && self.getField() != null && self.getField().vo != null && self.getField().vo.AD_Table_ID != null) {
-                getTbID_s = self.getField().vo.AD_Table_ID;
+            if (self != null && self.getField() != null && self.getField().vo != null && self.getField().vo.VAF_TableView_ID != null) {
+                getTbID_s = self.getField().vo.VAF_TableView_ID;
             }
 
             var obj = new VIS.AccountForm(self.title, self.lookup, C_AcctSchema_ID, getTbID_s);
@@ -4786,7 +4786,7 @@
         this.values = null;
         this.log = VIS.Logging.VLogger.getVLogger("VImage");
         var windowNo = winNo;
-        var columnName = colName;// "AD_Image_ID";
+        var columnName = colName;// "VAF_Image_ID";
         var $img = $("<img >");
         var $icon = $("<i>");
         var $txt = $("<span>").text("-");
@@ -4820,20 +4820,20 @@
                 //self.invokeActionPerformed({ source: self });
                 var obj = new VIS.VImageForm(self.getValue(), $txt.text().trim().length);
                 obj.showDialog();
-                obj.onClose = function (ad_image_Id, change) {
+                obj.onClose = function (VAF_Image_Id, change) {
                     //call set only when change call 
                     if (change) {
                         self.oldValue = -1;
-                        if (self.oldValue != ad_image_Id) {
+                        if (self.oldValue != VAF_Image_Id) {
                             // 'null' in case of image delete 
-                            ad_image_Id = (ad_image_Id == 'null' ? null : ad_image_Id);
-                            self.setValue(ad_image_Id);
-                            var evt = { newValue: ad_image_Id, propertyName: columnName };
+                            VAF_Image_Id = (VAF_Image_Id == 'null' ? null : VAF_Image_Id);
+                            self.setValue(VAF_Image_Id);
+                            var evt = { newValue: VAF_Image_Id, propertyName: columnName };
                             self.fireValueChanged(evt, true);
                             evt = null;
                         }
                         else {
-                            self.refreshImage(ad_image_Id);
+                            self.refreshImage(VAF_Image_Id);
                         }
                     }
                 };
@@ -4918,7 +4918,7 @@
             }
             //var neValue = newValue;
             //  Get/Create Image byte array
-            //var sql = "select * from AD_Image where AD_Image_ID=" + newValue;
+            //var sql = "select * from VAF_Image where VAF_Image_ID=" + newValue;
             //var dr = VIS.DB.executeDataReader(sql.toString());
             //if (dr.read()) {
             //    var data = dr.getString("BINARYDATA");
@@ -4931,7 +4931,7 @@
             ////    url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
             ////    dataType: "json",
             ////    data: {
-            ////        ad_image_id: neValue
+            ////        VAF_Image_id: neValue
             ////    },
             ////    success: function (data) {
             ////        var data = JSON.parse(data);
@@ -4956,7 +4956,7 @@
             url: VIS.Application.contextUrl + "VImageForm/GetImageAsByte",
             dataType: "json",
             data: {
-                ad_image_id: neValue
+                VAF_Image_id: neValue
             },
             success: function (data) {
                 var data = JSON.parse(data);
@@ -5000,7 +5000,7 @@
         var $txt = $("<span>").text("");
 
         var windowNo = winNo;
-        var columnName = colName;// "AD_Image_ID";
+        var columnName = colName;// "VAF_Image_ID";
 
         var $ctrl = null;
         var $ulPopup = null;
@@ -5641,7 +5641,7 @@
                 self.value = 0;
             }
 
-            var orgID = VIS.Env.getCtx().getContextAsInt(windowNo, "AD_Org_ID", false);
+            var orgID = VIS.Env.getCtx().getContextAsInt(windowNo, "VAF_Org_ID", false);
             var dValue;
 
             if (this.defaultValue) {
@@ -5909,15 +5909,15 @@
             zoomQuery.setRecordCount(1);	//	guess
             //}
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
             //Open Window
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
         };
 
         this.getText = function () {

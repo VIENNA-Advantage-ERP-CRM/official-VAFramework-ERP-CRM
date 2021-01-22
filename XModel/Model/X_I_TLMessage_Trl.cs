@@ -72,7 +72,7 @@ static X_I_TLMessage_Trl()
 //static long serialVersionUID 27638799895608L;
 /** Last Updated Timestamp 12/28/2012 11:32:58 AM */
 public static long updatedMS = 1356674578819L;
-/** AD_Table_ID=1000405 */
+/** VAF_TableView_ID=1000405 */
 public static int Table_ID;
  // =1000405;
 
@@ -115,22 +115,22 @@ StringBuilder sb = new StringBuilder ("X_I_TLMessage_Trl[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set Message.
-@param AD_Message_ID System Message */
-public void SetAD_Message_ID (int AD_Message_ID)
+@param VAF_Msg_Lable_ID System Message */
+public void SetVAF_Msg_Lable_ID (int VAF_Msg_Lable_ID)
 {
-//if (AD_Message_ID <= 0) Set_Value ("AD_Message_ID", null);
+//if (VAF_Msg_Lable_ID <= 0) Set_Value ("VAF_Msg_Lable_ID", null);
 //else
-//Set_Value ("AD_Message_ID", AD_Message_ID);
+//Set_Value ("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
 
 
-if (AD_Message_ID < 1) throw new ArgumentException("AD_Message_ID is mandatory.");
-Set_ValueNoCheck("AD_Message_ID", AD_Message_ID);
+if (VAF_Msg_Lable_ID < 1) throw new ArgumentException("VAF_Msg_Lable_ID is mandatory.");
+Set_ValueNoCheck("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
 }
 /** Get Message.
 @return System Message */
-public int GetAD_Message_ID() 
+public int GetVAF_Msg_Lable_ID() 
 {
-Object ii = Get_Value("AD_Message_ID");
+Object ii = Get_Value("VAF_Msg_Lable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

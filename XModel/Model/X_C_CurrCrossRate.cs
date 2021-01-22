@@ -25,7 +25,7 @@ public X_C_CurrCrossRate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, 
  added by ->Harwinder */
 static X_C_CurrCrossRate(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27881088188083L;/** Last Updated Timestamp 9/1/2020 12:21:11 PM */
-public static long updatedMS = 1598962871294L;/** AD_Table_ID=1000545 */
+public static long updatedMS = 1598962871294L;/** VAF_TableView_ID=1000545 */
 public static int Table_ID; // =1000545;
 /** TableName=C_CurrCrossRate */
 public static String Table_Name="C_CurrCrossRate";
@@ -52,8 +52,8 @@ public int GetC_ConversionType_ID() {Object ii = Get_Value("C_ConversionType_ID"
 public void SetC_CurrCrossRate_ID (int C_CurrCrossRate_ID){if (C_CurrCrossRate_ID < 1) throw new ArgumentException ("C_CurrCrossRate_ID is mandatory.");Set_ValueNoCheck ("C_CurrCrossRate_ID", C_CurrCrossRate_ID);}/** Get Cross Rate Setting.
 @return Cross rates are the relation of two currencies against each other */
 public int GetC_CurrCrossRate_ID() {Object ii = Get_Value("C_CurrCrossRate_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_Currency_From_ID AD_Reference_ID=112 */
-public static int C_CURRENCY_FROM_ID_AD_Reference_ID=112;/** Set From Currency.
+/** C_Currency_From_ID VAF_Control_Ref_ID=112 */
+public static int C_CURRENCY_FROM_ID_VAF_Control_Ref_ID=112;/** Set From Currency.
 @param C_Currency_From_ID From Currency */
 public void SetC_Currency_From_ID (int C_Currency_From_ID){if (C_Currency_From_ID < 1) throw new ArgumentException ("C_Currency_From_ID is mandatory.");Set_Value ("C_Currency_From_ID", C_Currency_From_ID);}/** Get From Currency.
 @return From Currency */
@@ -62,8 +62,8 @@ public int GetC_Currency_From_ID() {Object ii = Get_Value("C_Currency_From_ID");
 public void SetC_Currency_ID (int C_Currency_ID){if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");Set_Value ("C_Currency_ID", C_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
 public int GetC_Currency_ID() {Object ii = Get_Value("C_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_Currency_To_ID AD_Reference_ID=112 */
-public static int C_CURRENCY_TO_ID_AD_Reference_ID=112;/** Set Currency To.
+/** C_Currency_To_ID VAF_Control_Ref_ID=112 */
+public static int C_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;/** Set Currency To.
 @param C_Currency_To_ID Target currency */
 public void SetC_Currency_To_ID (int C_Currency_To_ID){if (C_Currency_To_ID < 1) throw new ArgumentException ("C_Currency_To_ID is mandatory.");Set_Value ("C_Currency_To_ID", C_Currency_To_ID);}/** Get Currency To.
 @return Target currency */

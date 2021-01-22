@@ -78,7 +78,7 @@ static X_PA_Achievement()
 //static long serialVersionUID 27562514381559L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064770L;
-/** AD_Table_ID=438 */
+/** VAF_TableView_ID=438 */
 public static int Table_ID;
  // =438;
 

@@ -95,13 +95,13 @@ namespace VAdvantage.Model
 
                 // get value of "Withholding" -- "related to"
                 _sql.Clear();
-                _sql.Append(@"SELECT L.Value FROM Ad_Ref_List L INNER JOIN AD_Reference r ON R.AD_REFERENCE_ID=L.AD_REFERENCE_ID 
+                _sql.Append(@"SELECT L.Value FROM VAF_CtrlRef_List L INNER JOIN VAF_Control_Ref r ON R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID 
                                 WHERE r.name='FRPT_RelatedTo' AND l.name='Witholding'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 // Get Accounting Schema
                 _sql.Clear();
-                _sql.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_CLIENT_ID=" + GetAD_Client_ID());
+                _sql.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
                 dsAcctSchema = DB.ExecuteDataset(_sql.ToString(), null);
                 if (dsAcctSchema != null && dsAcctSchema.Tables[0].Rows.Count > 0)
                 {
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
                         // Get Accounting default and combination from "Default Accounting" tab of Accounting schema based on "Related To" (withholding)
                         _sql.Clear();
                         _sql.Append(@"SELECT Frpt_Acctdefault_Id,C_Validcombination_Id FROM Frpt_Acctschema_Default
-                                        WHERE ISACTIVE='Y' AND AD_CLIENT_ID=" + GetAD_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID +
+                                        WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID +
                                         " AND Frpt_Relatedto = " + relatedtoProduct);
                         dsDefaultAcct = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (dsDefaultAcct != null && dsDefaultAcct.Tables[0].Rows.Count > 0)
@@ -125,14 +125,14 @@ namespace VAdvantage.Model
                                 _sql.Append(@"Select COUNT(Bp.C_Withholding_ID) From C_Withholding Bp
                                                        Left Join FRPT_Withholding_Acct  ca On Bp.C_Withholding_ID=ca.C_Withholding_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                               + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + GetAD_Client_ID() +
+                                               + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
                                                " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["C_Validcombination_Id"]) +
                                                " AND Bp.C_Withholding_ID = " + GetC_Withholding_ID());
                                 int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                 if (recordFound == 0)
                                 {
                                     withholdingAcct = MTable.GetPO(GetCtx(), "FRPT_Withholding_Acct", 0, null);
-                                    withholdingAcct.Set_ValueNoCheck("AD_Org_ID", 0);
+                                    withholdingAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                     withholdingAcct.Set_ValueNoCheck("C_Withholding_ID", Util.GetValueOfInt(GetC_Withholding_ID()));
                                     withholdingAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                     withholdingAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["C_Validcombination_Id"]));

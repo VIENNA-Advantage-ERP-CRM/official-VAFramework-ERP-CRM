@@ -76,7 +76,7 @@ static X_PA_BenchmarkData()
 //static long serialVersionUID 27562514381638L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064849L;
-/** AD_Table_ID=834 */
+/** VAF_TableView_ID=834 */
 public static int Table_ID;
  // =834;
 

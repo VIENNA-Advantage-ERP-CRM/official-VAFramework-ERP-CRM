@@ -81,33 +81,33 @@ namespace VAdvantage.Process
                 + ",M_CostElement_ID=" + _M_CostElement_ID);
 
             MWarehouse wh = MWarehouse.Get(GetCtx(), _M_Warehouse_ID);
-            MClient c = MClient.Get(GetCtx(), wh.GetAD_Client_ID());
+            MClient c = MClient.Get(GetCtx(), wh.GetVAF_Client_ID());
             MAcctSchema mas = c.GetAcctSchema();
 
             //  Delete (just to be sure)
-            StringBuilder sql = new StringBuilder("DELETE FROM T_InventoryValue WHERE AD_PInstance_ID=");
-            sql.Append(GetAD_PInstance_ID());
+            StringBuilder sql = new StringBuilder("DELETE FROM T_InventoryValue WHERE VAF_JInstance_ID=");
+            sql.Append(GetVAF_JInstance_ID());
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            MPInstance instance = new MPInstance(GetCtx(), GetAD_PInstance_ID(), null);
+            MPInstance instance = new MPInstance(GetCtx(), GetVAF_JInstance_ID(), null);
             DateTime Createddate = instance.GetCreated();
             Createddate = Createddate.AddHours(-1);
 
-            string qry = "select MAX(AD_PINSTANCE_ID) from AD_PINSTANCE WHERE AD_Process_ID=" + instance.GetAD_Process_ID() + " AND created<  TO_Date('" + Createddate.ToString("MM/dd/yyyy HH:mm:ss") + "', 'MM-DD-YYYY HH24:MI:SS')";
+            string qry = "select MAX(VAF_JINSTANCE_ID) from VAF_JINSTANCE WHERE VAF_Job_ID=" + instance.GetVAF_Job_ID() + " AND created<  TO_Date('" + Createddate.ToString("MM/dd/yyyy HH:mm:ss") + "', 'MM-DD-YYYY HH24:MI:SS')";
             int MaxInstance_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
 
-           int no1= DB.ExecuteQuery("DELETE FROM T_InventoryValue WHERE AD_PInstance_ID <=" + MaxInstance_ID);
+           int no1= DB.ExecuteQuery("DELETE FROM T_InventoryValue WHERE VAF_JInstance_ID <=" + MaxInstance_ID);
 
             //	Insert Standard Costs
             sql = new StringBuilder("INSERT INTO T_InventoryValue "
-                + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
-                + " AD_Client_ID, AD_Org_ID, CostStandard) "
-                + "SELECT ").Append(GetAD_PInstance_ID())
+                + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
+                + " VAF_Client_ID, VAF_Org_ID, CostStandard) "
+                + "SELECT ").Append(GetVAF_JInstance_ID())
                 .Append(", w.M_Warehouse_ID, c.M_Product_ID, c.M_AttributeSetInstance_ID,"
-                + " w.AD_Client_ID, w.AD_Org_ID, c.CurrentCostPrice "
+                + " w.VAF_Client_ID, w.VAF_Org_ID, c.CurrentCostPrice "
                 + "FROM M_Warehouse w"
-                + " INNER JOIN AD_ClientInfo ci ON (w.AD_Client_ID=ci.AD_Client_ID)"
+                + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                 + " INNER JOIN C_AcctSchema acs ON (ci.C_AcctSchema1_ID=acs.C_AcctSchema_ID)"
-                + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.AD_Org_ID IN (0, w.AD_Org_ID))"
+                + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID))"
                 + " INNER JOIN M_CostElement ce ON (c.M_CostElement_ID=ce.M_CostElement_ID AND ce.CostingMethod='S' AND ce.CostElementType='M') "
                 + "WHERE w.M_Warehouse_ID=").Append(_M_Warehouse_ID);
             int noInsertStd = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -120,19 +120,19 @@ namespace VAdvantage.Process
             if (_M_CostElement_ID != 0)
             {
                 sql = new StringBuilder("INSERT INTO T_InventoryValue "
-                    + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
-                    + " AD_Client_ID, AD_Org_ID, CostStandard, Cost, M_CostElement_ID) "
-                    + "SELECT ").Append(GetAD_PInstance_ID())
+                    + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
+                    + " VAF_Client_ID, VAF_Org_ID, CostStandard, Cost, M_CostElement_ID) "
+                    + "SELECT ").Append(GetVAF_JInstance_ID())
                     .Append(", w.M_Warehouse_ID, c.M_Product_ID, c.M_AttributeSetInstance_ID,"
-                    + " w.AD_Client_ID, w.AD_Org_ID, 0, c.CurrentCostPrice, c.M_CostElement_ID "
+                    + " w.VAF_Client_ID, w.VAF_Org_ID, 0, c.CurrentCostPrice, c.M_CostElement_ID "
                     + "FROM M_Warehouse w"
-                    + " INNER JOIN AD_ClientInfo ci ON (w.AD_Client_ID=ci.AD_Client_ID)"
+                    + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                     + " INNER JOIN C_AcctSchema acs ON (ci.C_AcctSchema1_ID=acs.C_AcctSchema_ID)"
-                    + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.AD_Org_ID IN (0, w.AD_Org_ID)) "
+                    + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
                     + "WHERE w.M_Warehouse_ID=").Append(_M_Warehouse_ID)
                     .Append(" AND c.M_CostElement_ID=").Append(_M_CostElement_ID)
                     .Append(" AND NOT EXISTS (SELECT * FROM T_InventoryValue iv "
-                        + "WHERE iv.AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                        + "WHERE iv.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                         .Append(" AND iv.M_Warehouse_ID=w.M_Warehouse_ID"
                         + " AND iv.M_Product_ID=c.M_Product_ID"
                         + " AND iv.M_AttributeSetInstance_ID=c.M_AttributeSetInstance_ID)");
@@ -143,17 +143,17 @@ namespace VAdvantage.Process
                     + "SET (Cost, M_CostElement_ID)="
                         + "(SELECT c.CurrentCostPrice, c.M_CostElement_ID "
                         + "FROM M_Warehouse w"
-                        + " INNER JOIN AD_ClientInfo ci ON (w.AD_Client_ID=ci.AD_Client_ID)"
+                        + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                         + " INNER JOIN C_AcctSchema acs ON (ci.C_AcctSchema1_ID=acs.C_AcctSchema_ID)"
                         + " INNER JOIN M_Cost c ON (acs.C_AcctSchema_ID=c.C_AcctSchema_ID"
-                            + " AND acs.M_CostType_ID=c.M_CostType_ID AND c.AD_Org_ID IN (0, w.AD_Org_ID)) "
+                            + " AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
                         + "WHERE c.M_CostElement_ID=" + _M_CostElement_ID
                         + " AND w.M_Warehouse_ID=iv.M_Warehouse_ID"
                         + " AND c.M_Product_ID=iv.M_Product_ID"
                         + " AND c.M_AttributeSetInstance_ID=iv.M_AttributeSetInstance_ID AND rownum=1 AND w.m_warehouse_ID=" + _M_Warehouse_ID + ") "
                     + "WHERE EXISTS (SELECT * FROM T_InventoryValue ivv "
-                        + "WHERE ivv.AD_PInstance_ID=" + GetAD_PInstance_ID()
-                        + " AND ivv.M_CostElement_ID IS NULL) AND iv.AD_PInstance_ID ="+GetAD_PInstance_ID());
+                        + "WHERE ivv.VAF_JInstance_ID=" + GetVAF_JInstance_ID()
+                        + " AND ivv.M_CostElement_ID IS NULL) AND iv.VAF_JInstance_ID ="+GetVAF_JInstance_ID());
                 int noUpdatedCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Updated Cost=" + noUpdatedCost);
             }
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
                     + "WHERE iv.M_Product_ID=s.M_Product_ID"
                     + " AND iv.M_Warehouse_ID=l.M_Warehouse_ID"
                     + " AND iv.M_AttributeSetInstance_ID=s.M_AttributeSetInstance_ID) "
-                + "WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                + "WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(" AND iv.M_AttributeSetInstance_ID<>0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("QtHand with ASI=" + no);
@@ -193,7 +193,7 @@ namespace VAdvantage.Process
                     + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
                     + "WHERE iv.M_Product_ID=s.M_Product_ID"
                     + " AND iv.M_Warehouse_ID=l.M_Warehouse_ID) "
-                + "WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                + "WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(" AND iv.M_AttributeSetInstance_ID=0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("QtHand w/o ASI=" + no);
@@ -226,30 +226,30 @@ namespace VAdvantage.Process
 
             //  Delete Records w/o OnHand Qty
             sql = new StringBuilder("DELETE FROM T_InventoryValue "
-                + "WHERE (QtyOnHand=0 OR QtyOnHand IS NULL) AND AD_PInstance_ID=").Append(GetAD_PInstance_ID());
+                + "WHERE (QtyOnHand=0 OR QtyOnHand IS NULL) AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
             int noQty = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("NoQty Deleted=" + noQty);
 
             //  Update Prices
             no = DataBase.DB.ExecuteQuery("UPDATE T_InventoryValue iv "
                 + "SET PricePO = "
-                    + "(SELECT MAX(currencyConvert (po.PriceList,po.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, po.AD_Client_ID,po.AD_Org_ID))"
+                    + "(SELECT MAX(currencyConvert (po.PriceList,po.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, po.VAF_Client_ID,po.VAF_Org_ID))"
                     + " FROM M_Product_PO po WHERE po.M_Product_ID=iv.M_Product_ID"
                     + " AND po.IsCurrentVendor='Y'), "
                 + "PriceList = "
-                    + "(SELECT currencyConvert(pp.PriceList,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.AD_Client_ID,pl.AD_Org_ID)"
+                    + "(SELECT currencyConvert(pp.PriceList,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
                     + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
                     + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
                     + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
                     + " AND plv.M_PriceList_ID=pl.M_PriceList_ID), "
                 + "PriceStd = "
-                    + "(SELECT currencyConvert(pp.PriceStd,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.AD_Client_ID,pl.AD_Org_ID)"
+                    + "(SELECT currencyConvert(pp.PriceStd,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
                     + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
                     + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
                     + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
                     + " AND plv.M_PriceList_ID=pl.M_PriceList_ID), "
                 + "PriceLimit = "
-                    + "(SELECT currencyConvert(pp.PriceLimit,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.AD_Client_ID,pl.AD_Org_ID)"
+                    + "(SELECT currencyConvert(pp.PriceLimit,pl.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
                     + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
                     + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
                     + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
@@ -264,12 +264,12 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE T_InventoryValue iv "
                     + "SET CostStandard= "
-                        + "(SELECT currencyConvert(iv.CostStandard,acs.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, iv.AD_Client_ID,iv.AD_Org_ID) "
+                        + "(SELECT currencyConvert(iv.CostStandard,acs.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, iv.VAF_Client_ID,iv.VAF_Org_ID) "
                         + "FROM C_AcctSchema acs WHERE acs.C_AcctSchema_ID=" + mas.GetC_AcctSchema_ID() + "),"
                     + "	Cost= "
-                        + "(SELECT currencyConvert(iv.Cost,acs.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, iv.AD_Client_ID,iv.AD_Org_ID) "
+                        + "(SELECT currencyConvert(iv.Cost,acs.C_Currency_ID,iv.C_Currency_ID,iv.DateValue,null, iv.VAF_Client_ID,iv.VAF_Org_ID) "
                         + "FROM C_AcctSchema acs WHERE acs.C_AcctSchema_ID=" + mas.GetC_AcctSchema_ID() + ") "
-                    + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID());
+                    + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID());
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Convered=" + no);
             }
@@ -282,7 +282,7 @@ namespace VAdvantage.Process
                 + "PriceLimitAmt = QtyOnHand * PriceLimit, "
                 + "CostStandardAmt = QtyOnHand * CostStandard, "
                 + "CostAmt = QtyOnHand * Cost "
-                + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID(), null, Get_TrxName());
+                + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID(), null, Get_TrxName());
             log.Fine("Calculation=" + no);
             //
             return msg;

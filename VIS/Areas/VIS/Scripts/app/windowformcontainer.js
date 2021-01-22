@@ -2,7 +2,7 @@
 
 ; (function (VIS, $) {
 
-    function WForm(height, AD_Form_ID, curTab, pWwindowNo) {
+    function WForm(height, VAF_Page_ID, curTab, pWwindowNo) {
         var $root, $busyDiv, $contentGrid, ch;
         var ctx = VIS.Env.getCtx(); //ctx
         var log = VIS.Logging.VLogger.getVLogger("VIS.AForm"); //Logger
@@ -24,12 +24,12 @@
             return windowNo;
         };
 
-        this.getAD_Table_ID = function () {
-            return curTab.getAD_Table_ID();
+        this.getVAF_TableView_ID = function () {
+            return curTab.getVAF_TableView_ID();
         }
 
-        this.getAD_Window_ID = function () {
-            return curTab.getAD_Window_ID();
+        this.getVAF_Screen_ID = function () {
+            return curTab.getVAF_Screen_ID();
         }
 
         this.getRecord_ID = function () {
@@ -54,7 +54,7 @@
         }
 
         function getFormDetails() {
-            VIS.dataContext.getFormDataString({ AD_Form_ID: AD_Form_ID }, function (json) {
+            VIS.dataContext.getFormDataString({ VAF_Page_ID: VAF_Page_ID }, function (json) {
                 if (json.error != null) {
                     VIS.ADialog.error(json.error);    //log error
                     self.dispose();
@@ -103,7 +103,7 @@
                 showForm(o);
             }
             catch (e) {
-                log.log(VIS.Logging.Level.WARNING, "Class=" + className + ", AD_Form Name=" + json.Name, e)
+                log.log(VIS.Logging.Level.WARNING, "Class=" + className + ", VAF_Page Name=" + json.Name, e)
                 return false;
             }
             return true;

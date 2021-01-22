@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Group_Window
+/** Generated Model for VAF_Group_Window
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Group_Window : PO
+public class X_VAF_Group_Window : PO
 {
-    public X_AD_Group_Window(Context ctx, int AD_Group_Window_ID, Trx trxName)
-        : base(ctx, AD_Group_Window_ID, trxName)
+    public X_VAF_Group_Window(Context ctx, int VAF_Group_Window_ID, Trx trxName)
+        : base(ctx, VAF_Group_Window_ID, trxName)
 {
-/** if (AD_Group_Window_ID == 0)
+/** if (VAF_Group_Window_ID == 0)
 {
-SetAD_GroupInfo_ID (0);
-SetAD_Group_Window_ID (0);
+SetVAF_GroupInfo_ID (0);
+SetVAF_Group_Window_ID (0);
 }
  */
 }
-    public X_AD_Group_Window(Ctx ctx, int AD_Group_Window_ID, Trx trxName)
-        : base(ctx, AD_Group_Window_ID, trxName)
+    public X_VAF_Group_Window(Ctx ctx, int VAF_Group_Window_ID, Trx trxName)
+        : base(ctx, VAF_Group_Window_ID, trxName)
 {
-/** if (AD_Group_Window_ID == 0)
+/** if (VAF_Group_Window_ID == 0)
 {
-SetAD_GroupInfo_ID (0);
-SetAD_Group_Window_ID (0);
+SetVAF_GroupInfo_ID (0);
+SetVAF_Group_Window_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetAD_Group_Window_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_AD_Group_Window(Context ctx, DataRow rs, Trx trxName)
+    public X_VAF_Group_Window(Context ctx, DataRow rs, Trx trxName)
         : base(ctx, rs, trxName)
 {
 }
@@ -50,7 +50,7 @@ SetAD_Group_Window_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_AD_Group_Window(Ctx ctx, DataRow rs, Trx trxName)
+    public X_VAF_Group_Window(Ctx ctx, DataRow rs, Trx trxName)
         : base(ctx, rs, trxName)
 {
 }
@@ -59,14 +59,14 @@ SetAD_Group_Window_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_AD_Group_Window(Ctx ctx, IDataReader dr, Trx trxName)
+    public X_VAF_Group_Window(Ctx ctx, IDataReader dr, Trx trxName)
         : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Group_Window()
+static X_VAF_Group_Window()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -75,12 +75,12 @@ static X_AD_Group_Window()
 static long serialVersionUID = 27712844996836L;
 /** Last Updated Timestamp 5/4/2015 11:38:00 AM */
 public static long updatedMS = 1430719680047L;
-/** AD_Table_ID=1000487 */
+/** VAF_TableView_ID=1000487 */
 public static int Table_ID;
  // =1000487;
 
-/** TableName=AD_Group_Window */
-public static String Table_Name="AD_Group_Window";
+/** TableName=VAF_Group_Window */
+public static String Table_Name="VAF_Group_Window";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -114,52 +114,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Group_Window[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Group_Window[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_GroupInfo_ID.
-@param AD_GroupInfo_ID AD_GroupInfo_ID */
-public void SetAD_GroupInfo_ID (int AD_GroupInfo_ID)
+/** Set VAF_GroupInfo_ID.
+@param VAF_GroupInfo_ID VAF_GroupInfo_ID */
+public void SetVAF_GroupInfo_ID (int VAF_GroupInfo_ID)
 {
-if (AD_GroupInfo_ID < 1) throw new ArgumentException ("AD_GroupInfo_ID is mandatory.");
-Set_ValueNoCheck ("AD_GroupInfo_ID", AD_GroupInfo_ID);
+if (VAF_GroupInfo_ID < 1) throw new ArgumentException ("VAF_GroupInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_GroupInfo_ID", VAF_GroupInfo_ID);
 }
-/** Get AD_GroupInfo_ID.
-@return AD_GroupInfo_ID */
-public int GetAD_GroupInfo_ID() 
+/** Get VAF_GroupInfo_ID.
+@return VAF_GroupInfo_ID */
+public int GetVAF_GroupInfo_ID() 
 {
-Object ii = Get_Value("AD_GroupInfo_ID");
+Object ii = Get_Value("VAF_GroupInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_Group_Window_ID.
-@param AD_Group_Window_ID AD_Group_Window_ID */
-public void SetAD_Group_Window_ID (int AD_Group_Window_ID)
+/** Set VAF_Group_Window_ID.
+@param VAF_Group_Window_ID VAF_Group_Window_ID */
+public void SetVAF_Group_Window_ID (int VAF_Group_Window_ID)
 {
-if (AD_Group_Window_ID < 1) throw new ArgumentException ("AD_Group_Window_ID is mandatory.");
-Set_ValueNoCheck ("AD_Group_Window_ID", AD_Group_Window_ID);
+if (VAF_Group_Window_ID < 1) throw new ArgumentException ("VAF_Group_Window_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Group_Window_ID", VAF_Group_Window_ID);
 }
-/** Get AD_Group_Window_ID.
-@return AD_Group_Window_ID */
-public int GetAD_Group_Window_ID() 
+/** Get VAF_Group_Window_ID.
+@return VAF_Group_Window_ID */
+public int GetVAF_Group_Window_ID() 
 {
-Object ii = Get_Value("AD_Group_Window_ID");
+Object ii = Get_Value("VAF_Group_Window_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID <= 0) Set_Value ("AD_Window_ID", null);
+if (VAF_Screen_ID <= 0) Set_Value ("VAF_Screen_ID", null);
 else
-Set_Value ("AD_Window_ID", AD_Window_ID);
+Set_Value ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

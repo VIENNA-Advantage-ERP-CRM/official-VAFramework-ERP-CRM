@@ -137,8 +137,8 @@ namespace VAdvantage.Model
 
             //_loader = new System.Threading.Thread(new System.Threading.ThreadStart(Load));
             //_loader.IsBackground = true;
-            //_loader.CurrentCulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
-            //_loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
+            //_loader.CurrentCulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetVAF_Language());
+            //_loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetVAF_Language());
 
             //_loader.Start();
 
@@ -265,7 +265,7 @@ namespace VAdvantage.Model
             int size = _lookup.Count;
             log.Finer(_vInfo.keyColumn
                     + " (" + _vInfo.column_ID + "):"
-                //	+ " ID=" + m_info.AD_Column_ID + " " +
+                //	+ " ID=" + m_info.VAF_Column_ID + " " +
                     + " - Loader complete #" + size + " - all=" + _allLoaded
                     + " - ms=" +(CommonFunctions.CurrentTimeMillis() -  startTime));
                     //+ " (" + String.valueOf(System.currentTimeMillis() - startTime) + ")");
@@ -510,9 +510,9 @@ namespace VAdvantage.Model
         /// Get Reference Value
         /// </summary>
         /// <returns>Reference Value</returns>
-        public int GetAD_Reference_Value_ID()
+        public int GetVAF_Control_Ref_Value_ID()
         {
-            return _vInfo.AD_Reference_Value_ID;
+            return _vInfo.VAF_Control_Ref_Value_ID;
         }
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace VAdvantage.Model
         }
         /// <summary>
         ///Get Zoom
-        ///Zoom AD_Window_ID
+        ///Zoom VAF_Screen_ID
         /// </summary>
         /// <returns></returns>
         public override  int GetZoomWindow()
@@ -719,8 +719,8 @@ namespace VAdvantage.Model
              * This will need to be expanded to add more tables if they have
              * multiple windows.
              */
-            int AD_Window_ID = ZoomTarget.GetZoomAD_Window_ID(_vInfo.tableName, _WindowNo, query.GetWhereClause(), GetCtx().IsSOTrx(_WindowNo),GetCtx());
-            return AD_Window_ID;
+            int VAF_Screen_ID = ZoomTarget.GetZoomVAF_Screen_ID(_vInfo.tableName, _WindowNo, query.GetWhereClause(), GetCtx().IsSOTrx(_WindowNo),GetCtx());
+            return VAF_Screen_ID;
         }
 
         /// <summary>

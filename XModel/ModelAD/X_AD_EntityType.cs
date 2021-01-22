@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_EntityType
+/** Generated Model for VAF_RecrodType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_EntityType : PO
+public class X_VAF_RecrodType : PO
 {
-public X_AD_EntityType (Context ctx, int AD_EntityType_ID, Trx trxName) : base (ctx, AD_EntityType_ID, trxName)
+public X_VAF_RecrodType (Context ctx, int VAF_RecrodType_ID, Trx trxName) : base (ctx, VAF_RecrodType_ID, trxName)
 {
-/** if (AD_EntityType_ID == 0)
+/** if (VAF_RecrodType_ID == 0)
 {
-SetAD_EntityType_ID (0);	// @SQL=SELECT NVL(MAX(AD_EntityType_ID),999999)+1 FROM AD_EntityType WHERE AD_EntityType_ID > 1000
+SetVAF_RecrodType_ID (0);	// @SQL=SELECT NVL(MAX(VAF_RecrodType_ID),999999)+1 FROM VAF_RecrodType WHERE VAF_RecrodType_ID > 1000
 SetEntityType (null);	// U
 SetName (null);
 }
  */
 }
-public X_AD_EntityType (Ctx ctx, int AD_EntityType_ID, Trx trxName) : base (ctx, AD_EntityType_ID, trxName)
+public X_VAF_RecrodType (Ctx ctx, int VAF_RecrodType_ID, Trx trxName) : base (ctx, VAF_RecrodType_ID, trxName)
 {
-/** if (AD_EntityType_ID == 0)
+/** if (VAF_RecrodType_ID == 0)
 {
-SetAD_EntityType_ID (0);	// @SQL=SELECT NVL(MAX(AD_EntityType_ID),999999)+1 FROM AD_EntityType WHERE AD_EntityType_ID > 1000
+SetVAF_RecrodType_ID (0);	// @SQL=SELECT NVL(MAX(VAF_RecrodType_ID),999999)+1 FROM VAF_RecrodType WHERE VAF_RecrodType_ID > 1000
 SetEntityType (null);	// U
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_EntityType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_RecrodType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_EntityType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_EntityType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_RecrodType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_EntityType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_EntityType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_RecrodType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_EntityType()
+static X_VAF_RecrodType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_EntityType()
 //static long serialVersionUID = 27562514361201L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044412L;
-/** AD_Table_ID=882 */
+/** VAF_TableView_ID=882 */
 public static int Table_ID;
  // =882;
 
-/** TableName=AD_EntityType */
-public static String Table_Name="AD_EntityType";
+/** TableName=VAF_RecrodType */
+public static String Table_Name="VAF_RecrodType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_EntityType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_RecrodType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Entity Type.
-@param AD_EntityType_ID System Entity Type */
-public void SetAD_EntityType_ID (int AD_EntityType_ID)
+@param VAF_RecrodType_ID System Entity Type */
+public void SetVAF_RecrodType_ID (int VAF_RecrodType_ID)
 {
-if (AD_EntityType_ID < 1) throw new ArgumentException ("AD_EntityType_ID is mandatory.");
-Set_ValueNoCheck ("AD_EntityType_ID", AD_EntityType_ID);
+if (VAF_RecrodType_ID < 1) throw new ArgumentException ("VAF_RecrodType_ID is mandatory.");
+Set_ValueNoCheck ("VAF_RecrodType_ID", VAF_RecrodType_ID);
 }
 /** Get Entity Type.
 @return System Entity Type */
-public int GetAD_EntityType_ID() 
+public int GetVAF_RecrodType_ID() 
 {
-Object ii = Get_Value("AD_EntityType_ID");
+Object ii = Get_Value("VAF_RecrodType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

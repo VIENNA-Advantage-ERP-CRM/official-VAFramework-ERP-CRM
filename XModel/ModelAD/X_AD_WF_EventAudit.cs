@@ -11,20 +11,20 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_WF_EventAudit
+    /** Generated Model for VAF_WFlow_EventLog
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_WF_EventAudit : PO
+    public class X_VAF_WFlow_EventLog : PO
     {
-        public X_AD_WF_EventAudit(Context ctx, int AD_WF_EventAudit_ID, Trx trxName) : base(ctx, AD_WF_EventAudit_ID, trxName)
+        public X_VAF_WFlow_EventLog(Context ctx, int VAF_WFlow_EventLog_ID, Trx trxName) : base(ctx, VAF_WFlow_EventLog_ID, trxName)
         {
-            /** if (AD_WF_EventAudit_ID == 0)
+            /** if (VAF_WFlow_EventLog_ID == 0)
 {
-SetAD_Table_ID (0);
-SetAD_WF_EventAudit_ID (0);
-SetAD_WF_Node_ID (0);
-SetAD_WF_Process_ID (0);
-SetAD_WF_Responsible_ID (0);
+SetVAF_TableView_ID (0);
+SetVAF_WFlow_EventLog_ID (0);
+SetVAF_WFlow_Node_ID (0);
+SetVAF_WFlow_Handler_ID (0);
+SetVAF_WFlow_Incharge_ID (0);
 SetElapsedTimeMS (0.0);
 SetEventType (null);
 SetRecord_ID (0);
@@ -32,15 +32,15 @@ SetWFState (null);
 }
              */
         }
-        public X_AD_WF_EventAudit(Ctx ctx, int AD_WF_EventAudit_ID, Trx trxName) : base(ctx, AD_WF_EventAudit_ID, trxName)
+        public X_VAF_WFlow_EventLog(Ctx ctx, int VAF_WFlow_EventLog_ID, Trx trxName) : base(ctx, VAF_WFlow_EventLog_ID, trxName)
         {
-            /** if (AD_WF_EventAudit_ID == 0)
+            /** if (VAF_WFlow_EventLog_ID == 0)
 {
-SetAD_Table_ID (0);
-SetAD_WF_EventAudit_ID (0);
-SetAD_WF_Node_ID (0);
-SetAD_WF_Process_ID (0);
-SetAD_WF_Responsible_ID (0);
+SetVAF_TableView_ID (0);
+SetVAF_WFlow_EventLog_ID (0);
+SetVAF_WFlow_Node_ID (0);
+SetVAF_WFlow_Handler_ID (0);
+SetVAF_WFlow_Incharge_ID (0);
 SetElapsedTimeMS (0.0);
 SetEventType (null);
 SetRecord_ID (0);
@@ -53,7 +53,7 @@ SetWFState (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_EventAudit(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_WFlow_EventLog(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -61,7 +61,7 @@ SetWFState (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_EventAudit(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_WFlow_EventLog(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -69,13 +69,13 @@ SetWFState (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_WF_EventAudit(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+        public X_VAF_WFlow_EventLog(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_WF_EventAudit()
+        static X_VAF_WFlow_EventLog()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -84,12 +84,12 @@ SetWFState (null);
         //static long serialVersionUID 27562514366075L;
         /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
         public static long updatedMS = 1280389049286L;
-        /** AD_Table_ID=649 */
+        /** VAF_TableView_ID=649 */
         public static int Table_ID;
         // =649;
 
-        /** TableName=AD_WF_EventAudit */
-        public static String Table_Name = "AD_WF_EventAudit";
+        /** TableName=VAF_WFlow_EventLog */
+        public static String Table_Name = "VAF_WFlow_EventLog";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -123,55 +123,55 @@ SetWFState (null);
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_WF_EventAudit[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_WFlow_EventLog[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Table.
-@param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_Value("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
 @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_User_ID AD_Reference_ID=110 */
-        public static int AD_USER_ID_AD_Reference_ID = 110;
+        /** VAF_UserContact_ID VAF_Control_Ref_ID=110 */
+        public static int VAF_USERCONTACT_ID_VAF_Control_Ref_ID = 110;
         /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Workflow Event Audit.
-@param AD_WF_EventAudit_ID Workflow Process Activity Event Audit Information */
-        public void SetAD_WF_EventAudit_ID(int AD_WF_EventAudit_ID)
+@param VAF_WFlow_EventLog_ID Workflow Process Activity Event Audit Information */
+        public void SetVAF_WFlow_EventLog_ID(int VAF_WFlow_EventLog_ID)
         {
-            if (AD_WF_EventAudit_ID < 1) throw new ArgumentException("AD_WF_EventAudit_ID is mandatory.");
-            Set_ValueNoCheck("AD_WF_EventAudit_ID", AD_WF_EventAudit_ID);
+            if (VAF_WFlow_EventLog_ID < 1) throw new ArgumentException("VAF_WFlow_EventLog_ID is mandatory.");
+            Set_ValueNoCheck("VAF_WFlow_EventLog_ID", VAF_WFlow_EventLog_ID);
         }
         /** Get Workflow Event Audit.
 @return Workflow Process Activity Event Audit Information */
-        public int GetAD_WF_EventAudit_ID()
+        public int GetVAF_WFlow_EventLog_ID()
         {
-            Object ii = Get_Value("AD_WF_EventAudit_ID");
+            Object ii = Get_Value("VAF_WFlow_EventLog_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -179,50 +179,50 @@ SetWFState (null);
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetAD_WF_EventAudit_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAF_WFlow_EventLog_ID().ToString());
         }
         /** Set Node.
-@param AD_WF_Node_ID Workflow Node (activity), step or process */
-        public void SetAD_WF_Node_ID(int AD_WF_Node_ID)
+@param VAF_WFlow_Node_ID Workflow Node (activity), step or process */
+        public void SetVAF_WFlow_Node_ID(int VAF_WFlow_Node_ID)
         {
-            if (AD_WF_Node_ID < 1) throw new ArgumentException("AD_WF_Node_ID is mandatory.");
-            Set_Value("AD_WF_Node_ID", AD_WF_Node_ID);
+            if (VAF_WFlow_Node_ID < 1) throw new ArgumentException("VAF_WFlow_Node_ID is mandatory.");
+            Set_Value("VAF_WFlow_Node_ID", VAF_WFlow_Node_ID);
         }
         /** Get Node.
 @return Workflow Node (activity), step or process */
-        public int GetAD_WF_Node_ID()
+        public int GetVAF_WFlow_Node_ID()
         {
-            Object ii = Get_Value("AD_WF_Node_ID");
+            Object ii = Get_Value("VAF_WFlow_Node_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Workflow Process.
-@param AD_WF_Process_ID Actual Workflow Process Instance */
-        public void SetAD_WF_Process_ID(int AD_WF_Process_ID)
+@param VAF_WFlow_Handler_ID Actual Workflow Process Instance */
+        public void SetVAF_WFlow_Handler_ID(int VAF_WFlow_Handler_ID)
         {
-            if (AD_WF_Process_ID < 1) throw new ArgumentException("AD_WF_Process_ID is mandatory.");
-            Set_Value("AD_WF_Process_ID", AD_WF_Process_ID);
+            if (VAF_WFlow_Handler_ID < 1) throw new ArgumentException("VAF_WFlow_Handler_ID is mandatory.");
+            Set_Value("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
         }
         /** Get Workflow Process.
 @return Actual Workflow Process Instance */
-        public int GetAD_WF_Process_ID()
+        public int GetVAF_WFlow_Handler_ID()
         {
-            Object ii = Get_Value("AD_WF_Process_ID");
+            Object ii = Get_Value("VAF_WFlow_Handler_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Workflow Responsible.
-@param AD_WF_Responsible_ID Responsible for Workflow Execution */
-        public void SetAD_WF_Responsible_ID(int AD_WF_Responsible_ID)
+@param VAF_WFlow_Incharge_ID Responsible for Workflow Execution */
+        public void SetVAF_WFlow_Incharge_ID(int VAF_WFlow_Incharge_ID)
         {
-            if (AD_WF_Responsible_ID < 1) throw new ArgumentException("AD_WF_Responsible_ID is mandatory.");
-            Set_Value("AD_WF_Responsible_ID", AD_WF_Responsible_ID);
+            if (VAF_WFlow_Incharge_ID < 1) throw new ArgumentException("VAF_WFlow_Incharge_ID is mandatory.");
+            Set_Value("VAF_WFlow_Incharge_ID", VAF_WFlow_Incharge_ID);
         }
         /** Get Workflow Responsible.
 @return Responsible for Workflow Execution */
-        public int GetAD_WF_Responsible_ID()
+        public int GetVAF_WFlow_Incharge_ID()
         {
-            Object ii = Get_Value("AD_WF_Responsible_ID");
+            Object ii = Get_Value("VAF_WFlow_Incharge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -276,8 +276,8 @@ SetWFState (null);
             return Convert.ToDecimal(bd);
         }
 
-        /** EventType AD_Reference_ID=306 */
-        public static int EVENTTYPE_AD_Reference_ID = 306;
+        /** EventType VAF_Control_Ref_ID=306 */
+        public static int EVENTTYPE_VAF_Control_Ref_ID = 306;
         /** Process Created = PC */
         public static String EVENTTYPE_ProcessCreated = "PC";
         /** Process Completed = PX */
@@ -378,8 +378,8 @@ SetWFState (null);
             return (String)Get_Value("TextMsg");
         }
 
-        /** WFState AD_Reference_ID=305 */
-        public static int WFSTATE_AD_Reference_ID = 305;
+        /** WFState VAF_Control_Ref_ID=305 */
+        public static int WFSTATE_VAF_Control_Ref_ID = 305;
         /** Aborted = CA */
         public static String WFSTATE_Aborted = "CA";
         /** Completed = CC */
@@ -423,8 +423,8 @@ SetWFState (null);
             return (String)Get_Value("WFState");
         }
 
-        /** ResponsibleOrg_ID AD_Reference_ID=276 */
-        public static int RESPONSIBLEORG_ID_AD_Reference_ID = 276;
+        /** ResponsibleOrg_ID VAF_Control_Ref_ID=276 */
+        public static int RESPONSIBLEORG_ID_VAF_Control_Ref_ID = 276;
         /** Set Responsible Organization.
         @param ResponsibleOrg_ID Responsible Organization */
         public void SetResponsibleOrg_ID(int ResponsibleOrg_ID)

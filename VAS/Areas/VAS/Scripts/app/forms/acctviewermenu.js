@@ -24,7 +24,7 @@
             //_btnResult.trigger("click");
 
 
-            var obj = new VIS.AcctViewer(VIS.context.getAD_Client_ID(), 1, 1, this.windowNo, 1);
+            var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), 1, 1, this.windowNo, 1);
             if (obj != null) {
                 obj.setIsMenu(true);
                 obj.showDialog();

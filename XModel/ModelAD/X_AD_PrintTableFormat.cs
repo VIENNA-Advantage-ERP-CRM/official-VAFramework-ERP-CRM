@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintTableFormat
+/** Generated Model for VAF_Print_Rpt_TblLayout
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintTableFormat : PO
+public class X_VAF_Print_Rpt_TblLayout : PO
 {
-public X_AD_PrintTableFormat (Context ctx, int AD_PrintTableFormat_ID, Trx trxName) : base (ctx, AD_PrintTableFormat_ID, trxName)
+public X_VAF_Print_Rpt_TblLayout (Context ctx, int VAF_Print_Rpt_TblLayout_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_TblLayout_ID, trxName)
 {
-/** if (AD_PrintTableFormat_ID == 0)
+/** if (VAF_Print_Rpt_TblLayout_ID == 0)
 {
-SetAD_PrintTableFormat_ID (0);
+SetVAF_Print_Rpt_TblLayout_ID (0);
 SetIsDefault (false);
 SetIsPaintBoundaryLines (false);
 SetIsPaintHLines (false);
@@ -31,11 +31,11 @@ SetName (null);
 }
  */
 }
-public X_AD_PrintTableFormat (Ctx ctx, int AD_PrintTableFormat_ID, Trx trxName) : base (ctx, AD_PrintTableFormat_ID, trxName)
+public X_VAF_Print_Rpt_TblLayout (Ctx ctx, int VAF_Print_Rpt_TblLayout_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_TblLayout_ID, trxName)
 {
-/** if (AD_PrintTableFormat_ID == 0)
+/** if (VAF_Print_Rpt_TblLayout_ID == 0)
 {
-SetAD_PrintTableFormat_ID (0);
+SetVAF_Print_Rpt_TblLayout_ID (0);
 SetIsDefault (false);
 SetIsPaintBoundaryLines (false);
 SetIsPaintHLines (false);
@@ -51,7 +51,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintTableFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_TblLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_PrintTableFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintTableFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_TblLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_PrintTableFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintTableFormat (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_TblLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintTableFormat()
+static X_VAF_Print_Rpt_TblLayout()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,12 +82,12 @@ static X_AD_PrintTableFormat()
 //static long serialVersionUID = 27562514363097L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046308L;
-/** AD_Table_ID=523 */
+/** VAF_TableView_ID=523 */
 public static int Table_ID;
  // =523;
 
-/** TableName=AD_PrintTableFormat */
-public static String Table_Name="AD_PrintTableFormat";
+/** TableName=VAF_Print_Rpt_TblLayout */
+public static String Table_Name="VAF_Print_Rpt_TblLayout";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,21 +121,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintTableFormat[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_TblLayout[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Print Table Format.
-@param AD_PrintTableFormat_ID Table Format in Reports */
-public void SetAD_PrintTableFormat_ID (int AD_PrintTableFormat_ID)
+@param VAF_Print_Rpt_TblLayout_ID Table Format in Reports */
+public void SetVAF_Print_Rpt_TblLayout_ID (int VAF_Print_Rpt_TblLayout_ID)
 {
-if (AD_PrintTableFormat_ID < 1) throw new ArgumentException ("AD_PrintTableFormat_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintTableFormat_ID", AD_PrintTableFormat_ID);
+if (VAF_Print_Rpt_TblLayout_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_TblLayout_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_TblLayout_ID", VAF_Print_Rpt_TblLayout_ID);
 }
 /** Get Print Table Format.
 @return Table Format in Reports */
-public int GetAD_PrintTableFormat_ID() 
+public int GetVAF_Print_Rpt_TblLayout_ID() 
 {
-Object ii = Get_Value("AD_PrintTableFormat_ID");
+Object ii = Get_Value("VAF_Print_Rpt_TblLayout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -208,8 +208,8 @@ public String GetFooterRight()
 return (String)Get_Value("FooterRight");
 }
 
-/** FunctBG_PrintColor_ID AD_Reference_ID=266 */
-public static int FUNCTBG_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** FunctBG_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int FUNCTBG_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Function BG Color.
 @param FunctBG_PrintColor_ID Function Background Color */
 public void SetFunctBG_PrintColor_ID (int FunctBG_PrintColor_ID)
@@ -227,8 +227,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FunctFG_PrintColor_ID AD_Reference_ID=266 */
-public static int FUNCTFG_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** FunctFG_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int FUNCTFG_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Function Color.
 @param FunctFG_PrintColor_ID Function Foreground Color */
 public void SetFunctFG_PrintColor_ID (int FunctFG_PrintColor_ID)
@@ -246,8 +246,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Funct_PrintFont_ID AD_Reference_ID=267 */
-public static int FUNCT_PRINTFONT_ID_AD_Reference_ID=267;
+/** Funct_PrintFont_ID VAF_Control_Ref_ID=267 */
+public static int FUNCT_PRINTFONT_ID_VAF_Control_Ref_ID=267;
 /** Set Function Font.
 @param Funct_PrintFont_ID Function row Font */
 public void SetFunct_PrintFont_ID (int Funct_PrintFont_ID)
@@ -265,8 +265,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** HdrLine_PrintColor_ID AD_Reference_ID=266 */
-public static int HDRLINE_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** HdrLine_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int HDRLINE_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Header Line Color.
 @param HdrLine_PrintColor_ID Table header row line color */
 public void SetHdrLine_PrintColor_ID (int HdrLine_PrintColor_ID)
@@ -298,8 +298,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** HdrStrokeType AD_Reference_ID=312 */
-public static int HDRSTROKETYPE_AD_Reference_ID=312;
+/** HdrStrokeType VAF_Control_Ref_ID=312 */
+public static int HDRSTROKETYPE_VAF_Control_Ref_ID=312;
 /** Dash-Dotted Line = 2 */
 public static String HDRSTROKETYPE_Dash_DottedLine = "2";
 /** Dashed Line = D */
@@ -335,8 +335,8 @@ public String GetHdrStrokeType()
 return (String)Get_Value("HdrStrokeType");
 }
 
-/** HdrTextBG_PrintColor_ID AD_Reference_ID=266 */
-public static int HDRTEXTBG_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** HdrTextBG_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int HDRTEXTBG_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Header Row BG Color.
 @param HdrTextBG_PrintColor_ID Background color of header row */
 public void SetHdrTextBG_PrintColor_ID (int HdrTextBG_PrintColor_ID)
@@ -354,8 +354,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** HdrTextFG_PrintColor_ID AD_Reference_ID=266 */
-public static int HDRTEXTFG_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** HdrTextFG_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int HDRTEXTFG_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Header Row Color.
 @param HdrTextFG_PrintColor_ID Foreground color of the table header row */
 public void SetHdrTextFG_PrintColor_ID (int HdrTextFG_PrintColor_ID)
@@ -373,8 +373,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Hdr_PrintFont_ID AD_Reference_ID=267 */
-public static int HDR_PRINTFONT_ID_AD_Reference_ID=267;
+/** Hdr_PrintFont_ID VAF_Control_Ref_ID=267 */
+public static int HDR_PRINTFONT_ID_VAF_Control_Ref_ID=267;
 /** Set Header Row Font.
 @param Hdr_PrintFont_ID Header row Font */
 public void SetHdr_PrintFont_ID (int Hdr_PrintFont_ID)
@@ -600,8 +600,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** LineStrokeType AD_Reference_ID=312 */
-public static int LINESTROKETYPE_AD_Reference_ID=312;
+/** LineStrokeType VAF_Control_Ref_ID=312 */
+public static int LINESTROKETYPE_VAF_Control_Ref_ID=312;
 /** Dash-Dotted Line = 2 */
 public static String LINESTROKETYPE_Dash_DottedLine = "2";
 /** Dashed Line = D */
@@ -637,8 +637,8 @@ public String GetLineStrokeType()
 return (String)Get_Value("LineStrokeType");
 }
 
-/** Line_PrintColor_ID AD_Reference_ID=266 */
-public static int LINE_PRINTCOLOR_ID_AD_Reference_ID=266;
+/** Line_PrintColor_ID VAF_Control_Ref_ID=266 */
+public static int LINE_PRINTCOLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Line Color.
 @param Line_PrintColor_ID Table line color */
 public void SetLine_PrintColor_ID (int Line_PrintColor_ID)

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MImpFormatRow
  * Purpose        : Import Format Row Model
- * Class Used     : X_AD_ImpFormat_Row
+ * Class Used     : X_VAF_ImportFormat_Row
  * Chronological    Development
  * Deepak           01-Feb-2009
   ******************************************************/
@@ -22,22 +22,22 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MImpFormatRow: X_AD_ImpFormat_Row
+    public class MImpFormatRow: X_VAF_ImportFormat_Row
     {
 
 	/// <summary>
 	///Standard Constructor
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="AD_ImpFormat_Row_ID">id</param>
+	/// <param name="VAF_ImportFormat_Row_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MImpFormatRow (Ctx ctx, int AD_ImpFormat_Row_ID, Trx trxName):base(ctx, AD_ImpFormat_Row_ID, trxName)
+	public MImpFormatRow (Ctx ctx, int VAF_ImportFormat_Row_ID, Trx trxName):base(ctx, VAF_ImportFormat_Row_ID, trxName)
 	{
 	
-		if (AD_ImpFormat_Row_ID == 0)
+		if (VAF_ImportFormat_Row_ID == 0)
 		{
-		//	setAD_ImpFormat_ID (0);		Parent
-		//	setAD_Column_ID (0);
+		//	setVAF_ImportFormat_ID (0);		Parent
+		//	setVAF_Column_ID (0);
 		//	setDataType (null);
 		//	setName (null);
 		//	setSeqNo (10);
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
 	public MImpFormatRow (MImpFormat format):this (format.GetCtx(), 0, format.Get_TrxName())
 	{
 		
-		SetAD_ImpFormat_ID(format.GetAD_ImpFormat_ID());
+		SetVAF_ImportFormat_ID(format.GetVAF_ImportFormat_ID());
 	}	//	MImpFormatRow
 	
 	/// <summary>
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
 		
 		CopyValues(original, this);
 		SetClientOrg(parent);
-		SetAD_ImpFormat_ID(parent.GetAD_ImpFormat_ID());
+		SetVAF_ImportFormat_ID(parent.GetVAF_ImportFormat_ID());
 	}	//	MImpFormatRow
 	
 }	

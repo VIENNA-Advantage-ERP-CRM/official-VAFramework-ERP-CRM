@@ -72,11 +72,11 @@ namespace VAdvantage.Model
 	/** Image Indicator				*/
 	private String      m_imageIndicator;
 	/** Window ID       */
-    private int         AD_Window_ID;
+    private int         VAF_Screen_ID;
     /** Process ID      */
-    private int         AD_Process_ID;
+    private int         VAF_Job_ID;
     /** Form ID         */
-    private int         AD_Form_ID;
+    private int         VAF_Page_ID;
     /** Workflow ID     */
     private int         AD_Workflow_ID;
     /** Task ID         */
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
 
 	/**************************************************************************
 	 *  Get Node ID
-	 *  @return node id (e.g. AD_Menu_ID)
+	 *  @return node id (e.g. VAF_MenuConfig_ID)
 	 */
 	public int GetNode_ID()
 	{
@@ -140,52 +140,52 @@ namespace VAdvantage.Model
 	/**
      * Get Window ID
      */
-    public int GetAD_Window_ID()
+    public int GetVAF_Screen_ID()
     {
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }
     
     /**
      * Set Window ID
      * @param int windowID
      */
-    public void SetAD_Window_ID(int windowID) 
+    public void SetVAF_Screen_ID(int windowID) 
     {
-        this.AD_Window_ID = windowID;
+        this.VAF_Screen_ID = windowID;
     }
     
     /**
      * Get Process ID
      */
-    public int GetAD_Process_ID()
+    public int GetVAF_Job_ID()
     {
-        return AD_Process_ID;
+        return VAF_Job_ID;
     }
     
     /**
      * Set Process ID
      * @param int processID
      */
-    public void SetAD_Process_ID(int processID)
+    public void SetVAF_Job_ID(int processID)
     {
-        this.AD_Process_ID = processID;
+        this.VAF_Job_ID = processID;
     }
     
     /**
      * Get Form ID
      */
-    public int GetAD_Form_ID()
+    public int GetVAF_Page_ID()
     {
-        return AD_Form_ID;
+        return VAF_Page_ID;
     }
     
     /**
      * Set Form ID
      * @param int formID
      */
-    public void SetAD_Form_ID(int formID)
+    public void SetVAF_Page_ID(int formID)
     {
-        this.AD_Form_ID = formID;
+        this.VAF_Page_ID = formID;
     }
     
     /**
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
 
 	/**
 	 *	Return parent
-	 *  @return Parent_ID (e.g. AD_Menu_ID)
+	 *  @return Parent_ID (e.g. VAF_MenuConfig_ID)
 	 */
 	public int GetParent_ID()
 	{
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
 
 	/**************************************************************************
 	 *  Get Image Indicator/Index
-	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_AD_WF_Node.ACTION_
+	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_VAF_WFlow_Node.ACTION_
 	 *  @return index of image
 	 */
 	public static int GetImageIndex (String imageIndicator)
@@ -346,41 +346,41 @@ namespace VAdvantage.Model
         {
             ;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserWindow)		//	Window 
-            || imageIndicator.Equals(X_AD_WF_Node.ACTION_UserForm))
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserWindow)		//	Window 
+            || imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserForm))
         {
             imageIndex = TYPE_WINDOW;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsReport))		//	Report
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsReport))		//	Report
         {
             imageIndex = TYPE_REPORT;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsProcess)		//	Process
-            || imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsTask))
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsProcess)		//	Process
+            || imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsTask))
         {
             imageIndex = TYPE_PROCESS;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_SubWorkflow))		//	WorkFlow
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_SubWorkflow))		//	WorkFlow
         {
             imageIndex = TYPE_WORKFLOW;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserWorkbench))	//	Workbench
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserWorkbench))	//	Workbench
         {
             imageIndex = TYPE_WORKBENCH;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_SetVariable))		//	Set Variable
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_SetVariable))		//	Set Variable
         {
             imageIndex = TYPE_SETVARIABLE;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserChoice))		//	User Choice
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserChoice))		//	User Choice
         {
             imageIndex = TYPE_USERCHOICE;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_DocumentAction))	//	Document Action
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_DocumentAction))	//	Document Action
         {
             imageIndex = TYPE_DOCACTION;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_WaitSleep))		//	Sleep
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_WaitSleep))		//	Sleep
         {
             ;
         }
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
 
 	/**
 	 *  Set Image Indicator and Index
-	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_AD_WF_Node.ACTION_
+	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_VAF_WFlow_Node.ACTION_
 	 */
 	public void SetImageIndicator (String imageIndicator)
 	{
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isProcess()
 	{
-		return X_AD_Menu.ACTION_Process.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Process.Equals(m_imageIndicator);
 	}	//	isProcess
 
 	/**
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isReport()
 	{
-		return X_AD_Menu.ACTION_Report.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Report.Equals(m_imageIndicator);
 	}	//	isReport
 	
 	/**
@@ -463,7 +463,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWindow()
 	{
-		return X_AD_Menu.ACTION_Window.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Window.Equals(m_imageIndicator);
 	}	//	isWindow
 	
 	/**
@@ -472,7 +472,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWorkbench()
 	{
-		return X_AD_Menu.ACTION_Workbench.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Workbench.Equals(m_imageIndicator);
 	}	//	isWorkbench
 	
 	/**
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWorkFlow()
 	{
-		return X_AD_Menu.ACTION_WorkFlow.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_WorkFlow.Equals(m_imageIndicator);
 	}	//	isWorkFlow
 
 	/**
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isForm()
 	{
-		return X_AD_Menu.ACTION_Form.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Form.Equals(m_imageIndicator);
 	}	//	isForm
 
 	/**
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isTask()
 	{
-		return X_AD_Menu.ACTION_Task.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Task.Equals(m_imageIndicator);
 	}	//	isTask
 
 	/**

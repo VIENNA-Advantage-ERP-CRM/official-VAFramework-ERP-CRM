@@ -22,19 +22,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            CreateDocumentTypes(GetCtx(), GetAD_Client_ID(), this, Get_TrxName());
-            CreatePeriodControls(GetCtx(), GetAD_Client_ID(), this, Get_TrxName());
+            CreateDocumentTypes(GetCtx(), GetVAF_Client_ID(), this, Get_TrxName());
+            CreatePeriodControls(GetCtx(), GetVAF_Client_ID(), this, Get_TrxName());
             return "OK";            
         }
 
-        public static void CreateDocumentTypes(Ctx ctx, int AD_Client_ID, SvrProcess sp, Trx trxName)
+        public static void CreateDocumentTypes(Ctx ctx, int VAF_Client_ID, SvrProcess sp, Trx trxName)
         {
-            _log.Info("AD_Client_ID=" + AD_Client_ID);
+            _log.Info("VAF_Client_ID=" + VAF_Client_ID);
             String sql = "SELECT rl.Value, rl.Name "
-                + "FROM AD_Ref_List rl "
-                + "WHERE rl.AD_Reference_ID=183"
+                + "FROM VAF_CtrlRef_List rl "
+                + "WHERE rl.VAF_Control_Ref_ID=183"
                 + " AND rl.IsActive='Y' AND NOT EXISTS "
-                + " (SELECT * FROM C_DocType dt WHERE dt.AD_Client_ID='" + AD_Client_ID + "' AND rl.Value=dt.DocBaseType)";
+                + " (SELECT * FROM C_DocType dt WHERE dt.VAF_Client_ID='" + VAF_Client_ID + "' AND rl.Value=dt.DocBaseType)";
             IDataReader idr=null;
             try
             {
@@ -85,12 +85,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// 
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <param name="sp"></param>
         /// <param name="trxName"></param>
-        public static void CreatePeriodControls(Ctx ctx, int AD_Client_ID, SvrProcess sp, Trx trxName)
+        public static void CreatePeriodControls(Ctx ctx, int VAF_Client_ID, SvrProcess sp, Trx trxName)
         {
-            _log.Info("AD_Client_ID=" + AD_Client_ID);
+            _log.Info("VAF_Client_ID=" + VAF_Client_ID);
 
             //	Delete Duplicates
             //jz remove correlation ID  String sql = "DELETE FROM C_PeriodControl pc1 "
@@ -108,10 +108,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             _log.Info("Duplicates deleted #" + no);
 
             //	Insert Missing
-            sql = "SELECT DISTINCT p.AD_Client_ID, p.AD_Org_ID, p.C_Period_ID, dt.DocBaseType "
+            sql = "SELECT DISTINCT p.VAF_Client_ID, p.VAF_Org_ID, p.C_Period_ID, dt.DocBaseType "
                 + "FROM C_Period p"
-                + " FULL JOIN C_DocType dt ON (p.AD_Client_ID=dt.AD_Client_ID) "
-                + "WHERE p.AD_Client_ID='" + AD_Client_ID + "'"
+                + " FULL JOIN C_DocType dt ON (p.VAF_Client_ID=dt.VAF_Client_ID) "
+                + "WHERE p.VAF_Client_ID='" + VAF_Client_ID + "'"
                 + " AND NOT EXISTS"
                 + " (SELECT * FROM C_PeriodControl pc "
                     + "WHERE pc.C_Period_ID=p.C_Period_ID AND pc.DocBaseType=dt.DocBaseType)";
@@ -126,11 +126,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     int Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
                     int C_Period_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
                     String DocBaseType = idr[3].ToString();
-                   _log.Config("AD_Client_ID=" + Client_ID
+                   _log.Config("VAF_Client_ID=" + Client_ID
                         + ", C_Period_ID=" + C_Period_ID + ", DocBaseType=" + DocBaseType);
                     //
                     MPeriodControl pc = new MPeriodControl(ctx, Client_ID, C_Period_ID, DocBaseType, trxName);
-                    pc.SetAD_Org_ID(Org_ID);                // Set Organization of Period, on Period Control.
+                    pc.SetVAF_Org_ID(Org_ID);                // Set Organization of Period, on Period Control.
                     if (pc.Save())
                     {
                         counter++;

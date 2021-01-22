@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721587398306L;
         /** Last Updated Timestamp 8/13/2015 4:04:42 PM */
         public static long updatedMS = 1439462081517L;
-        /** AD_Table_ID=291 */
+        /** VAF_TableView_ID=291 */
         public static int Table_ID;
         // =291;
 
@@ -146,44 +146,44 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_Language AD_Reference_ID=327 */
-        public static int AD_LANGUAGE_AD_Reference_ID = 327;
+        /** VAF_Language VAF_Control_Ref_ID=327 */
+        public static int VAF_LANGUAGE_VAF_Control_Ref_ID = 327;
         /** Set Language.
-        @param AD_Language Language for this entity */
-        public void SetAD_Language(String AD_Language)
+        @param VAF_Language Language for this entity */
+        public void SetVAF_Language(String VAF_Language)
         {
-            if (AD_Language != null && AD_Language.Length > 5)
+            if (VAF_Language != null && VAF_Language.Length > 5)
             {
                 log.Warning("Length > 5 - truncated");
-                AD_Language = AD_Language.Substring(0, 5);
+                VAF_Language = VAF_Language.Substring(0, 5);
             }
-            Set_Value("AD_Language", AD_Language);
+            Set_Value("VAF_Language", VAF_Language);
         }
         /** Get Language.
         @return Language for this entity */
-        public String GetAD_Language()
+        public String GetVAF_Language()
         {
-            return (String)Get_Value("AD_Language");
+            return (String)Get_Value("VAF_Language");
         }
 
-        /** AD_OrgBP_ID AD_Reference_ID=417 */
-        public static int AD_ORGBP_ID_AD_Reference_ID = 417;
+        /** VAF_OrgBP_ID VAF_Control_Ref_ID=417 */
+        public static int VAF_ORGBP_ID_VAF_Control_Ref_ID = 417;
         /** Set Linked Organization.
-        @param AD_OrgBP_ID The Business Partner is another Organization for explicit Inter-Org transactions */
-        public void SetAD_OrgBP_ID(String AD_OrgBP_ID)
+        @param VAF_OrgBP_ID The Business Partner is another Organization for explicit Inter-Org transactions */
+        public void SetVAF_OrgBP_ID(String VAF_OrgBP_ID)
         {
-            if (AD_OrgBP_ID != null && AD_OrgBP_ID.Length > 22)
+            if (VAF_OrgBP_ID != null && VAF_OrgBP_ID.Length > 22)
             {
                 log.Warning("Length > 22 - truncated");
-                AD_OrgBP_ID = AD_OrgBP_ID.Substring(0, 22);
+                VAF_OrgBP_ID = VAF_OrgBP_ID.Substring(0, 22);
             }
-            Set_Value("AD_OrgBP_ID", AD_OrgBP_ID);
+            Set_Value("VAF_OrgBP_ID", VAF_OrgBP_ID);
         }
         /** Get Linked Organization.
         @return The Business Partner is another Organization for explicit Inter-Org transactions */
-        public String GetAD_OrgBP_ID()
+        public String GetVAF_OrgBP_ID()
         {
-            return (String)Get_Value("AD_OrgBP_ID");
+            return (String)Get_Value("VAF_OrgBP_ID");
         }
         /** Set Acquisition Cost.
         @param AcqusitionCost The cost of gaining the prospect as a customer */
@@ -535,8 +535,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("CreateTargetList");
         }
-        /** CreditStatusSettingOn AD_Reference_ID=1000178 */
-        public static int CREDITSTATUSSETTINGON_AD_Reference_ID = 1000178;
+        /** CreditStatusSettingOn VAF_Control_Ref_ID=1000178 */
+        public static int CREDITSTATUSSETTINGON_VAF_Control_Ref_ID = 1000178;
         /** Customer Header = CH */
         public static String CREDITSTATUSSETTINGON_CustomerHeader = "CH";
         /** Customer Location = CL */
@@ -568,8 +568,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("CreditStatusSettingOn");
         }
 
-        /** CreditValidation AD_Reference_ID=1000179 */
-        public static int CREDITVALIDATION_AD_Reference_ID = 1000179;
+        /** CreditValidation VAF_Control_Ref_ID=1000179 */
+        public static int CREDITVALIDATION_VAF_Control_Ref_ID = 1000179;
         /** Stop SO = A */
         public static String CREDITVALIDATION_StopSO = "A";
         /** Stop Shipment = B */
@@ -638,8 +638,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DUNS");
         }
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        public static int DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        public static int DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         public static String DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -679,8 +679,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DeliveryRule");
         }
 
-        /** DeliveryViaRule AD_Reference_ID=152 */
-        public static int DELIVERYVIARULE_AD_Reference_ID = 152;
+        /** DeliveryViaRule VAF_Control_Ref_ID=152 */
+        public static int DELIVERYVIARULE_VAF_Control_Ref_ID = 152;
         /** Delivery = D */
         public static String DELIVERYVIARULE_Delivery = "D";
         /** Pickup = P */
@@ -780,8 +780,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("EMPLOYEE_GRADE");
         }
 
-        /** EMPLOYEE_STATUS AD_Reference_ID=1000009 */
-        public static int EMPLOYEE_STATUS_AD_Reference_ID = 1000009;
+        /** EMPLOYEE_STATUS VAF_Control_Ref_ID=1000009 */
+        public static int EMPLOYEE_STATUS_VAF_Control_Ref_ID = 1000009;
         /** Permanent = P */
         public static String EMPLOYEE_STATUS_Permanent = "P";
         /** Temporary = T */
@@ -911,8 +911,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("ED007_DiscountCalculation");
         }
-        /** FreightCostRule AD_Reference_ID=153 */
-        public static int FREIGHTCOSTRULE_AD_Reference_ID = 153;
+        /** FreightCostRule VAF_Control_Ref_ID=153 */
+        public static int FREIGHTCOSTRULE_VAF_Control_Ref_ID = 153;
         /** Calculated = C */
         public static String FREIGHTCOSTRULE_Calculated = "C";
         /** Fix price = F */
@@ -950,8 +950,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("FreightCostRule");
         }
 
-        /** Gender AD_Reference_ID=1000020 */
-        public static int GENDER_AD_Reference_ID = 1000020;
+        /** Gender VAF_Control_Ref_ID=1000020 */
+        public static int GENDER_VAF_Control_Ref_ID = 1000020;
         /** Female = F */
         public static String GENDER_Female = "F";
         /** Male = M */
@@ -1000,8 +1000,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("GenerateAccount");
         }
 
-        /** InvoiceRule AD_Reference_ID=150 */
-        public static int INVOICERULE_AD_Reference_ID = 150;
+        /** InvoiceRule VAF_Control_Ref_ID=150 */
+        public static int INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         public static String INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -1037,8 +1037,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("InvoiceRule");
         }
 
-        /** Invoice_PrintFormat_ID AD_Reference_ID=261 */
-        public static int INVOICE_PRINTFORMAT_ID_AD_Reference_ID = 261;
+        /** Invoice_PrintFormat_ID VAF_Control_Ref_ID=261 */
+        public static int INVOICE_PRINTFORMAT_ID_VAF_Control_Ref_ID = 261;
         /** Set Invoice Print Format.
         @param Invoice_PrintFormat_ID Print Format for printing Invoices */
         public void SetInvoice_PrintFormat_ID(int Invoice_PrintFormat_ID)
@@ -1242,8 +1242,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("LastLocalUpdated");
         }
 
-        /** M_DiscountSchema_ID AD_Reference_ID=325 */
-        public static int M_DISCOUNTSCHEMA_ID_AD_Reference_ID = 325;
+        /** M_DiscountSchema_ID VAF_Control_Ref_ID=325 */
+        public static int M_DISCOUNTSCHEMA_ID_VAF_Control_Ref_ID = 325;
         /** Set Discount Schema.
         @param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
         public void SetM_DiscountSchema_ID(int M_DiscountSchema_ID)
@@ -1293,8 +1293,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MaritalStatus AD_Reference_ID=1000021 */
-        public static int MARITALSTATUS_AD_Reference_ID = 1000021;
+        /** MaritalStatus VAF_Control_Ref_ID=1000021 */
+        public static int MARITALSTATUS_VAF_Control_Ref_ID = 1000021;
         /** Married = M */
         public static String MARITALSTATUS_Married = "M";
         /** Single = S */
@@ -1449,8 +1449,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("POReference");
         }
 
-        /** PO_DiscountSchema_ID AD_Reference_ID=325 */
-        public static int PO_DISCOUNTSCHEMA_ID_AD_Reference_ID = 325;
+        /** PO_DiscountSchema_ID VAF_Control_Ref_ID=325 */
+        public static int PO_DISCOUNTSCHEMA_ID_VAF_Control_Ref_ID = 325;
         /** Set PO Discount Schema.
         @param PO_DiscountSchema_ID Schema to calculate the purchase trade discount percentage */
         public void SetPO_DiscountSchema_ID(int PO_DiscountSchema_ID)
@@ -1468,8 +1468,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PO_PaymentTerm_ID AD_Reference_ID=227 */
-        public static int PO_PAYMENTTERM_ID_AD_Reference_ID = 227;
+        /** PO_PaymentTerm_ID VAF_Control_Ref_ID=227 */
+        public static int PO_PAYMENTTERM_ID_VAF_Control_Ref_ID = 227;
         /** Set PO Payment Term.
         @param PO_PaymentTerm_ID Payment rules for a purchase order */
         public void SetPO_PaymentTerm_ID(int PO_PaymentTerm_ID)
@@ -1487,8 +1487,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PO_PriceList_ID AD_Reference_ID=166 */
-        public static int PO_PRICELIST_ID_AD_Reference_ID = 166;
+        /** PO_PriceList_ID VAF_Control_Ref_ID=166 */
+        public static int PO_PRICELIST_ID_VAF_Control_Ref_ID = 166;
         /** Set Purchase Pricelist.
         @param PO_PriceList_ID Price List used by this Business Partner */
         public void SetPO_PriceList_ID(int PO_PriceList_ID)
@@ -1506,8 +1506,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PO_ReturnPolicy_ID AD_Reference_ID=431 */
-        public static int PO_RETURNPOLICY_ID_AD_Reference_ID = 431;
+        /** PO_ReturnPolicy_ID VAF_Control_Ref_ID=431 */
+        public static int PO_RETURNPOLICY_ID_VAF_Control_Ref_ID = 431;
         /** Set Vendor Return Policy.
         @param PO_ReturnPolicy_ID Vendor Return Policy */
         public void SetPO_ReturnPolicy_ID(int PO_ReturnPolicy_ID)
@@ -1525,8 +1525,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -1568,8 +1568,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("PaymentRule");
         }
 
-        /** PaymentRulePO AD_Reference_ID=195 */
-        public static int PAYMENTRULEPO_AD_Reference_ID = 195;
+        /** PaymentRulePO VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULEPO_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULEPO_Cash = "B";
         /** Direct Debit = D */
@@ -1674,8 +1674,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("ProspectTargetList");
         }
 
-        /** Rating AD_Reference_ID=419 */
-        public static int RATING_AD_Reference_ID = 419;
+        /** Rating VAF_Control_Ref_ID=419 */
+        public static int RATING_VAF_Control_Ref_ID = 419;
         /** Not Rated = - */
         public static String RATING_NotRated = "-";
         /** A = A */
@@ -1728,8 +1728,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("ReferenceNo");
         }
 
-        /** SALARYPROCESS AD_Reference_ID=1000010 */
-        public static int SALARYPROCESS_AD_Reference_ID = 1000010;
+        /** SALARYPROCESS VAF_Control_Ref_ID=1000010 */
+        public static int SALARYPROCESS_VAF_Control_Ref_ID = 1000010;
         /** Direct Deposit = A */
         public static String SALARYPROCESS_DirectDeposit = "A";
         /** Cash = C */
@@ -1763,8 +1763,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SALARYPROCESS");
         }
 
-        /** SOCreditStatus AD_Reference_ID=289 */
-        public static int SOCREDITSTATUS_AD_Reference_ID = 289;
+        /** SOCreditStatus VAF_Control_Ref_ID=289 */
+        public static int SOCREDITSTATUS_VAF_Control_Ref_ID = 289;
         /** Credit Hold = H */
         public static String SOCREDITSTATUS_CreditHold = "H";
         /** Credit OK = O */
@@ -1849,8 +1849,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SO_Description");
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Sales Rep.
         @param SalesRep_ID Company Agent like Sales Representitive, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -2040,21 +2040,21 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAHRUAE_AD_User_ID AD_Reference_ID=110 */
-        public static int VAHRUAE_AD_USER_ID_AD_Reference_ID = 110;
+        /** VAHRUAE_VAF_UserContact_ID VAF_Control_Ref_ID=110 */
+        public static int VAHRUAE_VAF_USERCONTACT_ID_VAF_Control_Ref_ID = 110;
         /** Set Report To.
-        @param VAHRUAE_AD_User_ID Report To */
-        public void SetVAHRUAE_AD_User_ID(int VAHRUAE_AD_User_ID)
+        @param VAHRUAE_VAF_UserContact_ID Report To */
+        public void SetVAHRUAE_VAF_UserContact_ID(int VAHRUAE_VAF_UserContact_ID)
         {
-            if (VAHRUAE_AD_User_ID <= 0) Set_Value("VAHRUAE_AD_User_ID", null);
+            if (VAHRUAE_VAF_UserContact_ID <= 0) Set_Value("VAHRUAE_VAF_UserContact_ID", null);
             else
-                Set_Value("VAHRUAE_AD_User_ID", VAHRUAE_AD_User_ID);
+                Set_Value("VAHRUAE_VAF_UserContact_ID", VAHRUAE_VAF_UserContact_ID);
         }
         /** Get Report To.
         @return Report To */
-        public int GetVAHRUAE_AD_User_ID()
+        public int GetVAHRUAE_VAF_UserContact_ID()
         {
-            Object ii = Get_Value("VAHRUAE_AD_User_ID");
+            Object ii = Get_Value("VAHRUAE_VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -2122,8 +2122,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAHRUAE_BLOOD_GROUP AD_Reference_ID=1000158 */
-        public static int VAHRUAE_BLOOD_GROUP_AD_Reference_ID = 1000158;
+        /** VAHRUAE_BLOOD_GROUP VAF_Control_Ref_ID=1000158 */
+        public static int VAHRUAE_BLOOD_GROUP_VAF_Control_Ref_ID = 1000158;
         /** O+ = 01 */
         public static String VAHRUAE_BLOOD_GROUP_OPlus = "01";
         /** O- = 02 */
@@ -2236,8 +2236,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VAHRUAE_FatherName");
         }
 
-        /** VAHRUAE_FrequencyType AD_Reference_ID=1000190 */
-        public static int VAHRUAE_FREQUENCYTYPE_AD_Reference_ID = 1000190;
+        /** VAHRUAE_FrequencyType VAF_Control_Ref_ID=1000190 */
+        public static int VAHRUAE_FREQUENCYTYPE_VAF_Control_Ref_ID = 1000190;
         /** Month = M */
         public static String VAHRUAE_FREQUENCYTYPE_Month = "M";
         /** Quater = Q */
@@ -2273,8 +2273,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VAHRUAE_FrequencyType");
         }
 
-        /** VAHRUAE_GOSIRule_ID AD_Reference_ID=1000195 */
-        public static int VAHRUAE_GOSIRULE_ID_AD_Reference_ID = 1000195;
+        /** VAHRUAE_GOSIRule_ID VAF_Control_Ref_ID=1000195 */
+        public static int VAHRUAE_GOSIRULE_ID_VAF_Control_Ref_ID = 1000195;
         /** Set GOSI Rule.
         @param VAHRUAE_GOSIRule_ID GOSI Rule */
         public void SetVAHRUAE_GOSIRule_ID(int VAHRUAE_GOSIRule_ID)
@@ -2357,8 +2357,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAHRUAE_IndeminityRule_ID AD_Reference_ID=1000196 */
-        public static int VAHRUAE_INDEMINITYRULE_ID_AD_Reference_ID = 1000196;
+        /** VAHRUAE_IndeminityRule_ID VAF_Control_Ref_ID=1000196 */
+        public static int VAHRUAE_INDEMINITYRULE_ID_VAF_Control_Ref_ID = 1000196;
         /** Set Indemnity Rule.
         @param VAHRUAE_IndeminityRule_ID Indemnity Rule */
         public void SetVAHRUAE_IndeminityRule_ID(int VAHRUAE_IndeminityRule_ID)
@@ -2477,8 +2477,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VAHRUAE_Remarks");
         }
 
-        /** VAHRUAE_SalaryType AD_Reference_ID=1000230 */
-        public static int VAHRUAE_SALARYTYPE_AD_Reference_ID = 1000230;
+        /** VAHRUAE_SalaryType VAF_Control_Ref_ID=1000230 */
+        public static int VAHRUAE_SALARYTYPE_VAF_Control_Ref_ID = 1000230;
         /** Daily = DA */
         public static String VAHRUAE_SALARYTYPE_Daily = "DA";
         /** Fort Night = FN */
@@ -2538,8 +2538,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("UNIVREGNO");
         }
 
-        /** VENDOR_NAME AD_Reference_ID=192 */
-        public static int VENDOR_NAME_AD_Reference_ID = 192;
+        /** VENDOR_NAME VAF_Control_Ref_ID=192 */
+        public static int VENDOR_NAME_VAF_Control_Ref_ID = 192;
         /** Set VENDOR_NAME.
         @param VENDOR_NAME VENDOR_NAME */
         public void SetVENDOR_NAME(int VENDOR_NAME)
@@ -2816,8 +2816,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VA009_PO_PaymentMethod_ID AD_Reference_ID=1000613 */
-        public static int VA009_PO_PAYMENTMETHOD_ID_AD_Reference_ID = 1000613;
+        /** VA009_PO_PaymentMethod_ID VAF_Control_Ref_ID=1000613 */
+        public static int VA009_PO_PAYMENTMETHOD_ID_VAF_Control_Ref_ID = 1000613;
         /** Set PO Payment Method.
             @param VA009_PO_PaymentMethod_ID The way that a buyer choose to pay the seller of a good or service. */
         public void SetVA009_PO_PaymentMethod_ID(int VA009_PO_PaymentMethod_ID)
@@ -2857,8 +2857,8 @@ namespace VAdvantage.Model
         }
         //----------------------------------------------------------
 
-        /** VA025_DiscountCalculation AD_Reference_ID=1000487 */
-        public static int VA025_DISCOUNTCALCULATION_AD_Reference_ID = 1000487;/** Combination and Value = C1 */
+        /** VA025_DiscountCalculation VAF_Control_Ref_ID=1000487 */
+        public static int VA025_DISCOUNTCALCULATION_VAF_Control_Ref_ID = 1000487;/** Combination and Value = C1 */
         public static String VA025_DISCOUNTCALCULATION_CombinationAndValue = "C1";/** Value and Combination = C2 */
         public static String VA025_DISCOUNTCALCULATION_ValueAndCombination = "C2";/** Combination = C3 */
         public static String VA025_DISCOUNTCALCULATION_Combination = "C3";/** Is test a valid value.
@@ -2877,8 +2877,8 @@ namespace VAdvantage.Model
         public void SetVA025_IsDiscountPerUnit(Boolean VA025_IsDiscountPerUnit) { Set_Value("VA025_IsDiscountPerUnit", VA025_IsDiscountPerUnit); }/** Get Apply Discount Per Unit.
         @return Apply Discount Per Unit */
         public Boolean IsVA025_IsDiscountPerUnit() { Object oo = Get_Value("VA025_IsDiscountPerUnit"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** VA025_PromotionalDiscount AD_Reference_ID=325 */
-        public static int VA025_PROMOTIONALDISCOUNT_AD_Reference_ID = 325;/** Set Promotional Discount Schema.
+        /** VA025_PromotionalDiscount VAF_Control_Ref_ID=325 */
+        public static int VA025_PROMOTIONALDISCOUNT_VAF_Control_Ref_ID = 325;/** Set Promotional Discount Schema.
         @param VA025_PromotionalDiscount Promotional Discount Schema */
         public void SetVA025_PromotionalDiscount(int VA025_PromotionalDiscount) { Set_Value("VA025_PromotionalDiscount", VA025_PromotionalDiscount); }/** Get Promotional Discount Schema.
         @return Promotional Discount Schema */
@@ -2917,8 +2917,8 @@ namespace VAdvantage.Model
         public void SetIsApplicableonARReceipt(Boolean IsApplicableonARReceipt) { Set_Value("IsApplicableonARReceipt", IsApplicableonARReceipt); }/** Get Withholding applicable on AR Receipt.
 @return This field represents that withholding tax to be calculated on the AR Receipt. */
         public Boolean IsApplicableonARReceipt() { Object oo = Get_Value("IsApplicableonARReceipt"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** AP_WithholdingTax_ID AD_Reference_ID=1000228 */
-        public static int AP_WITHHOLDINGTAX_ID_AD_Reference_ID = 1000228;/** Set AP Withholding Tax.
+        /** AP_WithholdingTax_ID VAF_Control_Ref_ID=1000228 */
+        public static int AP_WITHHOLDINGTAX_ID_VAF_Control_Ref_ID = 1000228;/** Set AP Withholding Tax.
 @param AP_WithholdingTax_ID AP Withholding Tax */
         public void SetAP_WithholdingTax_ID(int AP_WithholdingTax_ID)
         {

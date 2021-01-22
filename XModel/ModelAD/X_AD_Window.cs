@@ -11,16 +11,16 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Window
+    /** Generated Model for VAF_Screen
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Window : PO
+    public class X_VAF_Screen : PO
     {
-        public X_AD_Window(Context ctx, int AD_Window_ID, Trx trxName) : base(ctx, AD_Window_ID, trxName)
+        public X_VAF_Screen(Context ctx, int VAF_Screen_ID, Trx trxName) : base(ctx, VAF_Screen_ID, trxName)
         {
-            /** if (AD_Window_ID == 0)
+            /** if (VAF_Screen_ID == 0)
 {
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetEntityType (null);	// U
 SetIsBetaFunctionality (false);
 SetIsDefault (false);
@@ -29,11 +29,11 @@ SetWindowType (null);	// M
 }
              */
         }
-        public X_AD_Window(Ctx ctx, int AD_Window_ID, Trx trxName) : base(ctx, AD_Window_ID, trxName)
+        public X_VAF_Screen(Ctx ctx, int VAF_Screen_ID, Trx trxName) : base(ctx, VAF_Screen_ID, trxName)
         {
-            /** if (AD_Window_ID == 0)
+            /** if (VAF_Screen_ID == 0)
 {
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetEntityType (null);	// U
 SetIsBetaFunctionality (false);
 SetIsDefault (false);
@@ -47,7 +47,7 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_Screen(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -55,7 +55,7 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_Screen(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -63,13 +63,13 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+        public X_VAF_Screen(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Window()
+        static X_VAF_Screen()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -78,12 +78,12 @@ SetWindowType (null);	// M
         //static long serialVersionUID 27562514366388L;
         /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
         public static long updatedMS = 1280389049599L;
-        /** AD_Table_ID=105 */
+        /** VAF_TableView_ID=105 */
         public static int Table_ID;
         // =105;
 
-        /** TableName=AD_Window */
-        public static String Table_Name = "AD_Window";
+        /** TableName=VAF_Screen */
+        public static String Table_Name = "VAF_Screen";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -117,69 +117,69 @@ SetWindowType (null);	// M
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Window[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Screen[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set System Color.
-@param AD_Color_ID Color for backgrounds or indicators */
-        public void SetAD_Color_ID(int AD_Color_ID)
+@param VAF_Colour_ID Color for backgrounds or indicators */
+        public void SetVAF_Colour_ID(int VAF_Colour_ID)
         {
-            if (AD_Color_ID <= 0) Set_Value("AD_Color_ID", null);
+            if (VAF_Colour_ID <= 0) Set_Value("VAF_Colour_ID", null);
             else
-                Set_Value("AD_Color_ID", AD_Color_ID);
+                Set_Value("VAF_Colour_ID", VAF_Colour_ID);
         }
         /** Get System Color.
 @return Color for backgrounds or indicators */
-        public int GetAD_Color_ID()
+        public int GetVAF_Colour_ID()
         {
-            Object ii = Get_Value("AD_Color_ID");
+            Object ii = Get_Value("VAF_Colour_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Context Area.
-@param AD_CtxArea_ID Business Domain Area Terminology */
-        public void SetAD_CtxArea_ID(int AD_CtxArea_ID)
+@param VAF_ContextScope_ID Business Domain Area Terminology */
+        public void SetVAF_ContextScope_ID(int VAF_ContextScope_ID)
         {
-            if (AD_CtxArea_ID <= 0) Set_Value("AD_CtxArea_ID", null);
+            if (VAF_ContextScope_ID <= 0) Set_Value("VAF_ContextScope_ID", null);
             else
-                Set_Value("AD_CtxArea_ID", AD_CtxArea_ID);
+                Set_Value("VAF_ContextScope_ID", VAF_ContextScope_ID);
         }
         /** Get Context Area.
 @return Business Domain Area Terminology */
-        public int GetAD_CtxArea_ID()
+        public int GetVAF_ContextScope_ID()
         {
-            Object ii = Get_Value("AD_CtxArea_ID");
+            Object ii = Get_Value("VAF_ContextScope_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Image.
-@param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
 @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Window.
-@param AD_Window_ID Data entry or display window */
-        public void SetAD_Window_ID(int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+        public void SetVAF_Screen_ID(int VAF_Screen_ID)
         {
-            if (AD_Window_ID < 1) throw new ArgumentException("AD_Window_ID is mandatory.");
-            Set_ValueNoCheck("AD_Window_ID", AD_Window_ID);
+            if (VAF_Screen_ID < 1) throw new ArgumentException("VAF_Screen_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Screen_ID", VAF_Screen_ID);
         }
         /** Get Window.
 @return Data entry or display window */
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            Object ii = Get_Value("AD_Window_ID");
+            Object ii = Get_Value("VAF_Screen_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -201,8 +201,8 @@ SetWindowType (null);	// M
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -364,8 +364,8 @@ SetWindowType (null);	// M
             return Convert.ToInt32(ii);
         }
 
-        /** WindowType AD_Reference_ID=108 */
-        public static int WINDOWTYPE_AD_Reference_ID = 108;
+        /** WindowType VAF_Control_Ref_ID=108 */
+        public static int WINDOWTYPE_VAF_Control_Ref_ID = 108;
         /** Maintain = M */
         public static String WINDOWTYPE_Maintain = "M";
         /** Query Only = Q */

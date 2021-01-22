@@ -167,9 +167,9 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            if (GetAD_Org_ID() != 0)
+            if (GetVAF_Org_ID() != 0)
             {
-                SetAD_Org_ID(0);
+                SetVAF_Org_ID(0);
             }
             return true;
         }	

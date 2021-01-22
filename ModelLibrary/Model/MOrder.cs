@@ -97,7 +97,7 @@ namespace VAdvantage.Model
 
 
             to.Set_TrxName(trxName);
-            PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
+            PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("C_Order_ID", I_ZERO);
             to.Set_ValueNoCheck("DocumentNo", null);
             //
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
                 //SI_0625 : Link Organization Functionality
                 // set counter BP Org
                 if (from.GetCounterOrgID() > 0)
-                    to.SetAD_Org_ID(from.GetCounterOrgID());
+                    to.SetVAF_Org_ID(from.GetCounterOrgID());
 
                 //set warehouse
                 if (from.GetCounterWarehouseID() > 0)
@@ -154,11 +154,11 @@ namespace VAdvantage.Model
                      * 3. check 3rd with same currency , (*) Org , same client and IsDefault as True
                      * 4. check 3rd with same currency , (*) Org , same client and IsDefault as False */
                     string sql = @"SELECT M_PriceList_ID FROM M_PriceList 
-                               WHERE IsActive = 'Y' AND AD_Client_ID IN ( " + to.GetAD_Client_ID() + @" , 0 ) " +
+                               WHERE IsActive = 'Y' AND VAF_Client_ID IN ( " + to.GetVAF_Client_ID() + @" , 0 ) " +
                                     @" AND C_Currency_ID = " + to.GetC_Currency_ID() +
-                                    @" AND AD_Org_ID IN ( " + to.GetAD_Org_ID() + @" , 0 ) " +
+                                    @" AND VAF_Org_ID IN ( " + to.GetVAF_Org_ID() + @" , 0 ) " +
                                     @" AND IsSOPriceList = '" + (to.IsSOTrx() ? "Y" : "N") + "' " +
-                                    @" ORDER BY AD_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , AD_Client_ID DESC";
+                                    @" ORDER BY VAF_Org_ID DESC , IsDefault DESC,  M_PriceList_ID DESC , VAF_Client_ID DESC";
                     int priceListId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
                     if (priceListId > 0)
                     {
@@ -279,8 +279,8 @@ namespace VAdvantage.Model
         {
 
 
-            SetAD_Client_ID(project.GetAD_Client_ID());
-            SetAD_Org_ID(project.GetAD_Org_ID());
+            SetVAF_Client_ID(project.GetVAF_Client_ID());
+            SetVAF_Org_ID(project.GetVAF_Org_ID());
             SetC_Campaign_ID(project.GetC_Campaign_ID());
             SetSalesRep_ID(project.GetSalesRep_ID());
             //
@@ -295,7 +295,7 @@ namespace VAdvantage.Model
             //
             SetC_BPartner_ID(project.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(project.GetC_BPartner_Location_ID());
-            SetAD_User_ID(project.GetAD_User_ID());
+            SetVAF_UserContact_ID(project.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(project.GetM_Warehouse_ID());
             SetM_PriceList_ID(project.GetM_PriceList_ID());
@@ -329,12 +329,12 @@ namespace VAdvantage.Model
         }
 
         /*	Overwrite Client/Org if required
-        * 	@param AD_Client_ID client
-        * 	@param AD_Org_ID org
+        * 	@param VAF_Client_ID client
+        * 	@param VAF_Org_ID org
         */
-        public new void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        public new void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         {
-            base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
                 MUser[] contacts = bp.GetContacts(false);
                 if (contacts != null && contacts.Length == 1)
                 {
-                    SetAD_User_ID(contacts[0].GetAD_User_ID());
+                    SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
                 }
             }
             catch
@@ -473,19 +473,19 @@ namespace VAdvantage.Model
             if (IsReturnTrx())
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " lship.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
                 + " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
                 + " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             bool isSOTrx = IsSOTrx();
@@ -549,14 +549,14 @@ namespace VAdvantage.Model
                         SetBill_Location_ID(shipTo_ID);
 
                     //	Contact - overwritten by InfoBP selection
-                    int contID = Utility.Util.GetValueOfInt(dr["AD_User_ID"].ToString());
+                    int contID = Utility.Util.GetValueOfInt(dr["VAF_UserContact_ID"].ToString());
                     if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == C_BPartner_ID)
                     {
-                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
+                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                         if (cont.Length > 0)
                             contID = int.Parse(cont);
                     }
-                    SetAD_User_ID(contID);
+                    SetVAF_UserContact_ID(contID);
                     SetBill_User_ID(contID);
 
                     //	CreditAvailable 
@@ -662,17 +662,17 @@ namespace VAdvantage.Model
             if (IsReturnTrx())
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "c.AD_User_ID,"
+                + "c.VAF_UserContact_ID,"
                 + "p.PO_PriceList_ID, p.PaymentRulePO, p.PO_PaymentTerm_ID,"
                 + "lbill.C_BPartner_Location_ID AS Bill_Location_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             bool isSOTrx = IsSOTrx();
@@ -711,10 +711,10 @@ namespace VAdvantage.Model
                         SetBill_Location_ID(bill_Location_ID);
 
                     //	Contact - overwritten by InfoBP selection
-                    int contID = Utility.Util.GetValueOfInt(dr["AD_User_ID"].ToString());
+                    int contID = Utility.Util.GetValueOfInt(dr["VAF_UserContact_ID"].ToString());
                     if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == bill_BPartner_ID)
                     {
-                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
+                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                         if (cont.Length > 0)
                             contID = int.Parse(cont);
                     }
@@ -809,11 +809,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Business Partner Contact (Ship+Bill)
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
-        public new void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user</param>
+        public new void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            base.SetAD_User_ID(AD_User_ID);
-            base.SetBill_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
+            base.SetBill_User_ID(VAF_UserContact_ID);
         }
 
         /*	Set Ship Business Partner
@@ -835,11 +835,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Ship Business Partner Contact
-         *	@param AD_User_ID user
+         *	@param VAF_UserContact_ID user
          */
-        public void SetShip_User_ID(int AD_User_ID)
+        public void SetShip_User_ID(int VAF_UserContact_ID)
         {
-            base.SetAD_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
 
@@ -927,14 +927,14 @@ namespace VAdvantage.Model
 
             String sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
                 + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
-                + "s.AD_Sequence_ID,d.IsSOTrx,d.IsReturnTrx "               //	7..9
+                + "s.VAF_Record_Seq_ID,d.IsSOTrx,d.IsReturnTrx "               //	7..9
                 + "FROM C_DocType d "
-                + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+                + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
                 + "WHERE C_DocType_ID=";	//	#1
             DataTable dt = null;
             try
             {
-                int AD_Sequence_ID = 0;
+                int VAF_Record_Seq_ID = 0;
 
                 IDataReader idr = null;
                 //	Get old AD_SeqNo for comparison
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
                     idr.Close();
                     foreach (DataRow dr in dt.Rows)
                     {
-                        AD_Sequence_ID = Utility.Util.GetValueOfInt(dr[5].ToString());
+                        VAF_Record_Seq_ID = Utility.Util.GetValueOfInt(dr[5].ToString());
                     }
                     dt = null;
                 }
@@ -1021,10 +1021,10 @@ namespace VAdvantage.Model
                     //	DocumentNo
                     if (dr[3].ToString().Equals("Y"))			//	IsDocNoControlled
                     {
-                        if (!newDocNo && AD_Sequence_ID != Utility.Util.GetValueOfInt(dr[6].ToString()))
+                        if (!newDocNo && VAF_Record_Seq_ID != Utility.Util.GetValueOfInt(dr[6].ToString()))
                             newDocNo = true;
                         if (newDocNo)
-                            if (Ini.IsPropertyBool(Ini._VIENNASYS) && Env.GetContext().GetAD_Client_ID() < 1000000)
+                            if (Ini.IsPropertyBool(Ini._VIENNASYS) && Env.GetContext().GetVAF_Client_ID() < 1000000)
                             {
                                 SetDocumentNo("<" + dr[5].ToString() + ">");
                             }
@@ -1121,13 +1121,13 @@ namespace VAdvantage.Model
             try
             {
                 String sql = "SELECT C_DocType_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID IN (0," + GetAD_Org_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0," + GetVAF_Org_ID()
                     + ") AND DocSubTypeSO='" + DocSubTypeSO_x + "' AND IsReturnTrx='N' "
-                    + "ORDER BY AD_Org_ID DESC, IsDefault DESC";
+                    + "ORDER BY VAF_Org_ID DESC, IsDefault DESC";
                 int C_DocType_ID = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, null));
                 if (C_DocType_ID <= 0)
                 {
-                    log.Severe("Not found for AD_Client_ID=" + GetAD_Client_ID() + ", SubType=" + DocSubTypeSO_x);
+                    log.Severe("Not found for VAF_Client_ID=" + GetVAF_Client_ID() + ", SubType=" + DocSubTypeSO_x);
                 }
                 else
                 {
@@ -1181,13 +1181,13 @@ namespace VAdvantage.Model
                 }
                 //	PO
                 String sql = "SELECT C_DocType_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID IN (0," + GetAD_Org_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0," + GetVAF_Org_ID()
                     + ") AND DocBaseType='POO' AND IsReturnTrx='N' "
-                    + "ORDER BY AD_Org_ID DESC, IsDefault DESC";
+                    + "ORDER BY VAF_Org_ID DESC, IsDefault DESC";
                 int C_DocType_ID = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, null));
                 if (C_DocType_ID <= 0)
                 {
-                    log.Severe("No POO found for AD_Client_ID=" + GetAD_Client_ID());
+                    log.Severe("No POO found for VAF_Client_ID=" + GetVAF_Client_ID());
                 }
                 else
                 {
@@ -1224,13 +1224,13 @@ namespace VAdvantage.Model
                 }
                 //	PO
                 String sql = "SELECT C_DocType_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID IN (0," + GetAD_Org_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0," + GetVAF_Org_ID()
                     + ") AND DocBaseType='POO' AND IsReturnTrx='N' AND IsReleaseDocument='" + Released + "'"
-                    + " ORDER BY AD_Org_ID DESC, IsDefault DESC";
+                    + " ORDER BY VAF_Org_ID DESC, IsDefault DESC";
                 int C_DocType_ID = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, null));
                 if (C_DocType_ID <= 0)
                 {
-                    log.Severe("No POO found for AD_Client_ID=" + GetAD_Client_ID());
+                    log.Severe("No POO found for VAF_Client_ID=" + GetVAF_Client_ID());
                 }
                 else
                 {
@@ -1278,7 +1278,7 @@ namespace VAdvantage.Model
                     }
 
                     MOrderLine line = new MOrderLine(this);
-                    PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+                    PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                     line.SetC_Order_ID(GetC_Order_ID());
                     line.SetOrder(this);
@@ -1564,7 +1564,7 @@ namespace VAdvantage.Model
                 SetOrig_InOut_ID(-1);
                 SetC_BPartner_ID(origOrder.GetC_BPartner_ID());
                 SetC_BPartner_Location_ID(origOrder.GetC_BPartner_Location_ID());
-                SetAD_User_ID(origOrder.GetAD_User_ID());
+                SetVAF_UserContact_ID(origOrder.GetVAF_UserContact_ID());
                 SetBill_BPartner_ID(origOrder.GetBill_BPartner_ID());
                 SetBill_Location_ID(origOrder.GetBill_Location_ID());
                 SetBill_User_ID(origOrder.GetBill_User_ID());
@@ -1638,7 +1638,7 @@ namespace VAdvantage.Model
                 SetC_Project_ID(origInOut.GetC_Project_ID());
                 SetC_Campaign_ID(origInOut.GetC_Campaign_ID());
                 SetC_Activity_ID(origInOut.GetC_Activity_ID());
-                SetAD_OrgTrx_ID(origInOut.GetAD_OrgTrx_ID());
+                SetVAF_OrgTrx_ID(origInOut.GetVAF_OrgTrx_ID());
                 SetUser1_ID(origInOut.GetUser1_ID());
                 SetUser2_ID(origInOut.GetUser2_ID());
             }
@@ -2185,18 +2185,18 @@ namespace VAdvantage.Model
             try
             {
                 //	Client/Org Check
-                if (GetAD_Org_ID() == 0)
+                if (GetVAF_Org_ID() == 0)
                 {
-                    int context_AD_Org_ID = GetCtx().GetAD_Org_ID();
-                    if (context_AD_Org_ID != 0)
+                    int context_VAF_Org_ID = GetCtx().GetVAF_Org_ID();
+                    if (context_VAF_Org_ID != 0)
                     {
-                        SetAD_Org_ID(context_AD_Org_ID);
-                        log.Warning("Changed Org to Ctx=" + context_AD_Org_ID);
+                        SetVAF_Org_ID(context_VAF_Org_ID);
+                        log.Warning("Changed Org to Ctx=" + context_VAF_Org_ID);
                     }
                 }
-                if (GetAD_Client_ID() == 0)
+                if (GetVAF_Client_ID() == 0)
                 {
-                    _processMsg = "AD_Client_ID = 0";
+                    _processMsg = "VAF_Client_ID = 0";
                     return false;
                 }
 
@@ -2207,17 +2207,17 @@ namespace VAdvantage.Model
                 //	Default Warehouse
                 if (GetM_Warehouse_ID() == 0)
                 {
-                    MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+                    MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
                     SetM_Warehouse_ID(org.GetM_Warehouse_ID());
                 }
 
                 //	Warehouse Org
                 MWarehouse wh = null;
                 if (newRecord
-                    || Is_ValueChanged("AD_Org_ID") || Is_ValueChanged("M_Warehouse_ID"))
+                    || Is_ValueChanged("VAF_Org_ID") || Is_ValueChanged("M_Warehouse_ID"))
                 {
                     wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
-                    if (wh.GetAD_Org_ID() != GetAD_Org_ID())
+                    if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
                     {
                         //Arpit 20th Nov,2017 issue No.115 -Not to save record if WareHouse is conflictiong with Organization
                         log.SaveWarning("WarehouseOrgConflict", "");
@@ -2266,7 +2266,7 @@ namespace VAdvantage.Model
 
                 //	No Partner Info - set Template
                 if (GetC_BPartner_ID() == 0)
-                    SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
+                    SetBPartner(MBPartner.GetTemplate(GetCtx(), GetVAF_Client_ID()));
                 if (GetC_BPartner_Location_ID() == 0)
                     SetBPartner(MBPartner.Get(GetCtx(), GetC_BPartner_ID()));
                 //	No Bill - get from Ship
@@ -2304,7 +2304,7 @@ namespace VAdvantage.Model
                 {
                     string test = IsSOTrx() ? "Y" : "N";
                     int ii = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT M_PriceList_ID FROM M_PriceList "
-                        + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND IsSOPriceList='" + test
+                        + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND IsSOPriceList='" + test
                         + "' ORDER BY IsDefault DESC", null, null));
                     if (ii != 0)
                         SetM_PriceList_ID(ii);
@@ -2340,7 +2340,7 @@ namespace VAdvantage.Model
                         SetC_PaymentTerm_ID(ii);
                     else
                     {
-                        String sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND IsDefault='Y'";
+                        String sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND IsDefault='Y'";
                         ii = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, null));
                         if (ii != 0)
                             SetC_PaymentTerm_ID(ii);
@@ -2520,7 +2520,7 @@ namespace VAdvantage.Model
                     }
 
                     //	Sync Lines
-                    AfterSaveSync("AD_Org_ID");
+                    AfterSaveSync("VAF_Org_ID");
                     AfterSaveSync("C_BPartner_ID");
                     AfterSaveSync("C_BPartner_Location_ID");
                     AfterSaveSync("DateOrdered");
@@ -2539,7 +2539,7 @@ namespace VAdvantage.Model
                     {
                         Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
                             GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                         string retMsg = "";
@@ -2696,7 +2696,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -2704,7 +2704,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2863,7 +2863,7 @@ namespace VAdvantage.Model
                         }
                         Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
                             GetVAPOS_CreditAmt(), GetC_Currency_ID(), GetDateOrdered(),
-                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
                         if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
                         {
@@ -2897,7 +2897,7 @@ namespace VAdvantage.Model
                         //}
                         Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
                            GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-                            GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                            GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         //if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
                         //{
                         //    _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
@@ -3064,8 +3064,8 @@ namespace VAdvantage.Model
                     {
                         if (header_M_Warehouse_ID != line.GetM_Warehouse_ID())
                             line.SetM_Warehouse_ID(header_M_Warehouse_ID);
-                        if (GetAD_Org_ID() != line.GetAD_Org_ID())
-                            line.SetAD_Org_ID(GetAD_Org_ID());
+                        if (GetVAF_Org_ID() != line.GetVAF_Org_ID())
+                            line.SetVAF_Org_ID(GetVAF_Org_ID());
                     }
                     //	Binding
                     Decimal target = binding ? line.GetQtyOrdered() : Env.ZERO;
@@ -3840,7 +3840,7 @@ namespace VAdvantage.Model
                 //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
-                //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
+                //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from VAF_ModuleInfo Where Prefix='VAPOS_'"));
                 //    if (countVAPOS > 0)
                 //    {
                 //        MPriceList priceLst = new MPriceList(GetCtx(), GetM_PriceList_ID(), null);
@@ -3930,16 +3930,16 @@ namespace VAdvantage.Model
             sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
                   GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
                 FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
-                INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
-                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")
+                INNER JOIN VAF_ClientDetail ON VAF_ClientDetail.VAF_Client_ID = GL_Budget.VAF_Client_ID
+                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.VAF_Org_ID IN (0 , " + GetVAF_Org_ID() + @")
                    AND GL_BudgetControl.CommitmentType IN('B', 'C') AND
                   ((GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
                   (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN C_Year ON C_Year.C_Year_ID = C_Period.C_Year_ID
-                  WHERE C_Period.IsActive = 'Y'  AND C_Year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                  WHERE C_Period.IsActive = 'Y'  AND C_Year.C_Calendar_ID = VAF_ClientDetail.C_Calendar_ID
                   AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.StartDate AND C_Period.EndDate))
                 OR(GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
                   (SELECT C_Period.C_Year_ID FROM C_Period INNER JOIN C_Year ON C_Year.C_Year_ID = C_Period.C_Year_ID
-                  WHERE C_Period.IsActive = 'Y'   AND C_Year.C_Calendar_ID = AD_ClientInfo.C_Calendar_ID
+                  WHERE C_Period.IsActive = 'Y'   AND C_Year.C_Calendar_ID = VAF_ClientDetail.C_Calendar_ID
                 AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.StartDate AND C_Period.EndDate) ) ) 
                 AND(SELECT COUNT(Fact_Acct_ID) FROM Fact_Acct
                 WHERE GL_Budget_ID = GL_Budget.GL_Budget_ID
@@ -4004,7 +4004,7 @@ namespace VAdvantage.Model
         /// <returns>DataSet of Posting Records</returns>
         private DataSet BudgetControlling()
         {
-            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_181'")); // Purchase Order
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_181'")); // Purchase Order
             DataSet result = new DataSet();
             Type type = null;
             MethodInfo methodInfo = null;
@@ -4019,11 +4019,11 @@ namespace VAdvantage.Model
                     if (parameters.Length == 8)
                     {
                         object[] parametersArray = new object[] { GetCtx(),
-                                                                Util.GetValueOfInt(GetAD_Client_ID()),
-                                                                Util.GetValueOfInt(X_C_Order.Table_ID),//MTable.Get(GetCtx() , "C_Order").GetAD_Table_ID()
+                                                                Util.GetValueOfInt(GetVAF_Client_ID()),
+                                                                Util.GetValueOfInt(X_C_Order.Table_ID),//MTable.Get(GetCtx() , "C_Order").GetVAF_TableView_ID()
                                                                 Util.GetValueOfInt(GetC_Order_ID()),
                                                                 true,
-                                                                Util.GetValueOfInt(GetAD_Org_ID()),
+                                                                Util.GetValueOfInt(GetVAF_Org_ID()),
                                                                 ad_window_id,
                                                                 Util.GetValueOfInt(GetC_DocTypeTarget_ID()) };
                         result = (DataSet)methodInfo.Invoke(null, parametersArray);
@@ -4056,14 +4056,14 @@ namespace VAdvantage.Model
             if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
                                               (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
-                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.VAF_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
                                               (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
                                               (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
                                               (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
-                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
                                               (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
                                               (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
@@ -4082,14 +4082,14 @@ namespace VAdvantage.Model
                 _budgetControl = _listBudgetControl.Find(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
                                               (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
-                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.VAF_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
                                               (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
                                               (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
                                               (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
-                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
                                               (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
                                               (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
@@ -4147,8 +4147,8 @@ namespace VAdvantage.Model
         public String GetNonSelectedDimension(List<String> selectedDimension)
         {
             String where = "";
-            String sql = @" SELECT AD_Ref_List.Value FROM AD_Reference INNER JOIN AD_Ref_List ON AD_Ref_List.AD_Reference_ID = AD_Reference.AD_Reference_ID 
-                            WHERE  AD_Reference.AD_Reference_ID=181 AND AD_Ref_List.Value NOT IN ('AC' , 'SA')";
+            String sql = @" SELECT VAF_CtrlRef_List.Value FROM VAF_Control_Ref INNER JOIN VAF_CtrlRef_List ON VAF_CtrlRef_List.VAF_Control_Ref_ID = VAF_Control_Ref.VAF_Control_Ref_ID 
+                            WHERE  VAF_Control_Ref.VAF_Control_Ref_ID=181 AND VAF_CtrlRef_List.Value NOT IN ('AC' , 'SA')";
             DataSet dsElementType = DB.ExecuteDataset(sql, null, null);
             if (dsElementType != null && dsElementType.Tables.Count > 0)
             {
@@ -4187,7 +4187,7 @@ namespace VAdvantage.Model
                     else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx)
                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx))
                     {
-                        where += " AND NVL(AD_OrgTrx_ID, 0) = 0 ";
+                        where += " AND NVL(VAF_OrgTrx_ID, 0) = 0 ";
                     }
                     else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Project)
                        && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project))
@@ -4272,14 +4272,14 @@ namespace VAdvantage.Model
             if (!_listBudgetControl.Exists(x => (x.GL_Budget_ID == budget_id) &&
                                              (x.GL_BudgetControl_ID == budgetControl_Id) &&
                                              (x.Account_ID == account_id) &&
-                                             (x.AD_Org_ID == 0) &&
+                                             (x.VAF_Org_ID == 0) &&
                                              (x.C_BPartner_ID == 0) &&
                                              (x.M_Product_ID == 0) &&
                                              (x.C_Activity_ID == 0) &&
                                              (x.C_LocationFrom_ID == 0) &&
                                              (x.C_LocationTo_ID == 0) &&
                                              (x.C_Campaign_ID == 0) &&
-                                             (x.AD_OrgTrx_ID == 0) &&
+                                             (x.VAF_OrgTrx_ID == 0) &&
                                              (x.C_Project_ID == 0) &&
                                              (x.C_SalesRegion_ID == 0) &&
                                              (x.UserList1_ID == 0) &&
@@ -4300,14 +4300,14 @@ namespace VAdvantage.Model
                 budgetControl.GL_BudgetControl_ID = budgetControl_Id;
                 budgetControl.C_AcctSchema_ID = acctSchema_ID;
                 budgetControl.Account_ID = account_id;
-                budgetControl.AD_Org_ID = 0;
+                budgetControl.VAF_Org_ID = 0;
                 budgetControl.M_Product_ID = 0;
                 budgetControl.C_BPartner_ID = 0;
                 budgetControl.C_Activity_ID = 0;
                 budgetControl.C_LocationFrom_ID = 0;
                 budgetControl.C_LocationTo_ID = 0;
                 budgetControl.C_Campaign_ID = 0;
-                budgetControl.AD_OrgTrx_ID = 0;
+                budgetControl.VAF_OrgTrx_ID = 0;
                 budgetControl.C_Project_ID = 0;
                 budgetControl.C_SalesRegion_ID = 0;
                 budgetControl.UserList1_ID = 0;
@@ -4348,7 +4348,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateOrdered());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -4538,7 +4538,7 @@ namespace VAdvantage.Model
         //Changes by abhishek suggested by lokesh on 7/1/2016
         //public void SaveDayEndRecord(Ctx ctx, int Terminal_ID, string CashAmt, string CreditAmt, int DocType_ID, string[] Tax_ID, string[] TaxAmts, string OrderTotal, string[] DiscountLine)
         //{
-        //    MTable tblDayEnd = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select AD_Table_ID from ad_table where  tablename = 'VAPOS_DayEndReport'")), null);
+        //    MTable tblDayEnd = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReport'")), null);
 
         //    int DayEnd_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreport_id from vapos_dayendreport where to_date(vapos_trxdate, 'DD-MM-YYYY') =to_date(sysdate, 'DD-MM-YYYY') and vapos_posterminal_id=" + Terminal_ID));
         //    if (DayEnd_ID > 0)
@@ -4598,7 +4598,7 @@ namespace VAdvantage.Model
         //        {
         //            for (int j = 0; j < Tax_ID.Length; j++)
         //            {
-        //                MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select AD_Table_ID from ad_table where  tablename = 'VAPOS_DayEndReportTax'")), null);
+        //                MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
         //                int DayEndTax_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreporttax_ID from vapos_dayendreporttax where vapos_dayendreport_id=" + Util.GetValueOfInt(poDayEnd.Get_Value("VAPOS_DayEndReport_ID")) + " and c_tax_id=" + Util.GetValueOfInt(Tax_ID[j])));
         //                if (DayEndTax_ID > 0)
         //                {
@@ -4689,7 +4689,7 @@ namespace VAdvantage.Model
         //            {
         //                for (int j = 0; j < Tax_ID.Length; j++)
         //                {
-        //                    MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select AD_Table_ID from ad_table where  tablename = 'VAPOS_DayEndReportTax'")), null);
+        //                    MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
         //                    int DayEndTax_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreporttax_ID from vapos_dayendreporttax where vapos_dayendreport_id=" + Util.GetValueOfInt(poDayEnd.Get_Value("VAPOS_DayEndReport_ID")) + " and c_tax_id=" + Util.GetValueOfInt(Tax_ID[j])));
         //                    if (DayEndTax_ID > 0)
         //                    {
@@ -4940,7 +4940,7 @@ namespace VAdvantage.Model
                 {
                     if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                     {
-                        string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID = (SELECT AD_Table_ID FROM AD_Table WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
+                        string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_DocType') AND ColumnName = 'VAPOS_OrderType'";
                         int val = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                         if (val > 0)
                         {
@@ -5019,8 +5019,8 @@ namespace VAdvantage.Model
                            FROM M_ContainerStorage s 
                            LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)
                            WHERE NOT EXISTS (SELECT * FROM M_ProductContainer p WHERE isactive = 'N' AND p.M_ProductContainer_ID = NVL(s.M_ProductContainer_ID , 0)) 
-                           AND s.AD_Client_ID= " + oLine.GetAD_Client_ID() + @"
-                           AND s.AD_Org_ID=" + oLine.GetAD_Org_ID() + @"
+                           AND s.VAF_Client_ID= " + oLine.GetVAF_Client_ID() + @"
+                           AND s.VAF_Org_ID=" + oLine.GetVAF_Org_ID() + @"
                            AND s.M_Locator_ID = " + M_Locator_ID + @" 
                            AND s.M_Product_ID=" + oLine.GetM_Product_ID() + @"
                            AND s.Qty > 0 ";
@@ -5364,7 +5364,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetAD_Org_ID());
+            MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
             //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(Get_TrxName()); 
             int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
             if (counterC_BPartner_ID == 0)
@@ -5372,13 +5372,13 @@ namespace VAdvantage.Model
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = MBPartner.get (GetCtx(), getC_BPartner_ID());
             MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
-            int counterAD_Org_ID = bp.GetAD_OrgBP_ID_Int();
-            if (counterAD_Org_ID == 0)
+            int counterVAF_Org_ID = bp.GetVAF_OrgBP_ID_Int();
+            if (counterVAF_Org_ID == 0)
                 return null;
 
             //jz MBPartner counterBP = MBPartner.get (GetCtx(), counterC_BPartner_ID);
             MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterAD_Org_ID, null);
+            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type
@@ -5395,7 +5395,7 @@ namespace VAdvantage.Model
                 return null;
 
             // set counter Businees partner 
-            SetCounterBPartner(counterBP, counterAD_Org_ID, counterOrgInfo.GetM_Warehouse_ID());
+            SetCounterBPartner(counterBP, counterVAF_Org_ID, counterOrgInfo.GetM_Warehouse_ID());
             //	Deep Copy
             // JID_1300: If the PO is created with lines includes Product with attribute set instance, once the counter document is created on completion of PO i.e. SO, 
             // Attribute Set Instance values are not getting fetched into SO lines.
@@ -5974,7 +5974,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetSalesRep_ID();
@@ -6051,6 +6051,28 @@ namespace VAdvantage.Model
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                           WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+
+            //check order id exist on LCDetail or PODetail or SODetail. if exist then not able to reverse the current order 
+            if (_countOrder == 0 && Env.IsModuleInstalled("VA026_"))
+            {
+                sql = @"Select SUM(Result) From (                                                  
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.C_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.VA026_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_PODetail po INNER JOIN VA026_LCDetail lc ON po.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON po.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_SODetail so INNER JOIN VA026_LCDetail lc ON so.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON so.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @") t";
+
+                _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            }
+
             if (_countOrder > 0)
             {
                 return false;
@@ -6122,14 +6144,14 @@ namespace VAdvantage.Model
         public int GL_BudgetControl_ID { get; set; }
         public int C_AcctSchema_ID { get; set; }
         public int Account_ID { get; set; }
-        public int AD_Org_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
         public int M_Product_ID { get; set; }
         public int C_BPartner_ID { get; set; }
         public int C_Activity_ID { get; set; }
         public int C_LocationFrom_ID { get; set; }
         public int C_LocationTo_ID { get; set; }
         public int C_Campaign_ID { get; set; }
-        public int AD_OrgTrx_ID { get; set; }
+        public int VAF_OrgTrx_ID { get; set; }
         public int C_Project_ID { get; set; }
         public int C_SalesRegion_ID { get; set; }
         public int UserElement1_ID { get; set; }

@@ -80,7 +80,7 @@ static X_M_MovementConfirm()
 //static long serialVersionUID 27562514380086L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063297L;
-/** AD_Table_ID=738 */
+/** VAF_TableView_ID=738 */
 public static int Table_ID;
  // =738;
 
@@ -154,8 +154,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -212,8 +212,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */

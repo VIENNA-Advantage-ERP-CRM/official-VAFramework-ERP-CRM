@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514366953L;
         /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
         public static long updatedMS = 1280389050164L;
-        /** AD_Table_ID=539 */
+        /** VAF_TableView_ID=539 */
         public static int Table_ID;
         // =539;
 
@@ -132,18 +132,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -214,8 +214,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("AssetServiceDate");
         }
 
-        /** C_BPartnerSR_ID AD_Reference_ID=353 */
-        public static int C_BPARTNERSR_ID_AD_Reference_ID = 353;
+        /** C_BPartnerSR_ID VAF_Control_Ref_ID=353 */
+        public static int C_BPARTNERSR_ID_VAF_Control_Ref_ID = 353;
         /** Set BPartner (Agent).
         @param C_BPartnerSR_ID Business Partner (Agent or Sales Rep) */
         public void SetC_BPartnerSR_ID(int C_BPartnerSR_ID)
@@ -506,8 +506,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("LeaseTerminationDate");
         }
 
-        /** Lease_BPartner_ID AD_Reference_ID=192 */
-        public static int LEASE_BPARTNER_ID_AD_Reference_ID = 192;
+        /** Lease_BPartner_ID VAF_Control_Ref_ID=192 */
+        public static int LEASE_BPARTNER_ID_VAF_Control_Ref_ID = 192;
         /** Set Lessor.
         @param Lease_BPartner_ID The Business Partner who rents or leases */
         public void SetLease_BPartner_ID(int Lease_BPartner_ID)
@@ -718,8 +718,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SerNo");
         }
 
-        /** SystemStatus AD_Reference_ID=374 */
-        public static int SYSTEMSTATUS_AD_Reference_ID = 374;
+        /** SystemStatus VAF_Control_Ref_ID=374 */
+        public static int SYSTEMSTATUS_VAF_Control_Ref_ID = 374;
         /** Evaluation = E */
         public static String SYSTEMSTATUS_Evaluation = "E";
         /** Implementation = I */
@@ -885,8 +885,8 @@ namespace VAdvantage.Model
 
         ////////// Neha 9/March/2017
 
-        /** VAFAM_AssetType AD_Reference_ID=1000348 */
-        public static int VAFAM_ASSETTYPE_AD_Reference_ID = 1000348;/** Current Asset = C */
+        /** VAFAM_AssetType VAF_Control_Ref_ID=1000348 */
+        public static int VAFAM_ASSETTYPE_VAF_Control_Ref_ID = 1000348;/** Current Asset = C */
         public static String VAFAM_ASSETTYPE_CurrentAsset = "C";/** Intangible Asset = I */
         public static String VAFAM_ASSETTYPE_IntangibleAsset = "I";/** Tangible Asset = T */
         public static String VAFAM_ASSETTYPE_TangibleAsset = "T";/** Is test a valid value.

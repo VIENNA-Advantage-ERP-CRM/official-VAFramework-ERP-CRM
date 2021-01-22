@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_TreeBar
+/** Generated Model for VAF_TreeInfoBar
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_TreeBar : PO
+public class X_VAF_TreeInfoBar : PO
 {
-public X_AD_TreeBar (Context ctx, int AD_TreeBar_ID, Trx trxName) : base (ctx, AD_TreeBar_ID, trxName)
+public X_VAF_TreeInfoBar (Context ctx, int VAF_TreeInfoBar_ID, Trx trxName) : base (ctx, VAF_TreeInfoBar_ID, trxName)
 {
-/** if (AD_TreeBar_ID == 0)
+/** if (VAF_TreeInfoBar_ID == 0)
 {
-SetAD_Tree_ID (0);
-SetAD_User_ID (0);
+SetVAF_TreeInfo_ID (0);
+SetVAF_UserContact_ID (0);
 SetNode_ID (0);
 }
  */
 }
-public X_AD_TreeBar (Ctx ctx, int AD_TreeBar_ID, Trx trxName) : base (ctx, AD_TreeBar_ID, trxName)
+public X_VAF_TreeInfoBar (Ctx ctx, int VAF_TreeInfoBar_ID, Trx trxName) : base (ctx, VAF_TreeInfoBar_ID, trxName)
 {
-/** if (AD_TreeBar_ID == 0)
+/** if (VAF_TreeInfoBar_ID == 0)
 {
-SetAD_Tree_ID (0);
-SetAD_User_ID (0);
+SetVAF_TreeInfo_ID (0);
+SetVAF_UserContact_ID (0);
 SetNode_ID (0);
 }
  */
@@ -41,7 +41,7 @@ SetNode_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeBar (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TreeInfoBar (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_TreeBar (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeBar (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TreeInfoBar (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_TreeBar (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeBar (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TreeInfoBar (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_TreeBar()
+static X_VAF_TreeInfoBar()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_TreeBar()
 //static long serialVersionUID 27562514364602L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047813L;
-/** AD_Table_ID=456 */
+/** VAF_TableView_ID=456 */
 public static int Table_ID;
  // =456;
 
-/** TableName=AD_TreeBar */
-public static String Table_Name="AD_TreeBar";
+/** TableName=VAF_TreeInfoBar */
+public static String Table_Name="VAF_TreeInfoBar";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_TreeBar[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TreeInfoBar[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tree.
-@param AD_Tree_ID Identifies a Tree */
-public void SetAD_Tree_ID (int AD_Tree_ID)
+@param VAF_TreeInfo_ID Identifies a Tree */
+public void SetVAF_TreeInfo_ID (int VAF_TreeInfo_ID)
 {
-if (AD_Tree_ID < 1) throw new ArgumentException ("AD_Tree_ID is mandatory.");
-Set_ValueNoCheck ("AD_Tree_ID", AD_Tree_ID);
+if (VAF_TreeInfo_ID < 1) throw new ArgumentException ("VAF_TreeInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfo_ID", VAF_TreeInfo_ID);
 }
 /** Get Tree.
 @return Identifies a Tree */
-public int GetAD_Tree_ID() 
+public int GetVAF_TreeInfo_ID() 
 {
-Object ii = Get_Value("AD_Tree_ID");
+Object ii = Get_Value("VAF_TreeInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Node_ID.
 @param Node_ID Node_ID */

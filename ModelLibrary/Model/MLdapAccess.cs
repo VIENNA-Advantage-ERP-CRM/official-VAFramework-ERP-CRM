@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLdapAccess
  * Purpose        : MLdap Access Model
- * Class Used     : X_AD_LdapAccess
+ * Class Used     : X_VAF_LdapRights
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -23,17 +23,17 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLdapAccess : X_AD_LdapAccess
+    public class MLdapAccess : X_VAF_LdapRights
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_LdapAccess_ID">id</param>
+        /// <param name="VAF_LdapRights_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MLdapAccess(Ctx ctx, int AD_LdapAccess_ID, Trx trxName)
-            : base(ctx, AD_LdapAccess_ID, trxName)
+        public MLdapAccess(Ctx ctx, int VAF_LdapRights_ID, Trx trxName)
+            : base(ctx, VAF_LdapRights_ID, trxName)
         {
 
         }	//	MLdapAccess

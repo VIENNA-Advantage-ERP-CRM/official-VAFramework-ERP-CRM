@@ -12,7 +12,7 @@ namespace VAdvantage.Model
     public class X_Ref_Quantity_Type
     {
         #region Private Variables
-        public static int AD_Reference_ID = 533;
+        public static int VAF_Control_Ref_ID = 533;
         private String value;
         // Allocated = A 
         public const string ALLOCATED = "A";

@@ -180,15 +180,15 @@ namespace VAdvantage.Process
         /// <returns>target account</returns>
         private MAccount CreateAccount(MAcctSchema targetAS, MAccount sourceAcct)
         {
-            int AD_Client_ID = targetAS.GetAD_Client_ID();
+            int VAF_Client_ID = targetAS.GetVAF_Client_ID();
             int C_AcctSchema_ID = targetAS.GetC_AcctSchema_ID();
             //
-            int AD_Org_ID = 0;
+            int VAF_Org_ID = 0;
             int Account_ID = 0;
             int C_SubAcct_ID = 0;
             int M_Product_ID = 0;
             int C_BPartner_ID = 0;
-            int AD_OrgTrx_ID = 0;
+            int VAF_OrgTrx_ID = 0;
             int C_LocFrom_ID = 0;
             int C_LocTo_ID = 0;
             int C_SalesRegion_ID = 0;
@@ -209,7 +209,7 @@ namespace VAdvantage.Process
                 //
                 if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Organization))
                 {
-                    AD_Org_ID = sourceAcct.GetAD_Org_ID();
+                    VAF_Org_ID = sourceAcct.GetVAF_Org_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Account))
                 {
@@ -245,7 +245,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
                 {
-                    AD_OrgTrx_ID = sourceAcct.GetAD_OrgTrx_ID();
+                    VAF_OrgTrx_ID = sourceAcct.GetVAF_OrgTrx_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
                 {
@@ -274,9 +274,9 @@ namespace VAdvantage.Process
                 //	No UserElement
             }
             //
-            return MAccount.Get(GetCtx(), AD_Client_ID, AD_Org_ID,
+            return MAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
                 C_AcctSchema_ID, Account_ID, C_SubAcct_ID,
-                M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID,
+                M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID,
                 C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
                 C_Project_ID, C_Campaign_ID, C_Activity_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);

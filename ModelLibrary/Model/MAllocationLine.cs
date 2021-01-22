@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add((payment.GetPayAmt() +
                                             (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt())), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
-                                            payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                            payment.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     }
                                     else
                                     {
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
                                         // convert payment amount in invoice amt with view allocation date 
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()),
                                             GetWriteOffAmt())), allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                            invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                            invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                         if (doctype.GetDocBaseType() == "APC")
                                         {
                                             payAmt = Decimal.Negate(payAmt);
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add((payment.GetPayAmt() +
                                             (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt()), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
-                                            payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                            payment.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     }
                                     else
                                     {
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
                                         // convert payment amount in invoice amt with view allocation date 
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt()),
                                         allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(), invoice.GetC_ConversionType_ID(),
-                                        GetAD_Client_ID(), GetAD_Org_ID());
+                                        GetVAF_Client_ID(), GetVAF_Org_ID());
                                         if (doctype.GetDocBaseType() == "API")
                                         {
                                             payAmt = Decimal.Negate(payAmt);
@@ -507,7 +507,7 @@ namespace VAdvantage.Model
                                     {
                                         int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
-                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()), currency.GetStdPrecision()) +
+                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
                                          @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
                                                                  AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
                                          @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
@@ -523,7 +523,7 @@ namespace VAdvantage.Model
 
                                 // convert invoice paid amount to base currency amount
                                 invoiceSchedule.SetVA009_PaidAmnt(Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(),
-                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()),
+                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
                                  currency.GetStdPrecision()));
 
                                 // set Currency Variance amount as 0, when we reverse paymnet/ cash journalor allocation against this schedule
@@ -546,7 +546,7 @@ namespace VAdvantage.Model
                                 {
                                     payAmt = Decimal.Negate(Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt()));
                                     payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                        invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                        invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     invoiceSchedule.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(invoiceSchedule.GetVA009_PaidAmntInvce(), payAmt),
                                         currency.GetStdPrecision()));
                                 }
@@ -554,7 +554,7 @@ namespace VAdvantage.Model
                                 {
                                     payAmt = Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt());
                                     payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                        invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                        invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     invoiceSchedule.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(invoiceSchedule.GetVA009_PaidAmntInvce(), payAmt),
                                         currency.GetStdPrecision()));
                                 }
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
                                     {
                                         int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
-                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()), currency.GetStdPrecision()) +
+                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
                                          @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
                                                                  AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
                                          @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
@@ -582,7 +582,7 @@ namespace VAdvantage.Model
 
                                 // convert invoice paid amount to base currency amount
                                 invoiceSchedule.SetVA009_PaidAmnt(Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(),
-                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID()),
+                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
                                  currency.GetStdPrecision()));
 
                                 // set Currency Variance amount as 0, when we reverse paymnet/ cash journalor allocation against this schedule

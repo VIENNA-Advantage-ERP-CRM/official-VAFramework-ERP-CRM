@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514378441L;
         /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
         public static long updatedMS = 1280389061652L;
-        /** AD_Table_ID=798 */
+        /** VAF_TableView_ID=798 */
         public static int Table_ID;
         // =798;
 
@@ -124,8 +124,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** BOMType AD_Reference_ID=347 */
-        public static int BOMTYPE_AD_Reference_ID = 347;
+        /** BOMType VAF_Control_Ref_ID=347 */
+        public static int BOMTYPE_VAF_Control_Ref_ID = 347;
         /** Current Active = A */
         public static String BOMTYPE_CurrentActive = "A";
         /** Future = F */
@@ -168,8 +168,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BOMType");
         }
 
-        /** BOMUse AD_Reference_ID=348 */
-        public static int BOMUSE_AD_Reference_ID = 348;
+        /** BOMUse VAF_Control_Ref_ID=348 */
+        public static int BOMUSE_VAF_Control_Ref_ID = 348;
         /** Master = A */
         public static String BOMUSE_Master = "A";
         /** Engineering = E */

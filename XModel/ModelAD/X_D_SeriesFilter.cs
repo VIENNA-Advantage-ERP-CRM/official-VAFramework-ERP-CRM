@@ -68,7 +68,7 @@ static X_D_SeriesFilter()
 //static long serialVersionUID 27562514376105L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059316L;
-/** AD_Table_ID=1000008 */
+/** VAF_TableView_ID=1000008 */
 public static int Table_ID;
  // =1000008;
 
@@ -111,37 +111,37 @@ StringBuilder sb = new StringBuilder ("X_D_SeriesFilter[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_Table_ID AD_Reference_ID=415 */
-public static int AD_TABLE_ID_AD_Reference_ID=415;
+/** VAF_TableView_ID VAF_Control_Ref_ID=415 */
+public static int VAF_TABLEVIEW_ID_VAF_Control_Ref_ID=415;
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -211,8 +211,8 @@ public String GetValueTo()
 return (String)Get_Value("ValueTo");
 }
 
-/** WhereCondition AD_Reference_ID=1000004 */
-public static int WHERECONDITION_AD_Reference_ID=1000004;
+/** WhereCondition VAF_Control_Ref_ID=1000004 */
+public static int WHERECONDITION_VAF_Control_Ref_ID=1000004;
 /** = = 1 */
 public static String WHERECONDITION_Eq = "1";
 /** != = 2 */

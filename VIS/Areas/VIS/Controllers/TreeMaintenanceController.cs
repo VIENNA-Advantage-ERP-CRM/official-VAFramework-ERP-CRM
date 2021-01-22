@@ -30,11 +30,11 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult BindTree(string treeType, int AD_Tree_ID, string isAllNodes, bool isSummary)
+        public JsonResult BindTree(string treeType, int VAF_TreeInfo_ID, string isAllNodes, bool isSummary)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             TreeMaintenanceModel obj = new TreeMaintenanceModel(ctx);
-            var result = obj.BindTree(ctx, treeType, AD_Tree_ID, isAllNodes, isSummary);
+            var result = obj.BindTree(ctx, treeType, VAF_TreeInfo_ID, isAllNodes, isSummary);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 

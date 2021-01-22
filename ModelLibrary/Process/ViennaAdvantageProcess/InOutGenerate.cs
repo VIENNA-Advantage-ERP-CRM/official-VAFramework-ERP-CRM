@@ -161,7 +161,7 @@ namespace ViennaAdvantage.Process
             if (_selection)	//	VInOutGen
             {
                 _sql.Append("SELECT * FROM C_Order "
-                    + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND AD_Client_ID=" + GetCtx().GetAD_Client_ID()
+                    + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID()
                    //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
                    + @" AND C_order_ID NOT IN
                       (SELECT C_order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.C_Order_ID =C_Order.c_order_id
@@ -173,7 +173,7 @@ namespace ViennaAdvantage.Process
                     + "WHERE DocStatus='CO' AND IsSOTrx='Y'"
                     //	No Offer,POS
                     + " AND o.C_DocType_ID IN (SELECT C_DocType_ID FROM C_DocType "
-                        + "WHERE DocBaseType='SOO' AND DocSubTypeSO NOT IN ('ON','OB','WR')) AND AD_Client_ID=" + GetCtx().GetAD_Client_ID()
+                        + "WHERE DocBaseType='SOO' AND DocSubTypeSO NOT IN ('ON','OB','WR')) AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID()
                     + "	AND o.IsDropShip='N'"
                     //	No Manual
                     + " AND o.DeliveryRule<>'M'"

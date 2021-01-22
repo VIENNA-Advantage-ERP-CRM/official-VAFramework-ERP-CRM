@@ -37,7 +37,7 @@ namespace VAdvantage.Model
             //base(ctx, T_Aging_ID, trxName);
             if (T_Aging_ID == 0)
             {
-                //	setAD_PInstance_ID (0);
+                //	setVAF_JInstance_ID (0);
                 //	setC_BP_Group_ID (0);
                 //	setC_BPartner_ID (0);
                 //	setC_Currency_ID (0);
@@ -78,7 +78,7 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PInstance_ID">instance</param>
+        /// <param name="VAF_JInstance_ID">instance</param>
         /// <param name="StatementDate">statement date</param>
         /// <param name="C_BPartner_ID">bpartner</param>
         /// <param name="C_Currency_ID">currency</param>
@@ -88,14 +88,14 @@ namespace VAdvantage.Model
         /// <param name="DueDate">due date</param>
         /// <param name="IsSOTrx">so trx</param>
         /// <param name="trxName">transaction</param>
-        public MAging(Ctx ctx, int AD_PInstance_ID, DateTime? StatementDate,
+        public MAging(Ctx ctx, int VAF_JInstance_ID, DateTime? StatementDate,
             int C_BPartner_ID, int C_Currency_ID,
             int C_Invoice_ID, int C_InvoicePaySchedule_ID,
             int C_BP_Group_ID, DateTime? DueDate, Boolean IsSOTrx, Trx trxName)
             : this(ctx, 0, trxName)
         {
             //this(ctx, 0, trxName);
-            SetAD_PInstance_ID(AD_PInstance_ID);
+            SetVAF_JInstance_ID(VAF_JInstance_ID);
             SetStatementDate(StatementDate);
             //
             SetC_BPartner_ID(C_BPartner_ID);
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MAging[");
-            sb.Append("AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+            sb.Append("VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(",C_BPartner_ID=").Append(GetC_BPartner_ID())
                 .Append(",C_Currency_ID=").Append(GetC_Currency_ID())
                 .Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());

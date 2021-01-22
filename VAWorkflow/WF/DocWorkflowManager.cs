@@ -68,13 +68,13 @@ namespace VAdvantage.WF
         /// Process Document Value Workflow
         /// </summary>
         /// <param name="document">document</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <returns>true if WF started</returns>
-        public bool Process(PO document, int AD_Table_ID)
+        public bool Process(PO document, int VAF_TableView_ID)
         {
             _noCalled++;
             MWorkflow[] wfs = MWorkflow.GetDocValue(document.GetCtx(),
-                document.GetAD_Client_ID(), AD_Table_ID);
+                document.GetVAF_Client_ID(), VAF_TableView_ID);
             if (wfs == null || wfs.Length == 0)
                 return false;
 
@@ -91,7 +91,7 @@ namespace VAdvantage.WF
                 }
 
                 //	Re-check: Document must be same Client as workflow
-                if (wf.GetAD_Client_ID() != document.GetAD_Client_ID())
+                if (wf.GetVAF_Client_ID() != document.GetVAF_Client_ID())
                     continue;
 
                 //	Check Logic
@@ -116,16 +116,16 @@ namespace VAdvantage.WF
                 }
                 //	Start Workflow
                 log.Fine(logic);
-                int AD_Process_ID = 305;		//	HARDCODED
-                ProcessInfo pi = new ProcessInfo(wf.GetName(), AD_Process_ID, AD_Table_ID, document.Get_ID());
-                pi.SetAD_User_ID(document.GetCtx().GetAD_User_ID());
-                pi.SetAD_Client_ID(document.GetAD_Client_ID());
+                int VAF_Job_ID = 305;		//	HARDCODED
+                ProcessInfo pi = new ProcessInfo(wf.GetName(), VAF_Job_ID, VAF_TableView_ID, document.Get_ID());
+                pi.SetVAF_UserContact_ID(document.GetCtx().GetVAF_UserContact_ID());
+                pi.SetVAF_Client_ID(document.GetVAF_Client_ID());
                 
                 // vinay bhatt for window id
-                pi.SetAD_Window_ID(document.GetAD_Window_ID());
+                pi.SetVAF_Screen_ID(document.GetVAF_Screen_ID());
                 //
 
-                wf.GetCtx().SetContext("#AD_Client_ID", pi.GetAD_Client_ID().ToString());
+                wf.GetCtx().SetContext("#VAF_Client_ID", pi.GetVAF_Client_ID().ToString());
                 if (wf.Start(pi) != null)
                 {
                     log.Config(wf.GetName());
@@ -159,12 +159,12 @@ namespace VAdvantage.WF
             String keyColumn = keyColumns[0];
             StringBuilder sql = new StringBuilder("SELECT ")
                 .Append(keyColumn).Append(" FROM ").Append(tableName)
-                .Append(" WHERE AD_Client_ID=" + wf.GetAD_Client_ID() + " AND ")		//	#1
+                .Append(" WHERE VAF_Client_ID=" + wf.GetVAF_Client_ID() + " AND ")		//	#1
                     .Append(keyColumn).Append("=" + document.Get_ID() + " AND ")	//	#2
                 .Append(logic)
                 //	Duplicate Open Workflow test
-                .Append(" AND NOT EXISTS (SELECT * FROM AD_WF_Process wfp ")
-                    .Append("WHERE wfp.AD_Table_ID=" + document.Get_Table_ID() + " AND wfp.Record_ID=")	//	#3
+                .Append(" AND NOT EXISTS (SELECT * FROM VAF_WFlow_Handler wfp ")
+                    .Append("WHERE wfp.VAF_TableView_ID=" + document.Get_Table_ID() + " AND wfp.Record_ID=")	//	#3
                     .Append(tableName).Append(".").Append(keyColumn)
                     .Append(" AND wfp.AD_Workflow_ID=" + wf.GetAD_Workflow_ID())	//	#4
                     .Append(" AND SUBSTR(wfp.WFState,1,1)='O')");

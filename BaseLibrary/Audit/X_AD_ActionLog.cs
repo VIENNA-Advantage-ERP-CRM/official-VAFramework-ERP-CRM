@@ -38,7 +38,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_AD_ActionLog() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27883142468540L;/** Last Updated Timestamp 9/25/2020 8:59:12 AM */
-        public static long updatedMS = 1601017151751L;/** AD_Table_ID=1001065 */
+        public static long updatedMS = 1601017151751L;/** VAF_TableView_ID=1001065 */
         public static int Table_ID; // =1001065;
         /** TableName=AD_ActionLog */
         public static String Table_Name = "AD_ActionLog";
@@ -61,15 +61,15 @@ namespace VAdvantage.Model
         public void SetAD_ActionLog_ID(int AD_ActionLog_ID) { if (AD_ActionLog_ID < 1) throw new ArgumentException("AD_ActionLog_ID is mandatory."); Set_ValueNoCheck("AD_ActionLog_ID", AD_ActionLog_ID); }/** Get AD_ActionLog_ID.
 @return AD_ActionLog_ID */
         public int GetAD_ActionLog_ID() { Object ii = Get_Value("AD_ActionLog_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Role.
-@param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }/** Get Role.
 @return Responsibility Role */
-        public int GetAD_Role_ID() { Object ii = Get_Value("AD_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Session.
+        public int GetVAF_Role_ID() { Object ii = Get_Value("VAF_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Session.
 @param AD_Session_ID User Session Online or Web */
         public void SetAD_Session_ID(int AD_Session_ID)
         {
@@ -79,17 +79,17 @@ namespace VAdvantage.Model
         }/** Get Session.
 @return User Session Online or Web */
         public int GetAD_Session_ID() { Object ii = Get_Value("AD_Session_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Table/View.
-@param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }/** Get Table/View.
 @return Database Table information */
-        public int GetAD_Table_ID() { Object ii = Get_Value("AD_Table_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Action AD_Reference_ID=104 */
-        public static int ACTION_AD_Reference_ID = 104;/** Workbench = B */
+        public int GetVAF_TableView_ID() { Object ii = Get_Value("VAF_TableView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        /** Action VAF_Control_Ref_ID=104 */
+        public static int ACTION_VAF_Control_Ref_ID = 104;/** Workbench = B */
         public static String ACTION_Workbench = "B";/** WorkFlow = F */
         public static String ACTION_WorkFlow = "F";/** Process = P */
         public static String ACTION_Process = "P";/** Report = R */
@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         public void SetActionOrigin(String ActionOrigin) { if (ActionOrigin != null && ActionOrigin.Length > 100) { log.Warning("Length > 100 - truncated"); ActionOrigin = ActionOrigin.Substring(0, 100); } Set_Value("ActionOrigin", ActionOrigin); }/** Get Action origin.
 @return Action origin */
         public String GetActionOrigin() { return (String)Get_Value("ActionOrigin"); }
-        /** ActionType AD_Reference_ID=1000491 */
-        public static int ACTIONTYPE_AD_Reference_ID = 1000491;/** Download = D */
+        /** ActionType VAF_Control_Ref_ID=1000491 */
+        public static int ACTIONTYPE_VAF_Control_Ref_ID = 1000491;/** Download = D */
         public static String ACTIONTYPE_Download = "D";/** View = V */
         public static String ACTIONTYPE_View = "V";/** Is test a valid value.
 @param test testvalue

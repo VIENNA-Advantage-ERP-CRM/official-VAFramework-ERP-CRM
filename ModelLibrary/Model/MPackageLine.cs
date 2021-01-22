@@ -76,11 +76,11 @@ namespace VAdvantage.Model
             SetQty(line.GetMovementQty());
             //Edited :Arpit Rai ,13 Sept,2017 
             //to Set Client,Org,Confirm Date,Confirm Date, Scrapped Qty, Difference Qty & Reference No
-            SetAD_Client_ID(Client_ID);
-            SetAD_Org_ID(Org_ID);
+            SetVAF_Client_ID(Client_ID);
+            SetVAF_Org_ID(Org_ID);
             SetM_Product_ID(line.GetM_Product_ID());
             SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
-            if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'")) > 0
+            if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'")) > 0
                )
             {
                 if (moveDate != null)
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         public Decimal SetMovementLine(VAdvantage.Model.MMovementLine line)
         {
 
-            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));
+            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));
             if (_CountDTD001 > 0)
             {
                 SetM_MovementLine_ID(line.GetM_MovementLine_ID());
@@ -117,7 +117,7 @@ namespace VAdvantage.Model
         }
         public Decimal SetInoutLine(VAdvantage.Model.MInOutLine line)
         {
-            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_'"));
+            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
             if (_CountDTD001 > 0)
             {
                 SetM_InOutLine_ID(line.GetM_InOutLine_ID());
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
 
             #endregion
             Decimal difference = 0;
-            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));
+            int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));
             if (_CountDTD001 > 0)
             {
                 decimal totalPackQty = 0;

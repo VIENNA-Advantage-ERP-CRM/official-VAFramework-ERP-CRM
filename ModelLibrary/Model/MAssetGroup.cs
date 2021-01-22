@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT * FROM A_Asset_Group WHERE Name ='" + GetName() + "' AND IsActive ='Y' AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_TrxName())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT * FROM A_Asset_Group WHERE Name ='" + GetName() + "' AND IsActive ='Y' AND VAF_Client_ID=" + GetVAF_Client_ID(), null, Get_TrxName())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VAFAM_AstGrpAlreadyExist"));
                     return false;
@@ -115,12 +115,12 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Asset'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Asset'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO assetGroupAcct = null;
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where IsActive = 'Y' AND AD_CLIENT_ID=" + GetAD_Client_ID());
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + GetAD_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -143,14 +143,14 @@ namespace VAdvantage.Model
                                     _sql.Append(@"Select count(*) From A_Asset_Group Bp
                                                        Left Join FRPT_Asset_Group_Acct  ca On Bp.A_Asset_Group_ID=ca.A_Asset_Group_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                                   + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + GetAD_Client_ID() +
+                                                   + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
                                                    " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
                                                    " AND Bp.A_Asset_Group_ID = " + GetA_Asset_Group_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         assetGroupAcct = MTable.GetPO(GetCtx(), "FRPT_Asset_Group_Acct", 0, null);
-                                        assetGroupAcct.Set_ValueNoCheck("AD_Org_ID", 0);
+                                        assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         assetGroupAcct.Set_ValueNoCheck("A_Asset_Group_ID", Util.GetValueOfInt(GetA_Asset_Group_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         assetGroupAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));

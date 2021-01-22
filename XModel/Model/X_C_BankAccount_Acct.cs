@@ -94,7 +94,7 @@ static X_C_BankAccount_Acct()
 //static long serialVersionUID 27562514370683L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053894L;
-/** AD_Table_ID=391 */
+/** VAF_TableView_ID=391 */
 public static int Table_ID;
  // =391;
 

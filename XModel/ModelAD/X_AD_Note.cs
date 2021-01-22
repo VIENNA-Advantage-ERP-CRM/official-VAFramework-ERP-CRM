@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Note
+/** Generated Model for VAF_Notice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Note : PO
+public class X_VAF_Notice : PO
 {
-public X_AD_Note (Context ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note_ID, trxName)
+public X_VAF_Notice (Context ctx, int VAF_Notice_ID, Trx trxName) : base (ctx, VAF_Notice_ID, trxName)
 {
-/** if (AD_Note_ID == 0)
+/** if (VAF_Notice_ID == 0)
 {
-SetAD_Message_ID (0);
-SetAD_Note_ID (0);
+SetVAF_Msg_Lable_ID (0);
+SetVAF_Notice_ID (0);
 }
  */
 }
-public X_AD_Note (Ctx ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note_ID, trxName)
+public X_VAF_Notice (Ctx ctx, int VAF_Notice_ID, Trx trxName) : base (ctx, VAF_Notice_ID, trxName)
 {
-/** if (AD_Note_ID == 0)
+/** if (VAF_Notice_ID == 0)
 {
-SetAD_Message_ID (0);
-SetAD_Note_ID (0);
+SetVAF_Msg_Lable_ID (0);
+SetVAF_Notice_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Note_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Notice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Note (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Notice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Note (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Notice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Note()
+static X_VAF_Notice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_Note()
 //static long serialVersionUID = 27562514362313L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045524L;
-/** AD_Table_ID=389 */
+/** VAF_TableView_ID=389 */
 public static int Table_ID;
  // =389;
 
-/** TableName=AD_Note */
-public static String Table_Name="AD_Note";
+/** TableName=VAF_Notice */
+public static String Table_Name="VAF_Notice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,24 +109,24 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Note[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Notice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** AD_Message_ID AD_Reference_ID=102 */
-public static int AD_MESSAGE_ID_AD_Reference_ID=102;
+/** VAF_Msg_Lable_ID VAF_Control_Ref_ID=102 */
+public static int VAF_MSG_LABLE_ID_VAF_Control_Ref_ID=102;
 /** Set Message.
-@param AD_Message_ID System Message */
-public void SetAD_Message_ID (int AD_Message_ID)
+@param VAF_Msg_Lable_ID System Message */
+public void SetVAF_Msg_Lable_ID (int VAF_Msg_Lable_ID)
 {
-if (AD_Message_ID < 1) throw new ArgumentException ("AD_Message_ID is mandatory.");
-Set_ValueNoCheck ("AD_Message_ID", AD_Message_ID);
+if (VAF_Msg_Lable_ID < 1) throw new ArgumentException ("VAF_Msg_Lable_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
 }
 /** Get Message.
 @return System Message */
-public int GetAD_Message_ID() 
+public int GetVAF_Msg_Lable_ID() 
 {
-Object ii = Get_Value("AD_Message_ID");
+Object ii = Get_Value("VAF_Msg_Lable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -134,68 +134,68 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Message_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Msg_Lable_ID().ToString());
 }
 /** Set Notice.
-@param AD_Note_ID System Notice */
-public void SetAD_Note_ID (int AD_Note_ID)
+@param VAF_Notice_ID System Notice */
+public void SetVAF_Notice_ID (int VAF_Notice_ID)
 {
-if (AD_Note_ID < 1) throw new ArgumentException ("AD_Note_ID is mandatory.");
-Set_ValueNoCheck ("AD_Note_ID", AD_Note_ID);
+if (VAF_Notice_ID < 1) throw new ArgumentException ("VAF_Notice_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Notice_ID", VAF_Notice_ID);
 }
 /** Get Notice.
 @return System Notice */
-public int GetAD_Note_ID() 
+public int GetVAF_Notice_ID() 
 {
-Object ii = Get_Value("AD_Note_ID");
+Object ii = Get_Value("VAF_Notice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_ValueNoCheck ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_ValueNoCheck ("VAF_TableView_ID", null);
 else
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Activity.
-@param AD_WF_Activity_ID Workflow Activity */
-public void SetAD_WF_Activity_ID (int AD_WF_Activity_ID)
+@param VAF_WFlow_Task_ID Workflow Activity */
+public void SetVAF_WFlow_Task_ID (int VAF_WFlow_Task_ID)
 {
-if (AD_WF_Activity_ID <= 0) Set_Value ("AD_WF_Activity_ID", null);
+if (VAF_WFlow_Task_ID <= 0) Set_Value ("VAF_WFlow_Task_ID", null);
 else
-Set_Value ("AD_WF_Activity_ID", AD_WF_Activity_ID);
+Set_Value ("VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
 }
 /** Get Workflow Activity.
 @return Workflow Activity */
-public int GetAD_WF_Activity_ID() 
+public int GetVAF_WFlow_Task_ID() 
 {
-Object ii = Get_Value("AD_WF_Activity_ID");
+Object ii = Get_Value("VAF_WFlow_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /**
         * 	Detail Constructor
         *	@param ctx context
-        *	@param AD_Org_ID org
+        *	@param VAF_Org_ID org
         * 	@param M_Locator_ID locator
         * 	@param M_Product_ID product
         * 	@param M_AttributeSetInstance_ID attribute
@@ -57,12 +57,12 @@ namespace VAdvantage.Model
         * 	@param MovementDate optional date
         *	@param trxName transaction
         */
-        public MTransactionSummary(Ctx ctx, int AD_Org_ID, int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public MTransactionSummary(Ctx ctx, int VAF_Org_ID, int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
             Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementDate, Trx trxName)
             : base(ctx, 0, trxName)
         {
 
-            SetAD_Org_ID(AD_Org_ID);
+            SetVAF_Org_ID(VAF_Org_ID);
             if (M_Locator_ID == 0)
                 throw new ArgumentException("No Locator");
             SetM_Locator_ID(M_Locator_ID);

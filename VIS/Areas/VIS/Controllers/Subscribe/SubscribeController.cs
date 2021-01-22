@@ -16,22 +16,22 @@ namespace VIS.Controllers
         // GET: /VIS/Subscribe/
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult Subscribe(int AD_Window_ID, int Record_ID, int AD_Table_ID)
+        public JsonResult Subscribe(int VAF_Screen_ID, int Record_ID, int VAF_TableView_ID)
         {
              Ctx ct = Session["ctx"] as Ctx;
              SubscribeModel model = new SubscribeModel(ct);
-             var result= model.InsertSubscription(AD_Window_ID,Record_ID,AD_Table_ID);
+             var result= model.InsertSubscription(VAF_Screen_ID,Record_ID,VAF_TableView_ID);
              return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult UnSubscribe(int AD_Window_ID, int Record_ID, int AD_Table_ID)
+        public JsonResult UnSubscribe(int VAF_Screen_ID, int Record_ID, int VAF_TableView_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             SubscribeModel model = new SubscribeModel(ct);
-            var result = model.DeleteSubscription(AD_Window_ID,Record_ID,AD_Table_ID);
+            var result = model.DeleteSubscription(VAF_Screen_ID,Record_ID,VAF_TableView_ID);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
        

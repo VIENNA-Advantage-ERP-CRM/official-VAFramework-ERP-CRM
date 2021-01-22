@@ -7,7 +7,7 @@
 
 VIS.MRole.log = VIS.Logging.VLogger.getVLogger("MRole"); //log
 
-VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, createError) {
+VIS.MRole.canUpdate = function (VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID, Record_ID, createError) {
 
     var userLevel = this.vo.UserLevel.trim(); // Format 'SCO'
 
@@ -15,15 +15,15 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
     var whatMissing = "";
 
     // System == Client=0 & Org=0
-    if (AD_Client_ID == 0 && AD_Org_ID == 0 && userLevel.indexOf('S') == -1) {
+    if (VAF_Client_ID == 0 && VAF_Org_ID == 0 && userLevel.indexOf('S') == -1) {
         retValue = false;
         whatMissing += "S";
     }
 
         // Client == Client!=0 & Org=0
-    else if (AD_Client_ID != 0 && AD_Org_ID == 0
+    else if (VAF_Client_ID != 0 && VAF_Org_ID == 0
             && userLevel.indexOf('C') == -1) {
-        if (userLevel.indexOf('O') == -1 && this.getIsOrgAccess(AD_Org_ID, true))
+        if (userLevel.indexOf('O') == -1 && this.getIsOrgAccess(VAF_Org_ID, true))
             ; // Client+Org with access to *
         else {
             retValue = false;
@@ -32,7 +32,7 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
     }
 
         // Organization == Client!=0 & Org!=0
-    else if (AD_Client_ID != 0 && AD_Org_ID != 0
+    else if (VAF_Client_ID != 0 && VAF_Org_ID != 0
             && userLevel.indexOf('O') == -1) {
         retValue = false;
         whatMissing += "O";
@@ -40,14 +40,14 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
 
     // Data Access
     if (retValue)
-        retValue = this.getIsTableAccess(AD_Table_ID, false);
+        retValue = this.getIsTableAccess(VAF_TableView_ID, false);
 
     if (retValue && Record_ID != 0)
-        retValue = this.getIsRecordAccess(AD_Table_ID, Record_ID, false);
+        retValue = this.getIsRecordAccess(VAF_TableView_ID, Record_ID, false);
 
     if (!retValue && createError) {
-        VIS.MRole.log.warning("AccessTableNoUpdate => AD_Client_ID="
-                + AD_Client_ID + ", AD_Org_ID=" + AD_Org_ID
+        VIS.MRole.log.warning("AccessTableNoUpdate => VAF_Client_ID="
+                + VAF_Client_ID + ", VAF_Org_ID=" + VAF_Org_ID
                 + ", UserLevel=" + userLevel + " => missing="
                 + whatMissing);
         //log.warning(toString());
@@ -55,8 +55,8 @@ VIS.MRole.canUpdate = function (AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID,
     return retValue;
 }; //can update
 
-VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
-    if (!this.getIsTableAccess(AD_Table_ID, ro)) // No Access to Table
+VIS.MRole.getIsColumnAccess = function (VAF_TableView_ID, VAF_Column_ID, ro) {
+    if (!this.getIsTableAccess(VAF_TableView_ID, ro)) // No Access to Table
         return false;
 
     var retValue = true; // assuming exclusive
@@ -66,15 +66,15 @@ VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
             // If you Exclude Access to a column and select Read Only,
             // you can only read data (otherwise no access).
         {
-            if (m_columnAccess[i].AD_Table_ID == AD_Table_ID
-                    && m_columnAccess[i].AD_Column_ID == AD_Column_ID) {
+            if (m_columnAccess[i].VAF_TableView_ID == VAF_TableView_ID
+                    && m_columnAccess[i].VAF_Column_ID == VAF_Column_ID) {
                 if (!ro) // just R/O Access requested
                     retValue = !m_columnAccess[i].IsReadOnly;
                 else
                     retValue = false;
                 if (!retValue)
-                    //log.fine("Exclude AD_Table_ID=" + AD_Table_ID
-                    //        + ", AD_Column_ID=" + AD_Column_ID + " (ro="
+                    //log.fine("Exclude VAF_TableView_ID=" + VAF_TableView_ID
+                    //        + ", VAF_Column_ID=" + VAF_Column_ID + " (ro="
                     //        + ro + ",ColumnAccessRO="
                     //        + m_columnAccess[i].isReadOnly() + ") = "
                     //        + retValue);
@@ -84,16 +84,16 @@ VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
             // If you Include Access to a column and select Read Only,
             // you can only read data (otherwise full access).
         {
-            if (m_columnAccess[i].AD_Table_ID == AD_Table_ID) {
+            if (m_columnAccess[i].VAF_TableView_ID == VAF_TableView_ID) {
                 // retValue = false;
-                if (m_columnAccess[i].AD_Column_ID == AD_Column_ID) {
+                if (m_columnAccess[i].VAF_Column_ID == VAF_Column_ID) {
                     if (!ro) // rw only if not r/o
                         retValue = !m_columnAccess[i].IsReadOnly;
                     else
                         retValue = true;
                     if (!retValue)
-                        //log.fine("Include AD_Table_ID=" + AD_Table_ID
-                        //        + ", AD_Column_ID=" + AD_Column_ID
+                        //log.fine("Include VAF_TableView_ID=" + VAF_TableView_ID
+                        //        + ", VAF_Column_ID=" + VAF_Column_ID
                         //        + " (ro=" + ro + ",ColumnAccessRO="
                         //        + m_columnAccess[i].isReadOnly() + ") = "
                         //        + retValue);
@@ -103,20 +103,20 @@ VIS.MRole.getIsColumnAccess = function (AD_Table_ID, AD_Column_ID, ro) {
         } // include
     } // for all Table Access
     if (!retValue) {
-        //log.fine("AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID="
-        //        + AD_Column_ID + " (ro=" + ro + ") = " + retValue);
+        //log.fine("VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID="
+        //        + VAF_Column_ID + " (ro=" + ro + ") = " + retValue);
     }
     return retValue;
 }; // isColumnAccess
 
-VIS.MRole.getIsTableAccessLevel = function (AD_Table_ID, isAccess) {
+VIS.MRole.getIsTableAccessLevel = function (VAF_TableView_ID, isAccess) {
     if (isAccess)				//	role can always read
         return true;
 
-    var strRoleAccessLevel = this.vo.tableAccessLevel[AD_Table_ID];
+    var strRoleAccessLevel = this.vo.tableAccessLevel[VAF_TableView_ID];
     if (strRoleAccessLevel == null) {
         // log no access tableid
-        //log.Fine("NO - No AccessLevel - AD_Table_ID=" + AD_Table_ID);
+        //log.Fine("NO - No AccessLevel - VAF_TableView_ID=" + VAF_TableView_ID);
         return false;
     }
     //7
@@ -138,7 +138,7 @@ VIS.MRole.getIsTableAccessLevel = function (AD_Table_ID, isAccess) {
            || strRoleAccessLevel.equals(VIS.Consts.ACCESSLEVEL_ClientPlusOrganization))) {
         return true;
     }
-    //    log.Fine("NO - AD_Table_ID=" + AD_Table_ID
+    //    log.Fine("NO - VAF_TableView_ID=" + VAF_TableView_ID
     //+ ", UserLevel=" + userLevel + ", AccessLevel=" + strRoleAccessLevel);
     return false;
 
@@ -188,8 +188,8 @@ VIS.MRole.canView = function (strAccesLevel) {
     return retValue;
 };//can view
 
-VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
-    if (!this.getIsTableAccessLevel(AD_Table_ID, ro)) // Role Based Access
+VIS.MRole.getIsTableAccess = function (VAF_TableView_ID, ro) {
+    if (!this.getIsTableAccessLevel(VAF_TableView_ID, ro)) // Role Based Access
         return false;
     var hasAccess = true; // assuming exclusive rule
     var m_tableAccess = this.vo.tableAccess;
@@ -201,12 +201,12 @@ VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
             // If you Exclude Access to a table and select Read Only,
             // you can only read data (otherwise no access).
         {
-            if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID === VAF_TableView_ID) {
                 if (ro)
                     hasAccess = m_tableAccess[i].IsReadOnly;
                 else
                     hasAccess = false;
-                //log.fine("Exclude AD_Table_ID=" + AD_Table_ID + " (ro="
+                //log.fine("Exclude VAF_TableView_ID=" + VAF_TableView_ID + " (ro="
                 //        + ro + ",TableAccessRO="
                 //        + m_tableAccess[i].isReadOnly() + ") = "
                 //        + hasAccess);
@@ -217,12 +217,12 @@ VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
             // you can only read data (otherwise full access).
         {
             hasAccess = false;
-            if (m_tableAccess[i].AD_Table_ID == AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID == VAF_TableView_ID) {
                 if (!ro) // rw only if not r/o
                     hasAccess = !m_tableAccess[i].IsReadOnly;
                 else
                     hasAccess = true;
-                //log.fine("Include AD_Table_ID=" + AD_Table_ID + " (ro="
+                //log.fine("Include VAF_TableView_ID=" + VAF_TableView_ID + " (ro="
                 //        + ro + ",TableAccessRO="
                 //        + m_tableAccess[i].isReadOnly() + ") = "
                 //        + hasAccess);
@@ -231,20 +231,20 @@ VIS.MRole.getIsTableAccess = function (AD_Table_ID, ro) {
         }
     } // for all Table Access
     if (!hasAccess) {
-        //log.fine("AD_Table_ID=" + AD_Table_ID + "(ro=" + ro + ") = "
+        //log.fine("VAF_TableView_ID=" + VAF_TableView_ID + "(ro=" + ro + ") = "
         //        + hasAccess);
     }
     m_tableAccess = null;
     return hasAccess;
 };// isTableAccess
 
-VIS.MRole.getIsCanReport = function (AD_Table_ID) {
+VIS.MRole.getIsCanReport = function (VAF_TableView_ID) {
     if (!this.vo.IsCanReport) // Role Level block
     {
         //log.warning("Role denied");
         return false;
     }
-    if (!this.getIsTableAccess(AD_Table_ID, true)) // No R/O Access to Table
+    if (!this.getIsTableAccess(VAF_TableView_ID, true)) // No R/O Access to Table
         return false;
     //
     var canReport = true;
@@ -255,35 +255,35 @@ VIS.MRole.getIsCanReport = function (AD_Table_ID) {
             continue;
         if (m_tableAccess[i].IsExclude) // Exclude
         {
-            if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID === VAF_TableView_ID) {
                 canReport = m_tableAccess[i].IsCanReport;
-                //log.fine("Exclude " + AD_Table_ID + " - " + canReport);
+                //log.fine("Exclude " + VAF_TableView_ID + " - " + canReport);
                 return canReport;
             }
         } else // Include
         {
             canReport = false;
-            if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID === VAF_TableView_ID) {
                 canReport = m_tableAccess[i].IsCanReport;
-                //log.fine("Include " + AD_Table_ID + " - " + canReport);
+                //log.fine("Include " + VAF_TableView_ID + " - " + canReport);
                 return canReport;
             }
         }
     } // for all Table Access
-    //log.fine(AD_Table_ID + " - " + canReport);
+    //log.fine(VAF_TableView_ID + " - " + canReport);
     m_tableAccess = null;
     return canReport;
 }; // isCanReport
 
-VIS.MRole.getIsCanExport = function (AD_Table_ID) {
+VIS.MRole.getIsCanExport = function (VAF_TableView_ID) {
     if (!this.vo.IsCanExport) // Role Level block
     {
         //log.warning("Role denied");
         return false;
     }
-    if (!this.getIsTableAccess(AD_Table_ID, true)) // No R/O Access to Table
+    if (!this.getIsTableAccess(VAF_TableView_ID, true)) // No R/O Access to Table
         return false;
-    if (!this.getIsCanReport(AD_Table_ID)) // We cannot Export if we cannot report
+    if (!this.getIsCanReport(VAF_TableView_ID)) // We cannot Export if we cannot report
         return false;
     //
     var canExport = true;
@@ -296,9 +296,9 @@ VIS.MRole.getIsCanExport = function (AD_Table_ID) {
         {
             //  added if condition (similar to the if condition
             // in isCanReport)
-            if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID === VAF_TableView_ID) {
                 canExport = m_tableAccess[i].IsCanExport;
-                //log.fine("Exclude " + AD_Table_ID + " - " + canExport);
+                //log.fine("Exclude " + VAF_TableView_ID + " - " + canExport);
                 return canExport;
             } // end bug 10018373
         } else // Include
@@ -306,27 +306,27 @@ VIS.MRole.getIsCanExport = function (AD_Table_ID) {
             canExport = false;
             //  added if condition (similar to the if condition
             // in isCanReport)
-            if (m_tableAccess[i].AD_Table_ID === AD_Table_ID) {
+            if (m_tableAccess[i].VAF_TableView_ID === VAF_TableView_ID) {
                 canExport = m_tableAccess[i].IsCanExport;
-                //log.fine("Include " + AD_Table_ID + " - " + canExport);
+                //log.fine("Include " + VAF_TableView_ID + " - " + canExport);
                 return canExport;
             }
         }
     } // for all Table Access
-    //log.fine(AD_Table_ID + " - " + canExport);
+    //log.fine(VAF_TableView_ID + " - " + canExport);
     m_tableAccess = null;
     return canExport;
 }; // isCanExport
 
-VIS.MRole.getIsOrgAccess = function (AD_Org_ID, rw) {
+VIS.MRole.getIsOrgAccess = function (VAF_Org_ID, rw) {
     if (this.vo.IsAccessAllOrgs)
         return true;
-    if (AD_Org_ID == 0 && !rw) // can always read common org
+    if (VAF_Org_ID == 0 && !rw) // can always read common org
         return true;
     // Positive List
     var m_orgAccess = this.vo.orgAccess;
     for (var i = 0; i < m_orgAccess.length; i++) {
-        if (m_orgAccess[i].AD_Org_ID === AD_Org_ID) {
+        if (m_orgAccess[i].VAF_Org_ID === VAF_Org_ID) {
             if (!rw)
                 return true;
             if (!m_orgAccess[i].readOnly) // rw
@@ -338,8 +338,8 @@ VIS.MRole.getIsOrgAccess = function (AD_Org_ID, rw) {
     return false;
 }; // isOrgAccess
 
-VIS.MRole.getIsRecordAccess = function (AD_Table_ID, Record_ID, ro) {
-    // if (!isTableAccess(AD_Table_ID, ro)) // No Access to Table
+VIS.MRole.getIsRecordAccess = function (VAF_TableView_ID, Record_ID, ro) {
+    // if (!isTableAccess(VAF_TableView_ID, ro)) // No Access to Table
     // return false;
 
     var negativeList = true;
@@ -348,7 +348,7 @@ VIS.MRole.getIsRecordAccess = function (AD_Table_ID, Record_ID, ro) {
     for (var i = 0; i < m_recordAccess.length; i++) {
         ra = m_recordAccess[i];
 
-        if (ra.AD_Table_ID !== AD_Table_ID)
+        if (ra.VAF_TableView_ID !== VAF_TableView_ID)
             continue;
 
         if (ra.IsExclude) // Exclude
@@ -383,9 +383,9 @@ VIS.MRole.getIsRecordAccess = function (AD_Table_ID, Record_ID, ro) {
 VIS.MRole.getClientWhere = function (rw) {
     // All Orgs - use Client of Role
     if (this.vo.IsAccessAllOrgs) {
-        if (rw || this.vo.AD_Client_ID == 0)
-            return "AD_Client_ID=" + this.vo.AD_Client_ID;
-        return "AD_Client_ID IN (0," + this.vo.AD_Client_ID + ")";
+        if (rw || this.vo.VAF_Client_ID == 0)
+            return "VAF_Client_ID=" + this.vo.VAF_Client_ID;
+        return "VAF_Client_ID IN (0," + this.vo.VAF_Client_ID + ")";
     }
 
     // Unique Strings
@@ -395,7 +395,7 @@ VIS.MRole.getClientWhere = function (rw) {
     // Positive List
     for (var ele = 0; ele < this.vo.orgAccess.length; ele++)// OrgAccess element : m_orgAccess)
     {
-        var c = this.vo.orgAccess[ele].AD_Client_ID.toString();
+        var c = this.vo.orgAccess[ele].VAF_Client_ID.toString();
         if (set.indexOf(c) < 0) {
             set.push(c);
         }
@@ -416,13 +416,13 @@ VIS.MRole.getClientWhere = function (rw) {
     set = null;
     if (oneOnly) {
         if (sb.length() > 0)
-            return "AD_Client_ID=" + sb.toString();
+            return "VAF_Client_ID=" + sb.toString();
         else {
             this.log.log(VIS.Logging.Level.SEVERE, "No Access Org records");
-            return "AD_Client_ID=-1"; // No Access Record
+            return "VAF_Client_ID=-1"; // No Access Record
         }
     }
-    return "AD_Client_ID IN(" + sb.toString() + ")";
+    return "VAF_Client_ID IN(" + sb.toString() + ")";
 }; //get client where
 
 VIS.MRole.getOrgWhere = function (tableName, rw) {
@@ -435,7 +435,7 @@ VIS.MRole.getOrgWhere = function (tableName, rw) {
     // Positive List
     var orgAccess = this.vo.orgAccess;
     for (var i = 0; i < orgAccess.length; i++) {
-        var o = orgAccess[i].AD_Org_ID.toString();
+        var o = orgAccess[i].VAF_Org_ID.toString();
         if (!rw) {
             if (set.indexOf(o) < 0)
                 set.push(o);
@@ -448,10 +448,10 @@ VIS.MRole.getOrgWhere = function (tableName, rw) {
     orgAccess = null;
     //
     if (set.length == 1) {
-        return "COALESCE(" + (tableName == null ? "" : tableName + ".") + "AD_Org_ID,0)=" + set[0];
+        return "COALESCE(" + (tableName == null ? "" : tableName + ".") + "VAF_Org_ID,0)=" + set[0];
     } else if (set.length == 0) {
         this.log.log(VIS.Logging.Level.SEVERE, "No Access Org records");
-        return (tableName == null ? "" : tableName + ".") + "AD_Org_ID=-1"; // No Access Record
+        return (tableName == null ? "" : tableName + ".") + "VAF_Org_ID=-1"; // No Access Record
     }
 
     var sql = new StringBuilder();
@@ -471,7 +471,7 @@ VIS.MRole.getOrgWhere = function (tableName, rw) {
             if (sql.length() > 0)
                 sql.append(" OR ");
 
-            sql.append("COALESCE(" + (tableName == null ? "" : tableName + ".") + "AD_Org_ID,0) IN(").append(sb.toString()).append(")");
+            sql.append("COALESCE(" + (tableName == null ? "" : tableName + ".") + "VAF_Org_ID,0) IN(").append(sb.toString()).append(")");
             sb = null;
             sb = new StringBuilder();
         }
@@ -479,7 +479,7 @@ VIS.MRole.getOrgWhere = function (tableName, rw) {
     return "(" + sql.toString() + ")";
 };// getOrgWhereValue
 
-VIS.MRole.getAD_Table_ID = function (tableName) {
+VIS.MRole.getVAF_TableView_ID = function (tableName) {
     var ii = this.vo.tableName[tableName];
     if (ii != null)
         return ii;
@@ -501,15 +501,15 @@ VIS.MRole.getKeyColumnName = function (tableInfo, keyColumnName) {
     //	We have a synonym - ignore it if base table inquired
     for (var i = 0 ; i < tableInfo.length; i++) {
         var element = tableInfo[i];
-        if (keyColumnName.equals("AD_User_ID")) {
+        if (keyColumnName.equals("VAF_UserContact_ID")) {
 
             //	List of tables where not to use SalesRep_ID
-            if (element.getTableName().equals("AD_User"))
+            if (element.getTableName().equals("VAF_UserContact"))
                 return keyColumnName;
         }
-        else if (keyColumnName.equals("AD_ElementValue_ID")) {
+        else if (keyColumnName.equals("VAF_ColumnDicValue_ID")) {
             //	List of tables where not to use Account_ID
-            if (element.getTableName().equals("AD_ElementValue"))
+            if (element.getTableName().equals("VAF_ColumnDicValue"))
                 return keyColumnName;
         }
     }	//	tables to be ignored
@@ -566,14 +566,14 @@ VIS.MRole.getDependentRecordWhereColumn = function (mainSql, columnName) {
     return retValue;
 }; // ge
 
-VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
+VIS.MRole.getRecordWhere = function (VAF_TableView_ID, keyColumnName, rw) {
     //
     var sbInclude = new StringBuilder();
     var sbExclude = new StringBuilder();
     // Role Access
     var m_recordAccess = this.vo.recordAccess;
     for (var i = 0; i < m_recordAccess.length; i++) {
-        if (m_recordAccess[i].AD_Table_ID == AD_Table_ID) {
+        if (m_recordAccess[i].VAF_TableView_ID == VAF_TableView_ID) {
             // NOT IN (x)
             if (m_recordAccess[i].IsExclude) {
                 if (sbExclude.length() == 0)
@@ -606,9 +606,9 @@ VIS.MRole.getRecordWhere = function (AD_Table_ID, keyColumnName, rw) {
     // Don't ignore Privacy Access
     if (!this.vo.IsPersonalAccess) {
 
-        if (!this.vo.tableData[AD_Table_ID].IsView && this.vo.tableData[AD_Table_ID].HasKey) {
-            var lockedIDs = " NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE AD_Table_ID = "
-                    + AD_Table_ID + " AND AD_User_ID <> " + this.vo.AD_User_ID + " AND IsActive = 'Y' )";
+        if (!this.vo.tableData[VAF_TableView_ID].IsView && this.vo.tableData[VAF_TableView_ID].HasKey) {
+            var lockedIDs = " NOT IN ( SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID = "
+                    + VAF_TableView_ID + " AND VAF_UserContact_ID <> " + this.vo.VAF_UserContact_ID + " AND IsActive = 'Y' )";
             //if (lockedIDs.length > 0) {
             if (sb.length() > 0)
                 sb.append(" AND ");
@@ -697,32 +697,32 @@ VIS.MRole.getDocWhere = function (TableName) {
     if (!hasBPColumn)
         return "";
 
-    var AD_User_ID = VIS.context.getAD_User_ID();
+    var VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
 
-    //var docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+    //var docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
     //    + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-    //    + " WHERE u.AD_User_ID="
-    //    + AD_User_ID
+    //    + " WHERE u.VAF_UserContact_ID="
+    //    + VAF_UserContact_ID
     //    + " AND bp.C_BPartner_ID="
     //    + TableName
     //    + ".C_BPartner_ID)"
-    //    + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+    //    + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
     //    + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-    //    + " WHERE u.AD_User_ID="
-    //    + AD_User_ID
+    //    + " WHERE u.VAF_UserContact_ID="
+    //    + VAF_UserContact_ID
     //    + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
     //var hasUserColumn = false;
-    //var sql1 = "SELECT count(*) FROM AD_Table t "
-    //    + "INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+    //var sql1 = "SELECT count(*) FROM VAF_TableView t "
+    //    + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
     //    + "WHERE t.tableName='" + TableName
-    //    + "' AND c.ColumnName='AD_User_ID' ";
+    //    + "' AND c.ColumnName='VAF_UserContact_ID' ";
 
     //ret = executeScalar(sql);
     //hasUserColumn = (ret ? parseInt(ret) : 0) != 0;
 
     //if (hasUserColumn)
-    //    docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+    //    docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
     //docAccess += ")";
 
 
@@ -733,7 +733,7 @@ VIS.MRole.getDocWhere = function (TableName) {
         async: false,
         url: VIS.Application.contextUrl + "Form/GetDocWhere",
         data: {
-            AD_User_ID: AD_User_ID,
+            VAF_UserContact_ID: VAF_UserContact_ID,
             TableName: TableName
         },
         success: function (data) {
@@ -818,15 +818,15 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
     }
 
     // ** Data Access **
-    var AD_Table_ID = 0;
+    var VAF_TableView_ID = 0;
     var element;
     for (i = 0; i < ti.length; i++) {
         element = ti[i];
         var TableName = element.getTableName();
-        AD_Table_ID = this.getAD_Table_ID(TableName);
+        VAF_TableView_ID = this.getVAF_TableView_ID(TableName);
 
         // Org Access
-        if (AD_Table_ID != 0 && !this.vo.IsAccessAllOrgs && addOrgAccessForAll) {
+        if (VAF_TableView_ID != 0 && !this.vo.IsAccessAllOrgs && addOrgAccessForAll) {
             var TableSynonym = element.getSynonym();
             if (TableSynonym == null || TableSynonym.isEmpty())
                 TableSynonym = TableName;
@@ -836,9 +836,9 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         }
 
         // Data Table Access
-        if (AD_Table_ID != 0 && !this.getIsTableAccess(AD_Table_ID, !rw)) {
+        if (VAF_TableView_ID != 0 && !this.getIsTableAccess(VAF_TableView_ID, !rw)) {
             retSQL.append(" AND 1=3"); // prevent access at all
-            this.log.fine("No access to AD_Table_ID=" + AD_Table_ID + " - "
+            this.log.fine("No access to VAF_TableView_ID=" + VAF_TableView_ID + " - "
                     + TableName + " - " + retSQL);
             break; // no need to check further
         }
@@ -855,9 +855,9 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         }
         keyColumnName += TableName + "_ID"; // derived from table
 
-        // log.fine("addAccessSQL - " + TableName + "(" + AD_Table_ID + ") "
+        // log.fine("addAccessSQL - " + TableName + "(" + VAF_TableView_ID + ") "
         // + keyColumnName);
-        var recordWhere = this.getRecordWhere(AD_Table_ID, keyColumnName, rw);
+        var recordWhere = this.getRecordWhere(VAF_TableView_ID, keyColumnName, rw);
         if (recordWhere.length > 0) {
             retSQL.append(" AND ").append(recordWhere);
             this.log.finest("Record access - " + recordWhere);
@@ -867,7 +867,7 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
 
     // Dependent Records (only for main SQL)
     var mainSql = asp.getMainSql();
-    AD_Table_ID = 0;
+    VAF_TableView_ID = 0;
     var whereColumnName = null;
     var includes = [];
     var excludes = [];
@@ -888,12 +888,12 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
         if (!(charCheck == ',' || charCheck == ' ' || charCheck == ')'))
             continue;
 
-        if (AD_Table_ID != 0
-                && AD_Table_ID != m_recordDependentAccess[i].AD_Table_ID)
+        if (VAF_TableView_ID != 0
+                && VAF_TableView_ID != m_recordDependentAccess[i].VAF_TableView_ID)
             retSQL.append(this.getDependentAccess(whereColumnName, includes,
                     excludes));
 
-        AD_Table_ID = m_recordDependentAccess[i].AD_Table_ID;
+        VAF_TableView_ID = m_recordDependentAccess[i].VAF_TableView_ID;
         // *** we found the column in the main query
         if (m_recordDependentAccess[i].IsExclude) {
             excludes.push(m_recordDependentAccess[i].Record_ID);
@@ -925,31 +925,31 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
     return retSQL.toString();
 };
 
-VIS.MRole.getWindowAccess = function (AD_Window_ID) {
-    if (this.vo.windowAccess[AD_Window_ID])
+VIS.MRole.getWindowAccess = function (VAF_Screen_ID) {
+    if (this.vo.windowAccess[VAF_Screen_ID])
         return true;
     else return false;
 }; //get window access
 
-VIS.MRole.getFormAccess = function (AD_Form_ID) {
-    if (this.vo.formAccess[AD_Form_ID])
+VIS.MRole.getFormAccess = function (VAF_Page_ID) {
+    if (this.vo.formAccess[VAF_Page_ID])
         return true;
     else return false;
 }; //get form access
 
-VIS.MRole.getProcessAccess = function (AD_Process_ID) {
-    if (this.vo.processAccess[AD_Process_ID])
+VIS.MRole.getProcessAccess = function (VAF_Job_ID) {
+    if (this.vo.processAccess[VAF_Job_ID])
         return true;
     else return false;
 }; //get process access
 
-VIS.MRole.getIsClientAccess = function (AD_Client_ID, rw) {
-    if (AD_Client_ID == 0 && !rw) // can always read System
+VIS.MRole.getIsClientAccess = function (VAF_Client_ID, rw) {
+    if (VAF_Client_ID == 0 && !rw) // can always read System
         return true;
     // Positive List
     var m_orgAccess = this.vo.orgAccess;
     for (var i = 0; i < m_orgAccess.length; i++) {
-        if (m_orgAccess[i].AD_Client_ID == AD_Client_ID) {
+        if (m_orgAccess[i].VAF_Client_ID == VAF_Client_ID) {
             if (!rw)
                 return true;
             if (!m_orgAccess[i].readOnly) // rw
@@ -1014,7 +1014,7 @@ VIS.MRole.getHomePage = function () {
 
 VIS.MRole.toStringX = function (ctx) {
     var sb = new StringBuilder();
-    sb.append(VIS.Msg.translate(ctx, "AD_Role_ID")).append("=").append(
+    sb.append(VIS.Msg.translate(ctx, "VAF_Role_ID")).append("=").append(
             this.getName()).append(" - ").append(
                     VIS.Msg.translate(ctx, "IsCanExport")).append("=").append(
                             this.getIsCanExport()).append(" - ").append(

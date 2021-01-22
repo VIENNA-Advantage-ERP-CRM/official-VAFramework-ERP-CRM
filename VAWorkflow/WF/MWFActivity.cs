@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_AD_WF_Activity
+ * Class Used     : X_VAF_WFlow_Task
  * Chronological Development
  * Veena Pandey     02-May-2009
  * Lakhwinder       11-Nov-2013
@@ -28,7 +28,7 @@ using VAWorkflow.Classes;
 
 namespace VAdvantage.WF
 {
-    public class MWFActivity : X_AD_WF_Activity
+    public class MWFActivity : X_VAF_WFlow_Task
     {
         /**	State Machine				*/
         private StateEngine _state = null;
@@ -52,7 +52,7 @@ namespace VAdvantage.WF
         private List<String> _emails = new List<String>();
         private bool isBIReport = false;
         private bool isJasperReport = false;
-        private int AD_Window_ID = 0;
+        private int VAF_Screen_ID = 0;
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MWFActivity).FullName);
 
@@ -66,12 +66,12 @@ namespace VAdvantage.WF
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Activity_ID">id</param>
+        /// <param name="VAF_WFlow_Task_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFActivity(Ctx ctx, int AD_WF_Activity_ID, Trx trxName)
-            : base(ctx, AD_WF_Activity_ID, trxName)
+        public MWFActivity(Ctx ctx, int VAF_WFlow_Task_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_Task_ID, trxName)
         {
-            if (AD_WF_Activity_ID == 0)
+            if (VAF_WFlow_Task_ID == 0)
                 throw new ArgumentException("Cannot create new WF Activity directly");
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
@@ -94,19 +94,19 @@ namespace VAdvantage.WF
         /// Parent Contructor
         /// </summary>
         /// <param name="process">process</param>
-        /// <param name="AD_WF_Node_ID">start node id</param>
-        public MWFActivity(MWFProcess process, int AD_WF_Node_ID)
+        /// <param name="VAF_WFlow_Node_ID">start node id</param>
+        public MWFActivity(MWFProcess process, int VAF_WFlow_Node_ID)
             : base(process.GetCtx(), 0, process.Get_TrxName())
         {
-            SetAD_WF_Process_ID(process.GetAD_WF_Process_ID());
+            SetVAF_WFlow_Handler_ID(process.GetVAF_WFlow_Handler_ID());
             SetPriority(process.GetPriority());
 
             // vinay bhatt window id 
-            SetAD_Window_ID(process.GetAD_Window_ID());
+            SetVAF_Screen_ID(process.GetVAF_Screen_ID());
             //
 
             //	Document Link
-            SetAD_Table_ID(process.GetAD_Table_ID());
+            SetVAF_TableView_ID(process.GetVAF_TableView_ID());
             SetRecord_ID(process.GetRecord_ID());
             //	Status
             base.SetWFState(WFSTATE_NotStarted);
@@ -115,14 +115,14 @@ namespace VAdvantage.WF
             SetProcessed(false);
             //	Set Workflow Node
             SetAD_Workflow_ID(process.GetAD_Workflow_ID());
-            SetAD_WF_Node_ID(AD_WF_Node_ID);
+            SetVAF_WFlow_Node_ID(VAF_WFlow_Node_ID);
 
             SetSummary(GetSummary());
             // Set transaction organization on workflow activities
-            SetAD_Org_ID(process.GetAD_Org_ID());
+            SetVAF_Org_ID(process.GetVAF_Org_ID());
 
             //	Node Priority & End Duration
-            MWFNode node = MWFNode.Get(GetCtx(), AD_WF_Node_ID);
+            MWFNode node = MWFNode.Get(GetCtx(), VAF_WFlow_Node_ID);
             int priority = node.GetPriority();
             if (priority != 0 && priority != GetPriority())
                 SetPriority(priority);
@@ -135,7 +135,7 @@ namespace VAdvantage.WF
 
             // set zoom window ID if selected on node
             if (node.GetZoomWindow_ID() > 0)
-                SetAD_Window_ID(node.GetZoomWindow_ID());
+                SetVAF_Screen_ID(node.GetZoomWindow_ID());
 
             //	Responsible
             SetResponsible(process);
@@ -152,17 +152,17 @@ namespace VAdvantage.WF
         /// Get Activities for table/tecord
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <param name="activeOnly">if true only not processed records are returned</param>
         /// <returns>activity</returns>
-        public static MWFActivity[] Get(Ctx ctx, int AD_Table_ID, int Record_ID, bool activeOnly)
+        public static MWFActivity[] Get(Ctx ctx, int VAF_TableView_ID, int Record_ID, bool activeOnly)
         {
             List<MWFActivity> list = new List<MWFActivity>();
-            String sql = "SELECT * FROM AD_WF_Activity WHERE AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + "";
+            String sql = "SELECT * FROM VAF_WFlow_Task WHERE VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + "";
             if (activeOnly)
                 sql += " AND Processed<>'Y'";
-            sql += " ORDER BY AD_WF_Activity_ID";
+            sql += " ORDER BY VAF_WFlow_Task_ID";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -187,12 +187,12 @@ namespace VAdvantage.WF
         /// Get Active Info
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns>activity summary</returns>
-        public static String GetActiveInfo(Ctx ctx, int AD_Table_ID, int Record_ID)
+        public static String GetActiveInfo(Ctx ctx, int VAF_TableView_ID, int Record_ID)
         {
-            MWFActivity[] acts = Get(ctx, AD_Table_ID, Record_ID, true);
+            MWFActivity[] acts = Get(ctx, VAF_TableView_ID, Record_ID, true);
             if (acts == null || acts.Length == 0)
                 return null;
             //
@@ -244,9 +244,9 @@ namespace VAdvantage.WF
 
                 //	Inform Process
                 if (_process == null)
-                    _process = new MWFProcess(GetCtx(), GetAD_WF_Process_ID(), null);
+                    _process = new MWFProcess(GetCtx(), GetVAF_WFlow_Handler_ID(), null);
 
-                _process.SetAD_Window_ID(GetAD_Window_ID());
+                _process.SetVAF_Screen_ID(GetVAF_Screen_ID());
                 _process.CheckActivities();
             }
             else
@@ -300,7 +300,7 @@ namespace VAdvantage.WF
         {
             if (_audit != null)
                 return _audit;
-            MWFEventAudit[] events = MWFEventAudit.Get(GetCtx(), GetAD_WF_Process_ID(), GetAD_WF_Node_ID());
+            MWFEventAudit[] events = MWFEventAudit.Get(GetCtx(), GetVAF_WFlow_Handler_ID(), GetVAF_WFlow_Node_ID());
             if (events == null || events.Length == 0)
                 _audit = new MWFEventAudit(this);
             else
@@ -318,7 +318,7 @@ namespace VAdvantage.WF
         //    if (_po != null)
         //        return _po;
 
-        //    MTable table = MTable.Get(GetCtx(), GetAD_Table_ID());
+        //    MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
         //    _po = table.GetPO(GetCtx(), GetRecord_ID(), trxName);
         //    return _po;
         //}
@@ -343,7 +343,7 @@ namespace VAdvantage.WF
                 return _po;
             }
 
-            MTable table = MTable.Get(GetCtx(), GetAD_Table_ID());
+            MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
             _po = table.GetPO(GetCtx(), GetRecord_ID(), trx);
             return _po;
 
@@ -367,18 +367,18 @@ namespace VAdvantage.WF
         }
 
         /// <summary>
-        /// Get PO AD_Client_ID
+        /// Get PO VAF_Client_ID
         /// </summary>
         /// <param name="trxName">transaction</param>
         /// <returns>client of PO or -1</returns>
-        public int GetPO_AD_Client_ID(Trx trxName)
+        public int GetPO_VAF_Client_ID(Trx trxName)
         {
             if (_po == null && trxName == null)
                 GetPO(_trx);
             if (_po == null)
                 GetPO(trxName);
             if (_po != null)
-                return _po.GetAD_Client_ID();
+                return _po.GetVAF_Client_ID();
             return -1;
         }
 
@@ -391,13 +391,13 @@ namespace VAdvantage.WF
             MWFNode node = GetNode();
             if (node == null)
                 return null;
-            int AD_Column_ID = node.GetAD_Column_ID();
-            if (AD_Column_ID == 0)
+            int VAF_Column_ID = node.GetVAF_Column_ID();
+            if (VAF_Column_ID == 0)
                 return null;
             PO po = GetPO();
             if (po.Get_ID() == 0)
                 return null;
-            return po.Get_ValueOfColumn(AD_Column_ID);
+            return po.Get_ValueOfColumn(VAF_Column_ID);
         }
 
         /// <summary>
@@ -431,15 +431,15 @@ namespace VAdvantage.WF
         }
 
         /// <summary>
-        /// Set AD_WF_Node_ID.
+        /// Set VAF_WFlow_Node_ID.
         /// (Re)Set to Not Started
         /// </summary>
-        /// <param name="AD_WF_Node_ID">new node</param>
-        public new void SetAD_WF_Node_ID(int AD_WF_Node_ID)
+        /// <param name="VAF_WFlow_Node_ID">new node</param>
+        public new void SetVAF_WFlow_Node_ID(int VAF_WFlow_Node_ID)
         {
-            if (AD_WF_Node_ID == 0)
+            if (VAF_WFlow_Node_ID == 0)
                 throw new ArgumentException("Workflow Node is not defined");
-            base.SetAD_WF_Node_ID(AD_WF_Node_ID);
+            base.SetVAF_WFlow_Node_ID(VAF_WFlow_Node_ID);
             //
             if (!WFSTATE_NotStarted.Equals(GetWFState()))
             {
@@ -458,7 +458,7 @@ namespace VAdvantage.WF
         public MWFNode GetNode()
         {
             if (_node == null)
-                _node = MWFNode.Get(GetCtx(), GetAD_WF_Node_ID());
+                _node = MWFNode.Get(GetCtx(), GetVAF_WFlow_Node_ID());
             return _node;
         }
 
@@ -588,7 +588,7 @@ namespace VAdvantage.WF
         /// <returns>state text</returns>
         public String GetWFStateText()
         {
-            return MRefList.GetListName(GetCtx(), WFSTATE_AD_Reference_ID, GetWFState());
+            return MRefList.GetListName(GetCtx(), WFSTATE_VAF_Control_Ref_ID, GetWFState());
         }
 
         /// <summary>
@@ -598,19 +598,19 @@ namespace VAdvantage.WF
         private void SetResponsible(MWFProcess process)
         {
             //	Responsible
-            int AD_WF_Responsible_ID = GetNode().GetAD_WF_Responsible_ID();
-            if (AD_WF_Responsible_ID == 0)	//	not defined on Node Level
-                AD_WF_Responsible_ID = process.GetAD_WF_Responsible_ID();
-            SetAD_WF_Responsible_ID(AD_WF_Responsible_ID);
+            int VAF_WFlow_Incharge_ID = GetNode().GetVAF_WFlow_Incharge_ID();
+            if (VAF_WFlow_Incharge_ID == 0)	//	not defined on Node Level
+                VAF_WFlow_Incharge_ID = process.GetVAF_WFlow_Incharge_ID();
+            SetVAF_WFlow_Incharge_ID(VAF_WFlow_Incharge_ID);
             MWFResponsible resp = GetResponsible();
 
             //	User - Directly responsible
-            int AD_User_ID = resp.GetAD_User_ID();
+            int VAF_UserContact_ID = resp.GetVAF_UserContact_ID();
             //	Invoker - get Sales Rep or last updater of document
-            if (AD_User_ID == 0 && resp.IsInvoker())
-                AD_User_ID = process.GetAD_User_ID();
+            if (VAF_UserContact_ID == 0 && resp.IsInvoker())
+                VAF_UserContact_ID = process.GetVAF_UserContact_ID();
             //
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -619,7 +619,7 @@ namespace VAdvantage.WF
         /// <returns>responsible</returns>
         public MWFResponsible GetResponsible()
         {
-            MWFResponsible resp = MWFResponsible.Get(GetCtx(), GetAD_WF_Responsible_ID());
+            MWFResponsible resp = MWFResponsible.Get(GetCtx(), GetVAF_WFlow_Incharge_ID());
             return resp;
         }
 
@@ -636,21 +636,21 @@ namespace VAdvantage.WF
         /// Get Approval User.
         /// If the returned user is the same, the document is approved.
         /// </summary>
-        /// <param name="AD_User_ID">starting User</param>
+        /// <param name="VAF_UserContact_ID">starting User</param>
         /// <param name="C_Currency_ID">currency</param>
         /// <param name="amount">amount</param>
-        /// <param name="AD_Org_ID">document organization</param>
-        /// <param name="ownDocument">the document is owned by AD_User_ID</param>
-        /// <returns>AD_User_ID - if -1 no Approver</returns>
-        public int GetApprovalUser(int AD_User_ID, int C_Currency_ID, Decimal amount,
-            int AD_Org_ID, bool ownDocument, bool FetchLastApprover)
+        /// <param name="VAF_Org_ID">document organization</param>
+        /// <param name="ownDocument">the document is owned by VAF_UserContact_ID</param>
+        /// <returns>VAF_UserContact_ID - if -1 no Approver</returns>
+        public int GetApprovalUser(int VAF_UserContact_ID, int C_Currency_ID, Decimal amount,
+            int VAF_Org_ID, bool ownDocument, bool FetchLastApprover)
         {
             //	Nothing to approve
             if (Math.Sign(amount) == 0)
-                return AD_User_ID;
+                return VAF_UserContact_ID;
 
             //	Starting user
-            MUser user = MUser.Get(GetCtx(), AD_User_ID);
+            MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
             log.Info("For User=" + user + ", Amt=" + amount + ", Own=" + ownDocument);
 
             MUser oldUser = null;
@@ -663,7 +663,7 @@ namespace VAdvantage.WF
 
                     // In case if fetchlastapprover is true else return -1
                     if (FetchLastApprover)
-                        return user.GetAD_User_ID();
+                        return user.GetVAF_UserContact_ID();
                     else
                         return -1;
 
@@ -671,7 +671,7 @@ namespace VAdvantage.WF
                 oldUser = user;
                 log.Fine("User=" + user.GetName());
                 //	Get Roles of User
-                MRole[] roles = user.GetRoles(AD_Org_ID);
+                MRole[] roles = user.GetRoles(VAF_Org_ID);
                 for (int i = 0; i < roles.Length; i++)
                 {
                     MRole role = roles[i];
@@ -685,7 +685,7 @@ namespace VAdvantage.WF
                     {
                         roleAmt = MConversionRate.Convert(GetCtx(),//	today & default rate 
                             roleAmt, role.GetC_Currency_ID(),
-                            C_Currency_ID, GetAD_Client_ID(), AD_Org_ID);
+                            C_Currency_ID, GetVAF_Client_ID(), VAF_Org_ID);
                         if (Math.Sign(roleAmt) == 0)
                             continue;
                     }
@@ -693,7 +693,7 @@ namespace VAdvantage.WF
                     log.Fine("Approved=" + approved + " - User=" + user.GetName() + ", Role=" + role.GetName()
                         + ", ApprovalAmt=" + roleAmt);
                     if (approved)
-                        return user.GetAD_User_ID();
+                        return user.GetVAF_UserContact_ID();
                 }
 
                 //	**** Find next User 
@@ -706,7 +706,7 @@ namespace VAdvantage.WF
                 else
                 {
                     log.Fine("No Supervisor");
-                    MOrg org = MOrg.Get(GetCtx(), AD_Org_ID);
+                    MOrg org = MOrg.Get(GetCtx(), VAF_Org_ID);
                     MOrgInfo orgInfo = org.GetInfo();
                     //	Get Org Supervisor
                     if (orgInfo.GetSupervisor_ID() != 0)
@@ -761,7 +761,7 @@ namespace VAdvantage.WF
             {
                 if (GetNode().Get_ID() == 0)
                 {
-                    SetTextMsg("Node not found - AD_WF_Node_ID=" + GetAD_WF_Node_ID());
+                    SetTextMsg("Node not found - VAF_WFlow_Node_ID=" + GetVAF_WFlow_Node_ID());
                     SetWFState(StateEngine.STATE_ABORTED);
                     return;
                 }
@@ -840,7 +840,7 @@ namespace VAdvantage.WF
         private bool PerformWork(Trx trx)
         {
             ReportCtl.Report = null;
-            // AD_ReportFormat_ID = 0;
+            // VAF_ReportLayout_ID = 0;
 
             log.Info(_node + " [" + trx + "]");
             _postImmediate = null;
@@ -871,8 +871,8 @@ namespace VAdvantage.WF
                 log.Fine("DocumentAction=" + _node.GetDocAction());
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 _po.Set_TrxName(trx);
                 bool success = false;
                 String processMsg = null;
@@ -891,20 +891,20 @@ namespace VAdvantage.WF
                     //{
                     //    try
                     //    {
-                    //        if (GetAD_Table_ID().Equals(259))
+                    //        if (GetVAF_TableView_ID().Equals(259))
                     //        {
                     //            if (!(((MOrder)(doc)).IsSOTrx()) && !(((MOrder)(doc)).IsReturnTrx()))
                     //            {
-                    //                string sqlChkBud = "SELECT IsBudgetEnabled FROM AD_Org WHERE AD_Org_ID = " + GetAD_Org_ID();
+                    //                string sqlChkBud = "SELECT IsBudgetEnabled FROM VAF_Org WHERE VAF_Org_ID = " + GetVAF_Org_ID();
                     //                string budChk = Util.GetValueOfString(DB.ExecuteScalar(sqlChkBud, null, null));
                     //                if (budChk.Equals("Y"))
                     //                {
                     //                    ModelLibrary.Classes.BudgetCheck bc = new ModelLibrary.Classes.BudgetCheck();
-                    //                    bc.AD_Table_ID = GetAD_Table_ID();
+                    //                    bc.VAF_TableView_ID = GetVAF_TableView_ID();
                     //                    bc.Record_ID = GetRecord_ID();
                     //                    bc.TrxName = trx;
-                    //                    bc.AD_Client_ID = doc.GetAD_Client_ID();
-                    //                    bc.AD_Org_ID = doc.GetAD_Org_ID();
+                    //                    bc.VAF_Client_ID = doc.GetVAF_Client_ID();
+                    //                    bc.VAF_Org_ID = doc.GetVAF_Org_ID();
                     //                    bc.DocAction = _node.GetDocAction();
                     //                    bc.CheckBudget();
                     //                }
@@ -924,7 +924,7 @@ namespace VAdvantage.WF
                     //	Post Immediate
                     if (success && DocActionVariables.ACTION_COMPLETE.Equals(_node.GetDocAction()))
                     {
-                        MClient client = MClient.Get(_po.GetCtx(), doc.GetAD_Client_ID());
+                        MClient client = MClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
                         if (client.IsPostImmediate())
                             _postImmediate = doc;
                     }
@@ -936,9 +936,9 @@ namespace VAdvantage.WF
                 {
                     //throw new IllegalStateException("Persistent Object not DocAction - "
                     //    + _po.getClass().getName()
-                    //    + " - AD_Table_ID=" + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    //    + " - VAF_TableView_ID=" + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                     throw new Exception("Persistent Object not DocAction"
-                        + " - AD_Table_ID=" + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                        + " - VAF_TableView_ID=" + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 }
                 //
                 if (!_po.Save())
@@ -968,39 +968,39 @@ namespace VAdvantage.WF
             /******	Report						******/
             else if (MWFNode.ACTION_AppsReport.Equals(action))
             {
-                log.Fine("Report:AD_Process_ID=" + _node.GetAD_Process_ID());
+                log.Fine("Report:VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //	Process
-                MProcess process = MProcess.Get(GetCtx(), _node.GetAD_Process_ID());
+                MProcess process = MProcess.Get(GetCtx(), _node.GetVAF_Job_ID());
 
-                if (!process.IsReport() || (process.GetAD_PrintFormat_ID() == 0
-                                             && process.GetAD_ReportView_ID() == 0
+                if (!process.IsReport() || (process.GetVAF_Print_Rpt_Layout_ID() == 0
+                                             && process.GetVAF_ReportView_ID() == 0
                                              && process.GetIsCrystalReport() == "N"
-                                              && process.GetAD_ReportFormat_ID() == 0
+                                              && process.GetVAF_ReportLayout_ID() == 0
                                               && !process.Get_Value("IsCrystalReport").Equals("B")
                                               && !process.Get_Value("IsCrystalReport").Equals("J")
-                                                 && process.GetAD_ReportMaster_ID() == 0))
+                                                 && process.GetVAF_ReportMaster_ID() == 0))
 
-                // if (!process.IsReport() || process.GetAD_ReportView_ID() == 0)
+                // if (!process.IsReport() || process.GetVAF_ReportView_ID() == 0)
                 {
 
-                    //throw new IllegalStateException("Not a Report AD_Process_ID=" + _node.getAD_Process_ID());
-                    throw new Exception("Not a Report AD_Process_ID=" + _node.GetAD_Process_ID());
+                    //throw new IllegalStateException("Not a Report VAF_Job_ID=" + _node.getVAF_Job_ID());
+                    throw new Exception("Not a Report VAF_Job_ID=" + _node.GetVAF_Job_ID());
 
                 }
                 //
-                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetAD_Process_ID(),
-                    GetAD_Table_ID(), GetRecord_ID());
-                pi.SetAD_User_ID(GetAD_User_ID());
-                pi.SetAD_Client_ID(GetAD_Client_ID());
+                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetVAF_Job_ID(),
+                    GetVAF_TableView_ID(), GetRecord_ID());
+                pi.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
+                pi.SetVAF_Client_ID(GetVAF_Client_ID());
                 MPInstance pInstance = new MPInstance(process, GetRecord_ID());
                 FillParameter(pInstance, trx);
-                pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
                 //	Report
                 //ReportEngine_N re = ReportEngine_N.Get(GetCtx(), pi);
                 //if (re == null)
                 //{
-                //    //throw new IllegalStateException("Cannot create Report AD_Process_ID=" + _node.getAD_Process_ID());
-                //    throw new Exception("Cannot create Report AD_Process_ID=" + _node.GetAD_Process_ID());
+                //    //throw new IllegalStateException("Cannot create Report VAF_Job_ID=" + _node.getVAF_Job_ID());
+                //    throw new Exception("Cannot create Report VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //}
 
                 if (process.GetIsCrystalReport() == "Y")
@@ -1012,8 +1012,8 @@ namespace VAdvantage.WF
                     pi.SetIsCrystal(false);
                 }
 
-                pi.SetAD_ReportFormat_ID(process.GetAD_ReportFormat_ID());
-                pi.SetAD_ReportMaster_ID(process.GetAD_ReportMaster_ID());
+                pi.SetVAF_ReportLayout_ID(process.GetVAF_ReportLayout_ID());
+                pi.SetVAF_ReportMaster_ID(process.GetVAF_ReportMaster_ID());
                 process.ProcessIt(pi, trx);
                 ReportRun(pi);
                 SendNoticeEMail(trx);
@@ -1026,22 +1026,22 @@ namespace VAdvantage.WF
             /******	Process						******/
             else if (MWFNode.ACTION_AppsProcess.Equals(action))
             {
-                log.Fine("Process:AD_Process_ID=" + _node.GetAD_Process_ID());
+                log.Fine("Process:VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //	Process
-                MProcess process = MProcess.Get(GetCtx(), _node.GetAD_Process_ID());
+                MProcess process = MProcess.Get(GetCtx(), _node.GetVAF_Job_ID());
                 MPInstance pInstance = new MPInstance(process, GetRecord_ID());
                 FillParameter(pInstance, trx);
                 //
-                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetAD_Process_ID(),
-                    GetAD_Table_ID(), GetRecord_ID());
-                pi.SetAD_User_ID(GetAD_User_ID());
-                pi.SetAD_Client_ID(GetAD_Client_ID());
+                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetVAF_Job_ID(),
+                    GetVAF_TableView_ID(), GetRecord_ID());
+                pi.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
+                pi.SetVAF_Client_ID(GetVAF_Client_ID());
 
                 // set window ID in processinfo if found in Workflow Process
-                if (Util.GetValueOfInt(_process.GetAD_Window_ID()) > 0)
-                    pi.SetAD_Window_ID(_process.GetAD_Window_ID());
+                if (Util.GetValueOfInt(_process.GetVAF_Screen_ID()) > 0)
+                    pi.SetVAF_Screen_ID(_process.GetVAF_Screen_ID());
 
-                pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
                 return process.ProcessIt(pi, trx);
             }
 
@@ -1057,8 +1057,8 @@ namespace VAdvantage.WF
                 log.Fine("EMail:EMailRecipient=" + _node.GetEMailRecipient());
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 // if (_po.GetType() == typeof(DocAction) || _po.GetType().GetInterface("DocAction", true) == typeof(DocAction))
                 // {
                 _emails = new List<String>();
@@ -1080,7 +1080,7 @@ namespace VAdvantage.WF
                 //  }
                 //  else
                 //  {
-                //   MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+                //   MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
                 //   MMailText mailtext = new MMailText(GetCtx(), GetNode().GetR_MailText_ID(), null);
 
                 //   String subject = GetNode().GetDescription()
@@ -1104,9 +1104,9 @@ namespace VAdvantage.WF
             else if (MWFNode.ACTION_SetVariable.Equals(action))
             {
                 String value = _node.GetAttributeValue();
-                log.Fine("SetVariable:AD_Column_ID=" + _node.GetAD_Column_ID() + " to " + value);
+                log.Fine("SetVariable:VAF_Column_ID=" + _node.GetVAF_Column_ID() + " to " + value);
                 MColumn column = _node.GetColumn();
-                int dt = column.GetAD_Reference_ID();
+                int dt = column.GetVAF_Control_Ref_ID();
                 return SetVariable(value, dt, null);
             }
 
@@ -1119,7 +1119,7 @@ namespace VAdvantage.WF
             /******	User Choice					******/
             else if (MWFNode.ACTION_UserChoice.Equals(action))
             {
-                log.Fine("UserChoice:AD_Column_ID=" + _node.GetAD_Column_ID());
+                log.Fine("UserChoice:VAF_Column_ID=" + _node.GetVAF_Column_ID());
                 //	Approval
                 if (_node.IsUserApproval() && (GetPO().GetType() == typeof(DocAction) || GetPO().GetType().GetInterface("DocAction") == typeof(DocAction)))
                 {
@@ -1129,44 +1129,44 @@ namespace VAdvantage.WF
                     if (IsInvoker())
                     {
                         //	Set Approver
-                        int startAD_User_ID = GetAD_User_ID();
-                        if (startAD_User_ID == 0)
-                            startAD_User_ID = doc.GetDoc_User_ID();
-                        int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
+                        int startVAF_UserContact_ID = GetVAF_UserContact_ID();
+                        if (startVAF_UserContact_ID == 0)
+                            startVAF_UserContact_ID = doc.GetDoc_User_ID();
+                        int nextVAF_UserContact_ID = GetApprovalUser(startVAF_UserContact_ID,
                             doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
-                            doc.GetAD_Org_ID(),
-                            startAD_User_ID == doc.GetDoc_User_ID(), true);	//	own doc
+                            doc.GetVAF_Org_ID(),
+                            startVAF_UserContact_ID == doc.GetDoc_User_ID(), true);	//	own doc
                         //	same user = approved
-                        autoApproval = startAD_User_ID == nextAD_User_ID;
+                        autoApproval = startVAF_UserContact_ID == nextVAF_UserContact_ID;
                         if (!autoApproval)
                         {
                             // applied check for user whether user is available or user is active
-                            CheckUser(nextAD_User_ID);
-                            SetAD_User_ID(nextAD_User_ID);
+                            CheckUser(nextVAF_UserContact_ID);
+                            SetVAF_UserContact_ID(nextVAF_UserContact_ID);
                         }
 
                         //Lakhwinder
-                        //if (GetAD_User_ID() == 0)
+                        //if (GetVAF_UserContact_ID() == 0)
                         //{
-                        //    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + p_ctx.GetAD_User_ID()));
-                        //    SetAD_User_ID(nextAD_User_ID);
+                        //    nextVAF_UserContact_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM VAF_UserContact WHERE IsActive='Y' AND VAF_UserContact_ID=" + p_ctx.GetVAF_UserContact_ID()));
+                        //    SetVAF_UserContact_ID(nextVAF_UserContact_ID);
 
                     }
                     else	//	fixed Approver
                     {
                         // MWFResponsible resp = GetResponsible();
-                        //autoApproval = resp.GetAD_User_ID() == GetAD_User_ID();
-                        //if (!autoApproval && resp.GetAD_User_ID() != 0)
+                        //autoApproval = resp.GetVAF_UserContact_ID() == GetVAF_UserContact_ID();
+                        //if (!autoApproval && resp.GetVAF_UserContact_ID() != 0)
                         //{
-                        //    SetAD_User_ID(resp.GetAD_User_ID());
+                        //    SetVAF_UserContact_ID(resp.GetVAF_UserContact_ID());
                         //}
 
                         // Change to fetch user from responsible
-                        int userID = GetUserFromWFResponsible(_node.GetAD_WF_Responsible_ID(), GetPO());
+                        int userID = GetUserFromWFResponsible(_node.GetVAF_WFlow_Incharge_ID(), GetPO());
                         if (!autoApproval && userID != 0)
                         {
                             CheckUser(userID);
-                            SetAD_User_ID(userID);
+                            SetVAF_UserContact_ID(userID);
                         }
                     }
 
@@ -1184,96 +1184,96 @@ namespace VAdvantage.WF
                         doc = (DocAction)_po;
                     }
                     //bool autoApproval = false;
-                    int startAD_User_ID = 0;
-                    int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.AD_WF_EventAudit_ID
-                                                                    FROM AD_WF_EventAudit WFE
-                                                                    INNER JOIN AD_WF_Process WFP
-                                                                    ON (WFP.AD_WF_Process_ID=WFE.AD_WF_Process_ID)
-                                                                    INNER JOIN AD_WF_Activity WFA
-                                                                    ON (WFA.AD_WF_Process_ID =WFP.AD_WF_Process_ID)
-                                                                    WHERE WFE.AD_WF_Node_ID  =" + GetAD_WF_Node_ID() + @"
-                                                                    AND WFA.AD_WF_Activity_ID=" + GetAD_WF_Activity_ID()));
+                    int startVAF_UserContact_ID = 0;
+                    int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.VAF_WFlow_EventLog_ID
+                                                                    FROM VAF_WFlow_EventLog WFE
+                                                                    INNER JOIN VAF_WFlow_Handler WFP
+                                                                    ON (WFP.VAF_WFlow_Handler_ID=WFE.VAF_WFlow_Handler_ID)
+                                                                    INNER JOIN VAF_WFlow_Task WFA
+                                                                    ON (WFA.VAF_WFlow_Handler_ID =WFP.VAF_WFlow_Handler_ID)
+                                                                    WHERE WFE.VAF_WFlow_Node_ID  =" + GetVAF_WFlow_Node_ID() + @"
+                                                                    AND WFA.VAF_WFlow_Task_ID=" + GetVAF_WFlow_Task_ID()));
                     MWFEventAudit eve = new MWFEventAudit(GetCtx(), evendID, null);
                     // Changes done to handle Workflow Responsible in case of Multi Approval
-                    int nextAD_User_ID = 0;
-                    if (_node.GetAD_Column_ID_3() > 0)
+                    int nextVAF_UserContact_ID = 0;
+                    if (_node.GetVAF_Column_ID_3() > 0)
                     {
-                        startAD_User_ID = Util.GetValueOfInt(_po.Get_Value((new MColumn(GetCtx(), _node.GetAD_Column_ID_3(), null).GetColumnName())));
+                        startVAF_UserContact_ID = Util.GetValueOfInt(_po.Get_Value((new MColumn(GetCtx(), _node.GetVAF_Column_ID_3(), null).GetColumnName())));
                     }
                     // Added check to handle approver in case of workflow Responsible
-                    else if (_node.GetAD_WF_Responsible_ID() > 0 || _node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
+                    else if (_node.GetVAF_WFlow_Incharge_ID() > 0 || _node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
                     {
-                        int AD_WF_Responsible_ID = 0;
-                        if (_node.GetAD_WF_Responsible_ID() > 0)
-                            AD_WF_Responsible_ID = _node.GetAD_WF_Responsible_ID();
-                        else if (_node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
-                            AD_WF_Responsible_ID = _node.GetWorkflow().GetAD_WF_Responsible_ID();
-                        MWFResponsible resp = new MWFResponsible(GetCtx(), AD_WF_Responsible_ID, Get_TrxName());
+                        int VAF_WFlow_Incharge_ID = 0;
+                        if (_node.GetVAF_WFlow_Incharge_ID() > 0)
+                            VAF_WFlow_Incharge_ID = _node.GetVAF_WFlow_Incharge_ID();
+                        else if (_node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
+                            VAF_WFlow_Incharge_ID = _node.GetWorkflow().GetVAF_WFlow_Incharge_ID();
+                        MWFResponsible resp = new MWFResponsible(GetCtx(), VAF_WFlow_Incharge_ID, Get_TrxName());
                         if (!resp.IsInvoker() || resp.IsOrganization() || resp.IsSQL())
                         {
-                            startAD_User_ID = GetAD_User_ID();
-                            if (doc != null && startAD_User_ID == 0)
-                                startAD_User_ID = doc.GetDoc_User_ID();
+                            startVAF_UserContact_ID = GetVAF_UserContact_ID();
+                            if (doc != null && startVAF_UserContact_ID == 0)
+                                startVAF_UserContact_ID = doc.GetDoc_User_ID();
                             if (_node.GetApprovalLeval() == 0)
                             {
-                                SetAD_User_ID(startAD_User_ID);
-                                eve.SetAD_User_ID(startAD_User_ID);
+                                SetVAF_UserContact_ID(startVAF_UserContact_ID);
+                                eve.SetVAF_UserContact_ID(startVAF_UserContact_ID);
                                 eve.Save();
                                 return true;
                             }
-                            nextAD_User_ID = GetUserFromWFResponsible(AD_WF_Responsible_ID, GetPO());
-                            CheckUser(nextAD_User_ID);
-                            if (nextAD_User_ID == 0)
+                            nextVAF_UserContact_ID = GetUserFromWFResponsible(VAF_WFlow_Incharge_ID, GetPO());
+                            CheckUser(nextVAF_UserContact_ID);
+                            if (nextVAF_UserContact_ID == 0)
                             {
-                                SetAD_User_ID(startAD_User_ID);
-                                eve.SetAD_User_ID(startAD_User_ID);
+                                SetVAF_UserContact_ID(startVAF_UserContact_ID);
+                                eve.SetVAF_UserContact_ID(startVAF_UserContact_ID);
                                 eve.Save();
                                 return true;
                             }
                             if (resp.IsOrganization())
                             {
-                                SetResponsibleOrg_ID(_po.GetAD_Org_ID());
-                                eve.SetResponsibleOrg_ID(_po.GetAD_Org_ID());
+                                SetResponsibleOrg_ID(_po.GetVAF_Org_ID());
+                                eve.SetResponsibleOrg_ID(_po.GetVAF_Org_ID());
                             }
-                            SetAD_User_ID(nextAD_User_ID);
-                            eve.SetAD_User_ID(nextAD_User_ID);
+                            SetVAF_UserContact_ID(nextVAF_UserContact_ID);
+                            eve.SetVAF_UserContact_ID(nextVAF_UserContact_ID);
                             eve.Save();
                             return false;
                         }
                         else
-                            startAD_User_ID = GetAD_User_ID();
+                            startVAF_UserContact_ID = GetVAF_UserContact_ID();
                     }
-                    else if (startAD_User_ID == 0)
+                    else if (startVAF_UserContact_ID == 0)
                     {
-                        startAD_User_ID = GetAD_User_ID();
+                        startVAF_UserContact_ID = GetVAF_UserContact_ID();
                     }
-                    if (doc != null && startAD_User_ID == 0)
-                        startAD_User_ID = doc.GetDoc_User_ID();
+                    if (doc != null && startVAF_UserContact_ID == 0)
+                        startVAF_UserContact_ID = doc.GetDoc_User_ID();
                     if (_node.GetApprovalLeval() == 0)
                     {
-                        SetAD_User_ID(startAD_User_ID);
-                        eve.SetAD_User_ID(startAD_User_ID);
+                        SetVAF_UserContact_ID(startVAF_UserContact_ID);
+                        eve.SetVAF_UserContact_ID(startVAF_UserContact_ID);
                         eve.Save();
                         return true;
                     }
 
-                    SetAD_User_ID(startAD_User_ID);
-                    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + startAD_User_ID));
+                    SetVAF_UserContact_ID(startVAF_UserContact_ID);
+                    nextVAF_UserContact_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM VAF_UserContact WHERE IsActive='Y' AND VAF_UserContact_ID=" + startVAF_UserContact_ID));
                     //	same user = approved
-                    //autoApproval = startAD_User_ID == nextAD_User_ID;
-                    CheckUser(nextAD_User_ID);
-                    if (nextAD_User_ID == 0)
+                    //autoApproval = startVAF_UserContact_ID == nextVAF_UserContact_ID;
+                    CheckUser(nextVAF_UserContact_ID);
+                    if (nextVAF_UserContact_ID == 0)
                     {
-                        SetAD_User_ID(startAD_User_ID);
-                        eve.SetAD_User_ID(startAD_User_ID);
+                        SetVAF_UserContact_ID(startVAF_UserContact_ID);
+                        eve.SetVAF_UserContact_ID(startVAF_UserContact_ID);
                         eve.Save();
                         return true;
                     }
-                    SetAD_User_ID(nextAD_User_ID);
-                    eve.SetAD_User_ID(nextAD_User_ID);
+                    SetVAF_UserContact_ID(nextVAF_UserContact_ID);
+                    eve.SetVAF_UserContact_ID(nextVAF_UserContact_ID);
                     eve.Save();
                     //if (!autoApproval)
-                    //    SetAD_User_ID(nextAD_User_ID);
+                    //    SetVAF_UserContact_ID(nextVAF_UserContact_ID);
                     //if (autoApproval)
                     //{
                     //    if (doc != null)
@@ -1282,7 +1282,7 @@ namespace VAdvantage.WF
                     //        doc.Save();
                     //    }
                     //    MColumn column = _node.GetColumn();
-                    //    int dt = column.GetAD_Reference_ID();
+                    //    int dt = column.GetVAF_Control_Ref_ID();
                     //    SetVariable("Y", dt, null);
                     //    return true;
                     //}
@@ -1290,36 +1290,36 @@ namespace VAdvantage.WF
 
                 else
                 {
-                    int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.AD_WF_EventAudit_ID
-                                                                    FROM AD_WF_EventAudit WFE
-                                                                    INNER JOIN AD_WF_Process WFP
-                                                                    ON (WFP.AD_WF_Process_ID=WFE.AD_WF_Process_ID)
-                                                                    INNER JOIN AD_WF_Activity WFA
-                                                                    ON (WFA.AD_WF_Process_ID =WFP.AD_WF_Process_ID)
-                                                                    WHERE WFE.AD_WF_Node_ID  =" + GetAD_WF_Node_ID() + @"
-                                                                    AND WFA.AD_WF_Activity_ID=" + GetAD_WF_Activity_ID()));
+                    int evendID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT WFE.VAF_WFlow_EventLog_ID
+                                                                    FROM VAF_WFlow_EventLog WFE
+                                                                    INNER JOIN VAF_WFlow_Handler WFP
+                                                                    ON (WFP.VAF_WFlow_Handler_ID=WFE.VAF_WFlow_Handler_ID)
+                                                                    INNER JOIN VAF_WFlow_Task WFA
+                                                                    ON (WFA.VAF_WFlow_Handler_ID =WFP.VAF_WFlow_Handler_ID)
+                                                                    WHERE WFE.VAF_WFlow_Node_ID  =" + GetVAF_WFlow_Node_ID() + @"
+                                                                    AND WFA.VAF_WFlow_Task_ID=" + GetVAF_WFlow_Task_ID()));
                     MWFEventAudit eve = new MWFEventAudit(GetCtx(), evendID, null);
                     int userID = 0;
 
-                    if (_node.GetAD_WF_Responsible_ID() > 0)
+                    if (_node.GetVAF_WFlow_Incharge_ID() > 0)
                     {
-                        userID = (GetUserFromWFResponsible(_node.GetAD_WF_Responsible_ID(), GetPO()));
+                        userID = (GetUserFromWFResponsible(_node.GetVAF_WFlow_Incharge_ID(), GetPO()));
                     }
-                    else if (_node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
+                    else if (_node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
                     {
-                        userID = (GetUserFromWFResponsible(_node.GetWorkflow().GetAD_WF_Responsible_ID(), GetPO()));
+                        userID = (GetUserFromWFResponsible(_node.GetWorkflow().GetVAF_WFlow_Incharge_ID(), GetPO()));
                     }
                     else
                     {
-                        userID = (GetCtx().GetAD_User_ID());
+                        userID = (GetCtx().GetVAF_UserContact_ID());
                     }
                     CheckUser(userID);
-                    SetAD_User_ID(userID);
-                    eve.SetAD_User_ID(userID);
+                    SetVAF_UserContact_ID(userID);
+                    eve.SetVAF_UserContact_ID(userID);
                     eve.Save();
                 }
                 //For Genral Attribute
-                //else if (new MColumn(GetCtx(),_node.GetAD_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+                //else if (new MColumn(GetCtx(),_node.GetVAF_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
                 //{
 
                 //}
@@ -1334,13 +1334,13 @@ namespace VAdvantage.WF
             /******	User Form					******/
             else if (MWFNode.ACTION_UserForm.Equals(action))
             {
-                log.Fine("Form:AD_For_ID=" + _node.GetAD_Form_ID());
+                log.Fine("Form:AD_For_ID=" + _node.GetVAF_Page_ID());
                 return false;
             }
             /******	User Window					******/
             else if (MWFNode.ACTION_UserWindow.Equals(action))
             {
-                log.Fine("Window:AD_Window_ID=" + _node.GetAD_Window_ID());
+                log.Fine("Window:VAF_Screen_ID=" + _node.GetVAF_Screen_ID());
                 return false;
             }
 
@@ -1350,8 +1350,8 @@ namespace VAdvantage.WF
             {
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 SendSms();
                 return true;
             }
@@ -1362,8 +1362,8 @@ namespace VAdvantage.WF
                 //log.Fine("EMail:EMailRecipient=" + _node.GetEMailRecipient());
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 if (_po.GetType() == typeof(DocAction) || _po.GetType().GetInterface("DocAction", true) == typeof(DocAction))
                 {
                     _emails = new List<String>();
@@ -1382,7 +1382,7 @@ namespace VAdvantage.WF
                 }
                 else
                 {
-                    MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
                     MMailText mailtext = new MMailText(GetCtx(), GetNode().GetR_MailText_ID(), null);
 
                     String subject = GetNode().GetDescription()
@@ -1408,8 +1408,8 @@ namespace VAdvantage.WF
                 log.Fine("EMail:EMailRecipient=" + _node.GetEMailRecipient());
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 //if (_po.GetType() == typeof(DocAction) || _po.GetType().GetInterface("DocAction", true) == typeof(DocAction))
                 // {
                 _emails = new List<String>();
@@ -1429,7 +1429,7 @@ namespace VAdvantage.WF
                 // }
                 // else
                 // {
-                //    MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+                //    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
                 //    MMailText mailtext = new MMailText(GetCtx(), GetNode().GetR_MailText_ID(), null);
 
                 //    String subject = GetNode().GetDescription()
@@ -1449,8 +1449,8 @@ namespace VAdvantage.WF
                 ///////////FaxEmail//////////
                 GetPO(trx);
                 if (_po == null)
-                    throw new Exception("Persistent Object not found - AD_Table_ID="
-                        + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                    throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                        + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
                 if (_po.GetType() == typeof(DocAction) || _po.GetType().GetInterface("DocAction", true) == typeof(DocAction))
                 {
                     _emails = new List<String>();
@@ -1469,7 +1469,7 @@ namespace VAdvantage.WF
                 }
                 else
                 {
-                    MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
                     MMailText mailtext = new MMailText(GetCtx(), GetNode().GetR_MailText_ID(), null);
 
                     String subject = GetNode().GetDescription()
@@ -1567,15 +1567,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
           /// <summary>
         /// function to check for non 0 user id and to check whether user is active or not
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <returns>true or false, if user not found or user not active</returns>
-        public bool CheckUser(int AD_User_ID)
+        public bool CheckUser(int VAF_UserContact_ID)
         {
-            if (AD_User_ID == 0)
+            if (VAF_UserContact_ID == 0)
                 throw new Exception(Msg.GetMsg(GetCtx(),"Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotFound"));
             else
             {
-                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM AD_User WHERE AD_User_ID = " + AD_User_ID)).ToLower() == "y";
+                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAF_UserContact WHERE VAF_UserContact_ID = " + VAF_UserContact_ID)).ToLower() == "y";
                 if (!chkActiveUser)
                     throw new Exception(Msg.GetMsg(GetCtx(), "Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotActive"));
             }
@@ -1597,7 +1597,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 string lastActMsg = lastAct.GetTextMsg();
                 if (lastActMsg != "")
                     message += "\n \n " + lastActMsg;
-                NodesProc.Add(lastAct.GetAD_WF_Node_ID());
+                NodesProc.Add(lastAct.GetVAF_WFlow_Node_ID());
             }
 
             string NodeIDs = Util.GetValueOfString(_node.GetNotifyNode_ID());
@@ -1606,7 +1606,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 string[] nodes = NodeIDs.Split(',');
                 if (nodes.Length > 0)
                 {
-                    DataSet dsWFAct = DB.ExecuteDataset("SELECT TextMsg, AD_WF_Activity_ID, AD_WF_Node_ID FROM AD_WF_Activity WHERE AD_WF_Process_ID = " + GetAD_WF_Process_ID(), null, Get_TrxName());
+                    DataSet dsWFAct = DB.ExecuteDataset("SELECT TextMsg, VAF_WFlow_Task_ID, VAF_WFlow_Node_ID FROM VAF_WFlow_Task WHERE VAF_WFlow_Handler_ID = " + GetVAF_WFlow_Handler_ID(), null, Get_TrxName());
                     if (dsWFAct != null && dsWFAct.Tables[0].Rows.Count > 0)
                     {
                         foreach (string nID in nodes)
@@ -1614,7 +1614,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                             int curNodeID = Util.GetValueOfInt(nID);
                             if (!NodesProc.Contains(curNodeID))
                             {
-                                DataRow[] dr = dsWFAct.Tables[0].Select(" AD_WF_Node_ID = " + curNodeID);
+                                DataRow[] dr = dsWFAct.Tables[0].Select(" VAF_WFlow_Node_ID = " + curNodeID);
                                 if (dr != null && dr.Length > 0)
                                 {
                                     for (int r = 0; r < dr.Length; r++)
@@ -1659,7 +1659,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 if (userIDs != null && userIDs.ToString().Trim() != "")
                 {
                     StringBuilder sbUNames = new StringBuilder("");
-                    DataSet dsUserNames = DB.ExecuteDataset("SELECT Name FROM AD_User WHERE AD_User_ID IN (" + userIDs + ")", null, Get_TrxName());
+                    DataSet dsUserNames = DB.ExecuteDataset("SELECT Name FROM VAF_UserContact WHERE VAF_UserContact_ID IN (" + userIDs + ")", null, Get_TrxName());
                     if (dsUserNames != null && dsUserNames.Tables[0].Rows.Count > 0)
                     {
                         for (int u = 0; u < dsUserNames.Tables[0].Rows.Count; u++)
@@ -1678,7 +1678,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         }
 
         volatile IReportEngine re = null;
-        int AD_ReportFormat_ID = 0;
+        int VAF_ReportLayout_ID = 0;
         /// <summary>
         /// Report through work order
         /// </summary>
@@ -1690,15 +1690,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             ///	
 
 
-            //int AD_ReportFormat_ID = _pi.GetAD_ReportFormat_ID();
+            //int VAF_ReportLayout_ID = _pi.GetVAF_ReportLayout_ID();
 
-            ////if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = "+_pi.GetAD_Process_ID())))
+            ////if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = "+_pi.GetVAF_Job_ID())))
 
             ////Dynamic Report    
-            //if (_pi.GetAD_ReportMaster_ID() > 0)
+            //if (_pi.GetVAF_ReportMaster_ID() > 0)
             //{
             //    String fqClassName = "", asmName = "";
-            //    DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM AD_ReportMaster WHERE IsActive='Y' AND AD_ReportMaster_ID = " + _pi.GetAD_ReportMaster_ID());
+            //    DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM VAF_ReportMaster WHERE IsActive='Y' AND VAF_ReportMaster_ID = " + _pi.GetVAF_ReportMaster_ID());
             //    if (ds != null && ds.Tables[0].Rows.Count > 0)
             //    {
             //        fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
@@ -1712,13 +1712,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //    }
             //}
 
-            //else if (AD_ReportFormat_ID > 0)
+            //else if (VAF_ReportLayout_ID > 0)
             //{
             //    try
             //    {
-            //        string lang = p_ctx.GetAD_Language().Replace("_", "-");
+            //        string lang = p_ctx.GetVAF_Language().Replace("_", "-");
 
-            //        if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
+            //        if ((VAF_ReportLayout_ID > 0) && (lang == "ar-IQ"))
             //        {
             //            isDocxFile = true;
             //            re = VAdvantage.ReportFormat.ReportFormatEngine.Get(p_ctx, _pi, true);
@@ -1751,11 +1751,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //else
             //{
             //    //If user Choose BI Report...................
-            //    if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+            //    if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
             //    {
             //        re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
             //    }
-            //    else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+            //    else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
             //    {
             //        //isJasperReport = true;
             //        re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
@@ -1779,7 +1779,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private void SendNoticeEMail(Trx trx)
         {
             //	Notice
-            int AD_Message_ID = 753;		//	HARDCODED WorkflowResul
+            int VAF_Msg_Lable_ID = 753;		//	HARDCODED WorkflowResul
             List<int> userIds = new List<int>();
             StringBuilder sbLog = new StringBuilder("");
             DocAction doc = null;
@@ -1809,12 +1809,12 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             MWFResponsible resp = GetResponsible(); //Get WF responsible
             if (resp.IsInvoker())
             {
-                userIds.Add(GetAD_User_ID());
+                userIds.Add(GetVAF_UserContact_ID());
             }
             else if (resp.IsHuman())
             {
-                //   SendEMail(client, resp.GetAD_User_ID(), null, subject, message, data, isHTML, tableID, RecID);
-                userIds.Add(resp.GetAD_User_ID());
+                //   SendEMail(client, resp.GetVAF_UserContact_ID(), null, subject, message, data, isHTML, tableID, RecID);
+                userIds.Add(resp.GetVAF_UserContact_ID());
             }
             else if (resp.IsRole())
             {
@@ -1824,17 +1824,17 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     MUser[] users = MUser.GetWithRole(role);
                     for (int i = 0; i < users.Length; i++)
                     {
-                        userIds.Add(users[i].GetAD_User_ID());
-                        //SendEMail(client, users[i].GetAD_User_ID(), null, subject, message, data, isHTML, tableID, RecID);
+                        userIds.Add(users[i].GetVAF_UserContact_ID());
+                        //SendEMail(client, users[i].GetVAF_UserContact_ID(), null, subject, message, data, isHTML, tableID, RecID);
                     }
                 }
             }
             else if (resp.IsOrganization())
             {
-                MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetAD_Org_ID(), null);
+                MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetVAF_Org_ID(), null);
                 if (org.GetSupervisor_ID() == 0)
                 {
-                    sbLog.Append("No Supervisor for AD_Org_ID=" + _po.GetAD_Org_ID());
+                    sbLog.Append("No Supervisor for VAF_Org_ID=" + _po.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1919,7 +1919,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //    stream.Read(data, 0, data.Length);
             //}
             //
-            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetAD_Client_ID() : _po.GetAD_Client_ID());
+            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
 
             //	Explicit EMail
 
@@ -1944,15 +1944,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 {
                     if (user.IsNotificationNote() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice)
                     {
-                        MNote note = new MNote(GetCtx(), AD_Message_ID, userIds[i], trx);
+                        MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIds[i], trx);
                         note.SetTextMsg(_node.GetName(true));
                         note.SetDescription(_node.GetDescription(true));
-                        note.SetRecord(GetAD_Table_ID(), GetRecord_ID());
+                        note.SetRecord(GetVAF_TableView_ID(), GetRecord_ID());
                         note.Save();
                         ////	Attachment
                         if (report != null)
                         {
-                            MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetAD_Note_ID(), trx);
+                            MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), trx);
                             if (isDocxFile)
                             {
                                 attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".Docx", report);
@@ -2002,11 +2002,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             _newValue = null;
             GetPO();
             if (_po == null)
-                throw new Exception("Persistent Object not found - AD_Table_ID="
-                    + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID());
+                throw new Exception("Persistent Object not found - VAF_TableView_ID="
+                    + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
 
             //Check For Genral Attribute 
-            MColumn column = new MColumn(GetCtx(), GetNode().GetAD_Column_ID(), Get_TrxName());
+            MColumn column = new MColumn(GetCtx(), GetNode().GetVAF_Column_ID(), Get_TrxName());
             if (column.GetColumnName().ToString().ToLower().Equals("c_genattributesetinstance_id"))
             {
 
@@ -2051,14 +2051,14 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 dbValue = Convert.ToDecimal(value);
             else
                 dbValue = value;
-            _po.Set_ValueOfColumn(GetNode().GetAD_Column_ID(), dbValue);
+            _po.Set_ValueOfColumn(GetNode().GetVAF_Column_ID(), dbValue);
             _po.Save();
-            Object dbValueNew = _po.Get_ValueOfColumn(GetNode().GetAD_Column_ID());
+            Object dbValueNew = _po.Get_ValueOfColumn(GetNode().GetVAF_Column_ID());
             if (!dbValue.Equals(dbValueNew))
             {
                 if (!value.Equals(dbValueNew))
-                    throw new Exception("Persistent Object not updated - AD_Table_ID="
-                            + GetAD_Table_ID() + ", Record_ID=" + GetRecord_ID()
+                    throw new Exception("Persistent Object not updated - VAF_TableView_ID="
+                            + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID()
                             + " - Should=" + value + ", Is=" + dbValueNew);
             }
 
@@ -2082,20 +2082,20 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         public string UpdateVersions()
         {
             // Get Tab Information like MaintainVerOnApproval, TabLevel, SeqNo etc.
-            DataSet dsCurTab = DB.ExecuteDataset("SELECT MaintainVerOnApproval, AD_Tab_ID, TabLevel, SeqNo FROM AD_Tab WHERE AD_Window_ID = " + GetAD_Window_ID() + " AND AD_Table_ID = " + GetAD_Table_ID(), null, Get_TrxName());
+            DataSet dsCurTab = DB.ExecuteDataset("SELECT MaintainVerOnApproval, VAF_Tab_ID, TabLevel, SeqNo FROM VAF_Tab WHERE VAF_Screen_ID = " + GetVAF_Screen_ID() + " AND VAF_TableView_ID = " + GetVAF_TableView_ID(), null, Get_TrxName());
             if (dsCurTab != null && dsCurTab.Tables[0].Rows.Count > 0)
             {
                 string maintainVerOnApp = Util.GetValueOfString(dsCurTab.Tables[0].Rows[0]["MaintainVerOnApproval"]);
                 int tabLevel = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["TabLevel"]);
-                int AD_Tab_ID = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["AD_Tab_ID"]);
+                int VAF_Tab_ID = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["VAF_Tab_ID"]);
                 int SeqNo = Util.GetValueOfInt(dsCurTab.Tables[0].Rows[0]["SeqNo"]);
                 Dictionary<string, string> keyIDs = new Dictionary<string, string>();
 
                 // Check if Table linked with tab has MaintainVersions Column and 
                 // on tab MaintainVerOnApproval is marked as true and Tab Level is 0
-                if (CheckMaintainVerCol(GetAD_Table_ID()) && maintainVerOnApp == "Y" && tabLevel == 0)
+                if (CheckMaintainVerCol(GetVAF_TableView_ID()) && maintainVerOnApp == "Y" && tabLevel == 0)
                 {
-                    MTable tbl = new MTable(GetCtx(), GetAD_Table_ID(), Get_TrxName());
+                    MTable tbl = new MTable(GetCtx(), GetVAF_TableView_ID(), Get_TrxName());
                     // Get Key Column Name of First Tab
                     string KeyColName = tbl.GetTableName() + "_ID";
                     // Get ID of kEy column name for first tab
@@ -2108,7 +2108,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         StringBuilder sbPLCols = new StringBuilder("");
                         // Get all tabs in window except first tab (as data is already inserted into version table for first tab) order by seq number
-                        int[] allTabs = MTab.GetAllIDs("AD_Tab", "AD_Window_ID = " + GetAD_Window_ID() + " AND SeqNo > " + SeqNo + " ORDER BY SeqNo", Get_TrxName());
+                        int[] allTabs = MTab.GetAllIDs("VAF_Tab", "VAF_Screen_ID = " + GetVAF_Screen_ID() + " AND SeqNo > " + SeqNo + " ORDER BY SeqNo", Get_TrxName());
                         // Loop through all tabs
                         for (int i = 0; i < allTabs.Length; i++)
                         {
@@ -2117,21 +2117,21 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
                             // Check MaintainVersions column in current tab and setting of MaintainVerOnApproval column on tab
                             // then insert data in version table against current tab
-                            if (CheckMaintainVerCol(tb.GetAD_Table_ID()) && tb.IsMaintainVerOnApproval())
+                            if (CheckMaintainVerCol(tb.GetVAF_TableView_ID()) && tb.IsMaintainVerOnApproval())
                             {
-                                int tabTableID = tb.GetAD_Table_ID();
-                                int linkColumnID = tb.GetAD_Column_ID();
+                                int tabTableID = tb.GetVAF_TableView_ID();
+                                int linkColumnID = tb.GetVAF_Column_ID();
                                 // if link column is not defined on tab, then check linking of tabs based on Parent Link Column
                                 // in columns of Table linked with Tab
                                 if (linkColumnID <= 0)
                                 {
                                     // get all parent link columns from table
-                                    DataSet dsKeyCols = DB.ExecuteDataset("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + tabTableID + " AND IsParent = 'Y' AND IsActive ='Y'");
+                                    DataSet dsKeyCols = DB.ExecuteDataset("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + tabTableID + " AND IsParent = 'Y' AND IsActive ='Y'");
                                     if (dsKeyCols != null && dsKeyCols.Tables[0].Rows.Count > 0)
                                     {
                                         // check if table has only one Parent Link Column
                                         if (dsKeyCols.Tables[0].Rows.Count == 1)
-                                            linkColumnID = Util.GetValueOfInt(dsKeyCols.Tables[0].Rows[0]["AD_Column_ID"]);
+                                            linkColumnID = Util.GetValueOfInt(dsKeyCols.Tables[0].Rows[0]["VAF_Column_ID"]);
                                         else
                                         {
                                             // create comma separated string of columns marked as Parent Link Column
@@ -2140,9 +2140,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                                 for (int k = 0; k < dsKeyCols.Tables[0].Rows.Count; k++)
                                                 {
                                                     if (k == 0)
-                                                        sbPLCols.Append(dsKeyCols.Tables[0].Rows[k]["AD_Column_ID"]);
+                                                        sbPLCols.Append(dsKeyCols.Tables[0].Rows[k]["VAF_Column_ID"]);
                                                     else
-                                                        sbPLCols.Append("," + dsKeyCols.Tables[0].Rows[k]["AD_Column_ID"]);
+                                                        sbPLCols.Append("," + dsKeyCols.Tables[0].Rows[k]["VAF_Column_ID"]);
                                                 }
                                             }
                                         }
@@ -2150,7 +2150,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                 }
 
                                 tbl = new MTable(GetCtx(), tabTableID, Get_TrxName());
-                                string ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + linkColumnID, null, null));
+                                string ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + linkColumnID, null, null));
                                 // case if this tab is child tab of First tab itself
                                 if (ChildLinkCol == KeyColName)
                                     InsertTabData(tbl, keyIDs, ChildLinkCol, Util.GetValueOfString(keyColID));
@@ -2159,7 +2159,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                     // check if Link column found in current loop
                                     if (linkColumnID > 0)
                                     {
-                                        ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + linkColumnID, null, null));
+                                        ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + linkColumnID, null, null));
                                         if (keyIDs.ContainsKey(ChildLinkCol))
                                             InsertTabData(tbl, keyIDs, ChildLinkCol, keyIDs[ChildLinkCol]);
                                     }
@@ -2168,7 +2168,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                         // if multiple parent link columns found
                                         if (sbPLCols.ToString().Trim() != "")
                                         {
-                                            DataSet dsColNames = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Column_ID IN (" + sbPLCols + ")", null, Get_TrxName());
+                                            DataSet dsColNames = DB.ExecuteDataset("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID IN (" + sbPLCols + ")", null, Get_TrxName());
                                             if (dsColNames != null && dsColNames.Tables[0].Rows.Count > 0)
                                             {
                                                 string cName = "";
@@ -2223,11 +2223,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// Get Table name against table ID passed in parameter
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <returns>TableName (string)</returns>
-        public string GetTableName(int AD_Table_ID)
+        public string GetTableName(int VAF_TableView_ID)
         {
-            return Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            return Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + VAF_TableView_ID, null, Get_TrxName()));
         }
 
         /// <summary>
@@ -2331,15 +2331,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// check if current table has Maintain Version column then return true else false
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <returns>true/false</returns>
-        public bool CheckMaintainVerCol(int AD_Table_ID)
+        public bool CheckMaintainVerCol(int VAF_TableView_ID)
         {
-            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            int countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_TableView_ID) FROM VAF_TableView WHERE IsMaintainVersions = 'Y' AND VAF_TableView_ID = " + VAF_TableView_ID, null, Get_TrxName()));
             if (countVerCol > 0)
                 return true;
 
-            countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE IsMaintainVersions = 'Y' AND AD_Table_ID = " + AD_Table_ID, null, Get_TrxName()));
+            countVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Column_ID) FROM VAF_Column WHERE IsMaintainVersions = 'Y' AND VAF_TableView_ID = " + VAF_TableView_ID, null, Get_TrxName()));
             if (countVerCol > 0)
                 return true;
             return false;
@@ -2348,24 +2348,24 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// Set User Choice
         /// </summary>
-        /// <param name="AD_User_ID">user id</param>
+        /// <param name="VAF_UserContact_ID">user id</param>
         /// <param name="value">new Value</param>
         /// <param name="displayType">display type</param>
         /// <param name="textMsg">optional Message</param>
         /// <returns>true if set and throws Exception if error</returns>
-        public bool SetUserChoice(int AD_User_ID, String value, int displayType,
-            String textMsg, int AD_Window_ID = 0) //throws Exception
+        public bool SetUserChoice(int VAF_UserContact_ID, String value, int displayType,
+            String textMsg, int VAF_Screen_ID = 0) //throws Exception
         {
-            if (AD_Window_ID > 0)
+            if (VAF_Screen_ID > 0)
             {
-                this.AD_Window_ID = AD_Window_ID;
+                this.VAF_Screen_ID = VAF_Screen_ID;
             }
             //	Check if user approves own document when a role is responsible
             if (GetNode().IsUserApproval() && (GetPO().GetType() == typeof(DocAction) || GetPO().GetType().GetInterface("DocAction") == typeof(DocAction)))
             {
                 DocAction doc = (DocAction)_po;
-                MUser user = new MUser(GetCtx(), AD_User_ID, null);
-                MRole[] roles = user.GetRoles(_po.GetAD_Org_ID());
+                MUser user = new MUser(GetCtx(), VAF_UserContact_ID, null);
+                MRole[] roles = user.GetRoles(_po.GetVAF_Org_ID());
                 bool canApproveOwnDoc = false;
                 for (int r = 0; r < roles.Length; r++)
                 {
@@ -2385,7 +2385,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
 
             SetWFState(StateEngine.STATE_RUNNING);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             bool ok = SetVariable(value, displayType, textMsg);
             if (!ok)
                 return false;
@@ -2408,23 +2408,23 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         if (IsInvoker())
                         {
-                            int startAD_User_ID = GetAD_User_ID();
-                            if (startAD_User_ID == 0)
-                                startAD_User_ID = doc.GetDoc_User_ID();
-                            int nextAD_User_ID = GetApprovalUser(startAD_User_ID,
+                            int startVAF_UserContact_ID = GetVAF_UserContact_ID();
+                            if (startVAF_UserContact_ID == 0)
+                                startVAF_UserContact_ID = doc.GetDoc_User_ID();
+                            int nextVAF_UserContact_ID = GetApprovalUser(startVAF_UserContact_ID,
                                 doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
-                                doc.GetAD_Org_ID(),
-                                startAD_User_ID == doc.GetDoc_User_ID(), false);	//	own doc
+                                doc.GetVAF_Org_ID(),
+                                startVAF_UserContact_ID == doc.GetDoc_User_ID(), false);	//	own doc
                             //	No Approver
-                            if (nextAD_User_ID <= 0)
+                            if (nextVAF_UserContact_ID <= 0)
                             {
                                 newState = StateEngine.STATE_ABORTED;
                                 SetTextMsg("Cannot Approve - No Approver");
                                 doc.ProcessIt(DocActionVariables.ACTION_REJECT);
                             }
-                            else if (startAD_User_ID != nextAD_User_ID)
+                            else if (startVAF_UserContact_ID != nextVAF_UserContact_ID)
                             {
-                                ForwardTo(nextAD_User_ID, "Next Approver");
+                                ForwardTo(nextVAF_UserContact_ID, "Next Approver");
                                 newState = StateEngine.STATE_SUSPENDED;
                             }
                             else	//	Approve
@@ -2454,7 +2454,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 //	Send Approval Notification
                 if (newState.Equals(StateEngine.STATE_ABORTED))
                 {
-                    MClient client = MClient.Get(GetCtx(), doc.GetAD_Client_ID());
+                    MClient client = MClient.Get(GetCtx(), doc.GetVAF_Client_ID());
                     client.SendEMail(doc.GetDoc_User_ID(),
                         doc.GetDocumentInfo() + ": " + Utility.Msg.GetMsg(GetCtx(), "NotApproved", true),
                         doc.GetSummary()
@@ -2470,46 +2470,46 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// Forward To
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="textMsg">message</param>
         /// <returns>true if forwarded</returns>
-        public bool ForwardTo(int AD_User_ID, String textMsg, bool isFromActivityForm = false, bool isForwarded = false)
+        public bool ForwardTo(int VAF_UserContact_ID, String textMsg, bool isFromActivityForm = false, bool isForwarded = false)
         {
-            if (AD_User_ID == GetAD_User_ID())
+            if (VAF_UserContact_ID == GetVAF_UserContact_ID())
             {
-                log.Log(Level.WARNING, "Same User - AD_User_ID=" + AD_User_ID);
+                log.Log(Level.WARNING, "Same User - VAF_UserContact_ID=" + VAF_UserContact_ID);
                 return false;
             }
             //
-            MUser oldUser = MUser.Get(GetCtx(), GetAD_User_ID());
+            MUser oldUser = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
             // Set current user on event and activity in case of forward
             if (isForwarded)
             {
-                oldUser = MUser.Get(GetCtx(), GetCtx().GetAD_User_ID());
+                oldUser = MUser.Get(GetCtx(), GetCtx().GetVAF_UserContact_ID());
             }
-            MUser user = MUser.Get(GetCtx(), AD_User_ID);
+            MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
             if (user == null || user.Get_ID() == 0)
             {
-                log.Log(Level.WARNING, "Does not exist - AD_User_ID=" + AD_User_ID);
+                log.Log(Level.WARNING, "Does not exist - VAF_UserContact_ID=" + VAF_UserContact_ID);
                 return false;
             }
             //	Update 
-            SetAD_User_ID(user.GetAD_User_ID());
+            SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
 
 
             if (textMsg != null)
-                // textMsg += " - " + GetNode().GetAttributeName() + " Froward To:" + AD_User_ID;
+                // textMsg += " - " + GetNode().GetAttributeName() + " Froward To:" + VAF_UserContact_ID;
                 textMsg += " - " + GetNode().GetAttributeName() + " " + Msg.GetMsg(GetCtx(), "ForwardTo") + " : " + user.GetName();
 
             SetTextMsg(textMsg);
             Save();
             //	Close up Old Event
             GetEventAudit();
-            _audit.SetAD_User_ID(oldUser.GetAD_User_ID());
+            _audit.SetVAF_UserContact_ID(oldUser.GetVAF_UserContact_ID());
             _audit.SetTextMsg(GetTextMsg());
-            _audit.SetAttributeName("AD_User_ID");
-            _audit.SetOldValue(oldUser.GetName() + "(" + oldUser.GetAD_User_ID() + ")");
-            _audit.SetNewValue(user.GetName() + "(" + user.GetAD_User_ID() + ")");
+            _audit.SetAttributeName("VAF_UserContact_ID");
+            _audit.SetOldValue(oldUser.GetName() + "(" + oldUser.GetVAF_UserContact_ID() + ")");
+            _audit.SetNewValue(user.GetName() + "(" + user.GetVAF_UserContact_ID() + ")");
             //
             if (isFromActivityForm)
             {
@@ -2535,13 +2535,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// Set User Confirmation
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="textMsg">optional message</param>
-        public void SetUserConfirmation(int AD_User_ID, String textMsg)
+        public void SetUserConfirmation(int VAF_UserContact_ID, String textMsg)
         {
             log.Fine(textMsg);
             SetWFState(StateEngine.STATE_RUNNING);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             if (textMsg != null)
                 SetTextMsg(textMsg);
             SetWFState(StateEngine.STATE_COMPLETED);
@@ -2719,7 +2719,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //        if (server != null)
             //        {
             //            String error = server.PostImmediate(Env.getCtx(),
-            //                _postImmediate.getAD_Client_ID(),
+            //                _postImmediate.getVAF_Client_ID(),
             //                _postImmediate.get_Table_ID(), _postImmediate.get_ID(),
             //                true, null);
             //            _postImmediate.get_Logger().config("Server: " + error == null ? "OK" : error);
@@ -2791,8 +2791,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 VAdvantage.Common.Common com = new Common.Common();
 
-                pdf = com.GetPdfReportForMail(_po.GetCtx(), _trx, GetAD_Table_ID(), GetRecord_ID(), GetAD_User_ID(), GetAD_Client_ID(),
-                    _node.GetName(true), GetAD_Window_ID(), GetAD_WF_Activity_ID());
+                pdf = com.GetPdfReportForMail(_po.GetCtx(), _trx, GetVAF_TableView_ID(), GetRecord_ID(), GetVAF_UserContact_ID(), GetVAF_Client_ID(),
+                    _node.GetName(true), GetVAF_Screen_ID(), GetVAF_WFlow_Task_ID());
             }
             else if (isPOAsDocAction && !_node.IsBackground())
             {
@@ -2802,7 +2802,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
 
             //
-            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetAD_Client_ID() : _po.GetAD_Client_ID());
+            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
 
             //	Explicit EMail
 
@@ -2832,10 +2832,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             else if (recipient.Equals(MWFNode.EMAILRECIPIENT_DocumentBusinessPartner))
             {
-                int bpID = 0, AD_User_ID = 0;
-                if (_node.GetAD_Column_ID_1() > 0) //get c_Bpparner column id
+                int bpID = 0, VAF_UserContact_ID = 0;
+                if (_node.GetVAF_Column_ID_1() > 0) //get c_Bpparner column id
                 {
-                    string colName = MColumn.Get(_po.GetCtx(), _node.GetAD_Column_ID_1()).GetColumnName(); //Get binded column name
+                    string colName = MColumn.Get(_po.GetCtx(), _node.GetVAF_Column_ID_1()).GetColumnName(); //Get binded column name
 
                     Object oo = _po.Get_Value(_po.Get_ColumnIndex(colName));  // Getvalue of binded column from PO
                     if (oo is int)
@@ -2845,16 +2845,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
 
 
-                int index = _po.Get_ColumnIndex("AD_User_ID"); //GetUserID
+                int index = _po.Get_ColumnIndex("VAF_UserContact_ID"); //GetUserID
                 if (index > -1)
                 {
                     Object oo = _po.Get_Value(index);
                     if (oo is int)
                     {
-                        AD_User_ID = int.Parse(oo.ToString());
-                        //if (AD_User_ID != 0)
+                        VAF_UserContact_ID = int.Parse(oo.ToString());
+                        //if (VAF_UserContact_ID != 0)
                         //{
-                        // SendEMail(client, AD_User_ID, null, subject, message, data, isHTML, tableID, RecID);
+                        // SendEMail(client, VAF_UserContact_ID, null, subject, message, data, isHTML, tableID, RecID);
                         // }
                         // else
                         // {
@@ -2873,13 +2873,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 if (bpID > 0) // if user binding Bpartner column id
                 {
                     //Check User is member of Bussiness partnet
-                    if (AD_User_ID > 0 && Convert.ToInt16(DB.ExecuteScalar("SELECT Count(AD_User_ID) FROM AD_User WHERE C_BPartner_ID = " + bpID + " AND AD_User_ID = " + AD_User_ID)) > 0)
+                    if (VAF_UserContact_ID > 0 && Convert.ToInt16(DB.ExecuteScalar("SELECT Count(VAF_UserContact_ID) FROM VAF_UserContact WHERE C_BPartner_ID = " + bpID + " AND VAF_UserContact_ID = " + VAF_UserContact_ID)) > 0)
                     {
-                        SendEMail(client, AD_User_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
+                        SendEMail(client, VAF_UserContact_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
                     }
                     else // send to all user against Bpartner
                     {
-                        DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID =" + bpID, null);
+                        DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID =" + bpID, null);
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             SendEMail(client, Convert.ToInt32(dr[0]), null, subject, message, pdf, isHTML, tableID, RecID, action);
@@ -2888,9 +2888,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
                 else
                 {
-                    if (AD_User_ID > 0) //send email to user "AD_User_ID" column of record
+                    if (VAF_UserContact_ID > 0) //send email to user "VAF_UserContact_ID" column of record
                     {
-                        SendEMail(client, AD_User_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
+                        SendEMail(client, VAF_UserContact_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
                     }
                     else
                     {
@@ -2901,22 +2901,22 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             else if (recipient.Equals(MWFNode.EMAILRECIPIENT_DocumentUser)) // new Addition
             {
-                if (_node.GetAD_Column_ID_2() > 0) //Node's User column
+                if (_node.GetVAF_Column_ID_2() > 0) //Node's User column
                 {
-                    string colName = MColumn.GetColumnName(_po.GetCtx(), _node.GetAD_Column_ID_2()); //get binded user column name
+                    string colName = MColumn.GetColumnName(_po.GetCtx(), _node.GetVAF_Column_ID_2()); //get binded user column name
 
                     int index = _po.Get_ColumnIndex(colName); //get index of column
 
-                    //index = index < 0 ? _po.Get_ColumnIndex("AD_User_ID") : index; //do not send to default User Column
+                    //index = index < 0 ? _po.Get_ColumnIndex("VAF_UserContact_ID") : index; //do not send to default User Column
                     if (index > -1) //if found
                     {
                         Object oo = _po.Get_Value(index); //Get value form record
                         if (oo is int)
                         {
-                            int AD_User_ID = int.Parse(oo.ToString());
-                            if (AD_User_ID != 0)
+                            int VAF_UserContact_ID = int.Parse(oo.ToString());
+                            if (VAF_UserContact_ID != 0)
                             {
-                                SendEMail(client, AD_User_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
+                                SendEMail(client, VAF_UserContact_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
                             }
                             else
                             {
@@ -2956,9 +2956,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 MWFResponsible resp = GetResponsible();
                 if (resp.IsInvoker())
-                    SendEMail(client, isPOAsDocAction ? doc.GetDoc_User_ID() : GetAD_User_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
+                    SendEMail(client, isPOAsDocAction ? doc.GetDoc_User_ID() : GetVAF_UserContact_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
                 else if (resp.IsHuman())
-                    SendEMail(client, resp.GetAD_User_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
+                    SendEMail(client, resp.GetVAF_UserContact_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
                 else if (resp.IsRole())
                 {
                     MRole role = resp.GetRole();
@@ -2966,15 +2966,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         MUser[] users = MUser.GetWithRole(role);
                         for (int i = 0; i < users.Length; i++)
-                            SendEMail(client, users[i].GetAD_User_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
+                            SendEMail(client, users[i].GetVAF_UserContact_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
                     }
                 }
                 else if (resp.IsOrganization())
                 {
-                    MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetAD_Org_ID(), null);
+                    MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetVAF_Org_ID(), null);
                     if (org.GetSupervisor_ID() == 0)
                     {
-                        log.Fine("No Supervisor for AD_Org_ID=" + _po.GetAD_Org_ID());
+                        log.Fine("No Supervisor for VAF_Org_ID=" + _po.GetVAF_Org_ID());
                     }
                     else
                         SendEMail(client, org.GetSupervisor_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
@@ -2995,7 +2995,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 if (isPOAsDocAction)
                 {
-                    int userID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT supervisor_id FROM AD_User WHERE AD_User_ID=" + doc.GetDoc_User_ID()));
+                    int userID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT supervisor_id FROM VAF_UserContact WHERE VAF_UserContact_ID=" + doc.GetDoc_User_ID()));
                     SendEMail(client, userID, null, subject, message, pdf, isHTML, tableID, RecID, action);
                 }
             }
@@ -3032,17 +3032,17 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// Send actual EMail
         /// </summary>
         /// <param name="client">client</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="email">email string</param>
         /// <param name="subject">subject</param>
         /// <param name="message">message</param>
         /// <param name="pdf">attachment</param>
-        //private void SendEMail(MClient client, int AD_User_ID, String email, String subject,
+        //private void SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
         //    String message, FileInfo pdf)
         //{
-        //    if (AD_User_ID != 0)
+        //    if (VAF_UserContact_ID != 0)
         //    {
-        //        MUser user = MUser.Get(GetCtx(), AD_User_ID);
+        //        MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
         //        email = user.GetEMail();
         //        if (email != null && email.Length > 0)
         //        {
@@ -3093,23 +3093,23 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// Send actual EMail
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="email"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="pdf"></param>
         /// <param name="isHTML"></param>
-        private void SendEMail(MClient client, int AD_User_ID, String email, String subject,
-            String message, FileInfo pdf, bool isHTML, int AD_Table_ID, int record_ID, string action, byte[] bArray = null)
+        private void SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
+            String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, string action, byte[] bArray = null)
         {
             // create/update message based on the setting on node
             message = GetMailMessage(message);
 
-            if (AD_User_ID != 0)
+            if (VAF_UserContact_ID != 0)
             {
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
 
-                MRole[] rl = user.GetRoles(GetAD_Org_ID());
+                MRole[] rl = user.GetRoles(GetVAF_Org_ID());
                 // check applied if user has Org Access then only proceed to send
                 // mail or notice
                 if (rl.Length <= 0)
@@ -3121,7 +3121,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                    MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail.Equals(user.GetNotificationType())))
                 {
                     //Send Notice
-                    SendNotice(AD_User_ID, message, subject);
+                    SendNotice(VAF_UserContact_ID, message, subject);
                 }
 
                 email = user.GetEMail();
@@ -3164,13 +3164,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         if (isDocxFile)
                         {
-                            //client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
-                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            //client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
                         }
                         else
                         {
-                            //client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
-                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
+                            //client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
+                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
                         }
                         _emails.Add(email);
                         return;
@@ -3189,13 +3189,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         if (isDocxFile)
                         {
                             //DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
-                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
-                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
                         }
                         else
                         {
-                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
-                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
+                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
+                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
                         }
                         _emails.Add(email1);
                     }
@@ -3212,13 +3212,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         if (isDocxFile)
                         {
                             //DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
-                            //client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
-                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            //client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
                         }
                         else
                         {
-                            //client.SendEMail(email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
-                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
+                            //client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
+                            SendEMailBack(client, email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
                         }
                         _emails.Add(email);
                     }
@@ -3236,13 +3236,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         if (isDocxFile)
                         {
                             //DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
-                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
-                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
+                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx");
                         }
                         else
                         {
-                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
-                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, AD_Table_ID, record_ID, bArray);
+                            //client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
+                            SendEMailBack(client, email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray);
                         }
                         _emails.Add(email1);
                     }
@@ -3251,26 +3251,26 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         }
 
         // Save email to database and call singleton call object to start its working, if node is set as run background otherwise run simply
-        public bool SendEMailBack(MClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int AD_Table_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
+        public bool SendEMailBack(MClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int VAF_TableView_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
         {
             if ((MWFNode.ACTION_EMail.Equals(_node.GetAction()) || MWFNode.ACTION_EMailPlusFaxEMail.Equals(_node.GetAction())) && _node != null && _node.IsBackground())
             {
                 // Ctx
                 Ctx _ctxClient = client.GetCtx();
 
-                //Save to AD_MailQueue table
-                ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctxClient, 0, _trx);
-                mailQueue.SetAD_Role_ID(_ctxClient.GetAD_Role_ID());
+                //Save to VAF_MailQueue table
+                ViennaAdvantage.Model.X_VAF_MailQueue mailQueue = new ViennaAdvantage.Model.X_VAF_MailQueue(_ctxClient, 0, _trx);
+                mailQueue.SetVAF_Role_ID(_ctxClient.GetVAF_Role_ID());
                 mailQueue.SetToEMail(toEMail);
                 mailQueue.SetToName(toName);
                 mailQueue.SetMailSubject(subject);
                 mailQueue.SetMailMessage(message);
                 mailQueue.SetIsHtmlEmail(isHtml);
-                mailQueue.SetAD_Table_ID(AD_Table_ID);
+                mailQueue.SetVAF_TableView_ID(VAF_TableView_ID);
                 mailQueue.SetRecord_ID(Record_ID);
-                mailQueue.SetAD_WF_Activity_ID(GetAD_WF_Activity_ID());
-                mailQueue.SetAD_WF_EventAudit_ID(_audit.Get_ID());
-                mailQueue.SetAD_WF_Process_ID(GetAD_WF_Process_ID());
+                mailQueue.SetVAF_WFlow_Task_ID(GetVAF_WFlow_Task_ID());
+                mailQueue.SetVAF_WFlow_EventLog_ID(_audit.Get_ID());
+                mailQueue.SetVAF_WFlow_Handler_ID(GetVAF_WFlow_Handler_ID());
                 mailQueue.SetMailStatus("Q");
                 bool issaved = mailQueue.Save();
 
@@ -3291,10 +3291,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
 
             MMailAttachment1 _mAttachment = new MMailAttachment1(GetCtx(), 0, null);
-            _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-            _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            _mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+            _mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             _mAttachment.SetIsMailSent(true);
-            _mAttachment.SetAD_Table_ID(AD_Table_ID);
+            _mAttachment.SetVAF_TableView_ID(VAF_TableView_ID);
             _mAttachment.IsActive();
             _mAttachment.SetAttachmentType("M");
             _mAttachment.SetRecord_ID(Util.GetValueOfInt(Record_ID));
@@ -3315,26 +3315,26 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             }
 
-            return client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
+            return client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, VAF_TableView_ID, Record_ID, array, fileName);
         }
 
-        private void SendNotice(int AD_User_ID, string message, string subject)
+        private void SendNotice(int VAF_UserContact_ID, string message, string subject)
         {
             //	Create Notice
             MNote note = new MNote(GetCtx(), 0, Get_TrxName());
-            note.SetAD_User_ID(AD_User_ID);
+            note.SetVAF_UserContact_ID(VAF_UserContact_ID);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            //note.SetClientOrg(GetAD_Client_ID(), GetAD_Org_ID());
-            note.SetClientOrg(GetAD_Client_ID(), 0);
+            //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+            note.SetClientOrg(GetVAF_Client_ID(), 0);
             note.SetTextMsg(subject + " - " + message);
             note.SetDescription("");
             note.SetRecord(Table_ID, Get_ID());		//	point to this
-            note.SetAD_Message_ID(859);//Workflow
+            note.SetVAF_Msg_Lable_ID(859);//Workflow
             if (note.Save(Get_TrxName()))
             {
                 // add user ID to the Notice User list to whom notices are sent
-                if (!_noticeUsers.Contains(AD_User_ID))
-                    _noticeUsers.Add(AD_User_ID);
+                if (!_noticeUsers.Contains(VAF_UserContact_ID))
+                    _noticeUsers.Add(VAF_UserContact_ID);
             }
             else
             {
@@ -3361,7 +3361,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         public String GetHistoryHTML()
         {
             StringBuilder sb = new StringBuilder();
-            MWFEventAudit[] events = MWFEventAudit.Get(GetCtx(), GetAD_WF_Process_ID());
+            MWFEventAudit[] events = MWFEventAudit.Get(GetCtx(), GetVAF_WFlow_Handler_ID());
             //SimpleDateFormat format = DisplayType.getDateFormat(DisplayType.DateTime);
             for (int i = 0; i < events.Length; i++)
             {
@@ -3430,11 +3430,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             StringBuilder sb = new StringBuilder("MWFActivity[");
             sb.Append(Get_ID()).Append(",Node=");
             if (_node == null)
-                sb.Append(GetAD_WF_Node_ID());
+                sb.Append(GetVAF_WFlow_Node_ID());
             else
                 sb.Append(_node.GetName());
             sb.Append(",State=").Append(GetWFState())
-                .Append(",AD_User_ID=").Append(GetAD_User_ID())
+                .Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
                 .Append(",").Append(GetCreated())
                 .Append("]");
             return sb.ToString();
@@ -3448,9 +3448,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(GetWFStateText()).Append(": ").Append(GetNode().GetName());
-            if (GetAD_User_ID() > 0)
+            if (GetVAF_UserContact_ID() > 0)
             {
-                MUser user = MUser.Get(GetCtx(), GetAD_User_ID());
+                MUser user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
                 sb.Append(" (").Append(user.GetName()).Append(")");
             }
             return sb.ToString();
@@ -3480,7 +3480,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 + "\n" + doc.GetSummary();
             FileInfo pdf = doc.CreatePDF();
             //
-            MClient client = MClient.Get(_po.GetCtx(), doc.GetAD_Client_ID());
+            MClient client = MClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
 
             //	Explicit EMail
             SendFaxEMail(client, 0, _node.GetEMail(), subject, message, pdf, isHTML);
@@ -3491,16 +3491,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 SendFaxEMail(client, doc.GetDoc_User_ID(), null, subject, message, pdf, isHTML);
             else if (recipient.Equals(MWFNode.EMAILRECIPIENT_DocumentBusinessPartner))
             {
-                int index = _po.Get_ColumnIndex("AD_User_ID");
+                int index = _po.Get_ColumnIndex("VAF_UserContact_ID");
                 if (index > 0)
                 {
                     Object oo = _po.Get_Value(index);
                     if (oo.GetType() == typeof(int))
                     {
-                        int AD_User_ID = int.Parse(oo.ToString());
-                        if (AD_User_ID != 0)
+                        int VAF_UserContact_ID = int.Parse(oo.ToString());
+                        if (VAF_UserContact_ID != 0)
                         {
-                            SendFaxEMail(client, AD_User_ID, null, subject, message, pdf, isHTML);
+                            SendFaxEMail(client, VAF_UserContact_ID, null, subject, message, pdf, isHTML);
                         }
                         else
                         {
@@ -3534,7 +3534,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 if (resp.IsInvoker())
                     SendFaxEMail(client, doc.GetDoc_User_ID(), null, subject, message, pdf, isHTML);
                 else if (resp.IsHuman())
-                    SendFaxEMail(client, resp.GetAD_User_ID(), null, subject, message, pdf, isHTML);
+                    SendFaxEMail(client, resp.GetVAF_UserContact_ID(), null, subject, message, pdf, isHTML);
                 else if (resp.IsRole())
                 {
                     MRole role = resp.GetRole();
@@ -3542,15 +3542,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         MUser[] users = MUser.GetWithRole(role);
                         for (int i = 0; i < users.Length; i++)
-                            SendFaxEMail(client, users[i].GetAD_User_ID(), null, subject, message, pdf, isHTML);
+                            SendFaxEMail(client, users[i].GetVAF_UserContact_ID(), null, subject, message, pdf, isHTML);
                     }
                 }
                 else if (resp.IsOrganization())
                 {
-                    MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetAD_Org_ID(), null);
+                    MOrgInfo org = MOrgInfo.Get(GetCtx(), _po.GetVAF_Org_ID(), null);
                     if (org.GetSupervisor_ID() == 0)
                     {
-                        log.Fine("No Supervisor for AD_Org_ID=" + _po.GetAD_Org_ID());
+                        log.Fine("No Supervisor for VAF_Org_ID=" + _po.GetVAF_Org_ID());
                     }
                     else
                         SendFaxEMail(client, org.GetSupervisor_ID(), null, subject, message, pdf, isHTML);
@@ -3569,7 +3569,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             else if (recipient.Equals(MWFNode.EMAILRECIPIENT_DocumentOwnerSSupervisor))
             {
 
-                int userID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT supervisor_id FROM AD_User WHERE AD_User_ID=" + doc.GetDoc_User_ID()));
+                int userID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT supervisor_id FROM VAF_UserContact WHERE VAF_UserContact_ID=" + doc.GetDoc_User_ID()));
                 SendFaxEMail(client, userID, null, subject, message, pdf, isHTML);
 
             }
@@ -3579,26 +3579,26 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// Send actual EMail
         /// </summary>
         /// <param name="client">client</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="email">email string</param>
         /// <param name="subject">subject</param>
         /// <param name="message">message</param>
         /// <param name="pdf">attachment</param>
-        private void SendFaxEMail(MClient client, int AD_User_ID, String email, String subject,
+        private void SendFaxEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML)
         {
             // create/update message based on the setting on node
             message = GetMailMessage(message);
 
-            if (AD_User_ID != 0)
+            if (VAF_UserContact_ID != 0)
             {
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
 
                 ////Notice
                 //if (action != null && action.Equals(MWFNode.ACTION_EMailPlusFaxEMail) && MUser.NOTIFICATIONTYPE_Notice.Equals(user.GetNotificationType()))
                 //{
                 //    //Send Notice
-                //    SendNotice(AD_User_ID, message, subject);
+                //    SendNotice(VAF_UserContact_ID, message, subject);
                 //}
 
                 //email = user.GetEMail();
@@ -3700,16 +3700,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         void SendSms()
         {
 
-            int index = _po.Get_ColumnIndex("AD_User_ID");
+            int index = _po.Get_ColumnIndex("VAF_UserContact_ID");
             if (index > 0)
             {
                 Object oo = _po.Get_Value(index);
                 if (oo.GetType() == typeof(int))
                 {
-                    int AD_User_ID = int.Parse(oo.ToString());
-                    if (AD_User_ID != 0)
+                    int VAF_UserContact_ID = int.Parse(oo.ToString());
+                    if (VAF_UserContact_ID != 0)
                     {
-                        MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                        MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
                         StringBuilder res = new StringBuilder();
                         //if (MUser.NOTIFICATIONTYPE_SMS.Equals(user.GetNotificationType()))
                         {
@@ -3926,13 +3926,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private List<int> GetRecipientUser()
         {
 
-            DataSet ds = DB.ExecuteDataset("SELECT AD_WF_Recipient_ID FROM AD_WF_Recipient WHERE IsActive='Y' AND AD_WF_Node_ID=" + _node.Get_ID());
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_WFlow_Recipient_ID FROM VAF_WFlow_Recipient WHERE IsActive='Y' AND VAF_WFlow_Node_ID=" + _node.Get_ID());
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 return null;
             }
             List<int> recipientUser = new List<int>();
-            X_AD_WF_Recipient wfRecipient = null;
+            X_VAF_WFlow_Recipient wfRecipient = null;
             //MRole role = null;
             // MUserRoles userRole = null;
             DataSet dsUserRole = null;
@@ -3940,26 +3940,26 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             int roleID = 0;
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                wfRecipient = new X_AD_WF_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Recipient_ID"]), Get_TrxName());
-                userID = wfRecipient.GetAD_User_ID();
+                wfRecipient = new X_VAF_WFlow_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Recipient_ID"]), Get_TrxName());
+                userID = wfRecipient.GetVAF_UserContact_ID();
                 if (userID > 0 && !(recipientUser.Contains(userID)))
                 {
                     recipientUser.Add(userID);
                 }
-                roleID = wfRecipient.GetAD_Role_ID();
+                roleID = wfRecipient.GetVAF_Role_ID();
                 if (roleID == 0)
                 {
                     continue;
                 }
                 //role = new MRole(Env.GetCtx(), roleID, Get_TrxName());
-                dsUserRole = DB.ExecuteDataset("SELECT AD_User_ID FROM AD_User_roles WHERE IsActive='Y' AND AD_Role_ID=" + roleID);
+                dsUserRole = DB.ExecuteDataset("SELECT VAF_UserContact_ID FROM VAF_UserContact_Roles WHERE IsActive='Y' AND VAF_Role_ID=" + roleID);
                 if (dsUserRole == null || dsUserRole.Tables[0].Rows.Count == 0)
                 {
                     continue;
                 }
                 for (int j = 0; j < dsUserRole.Tables[0].Rows.Count; j++)
                 {
-                    userID = Util.GetValueOfInt(dsUserRole.Tables[0].Rows[j]["AD_User_ID"]);
+                    userID = Util.GetValueOfInt(dsUserRole.Tables[0].Rows[j]["VAF_UserContact_ID"]);
                     if (!(recipientUser.Contains(userID)))
                     {
                         recipientUser.Add(userID);
@@ -3972,13 +3972,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private List<int> GetRecipientUserOnly()
         {
 
-            DataSet ds = DB.ExecuteDataset("SELECT AD_WF_Recipient_ID FROM AD_WF_Recipient WHERE IsActive='Y' AND AD_WF_Node_ID=" + _node.Get_ID());
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_WFlow_Recipient_ID FROM VAF_WFlow_Recipient WHERE IsActive='Y' AND VAF_WFlow_Node_ID=" + _node.Get_ID());
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 return null;
             }
             List<int> recipientUser = new List<int>();
-            X_AD_WF_Recipient wfRecipient = null;
+            X_VAF_WFlow_Recipient wfRecipient = null;
             //MRole role = null;
             // MUserRoles userRole = null;
             //DataSet dsUserRole = null;
@@ -3986,8 +3986,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //int roleID = 0;
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                wfRecipient = new X_AD_WF_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Recipient_ID"]), Get_TrxName());
-                userID = wfRecipient.GetAD_User_ID();
+                wfRecipient = new X_VAF_WFlow_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Recipient_ID"]), Get_TrxName());
+                userID = wfRecipient.GetVAF_UserContact_ID();
                 if (userID > 0 && !(recipientUser.Contains(userID)))
                 {
                     recipientUser.Add(userID);
@@ -3998,19 +3998,19 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private List<int> GetRecipientRoles()
         {
 
-            DataSet ds = DB.ExecuteDataset("SELECT AD_WF_Recipient_ID FROM AD_WF_Recipient WHERE IsActive='Y' AND AD_WF_Node_ID=" + _node.Get_ID());
+            DataSet ds = DB.ExecuteDataset("SELECT VAF_WFlow_Recipient_ID FROM VAF_WFlow_Recipient WHERE IsActive='Y' AND VAF_WFlow_Node_ID=" + _node.Get_ID());
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
                 return null;
             }
             List<int> recipientRoles = new List<int>();
-            X_AD_WF_Recipient wfRecipient = null;
+            X_VAF_WFlow_Recipient wfRecipient = null;
             int roleID = 0;
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                wfRecipient = new X_AD_WF_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Recipient_ID"]), Get_TrxName());
+                wfRecipient = new X_VAF_WFlow_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Recipient_ID"]), Get_TrxName());
 
-                roleID = wfRecipient.GetAD_Role_ID();
+                roleID = wfRecipient.GetVAF_Role_ID();
                 if (roleID > 0 && !(recipientRoles.Contains(roleID)))
                 {
                     recipientRoles.Add(roleID);
@@ -4018,20 +4018,20 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             return recipientRoles;
         }
-        private int GetUserFromWFResponsible(int AD_WF_Responsible_ID, PO po)
+        private int GetUserFromWFResponsible(int VAF_WFlow_Incharge_ID, PO po)
         {
-            MWFResponsible resp = new MWFResponsible(GetCtx(), AD_WF_Responsible_ID, Get_TrxName());
+            MWFResponsible resp = new MWFResponsible(GetCtx(), VAF_WFlow_Incharge_ID, Get_TrxName());
             if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_Human))
             {
-                return resp.GetAD_User_ID();
+                return resp.GetVAF_UserContact_ID();
             }
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_Organization))
             {
-                return (new MOrgInfo(GetCtx(), Util.GetValueOfInt(po.Get_Value("AD_Org_ID")), Get_TrxName()).GetSupervisor_ID());
+                return (new MOrgInfo(GetCtx(), Util.GetValueOfInt(po.Get_Value("VAF_Org_ID")), Get_TrxName()).GetSupervisor_ID());
             }
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_Role))
             {
-                return Util.GetValueOfInt(DB.ExecuteScalar("select ad_user_ID from ad_user_roles where Ad_role_ID=" + resp.GetAD_Role_ID() + " AND isactive='Y'"));
+                return Util.GetValueOfInt(DB.ExecuteScalar("select VAF_UserContact_ID from VAF_UserContact_Roles where VAF_Role_ID=" + resp.GetVAF_Role_ID() + " AND isactive='Y'"));
             }
             // Handled code for new Responsible type being added
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_SQL))
@@ -4046,7 +4046,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else
             {
-                return GetCtx().GetAD_User_ID();
+                return GetCtx().GetVAF_UserContact_ID();
             }
         }
 
@@ -4081,13 +4081,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 token = inStr.Substring(0, j);
                 if (token == "Tenant")
                 {
-                    int id = po.GetAD_Client_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_Client WHERE AD_Client_ID=" + id));
+                    int id = po.GetVAF_Client_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_Client WHERE VAF_Client_ID=" + id));
                 }
                 else if (token == "Org")
                 {
-                    int id = po.GetAD_Org_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_ORG WHERE AD_ORG_ID=" + id));
+                    int id = po.GetVAF_Org_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_ORG WHERE VAF_ORG_ID=" + id));
                 }
                 else if (token == "BPName")
                 {
@@ -4111,12 +4111,12 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         {
             string res = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT
                               CASE
-                                WHEN ( (SELECT AD_Table_ID FROM AD_Table WHERE TableName='VADMS_MetaData')=
-                                  (SELECT AD_Table_ID
+                                WHEN ( (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VADMS_MetaData')=
+                                  (SELECT VAF_TableView_ID
                                   FROM AD_WorkFlow
                                   WHERE IsActive    ='Y'
                                   AND AD_WorkFlow_ID=
-                                    (SELECT AD_Workflow_ID FROM AD_WF_Node WHERE AD_Wf_Node_ID =" + GetAD_WF_Node_ID() + @"
+                                    (SELECT AD_Workflow_ID FROM VAF_WFlow_Node WHERE VAF_WFlow_Node_ID =" + GetVAF_WFlow_Node_ID() + @"
                                     )
                                   ) )
                                 THEN 'True'
@@ -4131,7 +4131,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             DocumentAction action = new DocumentAction();
             int VADMS_Document_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VADMS_Document_ID From VADMS_Metadata WHERE IsActive='Y' AND VADMS_Metadata_ID=" + GetRecord_ID()));
 
-            action.SaveActionLog(GetCtx(), VADMS_Document_ID, GetCtx().GetAD_User_ID(), 0, Msg.GetMsg(GetCtx(), "VADMS_DoneBySystem"), emailto, trxname, out res);
+            action.SaveActionLog(GetCtx(), VADMS_Document_ID, GetCtx().GetVAF_UserContact_ID(), 0, Msg.GetMsg(GetCtx(), "VADMS_DoneBySystem"), emailto, trxname, out res);
 
             return res;
         }
@@ -4151,10 +4151,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //    sb.Append(Msg.GetElement(GetCtx(), keyColumns[0])).Append(" ");
 
             // Get Workflow Activity details from selected Text Template
-            MWFNode node = MWFNode.Get(po.GetCtx(), GetAD_WF_Node_ID());
-            if (node.Get_ColumnIndex("AD_TextTemplate_ID") >= 0 && node.GetAD_TextTemplate_ID() > 0)
+            MWFNode node = MWFNode.Get(po.GetCtx(), GetVAF_WFlow_Node_ID());
+            if (node.Get_ColumnIndex("VAF_TextTemplate_ID") >= 0 && node.GetVAF_TextTemplate_ID() > 0)
             {
-                string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
+                string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM VAF_TextTemplate WHERE VAF_TextTemplate_ID = " + node.GetVAF_TextTemplate_ID()));
                 sb.Append(VAdvantage.Common.Common.Parse(mailtext, po));
                 //sb.Replace("<br>", "●");
             }
@@ -4191,7 +4191,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     sr = (int?)po.Get_Value(index);
                 else
                 {
-                    index = po.Get_ColumnIndex("AD_User_ID");
+                    index = po.Get_ColumnIndex("VAF_UserContact_ID");
                     if (index != -1)
                         sr = (int?)po.Get_Value(index);
                 }
@@ -4228,10 +4228,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <summary>
         /// Set Workflow Activity ID in Last Activity
         /// </summary>
-        /// <param name="AD_WF_Activity_ID"></param>
-        public void SetLastActivity(int AD_WF_Activity_ID)
+        /// <param name="VAF_WFlow_Task_ID"></param>
+        public void SetLastActivity(int VAF_WFlow_Task_ID)
         {
-            _lastActivity = AD_WF_Activity_ID;
+            _lastActivity = VAF_WFlow_Task_ID;
         }
     }
 }

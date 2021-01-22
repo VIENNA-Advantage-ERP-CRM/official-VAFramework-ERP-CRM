@@ -32,7 +32,7 @@ namespace ViennaAdvantageServer.Process
         }
         protected override string DoIt()
         {
-            sql = @"SELECT   AD_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id , m_transaction_id
+            sql = @"SELECT   VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id , m_transaction_id
                     FROM m_transaction WHERE m_movementline_id IS NOT NULL ORDER BY m_product_id";
             dsAllTransactionRecord = new DataSet();
             try
@@ -47,9 +47,9 @@ namespace ViennaAdvantageServer.Process
                 }
             }
 
-            sql = @"SELECT COUNT(*) ,   AD_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
+            sql = @"SELECT COUNT(*) ,   VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
                     FROM m_transaction WHERE m_movementline_id IS NOT NULL
-                    GROUP BY AD_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
+                    GROUP BY VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
                     HAVING COUNT(*) > 1 ORDER BY m_product_id";
             dsTransaction = new DataSet();
             try
@@ -64,7 +64,7 @@ namespace ViennaAdvantageServer.Process
                             int i = 0, j = 0;
                             for (i = 0; i < dsTransaction.Tables[0].Rows.Count; i++)
                             {
-                                DataRow[] dr = dsAllTransactionRecord.Tables[0].Select("AD_Org_ID= " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["AD_Org_ID"]) +
+                                DataRow[] dr = dsAllTransactionRecord.Tables[0].Select("VAF_Org_ID= " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAF_Org_ID"]) +
                                                                                        " AND M_Product_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) +
                                                                                        " AND M_Locator_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) +
                                                                                        " AND M_AttributeSetInstance_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) +

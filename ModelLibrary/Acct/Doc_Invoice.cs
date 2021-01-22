@@ -336,7 +336,7 @@ namespace VAdvantage.Acct
                     int custCnt = 0;
 
                     //Check For Country Of Organization And Customer
-                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM AD_OrgInfo org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.AD_Org_ID=" + GetAD_Org_ID()));
+                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM VAF_OrgDetail org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
                     custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM C_Invoice inv INNER JOIN C_Bpartner_Location bl ON (inv.C_Bpartner_Location_ID=bl.C_Bpartner_Location_ID) INNER JOIN C_Location loc ON (bl.C_Location_ID=loc.C_Location_ID) WHERE inv.C_Invoice_ID=" + Get_ID()));
 
                     if (orgCnt == custCnt)
@@ -394,7 +394,7 @@ namespace VAdvantage.Acct
                         {
                             if (fLines[i] != null)
                             {
-                                fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), true);      //  from Loc
+                                fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
                                 fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
                             }
                         }
@@ -551,7 +551,7 @@ namespace VAdvantage.Acct
                         {
                             if (fLines[i] != null)
                             {
-                                fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), true);      //  from Loc
+                                fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
                                 fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
                             }
                         }
@@ -752,7 +752,7 @@ namespace VAdvantage.Acct
                     {
                         if (fLines[i] != null)
                         {
-                            fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), true);      //  from Loc
+                            fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
                             fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
                         }
                     }
@@ -889,7 +889,7 @@ namespace VAdvantage.Acct
                 {
                     if (fLines[i] != null)
                     {
-                        fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), true);      //  from Loc
+                        fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
                         fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
                     }
                 }
@@ -1040,7 +1040,7 @@ namespace VAdvantage.Acct
                             if (!IsPosted())
                             {
 
-                                MCostDetail.CreateInvoice(as1, line.GetAD_Org_ID(),
+                                MCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
                                     line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                                     line.Get_ID(), 0,		//	No Cost Element
                                     line.GetAmtSource(), line.GetQty().Value,
@@ -1056,7 +1056,7 @@ namespace VAdvantage.Acct
                     if (fLines[i] != null)
                     {
                         fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
-                        fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), false);    //  to Loc
+                        fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                 }
 
@@ -1208,7 +1208,7 @@ namespace VAdvantage.Acct
                             if (!IsPosted())
                             {
 
-                                MCostDetail.CreateInvoice(as1, line.GetAD_Org_ID(),
+                                MCostDetail.CreateInvoice(as1, line.GetVAF_Org_ID(),
                                     line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                                     line.Get_ID(), 0,		//	No Cost Element
                                     Decimal.Negate(line.GetAmtSource()), line.GetQty().Value,
@@ -1223,7 +1223,7 @@ namespace VAdvantage.Acct
                     if (fLines[i] != null)
                     {
                         fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
-                        fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), false);    //  to Loc
+                        fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                 }
                 //  Liability       DR
@@ -1382,11 +1382,11 @@ namespace VAdvantage.Acct
                     if (payables)
                     {
                         fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
-                        fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), false);    //  to Loc
+                        fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                     else
                     {
-                        fLines[i].SetLocationFromOrg(fLines[i].GetAD_Org_ID(), true);    //  from Loc
+                        fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);    //  from Loc
                         fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
                     }
                 }
@@ -1474,7 +1474,7 @@ namespace VAdvantage.Acct
                     allocationAmt = MConversionRate.Convert(GetCtx(), allocationAmt,
                         GetC_Currency_ID(), as1.GetC_Currency_ID(),
                         GetDateAcct(), GetC_ConversionType_ID(),
-                        GetAD_Client_ID(), GetAD_Org_ID());
+                        GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 if (Env.Scale(allocationAmt) > as1.GetCostingPrecision())
                 {
@@ -1487,7 +1487,7 @@ namespace VAdvantage.Acct
                 if (!IsPosted())
                 {
 
-                    MCostDetail cd = new MCostDetail(as1, lca.GetAD_Org_ID(),
+                    MCostDetail cd = new MCostDetail(as1, lca.GetVAF_Org_ID(),
                         lca.GetM_Product_ID(), lca.GetM_AttributeSetInstance_ID(),
                         lca.GetM_CostElement_ID(),
                         allocationAmt, lca.GetQty(),		//	Qty
@@ -1497,7 +1497,7 @@ namespace VAdvantage.Acct
                     bool ok = cd.Save();
                     if (ok && !cd.IsProcessed())
                     {
-                        MClient client = MClient.Get(as1.GetCtx(), as1.GetAD_Client_ID());
+                        MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                         if (client.IsCostImmediate())
                         {
                             cd.Process();
@@ -1516,7 +1516,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">accounting schema</param>
         private void UpdateProductPO(MAcctSchema as1)
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetAD_Client_ID());
+            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
             if (ci.GetC_AcctSchema1_ID() != as1.GetC_AcctSchema_ID())
             {
                 return;
@@ -1526,7 +1526,7 @@ namespace VAdvantage.Acct
                 "UPDATE M_Product_PO po "
                 + "SET PriceLastInv = "
                 //	select
-                + "(SELECT currencyConvert(il.PriceActual,i.C_Currency_ID,po.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) "
+                + "(SELECT currencyConvert(il.PriceActual,i.C_Currency_ID,po.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID) "
                 + "FROM C_Invoice i, C_InvoiceLine il "
                 + "WHERE i.C_Invoice_ID=il.C_Invoice_ID"
                 + " AND po.M_Product_ID=il.M_Product_ID AND po.C_BPartner_ID=i.C_BPartner_ID");

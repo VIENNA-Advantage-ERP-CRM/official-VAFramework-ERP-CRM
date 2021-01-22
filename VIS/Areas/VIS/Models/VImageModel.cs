@@ -16,9 +16,9 @@ namespace VIS.Models
         public string UsrImage { get; set; }
         public bool Isdatabase { get; set; }
 
-        public ImagePathInfo GetImage(Ctx ctx, int ad_image_id, int height, int width, string URI)
+        public ImagePathInfo GetImage(Ctx ctx, int VAF_Image_id, int height, int width, string URI)
         {
-            MImage mimg = new MImage(ctx, ad_image_id, null);
+            MImage mimg = new MImage(ctx, VAF_Image_id, null);
             bool url = false;
             var value = mimg.GetThumbnail(height, width, out url);
             if (url)
@@ -34,9 +34,9 @@ namespace VIS.Models
         }
 
 
-        //public ImagePathInfo GetImageForWindowControl(Ctx ctx, int ad_image_id, int height, int width)
+        //public ImagePathInfo GetImageForWindowControl(Ctx ctx, int VAF_Image_id, int height, int width)
         //{
-        //    MImage mimg = new MImage(ctx, ad_image_id, null);
+        //    MImage mimg = new MImage(ctx, VAF_Image_id, null);
         //    if (!string.IsNullOrEmpty(mimg.GetFontName()))
         //    {
         //        return new ImagePathInfo() { ClassName = mimg.GetFontName() };
@@ -129,11 +129,11 @@ namespace VIS.Models
         /// Delete image 
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_image_id"></param>
+        /// <param name="VAF_Image_id"></param>
         /// <returns></returns>
-        public int DeleteImage(Ctx ctx, int ad_image_id)
+        public int DeleteImage(Ctx ctx, int VAF_Image_id)
         {
-            var ret = CommonFunctions.DeleteImage(ctx, ad_image_id);
+            var ret = CommonFunctions.DeleteImage(ctx, VAF_Image_id);
             return 0;
         }
 

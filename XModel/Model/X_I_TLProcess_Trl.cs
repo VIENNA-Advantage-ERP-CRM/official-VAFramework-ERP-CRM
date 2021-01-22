@@ -20,7 +20,7 @@ public X_I_TLProcess_Trl (Context ctx, int I_TLProcess_Trl_ID, Trx trxName) : ba
 {
 /** if (I_TLProcess_Trl_ID == 0)
 {
-SetAD_Process_ID (0);
+SetVAF_Job_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLProcess_Trl (Ctx ctx, int I_TLProcess_Trl_ID, Trx trxName) : base (
 {
 /** if (I_TLProcess_Trl_ID == 0)
 {
-SetAD_Process_ID (0);
+SetVAF_Job_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -74,7 +74,7 @@ static X_I_TLProcess_Trl()
 //static long serialVersionUID 27638799900538L;
 /** Last Updated Timestamp 12/28/2012 11:33:03 AM */
 public static long updatedMS = 1356674583749L;
-/** AD_Table_ID=1000410 */
+/** VAF_TableView_ID=1000410 */
 public static int Table_ID;
  // =1000410;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLProcess_Trl[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID < 1) throw new ArgumentException ("AD_Process_ID is mandatory.");
-Set_ValueNoCheck ("AD_Process_ID", AD_Process_ID);
+if (VAF_Job_ID < 1) throw new ArgumentException ("VAF_Job_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

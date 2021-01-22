@@ -20,7 +20,7 @@ public X_AD_Workbench (Context ctx, int AD_Workbench_ID, Trx trxName) : base (ct
 {
 /** if (AD_Workbench_ID == 0)
 {
-SetAD_Column_ID (0);
+SetVAF_Column_ID (0);
 SetAD_Workbench_ID (0);
 SetEntityType (null);	// U
 SetName (null);
@@ -31,7 +31,7 @@ public X_AD_Workbench (Ctx ctx, int AD_Workbench_ID, Trx trxName) : base (ctx, A
 {
 /** if (AD_Workbench_ID == 0)
 {
-SetAD_Column_ID (0);
+SetVAF_Column_ID (0);
 SetAD_Workbench_ID (0);
 SetEntityType (null);	// U
 SetName (null);
@@ -74,7 +74,7 @@ static X_AD_Workbench()
 //static long serialVersionUID 27562514366780L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049991L;
-/** AD_Table_ID=468 */
+/** VAF_TableView_ID=468 */
 public static int Table_ID;
  // =468;
 
@@ -117,52 +117,52 @@ StringBuilder sb = new StringBuilder ("X_AD_Workbench[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set System Color.
-@param AD_Color_ID Color for backgrounds or indicators */
-public void SetAD_Color_ID (int AD_Color_ID)
+@param VAF_Colour_ID Color for backgrounds or indicators */
+public void SetVAF_Colour_ID (int VAF_Colour_ID)
 {
-if (AD_Color_ID <= 0) Set_Value ("AD_Color_ID", null);
+if (VAF_Colour_ID <= 0) Set_Value ("VAF_Colour_ID", null);
 else
-Set_Value ("AD_Color_ID", AD_Color_ID);
+Set_Value ("VAF_Colour_ID", VAF_Colour_ID);
 }
 /** Get System Color.
 @return Color for backgrounds or indicators */
-public int GetAD_Color_ID() 
+public int GetVAF_Colour_ID() 
 {
-Object ii = Get_Value("AD_Color_ID");
+Object ii = Get_Value("VAF_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_Column_ID AD_Reference_ID=244 */
-public static int AD_COLUMN_ID_AD_Reference_ID=244;
+/** VAF_Column_ID VAF_Control_Ref_ID=244 */
+public static int VAF_COLUMN_ID_VAF_Control_Ref_ID=244;
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID < 1) throw new ArgumentException ("AD_Column_ID is mandatory.");
-Set_Value ("AD_Column_ID", AD_Column_ID);
+if (VAF_Column_ID < 1) throw new ArgumentException ("VAF_Column_ID is mandatory.");
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);
+if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);
 else
-Set_Value ("AD_Image_ID", AD_Image_ID);
+Set_Value ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -199,8 +199,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

@@ -70,7 +70,7 @@ static X_I_Product()
 //static long serialVersionUID 27562514377532L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060743L;
-/** AD_Table_ID=532 */
+/** VAF_TableView_ID=532 */
 public static int Table_ID;
  // =532;
 
@@ -355,8 +355,8 @@ public String GetI_ErrorMsg()
 return (String)Get_Value("I_ErrorMsg");
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */
@@ -638,8 +638,8 @@ public String GetProductCategory_Value()
 return (String)Get_Value("ProductCategory_Value");
 }
 
-/** ProductType AD_Reference_ID=270 */
-public static int PRODUCTTYPE_AD_Reference_ID=270;
+/** ProductType VAF_Control_Ref_ID=270 */
+public static int PRODUCTTYPE_VAF_Control_Ref_ID=270;
 /** Expense type = E */
 public static String PRODUCTTYPE_ExpenseType = "E";
 /** Item = I */

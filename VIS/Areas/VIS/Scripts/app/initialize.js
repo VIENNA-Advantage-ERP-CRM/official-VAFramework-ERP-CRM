@@ -5,7 +5,7 @@
           Set Login Cultue to Globalize js
         */
         function setCulture() {
-            var lang = V.context.getAD_Language().replace("_", "-");
+            var lang = V.context.getVAF_Language().replace("_", "-");
             Globalize.culture(lang);
         };
        
@@ -56,9 +56,9 @@
            //Set current date 
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             var date = $('#vis_userDate').find('span');
-            date.text(" "+ new Date().toLocaleDateString(V.context.getAD_Language().replace("_", "-"), options));
+            date.text(" "+ new Date().toLocaleDateString(V.context.getVAF_Language().replace("_", "-"), options));
             //date.text(new Date().toLocaleDateString('de-DE', options));
-            //V.context.getAD_Language().replace("_", "-");
+            //V.context.getVAF_Language().replace("_", "-");
         }
         return {
             init: init

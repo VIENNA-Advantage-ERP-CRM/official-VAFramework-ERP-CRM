@@ -37,18 +37,18 @@ namespace VAdvantage.Print
         }	//	get
 
 
-        public static ImageElement Get(int AD_PrintFormatItem_ID)
+        public static ImageElement Get(int VAF_Print_Rpt_LItem_ID)
         {
-            Object key = AD_PrintFormatItem_ID;
+            Object key = VAF_Print_Rpt_LItem_ID;
             ImageElement image = null;
             if (s_cache.ContainsKey(key))
                 image = (ImageElement)s_cache[key];
             if (image == null)
             {
-                image = new ImageElement(AD_PrintFormatItem_ID);
+                image = new ImageElement(VAF_Print_Rpt_LItem_ID);
                 s_cache[key] = image;
             }
-            return new ImageElement(image.GetImage(), "AD_PrintFormatItem_ID=" + AD_PrintFormatItem_ID);
+            return new ImageElement(image.GetImage(), "VAF_Print_Rpt_LItem_ID=" + VAF_Print_Rpt_LItem_ID);
         }	//	get
 
 
@@ -72,9 +72,9 @@ namespace VAdvantage.Print
                 log.Log(Level.WARNING, "Image is NULL");
         }	//	ImageElement
 
-        private ImageElement(int AD_PrintFormatItem_ID)
+        private ImageElement(int VAF_Print_Rpt_LItem_ID)
         {
-            LoadAttachment(AD_PrintFormatItem_ID);
+            LoadAttachment(VAF_Print_Rpt_LItem_ID);
         }	//	ImageElement
 
         private ImageElement(String imageURLstring)
@@ -118,12 +118,12 @@ namespace VAdvantage.Print
         }	//	getImage
 
 
-        private void LoadAttachment(int AD_PrintFormatItem_ID)
+        private void LoadAttachment(int VAF_Print_Rpt_LItem_ID)
         {
-            MAttachment attachment = MAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MPrintFormatItem.Table_ID, AD_PrintFormatItem_ID);
+            MAttachment attachment = MAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MPrintFormatItem.Table_ID, VAF_Print_Rpt_LItem_ID);
             if (attachment == null)
             {
-                log.Log(Level.WARNING, "No Attachment - AD_PrintFormatItem_ID=" + AD_PrintFormatItem_ID);
+                log.Log(Level.WARNING, "No Attachment - VAF_Print_Rpt_LItem_ID=" + VAF_Print_Rpt_LItem_ID);
                 return;
             }
             if (attachment.GetEntryCount() != 1)
@@ -141,7 +141,7 @@ namespace VAdvantage.Print
             if (m_image != null)
                 log.Fine(attachment.GetEntryName(0) + " - Size=" + imageData.Length);
             else
-                log.Log(Level.WARNING, attachment.GetEntryName(0) + " - not loaded (must be gif or jpg) - AD_PrintFormatItem_ID=" + AD_PrintFormatItem_ID);
+                log.Log(Level.WARNING, attachment.GetEntryName(0) + " - not loaded (must be gif or jpg) - VAF_Print_Rpt_LItem_ID=" + VAF_Print_Rpt_LItem_ID);
         }	//	loadAttachment
 
         protected override bool CalculateSize()

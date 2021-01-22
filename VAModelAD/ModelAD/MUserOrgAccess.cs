@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MUserOrgAccess
  * Purpose        : User Org Access Info
- * Class Used     : X_AD_User_OrgAccess
+ * Class Used     : X_VAF_UserContact_OrgRights
  * Chronological    Development
  * Deepak          17-Nov-2009
   ******************************************************/
@@ -27,17 +27,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUserOrgAccess : X_AD_User_OrgAccess
+    public class MUserOrgAccess : X_VAF_UserContact_OrgRights
     {
         /// <summary>
         /// Get Organizational Access of User
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <returns>array of User Org Access</returns>
-        public static MUserOrgAccess[] GetOfUser(Ctx ctx, int AD_User_ID)
+        public static MUserOrgAccess[] GetOfUser(Ctx ctx, int VAF_UserContact_ID)
         {
-            return Get(ctx, "SELECT * FROM AD_User_OrgAccess WHERE AD_User_ID=@Param1", AD_User_ID);
+            return Get(ctx, "SELECT * FROM VAF_UserContact_OrgRights WHERE VAF_UserContact_ID=@Param1", VAF_UserContact_ID);
         }	//	getOfUser
 
         /// <summary>
@@ -120,13 +120,13 @@ namespace VAdvantage.Model
         /// Organization Constructor
         /// </summary>
         /// <param name="org">org</param>
-        /// <param name="AD_User_ID"> role</param>
-        public MUserOrgAccess(PO org, int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"> role</param>
+        public MUserOrgAccess(PO org, int VAF_UserContact_ID)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             //this (org.GetCtx(), 0, org.Get_TrxName());
             SetClientOrg(org);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
         }	//	MUserOrgAccess
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace VAdvantage.Model
         public String toString()
         {
             StringBuilder sb = new StringBuilder("MUserOrgAccess[");
-            sb.Append("AD_User_ID=").Append(GetAD_User_ID())
-                .Append(",AD_Client_ID=").Append(GetAD_Client_ID())
-                .Append(",AD_Org_ID=").Append(GetAD_Org_ID())
+            sb.Append("VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
+                .Append(",VAF_Client_ID=").Append(GetVAF_Client_ID())
+                .Append(",VAF_Org_ID=").Append(GetVAF_Org_ID())
                 .Append(",RO=").Append(IsReadOnly());
             sb.Append("]");
             return sb.ToString();
@@ -153,8 +153,8 @@ namespace VAdvantage.Model
         public String ToStringX(Ctx ctx)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(Msg.Translate(ctx, "AD_Client_ID")).Append("=").Append(GetClientName()).Append(" - ")
-                .Append(Msg.Translate(ctx, "AD_Org_ID")).Append("=").Append(GetOrgName());
+            sb.Append(Msg.Translate(ctx, "VAF_Client_ID")).Append("=").Append(GetClientName()).Append(" - ")
+                .Append(Msg.Translate(ctx, "VAF_Org_ID")).Append("=").Append(GetOrgName());
             return sb.ToString();
         }	//	toStringX
 
@@ -170,13 +170,13 @@ namespace VAdvantage.Model
             if (_clientName == null)
             {
                 String sql = "SELECT c.Name, o.Name "
-                    + "FROM AD_Client c INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID) "
-                    + "WHERE o.AD_Org_ID=@Param1";
+                    + "FROM VAF_Client c INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID) "
+                    + "WHERE o.VAF_Org_ID=@Param1";
                 SqlParameter[] Param = new SqlParameter[1];
                 IDataReader idr = null;
                 try
                 {
-                    Param[0] = new SqlParameter("@Param1", GetAD_Org_ID());
+                    Param[0] = new SqlParameter("@Param1", GetVAF_Org_ID());
                     idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
                     if (idr.Read())
                     {
@@ -242,8 +242,8 @@ namespace VAdvantage.Model
 
         private void UpdateLoginSettings()
         {
-            DataSet ds = DB.ExecuteDataset(@"SELECT AD_Role_ID,ISUSEUSERORGACCESS From AD_Role WHERE AD_Role_ID IN 
-                        (SELECT AD_Role_ID FROM ad_loginsetting WHERE AD_Org_ID=" + GetAD_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID() + ")");
+            DataSet ds = DB.ExecuteDataset(@"SELECT VAF_Role_ID,ISUSEUSERORGACCESS From VAF_Role WHERE VAF_Role_ID IN 
+                        (SELECT VAF_Role_ID FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_UserContact_ID=" + GetVAF_UserContact_ID() + ")");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -251,25 +251,25 @@ namespace VAdvantage.Model
                 {
                     if (ds.Tables[0].Rows[i]["ISUSEUSERORGACCESS"].ToString() == "Y" ? true : false)
                     {
-                        deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                        deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     }
                     else
                     {
-                        int roleOrgID = Convert.ToInt32(DB.ExecuteScalar(@"SELECT count(*) From AD_Role_OrgAccess WHERE AD_Org_ID=" + GetAD_Org_ID() +
-                            " AND AD_Role_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"])));
+                        int roleOrgID = Convert.ToInt32(DB.ExecuteScalar(@"SELECT count(*) From VAF_Role_OrgRights WHERE VAF_Org_ID=" + GetVAF_Org_ID() +
+                            " AND VAF_Role_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"])));
                         if (roleOrgID == 0)
                         {
-                            deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                            deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                         }
                     }
                 }
             }
         }
 
-        private void deleteLoginDetails(int AD_Role_ID)
+        private void deleteLoginDetails(int VAF_Role_ID)
         {
-            DB.ExecuteQuery(@"DELETE FROM ad_loginsetting WHERE AD_Role_ID=" + AD_Role_ID +
-                                                             " AND AD_Org_ID=" + GetAD_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID());
+            DB.ExecuteQuery(@"DELETE FROM VAF_Loginsetting WHERE VAF_Role_ID=" + VAF_Role_ID +
+                                                             " AND VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_UserContact_ID=" + GetVAF_UserContact_ID());
         }
 
 

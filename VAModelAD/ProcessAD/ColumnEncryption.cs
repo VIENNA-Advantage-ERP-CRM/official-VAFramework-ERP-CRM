@@ -23,7 +23,7 @@ namespace VAdvantage.Process
         /** Test Value						*/
         private String p_TestValue = null;
         /** The Column						*/
-        private int p_AD_Column_ID = 0;
+        private int p_VAF_Column_ID = 0;
 
         /**
          *  Prepare - e.g., get Parameters.
@@ -49,7 +49,7 @@ namespace VAdvantage.Process
                 else
                     log.Log(VAdvantage.Logging.Level.SEVERE, "Unknown Parameter: " + name);
             }
-            p_AD_Column_ID = GetRecord_ID();
+            p_VAF_Column_ID = GetRecord_ID();
         }	//	prepare
 
         /**
@@ -59,16 +59,16 @@ namespace VAdvantage.Process
          */
         protected override String DoIt()// throws Exception
         {
-            log.Info("AD_Column_ID=" + p_AD_Column_ID
+            log.Info("VAF_Column_ID=" + p_VAF_Column_ID
                 + ", IsEncrypted=" + p_IsEncrypted
                 + ", ChangeSetting=" + p_ChangeSetting
                 + ", MaxLength=" + p_MaxLength);
-            MColumn column = new MColumn(GetCtx(), p_AD_Column_ID, Get_Trx());
-            if (column.Get_ID() == 0 || column.Get_ID() != p_AD_Column_ID)
-                throw new Exception("@NotFound@ @AD_Column_ID@ - " + p_AD_Column_ID);
+            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
+            if (column.Get_ID() == 0 || column.Get_ID() != p_VAF_Column_ID)
+                throw new Exception("@NotFound@ @VAF_Column_ID@ - " + p_VAF_Column_ID);
             //
             String columnName = column.GetColumnName();
-            int dt = column.GetAD_Reference_ID();
+            int dt = column.GetVAF_Control_Ref_ID();
 
             //	Can it be enabled?
             if (column.IsKey()
@@ -163,14 +163,14 @@ namespace VAdvantage.Process
 
             if (p_IsEncrypted == column.IsEncrypted() && !error)      // Done By Karan on 10-nov-2016, to encrypt/decrypt passwords according to settings.
             {
-                //object colID = DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID =(SELECT AD_Table_ID From AD_Table WHERE TableName='AD_User') AND ColumnName='Password'", null, Get_Trx());
+                //object colID = DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID =(SELECT VAF_TableView_ID From VAF_TableView WHERE TableName='VAF_UserContact') AND ColumnName='Password'", null, Get_Trx());
 
 
 
-                // if (colID != null && colID != DBNull.Value && Convert.ToInt32(colID) == column.GetAD_Column_ID())
+                // if (colID != null && colID != DBNull.Value && Convert.ToInt32(colID) == column.GetVAF_Column_ID())
                 //{
 
-                string tableName = MTable.GetTableName(GetCtx(), column.GetAD_Table_ID());
+                string tableName = MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID());
 
                 DataSet ds = DB.ExecuteDataset("SELECT " + column.GetColumnName() + "," + tableName
                                                                 + "_ID FROM " + tableName, null, Get_Trx());
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
                             if (ds.Tables[0].Rows[i][column.GetColumnName()] != null && ds.Tables[0].Rows[i][column.GetColumnName()] != DBNull.Value
                                 && !SecureEngine.IsEncrypted(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()))
                             {
-                                //MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetAD_Table_ID()) + "_ID"]), Get_Trx());
+                                //MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID()) + "_ID"]), Get_Trx());
                                 //user.SetPassword(SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()));
 
                                 int encLength = SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()).Length;
@@ -200,7 +200,7 @@ namespace VAdvantage.Process
                                     //    return "Encryption=" + false;
                                     //}
                                     string p_NewPassword = SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString());
-                                    String sql = "UPDATE " + tableName + " SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+                                    String sql = "UPDATE " + tableName + " SET Updated=SYSDATE, UpdatedBy=" + GetVAF_UserContact_ID();
                                     if (!string.IsNullOrEmpty(p_NewPassword))
                                     {
                                         sql += ", " + column.GetColumnName() + "=" + GlobalVariable.TO_STRING(p_NewPassword);
@@ -228,7 +228,7 @@ namespace VAdvantage.Process
                             if (ds.Tables[0].Rows[i][column.GetColumnName()] != null && ds.Tables[0].Rows[i][column.GetColumnName()] != DBNull.Value
                                 && SecureEngine.IsEncrypted(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()))
                             {
-                                // MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetAD_Table_ID())+"_ID"]), Get_Trx());
+                                // MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID())+"_ID"]), Get_Trx());
 
                                 //PO tab = MTable.GetPO(GetCtx(), tableName,
                                 //   Util.GetValueOfInt(ds.Tables[0].Rows[i][tableName + "_ID"]), Get_Trx());
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                                 //}
 
                                 string p_NewPassword = SecureEngine.Decrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString());
-                                String sql = "UPDATE " + tableName + "  SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+                                String sql = "UPDATE " + tableName + "  SET Updated=SYSDATE, UpdatedBy=" + GetVAF_UserContact_ID();
                                 if (!string.IsNullOrEmpty(p_NewPassword))
                                 {
                                     sql += ", " + column.GetColumnName() + "=" + GlobalVariable.TO_STRING(p_NewPassword);

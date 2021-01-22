@@ -58,7 +58,7 @@ namespace VIS.Models
 
             //End Assign parameter value
 
-            MProductPricing pp = new MProductPricing(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+            MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
 
             //var M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");

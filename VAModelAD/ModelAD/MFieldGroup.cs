@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_FieldGroup
+ * Class Used     : X_VAF_FieldSection
  * Chronological Development
  * Veena Pandey     31-Aug-09
  ******************************************************/
@@ -17,22 +17,22 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MFieldGroup : X_AD_FieldGroup
+    public class MFieldGroup : X_VAF_FieldSection
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_FieldGroup_ID">id</param>
+        /// <param name="VAF_FieldSection_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MFieldGroup(Context ctx, int AD_FieldGroup_ID, Trx trxName)
-            : base(ctx, AD_FieldGroup_ID, trxName)
+        public MFieldGroup(Context ctx, int VAF_FieldSection_ID, Trx trxName)
+            : base(ctx, VAF_FieldSection_ID, trxName)
         {
         }
 
 
-        public MFieldGroup(Ctx ctx, int AD_FieldGroup_ID, Trx trxName)
-            : base(ctx, AD_FieldGroup_ID, trxName)
+        public MFieldGroup(Ctx ctx, int VAF_FieldSection_ID, Trx trxName)
+            : base(ctx, VAF_FieldSection_ID, trxName)
         {
         }
 

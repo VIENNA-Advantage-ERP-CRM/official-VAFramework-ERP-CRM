@@ -110,7 +110,7 @@ namespace VAdvantage.Model
 			xmlCode.Append ("  <description><![CDATA["
 				+ this.GetDescription () + "]]></description>");
 			xmlCode.Append ("  <language>"
-				+ this.GetAD_Language () + "</language>");
+				+ this.GetVAF_Language () + "</language>");
 			xmlCode.Append ("  <copyright>" + "" + "</copyright>");
 			xmlCode.Append ("  <pubDate>"
 				+ this.GetCreated () + "</pubDate>");
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
 		String[] toBeIndexed = new String[2];
 		toBeIndexed[0] = this.GetName();
 		toBeIndexed[1] = this.GetDescription();
-		MIndex.ReIndex (newRecord, toBeIndexed, GetCtx(), GetAD_Client_ID(), Get_Table_ID(), Get_ID(), GetCM_WebProject_ID(), this.GetUpdated());
+		MIndex.ReIndex (newRecord, toBeIndexed, GetCtx(), GetVAF_Client_ID(), Get_Table_ID(), Get_ID(), GetCM_WebProject_ID(), this.GetUpdated());
 	}
 }	//	
 

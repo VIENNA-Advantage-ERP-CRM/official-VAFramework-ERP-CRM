@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             if (IsPosted())
             {
                 // Check Period Open
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 {
                     log.Warning("Period Closed");
                     return false;
@@ -345,14 +345,14 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
             }
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -437,7 +437,7 @@ namespace VAdvantage.Model
                 bps.Add(line.ProcessIt(false));	//	not reverse
 
                 // change by Amit for Payment Management 5-11-2015
-                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
+                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     if (line.GetC_Invoice_ID() > 0 && line.GetC_InvoicePaySchedule_ID() > 0)
@@ -472,9 +472,9 @@ namespace VAdvantage.Model
                         ShiftVarianceOnOther = 0;
 
                         _sql.Clear();
-                        _sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN ad_clientinfo ci ON ci.c_acctschema1_id = asch.c_acctschema_id
-                                 INNER JOIN ad_client c ON c.ad_client_id = ci.ad_client_id INNER JOIN c_invoice i ON c.ad_client_id    = i.ad_client_id
-                                 WHERE i.ad_client_id = " + invoice.GetAD_Client_ID());
+                        _sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN c_invoice i ON c.vaf_client_id    = i.vaf_client_id
+                                 WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
                         int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
 
 
@@ -552,7 +552,7 @@ namespace VAdvantage.Model
                         if (BaseCurrency != invoice.GetC_Currency_ID())
                         {
                             // get Conversion on the basis of Allocation Date Account because Paid Amount need to be convert on DateAcct of Allocation
-                            multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                            multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                             paySch.SetVA009_PaidAmnt(Decimal.Round(paySch.GetVA009_PaidAmntInvce() * multiplyRate, currency.GetStdPrecision()));
                         }
                         else
@@ -614,7 +614,7 @@ namespace VAdvantage.Model
                         {
                             backupNewPaySch = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
                             backupNewPaySch.Set_TrxName(Get_Trx());
-                            PO.CopyValues(paySch, backupNewPaySch, paySch.GetAD_Client_ID(), paySch.GetAD_Org_ID());
+                            PO.CopyValues(paySch, backupNewPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
                         }
 
                         // update open amount in base / invoice currency when we splitted record
@@ -643,7 +643,7 @@ namespace VAdvantage.Model
                             //MInvoicePaySchedule newPaySch = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
                             MInvoicePaySchedule newPaySch = backupNewPaySch;
                             newPaySch.Set_TrxName(Get_Trx());
-                            //PO.CopyValues(paySch, newPaySch, paySch.GetAD_Client_ID(), paySch.GetAD_Org_ID());
+                            //PO.CopyValues(paySch, newPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
 
                             // update payment method and its respective fields
 
@@ -919,7 +919,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetCreatedBy();
@@ -936,11 +936,11 @@ namespace VAdvantage.Model
                 throw new Exception("Allocation already reversed (not active)");
 
             //	Can we delete posting
-            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateTrx(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateTrx(), GetVAF_Org_ID()))
             {
                 throw new Exception(Common.Common.NONBUSINESSDAY);
             }
@@ -953,7 +953,7 @@ namespace VAdvantage.Model
                 throw new Exception("Cannot de-activate allocation");
 
             //	Delete Posting
-            String sql = "DELETE FROM Fact_Acct WHERE AD_Table_ID=" + MAllocationHdr.Table_ID
+            String sql = "DELETE FROM Fact_Acct WHERE VAF_TableView_ID=" + MAllocationHdr.Table_ID
                 + " AND Record_ID=" + GetC_AllocationHdr_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Fine("Fact_Acct deleted #" + no);
@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();
             MCash cash = null; MJournal journal = null;
-            int currencyTo_ID = 0, C_ConversionType_ID = 0, AD_Client_ID = 0, AD_Org_ID = 0;
+            int currencyTo_ID = 0, C_ConversionType_ID = 0, VAF_Client_ID = 0, VAF_Org_ID = 0;
             DateTime? DateAcct = null;
             DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
             if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
@@ -1075,7 +1075,7 @@ namespace VAdvantage.Model
                 // when we allocate invoice with invoice 
                 if (payment == null && cashline == null && journalline == null) // Invoice to Invoice
                 {
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), conversionDate, GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), conversionDate, GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1088,16 +1088,16 @@ namespace VAdvantage.Model
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
-                            AD_Client_ID = invoice.GetAD_Client_ID();
-                            AD_Org_ID = invoice.GetAD_Org_ID();
+                            VAF_Client_ID = invoice.GetVAF_Client_ID();
+                            VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
                         else if (journalline != null && payment != null) //Journal to payment
                         {
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
-                            AD_Client_ID = payment.GetAD_Client_ID();
-                            AD_Org_ID = payment.GetAD_Org_ID();
+                            VAF_Client_ID = payment.GetVAF_Client_ID();
+                            VAF_Org_ID = payment.GetVAF_Org_ID();
                         }
                         else if (journalline != null && cashline != null) // journal to cash
                         {
@@ -1105,10 +1105,10 @@ namespace VAdvantage.Model
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = cash.GetC_Currency_ID();
-                            AD_Client_ID = cash.GetAD_Client_ID();
-                            AD_Org_ID = cash.GetAD_Org_ID();
+                            VAF_Client_ID = cash.GetVAF_Client_ID();
+                            VAF_Org_ID = cash.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
 
                     // in case of cash journal
@@ -1119,10 +1119,10 @@ namespace VAdvantage.Model
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
-                            AD_Client_ID = invoice.GetAD_Client_ID();
-                            AD_Org_ID = invoice.GetAD_Org_ID();
+                            VAF_Client_ID = invoice.GetVAF_Client_ID();
+                            VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
 
                     // in case of Payment
@@ -1133,18 +1133,18 @@ namespace VAdvantage.Model
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
-                            AD_Client_ID = invoice.GetAD_Client_ID();
-                            AD_Org_ID = invoice.GetAD_Org_ID();
+                            VAF_Client_ID = invoice.GetVAF_Client_ID();
+                            VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
                         else if (payment != null && payment != null) //payment to payment
                         {
                             DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
-                            AD_Client_ID = payment.GetAD_Client_ID();
-                            AD_Org_ID = payment.GetAD_Org_ID();
+                            VAF_Client_ID = payment.GetVAF_Client_ID();
+                            VAF_Org_ID = payment.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
                 }
             }

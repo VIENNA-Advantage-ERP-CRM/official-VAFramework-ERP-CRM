@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Reference
+ * Class Used     : X_VAF_Control_Ref
  * Chronological Development
  * Veena Pandey     29-Aug-09
  ******************************************************/
@@ -17,24 +17,24 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MReference : X_AD_Reference
+    public class MReference : X_VAF_Control_Ref
     {
         // Cache
-        private static CCache<int, MReference> _cache = new CCache<int, MReference>("AD_Reference", 20);
+        private static CCache<int, MReference> _cache = new CCache<int, MReference>("VAF_Control_Ref", 20);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">id</param>
+        /// <param name="VAF_Control_Ref_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReference(Context ctx, int AD_Reference_ID, Trx trxName)
-            : base(ctx, AD_Reference_ID, trxName)
+        public MReference(Context ctx, int VAF_Control_Ref_ID, Trx trxName)
+            : base(ctx, VAF_Control_Ref_ID, trxName)
         {
         }
 
-        public MReference(Ctx ctx, int AD_Reference_ID, Trx trxName)
-            : base(ctx, AD_Reference_ID, trxName)
+        public MReference(Ctx ctx, int VAF_Control_Ref_ID, Trx trxName)
+            : base(ctx, VAF_Control_Ref_ID, trxName)
         {
         }
         /// <summary>
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         /// Get Reference from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">id</param>
+        /// <param name="VAF_Control_Ref_ID">id</param>
         /// <returns>MReference</returns>
-        public static MReference Get(Ctx ctx, int AD_Reference_ID)
+        public static MReference Get(Ctx ctx, int VAF_Control_Ref_ID)
         {
-            int key = AD_Reference_ID;
+            int key = VAF_Control_Ref_ID;
             MReference retValue = _cache[key];
             if (retValue == null)
-                return new MReference(ctx, AD_Reference_ID, null);
+                return new MReference(ctx, VAF_Control_Ref_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;

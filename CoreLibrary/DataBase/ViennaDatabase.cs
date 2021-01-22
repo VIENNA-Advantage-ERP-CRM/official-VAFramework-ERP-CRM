@@ -121,10 +121,10 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="columnName">columnName  the column name in the SQL</param>
         /// <param name="displayType">displayType Display Type</param>
-        /// <param name="AD_Language">AD_Language 6 character language setting (from Env.LANG_*)</param>
+        /// <param name="VAF_Language">VAF_Language 6 character language setting (from Env.LANG_*)</param>
         /// <returns>TRIM(TO_CHAR(columnName,'999G999G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
         /// or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
-        String TO_CHAR(String columnName, int displayType, String AD_Language);
+        String TO_CHAR(String columnName, int displayType, String VAF_Language);
 
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace VAdvantage.DataBase
         /// <summary>
         ///Default sql use to test whether a connection is still valid
         /// </summary>
-        // static String DEFAULT_CONN_TEST_SQL = "SELECT Version FROM AD_System";
+        // static String DEFAULT_CONN_TEST_SQL = "SELECT Version FROM VAF_System";
 
         /// <summary>
         ///// Is the database have sql extension that return a subset of the query result

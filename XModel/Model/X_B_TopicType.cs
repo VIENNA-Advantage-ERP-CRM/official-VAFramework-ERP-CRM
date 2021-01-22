@@ -78,7 +78,7 @@ static X_B_TopicType()
 //static long serialVersionUID 27562514367579L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050790L;
-/** AD_Table_ID=690 */
+/** VAF_TableView_ID=690 */
 public static int Table_ID;
  // =690;
 
@@ -203,8 +203,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductMember_ID AD_Reference_ID=162 */
-public static int M_PRODUCTMEMBER_ID_AD_Reference_ID=162;
+/** M_ProductMember_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCTMEMBER_ID_VAF_Control_Ref_ID=162;
 /** Set Membership.
 @param M_ProductMember_ID Product used to deternine the price of the membership for the topic type */
 public void SetM_ProductMember_ID (int M_ProductMember_ID)

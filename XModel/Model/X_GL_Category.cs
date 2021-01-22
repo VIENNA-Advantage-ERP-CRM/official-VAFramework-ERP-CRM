@@ -74,7 +74,7 @@ static X_GL_Category()
 //static long serialVersionUID 27562514376340L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059551L;
-/** AD_Table_ID=218 */
+/** VAF_TableView_ID=218 */
 public static int Table_ID;
  // =218;
 
@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_GL_Category[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 
-/** CategoryType AD_Reference_ID=207 */
-public static int CATEGORYTYPE_AD_Reference_ID=207;
+/** CategoryType VAF_Control_Ref_ID=207 */
+public static int CATEGORYTYPE_VAF_Control_Ref_ID=207;
 /** Document = D */
 public static String CATEGORYTYPE_Document = "D";
 /** Import = I */

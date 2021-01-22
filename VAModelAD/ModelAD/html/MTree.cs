@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Tree
  * Purpose        : 
- * Class Used     : X_AD_Tree
+ * Class Used     : X_VAF_TreeInfo
  * Chronological Development
  * Veena Pandey     05-May-2009
  * Harwinder    :   13 june 2009
@@ -24,12 +24,12 @@ using System.Windows.Forms;
 
 namespace VAdvantage.Model
 {
-    public class MTree : X_AD_Tree
+    public class MTree : X_VAF_TreeInfo
     {
         #region "Mtree TreeNode
 
         /**	Cache						*/
-        private static CCache<int, MTree> s_cache = new CCache<int, MTree>("AD_Tree", 10);
+        private static CCache<int, MTree> s_cache = new CCache<int, MTree>("VAF_TreeInfo", 10);
 
         /** All Table Names with tree		*/
         private static List<String> s_TableNames = null;
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         int maxLevel = 0;
         int currentNodeID = 0;
         private bool onDemand = false;
-        private int AD_Tab_ID = 0;
+        private int VAF_Tab_ID = 0;
         private int windowNo = 0;
 
         //	Logger	
@@ -100,8 +100,8 @@ namespace VAdvantage.Model
 		    X_CM_Template.Table_ID,
 		    X_C_ElementValue.Table_ID,
 		    X_C_Campaign.Table_ID,
-		    X_AD_Menu.Table_ID,
-		    X_AD_Org.Table_ID,
+		    X_VAF_MenuConfig.Table_ID,
+		    X_VAF_Org.Table_ID,
 		    X_M_Product_Category.Table_ID,
 		    X_C_Project.Table_ID,
 		    X_M_Product.Table_ID,
@@ -113,12 +113,12 @@ namespace VAdvantage.Model
         /// Default Constructor. Need to call loadNodes explicitly
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">id</param>
+        /// <param name="VAF_TreeInfo_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, Trx trxName)
-            : base(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, Trx trxName)
+            : base(ctx, VAF_TreeInfo_ID, trxName)
         {
-            if (AD_Tree_ID == 0)
+            if (VAF_TreeInfo_ID == 0)
             {
                 //	setName (null);
                 //	setTreeType (null);
@@ -131,45 +131,45 @@ namespace VAdvantage.Model
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName, bool onDemand, int AD_Tab_ID, int windowNO)
-            : this(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName, bool onDemand, int VAF_Tab_ID, int windowNO)
+            : this(ctx, VAF_TreeInfo_ID, trxName)
         {
-            this.AD_Tab_ID = AD_Tab_ID;
+            this.VAF_Tab_ID = VAF_Tab_ID;
             this.onDemand = onDemand;
             this.windowNo = windowNO;
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName, bool onDemand)
-            : this(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName, bool onDemand)
+            : this(ctx, VAF_TreeInfo_ID, trxName)
         {
-            this.AD_Tab_ID = AD_Tab_ID;
+            this.VAF_Tab_ID = VAF_Tab_ID;
             this.onDemand = onDemand;
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
 
@@ -177,44 +177,44 @@ namespace VAdvantage.Model
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName, int nodeid)
-            : this(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName, int nodeid)
+            : this(ctx, VAF_TreeInfo_ID, trxName)
         {
-            this.AD_Tab_ID = AD_Tab_ID;
+            this.VAF_Tab_ID = VAF_Tab_ID;
             m_editable = editable;
             currentNodeID = nodeid;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName, int nodeid, int AD_Tab_ID)
-            : this(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName, int nodeid, int VAF_Tab_ID)
+            : this(ctx, VAF_TreeInfo_ID, trxName)
         {
-            this.AD_Tab_ID = AD_Tab_ID;
+            this.VAF_Tab_ID = VAF_Tab_ID;
             m_editable = editable;
             currentNodeID = nodeid;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
 
@@ -242,7 +242,7 @@ namespace VAdvantage.Model
         {
             SetName(Name);
             SetTreeType(TreeType);
-            SetAD_Table_ID();
+            SetVAF_TableView_ID();
             SetIsAllNodes(true);	//	complete tree
             SetIsDefault(false);
         }
@@ -253,69 +253,69 @@ namespace VAdvantage.Model
         /// <param name="client">client</param>
         /// <param name="name">name</param>
         /// <param name="treeType">tree type</param>
-        public MTree(X_AD_Client client, String name, String treeType)
+        public MTree(X_VAF_Client client, String name, String treeType)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
             SetName(name);
             SetTreeType(treeType);
-            SetAD_Table_ID();
+            SetVAF_TableView_ID();
         }
 
         /// <summary>
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
-        public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName)
-            : this(ctx, AD_Tree_ID, trxName)
+        public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName)
+            : this(ctx, VAF_TreeInfo_ID, trxName)
         {
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
         /// Get MTree_Base from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">id</param>
+        /// <param name="VAF_TreeInfo_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>MTree_Base</returns>
-        public static MTree Get(Ctx ctx, int AD_Tree_ID, Trx trxName)
+        public static MTree Get(Ctx ctx, int VAF_TreeInfo_ID, Trx trxName)
         {
-            int key = AD_Tree_ID;
+            int key = VAF_TreeInfo_ID;
             MTree retValue = (MTree)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MTree(ctx, AD_Tree_ID, trxName);
+            retValue = new MTree(ctx, VAF_TreeInfo_ID, trxName);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
         }
 
         /// <summary>
-        /// Get default (oldest) complete AD_Tree_ID for KeyColumn.
+        /// Get default (oldest) complete VAF_TreeInfo_ID for KeyColumn.
         /// </summary>
-        /// <param name="AD_Client_ID">client id</param>
-        /// <param name="AD_Table_ID">table id</param>
-        /// <returns>AD_Tree_ID or 0</returns>
-        public static int GetDefaultAD_Tree_ID(int AD_Client_ID, int AD_Table_ID)
+        /// <param name="VAF_Client_ID">client id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
+        /// <returns>VAF_TreeInfo_ID or 0</returns>
+        public static int GetDefaultVAF_TreeInfo_ID(int VAF_Client_ID, int VAF_TableView_ID)
         {
-            _log.Finer("AD_Table_ID=" + AD_Table_ID);
-            if (AD_Table_ID == 0)
+            _log.Finer("VAF_TableView_ID=" + VAF_TableView_ID);
+            if (VAF_TableView_ID == 0)
                 return 0;
-            int AD_Tree_ID = 0;
-            String sql = "SELECT AD_Tree_ID, Name FROM AD_Tree "
-                + "WHERE AD_Client_ID=" + AD_Client_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND IsActive='Y' AND IsAllNodes='Y' "
-                + "ORDER BY IsDefault DESC, AD_Tree_ID";
+            int VAF_TreeInfo_ID = 0;
+            String sql = "SELECT VAF_TreeInfo_ID, Name FROM VAF_TreeInfo "
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND IsActive='Y' AND IsAllNodes='Y' "
+                + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";
 
             IDataReader dr = null;
             try
@@ -323,8 +323,8 @@ namespace VAdvantage.Model
                 dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
                 if (dr.Read())
                 {
-                    if (dr["AD_Tree_ID"] != null && dr["AD_Tree_ID"].ToString() != "")
-                        AD_Tree_ID = Utility.Util.GetValueOfInt(dr["AD_Tree_ID"].ToString());
+                    if (dr["VAF_TreeInfo_ID"] != null && dr["VAF_TreeInfo_ID"].ToString() != "")
+                        VAF_TreeInfo_ID = Utility.Util.GetValueOfInt(dr["VAF_TreeInfo_ID"].ToString());
                 }
                 dr.Close();
                 dr = null;
@@ -338,28 +338,28 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, e);
             }
-            return AD_Tree_ID;
+            return VAF_TreeInfo_ID;
         }
 
         /// <summary>
-        /// Get default (oldest) complete AD_Tree_ID for KeyColumn.
+        /// Get default (oldest) complete VAF_TreeInfo_ID for KeyColumn.
         /// </summary>
-        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="VAF_Client_ID">client id</param>
         /// <param name="tableName">table name</param>
-        /// <returns>AD_Tree_ID or 0</returns>
-        public static int GetDefaultAD_Tree_ID(int AD_Client_ID, String tableName)
+        /// <returns>VAF_TreeInfo_ID or 0</returns>
+        public static int GetDefaultVAF_TreeInfo_ID(int VAF_Client_ID, String tableName)
         {
             _log.Finer("TableName=" + tableName);
             if (tableName == null)
                 return 0;
-            int AD_Tree_ID = 0;
-            String sql = "SELECT tr.AD_Tree_ID, tr.Name "
-                + "FROM AD_Tree tr INNER JOIN AD_Table tb ON (tr.AD_Table_ID=tb.AD_Table_ID) "
-                + "WHERE tr.AD_Client_ID=@clientid AND tb.TableName=@tablename AND tr.IsActive='Y' AND tr.IsAllNodes='Y' "
-                + "ORDER BY tr.IsDefault DESC, tr.AD_Tree_ID";
+            int VAF_TreeInfo_ID = 0;
+            String sql = "SELECT tr.VAF_TreeInfo_ID, tr.Name "
+                + "FROM VAF_TreeInfo tr INNER JOIN VAF_TableView tb ON (tr.VAF_TableView_ID=tb.VAF_TableView_ID) "
+                + "WHERE tr.VAF_Client_ID=@clientid AND tb.TableName=@tablename AND tr.IsActive='Y' AND tr.IsAllNodes='Y' "
+                + "ORDER BY tr.IsDefault DESC, tr.VAF_TreeInfo_ID";
 
             SqlParameter[] param = new SqlParameter[2];
-            param[0] = new SqlParameter("@clientid", AD_Client_ID);
+            param[0] = new SqlParameter("@clientid", VAF_Client_ID);
             param[1] = new SqlParameter("@tablename", tableName);
             IDataReader dr = null;
             try
@@ -367,8 +367,8 @@ namespace VAdvantage.Model
                 dr = ExecuteQuery.ExecuteReader(sql, param);
                 if (dr.Read())
                 {
-                    if (dr["AD_Tree_ID"] != null && dr["AD_Tree_ID"].ToString() != "")
-                        AD_Tree_ID = Utility.Util.GetValueOfInt(dr["AD_Tree_ID"].ToString());
+                    if (dr["VAF_TreeInfo_ID"] != null && dr["VAF_TreeInfo_ID"].ToString() != "")
+                        VAF_TreeInfo_ID = Utility.Util.GetValueOfInt(dr["VAF_TreeInfo_ID"].ToString());
                 }
                 dr.Close();
                 dr = null;
@@ -382,17 +382,17 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, e);
             }
-            return AD_Tree_ID;
+            return VAF_TreeInfo_ID;
         }
 
         /// <summary>
         /// Get Node TableName
         /// </summary>
         /// <param name="treeType">tree type</param>
-        /// <returns>node table name, e.g. AD_TreeNode</returns>
+        /// <returns>node table name, e.g. VAF_TreeInfoChild</returns>
         static String GetNodeTableName(String treeType)
         {
-            String nodeTableName = "AD_TreeNode";
+            String nodeTableName = "VAF_TreeInfoChild";
             if (TREETYPE_Menu.Equals(treeType))
                 nodeTableName += "MM";
             else if (TREETYPE_BPartner.Equals(treeType))
@@ -423,31 +423,31 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Node TableName
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
-        /// <returns>e name, e.g. AD_TreeNode</returns>
-        static public String GetNodeTableName(int AD_Table_ID, Ctx ctx)
+        /// <param name="VAF_TableView_ID">table id</param>
+        /// <returns>e name, e.g. VAF_TreeInfoChild</returns>
+        static public String GetNodeTableName(int VAF_TableView_ID, Ctx ctx)
         {
-            String nodeTableName = "AD_TreeNode";
-            if (X_AD_Menu.Table_ID == AD_Table_ID)
+            String nodeTableName = "VAF_TreeInfoChild";
+            if (X_VAF_MenuConfig.Table_ID == VAF_TableView_ID)
                 nodeTableName += "MM";
-            else if (X_C_BPartner.Table_ID == AD_Table_ID)
+            else if (X_C_BPartner.Table_ID == VAF_TableView_ID)
                 nodeTableName += "BP";
-            else if (X_M_Product.Table_ID == AD_Table_ID)
+            else if (X_M_Product.Table_ID == VAF_TableView_ID)
                 nodeTableName += "PR";
             //
-            else if (X_CM_Container.Table_ID == AD_Table_ID)
+            else if (X_CM_Container.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMC";
-            else if (X_CM_CStage.Table_ID == AD_Table_ID)
+            else if (X_CM_CStage.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMS";
-            else if (X_CM_Media.Table_ID == AD_Table_ID)
+            else if (X_CM_Media.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMM";
-            else if (X_CM_Template.Table_ID == AD_Table_ID)
+            else if (X_CM_Template.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMT";
             else
             {
                 if (s_TableIDs == null)
                     FillUserTables(null, ctx);
-                int ii = AD_Table_ID;
+                int ii = VAF_TableView_ID;
                 if (s_TableIDs.Contains(ii))
                 {
                     if (s_TableIDs_U1.Contains(ii))
@@ -468,13 +468,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Table has Tree
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <returns>true if table has tree</returns>
-        public static bool HasTree(int AD_Table_ID, Ctx ctx)
+        public static bool HasTree(int VAF_TableView_ID, Ctx ctx)
         {
             if (s_TableIDs == null)
                 FillUserTables(null, ctx);
-            return s_TableIDs.Contains(AD_Table_ID);
+            return s_TableIDs.Contains(VAF_TableView_ID);
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace VAdvantage.Model
             s_TableIDs_U3 = new List<int>();
             s_TableIDs_U4 = new List<int>();
             //
-            String sql = "SELECT DISTINCT TreeType, AD_Table_ID FROM AD_Tree";
+            String sql = "SELECT DISTINCT TreeType, VAF_TableView_ID FROM VAF_TreeInfo";
 
             IDataReader dr = null;
             try
@@ -512,22 +512,22 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     String TreeType = dr["TreeType"].ToString();//rs.getString(1);
-                    int AD_Table_ID = 0;
-                    if (dr["AD_Table_ID"] != null && dr["AD_Table_ID"].ToString() != "")
+                    int VAF_TableView_ID = 0;
+                    if (dr["VAF_TableView_ID"] != null && dr["VAF_TableView_ID"].ToString() != "")
                     {
-                        AD_Table_ID = Utility.Util.GetValueOfInt(dr["AD_Table_ID"].ToString());//rs.getInt(2);
+                        VAF_TableView_ID = Utility.Util.GetValueOfInt(dr["VAF_TableView_ID"].ToString());//rs.getInt(2);
                     }
-                    if (AD_Table_ID == 0)
+                    if (VAF_TableView_ID == 0)
                         continue;
-                    s_TableIDs.Add(AD_Table_ID);		//	all
+                    s_TableIDs.Add(VAF_TableView_ID);		//	all
                     if (TreeType.Equals("U1"))
-                        s_TableIDs_U1.Add(AD_Table_ID);
+                        s_TableIDs_U1.Add(VAF_TableView_ID);
                     else if (TreeType.Equals("U2"))
-                        s_TableIDs_U2.Add(AD_Table_ID);
+                        s_TableIDs_U2.Add(VAF_TableView_ID);
                     else if (TreeType.Equals("U3"))
-                        s_TableIDs_U3.Add(AD_Table_ID);
+                        s_TableIDs_U3.Add(VAF_TableView_ID);
                     else if (TreeType.Equals("U4"))
-                        s_TableIDs_U4.Add(AD_Table_ID);
+                        s_TableIDs_U4.Add(VAF_TableView_ID);
                 }
                 dr.Close();
                 dr = null;
@@ -556,7 +556,7 @@ namespace VAdvantage.Model
         /// </summary>
         public void UpdateTrees()
         {
-            SetAD_Table_ID();
+            SetVAF_TableView_ID();
             for (int i = 0; i < TREETYPES.Length; i++)
                 UpdateTrees(TREETYPES[i], TABLEIDS[i]);
         }
@@ -565,14 +565,14 @@ namespace VAdvantage.Model
         /// Update Trees
         /// </summary>
         /// <param name="treeType">tree type</param>
-        /// <param name="AD_Table_ID">table id</param>
-        private void UpdateTrees(String treeType, int AD_Table_ID)
+        /// <param name="VAF_TableView_ID">table id</param>
+        private void UpdateTrees(String treeType, int VAF_TableView_ID)
         {
-            if (AD_Table_ID == 0)
+            if (VAF_TableView_ID == 0)
                 return;
-            StringBuilder sb = new StringBuilder("UPDATE AD_Tree SET AD_Table_ID=")
-                .Append(AD_Table_ID)
-                .Append(" WHERE TreeType='").Append(treeType).Append("' AND AD_Table_ID IS NULL");
+            StringBuilder sb = new StringBuilder("UPDATE VAF_TreeInfo SET VAF_TableView_ID=")
+                .Append(VAF_TableView_ID)
+                .Append(" WHERE TreeType='").Append(treeType).Append("' AND VAF_TableView_ID IS NULL");
             int no = DB.ExecuteQuery(sb.ToString(), null, Get_Trx());
             //int no = DataBase.executeUpdate(sb.ToString(), Get_TrxName());
             log.Fine(treeType + " #" + no);
@@ -592,9 +592,9 @@ namespace VAdvantage.Model
         /// 
         /// </summary>
         /// <returns></returns>
-        private int SetAD_Table_ID()
+        private int SetVAF_TableView_ID()
         {
-            int AD_Table_ID = 0;
+            int VAF_TableView_ID = 0;
             String type = GetTreeType();
             if (type == null
                 || type.StartsWith("U")	//	User
@@ -604,17 +604,17 @@ namespace VAdvantage.Model
             {
                 if (type.Equals(TREETYPES[i]))
                 {
-                    AD_Table_ID = TABLEIDS[i];
+                    VAF_TableView_ID = TABLEIDS[i];
                     break;
                 }
             }
-            if (AD_Table_ID != 0)
-                SetAD_Table_ID(AD_Table_ID);
-            if (AD_Table_ID == 0)
+            if (VAF_TableView_ID != 0)
+                SetVAF_TableView_ID(VAF_TableView_ID);
+            if (VAF_TableView_ID == 0)
             {
                 log.Warning("Did not find Table for TreeType=" + type);
             }
-            return AD_Table_ID;
+            return VAF_TableView_ID;
         }
 
         /// <summary>
@@ -668,14 +668,14 @@ namespace VAdvantage.Model
                 if (IsDefault())
                     SetIsDefault(false);
             //	Table
-            if (GetAD_Table_ID(true) == 0)
+            if (GetVAF_TableView_ID(true) == 0)
             {
                 if (newRecord)
-                    SetAD_Table_ID();
+                    SetVAF_TableView_ID();
                 else
                     UpdateTrees();
                 //
-                if (GetAD_Table_ID(true) == 0)
+                if (GetVAF_TableView_ID(true) == 0)
                 {
                     log.Warning("No Table for " + ToString());
                     return false;
@@ -685,33 +685,33 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_Table_ID
+        /// Get VAF_TableView_ID
         /// </summary>
         /// <returns>table id</returns>
-        public new int GetAD_Table_ID()
+        public new int GetVAF_TableView_ID()
         {
-            int AD_Table_ID = base.GetAD_Table_ID();
-            if (AD_Table_ID == 0)
-                AD_Table_ID = SetAD_Table_ID();
-            return AD_Table_ID;
+            int VAF_TableView_ID = base.GetVAF_TableView_ID();
+            if (VAF_TableView_ID == 0)
+                VAF_TableView_ID = SetVAF_TableView_ID();
+            return VAF_TableView_ID;
         }
 
         /// <summary>
-        /// Get AD_Table_ID
+        /// Get VAF_TableView_ID
         /// </summary>
         /// <param name="isBase">base</param>
         /// <returns>table id</returns>
-        public int GetAD_Table_ID(bool isBase)
+        public int GetVAF_TableView_ID(bool isBase)
         {
             if (isBase)
-                return base.GetAD_Table_ID();
-            return GetAD_Table_ID();
+                return base.GetVAF_TableView_ID();
+            return GetVAF_TableView_ID();
         }
 
         /// <summary>
-        /// Validate TreeType and AD_Table_ID
+        /// Validate TreeType and VAF_TableView_ID
         /// </summary>
-        /// <returns>true if Tree Type compatible with AD_Table_ID</returns>
+        /// <returns>true if Tree Type compatible with VAF_TableView_ID</returns>
         private bool Validate()
         {
             String type = GetTreeType();
@@ -719,18 +719,18 @@ namespace VAdvantage.Model
                     && (type.StartsWith("U") || type.Equals(TREETYPE_Other)))
                 return true;
             //
-            int AD_Table_ID = GetAD_Table_ID(true);
+            int VAF_TableView_ID = GetVAF_TableView_ID(true);
             for (int i = 0; i < TREETYPES.Length; i++)
             {
                 if (type == null)
                 {
-                    if (AD_Table_ID == TABLEIDS[i])
+                    if (VAF_TableView_ID == TABLEIDS[i])
                     {
                         SetTreeType(TREETYPES[i]);
                         return true;
                     }
                 }
-                else if (AD_Table_ID == TABLEIDS[i])
+                else if (VAF_TableView_ID == TABLEIDS[i])
                 {
                     if (type.Equals(TREETYPES[i]))
                         return true;
@@ -740,9 +740,9 @@ namespace VAdvantage.Model
                         return true;
                     }
                 }
-                else if (AD_Table_ID == 0 && type.Equals(TREETYPES[i]))
+                else if (VAF_TableView_ID == 0 && type.Equals(TREETYPES[i]))
                 {
-                    SetAD_Table_ID(TABLEIDS[i]);
+                    SetVAF_TableView_ID(TABLEIDS[i]);
                     return true;
                 }
             }
@@ -752,7 +752,7 @@ namespace VAdvantage.Model
                 SetTreeType(TREETYPE_Other);
                 return true;
             }
-            log.Warning("TreeType=" + type + " <> AD_Table_ID=" + AD_Table_ID);
+            log.Warning("TreeType=" + type + " <> VAF_TableView_ID=" + VAF_TableView_ID);
             SetTreeType(TREETYPE_Other);
             return false;
         }
@@ -772,28 +772,28 @@ namespace VAdvantage.Model
             if (GetTreeType().Equals(TREETYPE_Menu))
             {
                 bool baseLang = Utility.Env.IsBaseLanguage(GetCtx(), "");// DataBase.GlobalVariable.IsBaseLanguage();
-                sourceTable = "AD_Menu";
+                sourceTable = "VAF_MenuConfig";
                 if (baseLang)
-                    sqlNode.Append("SELECT AD_Menu.AD_Menu_ID, AD_Menu.Name,AD_Menu.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu");
+                    sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
-                    sqlNode.Append("SELECT AD_Menu.AD_Menu_ID,  t.Name,t.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.AD_Form_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+                    sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
-                    sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                    sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=VAF_MenuConfig." + columnNameX + "_ID ");
 
-                    sqlNode.Append(" WHERE AD_Menu.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='")
-                        .Append(Utility.Env.GetAD_Language(GetCtx())).Append("'");
+                    sqlNode.Append(" WHERE VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='")
+                        .Append(Utility.Env.GetVAF_Language(GetCtx())).Append("'");
 
                     if (onDemand)
                     {
 
-                        //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
+                        //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
 
-                        sqlNode.Append(" AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
+                        sqlNode.Append(" AND pr.VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + "  AND (IsSummary='Y')");
 
                     }
                 }
@@ -801,9 +801,9 @@ namespace VAdvantage.Model
                 {
                     if (onDemand)
                     {
-                        sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
-                        //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
-                        sqlNode.Append("AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
+                        sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=VAF_MenuConfig." + columnNameX + "_ID ");
+                        //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
+                        sqlNode.Append("AND pr.VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + "  AND (IsSummary='Y')");
 
                     }
                 }
@@ -811,23 +811,23 @@ namespace VAdvantage.Model
                 if (!m_editable)
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
-                    sqlNode.Append(hasWhere ? " AND " : " WHERE ").Append("AD_Menu.IsActive='Y' ");
+                    sqlNode.Append(hasWhere ? " AND " : " WHERE ").Append("VAF_MenuConfig.IsActive='Y' ");
                 }
                 //	Do not show Beta
                 if (!GetCtx().GetIsUseBetaFunctions())
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
                     sqlNode.Append(hasWhere ? " AND " : " WHERE ");
-                    sqlNode.Append("(AD_Menu.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE AD_Menu.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))")
-                        .Append(" AND (AD_Menu.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process p WHERE AD_Menu.AD_Process_ID=p.AD_Process_ID AND p.IsBetaFunctionality='N'))")
-                        .Append(" AND (AD_Menu.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM AD_Form f WHERE AD_Menu.AD_Form_ID=f.AD_Form_ID AND f.IsBetaFunctionality='N'))");
+                    sqlNode.Append("(VAF_MenuConfig.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen w WHERE VAF_MenuConfig.VAF_Screen_ID=w.VAF_Screen_ID AND w.IsBetaFunctionality='N'))")
+                        .Append(" AND (VAF_MenuConfig.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job p WHERE VAF_MenuConfig.VAF_Job_ID=p.VAF_Job_ID AND p.IsBetaFunctionality='N'))")
+                        .Append(" AND (VAF_MenuConfig.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE VAF_MenuConfig.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N'))");
                 }
                 //	In R/O Menu - Show only defined Forms
                 if (!m_editable)
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
                     sqlNode.Append(hasWhere ? " AND " : " WHERE ");
-                    sqlNode.Append("(AD_Menu.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM AD_Form f WHERE AD_Menu.AD_Form_ID=f.AD_Form_ID AND ");
+                    sqlNode.Append("(VAF_MenuConfig.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE VAF_MenuConfig.VAF_Page_ID=f.VAF_Page_ID AND ");
                     if (m_clientTree)
                         sqlNode.Append("f.Classname");
                     else
@@ -855,9 +855,9 @@ namespace VAdvantage.Model
                     {
                         sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=" + columnNameX + "." + columnNameX + "_ID ");
                         sqlNode.Append(" WHERE " + columnNameX + ".IsActive='Y'");
-                        sqlNode.Append(" AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y' )");
+                        sqlNode.Append(" AND pr.VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + "  AND (IsSummary='Y' )");
                         //  sqlNode.Append(" AND t.IsSummary='Y'");
-                        //sqlNode.Append(" OR ( t." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND t.IsSummary='N' AND IsActive='Y')) ");
+                        //sqlNode.Append(" OR ( t." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + " AND t.IsSummary='N' AND IsActive='Y')) ");
                     }
                     else
                     {
@@ -870,11 +870,11 @@ namespace VAdvantage.Model
                     {
                         // sqlNode.Append(" WHERE t.IsActive='Y'");
                         // sqlNode.Append(" AND t.IsSummary='Y'");
-                        //sqlNode.Append(" OR ( t." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND t.IsSummary='N' AND IsActive='Y')) ");
+                        //sqlNode.Append(" OR ( t." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + " AND t.IsSummary='N' AND IsActive='Y')) ");
 
                         sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=" + columnNameX + "." + columnNameX + "_ID ");
                         sqlNode.Append(" WHERE " + columnNameX + ".IsActive='Y'");
-                        sqlNode.Append(" AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
+                        sqlNode.Append(" AND pr.VAF_TreeInfo_ID=" + GetVAF_TreeInfo_ID() + "  AND (IsSummary='Y')");
 
                     }
                 }
@@ -886,9 +886,9 @@ namespace VAdvantage.Model
 
             if (sql.ToLower().IndexOf("where") > -1)
             {
-                if (AD_Tab_ID > 0)
+                if (VAF_Tab_ID > 0)
                 {
-                    MTab tab = new MTab(p_ctx, AD_Tab_ID, null);
+                    MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
                     if (!String.IsNullOrEmpty(tab.GetWhereClause()))
                     {
                         sql += " AND " + tab.GetWhereClause();
@@ -897,9 +897,9 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (AD_Tab_ID > 0)
+                if (VAF_Tab_ID > 0)
                 {
-                    MTab tab = new MTab(p_ctx, AD_Tab_ID, null);
+                    MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
                     if (!String.IsNullOrEmpty(tab.GetWhereClause()))
                     {
                         sql += " WHERE " + tab.GetWhereClause();
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
         /// <param name="orderClause">Order By clause</param>
         public void GetTreeNodes(Ctx ctx, string orderClause)
         {
-            LoadNodes(ctx.GetAD_User_ID(), orderClause);
+            LoadNodes(ctx.GetVAF_UserContact_ID(), orderClause);
         }
 
 
@@ -955,20 +955,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// Load Nodes and Bar
         /// </summary>
-        /// <param name="AD_User_ID">user for tree bar</param>
-        private void LoadNodes(int AD_User_ID,string orderClause="")
+        /// <param name="VAF_UserContact_ID">user for tree bar</param>
+        private void LoadNodes(int VAF_UserContact_ID,string orderClause="")
         {
             ////  SQL for TreeNodes
             StringBuilder sql = new StringBuilder("SELECT "
                 + "tn.Node_ID,COALESCE(tn.Parent_ID, -1) AS Parent_ID,tn.SeqNo,tb.IsActive "
                 + "FROM ").Append(GetNodeTableName()).Append(" tn"
-                + " LEFT OUTER JOIN AD_TreeBar tb ON (tn.AD_Tree_ID=tb.AD_Tree_ID"
-                + " AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=@userid) ");	//	#1
+                + " LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID"
+                + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) ");	//	#1
 
-            string tblName = MTable.GetTableName(p_ctx, GetAD_Table_ID());
+            string tblName = MTable.GetTableName(p_ctx, GetVAF_TableView_ID());
             //on (mp.M_Product_ID= tn.Node_ID)
 
-            //if (onDemand || AD_Tab_ID > 0)
+            //if (onDemand || VAF_Tab_ID > 0)
             //{
             sql.Append(" JOIN ").Append(tblName + " " + tblName + " ON (" + tblName + "." + tblName + "_ID = tn.Node_ID)");
             //}
@@ -977,7 +977,7 @@ namespace VAdvantage.Model
             {
 
 
-                sql.Append("WHERE tn.AD_Tree_ID=@treeId");								//	#2
+                sql.Append("WHERE tn.VAF_TreeInfo_ID=@treeId");								//	#2
                 if (!m_editable)
                     sql.Append(" AND tn.IsActive='Y'");
 
@@ -985,7 +985,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                sql.Append("WHERE tn.AD_Tree_ID=@treeId");								//	#2
+                sql.Append("WHERE tn.VAF_TreeInfo_ID=@treeId");								//	#2
                 if (!m_editable)
                     sql.Append(" AND tn.IsActive='Y'");
             }
@@ -1003,9 +1003,9 @@ namespace VAdvantage.Model
             }
 
             string sqls = sql.ToString();
-            if (AD_Tab_ID > 0)
+            if (VAF_Tab_ID > 0)
             {
-                MTab tab = new MTab(p_ctx, AD_Tab_ID, null);
+                MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
                 string _whareCaluse = tab.GetWhereClause();
 
                 _whareCaluse = Env.ParseContext(p_ctx, windowNo, _whareCaluse, false);
@@ -1049,8 +1049,8 @@ namespace VAdvantage.Model
                 GetNodeDetails();
                 //
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@userid", AD_User_ID);
-                param[1] = new SqlParameter("@treeId", GetAD_Tree_ID());
+                param[0] = new SqlParameter("@userid", VAF_UserContact_ID);
+                param[1] = new SqlParameter("@treeId", GetVAF_TreeInfo_ID());
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
 
                 //    //	Get Tree & Bar
@@ -1276,9 +1276,9 @@ namespace VAdvantage.Model
         /// <returns>VTreeNode </returns>
         private VTreeNode GetNodeDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         {
-            int AD_Window_ID = 0;
-            int AD_Process_ID = 0;
-            int AD_Form_ID = 0;
+            int VAF_Screen_ID = 0;
+            int VAF_Job_ID = 0;
+            int VAF_Page_ID = 0;
             int AD_Workflow_ID = 0;
             int AD_Task_ID = 0;
             int AD_Workbench_ID = 0;
@@ -1309,11 +1309,11 @@ namespace VAdvantage.Model
                     //	Menu only
                     if (GetTreeType().Equals(TREETYPE_Menu) && !isSummary)
                     {
-                        AD_Window_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Screen_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
-                        AD_Process_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Job_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
-                        AD_Form_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Page_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
                         AD_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
@@ -1326,16 +1326,16 @@ namespace VAdvantage.Model
                         bool? blnAccess = false;
 
 
-                        if (X_AD_Menu.ACTION_Window.Equals(actionColor))
-                            blnAccess = role.GetWindowAccess(AD_Window_ID);
-                        else if (X_AD_Menu.ACTION_Process.Equals(actionColor)
-                        || X_AD_Menu.ACTION_Report.Equals(actionColor))
-                            blnAccess = role.GetProcessAccess(AD_Process_ID);
-                        else if (X_AD_Menu.ACTION_Form.Equals(actionColor))
-                            blnAccess = role.GetFormAccess(AD_Form_ID);
-                        else if (X_AD_Menu.ACTION_WorkFlow.Equals(actionColor))
+                        if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
+                            blnAccess = role.GetWindowAccess(VAF_Screen_ID);
+                        else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
+                        || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
+                            blnAccess = role.GetProcessAccess(VAF_Job_ID);
+                        else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
+                            blnAccess = role.GetFormAccess(VAF_Page_ID);
+                        else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
                             blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
-                        else if (X_AD_Menu.ACTION_Task.Equals(actionColor))
+                        else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
                             blnAccess = role.GetTaskAccess(AD_Task_ID);
 
                         if (blnAccess != null || m_editable)		//	rw or ro for Role 
@@ -1369,9 +1369,9 @@ namespace VAdvantage.Model
             if (retValue != null)
             {
                 // set VTreeNode ID's
-                retValue.AD_Window_ID = AD_Window_ID;
-                retValue.AD_Process_ID = AD_Process_ID;
-                retValue.AD_Form_ID = AD_Form_ID;
+                retValue.VAF_Screen_ID = VAF_Screen_ID;
+                retValue.VAF_Job_ID = VAF_Job_ID;
+                retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.AD_Workflow_ID = AD_Workflow_ID;
                 retValue.AD_Task_ID = AD_Task_ID;
                 retValue.AD_Workbench_ID = AD_Workbench_ID;
@@ -1437,11 +1437,11 @@ namespace VAdvantage.Model
         /// Get Source TableName (i.e. where to get the name and color)
         /// </summary>
         /// <param name="tableNameOnly">if false return From clause (alias = t)</param>
-        /// <returns>source table name, e.g. AD_Org or null</returns>
+        /// <returns>source table name, e.g. VAF_Org or null</returns>
         public String GetSourceTableName(bool tableNameOnly)
         {
-            int AD_Table_ID = GetAD_Table_ID();
-            String tableName = MTable.GetTableName(GetCtx(), AD_Table_ID);
+            int VAF_TableView_ID = GetVAF_TableView_ID();
+            String tableName = MTable.GetTableName(GetCtx(), VAF_TableView_ID);
             //
             if (tableNameOnly)
                 return tableName;
@@ -1449,9 +1449,9 @@ namespace VAdvantage.Model
                 return "M_Product M_Product INNER JOIN M_Product_Category x ON (M_Product.M_Product_Category_ID=x.M_Product_Category_ID)";
             if ("C_BPartner".Equals(tableName))
                 return "C_BPartner C_BPartner INNER JOIN C_BP_Group x ON (C_BPartner.C_BP_Group_ID=x.C_BP_Group_ID)";
-            if ("AD_Org".Equals(tableName))
-                return "AD_Org AD_Org INNER JOIN AD_OrgInfo i ON (AD_Org.AD_Org_ID=i.AD_Org_ID) "
-                    + "LEFT OUTER JOIN AD_OrgType x ON (i.AD_OrgType_ID=x.AD_OrgType_ID)";
+            if ("VAF_Org".Equals(tableName))
+                return "VAF_Org VAF_Org INNER JOIN VAF_OrgDetail i ON (VAF_Org.VAF_Org_ID=i.VAF_Org_ID) "
+                    + "LEFT OUTER JOIN VAF_OrgCategory x ON (i.VAF_OrgCategory_ID=x.VAF_OrgCategory_ID)";
             if ("C_Campaign".Equals(tableName))
                 return "C_Campaign C_Campaign LEFT OUTER JOIN C_Channel x ON (C_Campaign.C_Channel_ID=x.C_Channel_ID)";
             if (tableName != null)
@@ -1523,14 +1523,14 @@ namespace VAdvantage.Model
         /// <returns>NULL or Action or Color</returns>
         public String GetActionColorName()
         {
-            int AD_Table_ID = GetAD_Table_ID();
-            String tableName = MTable.GetTableName(GetCtx(), AD_Table_ID);
+            int VAF_TableView_ID = GetVAF_TableView_ID();
+            String tableName = MTable.GetTableName(GetCtx(), VAF_TableView_ID);
             //
-            if ("AD_Menu".Equals(tableName))
+            if ("VAF_MenuConfig".Equals(tableName))
                 return "t.Action";
             if ("M_Product".Equals(tableName) || "C_BPartner".Equals(tableName)
-                || "AD_Org".Equals(tableName) || "C_Campaign".Equals(tableName))
-                return "x.AD_PrintColor_ID";
+                || "VAF_Org".Equals(tableName) || "C_Campaign".Equals(tableName))
+                return "x.VAF_Print_Rpt_Colour_ID";
             return "NULL";
         }
 
@@ -1592,38 +1592,38 @@ namespace VAdvantage.Model
         /// Construct & Load Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tree_ID">The tree to build</param>
+        /// <param name="VAF_TreeInfo_ID">The tree to build</param>
         /// <param name="editable">True, if tree can be modified - includes inactive and empty summary nodes</param>
         /// <param name="clientTree">the tree is displayed on the java client (not on web)</param>
         /// <param name="trxName">transaction</param>
 
-        //public MTree(Ctx ctx, int AD_Tree_ID, bool editable, bool clientTree, Trx trxName, System.Windows.Forms.ImageList imgList, StartMenu.IToolStripItem source)
-        //    : this(ctx, AD_Tree_ID, trxName)
+        //public MTree(Ctx ctx, int VAF_TreeInfo_ID, bool editable, bool clientTree, Trx trxName, System.Windows.Forms.ImageList imgList, StartMenu.IToolStripItem source)
+        //    : this(ctx, VAF_TreeInfo_ID, trxName)
         //{
         //    _imgList = imgList;
         //    _itemClickHandler = source;
         //    m_editable = editable;
-        //    int AD_User_ID = ctx.GetAD_User_ID();
+        //    int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
         //    m_clientTree = clientTree;
-        //    log.Info("AD_Tree_ID=" + AD_Tree_ID + ", AD_User_ID=" + AD_User_ID
+        //    log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
         //        + ", Editable=" + editable + ", OnClient=" + clientTree);
         //    //
-        //    LoadStartMenu(AD_User_ID);
+        //    LoadStartMenu(VAF_UserContact_ID);
         //}
 
         /// <summary>
         /// Load Nodes and Bar
         /// </summary>
-        /// <param name="AD_User_ID">user for tree bar</param>
-        //private void LoadStartMenu(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user for tree bar</param>
+        //private void LoadStartMenu(int VAF_UserContact_ID)
         //{
         //    ////  SQL for TreeNodes
         //    StringBuilder sql = new StringBuilder("SELECT "
         //        + "tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive "
         //        + "FROM ").Append(GetNodeTableName()).Append(" tn"
-        //        + " LEFT OUTER JOIN AD_TreeBar tb ON (tn.AD_Tree_ID=tb.AD_Tree_ID"
-        //        + " AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=@userid) "	//	#1
-        //        + "WHERE tn.AD_Tree_ID=@treeId");								//	#2
+        //        + " LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID"
+        //        + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) "	//	#1
+        //        + "WHERE tn.VAF_TreeInfo_ID=@treeId");								//	#2
         //    if (!m_editable)
         //        sql.Append(" AND tn.IsActive='Y'");
         //    sql.Append(" ORDER BY COALESCE(tn.Parent_ID, -1), tn.SeqNo");
@@ -1637,8 +1637,8 @@ namespace VAdvantage.Model
         //        GetNodeDetails();
         //        //
         //        SqlParameter[] param = new SqlParameter[2];
-        //        param[0] = new SqlParameter("@userid", AD_User_ID);
-        //        param[1] = new SqlParameter("@treeId", GetAD_Tree_ID());
+        //        param[0] = new SqlParameter("@userid", VAF_UserContact_ID);
+        //        param[1] = new SqlParameter("@treeId", GetVAF_TreeInfo_ID());
         //        //PreparedStatement pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
 
         //        //    //	Get Tree & Bar
@@ -1812,9 +1812,9 @@ namespace VAdvantage.Model
         /// <returns>VTreeNode </returns>
         //private VToolStripMenuItem GetStartMenuDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         //{
-        //    int AD_Window_ID = 0;
-        //    int AD_Process_ID = 0;
-        //    int AD_Form_ID = 0;
+        //    int VAF_Screen_ID = 0;
+        //    int VAF_Job_ID = 0;
+        //    int VAF_Page_ID = 0;
         //    int AD_Workflow_ID = 0;
         //    int AD_Task_ID = 0;
         //    int AD_Workbench_ID = 0;
@@ -1845,11 +1845,11 @@ namespace VAdvantage.Model
         //            //	Menu only
         //            if (GetTreeType().Equals(TREETYPE_Menu) && !isSummary)
         //            {
-        //                AD_Window_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Screen_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
-        //                AD_Process_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Job_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
-        //                AD_Form_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Page_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
         //                AD_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
@@ -1862,16 +1862,16 @@ namespace VAdvantage.Model
         //                bool? blnAccess = false;
 
 
-        //                if (X_AD_Menu.ACTION_Window.Equals(actionColor))
-        //                    blnAccess = role.GetWindowAccess(AD_Window_ID);
-        //                else if (X_AD_Menu.ACTION_Process.Equals(actionColor)
-        //                || X_AD_Menu.ACTION_Report.Equals(actionColor))
-        //                    blnAccess = role.GetProcessAccess(AD_Process_ID);
-        //                else if (X_AD_Menu.ACTION_Form.Equals(actionColor))
-        //                    blnAccess = role.GetFormAccess(AD_Form_ID);
-        //                else if (X_AD_Menu.ACTION_WorkFlow.Equals(actionColor))
+        //                if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
+        //                    blnAccess = role.GetWindowAccess(VAF_Screen_ID);
+        //                else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
+        //                || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
+        //                    blnAccess = role.GetProcessAccess(VAF_Job_ID);
+        //                else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
+        //                    blnAccess = role.GetFormAccess(VAF_Page_ID);
+        //                else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
         //                    blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
-        //                else if (X_AD_Menu.ACTION_Task.Equals(actionColor))
+        //                else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
         //                    blnAccess = role.GetTaskAccess(AD_Task_ID);
 
         //                if (blnAccess != null || m_editable)		//	rw or ro for Role 
@@ -1905,9 +1905,9 @@ namespace VAdvantage.Model
         //    if (retValue != null)
         //    {
         //        // set VTreeNode ID's
-        //        retValue.AD_Window_ID = AD_Window_ID;
-        //        retValue.AD_Process_ID = AD_Process_ID;
-        //        retValue.AD_Form_ID = AD_Form_ID;
+        //        retValue.VAF_Screen_ID = VAF_Screen_ID;
+        //        retValue.VAF_Job_ID = VAF_Job_ID;
+        //        retValue.VAF_Page_ID = VAF_Page_ID;
         //        retValue.AD_Workflow_ID = AD_Workflow_ID;
         //        retValue.AD_Task_ID = AD_Task_ID;
         //        retValue.AD_Workbench_ID = AD_Workbench_ID;

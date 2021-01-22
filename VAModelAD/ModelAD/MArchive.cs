@@ -12,12 +12,12 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    public class MArchive : X_AD_Archive
+    public class MArchive : X_VAF_Archive
     {
         public static MArchive[] Get(Ctx ctx, String whereClause)
         {
             List<MArchive> list = new List<MArchive>();
-            String sql = "SELECT * FROM AD_Archive WHERE AD_Client_ID=@param1";
+            String sql = "SELECT * FROM VAF_Archive WHERE VAF_Client_ID=@param1";
             if (whereClause != null && whereClause.Length > 0)
                 sql += whereClause;
             sql += " ORDER BY Created";
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", ctx.GetAD_Client_ID());
+                param[0] = new SqlParameter("@param1", ctx.GetVAF_Client_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -58,8 +58,8 @@ namespace VAdvantage.Model
 
         }	//	MArchive
 
-        public MArchive(Ctx ctx, int AD_Archive_ID, Trx trx)
-            : base(ctx, AD_Archive_ID, trx)
+        public MArchive(Ctx ctx, int VAF_Archive_ID, Trx trx)
+            : base(ctx, VAF_Archive_ID, trx)
         {
 
         }	//	MArchive
@@ -70,8 +70,8 @@ namespace VAdvantage.Model
             SetName(info.GetName());
             SetIsReport(info.IsReport());
             //
-            SetAD_Process_ID(info.GetAD_Process_ID());
-            SetAD_Table_ID(info.GetAD_Table_ID());
+            SetVAF_Job_ID(info.GetVAF_Job_ID());
+            SetVAF_TableView_ID(info.GetVAF_TableView_ID());
             SetRecord_ID(info.GetRecord_ID());
             SetC_BPartner_ID(info.GetC_BPartner_ID());
         }	//	MArchive
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
         public String GetCreatedByName()
         {
             String name = "?";
-            String sql = "SELECT Name FROM AD_User WHERE AD_User_ID=@param";
+            String sql = "SELECT Name FROM VAF_UserContact WHERE VAF_UserContact_ID=@param";
             IDataReader dr = null;
             try
             {

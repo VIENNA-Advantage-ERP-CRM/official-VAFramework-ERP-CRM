@@ -90,7 +90,7 @@ static X_C_DunningLevel()
 //static long serialVersionUID 27562514371983L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055194L;
-/** AD_Table_ID=331 */
+/** VAF_TableView_ID=331 */
 public static int Table_ID;
  // =331;
 
@@ -261,8 +261,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** Dunning_PrintFormat_ID AD_Reference_ID=259 */
-public static int DUNNING_PRINTFORMAT_ID_AD_Reference_ID=259;
+/** Dunning_PrintFormat_ID VAF_Control_Ref_ID=259 */
+public static int DUNNING_PRINTFORMAT_ID_VAF_Control_Ref_ID=259;
 /** Set Dunning Print Format.
 @param Dunning_PrintFormat_ID Print Format for printing Dunning Letters */
 public void SetDunning_PrintFormat_ID (int Dunning_PrintFormat_ID)
@@ -308,8 +308,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** InvoiceCollectionType AD_Reference_ID=394 */
-public static int INVOICECOLLECTIONTYPE_AD_Reference_ID=394;
+/** InvoiceCollectionType VAF_Control_Ref_ID=394 */
+public static int INVOICECOLLECTIONTYPE_VAF_Control_Ref_ID=394;
 /** Collection Agency = C */
 public static String INVOICECOLLECTIONTYPE_CollectionAgency = "C";
 /** Dunning = D */

@@ -21,13 +21,13 @@ namespace VIS.Controllers
             return PartialView();
         }
 
-        public JsonResult Load(int mAttributeSetInstanceId, int mProductId, bool productWindow, int windowNo, int AD_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
+        public JsonResult Load(int mAttributeSetInstanceId, int mProductId, bool productWindow, int windowNo, int VAF_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.LoadInit(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, AD_Column_ID, window_ID, IsSOTrx, IsInternalUse);
+                var value = obj.LoadInit(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, window_ID, IsSOTrx, IsInternalUse);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
@@ -80,14 +80,14 @@ namespace VIS.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAttribute(int mAttributeSetInstanceId, int mProductId, bool productWindow, int windowNo, int AD_Column_ID, string attrcode)
+        public JsonResult GetAttribute(int mAttributeSetInstanceId, int mProductId, bool productWindow, int windowNo, int VAF_Column_ID, string attrcode)
         {
             PAttributesModel obj = new PAttributesModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var AttrValue = obj.GetAttribute(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, AD_Column_ID, attrcode);
-                var value = obj.GetAttributeInstance(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, AD_Column_ID, attrcode);
+                var AttrValue = obj.GetAttribute(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
+                var value = obj.GetAttributeInstance(mAttributeSetInstanceId, mProductId, productWindow, windowNo, ctx, VAF_Column_ID, attrcode);
                 if (value != null)
                 {
                     return Json(JsonConvert.SerializeObject(new { result = AttrValue, lot = value[0], serial = value[1], gdate = value[2] }), JsonRequestBehavior.AllowGet);

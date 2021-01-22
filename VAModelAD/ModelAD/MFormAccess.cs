@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Form_Access
+ * Class Used     : X_VAF_Page_Rights
  * Chronological Development
  * Veena Pandey     31-Aug-09
  ******************************************************/
@@ -17,7 +17,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MFormAccess : X_AD_Form_Access
+    public class MFormAccess : X_VAF_Page_Rights
     {
         /// <summary>
         /// Standard Constructor
@@ -34,8 +34,8 @@ namespace VAdvantage.Model
             }
             else
             {
-                //	setAD_Form_ID (0);
-                //	setAD_Role_ID (0);
+                //	setVAF_Page_ID (0);
+                //	setVAF_Role_ID (0);
                 SetIsReadWrite(true);
             }
         }
@@ -55,13 +55,13 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="AD_Role_ID">role id</param>
-        public MFormAccess(MForm parent, int AD_Role_ID)
+        /// <param name="VAF_Role_ID">role id</param>
+        public MFormAccess(MForm parent, int VAF_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Form_ID(parent.GetAD_Form_ID());
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Page_ID(parent.GetVAF_Page_ID());
+            SetVAF_Role_ID(VAF_Role_ID);
         }
     }
 }

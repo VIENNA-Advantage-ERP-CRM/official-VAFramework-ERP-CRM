@@ -439,11 +439,11 @@ namespace VAdvantage.Logging
 
         //    //sb.Append(GetMsg("Host")).Append(eq).Append(Ini.GetProperty("dbhost") + " : " + Ini.GetProperty("dbport")).Append(Environment.NewLine);
         //    //sb.Append(GetMsg("Database")).Append(eq).Append(Ini.GetProperty("dbhost") + " / " + Ini.GetProperty("dbname")).Append(Environment.NewLine);
-        //    //sb.Append(GetMsg("AD_User_ID")).Append(eq).Append(ctx.GetContext("#AD_User_Name")).Append(Environment.NewLine);
-        //    //sb.Append(GetMsg("AD_Role_ID")).Append(eq).Append(ctx.GetContext("#AD_Role_Name")).Append(Environment.NewLine);
+        //    //sb.Append(GetMsg("VAF_UserContact_ID")).Append(eq).Append(ctx.GetContext("#VAF_UserContact_Name")).Append(Environment.NewLine);
+        //    //sb.Append(GetMsg("VAF_Role_ID")).Append(eq).Append(ctx.GetContext("#VAF_Role_Name")).Append(Environment.NewLine);
         //    ////
-        //    //sb.Append(GetMsg("AD_Client_ID")).Append(eq).Append(ctx.GetContext("#AD_Client_Name")).Append(Environment.NewLine);
-        //    //sb.Append(GetMsg("AD_Org_ID")).Append(eq).Append(ctx.GetContext("#AD_Org_Name")).Append(Environment.NewLine);
+        //    //sb.Append(GetMsg("VAF_Client_ID")).Append(eq).Append(ctx.GetContext("#VAF_Client_Name")).Append(Environment.NewLine);
+        //    //sb.Append(GetMsg("VAF_Org_ID")).Append(eq).Append(ctx.GetContext("#VAF_Org_Name")).Append(Environment.NewLine);
         //    ////
         //    //sb.Append(GetMsg("Date")).Append(eq).Append(ctx.GetContext("#Date")).Append(Environment.NewLine);
         //    //sb.Append(GetMsg("Printer")).Append(eq).Append(ctx.GetPrinterName()).Append(Environment.NewLine);

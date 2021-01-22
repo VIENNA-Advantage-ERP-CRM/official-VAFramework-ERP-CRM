@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Archive
+/** Generated Model for VAF_Archive
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Archive : PO
+public class X_VAF_Archive : PO
 {
-public X_AD_Archive (Context ctx, int AD_Archive_ID, Trx trxName) : base (ctx, AD_Archive_ID, trxName)
+public X_VAF_Archive (Context ctx, int VAF_Archive_ID, Trx trxName) : base (ctx, VAF_Archive_ID, trxName)
 {
-/** if (AD_Archive_ID == 0)
+/** if (VAF_Archive_ID == 0)
 {
-SetAD_Archive_ID (0);
+SetVAF_Archive_ID (0);
 SetIsReport (false);
 SetName (null);
 }
  */
 }
-public X_AD_Archive (Ctx ctx, int AD_Archive_ID, Trx trxName) : base (ctx, AD_Archive_ID, trxName)
+public X_VAF_Archive (Ctx ctx, int VAF_Archive_ID, Trx trxName) : base (ctx, VAF_Archive_ID, trxName)
 {
-/** if (AD_Archive_ID == 0)
+/** if (VAF_Archive_ID == 0)
 {
-SetAD_Archive_ID (0);
+SetVAF_Archive_ID (0);
 SetIsReport (false);
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Archive (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Archive()
+static X_VAF_Archive()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_Archive()
 //static long serialVersionUID = 27562514360417L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043628L;
-/** AD_Table_ID=754 */
+/** VAF_TableView_ID=754 */
 public static int Table_ID;
  // =754;
 
-/** TableName=AD_Archive */
-public static String Table_Name="AD_Archive";
+/** TableName=VAF_Archive */
+public static String Table_Name="VAF_Archive";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,53 +111,53 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Archive[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Archive[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Archive.
-@param AD_Archive_ID Document and Report Archive */
-public void SetAD_Archive_ID (int AD_Archive_ID)
+@param VAF_Archive_ID Document and Report Archive */
+public void SetVAF_Archive_ID (int VAF_Archive_ID)
 {
-if (AD_Archive_ID < 1) throw new ArgumentException ("AD_Archive_ID is mandatory.");
-Set_ValueNoCheck ("AD_Archive_ID", AD_Archive_ID);
+if (VAF_Archive_ID < 1) throw new ArgumentException ("VAF_Archive_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Archive_ID", VAF_Archive_ID);
 }
 /** Get Archive.
 @return Document and Report Archive */
-public int GetAD_Archive_ID() 
+public int GetVAF_Archive_ID() 
 {
-Object ii = Get_Value("AD_Archive_ID");
+Object ii = Get_Value("VAF_Archive_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

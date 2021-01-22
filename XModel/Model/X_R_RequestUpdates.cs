@@ -20,7 +20,7 @@ public X_R_RequestUpdates (Context ctx, int R_RequestUpdates_ID, Trx trxName) : 
 {
 /** if (R_RequestUpdates_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
 SetR_Request_ID (0);
 }
@@ -30,7 +30,7 @@ public X_R_RequestUpdates (Ctx ctx, int R_RequestUpdates_ID, Trx trxName) : base
 {
 /** if (R_RequestUpdates_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
 SetR_Request_ID (0);
 }
@@ -72,7 +72,7 @@ static X_R_RequestUpdates()
 //static long serialVersionUID 27562514383409L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066620L;
-/** AD_Table_ID=783 */
+/** VAF_TableView_ID=783 */
 public static int Table_ID;
  // =783;
 
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_R_RequestUpdates[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

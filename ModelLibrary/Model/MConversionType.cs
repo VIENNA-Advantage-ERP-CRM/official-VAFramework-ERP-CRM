@@ -54,12 +54,12 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Default Conversion Rate for Client/Org
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <returns>C_ConversionType_ID or 0 if not found</returns>
-        public static int GetDefault(int AD_Client_ID)
+        public static int GetDefault(int VAF_Client_ID)
         {
             //	Try Cache
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             int ii = (int)s_cache[key];
             if (ii != 0)
             {
@@ -72,9 +72,9 @@ namespace VAdvantage.Model
             String sql = "SELECT C_ConversionType_ID "
                 + "FROM C_ConversionType "
                 + "WHERE IsActive='Y'"
-                + " AND AD_Client_ID IN (0, @param1)"		//	#1
-                + "ORDER BY IsDefault DESC, AD_Client_ID DESC";
-            C_ConversionType_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql, AD_Client_ID);
+                + " AND VAF_Client_ID IN (0, @param1)"		//	#1
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC";
+            C_ConversionType_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql, VAF_Client_ID);
 
             //	Return
             s_cache.Add(key, C_ConversionType_ID);

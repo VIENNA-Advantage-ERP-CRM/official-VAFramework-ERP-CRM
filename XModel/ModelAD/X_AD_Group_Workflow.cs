@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Group_Workflow
+/** Generated Model for VAF_Group_Workflow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Group_Workflow : PO
+public class X_VAF_Group_Workflow : PO
 {
-public X_AD_Group_Workflow (Context ctx, int AD_Group_Workflow_ID, Trx trxName) : base (ctx, AD_Group_Workflow_ID, trxName)
+public X_VAF_Group_Workflow (Context ctx, int VAF_Group_Workflow_ID, Trx trxName) : base (ctx, VAF_Group_Workflow_ID, trxName)
 {
-/** if (AD_Group_Workflow_ID == 0)
+/** if (VAF_Group_Workflow_ID == 0)
 {
-SetAD_GroupInfo_ID (0);
-SetAD_Group_Workflow_ID (0);
+SetVAF_GroupInfo_ID (0);
+SetVAF_Group_Workflow_ID (0);
 }
  */
 }
-public X_AD_Group_Workflow(Ctx ctx, int AD_Group_Workflow_ID, Trx trxName)
-    : base(ctx, AD_Group_Workflow_ID, trxName)
+public X_VAF_Group_Workflow(Ctx ctx, int VAF_Group_Workflow_ID, Trx trxName)
+    : base(ctx, VAF_Group_Workflow_ID, trxName)
 {
-/** if (AD_Group_Workflow_ID == 0)
+/** if (VAF_Group_Workflow_ID == 0)
 {
-SetAD_GroupInfo_ID (0);
-SetAD_Group_Workflow_ID (0);
+SetVAF_GroupInfo_ID (0);
+SetVAF_Group_Workflow_ID (0);
 }
  */
 }
@@ -40,7 +40,7 @@ SetAD_Group_Workflow_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Group_Workflow(Context ctx, DataRow rs, Trx trxName)
+public X_VAF_Group_Workflow(Context ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -49,7 +49,7 @@ public X_AD_Group_Workflow(Context ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Group_Workflow(Ctx ctx, DataRow rs, Trx trxName)
+public X_VAF_Group_Workflow(Ctx ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -58,14 +58,14 @@ public X_AD_Group_Workflow(Ctx ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Group_Workflow(Ctx ctx, IDataReader dr, Trx trxName)
+public X_VAF_Group_Workflow(Ctx ctx, IDataReader dr, Trx trxName)
     : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Group_Workflow()
+static X_VAF_Group_Workflow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_Group_Workflow()
 static long serialVersionUID = 27712845008858L;
 /** Last Updated Timestamp 5/4/2015 11:38:12 AM */
 public static long updatedMS = 1430719692069L;
-/** AD_Table_ID=1000490 */
+/** VAF_TableView_ID=1000490 */
 public static int Table_ID;
  // =1000490;
 
-/** TableName=AD_Group_Workflow */
-public static String Table_Name="AD_Group_Workflow";
+/** TableName=VAF_Group_Workflow */
+public static String Table_Name="VAF_Group_Workflow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Group_Workflow[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Group_Workflow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_GroupInfo_ID.
-@param AD_GroupInfo_ID AD_GroupInfo_ID */
-public void SetAD_GroupInfo_ID (int AD_GroupInfo_ID)
+/** Set VAF_GroupInfo_ID.
+@param VAF_GroupInfo_ID VAF_GroupInfo_ID */
+public void SetVAF_GroupInfo_ID (int VAF_GroupInfo_ID)
 {
-if (AD_GroupInfo_ID < 1) throw new ArgumentException ("AD_GroupInfo_ID is mandatory.");
-Set_ValueNoCheck ("AD_GroupInfo_ID", AD_GroupInfo_ID);
+if (VAF_GroupInfo_ID < 1) throw new ArgumentException ("VAF_GroupInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_GroupInfo_ID", VAF_GroupInfo_ID);
 }
-/** Get AD_GroupInfo_ID.
-@return AD_GroupInfo_ID */
-public int GetAD_GroupInfo_ID() 
+/** Get VAF_GroupInfo_ID.
+@return VAF_GroupInfo_ID */
+public int GetVAF_GroupInfo_ID() 
 {
-Object ii = Get_Value("AD_GroupInfo_ID");
+Object ii = Get_Value("VAF_GroupInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_Group_Workflow_ID.
-@param AD_Group_Workflow_ID AD_Group_Workflow_ID */
-public void SetAD_Group_Workflow_ID (int AD_Group_Workflow_ID)
+/** Set VAF_Group_Workflow_ID.
+@param VAF_Group_Workflow_ID VAF_Group_Workflow_ID */
+public void SetVAF_Group_Workflow_ID (int VAF_Group_Workflow_ID)
 {
-if (AD_Group_Workflow_ID < 1) throw new ArgumentException ("AD_Group_Workflow_ID is mandatory.");
-Set_ValueNoCheck ("AD_Group_Workflow_ID", AD_Group_Workflow_ID);
+if (VAF_Group_Workflow_ID < 1) throw new ArgumentException ("VAF_Group_Workflow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Group_Workflow_ID", VAF_Group_Workflow_ID);
 }
-/** Get AD_Group_Workflow_ID.
-@return AD_Group_Workflow_ID */
-public int GetAD_Group_Workflow_ID() 
+/** Get VAF_Group_Workflow_ID.
+@return VAF_Group_Workflow_ID */
+public int GetVAF_Group_Workflow_ID() 
 {
-Object ii = Get_Value("AD_Group_Workflow_ID");
+Object ii = Get_Value("VAF_Group_Workflow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Message
+/** Generated Model for VAF_Msg_Lable
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Message : PO
+public class X_VAF_Msg_Lable : PO
 {
-public X_AD_Message (Context ctx, int AD_Message_ID, Trx trxName) : base (ctx, AD_Message_ID, trxName)
+public X_VAF_Msg_Lable (Context ctx, int VAF_Msg_Lable_ID, Trx trxName) : base (ctx, VAF_Msg_Lable_ID, trxName)
 {
-/** if (AD_Message_ID == 0)
+/** if (VAF_Msg_Lable_ID == 0)
 {
-SetAD_Message_ID (0);
+SetVAF_Msg_Lable_ID (0);
 SetEntityType (null);	// U
 SetMsgText (null);
 SetMsgType (null);	// I
@@ -28,11 +28,11 @@ SetValue (null);
 }
  */
 }
-public X_AD_Message (Ctx ctx, int AD_Message_ID, Trx trxName) : base (ctx, AD_Message_ID, trxName)
+public X_VAF_Msg_Lable (Ctx ctx, int VAF_Msg_Lable_ID, Trx trxName) : base (ctx, VAF_Msg_Lable_ID, trxName)
 {
-/** if (AD_Message_ID == 0)
+/** if (VAF_Msg_Lable_ID == 0)
 {
-SetAD_Message_ID (0);
+SetVAF_Msg_Lable_ID (0);
 SetEntityType (null);	// U
 SetMsgText (null);
 SetMsgType (null);	// I
@@ -45,7 +45,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Message (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Msg_Lable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_AD_Message (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Message (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Msg_Lable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_AD_Message (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Message (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Msg_Lable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Message()
+static X_VAF_Msg_Lable()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,12 +76,12 @@ static X_AD_Message()
 //static long serialVersionUID = 27562514362204L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045415L;
-/** AD_Table_ID=109 */
+/** VAF_TableView_ID=109 */
 public static int Table_ID;
  // =109;
 
-/** TableName=AD_Message */
-public static String Table_Name="AD_Message";
+/** TableName=VAF_Msg_Lable */
+public static String Table_Name="VAF_Msg_Lable";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -115,27 +115,27 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Message[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Msg_Lable[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Message.
-@param AD_Message_ID System Message */
-public void SetAD_Message_ID (int AD_Message_ID)
+@param VAF_Msg_Lable_ID System Message */
+public void SetVAF_Msg_Lable_ID (int VAF_Msg_Lable_ID)
 {
-if (AD_Message_ID < 1) throw new ArgumentException ("AD_Message_ID is mandatory.");
-Set_ValueNoCheck ("AD_Message_ID", AD_Message_ID);
+if (VAF_Msg_Lable_ID < 1) throw new ArgumentException ("VAF_Msg_Lable_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
 }
 /** Get Message.
 @return System Message */
-public int GetAD_Message_ID() 
+public int GetVAF_Msg_Lable_ID() 
 {
-Object ii = Get_Value("AD_Message_ID");
+Object ii = Get_Value("VAF_Msg_Lable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -191,8 +191,8 @@ public String GetMsgTip()
 return (String)Get_Value("MsgTip");
 }
 
-/** MsgType AD_Reference_ID=103 */
-public static int MSGTYPE_AD_Reference_ID=103;
+/** MsgType VAF_Control_Ref_ID=103 */
+public static int MSGTYPE_VAF_Control_Ref_ID=103;
 /** Error = E */
 public static String MSGTYPE_Error = "E";
 /** Information = I */

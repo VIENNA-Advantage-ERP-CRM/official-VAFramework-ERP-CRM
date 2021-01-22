@@ -25,7 +25,7 @@ public X_GL_AssignAcctSchema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, 
  added by ->Harwinder */
 static X_GL_AssignAcctSchema(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27853764428601L;/** Last Updated Timestamp 10/21/2019 11:55:11 AM */
-public static long updatedMS = 1571639111812L;/** AD_Table_ID=1001269 */
+public static long updatedMS = 1571639111812L;/** VAF_TableView_ID=1001269 */
 public static int Table_ID; // =1001269;
 /** TableName=GL_AssignAcctSchema */
 public static String Table_Name="GL_AssignAcctSchema";

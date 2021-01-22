@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ModuleForm
+/** Generated Model for VAF_ModuleForm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ModuleForm : PO
+public class X_VAF_ModuleForm : PO
 {
-public X_AD_ModuleForm (Context ctx, int AD_ModuleForm_ID, Trx trxName) : base (ctx, AD_ModuleForm_ID, trxName)
+public X_VAF_ModuleForm (Context ctx, int VAF_ModuleForm_ID, Trx trxName) : base (ctx, VAF_ModuleForm_ID, trxName)
 {
-/** if (AD_ModuleForm_ID == 0)
+/** if (VAF_ModuleForm_ID == 0)
 {
-SetAD_ModuleForm_ID (0);
-SetAD_ModuleInfo_ID (0);
+SetVAF_ModuleForm_ID (0);
+SetVAF_ModuleInfo_ID (0);
 }
  */
 }
-public X_AD_ModuleForm (Ctx ctx, int AD_ModuleForm_ID, Trx trxName) : base (ctx, AD_ModuleForm_ID, trxName)
+public X_VAF_ModuleForm (Ctx ctx, int VAF_ModuleForm_ID, Trx trxName) : base (ctx, VAF_ModuleForm_ID, trxName)
 {
-/** if (AD_ModuleForm_ID == 0)
+/** if (VAF_ModuleForm_ID == 0)
 {
-SetAD_ModuleForm_ID (0);
-SetAD_ModuleInfo_ID (0);
+SetVAF_ModuleForm_ID (0);
+SetVAF_ModuleInfo_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_ModuleInfo_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleForm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleForm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ModuleForm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleForm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleForm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ModuleForm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleForm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ModuleForm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ModuleForm()
+static X_VAF_ModuleForm()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_ModuleForm()
 //static long serialVersionUID = 27622811914920L;
 /** Last Updated Timestamp 6/26/2012 10:26:38 AM */
 public static long updatedMS = 1340686598131L;
-/** AD_Table_ID=1000058 */
+/** VAF_TableView_ID=1000058 */
 public static int Table_ID;
  // =1000058;
 
-/** TableName=AD_ModuleForm */
-public static String Table_Name="AD_ModuleForm";
+/** TableName=VAF_ModuleForm */
+public static String Table_Name="VAF_ModuleForm";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ModuleForm[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ModuleForm[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ModuleForm_ID.
-@param AD_ModuleForm_ID AD_ModuleForm_ID */
-public void SetAD_ModuleForm_ID (int AD_ModuleForm_ID)
+/** Set VAF_ModuleForm_ID.
+@param VAF_ModuleForm_ID VAF_ModuleForm_ID */
+public void SetVAF_ModuleForm_ID (int VAF_ModuleForm_ID)
 {
-if (AD_ModuleForm_ID < 1) throw new ArgumentException ("AD_ModuleForm_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleForm_ID", AD_ModuleForm_ID);
+if (VAF_ModuleForm_ID < 1) throw new ArgumentException ("VAF_ModuleForm_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleForm_ID", VAF_ModuleForm_ID);
 }
-/** Get AD_ModuleForm_ID.
-@return AD_ModuleForm_ID */
-public int GetAD_ModuleForm_ID() 
+/** Get VAF_ModuleForm_ID.
+@return VAF_ModuleForm_ID */
+public int GetVAF_ModuleForm_ID() 
 {
-Object ii = Get_Value("AD_ModuleForm_ID");
+Object ii = Get_Value("VAF_ModuleForm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Module.
-@param AD_ModuleInfo_ID Module */
-public void SetAD_ModuleInfo_ID (int AD_ModuleInfo_ID)
+@param VAF_ModuleInfo_ID Module */
+public void SetVAF_ModuleInfo_ID (int VAF_ModuleInfo_ID)
 {
-if (AD_ModuleInfo_ID < 1) throw new ArgumentException ("AD_ModuleInfo_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+if (VAF_ModuleInfo_ID < 1) throw new ArgumentException ("VAF_ModuleInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
 }
 /** Get Module.
 @return Module */
-public int GetAD_ModuleInfo_ID() 
+public int GetVAF_ModuleInfo_ID() 
 {
-Object ii = Get_Value("AD_ModuleInfo_ID");
+Object ii = Get_Value("VAF_ModuleInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

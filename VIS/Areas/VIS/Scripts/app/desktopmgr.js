@@ -816,7 +816,7 @@
                 cmbOrg.empty();
                 cmbWare.empty();
 
-                getdata(cmbOrg, contextUrl + "Account/GetOrgs", { 'role': cmbRole.val(), 'user': VIS.context.getAD_User_ID(), 'client': combo.value });
+                getdata(cmbOrg, contextUrl + "Account/GetOrgs", { 'role': cmbRole.val(), 'user': VIS.context.getVAF_UserContact_ID(), 'client': combo.value });
             }
             else if (combo.id === cmbOrg.attr('id')) {
                 cmbWare.empty();

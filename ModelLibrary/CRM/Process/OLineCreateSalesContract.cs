@@ -49,7 +49,7 @@ namespace VAdvantage.Process
                 {
 
                     VAdvantage.Model.X_C_Contract contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, null);
-                    VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetAD_Client_ID(), GetCtx().GetAD_Org_ID(),
+                    VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                         line.GetM_Product_ID(), order.GetC_BPartner_ID(), line.GetQtyOrdered(), true);
                     int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
                     pp.SetM_PriceList_ID(M_PriceList_ID);

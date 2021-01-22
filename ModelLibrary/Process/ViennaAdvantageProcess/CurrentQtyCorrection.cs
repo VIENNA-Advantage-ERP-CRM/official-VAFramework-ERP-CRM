@@ -57,7 +57,7 @@ namespace ViennaAdvantageServer.Process
                     productId = (String)para[i].GetParameter();
                     //productCollection = productId.Split(',');
                 }
-                //else if (name.Equals("AD_Org_ID"))
+                //else if (name.Equals("VAF_Org_ID"))
                 //{
                 //    orgId = (String)para[i].GetParameter();
                 //    //OrgCollection = orgId.Split(',');
@@ -75,7 +75,7 @@ namespace ViennaAdvantageServer.Process
                     FROM M_Transaction WHERE IsActive= 'Y' ";
             //if (orgId != null && !string.IsNullOrEmpty(orgId))
             //{
-            //    sql += " AND AD_Org_ID  IN ( " + orgId + " )";
+            //    sql += " AND VAF_Org_ID  IN ( " + orgId + " )";
             //}
             if (productId != null && !string.IsNullOrEmpty(productId))
             {
@@ -315,7 +315,7 @@ namespace ViennaAdvantageServer.Process
             //                    FROM M_Transaction WHERE IsActive= 'Y' ";
             //            //if (orgId != null && !string.IsNullOrEmpty(orgId))
             //            //{
-            //            //    sql += " AND AD_Org_ID  IN ( " + orgId + " )";
+            //            //    sql += " AND VAF_Org_ID  IN ( " + orgId + " )";
             //            //}
             //            if (productId != null && !string.IsNullOrEmpty(productId))
             //            {

@@ -66,8 +66,8 @@ namespace VAdvantage.Process
                     foreach (DataRow dr in dt.Rows)
                     {
                         MFinRptAcctGroup acctGroup = new MFinRptAcctGroup(GetCtx(), 0, null);
-                        acctGroup.SetAD_Client_ID(Util.GetValueOfInt(dr["AD_Client_ID"]));
-                        acctGroup.SetAD_Org_ID(Util.GetValueOfInt(dr["AD_Org_ID"]));
+                        acctGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr["VAF_Client_ID"]));
+                        acctGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr["VAF_Org_ID"]));
                         acctGroup.SetC_AccountGroup_ID(Util.GetValueOfInt(dr["C_ACCOUNTGROUP_ID"]));
                         acctGroup.SetC_FinRptConfig_ID(_C_FinRecordConfig_ID);
                         acctGroup.SetLine(Util.GetValueOfString(dr["Line"]));
@@ -98,8 +98,8 @@ namespace VAdvantage.Process
                             foreach (DataRow dr1 in DT1.Rows)
                             {
                                 MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
-                                AcctSubGroup.SetAD_Client_ID(Util.GetValueOfInt(dr1["AD_Client_ID"]));
-                                AcctSubGroup.SetAD_Org_ID(Util.GetValueOfInt(dr1["AD_Org_ID"]));
+                                AcctSubGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr1["VAF_Client_ID"]));
+                                AcctSubGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr1["VAF_Org_ID"]));
                                 AcctSubGroup.SetC_AccountSubGroup_ID(Util.GetValueOfInt(dr1["C_ACCOUNTSUBGROUP_ID"]));
                                 AcctSubGroup.SetC_FinRptAcctGroup_ID(acctGroup.GetC_FinRptAcctGroup_ID());
                                 AcctSubGroup.SetLine(Util.GetValueOfString(dr1["LINE"]));

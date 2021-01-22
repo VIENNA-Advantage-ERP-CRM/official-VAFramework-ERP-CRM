@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintForm
+/** Generated Model for VAF_Print_Rpt_Page
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintForm : PO
+public class X_VAF_Print_Rpt_Page : PO
 {
-public X_AD_PrintForm (Context ctx, int AD_PrintForm_ID, Trx trxName) : base (ctx, AD_PrintForm_ID, trxName)
+public X_VAF_Print_Rpt_Page (Context ctx, int VAF_Print_Rpt_Page_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Page_ID, trxName)
 {
-/** if (AD_PrintForm_ID == 0)
+/** if (VAF_Print_Rpt_Page_ID == 0)
 {
-SetAD_PrintForm_ID (0);
+SetVAF_Print_Rpt_Page_ID (0);
 SetName (null);
 }
  */
 }
-public X_AD_PrintForm (Ctx ctx, int AD_PrintForm_ID, Trx trxName) : base (ctx, AD_PrintForm_ID, trxName)
+public X_VAF_Print_Rpt_Page (Ctx ctx, int VAF_Print_Rpt_Page_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Page_ID, trxName)
 {
-/** if (AD_PrintForm_ID == 0)
+/** if (VAF_Print_Rpt_Page_ID == 0)
 {
-SetAD_PrintForm_ID (0);
+SetVAF_Print_Rpt_Page_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintForm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Page (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_PrintForm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintForm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Page (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_PrintForm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintForm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_Page (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintForm()
+static X_VAF_Print_Rpt_Page()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_PrintForm()
 //static long serialVersionUID = 27562514362721L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045932L;
-/** AD_Table_ID=454 */
+/** VAF_TableView_ID=454 */
 public static int Table_ID;
  // =454;
 
-/** TableName=AD_PrintForm */
-public static String Table_Name="AD_PrintForm";
+/** TableName=VAF_Print_Rpt_Page */
+public static String Table_Name="VAF_Print_Rpt_Page";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintForm[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_Page[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Print Form.
-@param AD_PrintForm_ID Form */
-public void SetAD_PrintForm_ID (int AD_PrintForm_ID)
+@param VAF_Print_Rpt_Page_ID Form */
+public void SetVAF_Print_Rpt_Page_ID (int VAF_Print_Rpt_Page_ID)
 {
-if (AD_PrintForm_ID < 1) throw new ArgumentException ("AD_PrintForm_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintForm_ID", AD_PrintForm_ID);
+if (VAF_Print_Rpt_Page_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Page_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_Page_ID", VAF_Print_Rpt_Page_ID);
 }
 /** Get Print Form.
 @return Form */
-public int GetAD_PrintForm_ID() 
+public int GetVAF_Print_Rpt_Page_ID() 
 {
-Object ii = Get_Value("AD_PrintForm_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -145,8 +145,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** Inventory_MailText_ID AD_Reference_ID=274 */
-public static int INVENTORY_MAILTEXT_ID_AD_Reference_ID=274;
+/** Inventory_MailText_ID VAF_Control_Ref_ID=274 */
+public static int INVENTORY_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Inventory Mail Text.
 @param Inventory_MailText_ID Email text used for sending physical inventory */
 public void SetInventory_MailText_ID (int Inventory_MailText_ID)
@@ -164,8 +164,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Inventory_PrintFormat_ID AD_Reference_ID=404 */
-public static int INVENTORY_PRINTFORMAT_ID_AD_Reference_ID=404;
+/** Inventory_PrintFormat_ID VAF_Control_Ref_ID=404 */
+public static int INVENTORY_PRINTFORMAT_ID_VAF_Control_Ref_ID=404;
 /** Set Inventory Print Format.
 @param Inventory_PrintFormat_ID Print Format for printing Physical Inventory */
 public void SetInventory_PrintFormat_ID (int Inventory_PrintFormat_ID)
@@ -183,8 +183,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Invoice_MailText_ID AD_Reference_ID=274 */
-public static int INVOICE_MAILTEXT_ID_AD_Reference_ID=274;
+/** Invoice_MailText_ID VAF_Control_Ref_ID=274 */
+public static int INVOICE_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Invoice Mail Text.
 @param Invoice_MailText_ID Email text used for sending invoices */
 public void SetInvoice_MailText_ID (int Invoice_MailText_ID)
@@ -202,8 +202,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Invoice_PrintFormat_ID AD_Reference_ID=261 */
-public static int INVOICE_PRINTFORMAT_ID_AD_Reference_ID=261;
+/** Invoice_PrintFormat_ID VAF_Control_Ref_ID=261 */
+public static int INVOICE_PRINTFORMAT_ID_VAF_Control_Ref_ID=261;
 /** Set Invoice Print Format.
 @param Invoice_PrintFormat_ID Print Format for printing Invoices */
 public void SetInvoice_PrintFormat_ID (int Invoice_PrintFormat_ID)
@@ -221,8 +221,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Movement_MailText_ID AD_Reference_ID=274 */
-public static int MOVEMENT_MAILTEXT_ID_AD_Reference_ID=274;
+/** Movement_MailText_ID VAF_Control_Ref_ID=274 */
+public static int MOVEMENT_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Movement Mail Text.
 @param Movement_MailText_ID Email text used for sending Movements */
 public void SetMovement_MailText_ID (int Movement_MailText_ID)
@@ -240,8 +240,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Movement_PrintFormat_ID AD_Reference_ID=403 */
-public static int MOVEMENT_PRINTFORMAT_ID_AD_Reference_ID=403;
+/** Movement_PrintFormat_ID VAF_Control_Ref_ID=403 */
+public static int MOVEMENT_PRINTFORMAT_ID_VAF_Control_Ref_ID=403;
 /** Set Movement Print Format.
 @param Movement_PrintFormat_ID Print Format for using Movements */
 public void SetMovement_PrintFormat_ID (int Movement_PrintFormat_ID)
@@ -283,8 +283,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Order_MailText_ID AD_Reference_ID=274 */
-public static int ORDER_MAILTEXT_ID_AD_Reference_ID=274;
+/** Order_MailText_ID VAF_Control_Ref_ID=274 */
+public static int ORDER_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Order Mail Text.
 @param Order_MailText_ID Email text used for sending order acknowledgements or quotations */
 public void SetOrder_MailText_ID (int Order_MailText_ID)
@@ -302,8 +302,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Order_PrintFormat_ID AD_Reference_ID=262 */
-public static int ORDER_PRINTFORMAT_ID_AD_Reference_ID=262;
+/** Order_PrintFormat_ID VAF_Control_Ref_ID=262 */
+public static int ORDER_PRINTFORMAT_ID_VAF_Control_Ref_ID=262;
 /** Set Order Print Format.
 @param Order_PrintFormat_ID Print Format for Orders, Quotes, Offers */
 public void SetOrder_PrintFormat_ID (int Order_PrintFormat_ID)
@@ -321,8 +321,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Project_MailText_ID AD_Reference_ID=274 */
-public static int PROJECT_MAILTEXT_ID_AD_Reference_ID=274;
+/** Project_MailText_ID VAF_Control_Ref_ID=274 */
+public static int PROJECT_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Project Mail Text.
 @param Project_MailText_ID Standard text for Project EMails */
 public void SetProject_MailText_ID (int Project_MailText_ID)
@@ -340,8 +340,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Project_PrintFormat_ID AD_Reference_ID=402 */
-public static int PROJECT_PRINTFORMAT_ID_AD_Reference_ID=402;
+/** Project_PrintFormat_ID VAF_Control_Ref_ID=402 */
+public static int PROJECT_PRINTFORMAT_ID_VAF_Control_Ref_ID=402;
 /** Set Project Print Format.
 @param Project_PrintFormat_ID Standard Project Print Format */
 public void SetProject_PrintFormat_ID (int Project_PrintFormat_ID)
@@ -359,8 +359,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Remittance_MailText_ID AD_Reference_ID=274 */
-public static int REMITTANCE_MAILTEXT_ID_AD_Reference_ID=274;
+/** Remittance_MailText_ID VAF_Control_Ref_ID=274 */
+public static int REMITTANCE_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Remittance Mail Text.
 @param Remittance_MailText_ID Email text used for sending payment remittances */
 public void SetRemittance_MailText_ID (int Remittance_MailText_ID)
@@ -378,8 +378,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Remittance_PrintFormat_ID AD_Reference_ID=268 */
-public static int REMITTANCE_PRINTFORMAT_ID_AD_Reference_ID=268;
+/** Remittance_PrintFormat_ID VAF_Control_Ref_ID=268 */
+public static int REMITTANCE_PRINTFORMAT_ID_VAF_Control_Ref_ID=268;
 /** Set Remittance Print Format.
 @param Remittance_PrintFormat_ID Print Format for separate Remittances */
 public void SetRemittance_PrintFormat_ID (int Remittance_PrintFormat_ID)
@@ -397,8 +397,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Shipment_MailText_ID AD_Reference_ID=274 */
-public static int SHIPMENT_MAILTEXT_ID_AD_Reference_ID=274;
+/** Shipment_MailText_ID VAF_Control_Ref_ID=274 */
+public static int SHIPMENT_MAILTEXT_ID_VAF_Control_Ref_ID=274;
 /** Set Shipment Mail Text.
 @param Shipment_MailText_ID Email text used for sending delivery notes */
 public void SetShipment_MailText_ID (int Shipment_MailText_ID)
@@ -416,8 +416,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Shipment_PrintFormat_ID AD_Reference_ID=263 */
-public static int SHIPMENT_PRINTFORMAT_ID_AD_Reference_ID=263;
+/** Shipment_PrintFormat_ID VAF_Control_Ref_ID=263 */
+public static int SHIPMENT_PRINTFORMAT_ID_VAF_Control_Ref_ID=263;
 /** Set Shipment Print Format.
 @param Shipment_PrintFormat_ID Print Format for Shipments, Receipts, Pick Lists */
 public void SetShipment_PrintFormat_ID (int Shipment_PrintFormat_ID)

@@ -39,10 +39,10 @@ namespace VAdvantage.ProcessEngine
         private string rptHtml = null;
         private bool isPrintFormat = false;
         // private bool isPrintCsv = false;
-        private int AD_PrintFormat_ID = 0;
-        private int AD_ReportView_ID = 0;
+        private int VAF_Print_Rpt_Layout_ID = 0;
+        private int VAF_ReportView_ID = 0;
         //int reportTable_ID = 0;
-        // private int ResAD_PrintFormat_ID = -1;
+        // private int ResVAF_Print_Rpt_Layout_ID = -1;
         //private string fileType = "PDF";
         public ProcessCtl() { }
 
@@ -116,10 +116,10 @@ namespace VAdvantage.ProcessEngine
 
             //    foreach (NpgsqlParameter orp in comm.Parameters)
             //    {
-            //        param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+            //        param[0] = new NpgsqlParameter(orp.ParameterName, _pi.GetVAF_JInstance_ID());
             //    }
 
-            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
             //    int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
             //    conn1.Close();
             //    if (res < 0)
@@ -145,7 +145,7 @@ namespace VAdvantage.ProcessEngine
             //}
 
             //  execute on this thread/connection
-            //String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+            //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
             //OracleConnection conn = null;
             //try
             //{
@@ -161,10 +161,10 @@ namespace VAdvantage.ProcessEngine
 
             //    foreach (OracleParameter orp in comm.Parameters)
             //    {
-            //        param[0] = new OracleParameter(orp.ParameterName, _pi.GetAD_PInstance_ID());
+            //        param[0] = new OracleParameter(orp.ParameterName, _pi.GetVAF_JInstance_ID());
             //    }
 
-            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
             //    int res = SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
             //    conn.Close();
             //    if (res < 0)
@@ -273,7 +273,7 @@ namespace VAdvantage.ProcessEngine
             //            i++;
             //        }
 
-            //        //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //        //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
             //        int res = SqlExec.PostgreSql.PostgreHelper.ExecuteNonQuery(conn1, CommandType.StoredProcedure, procedureName, param);
             //        conn1.Close();                    
             //        if (res < 0)
@@ -297,7 +297,7 @@ namespace VAdvantage.ProcessEngine
             //}
 
             ////  execute on this thread/connection
-            ////String sql = "{call " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")}";
+            ////String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
             //OracleConnection conn = null;
             //try
             //{
@@ -377,7 +377,7 @@ namespace VAdvantage.ProcessEngine
             //        i++;
             //    }
 
-            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetAD_PInstance_ID() + ")");
+            //    //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
             //    int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
             //    conn.Close();
             //    if (res < 0)
@@ -414,8 +414,8 @@ namespace VAdvantage.ProcessEngine
             if (_parent != null)
             {
                 Thread t = new Thread(delegate () { _parent.UnlockUI(_pi); });
-                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
-                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
+                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
+                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
                 t.Start();
             }
         }
@@ -434,11 +434,11 @@ namespace VAdvantage.ProcessEngine
 
             MPInstance instance = null;
 
-            if (_pi.GetAD_PInstance_ID() < 1)
+            if (_pi.GetVAF_JInstance_ID() < 1)
             {
                 try
                 {
-                    instance = new MPInstance(ctx, _pi.GetAD_Process_ID(), _pi.GetRecord_ID());
+                    instance = new MPInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
 
                 }
                 catch (Exception e)
@@ -455,14 +455,14 @@ namespace VAdvantage.ProcessEngine
                     return _pi.ToList();
                 }
 
-                _pi.SetAD_PInstance_ID(instance.Get_ID());
+                _pi.SetVAF_JInstance_ID(instance.Get_ID());
             }
 
 
 
             String procedureName = "";
-            int AD_ReportViews_ID = 0;
-            int AD_ReportFormat_ID = 0;
+            int VAF_ReportViews_ID = 0;
+            int VAF_ReportLayout_ID = 0;
             int AD_Workflow_ID = 0;
             bool IsReport = false;
 
@@ -470,22 +470,22 @@ namespace VAdvantage.ProcessEngine
 
             bool IsCrystalReport = false;
 
-            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.AD_Process_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.AD_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
                 + " p.IsServerProcess, " //10
                 + " p.IsCrystalReport, "         // crystal  11...12
-                + " p.AD_ReportFormat_ID " //12
-                + " FROM AD_Process p"
-                + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
+                + " p.VAF_ReportLayout_ID " //12
+                + " FROM VAF_Job p"
+                + " INNER JOIN VAF_JInstance i ON (p.VAF_Job_ID=i.VAF_Job_ID) "
                 + " WHERE p.IsActive='Y'"
-                + " AND i.AD_PInstance_ID=@pinstanceid";
+                + " AND i.VAF_JInstance_ID=@pinstanceid";
 
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@pinstanceid", _pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@pinstanceid", _pi.GetVAF_JInstance_ID());
                 dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
                 while (dr.Read())
                 {
@@ -496,16 +496,16 @@ namespace VAdvantage.ProcessEngine
 
                     _pi.SetClassName(dr[2].ToString());
 
-                    _pi.SetAD_Process_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    _pi.SetVAF_Job_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
                     //	Report
                     if ("Y".Equals(dr[4].ToString()))
                     {
                         IsReport = true;
                         IsCrystalReport = "Y".Equals(dr[10].ToString());
-                        AD_ReportFormat_ID = dr[11].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[11].ToString());
+                        VAF_ReportLayout_ID = dr[11].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[11].ToString());
                         //later
                     }
-                    AD_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
+                    VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
                     AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     //_IsServerProcess = "Y".Equals(dr[9].ToString());
@@ -542,9 +542,9 @@ namespace VAdvantage.ProcessEngine
                     if (re is IReportView)
                     {
                         IReportView irv = re as IReportView;
-                        //  reportTable_ID = irv.GetPrintFormat().GetAD_Table_ID();
+                        //  reportTable_ID = irv.GetPrintFormat().GetVAF_TableView_ID();
                         irv.GetView();
-                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetAD_Table_ID());
+                        _pi.Set_VAF_Print_Rpt_Layout_Table_ID(irv.GetPrintFormat().GetVAF_TableView_ID());
                     }
                     _pi.SetSummary("Report", re != null);
                     Unlock();
@@ -587,7 +587,7 @@ namespace VAdvantage.ProcessEngine
                 }
 
 
-                if (AD_ReportFormat_ID > 0)             // For Report Formats
+                if (VAF_ReportLayout_ID > 0)             // For Report Formats
                 {
                     _pi.SetIsReportFormat(true);
                     int totalRecords = 0;
@@ -609,10 +609,10 @@ namespace VAdvantage.ProcessEngine
                     //	Start Report	-----------------------------------------------
                     re = ReportCtl.Start(_ctx, _pi, IsDirectPrint);
                     _rep = (ReportEngine_N)re;
-                    // int reportTable_ID = _rep.GetPrintFormat().GetAD_Table_ID();
+                    // int reportTable_ID = _rep.GetPrintFormat().GetVAF_TableView_ID();
                     _rep.GetView();
-                    _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetAD_Table_ID());
-                    _pi.Set_AD_PrintFormat_ID(_rep.GetPrintFormat().GetAD_PrintFormat_ID());
+                    _pi.Set_VAF_Print_Rpt_Layout_Table_ID(_rep.GetPrintFormat().GetVAF_TableView_ID());
+                    _pi.Set_VAF_Print_Rpt_Layout_ID(_rep.GetPrintFormat().GetVAF_Print_Rpt_Layout_ID());
                     _pi.SetSummary("Report", re != null);
                     Unlock();
                     if (re != null)
@@ -662,11 +662,11 @@ namespace VAdvantage.ProcessEngine
 
             MPInstance instance = null;
 
-            if (_pi.GetAD_PInstance_ID() < 1)
+            if (_pi.GetVAF_JInstance_ID() < 1)
             {
                 try
                 {
-                    instance = new MPInstance(ctx, _pi.GetAD_Process_ID(), _pi.GetRecord_ID());
+                    instance = new MPInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
 
                 }
                 catch (Exception e)
@@ -683,14 +683,14 @@ namespace VAdvantage.ProcessEngine
                     return _pi.ToList();
                 }
 
-                _pi.SetAD_PInstance_ID(instance.Get_ID());
+                _pi.SetVAF_JInstance_ID(instance.Get_ID());
             }
 
 
 
             String procedureName = "";
-            //int AD_ReportView_ID = 0;
-            int AD_ReportFormat_ID = 0;
+            //int VAF_ReportView_ID = 0;
+            int VAF_ReportLayout_ID = 0;
             int AD_Workflow_ID = 0;
             bool IsReport = false;
 
@@ -700,27 +700,27 @@ namespace VAdvantage.ProcessEngine
             bool IsTelerikReport = false;
             bool IsBIReport = false;
             bool IsJasperReport = false;
-            int AD_ReportMaster_ID = 0;
+            int VAF_ReportMaster_ID = 0;
 
-            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.AD_Process_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.AD_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
                 + " p.IsServerProcess, " //10
                 + " p.IsCrystalReport, "         // crystal  11...12
-                + " p.AD_ReportFormat_ID,  " //12
-                + "  p.AD_ReportMaster_ID  "  //13
-                + " FROM AD_Process p"
-                + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
+                + " p.VAF_ReportLayout_ID,  " //12
+                + "  p.VAF_ReportMaster_ID  "  //13
+                + " FROM VAF_Job p"
+                + " INNER JOIN VAF_JInstance i ON (p.VAF_Job_ID=i.VAF_Job_ID) "
 
 
                 + " WHERE p.IsActive='Y'"
-                + " AND i.AD_PInstance_ID=@pinstanceid";
+                + " AND i.VAF_JInstance_ID=@pinstanceid";
 
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@pinstanceid", _pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@pinstanceid", _pi.GetVAF_JInstance_ID());
                 dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
                 while (dr.Read())
                 {
@@ -731,23 +731,23 @@ namespace VAdvantage.ProcessEngine
 
                     _pi.SetClassName(dr[2].ToString());
 
-                    _pi.SetAD_Process_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    _pi.SetVAF_Job_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
                     //	Report
                     if ("Y".Equals(dr[4].ToString()))
                     {
                         IsReport = true;
                         pi.SetIsReport(IsReport);
                         IsCrystalReport = "Y".Equals(dr[10].ToString());
-                        AD_ReportFormat_ID = dr[11].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[11].ToString());
+                        VAF_ReportLayout_ID = dr[11].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[11].ToString());
                         IsTelerikReport = "T".Equals(dr[10].ToString());
                         //later
                         IsBIReport = "B".Equals(dr[10].ToString());
                         IsJasperReport = "J".Equals(dr[10].ToString());
 
                         //New Column 
-                        AD_ReportMaster_ID = Utility.Util.GetValueOfInt(dr[12].ToString());
+                        VAF_ReportMaster_ID = Utility.Util.GetValueOfInt(dr[12].ToString());
                     }
-                    AD_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
+                    VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
                     AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     //_IsServerProcess = "Y".Equals(dr[9].ToString());
@@ -786,9 +786,9 @@ namespace VAdvantage.ProcessEngine
                     if (re is IReportView)
                     {
                         IReportView irv = re as IReportView;
-                        // reportTable_ID = irv.GetPrintFormat().GetAD_Table_ID();
+                        // reportTable_ID = irv.GetPrintFormat().GetVAF_TableView_ID();
                         irv.GetView();
-                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetAD_Table_ID());
+                        _pi.Set_VAF_Print_Rpt_Layout_Table_ID(irv.GetPrintFormat().GetVAF_TableView_ID());
                     }
                     _pi.SetSummary("Report", re != null);
                     Unlock();
@@ -831,14 +831,14 @@ namespace VAdvantage.ProcessEngine
                 }
 
                 //Check Dynamically created report 
-                if (AD_ReportMaster_ID > 0)
+                if (VAF_ReportMaster_ID > 0)
                 {
                     IDataReader drRep = null;
                     // bool foundEngine = false;
                     try
                     {
-                        drRep = DB.ExecuteReader(@"SELECT Name, ClassName,Assemblyname,IssupportPaging,dynamicAction,PageSize FROM AD_ReportMaster WHERE
-                                                   IsActive='Y' AND AD_ReportMaster_ID = " + AD_ReportMaster_ID);
+                        drRep = DB.ExecuteReader(@"SELECT Name, ClassName,Assemblyname,IssupportPaging,dynamicAction,PageSize FROM VAF_ReportMaster WHERE
+                                                   IsActive='Y' AND VAF_ReportMaster_ID = " + VAF_ReportMaster_ID);
                         string cName = "", assemblyName = "", dynamicAction = "";
                         int pageSize = 0;
                         bool isSupportPaging = false;
@@ -879,7 +879,7 @@ namespace VAdvantage.ProcessEngine
                     }
                 }
 
-                else if (AD_ReportFormat_ID > 0)             // For Report Formats
+                else if (VAF_ReportLayout_ID > 0)             // For Report Formats
                 {
                     _pi.SetIsReportFormat(true);
                     _pi.SetPrintAllPages(false);
@@ -914,13 +914,13 @@ namespace VAdvantage.ProcessEngine
                     //null check Implemented by raghu 22-May-2015
                     if (_rep != null)
                     {
-                        //reportTable_ID = _rep.GetPrintFormat().GetAD_Table_ID();
+                        //reportTable_ID = _rep.GetPrintFormat().GetVAF_TableView_ID();
                         _rep.GetView();
 
-                        _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetAD_Table_ID());
-                        _pi.Set_AD_PrintFormat_ID(_rep.GetPrintFormat().GetAD_PrintFormat_ID());
+                        _pi.Set_VAF_Print_Rpt_Layout_Table_ID(_rep.GetPrintFormat().GetVAF_TableView_ID());
+                        _pi.Set_VAF_Print_Rpt_Layout_ID(_rep.GetPrintFormat().GetVAF_Print_Rpt_Layout_ID());
                         //_pi.SetTotalRecords(_rep.GetPrintFormat().TotalPage);
-                        _pi.Set_AD_ReportView_ID(AD_ReportView_ID);
+                        _pi.Set_VAF_ReportView_ID(VAF_ReportView_ID);
                         _pi.SetSummary("Report", re != null);
 
                         // "#REPORT_PAGE_SIZE"
@@ -1030,15 +1030,15 @@ namespace VAdvantage.ProcessEngine
         {
             return isRCReport;
         }
-        public int GetAD_PrintFormat_ID()
+        public int GetVAF_Print_Rpt_Layout_ID()
         {
-            return AD_PrintFormat_ID;
+            return VAF_Print_Rpt_Layout_ID;
         }
 
 
-        public int GetAD_ReportView_ID()
+        public int GetVAF_ReportView_ID()
         {
-            return AD_ReportView_ID;
+            return VAF_ReportView_ID;
         }
 
         //public Dictionary<string, object> Process(ProcessInfo pi, Ctx ctx, out byte[] report, out IReportEngine _rep)
@@ -1051,11 +1051,11 @@ namespace VAdvantage.ProcessEngine
 
         //    MPInstance instance = null;
 
-        //    if (_pi.GetAD_PInstance_ID() < 1)
+        //    if (_pi.GetVAF_JInstance_ID() < 1)
         //    {
         //        try
         //        {
-        //            instance = new MPInstance(_ctx, _pi.GetAD_Process_ID(), _pi.GetRecord_ID());
+        //            instance = new MPInstance(_ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
         //        }
         //        catch (Exception e)
         //        {
@@ -1071,13 +1071,13 @@ namespace VAdvantage.ProcessEngine
         //            return _pi.ToList();
         //        }
 
-        //        _pi.SetAD_PInstance_ID(instance.Get_ID());
+        //        _pi.SetVAF_JInstance_ID(instance.Get_ID());
         //    }
 
 
 
         //    String procedureName = "";
-        //    int AD_ReportView_ID = 0;
+        //    int VAF_ReportView_ID = 0;
         //    int AD_Workflow_ID = 0;
         //    bool IsReport = false;
 
@@ -1085,21 +1085,21 @@ namespace VAdvantage.ProcessEngine
 
         //    bool IsCrystalReport = false;
 
-        //    String sql = "SELECT p.Name, p.procedureName,p.Classname, p.AD_Process_ID,"		//	1..4  
-        //        + " p.IsReport,p.IsDirectPrint,p.AD_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+        //    String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
+        //        + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
         //        + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
         //        + " p.IsServerProcess, " //10
         //        + " p.IsCrystalReport "         // crystal  11...12
-        //        + " FROM AD_Process p"
-        //        + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
+        //        + " FROM VAF_Job p"
+        //        + " INNER JOIN VAF_JInstance i ON (p.VAF_Job_ID=i.VAF_Job_ID) "
         //        + " WHERE p.IsActive='Y'"
-        //        + " AND i.AD_PInstance_ID=@pinstanceid";
+        //        + " AND i.VAF_JInstance_ID=@pinstanceid";
 
         //    IDataReader dr = null;
         //    try
         //    {
         //        SqlParameter[] param = new SqlParameter[1];
-        //        param[0] = new SqlParameter("@pinstanceid", _pi.GetAD_PInstance_ID());
+        //        param[0] = new SqlParameter("@pinstanceid", _pi.GetVAF_JInstance_ID());
         //        dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
         //        while (dr.Read())
         //        {
@@ -1110,7 +1110,7 @@ namespace VAdvantage.ProcessEngine
 
         //            _pi.SetClassName(dr[2].ToString());
 
-        //            _pi.SetAD_Process_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+        //            _pi.SetVAF_Job_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
         //            //	Report
         //            if ("Y".Equals(dr[4].ToString()))
         //            {
@@ -1119,7 +1119,7 @@ namespace VAdvantage.ProcessEngine
         //                IsCrystalReport = "Y".Equals(dr[10].ToString());
         //                //later
         //            }
-        //            AD_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
+        //            VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
         //            AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
         //            //
         //            //_IsServerProcess = "Y".Equals(dr[9].ToString());
@@ -1150,9 +1150,9 @@ namespace VAdvantage.ProcessEngine
         //        re = ReportCtl.Report;
         //        if (re != null)
         //        {
-        //            int reportTable_ID = re.GetPrintFormat().GetAD_Table_ID();
+        //            int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
         //            re.GetView();
-        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetAD_Table_ID());
+        //            _pi.Set_VAF_Print_Rpt_Layout_Table_ID(re.GetPrintFormat().GetVAF_TableView_ID());
         //            _pi.SetSummary("Report", re != null);
         //            Unlock();
         //            if (re != null)
@@ -1199,10 +1199,10 @@ namespace VAdvantage.ProcessEngine
         //            //	Start Report	-----------------------------------------------
         //            re = ReportCtl.Start(_ctx, _pi, IsDirectPrint);
         //            _rep = re;
-        //            int reportTable_ID = re.GetPrintFormat().GetAD_Table_ID();
+        //            int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
         //            re.GetView();
-        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetAD_Table_ID());
-        //            _pi.Set_AD_PrintFormat_ID(re.GetPrintFormat().GetAD_PrintFormat_ID());
+        //            _pi.Set_VAF_Print_Rpt_Layout_Table_ID(re.GetPrintFormat().GetVAF_TableView_ID());
+        //            _pi.Set_VAF_Print_Rpt_Layout_ID(re.GetPrintFormat().GetVAF_Print_Rpt_Layout_ID());
         //            _pi.SetSummary("Report", re != null);
         //            Unlock();
         //            if (re != null)
@@ -1327,9 +1327,9 @@ namespace VAdvantage.ProcessEngine
         //    return reportTable_ID;
         //}
 
-        //public void SetAD_PrintFormat_ID(int _AD_PrintFormat_ID)
+        //public void SetVAF_Print_Rpt_Layout_ID(int _VAF_Print_Rpt_Layout_ID)
         //{
-        //    ResAD_PrintFormat_ID = _AD_PrintFormat_ID;
+        //    ResVAF_Print_Rpt_Layout_ID = _VAF_Print_Rpt_Layout_ID;
         //}
         //public bool GetIsPrintCsv()
         //{
@@ -1376,8 +1376,8 @@ namespace VAdvantage.ProcessEngine
             else
             {
                 Thread t = new Thread(delegate () { _parent.LockUI(_pi); });
-                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
-                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
+                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
+                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
                 t.Start();
             }
 
@@ -1385,42 +1385,42 @@ namespace VAdvantage.ProcessEngine
 
         public void Run()
         {
-            log.Fine("AD_PInstance_ID=" + _pi.GetAD_PInstance_ID() + ", Record_ID=" + _pi.GetRecord_ID());
+            log.Fine("VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID() + ", Record_ID=" + _pi.GetRecord_ID());
             Lock();
 
             //	Get Process Information: Name, Procedure Name, ClassName, IsReport, IsDirectPrint
             String procedureName = "";
-            int AD_ReportView_ID = 0;
+            int VAF_ReportView_ID = 0;
             int AD_Workflow_ID = 0;
             bool IsReport = false;
             bool IsDirectPrint = false;
             //
-            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.AD_Process_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.AD_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+            String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END,"
                 + " p.IsServerProcess "
-                + "FROM AD_Process p"
-                + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
+                + "FROM VAF_Job p"
+                + " INNER JOIN VAF_JInstance i ON (p.VAF_Job_ID=i.VAF_Job_ID) "
                 + "WHERE p.IsActive='Y'"
-                + " AND i.AD_PInstance_ID=@pinstanceid";
+                + " AND i.VAF_JInstance_ID=@pinstanceid";
 
-            if (!Utility.Env.IsBaseLanguage(_ctx, "AD_Process"))//   GlobalVariable.IsBaseLanguage())
-                sql = "SELECT t.Name, p.procedureName,p.Classname, p.AD_Process_ID,"		//	1..4  
-                    + " p.IsReport, p.IsDirectPrint,p.AD_ReportView_ID,p.AD_Workflow_ID,"	//	5..8
+            if (!Utility.Env.IsBaseLanguage(_ctx, "VAF_Job"))//   GlobalVariable.IsBaseLanguage())
+                sql = "SELECT t.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
+                    + " p.IsReport, p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"	//	5..8
                     + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END CASE,"
                     + " p.IsServerProcess "
-                    + "FROM AD_Process p"
-                    + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
-                    + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID"
-                        + " AND t.AD_Language='" + Utility.Env.GetAD_Language(_ctx) + "') "
+                    + "FROM VAF_Job p"
+                    + " INNER JOIN VAF_JInstance i ON (p.VAF_Job_ID=i.VAF_Job_ID) "
+                    + " INNER JOIN VAF_Job_TL t ON (p.VAF_Job_ID=t.VAF_Job_ID"
+                        + " AND t.VAF_Language='" + Utility.Env.GetVAF_Language(_ctx) + "') "
                     + "WHERE p.IsActive='Y'"
-                    + " AND i.AD_PInstance_ID=@pinstanceid";
+                    + " AND i.VAF_JInstance_ID=@pinstanceid";
             //
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@pinstanceid", _pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@pinstanceid", _pi.GetVAF_JInstance_ID());
                 dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
                 while (dr.Read())
                 {
@@ -1431,7 +1431,7 @@ namespace VAdvantage.ProcessEngine
 
                     _pi.SetClassName(dr[2].ToString());
 
-                    _pi.SetAD_Process_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    _pi.SetVAF_Job_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
                     //	Report
                     if ("Y".Equals(dr[4].ToString()))
                     {
@@ -1439,7 +1439,7 @@ namespace VAdvantage.ProcessEngine
                         if ("Y".Equals(dr[5].ToString()) && !Ini.IsPropertyBool(Ini.P_PRINTPREVIEW))
                             IsDirectPrint = true;
                     }
-                    AD_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
+                    VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
                     AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     _IsServerProcess = "Y".Equals(dr[9].ToString());
@@ -1490,7 +1490,7 @@ namespace VAdvantage.ProcessEngine
                     return;
                 }
 
-                if (IsReport && AD_ReportView_ID == 0)
+                if (IsReport && VAF_ReportView_ID == 0)
                 {
                     Unlock();
                     return;

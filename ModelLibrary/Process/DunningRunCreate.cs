@@ -237,8 +237,8 @@ namespace VAdvantage.Process
                     + " LEFT JOIN C_INVOICEPAYSCHEDULE ips "
                     + " ON ips.c_invoice_id               =i.c_invoice_id "
                     + " WHERE ips.VA009_IsPaid                    ='N' "
-                    + " AND i.AD_Client_ID                = " + _run.GetAD_Client_ID()
-                    + " AND i.AD_Org_ID                   = " + _run.GetAD_Org_ID()
+                    + " AND i.VAF_Client_ID                = " + _run.GetVAF_Client_ID()
+                    + " AND i.VAF_Org_ID                   = " + _run.GetVAF_Org_ID()
                     + " AND i.DocStatus                  IN ('CO','CL') "
                     + " AND (NOT i.InvoiceCollectionType IN ('" + X_C_Invoice.INVOICECOLLECTIONTYPE_CollectionAgency + "', "
                     + "'" + X_C_Invoice.INVOICECOLLECTIONTYPE_LegalProcedure + "', '" + X_C_Invoice.INVOICECOLLECTIONTYPE_Uncollectable + "')"
@@ -536,8 +536,8 @@ namespace VAdvantage.Process
                 sql.Append(", (SELECT VA027_PostDatedCheck_ID FROM C_Payment WHERE C_Payment_ID= p.C_Payment_ID) AS VA027_postdatedcheck_ID ");
             }
             sql.Append("FROM C_Payment_v p "
-           + "WHERE AD_Client_ID=" + _run.GetAD_Client_ID()        //	##1
-           + " AND AD_Org_ID=" + _run.GetAD_Org_ID()
+           + "WHERE VAF_Client_ID=" + _run.GetVAF_Client_ID()        //	##1
+           + " AND VAF_Org_ID=" + _run.GetVAF_Org_ID()
            + " AND IsAllocated='N' AND C_BPartner_ID IS NOT NULL"
            + " AND C_Charge_ID IS NULL"
            + " AND DocStatus IN ('CO','CL')"
@@ -734,7 +734,7 @@ namespace VAdvantage.Process
                 " INNER JOIN C_Cash c on cl.C_Cash_ID = c.C_Cash_ID" +
                 " WHERE cl.cashtype ='B' AND cl.IsAllocated='N'  " +
                 "AND c.DocStatus In ('CO','Cl') " +
-                "AND cl.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND cl.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                "AND cl.vaf_client_ID =" + _run.GetVAF_Client_ID() + " AND cl.vaf_org_ID=  " + _run.GetVAF_Org_ID() +
                  //	Only BP and BPGroup with Dunning defined
                  " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
                  " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
@@ -896,7 +896,7 @@ namespace VAdvantage.Process
                 "INNER JOIN C_ElementValue EV ON Gl.Account_ID = EV.C_ElementValue_ID " +
                 "WHERE EV.IsAllocationRelated ='Y' AND GL.IsAllocated='N'  " +
                 "AND J.DocStatus In ('CO','Cl') " +
-                "AND GL.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND GL.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                "AND GL.vaf_client_ID =" + _run.GetVAF_Client_ID() + " AND GL.vaf_org_ID=  " + _run.GetVAF_Org_ID() +
                 //	Only BP and BPGroup with Dunning defined
                 " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
                 " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
@@ -1041,7 +1041,7 @@ namespace VAdvantage.Process
                 "FROM  VA027_PostDatedCheck pdc INNER JOIN C_DocType dt on pdc.C_DocType_ID = dt.C_DocType_ID " +
                 "WHERE pdc.VA027_PaymentGenerated='N' " +
                 "AND DocStatus IN ('CO','CL')" +
-                "AND pdc.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND pdc.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                "AND pdc.vaf_client_ID =" + _run.GetVAF_Client_ID() + " AND pdc.vaf_org_ID=  " + _run.GetVAF_Org_ID() +
                 //	Only BP and BPGroup with Dunning defined
                 "AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
                 " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +

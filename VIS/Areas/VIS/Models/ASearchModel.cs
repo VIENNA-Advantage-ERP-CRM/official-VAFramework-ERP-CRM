@@ -15,13 +15,13 @@ namespace VIS.Models
     public class ASearchModel
     {
         // Added by Bharat on 05 June 2017
-        public List<Dictionary<string, object>> GetData(string valueColumnName, int AD_Tab_ID, int AD_Table_ID, Ctx ctx)
+        public List<Dictionary<string, object>> GetData(string valueColumnName, int VAF_Tab_ID, int VAF_TableView_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "SELECT Name," + valueColumnName + ", AD_UserQuery_ID FROM AD_UserQuery WHERE"
-                + " AD_Client_ID=" + ctx.GetAD_Client_ID() + " AND IsActive='Y'"
-                + " AND (AD_Tab_ID=" + AD_Tab_ID + " OR AD_Table_ID=" + AD_Table_ID + ")"
-                + " ORDER BY Upper(Name), AD_UserQuery_ID";
+            string sql = "SELECT Name," + valueColumnName + ", VAF_UserSearch_ID FROM VAF_UserSearch WHERE"
+                + " VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND IsActive='Y'"
+                + " AND (VAF_Tab_ID=" + VAF_Tab_ID + " OR VAF_TableView_ID=" + VAF_TableView_ID + ")"
+                + " ORDER BY Upper(Name), VAF_UserSearch_ID";
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -32,7 +32,7 @@ namespace VIS.Models
                     Dictionary<string, object> obj = new Dictionary<string, object>();
                     obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
                     obj[valueColumnName] = Util.GetValueOfString(ds.Tables[0].Rows[i][valueColumnName]);
-                    obj["AD_UserQuery_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_UserQuery_ID"]);
+                    obj["VAF_UserSearch_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserSearch_ID"]);
                     retDic.Add(obj);
                 }
             }
@@ -40,12 +40,12 @@ namespace VIS.Models
         }
 
         // Added by Bharat on 05 June 2017
-        public List<Dictionary<string, object>> GetQueryLines(int AD_UserQuery_ID, Ctx ctx)
+        public List<Dictionary<string, object>> GetQueryLines(int VAF_UserSearch_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
             string sql = "SELECT KEYNAME, KEYVALUE, OPERATOR AS OPERATORNAME,VALUE1NAME," +
-                "VALUE1VALUE, VALUE2NAME, VALUE2VALUE, AD_USERQUERYLINE_ID, Isfullday FROM AD_UserQueryLine WHERE AD_UserQuery_ID=" +
-                AD_UserQuery_ID + " ORDER BY SeqNo";
+                "VALUE1VALUE, VALUE2NAME, VALUE2VALUE, VAF_USERSEARCHLINE_ID, Isfullday FROM VAF_UserSearchLine WHERE VAF_UserSearch_ID=" +
+                VAF_UserSearch_ID + " ORDER BY SeqNo";
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -61,7 +61,7 @@ namespace VIS.Models
                     obj["VALUE1VALUE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["VALUE1VALUE"]);
                     obj["VALUE2NAME"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["VALUE2NAME"]);
                     obj["VALUE2VALUE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["VALUE2VALUE"]);
-                    obj["AD_USERQUERYLINE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_USERQUERYLINE_ID"]);
+                    obj["VAF_USERSEARCHLINE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_USERSEARCHLINE_ID"]);
                     obj["FULLDAY"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISFULLDAY"]);
                     retDic.Add(obj);
                 }
@@ -70,9 +70,9 @@ namespace VIS.Models
         }
 
         // Added by Bharat on 05 June 2017
-        public int GetQueryDefault(int AD_UserQuery_ID, Ctx ctx)
+        public int GetQueryDefault(int VAF_UserSearch_ID, Ctx ctx)
         {
-            string sql = "SELECT Count(*) FROM AD_DefaultUserQuery WHERE AD_UserQuery_ID=" + AD_UserQuery_ID + " AND AD_User_ID!=" + ctx.GetAD_User_ID();
+            string sql = "SELECT Count(*) FROM VAF_DefaultUserQuery WHERE VAF_UserSearch_ID=" + VAF_UserSearch_ID + " AND VAF_UserContact_ID!=" + ctx.GetVAF_UserContact_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             return count;
         }

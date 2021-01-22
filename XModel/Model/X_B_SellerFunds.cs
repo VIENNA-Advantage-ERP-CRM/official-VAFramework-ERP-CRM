@@ -20,7 +20,7 @@ public X_B_SellerFunds (Context ctx, int B_SellerFunds_ID, Trx trxName) : base (
 {
 /** if (B_SellerFunds_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetB_SellerFunds_ID (0);
 SetCommittedAmt (0.0);
 SetNonCommittedAmt (0.0);
@@ -31,7 +31,7 @@ public X_B_SellerFunds (Ctx ctx, int B_SellerFunds_ID, Trx trxName) : base (ctx,
 {
 /** if (B_SellerFunds_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetB_SellerFunds_ID (0);
 SetCommittedAmt (0.0);
 SetNonCommittedAmt (0.0);
@@ -74,7 +74,7 @@ static X_B_SellerFunds()
 //static long serialVersionUID 27562514367501L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050712L;
-/** AD_Table_ID=680 */
+/** VAF_TableView_ID=680 */
 public static int Table_ID;
  // =680;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_B_SellerFunds[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_Value ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,7 +135,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Seller Funds.
 @param B_SellerFunds_ID Seller Funds from Offers on Topics */

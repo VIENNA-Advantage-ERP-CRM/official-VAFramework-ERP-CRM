@@ -84,8 +84,8 @@
             var height = ($(window).height()) * (96 / 100);
 
 
-            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, null);
-            $cmbOrganization = new VIS.Controls.VComboBox("AD_Org_ID", false, false, true, lookupOrg, 50);
+            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "VAF_Org_ID", 0, false, null);
+            $cmbOrganization = new VIS.Controls.VComboBox("VAF_Org_ID", false, false, true, lookupOrg, 50);
 
             // var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3666, VIS.DisplayType.List, "MovementType",189, false, null);
             var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.List, "MovementType", 189, false, null);
@@ -155,7 +155,7 @@
             $divOrganization.append($divOrganizationInputwrap);
             $divOrganizationInputwrap.append($divOrganizationCtrlwrap);
             $divOrganizationCtrlwrap.append($cmbOrganization.getControl());
-            $divOrganizationCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
+            $divOrganizationCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Org_ID") + " </label>"));
             $divInfoinn.append($divOrganization);
 
             var $divMovementType = $("<div class='vis-paymentselect-field'>");
@@ -285,8 +285,8 @@
         //Execute Query
         //*******************
         function loadGrid() {
-            var AD_Window_ID = 223;		//	Mavarain Account Combinations 
-            VIS.AEnv.getGridWindow($self.windowNo, AD_Window_ID, function (json) {
+            var VAF_Screen_ID = 223;		//	Mavarain Account Combinations 
+            VIS.AEnv.getGridWindow($self.windowNo, VAF_Screen_ID, function (json) {
                 if (json.error != null) {
                     VIS.ADialog.error(json.error);    //log error
                     self.dispose();
@@ -315,7 +315,7 @@
                 $divGridPSelect.append(gridController.getRoot());
                 gridController.activate();
                 query = new VIS.Query();
-                query.addRestriction("AD_Client_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_Client_ID());
+                query.addRestriction("VAF_Client_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_Client_ID());
                 //_mTab.setQuery(query);
                 //gridController.query(0, 0, false);
             });
@@ -341,7 +341,7 @@
                 value = null;
             }
             if (value != null && value.toString().length > 0) {
-                localquery.addRestriction("AD_Org_ID", VIS.Query.prototype.EQUAL, value);
+                localquery.addRestriction("VAF_Org_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  Locator
             value = $locator.getValue();
@@ -385,7 +385,7 @@
         //********************
         function zoom() {
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             var ColumnName = null;
             var SQL = null;
             var params = [];
@@ -394,16 +394,16 @@
             if (lineID != 0) {
 
                 if (VIS.context.getContext($self.windowNo, "MovementType").equals("C-")) {
-                    AD_Window_ID = 169;     //  Customer Shipment
+                    VAF_Screen_ID = 169;     //  Customer Shipment
                 }
                 else if (VIS.context.getContext($self.windowNo, "MovementType").equals("C+")) {
-                    AD_Window_ID = 409;     //  Customer Return
+                    VAF_Screen_ID = 409;     //  Customer Return
                 }
                 else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V+")) {
-                    AD_Window_ID = 184;     //  Vendor Receipt
+                    VAF_Screen_ID = 184;     //  Vendor Receipt
                 }
                 else if (VIS.context.getContext($self.windowNo, "MovementType").equals("V-")) {
-                    AD_Window_ID = 411;     //  Vendor Return
+                    VAF_Screen_ID = 411;     //  Vendor Return
                 }
 
                 ColumnName = "M_InOut_ID";
@@ -414,7 +414,7 @@
                 lineID = VIS.context.getContextAsInt($self.windowNo, "M_InventoryLine_ID");
                 if (lineID != 0) {
                     //  log.Fine("M_InventoryLine_ID=" + lineID);
-                    AD_Window_ID = 168;
+                    VAF_Screen_ID = 168;
                     ColumnName = "M_Inventory_ID";
                     SQL = "VIS_141";
                     params[0] = new VIS.DB.SqlParam("@lineID", lineID);
@@ -424,7 +424,7 @@
                     lineID = VIS.context.getContextAsInt($self.windowNo, "M_MovementLine_ID");
                     if (lineID != 0) {
                         // log.Fine("M_MovementLine_ID=" + lineID);
-                        AD_Window_ID = 170;
+                        VAF_Screen_ID = 170;
                         ColumnName = "M_Movement_ID";
                         SQL = "VIS_142";
                         params[0] = new VIS.DB.SqlParam("@lineID", lineID);
@@ -433,7 +433,7 @@
                         lineID = VIS.context.getContextAsInt($self.windowNo, "M_ProductionLine_ID");
                         if (lineID != 0) {
                             // log.Fine("M_ProductionLine_ID=" + lineID);
-                            AD_Window_ID = 191;
+                            VAF_Screen_ID = 191;
                             ColumnName = "M_Production_ID";
                             SQL = "VIS_143";
                             params[0] = new VIS.DB.SqlParam("@lineID", lineID);
@@ -444,7 +444,7 @@
                     }
                 }
             }
-            if (AD_Window_ID == 0) {
+            if (VAF_Screen_ID == 0) {
                 return;
             }
 
@@ -459,7 +459,7 @@
             if (GridSelectedRowCount.length > 0) {
 
                 parentID = VIS.Utility.Util.getValueOfInt((executeScalar(SQL, null, null)));
-                showWindow(ColumnName, lineID, AD_Window_ID, parentID);
+                showWindow(ColumnName, lineID, VAF_Screen_ID, parentID);
             }
             else {
                 return alert(VIS.Msg.getMsg("NoRecordSelected"))
@@ -468,8 +468,8 @@
             //************************************************  vikas End   ************************************************ 
 
             /*   parentID = VIS.Utility.Util.getValueOfInt((VIS.DB.executeScalar(SQL, null, null)));
-            // System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => ShowWindow(ColumnName, parentID, AD_Window_ID, SQL, lineID));
-              showWindow(ColumnName, lineID, AD_Window_ID,parentID);*/
+            // System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() => ShowWindow(ColumnName, parentID, VAF_Screen_ID, SQL, lineID));
+              showWindow(ColumnName, lineID, VAF_Screen_ID,parentID);*/
 
 
         };

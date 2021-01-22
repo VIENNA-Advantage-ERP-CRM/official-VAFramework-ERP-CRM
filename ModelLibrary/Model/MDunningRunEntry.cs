@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                 if (users[0].IsEmail() || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
                         || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail)
                 {
-                    SetAD_User_ID(users[0].GetAD_User_ID());
+                    SetVAF_UserContact_ID(users[0].GetVAF_UserContact_ID());
                 }
             }
             else
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
                     if (user.GetC_BPartner_Location_ID() == GetC_BPartner_Location_ID() && (user.IsEmail() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
                         || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail))
                     {
-                        SetAD_User_ID(users[i].GetAD_User_ID());
+                        SetVAF_UserContact_ID(users[i].GetVAF_UserContact_ID());
                         break;
                     }
                 }
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
         public static MUser[] GetOfBPartner(Ctx ctx, int C_BPartner_ID)
         {
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM AD_User WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY Updated DESC ";
+            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY Updated DESC ";
 
             try
             {

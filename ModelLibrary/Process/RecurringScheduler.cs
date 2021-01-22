@@ -39,7 +39,7 @@ namespace ViennaAdvantageServer.Process
         {
             ds = new DataSet();
 
-            ds = DB.ExecuteDataset("SELECT C_Recurring_ID From C_Recurring Where IsActive='Y' AND AD_Client_ID=" + GetAD_Client_ID()
+            ds = DB.ExecuteDataset("SELECT C_Recurring_ID From C_Recurring Where IsActive='Y' AND VAF_Client_ID=" + GetVAF_Client_ID()
                                   + " AND TRUNC(DateNextRun)=" + GlobalVariable.TO_DATE(DateTime.Now, true));
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

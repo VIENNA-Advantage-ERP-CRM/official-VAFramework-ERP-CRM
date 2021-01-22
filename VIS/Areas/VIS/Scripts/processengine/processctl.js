@@ -79,15 +79,15 @@
 
         var data = { processInfo: this.pi.toJson() };
         //{
-        //    AD_Process_ID: this.pi.getAD_Process_ID(),
+        //    VAF_Job_ID: this.pi.getVAF_Job_ID(),
         //    Name: this.pi.getTitle(),
-        //    AD_Table_ID: this.pi.getTable_ID(),
+        //    VAF_TableView_ID: this.pi.getTable_ID(),
         //    Record_ID: this.pi.getRecord_ID(),
         //    WindowNo: windowNo,
         //    fileType: this.fileType,
         //    pageSize: this.PAGE_SIZE,
         //    pageNo: this.pageNo,
-        //    AD_Window_ID: (this.parent.$parentWindow === undefined ? 0 : this.parent.$parentWindow.AD_Window_ID) // vinay bhatt window id
+        //    VAF_Screen_ID: (this.parent.$parentWindow === undefined ? 0 : this.parent.$parentWindow.VAF_Screen_ID) // vinay bhatt window id
         //}
 
         VIS.dataContext.process(data, function (jsonStr) {
@@ -119,7 +119,7 @@
 	 */
     ProcessCtl.prototype.complete = function (jObject) {
         this.jObjectFromServer = jObject;
-        this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
+        this.pi.setVAF_JInstance_ID(jObject.VAF_JInstance_ID);
 
         // Change Lokesh Chauhan
         this.pi.setCustomHTML(jObject.CustomHTML);
@@ -131,7 +131,7 @@
         }
 
         if (jObject.ShowParameter) { //Open Paramter Dialog
-            this.pi.setAD_PInstance_ID(jObject.AD_PInstance_ID);
+            this.pi.setVAF_JInstance_ID(jObject.VAF_JInstance_ID);
             try {
                 var pp = new VIS.ProcessParameter(this.pi, this, this.windowNo);
                 if (this.splitUI) {
@@ -170,7 +170,7 @@
             if (jObject.IsTelerikReport) {
                 if (window.KJS) {
                     if (this.parent) {
-                        this.parent.showTelerikReport(this.pi.AD_PInstance_ID, this.pi.getTable_ID());
+                        this.parent.showTelerikReport(this.pi.VAF_JInstance_ID, this.pi.getTable_ID());
                     }
                 }
             }
@@ -222,7 +222,7 @@
                                 this.parent.showReport(pdfViewer, jObject, this)
                             }
 
-                            //this.parent.showReport(pdfViewer, jObject, this);// this.windowNo, this.paraList, jObject.AD_Table_ID, ispdf, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.AD_ReportView_ID, jObject.IsJasperReport);
+                            //this.parent.showReport(pdfViewer, jObject, this);// this.windowNo, this.paraList, jObject.VAF_TableView_ID, ispdf, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.VAF_ReportView_ID, jObject.IsJasperReport);
                         }
                     }
                     else if (this.pi.getUseCrystalReportViewer() && this.pi.getIsReport()) {
@@ -269,7 +269,7 @@
                         else {
                             this.parent.setReportBytes(jObject.Report);
                             this.parent.setReportPath(jObject.ReportFilePath);
-                            this.parent.showReport(new VIS.PdfViewer(jObject.HTML, null, true), jObject.AD_PrintFormat_ID, this, this.windowNo, this.paraList, jObject.AD_Table_ID, false, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.AD_ReportView_ID, jObject.IsJasperReport);
+                            this.parent.showReport(new VIS.PdfViewer(jObject.HTML, null, true), jObject.VAF_Print_Rpt_Layout_ID, this, this.windowNo, this.paraList, jObject.VAF_TableView_ID, false, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.VAF_ReportView_ID, jObject.IsJasperReport);
                         }
                     }
                 }
@@ -286,12 +286,12 @@
                     else if (!this.parent.setReportBytes) {
                         window.open(VIS.Application.contextUrl + jObject.ReportFilePath);
                         //this.parent.setReportBytes(jObject.Report);
-                        //this.parent.showReport(new VIS.PdfViewer(jObject.ReportFilePath), jObject.AD_PrintFormat_ID, this, this.windowNo, this.paraList, jObject.AD_Table_ID, true, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo);
+                        //this.parent.showReport(new VIS.PdfViewer(jObject.ReportFilePath), jObject.VAF_Print_Rpt_Layout_ID, this, this.windowNo, this.paraList, jObject.VAF_TableView_ID, true, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo);
                     }
                     else {
                         this.parent.setReportBytes(jObject.Report);
                         this.parent.setReportPath(jObject.ReportFilePath);
-                        this.parent.showReport(new VIS.PdfViewer(jObject.ReportFilePath), jObject.AD_PrintFormat_ID, this, this.windowNo, this.paraList, jObject.AD_Table_ID, true, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.AD_ReportView_ID, jObject.IsJasperReport);
+                        this.parent.showReport(new VIS.PdfViewer(jObject.ReportFilePath), jObject.VAF_Print_Rpt_Layout_ID, this, this.windowNo, this.paraList, jObject.VAF_TableView_ID, true, jObject.TotalRecords, jObject.IsReportFormat, this.PAGE_SIZE, this.pageNo, jObject.VAF_ReportView_ID, jObject.IsJasperReport);
 
                     }
                 }
@@ -301,7 +301,7 @@
         ////if (IsPosReport != "IsPosReport") {
             this.dispose();
         ////}*/
-            //this.pi.setAD_PInstance_ID(0);
+            //this.pi.setVAF_JInstance_ID(0);
         }
     };
 
@@ -322,20 +322,20 @@
             this.lock();
 
             ////if (IsPosReport == "IsPosReport") {
-            ////    getPInstanceIDss = getPinstanceIdOnOkClick(this.pi.getAD_Process_ID(), this.pi.getTitle(), this.pi.getTable_ID(), this.pi.getRecord_ID(), VIS.Env.getWindowNo(), this.fileType);
+            ////    getPInstanceIDss = getPinstanceIdOnOkClick(this.pi.getVAF_Job_ID(), this.pi.getTitle(), this.pi.getTable_ID(), this.pi.getRecord_ID(), VIS.Env.getWindowNo(), this.fileType);
             ////}
             ////else {
-            ////getPInstanceIDss = this.pi.getAD_PInstance_ID();
+            ////getPInstanceIDss = this.pi.getVAF_JInstance_ID();
             //// }
 
             var data = { processInfo: self.pi.toJson(), parameterList: paraList }
 
 
             //    {
-            //    AD_Process_ID: self.pi.getAD_Process_ID(),
-            //    AD_PInstance_ID: self.pi.getAD_PInstance_ID(),
+            //    VAF_Job_ID: self.pi.getVAF_Job_ID(),
+            //    VAF_JInstance_ID: self.pi.getVAF_JInstance_ID(),
             //    Name: self.pi.getTitle(),
-            //    AD_Table_ID: self.pi.getTable_ID(),
+            //    VAF_TableView_ID: self.pi.getTable_ID(),
             //    Record_ID: self.pi.getRecord_ID(),
             //    ParameterList: paraList,
             //    fileType: self.fileType
@@ -374,12 +374,12 @@
         }
     };
     /*////
-    function getPinstanceIdOnOkClick(AD_Process_IDs, Names, AD_Table_IDs, Record_IDs, pageSizes) {
+    function getPinstanceIdOnOkClick(VAF_Job_IDs, Names, VAF_TableView_IDs, Record_IDs, pageSizes) {
         var json = 0;
         var data = {
-            AD_Process_ID: AD_Process_IDs,
+            VAF_Job_ID: VAF_Job_IDs,
             Name: Names,
-            AD_Table_ID: AD_Table_IDs,
+            VAF_TableView_ID: VAF_TableView_IDs,
             Record_ID: Record_IDs,
             WindowNo: VIS.Env.getWindowNo(),
             fileType: "P",
@@ -391,7 +391,7 @@
             json = JSON.parse(jsonStr.result);            
         });
         if (json) {
-            return getPInstanceIDss = json.AD_PInstance_ID;
+            return getPInstanceIDss = json.VAF_JInstance_ID;
         }
         else {
             return json;

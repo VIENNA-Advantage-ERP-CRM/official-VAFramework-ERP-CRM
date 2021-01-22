@@ -70,7 +70,7 @@ static X_RC_TabPanels()
 //static long serialVersionUID 27634578416249L;
 /** Last Updated Timestamp 11/9/2012 2:55:00 PM */
 public static long updatedMS = 1352453099460L;
-/** AD_Table_ID=1000234 */
+/** VAF_TableView_ID=1000234 */
 public static int Table_ID;
  // =1000234;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_RC_TabPanels[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set User Query.
-@param AD_UserQuery_ID Saved User Query */
-public void SetAD_UserQuery_ID (int AD_UserQuery_ID)
+@param VAF_UserSearch_ID Saved User Query */
+public void SetVAF_UserSearch_ID (int VAF_UserSearch_ID)
 {
-if (AD_UserQuery_ID <= 0) Set_Value ("AD_UserQuery_ID", null);
+if (VAF_UserSearch_ID <= 0) Set_Value ("VAF_UserSearch_ID", null);
 else
-Set_Value ("AD_UserQuery_ID", AD_UserQuery_ID);
+Set_Value ("VAF_UserSearch_ID", VAF_UserSearch_ID);
 }
 /** Get User Query.
 @return Saved User Query */
-public int GetAD_UserQuery_ID() 
+public int GetVAF_UserSearch_ID() 
 {
-Object ii = Get_Value("AD_UserQuery_ID");
+Object ii = Get_Value("VAF_UserSearch_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -206,8 +206,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** RoleCenterPanels AD_Reference_ID=1000092 */
-public static int ROLECENTERPANELS_AD_Reference_ID=1000092;
+/** RoleCenterPanels VAF_Control_Ref_ID=1000092 */
+public static int ROLECENTERPANELS_VAF_Control_Ref_ID=1000092;
 /** View = 1 */
 public static String ROLECENTERPANELS_View = "1";
 /** Chart = 2 */

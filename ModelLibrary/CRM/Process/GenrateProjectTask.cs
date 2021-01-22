@@ -59,18 +59,18 @@ namespace VAdvantage.Process
 
             Project.SetName(CampaignType.GetName());
             Project.SetC_Campaign_ID(GetRecord_ID());
-            Project.SetSalesRep_ID(GetAD_User_ID());
+            Project.SetSalesRep_ID(GetVAF_UserContact_ID());
             Project.SetDateContract(Campaign.GetStartDate());
             Project.SetDateFinish(Campaign.GetEndDate());
             Project.SetSalesRep_ID(Campaign.GetSalesRep_ID());
-            Project.SetAD_Client_ID(CampaignType.GetAD_Client_ID());
-            Project.SetAD_Org_ID(CampaignType.GetAD_Org_ID());
+            Project.SetVAF_Client_ID(CampaignType.GetVAF_Client_ID());
+            Project.SetVAF_Org_ID(CampaignType.GetVAF_Org_ID());
             if (!Project.Save(Get_TrxName()))
             {
                 log.SaveError("CampaignNotSaved", "");
                 return Msg.GetMsg(GetCtx(), "CampaignNotSaved");
             }
-            int[] allids = VAdvantage.Model.X_C_CampaignPhase.GetAllIDs("C_CampaignPhase", "C_CampaignType_ID=" + C_CampaignType_ID + " and AD_Client_ID = " + GetAD_Client_ID(), Get_TrxName());
+            int[] allids = VAdvantage.Model.X_C_CampaignPhase.GetAllIDs("C_CampaignPhase", "C_CampaignType_ID=" + C_CampaignType_ID + " and VAF_Client_ID = " + GetVAF_Client_ID(), Get_TrxName());
             //int[] allids = X_C_Phase.GetAllIDs("C_Phase", "C_ProjectType_ID=" + C_ProjectType_ID, Get_TrxName());
             for (int i = 0; i < allids.Length; i++)
             {
@@ -81,10 +81,10 @@ namespace VAdvantage.Process
                 if (C_CampaignPhase_ID != 0)
                 {
                     VAdvantage.Model.MProjectPhase ProjectPhase = new VAdvantage.Model.MProjectPhase(GetCtx(), 0, Get_TrxName());
-                    //ProjectPhase.SetAD_Client_ID(Phase1.GetAD_Client_ID());
-                    ProjectPhase.SetAD_Client_ID(CampPhase.GetAD_Client_ID());
-                    //ProjectPhase.SetAD_Org_ID(Phase1.GetAD_Org_ID());
-                    ProjectPhase.SetAD_Org_ID(CampPhase.GetAD_Org_ID());
+                    //ProjectPhase.SetVAF_Client_ID(Phase1.GetVAF_Client_ID());
+                    ProjectPhase.SetVAF_Client_ID(CampPhase.GetVAF_Client_ID());
+                    //ProjectPhase.SetVAF_Org_ID(Phase1.GetVAF_Org_ID());
+                    ProjectPhase.SetVAF_Org_ID(CampPhase.GetVAF_Org_ID());
                     ProjectPhase.SetC_Project_ID(Project.GetC_Project_ID());
                     //ProjectPhase.SetName(Phase1.GetName());
                     ProjectPhase.SetName(CampPhase.GetName());
@@ -100,7 +100,7 @@ namespace VAdvantage.Process
                         log.SaveError("CampaignPhasetNotSaved", "");
                         return Msg.GetMsg(GetCtx(), "CampaignPhasetNotSaved");
                     }
-                    int[] allids1 = VAdvantage.Model.X_C_CampaignTask.GetAllIDs("C_CampaignTask", "C_CampaignPhase_ID=" + C_CampaignPhase_ID + " and AD_Client_ID = " + GetAD_Client_ID(), Get_TrxName());
+                    int[] allids1 = VAdvantage.Model.X_C_CampaignTask.GetAllIDs("C_CampaignTask", "C_CampaignPhase_ID=" + C_CampaignPhase_ID + " and VAF_Client_ID = " + GetVAF_Client_ID(), Get_TrxName());
                     //int[] allids1 = X_C_Task.GetAllIDs("C_Task", "C_Phase_ID=" + C_Phase_ID, Get_TrxName());
                     for (int j = 0; j < allids1.Length; j++)
                     {
@@ -111,10 +111,10 @@ namespace VAdvantage.Process
                         if (C_CampaignTask_ID != 0)
                         {
                             VAdvantage.Model.MProjectTask ProjectTask = new VAdvantage.Model.MProjectTask(GetCtx(), 0, Get_TrxName());
-                            //ProjectTask.SetAD_Client_ID(task1.GetAD_Client_ID());
-                          //  ProjectTask.SetAD_Client_ID(CampaignTask.GetAD_Client_ID());
-                            // ProjectTask.SetAD_Client_ID(task1.GetAD_Client_ID());
-                          //  ProjectTask.SetAD_Org_ID(CampaignTask.GetAD_Client_ID());
+                            //ProjectTask.SetVAF_Client_ID(task1.GetVAF_Client_ID());
+                          //  ProjectTask.SetVAF_Client_ID(CampaignTask.GetVAF_Client_ID());
+                            // ProjectTask.SetVAF_Client_ID(task1.GetVAF_Client_ID());
+                          //  ProjectTask.SetVAF_Org_ID(CampaignTask.GetVAF_Client_ID());
                             ProjectTask.SetC_ProjectPhase_ID(ProjectPhase.GetC_ProjectPhase_ID());
                             //ProjectTask.SetName(task1.GetName());
                             ProjectTask.SetName(CampaignTask.GetName());

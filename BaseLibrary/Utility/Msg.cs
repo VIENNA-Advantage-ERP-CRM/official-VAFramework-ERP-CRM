@@ -72,25 +72,25 @@ namespace VAdvantage.Utility
 
         /**
          *  Get Language specific Message Map
-         *  @param ad_language Language Key
+         *  @param VAF_Language Language Key
          *  @return HashMap of Language
          */
-        public CCache<String, String> GetMsgMap(String ad_language)
+        public CCache<String, String> GetMsgMap(String VAF_Language)
         {
-            String AD_Language = ad_language;
-            if (AD_Language == null || AD_Language.Length == 0)
-                AD_Language = Language.GetBaseAD_Language();
+            String VAF_Language = VAF_Language;
+            if (VAF_Language == null || VAF_Language.Length == 0)
+                VAF_Language = Language.GetBaseVAF_Language();
 
             //  Do we have the language ?
-            CCache<String, String> retValue = (CCache<String, String>)_languages[AD_Language];
+            CCache<String, String> retValue = (CCache<String, String>)_languages[VAF_Language];
             if (retValue != null && retValue.Size() > 0)
                 return retValue;
 
             //  Load Language
-            retValue = InitMsg(AD_Language);
+            retValue = InitMsg(VAF_Language);
             if (retValue != null)
             {
-                _languages.Add(AD_Language, retValue);
+                _languages.Add(VAF_Language, retValue);
                 return retValue;
             }
             return retValue;
@@ -101,19 +101,19 @@ namespace VAdvantage.Utility
          *	Init message HashMap.
          *	The initial call is from ALogin (ConfirmPanel init).
          *	The second from Env.verifyLanguage.
-         *  @param AD_Language Language
+         *  @param VAF_Language Language
          *  @return Cache HashMap
          */
-        private CCache<String, String> InitMsg(String AD_Language)
+        private CCache<String, String> InitMsg(String VAF_Language)
         {
             //	Trace.printStack();
-            CCache<String, String> msg = new CCache<String, String>("AD_Message", MAP_SIZE, 0);
+            CCache<String, String> msg = new CCache<String, String>("VAF_Msg_Lable", MAP_SIZE, 0);
             //
             if (!DataBase.DB.IsConnected())
             {
                 //s_log.log(Level.SEVERE, "No DB Connection");
 
-                // //ErrorLog.FillErrorLog("Msg.InitMsg(String AD_Language)", "No DB Connection ", "", Message.MessageType.ERROR);
+                // //ErrorLog.FillErrorLog("Msg.InitMsg(String VAF_Language)", "No DB Connection ", "", Message.MessageType.ERROR);
                 return null;
             }
             string sqlQry = "";
@@ -123,19 +123,19 @@ namespace VAdvantage.Utility
                 //PreparedStatement pstmt = null;
 
 
-                if (AD_Language == null || AD_Language.Length == 0 || Utility.Env.IsBaseLanguage(AD_Language, "AD_Language"))
+                if (VAF_Language == null || VAF_Language.Length == 0 || Utility.Env.IsBaseLanguage(VAF_Language, "VAF_Language"))
                 {
-                    sqlQry = "SELECT Value, MsgText, MsgTip FROM AD_Message";
+                    sqlQry = "SELECT Value, MsgText, MsgTip FROM VAF_Msg_Lable";
                     dr = DataBase.DB.ExecuteReader(sqlQry);
                 }
                 else
                 {
-                    sqlQry = "SELECT m.Value, t.MsgText, t.MsgTip " + "FROM AD_Message_Trl t, AD_Message m "
-                        + "WHERE m.AD_Message_ID=t.AD_Message_ID"
-                        + " AND t.AD_Language=@AD_Language";
+                    sqlQry = "SELECT m.Value, t.MsgText, t.MsgTip " + "FROM VAF_Msg_Lable_TL t, VAF_Msg_Lable m "
+                        + "WHERE m.VAF_Msg_Lable_ID=t.VAF_Msg_Lable_ID"
+                        + " AND t.VAF_Language=@VAF_Language";
 
                     SqlParameter[] param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@AD_Language", AD_Language);
+                    param[0] = new SqlParameter("@VAF_Language", VAF_Language);
                     dr = DataBase.DB.ExecuteReader(sqlQry, param);
 
                 }
@@ -144,7 +144,7 @@ namespace VAdvantage.Utility
                 //	get values
                 while (dr.Read())
                 {
-                    String AD_Message = dr[0].ToString();
+                    String VAF_Msg_Lable = dr[0].ToString();
                     StringBuilder msgText = new StringBuilder();
                     String msgTip = null;
                     msgText.Append(dr[1].ToString());
@@ -155,7 +155,7 @@ namespace VAdvantage.Utility
                     //
                     if (msgTip != null && msgTip.Length != 0)			//	messageTip on next line, if exists
                         msgText.Append(" ").Append(SEPARATOR).Append(msgTip);
-                    msg.Add(AD_Message, msgText.ToString());
+                    msg.Add(VAF_Msg_Lable, msgText.ToString());
                 }
 
                 dr.Close();
@@ -170,16 +170,16 @@ namespace VAdvantage.Utility
                     dr = null;
                 }
                 _log.Log(Level.SEVERE, "initMsg", e);
-                ////ErrorLog.FillErrorLog("Msg.InitMsg(String AD_Language)", sqlQry, e.Message, Message.MessageType.ERROR);
+                ////ErrorLog.FillErrorLog("Msg.InitMsg(String VAF_Language)", sqlQry, e.Message, Message.MessageType.ERROR);
                 return null;
             }
             //
             if (msg.Size() < 100)
             {
-                _log.Log(Level.SEVERE, "Too few (" + msg.Count + ") Records found for " + AD_Language);
+                _log.Log(Level.SEVERE, "Too few (" + msg.Count + ") Records found for " + VAF_Language);
                 return null;
             }
-            _log.Info("Records=" + msg.Count + " - " + AD_Language);
+            _log.Info("Records=" + msg.Count + " - " + VAF_Language);
             return msg;
         }
 
@@ -250,17 +250,17 @@ namespace VAdvantage.Utility
 
         /**
          *  Lookup term
-         *  @param AD_Language language
+         *  @param VAF_Language language
          *  @param text text
          *  @return translated term or null
          */
-        private String Lookup(String AD_Language, String text)
+        private String Lookup(String VAF_Language, String text)
         {
             if (text == null)
             {
                 return null;
             }
-            if (AD_Language == null || AD_Language.Length == 0)
+            if (VAF_Language == null || VAF_Language.Length == 0)
             {
                 return text;
             }
@@ -275,7 +275,7 @@ namespace VAdvantage.Utility
                 return System.IO.Path.PathSeparator.ToString();
             }
 
-            CCache<String, String> langMap = GetMsgMap(AD_Language);
+            CCache<String, String> langMap = GetMsgMap(VAF_Language);
             if (langMap == null)
                 return null;
             return (String)langMap[text];
@@ -283,33 +283,33 @@ namespace VAdvantage.Utility
 
 
         /**************************************************************************
-         *	Get translated text for AD_Message
-         *  @param  ad_language - Language
-         *  @param	AD_Message - Message Key
+         *	Get translated text for VAF_Msg_Lable
+         *  @param  VAF_Language - Language
+         *  @param	VAF_Msg_Lable - Message Key
          *  @return translated text
          */
-        public static String GetMsg(String ad_language, String AD_Message)
+        public static String GetMsg(String VAF_Language, String VAF_Msg_Lable)
         {
-           // return GetMsg(ad_language, AD_Message, 1);
-            if (AD_Message == null || AD_Message.Length == 0)
+           // return GetMsg(VAF_Language, VAF_Msg_Lable, 1);
+            if (VAF_Msg_Lable == null || VAF_Msg_Lable.Length == 0)
                 return "";
             //
-            String AD_Language = ad_language;
-            if (AD_Language == null || AD_Language.Length == 0)
-                AD_Language = Language.GetBaseAD_Language();
+            String VAF_Language = VAF_Language;
+            if (VAF_Language == null || VAF_Language.Length == 0)
+                VAF_Language = Language.GetBaseVAF_Language();
             //
             if (DatabaseType.IsMSSql)
             {
-                if (AD_Message.Equals("Date"))
-                    AD_Message = "DATETIME";
+                if (VAF_Msg_Lable.Equals("Date"))
+                    VAF_Msg_Lable = "DATETIME";
             }
-            String retStr = Get().Lookup(AD_Language, AD_Message);
+            String retStr = Get().Lookup(VAF_Language, VAF_Msg_Lable);
             //
             if (retStr == null || retStr.Length == 0)
             {
-                //s_log.warning("NOT found: " + AD_Message);
-                ////ErrorLog.FillErrorLog("GetMsg", "NOT found: " + AD_Message, "", Message.MessageType.WARNING);
-                return "[" + AD_Message + "]";
+                //s_log.warning("NOT found: " + VAF_Msg_Lable);
+                ////ErrorLog.FillErrorLog("GetMsg", "NOT found: " + VAF_Msg_Lable, "", Message.MessageType.WARNING);
+                return "[" + VAF_Msg_Lable + "]";
             }
 
             if (DatabaseType.IsMSSql)
@@ -320,41 +320,41 @@ namespace VAdvantage.Utility
         }	//	getMsg
 
         /**
-         *  Get translated text message for AD_Message
+         *  Get translated text message for VAF_Msg_Lable
          *  @param  ctx Context to retrieve language
-         *  @param	AD_Message - Message Key
+         *  @param	VAF_Msg_Lable - Message Key
          *  @return translated text
         // */
-        //public static String GetMsg(Context ctx, String AD_Message)
+        //public static String GetMsg(Context ctx, String VAF_Msg_Lable)
         //{
-        //    return GetMsg(Utility.Env.GetAD_Language(ctx), AD_Message);
+        //    return GetMsg(Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable);
         //}   //  getMsg
 
-        public static String GetMsg(Ctx ctx, String AD_Message)
+        public static String GetMsg(Ctx ctx, String VAF_Msg_Lable)
         {
-            return GetMsg(Utility.Env.GetAD_Language(ctx), AD_Message);
+            return GetMsg(Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable);
         }   //  getMsg
 
 
-        public static String GetMsg(String AD_Language, String AD_Message, int a)
+        public static String GetMsg(String VAF_Language, String VAF_Msg_Lable, int a)
         {
-            //String AD_Language = ctx.GetAD_Language();
+            //String VAF_Language = ctx.GetVAF_Language();
             String sqlQry = "";
             IDataReader dr = null;
 
-            if (AD_Language == null || AD_Language.Length == 0 || Utility.Env.IsBaseLanguage(AD_Language, "AD_Language"))
+            if (VAF_Language == null || VAF_Language.Length == 0 || Utility.Env.IsBaseLanguage(VAF_Language, "VAF_Language"))
             {
-                sqlQry = "SELECT Value, MsgText, MsgTip FROM AD_Message WHERE Value = '" + AD_Message + "'";
+                sqlQry = "SELECT Value, MsgText, MsgTip FROM VAF_Msg_Lable WHERE Value = '" + VAF_Msg_Lable + "'";
                 dr = DataBase.DB.ExecuteReader(sqlQry);
             }
             else
             {
-                sqlQry = "SELECT m.Value, t.MsgText, t.MsgTip " + "FROM AD_Message_Trl t, AD_Message m "
-                    + "WHERE m.Value = '" + AD_Message + "' AND m.AD_Message_ID=t.AD_Message_ID"
-                    + " AND t.AD_Language=@AD_Language";
+                sqlQry = "SELECT m.Value, t.MsgText, t.MsgTip " + "FROM VAF_Msg_Lable_TL t, VAF_Msg_Lable m "
+                    + "WHERE m.Value = '" + VAF_Msg_Lable + "' AND m.VAF_Msg_Lable_ID=t.VAF_Msg_Lable_ID"
+                    + " AND t.VAF_Language=@VAF_Language";
 
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_Language", AD_Language);
+                param[0] = new SqlParameter("@VAF_Language", VAF_Language);
                 dr = DataBase.DB.ExecuteReader(sqlQry, param);
 
             }
@@ -365,7 +365,7 @@ namespace VAdvantage.Utility
             
             while (dr.Read())
             {
-                //String AD_Message = dr[0].ToString();
+                //String VAF_Msg_Lable = dr[0].ToString();
                 //StringBuilder msgText = new StringBuilder();
                 //String msgTip = null;
                 msg = dr[1].ToString();
@@ -379,7 +379,7 @@ namespace VAdvantage.Utility
 
             if (string.IsNullOrEmpty(msg))
             {
-                return "[" + AD_Message + "]";
+                return "[" + VAF_Msg_Lable + "]";
             }
 
             return msg;
@@ -389,15 +389,15 @@ namespace VAdvantage.Utility
 
 
         /**
-         *  Get translated text message for AD_Message
+         *  Get translated text message for VAF_Msg_Lable
          *  @param ctx Context to retrieve language
-         *  @param AD_Message - Message Key
+         *  @param VAF_Msg_Lable - Message Key
          *  @param parameter optional parameter
          *  @return translated text
          */
-        //public static String GetMsg (Context ctx, String AD_Message, Object parameter)
+        //public static String GetMsg (Context ctx, String VAF_Msg_Lable, Object parameter)
         //{
-        //    StringBuilder msg = new StringBuilder(GetMsg(Utility.Env.GetAD_Language(ctx), AD_Message));
+        //    StringBuilder msg = new StringBuilder(GetMsg(Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable));
         //    if (parameter != null)
         //    {
         //        if (parameter is Array)
@@ -430,9 +430,9 @@ namespace VAdvantage.Utility
         //}   //  getMsg
 
 
-        public static String GetMsg(Ctx ctx, String AD_Message, Object parameter)
+        public static String GetMsg(Ctx ctx, String VAF_Msg_Lable, Object parameter)
         {
-            StringBuilder msg = new StringBuilder(GetMsg(Utility.Env.GetAD_Language(ctx), AD_Message));
+            StringBuilder msg = new StringBuilder(GetMsg(Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable));
             if (parameter != null)
             {
                 if (parameter is Array)
@@ -467,26 +467,26 @@ namespace VAdvantage.Utility
 
 
         /**
-         *  Get translated text message for AD_Message
+         *  Get translated text message for VAF_Msg_Lable
          *  @param  language Language
-         *  @param	AD_Message - Message Key
+         *  @param	VAF_Msg_Lable - Message Key
          *  @return translated text
          */
-        public static String GetMsg(Language language, String AD_Message)
+        public static String GetMsg(Language language, String VAF_Msg_Lable)
         {
-            return GetMsg(language.GetAD_Language(), AD_Message);
+            return GetMsg(language.GetVAF_Language(), VAF_Msg_Lable);
         }   //  getMeg
 
         /**
-         *  Get translated text message for AD_Message
-         *  @param  ad_language - Language
-         *  @param	AD_Message - Message Key
+         *  Get translated text message for VAF_Msg_Lable
+         *  @param  VAF_Language - Language
+         *  @param	VAF_Msg_Lable - Message Key
          *  @param  getText if true only return Text, if false only return Tip
          *  @return translated text
          */
-        public static String GetMsg(String ad_language, String AD_Message, Boolean getText)
+        public static String GetMsg(String VAF_Language, String VAF_Msg_Lable, Boolean getText)
         {
-            String retStr = GetMsg(ad_language, AD_Message);
+            String retStr = GetMsg(VAF_Language, VAF_Msg_Lable);
             int pos = retStr.IndexOf(SEPARATOR);
             //  No Tip
             if (pos == -1)
@@ -511,76 +511,76 @@ namespace VAdvantage.Utility
         }	//	getMsg
 
         /**
-         *  Get translated text message for AD_Message
+         *  Get translated text message for VAF_Msg_Lable
          *  @param  ctx Context to retrieve language
-         *  @param	AD_Message  Message Key
+         *  @param	VAF_Msg_Lable  Message Key
          *  @param  getText if true only return Text, if false only return Tip
          *  @return translated text
          */
-        //public static String GetMsg(Context ctx, String AD_Message, Boolean getText)
+        //public static String GetMsg(Context ctx, String VAF_Msg_Lable, Boolean getText)
         //{
-        //    return GetMsg (Utility.Env.GetAD_Language(ctx), AD_Message, getText);
+        //    return GetMsg (Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable, getText);
         //}   //  getMsg
 
-        public static String GetMsg(Ctx ctx, String AD_Message, Boolean getText)
+        public static String GetMsg(Ctx ctx, String VAF_Msg_Lable, Boolean getText)
         {
-            return GetMsg(Utility.Env.GetAD_Language(ctx), AD_Message, getText);
+            return GetMsg(Utility.Env.GetVAF_Language(ctx), VAF_Msg_Lable, getText);
         }   //  getMsg
 
         /**
-         *  Get translated text message for AD_Message
+         *  Get translated text message for VAF_Msg_Lable
          *  @param  language Language
-         *  @param	AD_Message  Message Key
+         *  @param	VAF_Msg_Lable  Message Key
          *  @param  getText if true only return Text, if false only return Tip
          *  @return translated text
          */
-        public static String GetMsg(Language language, String AD_Message, Boolean getText)
+        public static String GetMsg(Language language, String VAF_Msg_Lable, Boolean getText)
         {
-            return GetMsg(language.GetAD_Language(), AD_Message, getText);
+            return GetMsg(language.GetVAF_Language(), VAF_Msg_Lable, getText);
         }   //  getMsg
 
         /**
-         *	Get clear text for AD_Message with parameters
+         *	Get clear text for VAF_Msg_Lable with parameters
          *  @param  ctx Context to retrieve language
-         *  @param AD_Message   Message yey
+         *  @param VAF_Msg_Lable   Message yey
          *  @param args         MessageFormat arguments
          *  @return translated text
          *  @see java.text.MessageFormat for formatting options
          */
-        //public static String GetMsg(Context ctx, String AD_Message, Object[] args)
+        //public static String GetMsg(Context ctx, String VAF_Msg_Lable, Object[] args)
         //{
-        //    return GetMsg (Env.GetAD_Language(ctx), AD_Message, args);
+        //    return GetMsg (Env.GetVAF_Language(ctx), VAF_Msg_Lable, args);
         //}	//	getMsg
 
-        public static String GetMsg(Ctx ctx, String AD_Message, Object[] args)
+        public static String GetMsg(Ctx ctx, String VAF_Msg_Lable, Object[] args)
         {
-            return GetMsg(Env.GetAD_Language(ctx), AD_Message, args);
+            return GetMsg(Env.GetVAF_Language(ctx), VAF_Msg_Lable, args);
         }
 
         /**
-         *	Get clear text for AD_Message with parameters
+         *	Get clear text for VAF_Msg_Lable with parameters
          *  @param  language Language
-         *  @param AD_Message   Message yey
+         *  @param VAF_Msg_Lable   Message yey
          *  @param args         MessageFormat arguments
          *  @return translated text
          *  @see java.text.MessageFormat for formatting options
          */
-        public static String GetMsg(Language language, String AD_Message, Object[] args)
+        public static String GetMsg(Language language, String VAF_Msg_Lable, Object[] args)
         {
-            return GetMsg(language.GetAD_Language(), AD_Message, args);
+            return GetMsg(language.GetVAF_Language(), VAF_Msg_Lable, args);
         }	//	getMsg
 
         /**
-         *	Get clear text for AD_Message with parameters
-         *  @param ad_language  Language
-         *  @param AD_Message   Message yey
+         *	Get clear text for VAF_Msg_Lable with parameters
+         *  @param VAF_Language  Language
+         *  @param VAF_Msg_Lable   Message yey
          *  @param args         MessageFormat arguments
          *  @return translated text
          *  @see java.text.MessageFormat for formatting options
          */
-        public static String GetMsg(String ad_language, String AD_Message, Object[] args)
+        public static String GetMsg(String VAF_Language, String VAF_Msg_Lable, Object[] args)
         {
-            String msg = GetMsg(ad_language, AD_Message);
+            String msg = GetMsg(VAF_Language, VAF_Msg_Lable);
             String retStr = msg;
             try
             {
@@ -655,20 +655,20 @@ namespace VAdvantage.Utility
 
         /**************************************************************************
          *  Get Translation for Element
-         *  @param ad_language language
+         *  @param VAF_Language language
          *  @param ColumnName column name
          *  @param isSOTrx if false PO terminology is used (if exists)
          *  @return Name of the Column or "" if not found
          */
-        public static String GetElement(String ad_language, String ColumnName, Boolean isSOTrx)
+        public static String GetElement(String VAF_Language, String ColumnName, Boolean isSOTrx)
         {
             if (ColumnName == null || ColumnName.Equals(""))
                 return "";
-            String AD_Language = ad_language;
-            if (AD_Language == null || AD_Language.Length == 0)
-                AD_Language = Language.GetBaseAD_Language();
+            String VAF_Language = VAF_Language;
+            if (VAF_Language == null || VAF_Language.Length == 0)
+                VAF_Language = Language.GetBaseVAF_Language();
 
-            //	Check AD_Element
+            //	Check VAF_ColumnDic
             String retStr = "";
             string sqlQry = "";
 
@@ -679,21 +679,21 @@ namespace VAdvantage.Utility
 
                 try
                 {
-                    if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "AD_Element"))
+                    if (VAF_Language == null || VAF_Language.Length == 0 || Env.IsBaseLanguage(VAF_Language, "VAF_ColumnDic"))
                     {
-                        sqlQry = "SELECT Name, PO_Name FROM AD_Element WHERE UPPER(ColumnName)=@ColumnName";
+                        sqlQry = "SELECT Name, PO_Name FROM VAF_ColumnDic WHERE UPPER(ColumnName)=@ColumnName";
                         SqlParameter[] param = new SqlParameter[1];
                         param[0] = new SqlParameter("@ColumnName", ColumnName.ToUpper());
                         dr = DataBase.DB.ExecuteReader(sqlQry, param);
                     }
                     else
                     {
-                        sqlQry = "SELECT t.Name, t.PO_Name FROM AD_Element_Trl t, AD_Element e "
-                            + "WHERE t.AD_Element_ID=e.AD_Element_ID AND UPPER(e.ColumnName)=@ColumnName "
-                            + "AND t.AD_Language=@AD_Language";
+                        sqlQry = "SELECT t.Name, t.PO_Name FROM VAF_ColumnDic_TL t, VAF_ColumnDic e "
+                            + "WHERE t.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND UPPER(e.ColumnName)=@ColumnName "
+                            + "AND t.VAF_Language=@VAF_Language";
                         SqlParameter[] param = new SqlParameter[2];
                         param[0] = new SqlParameter("@ColumnName", ColumnName.ToUpper());
-                        param[1] = new SqlParameter("@AD_Language", AD_Language);
+                        param[1] = new SqlParameter("@VAF_Language", VAF_Language);
                         dr = DataBase.DB.ExecuteReader(sqlQry, param);
                     }
                 }
@@ -726,7 +726,7 @@ namespace VAdvantage.Utility
                 dr.Close();
                 _log.Log(Level.SEVERE, "getElement", e);
 
-                ////ErrorLog.FillErrorLog("Msg.GetElement (String ad_language, String ColumnName, Boolean isSOTrx)", "getElement", e.Message, Message.MessageType.ERROR);
+                ////ErrorLog.FillErrorLog("Msg.GetElement (String VAF_Language, String ColumnName, Boolean isSOTrx)", "getElement", e.Message, Message.MessageType.ERROR);
                 return "";
             }
             if (retStr != null)
@@ -742,12 +742,12 @@ namespace VAdvantage.Utility
          */
         //public static String GetElement(Context ctx, String ColumnName)
         //{
-        //    return GetElement (Env.GetAD_Language(ctx), ColumnName, true);
+        //    return GetElement (Env.GetVAF_Language(ctx), ColumnName, true);
         //}   //  getElement
 
         public static String GetElement(Ctx ctx, String ColumnName)
         {
-            return GetElement(Env.GetAD_Language(ctx), ColumnName, true);
+            return GetElement(Env.GetVAF_Language(ctx), ColumnName, true);
         }
 
         /**
@@ -759,46 +759,46 @@ namespace VAdvantage.Utility
          */
         //public static String GetElement(Context ctx, String ColumnName, Boolean isSOTrx)
         //{
-        //    return GetElement (Env.GetAD_Language(ctx), ColumnName, isSOTrx);
+        //    return GetElement (Env.GetVAF_Language(ctx), ColumnName, isSOTrx);
         //}   //  getElement
 
         public static String GetElement(Ctx ctx, String ColumnName, Boolean isSOTrx)
         {
-            return GetElement(Env.GetAD_Language(ctx), ColumnName, isSOTrx);
+            return GetElement(Env.GetVAF_Language(ctx), ColumnName, isSOTrx);
         }
 
         /**************************************************************************
          *	"Translate" text.
          *  <pre>
-         *		- Check AD_Element.ColumnName	->	Name
-         *		- Check AD_Message.AD_Message 	->	MsgText
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
+         *		- Check VAF_Msg_Lable.VAF_Msg_Lable 	->	MsgText
          *  </pre>
-         *  If checking AD_Element, the SO terminology is used.
-         *  @param ad_language  Language
+         *  If checking VAF_ColumnDic, the SO terminology is used.
+         *  @param VAF_Language  Language
          *  @param isSOTrx sales order context
          *  @param text	Text - MsgText or Element Name
          *  @return translated text or original text if not found
          */
-        public static String Translate(String ad_language, Boolean isSOTrx, String text)
+        public static String Translate(String VAF_Language, Boolean isSOTrx, String text)
         {
             if (text == null || text.Equals(""))
                 return "";
-            String AD_Language = ad_language;
-            if (AD_Language == null || AD_Language.Length == 0)
-                AD_Language = Language.GetBaseAD_Language();
+            String VAF_Language = VAF_Language;
+            if (VAF_Language == null || VAF_Language.Length == 0)
+                VAF_Language = Language.GetBaseVAF_Language();
 
-            //	Check AD_Element
-            String retStr = GetElement(AD_Language, text, isSOTrx);
+            //	Check VAF_ColumnDic
+            String retStr = GetElement(VAF_Language, text, isSOTrx);
             if (!retStr.Equals(""))
                 return retStr.Trim();
 
-            //	Check AD_Message
+            //	Check VAF_Msg_Lable
             if (DatabaseType.IsMSSql)
             {
                 if (text.Equals("Date"))
                     text = "DATETIME";
             }
-            retStr = Get().Lookup(AD_Language, text);
+            retStr = Get().Lookup(VAF_Language, text);
             if (retStr != null)
                 return retStr;
 
@@ -806,7 +806,7 @@ namespace VAdvantage.Utility
             if (!text.StartsWith("*"))
             {
                 //s_log.warning("NOT found: " + text);
-                // //ErrorLog.FillErrorLog("Msg.Translate(String ad_language, Boolean isSOTrx, String text)", "NOT found: " + text, "", Message.MessageType.WARNING);
+                // //ErrorLog.FillErrorLog("Msg.Translate(String VAF_Language, Boolean isSOTrx, String text)", "NOT found: " + text, "", Message.MessageType.WARNING);
             }
             return text;
         }	//	translate
@@ -815,25 +815,25 @@ namespace VAdvantage.Utility
          *	"Translate" text (SO Context).
          *  <pre>
          *  	- Check Context
-         *		- Check AD_Message.AD_Message 	->	MsgText
-         *		- Check AD_Element.ColumnName	->	Name
+         *		- Check VAF_Msg_Lable.VAF_Msg_Lable 	->	MsgText
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
          *  </pre>
-         *  If checking AD_Element, the SO terminology is used.
-         *  @param ad_language  Language
+         *  If checking VAF_ColumnDic, the SO terminology is used.
+         *  @param VAF_Language  Language
          *  @param text	Text - MsgText or Element Name
          *  @return translated text or original text if not found
          */
-        public static String Translate(String ad_language, String text)
+        public static String Translate(String VAF_Language, String text)
         {
-            return Translate(ad_language, true, text);
+            return Translate(VAF_Language, true, text);
         }	//	translate
 
         /**
          *	"Translate" text.
          *  <pre>
          *  	- Check Context
-         *		- Check AD_Element.ColumnName	->	Name
-         *		- Check AD_Message.AD_Message 	->	MsgText
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
+         *		- Check VAF_Msg_Lable.VAF_Msg_Lable 	->	MsgText
          *  </pre>
          *  @param ctx  Context
          *  @param text	Text - MsgText or Element Name
@@ -846,7 +846,7 @@ namespace VAdvantage.Utility
         //    String s = (String)ctx.Get(text);
         //    if (s != null && s.Length > 0)
         //        return s;
-        //    return Translate (Utility.Env.GetAD_Language(ctx), ctx.IsSOTrx(), text);
+        //    return Translate (Utility.Env.GetVAF_Language(ctx), ctx.IsSOTrx(), text);
         //}   //  translate
 
         public static String Translate(Ctx ctx, String text)
@@ -856,14 +856,14 @@ namespace VAdvantage.Utility
             String s = (String)ctx.Get(text);
             if (s != null && s.Length > 0)
                 return s;
-            return Translate(Utility.Env.GetAD_Language(ctx), ctx.IsSOTrx(), text);
+            return Translate(Utility.Env.GetVAF_Language(ctx), ctx.IsSOTrx(), text);
         }
 
         /**
          *	"Translate" text.
          *  <pre>
-         *		- Check AD_Element.ColumnName	->	Name
-         *		- Check AD_Message.AD_Message 	->	MsgText
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
+         *		- Check VAF_Msg_Lable.VAF_Msg_Lable 	->	MsgText
          *  </pre>
          *  @param language Language
          *  @param text     Text
@@ -871,7 +871,7 @@ namespace VAdvantage.Utility
          */
         public static String Translate(Language language, String text)
         {
-            return Translate(language.GetAD_Language(), false, text);
+            return Translate(language.GetVAF_Language(), false, text);
         }   //  translate
 
         /**

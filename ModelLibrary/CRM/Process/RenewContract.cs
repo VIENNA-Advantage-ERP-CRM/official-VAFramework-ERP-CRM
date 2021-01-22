@@ -38,21 +38,21 @@ namespace VAdvantage.Process
             {
                 // Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and C_Contract_id=" + Record_id + " and RenewContract = 'N'";
                 //Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and C_Contract_id=" + Record_id;
-                Sql = "select RenewalType from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and isactive = 'Y' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                Sql = "select RenewalType from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and isactive = 'Y' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 string renewType = Util.GetValueOfString(DB.ExecuteScalar(Sql));
                 if (renewType == "M")
                 {
-                    Sql = "select C_Contract_id from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                    Sql = "select C_Contract_id from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 }
                 else
                 {
-                    Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and C_Contract_id=" + Record_id + " and RenewContract = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                    Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and C_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 }
             }
             else
             {
                 //Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and RenewContract = 'N'";
-                Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and RenewalType='A' and RenewContract = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and RenewalType='A' and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
             }
 
             IDataReader dr = DB.ExecuteReader(Sql);

@@ -68,7 +68,7 @@ static X_T_ImpFormat()
 //static long serialVersionUID 27562514384208L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067419L;
-/** AD_Table_ID=992 */
+/** VAF_TableView_ID=992 */
 public static int Table_ID;
  // =992;
 

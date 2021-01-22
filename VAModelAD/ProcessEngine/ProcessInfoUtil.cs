@@ -41,8 +41,8 @@ namespace VAdvantage.ProcessEngine
             int sleepTime = 2000;	//	2 secomds
             int noRetry = 5;        //  10 seconds total
             //
-            String sql = "SELECT Result, ErrorMsg FROM AD_PInstance "
-                + "WHERE AD_PInstance_ID=@instanceid"
+            String sql = "SELECT Result, ErrorMsg FROM VAF_JInstance "
+                + "WHERE VAF_JInstance_ID=@instanceid"
                 + " AND Result IS NOT NULL";
             IDataReader dr = null;
             try
@@ -50,7 +50,7 @@ namespace VAdvantage.ProcessEngine
                 SqlParameter[] param = new SqlParameter[1];
                 for (int noTry = 0; noTry < noRetry; noTry++)
                 {
-                    param[0] = new SqlParameter("@instanceid", pi.GetAD_PInstance_ID());
+                    param[0] = new SqlParameter("@instanceid", pi.GetVAF_JInstance_ID());
                     dr = DataBase.DB.ExecuteReader(sql, param, null);
                     while (dr.Read())
                     {
@@ -126,22 +126,22 @@ namespace VAdvantage.ProcessEngine
                                       ip.P_Date_To,
                                       ip.Info,
                                       ip.Info_To,
-                                      i.AD_Client_ID,
-                                      i.AD_Org_ID,
-                                      i.AD_User_ID,
+                                      i.VAF_Client_ID,
+                                      i.VAF_Org_ID,
+                                      i.VAF_UserContact_ID,
                                       NVL(PP.LOADRECURSIVEDATA,'N') as LOADRECURSIVEDATA,
-                                     nvl(pp.ShowChildOfSelected,'N') as ShowChildOfSelected,nvl(pp.AD_Reference_ID,0) as AD_Reference_ID
-                                    FROM AD_PInstance_Para ip JOIN AD_PInstance i ON (ip.AD_PINstance_ID=i.AD_PINstance_ID)
-                                   Left Outer JOIN AD_Process_Para pp
-                                        ON (pp.AD_Process_Para_ID=ip.AD_Process_Para_ID
-                                        AND pp.AD_Process_ID=i.AD_Process_ID)
-                                    WHERE ip.AD_PInstance_ID =@pinstanceid";
+                                     nvl(pp.ShowChildOfSelected,'N') as ShowChildOfSelected,nvl(pp.VAF_Control_Ref_ID,0) as VAF_Control_Ref_ID
+                                    FROM VAF_JInstance_Para ip JOIN VAF_JInstance i ON (ip.VAF_JInstance_ID=i.VAF_JInstance_ID)
+                                   Left Outer JOIN VAF_Job_Para pp
+                                        ON (pp.VAF_Job_Para_ID=ip.VAF_Job_Para_ID
+                                        AND pp.VAF_Job_ID=i.VAF_Job_ID)
+                                    WHERE ip.VAF_JInstance_ID =@pinstanceid";
 
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@pinstanceid", pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@pinstanceid", pi.GetVAF_JInstance_ID());
                 //param[0] = new SqlParameter("@pinstanceid", 1000296);
 
                 dr = DataBase.DB.ExecuteReader(sql, param, null);
@@ -269,10 +269,10 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    if (pi.GetAD_Client_ID() == null)
-                        pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
-                    if (pi.GetAD_User_ID() == null)
-                        pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    if (pi.GetVAF_Client_ID() == null)
+                        pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
+                    if (pi.GetVAF_UserContact_ID() == null)
+                        pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 
@@ -329,7 +329,7 @@ namespace VAdvantage.ProcessEngine
                 {
                     _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
                 }
-                Language _language = Language.GetLanguage(_ctx.GetAD_Language());
+                Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
                 //Get Query to fetch identifier value from table based on column selected. it will be used to display identifires on for parameter in report.
                 eSql = VLookUpFactory.GetLookup_TableDirEmbed(_language, columnName, columnName.Substring(0, columnName.Length - 3));
@@ -473,11 +473,11 @@ namespace VAdvantage.ProcessEngine
             String sql = "SELECT p.ParameterName,"         			    	//  1
                    + " p.P_String,p.P_String_To, p.P_Number,p.P_Number_To,"    //  2/3 4/5
                    + " p.P_Date,p.P_Date_To, p.Info,p.Info_To, "               //  6/7 8/9
-                   + " i.AD_Client_ID, i.AD_Org_ID, i.AD_User_ID "				//	10..12
+                   + " i.VAF_Client_ID, i.VAF_Org_ID, i.VAF_UserContact_ID "				//	10..12
                 // +" p.P_Date_Time,p.P_Date_Time_To,p.P_Time, p.P_Time_To "
-                   + "FROM AD_PInstance_Para p"
-                   + " INNER JOIN AD_PInstance i ON (p.AD_PInstance_ID=i.AD_PInstance_ID) "
-                   + "WHERE p.AD_PInstance_ID=@pinstanceid "
+                   + "FROM VAF_JInstance_Para p"
+                   + " INNER JOIN VAF_JInstance i ON (p.VAF_JInstance_ID=i.VAF_JInstance_ID) "
+                   + "WHERE p.VAF_JInstance_ID=@pinstanceid "
                    + "ORDER BY p.SeqNo";
 
 
@@ -490,23 +490,23 @@ namespace VAdvantage.ProcessEngine
             //                                      ip.P_Date_To,
             //                                      ip.Info,
             //                                      ip.Info_To,
-            //                                      i.AD_Client_ID,
-            //                                      i.AD_Org_ID,
-            //                                      i.AD_User_ID,
+            //                                      i.VAF_Client_ID,
+            //                                      i.VAF_Org_ID,
+            //                                      i.VAF_UserContact_ID,
             //                                      ip.P_Date_Time,
             //                                      ip.P_Date_Time_To,
             //                                      ip.P_Time,
             //                                      ip.P_Time_To ,
-            //                                     pp.AD_REFERENCE_ID
-            //                                    FROM AD_PInstance_Para ip JOIN AD_PInstance i ON (ip.AD_PINstance_ID=i.AD_PINstance_ID)
-            //                                    LEFT  outer JOIN   AD_Process_Para pp ON (pp.AD_Process_ID=i.AD_Process_ID)
-            //                                    WHERE ip.AD_PInstance_ID =@pinstanceid";
+            //                                     pp.VAF_CONTROL_REF_ID
+            //                                    FROM VAF_JInstance_Para ip JOIN VAF_JInstance i ON (ip.VAF_JInstance_ID=i.VAF_JInstance_ID)
+            //                                    LEFT  outer JOIN   VAF_Job_Para pp ON (pp.VAF_Job_ID=i.VAF_Job_ID)
+            //                                    WHERE ip.VAF_JInstance_ID =@pinstanceid";
 
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@pinstanceid", pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@pinstanceid", pi.GetVAF_JInstance_ID());
                 //param[0] = new SqlParameter("@pinstanceid", 1000296);
 
                 dr = DataBase.DB.ExecuteReader(sql, param, null);
@@ -596,10 +596,10 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    if (pi.GetAD_Client_ID() == null)
-                        pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
-                    if (pi.GetAD_User_ID() == null)
-                        pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    if (pi.GetVAF_Client_ID() == null)
+                        pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
+                    if (pi.GetVAF_UserContact_ID() == null)
+                        pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 
@@ -636,10 +636,10 @@ namespace VAdvantage.ProcessEngine
             String sql = "SELECT p.ParameterName,"         			    	//  1
                 + " p.P_String,p.P_String_To, p.P_Number,p.P_Number_To,"    //  2/3 4/5
                 + " p.P_Date,p.P_Date_To, p.Info,p.Info_To, "               //  6/7 8/9
-                + " i.AD_Client_ID, i.AD_Org_ID "				//	10..12
-                + " FROM AD_CrystalInstance_Para p"
-                + " INNER JOIN AD_CrystalInstance i ON (p.AD_CrystalInstance_ID=i.AD_CrystalInstance_ID) "
-                + "WHERE p.AD_CrystalInstance_ID=@pinstanceid "
+                + " i.VAF_Client_ID, i.VAF_Org_ID "				//	10..12
+                + " FROM VAF_CrystalInstance_Para p"
+                + " INNER JOIN VAF_CrystalInstance i ON (p.VAF_CrystalInstance_ID=i.VAF_CrystalInstance_ID) "
+                + "WHERE p.VAF_CrystalInstance_ID=@pinstanceid "
                 + "ORDER BY p.SeqNo";
             IDataReader dr = null;
             try
@@ -685,10 +685,10 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    //if (pi.GetAD_Client_ID() == null)
-                    //    pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
-                    //if (pi.GetAD_User_ID() == null)
-                    //    pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    //if (pi.GetVAF_Client_ID() == null)
+                    //    pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
+                    //if (pi.GetVAF_UserContact_ID() == null)
+                    //    pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 
@@ -718,14 +718,14 @@ namespace VAdvantage.ProcessEngine
         public static void SetLogFromDB(ProcessInfo pi)
         {
             String sql = "SELECT Log_ID, P_ID, P_Date, P_Number, P_Msg "
-                + "FROM AD_PInstance_Log "
-                + "WHERE AD_PInstance_ID=@instanceid "
+                + "FROM VAF_JInstance_Log "
+                + "WHERE VAF_JInstance_ID=@instanceid "
                 + "ORDER BY Log_ID";
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@instanceid", pi.GetAD_PInstance_ID());
+                param[0] = new SqlParameter("@instanceid", pi.GetVAF_JInstance_ID());
                 dr = DataBase.DB.ExecuteReader(sql, param);
 
                 int? ival;
@@ -770,21 +770,21 @@ namespace VAdvantage.ProcessEngine
                 _log.Fine("No Log");
                 return;
             }
-            if (pi.GetAD_PInstance_ID() == 0)
+            if (pi.GetVAF_JInstance_ID() == 0)
             {
-                _log.Log(Level.WARNING, "AD_PInstance_ID==0");
+                _log.Log(Level.WARNING, "VAF_JInstance_ID==0");
                 return;
             }
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
             for (int i = 0; i < logs.Length; i++)
             {
-                StringBuilder sql = new StringBuilder("INSERT INTO AD_PInstance_Log "
-                    + "(AD_PInstance_ID, Log_ID, P_Date, P_ID, P_Number, P_Msg)"
+                StringBuilder sql = new StringBuilder("INSERT INTO VAF_JInstance_Log "
+                    + "(VAF_JInstance_ID, Log_ID, P_Date, P_ID, P_Number, P_Msg)"
                     + " VALUES (");
-                sql.Append(pi.GetAD_PInstance_ID()).Append(",")
+                sql.Append(pi.GetVAF_JInstance_ID()).Append(",")
                     .Append(logs[i].GetLog_ID()).Append(",");
                 if (logs[i].GetP_Date() == null)
                     sql.Append("NULL");
@@ -814,8 +814,8 @@ namespace VAdvantage.ProcessEngine
                 SqlExec.ExecuteQuery.ExecuteNonQuery(sql.ToString());
             }
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
             pi.SetLogList(null);	//	otherwise log entries are twice
         }
 

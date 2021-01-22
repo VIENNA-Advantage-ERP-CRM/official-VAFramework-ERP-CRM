@@ -78,7 +78,7 @@ static X_M_OperationResource()
 //static long serialVersionUID 27562514380259L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063470L;
-/** AD_Table_ID=797 */
+/** VAF_TableView_ID=797 */
 public static int Table_ID;
  // =797;
 

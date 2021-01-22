@@ -115,7 +115,7 @@
         }
         catch (e) {
            
-                this.log.log(VIS.Logging.Level.WARNING, "Class=" + className + ", AD_Form Name=" + json.Name, e)
+                this.log.log(VIS.Logging.Level.WARNING, "Class=" + className + ", VAF_Page Name=" + json.Name, e)
                 return false;
            
             

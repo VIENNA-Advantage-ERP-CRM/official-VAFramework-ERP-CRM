@@ -70,7 +70,7 @@ static X_C_Calendar()
 //static long serialVersionUID 27562514370949L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054160L;
-/** AD_Table_ID=139 */
+/** VAF_TableView_ID=139 */
 public static int Table_ID;
  // =139;
 

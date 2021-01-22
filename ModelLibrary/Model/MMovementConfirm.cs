@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 cLine.Save(move.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
             {
                 CreateConfirmParameters(move, confirm.GetM_MovementConfirm_ID(), confirm.GetCtx());
             }
@@ -215,7 +215,7 @@ namespace VAdvantage.Model
                 _sql.Append(@"SELECT NVL(VA010_PercentQtyToVerify,0)VA010_PercentQtyToVerify,
                                 NVL(VA010_ReceiptQtyFrom,0) VA010_ReceiptQtyFrom,
                                 NVL(VA010_ReceiptQtyTo,0) VA010_ReceiptQtyTo FROM VA010_CheckingQty 
-                              WHERE IsActive='Y' AND VA010_Qualityplan_ID=" + VA010_QUalityPlan_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID());
+                              WHERE IsActive='Y' AND VA010_Qualityplan_ID=" + VA010_QUalityPlan_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID());
 
 
                 _ds = DB.ExecuteDataset(_sql.ToString(), null, Trx_Name);
@@ -279,8 +279,8 @@ namespace VAdvantage.Model
                                 pos.Set_ValueNoCheck("M_MovementLineConfirm_ID", Util.GetValueOfInt(M_MoveConfirmLine_ID[i]));
                                 pos.Set_ValueNoCheck("VA010_TestPrmtrList_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_TestPrmtrList_ID"]));
                                 pos.Set_ValueNoCheck("VA010_QuantityToVerify", Util.GetValueOfDecimal(_qty));
-                                pos.Set_ValueNoCheck("AD_Client_ID", ctx.GetAD_Client_ID());
-                                pos.Set_ValueNoCheck("AD_Org_ID", ctx.GetAD_Org_ID());
+                                pos.Set_ValueNoCheck("VAF_Client_ID", ctx.GetVAF_Client_ID());
+                                pos.Set_ValueNoCheck("VAF_Org_ID", ctx.GetVAF_Org_ID());
 
                                 if (pos.Save(Trx_Name))
                                 {
@@ -364,8 +364,8 @@ namespace VAdvantage.Model
         {
             if (isApproved && !IsApproved())
             {
-                int AD_User_ID = GetCtx().GetAD_User_ID();
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
                 String info = user.GetName()
                     + ": "
                     + Msg.Translate(GetCtx(), "IsApproved")
@@ -468,7 +468,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetUpdated(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetUpdated(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -476,7 +476,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetUpdated(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetUpdated(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -903,7 +903,7 @@ namespace VAdvantage.Model
                 }
 
                 MMovementConfirm RevMoveConf = new MMovementConfirm(GetCtx(), 0, Get_Trx());
-                CopyValues(this, RevMoveConf, GetAD_Client_ID(), GetAD_Org_ID());
+                CopyValues(this, RevMoveConf, GetVAF_Client_ID(), GetVAF_Org_ID());
                 RevMoveConf.SetDocumentNo(GetDocumentNo());
                 // RevMoveConf.SetDocStatus("RE");
                 //  RevMoveConf.SetDocAction(DOCACTION_Void);
@@ -916,7 +916,7 @@ namespace VAdvantage.Model
                     {
                         MMovementLineConfirm oLines = Lines[i];
                         MMovementLineConfirm revLines = new MMovementLineConfirm(GetCtx(), 0, Get_TrxName());
-                        CopyValues(oLines, revLines, oLines.GetAD_Client_ID(), oLines.GetAD_Org_ID());
+                        CopyValues(oLines, revLines, oLines.GetVAF_Client_ID(), oLines.GetVAF_Org_ID());
                         revLines.SetM_MovementConfirm_ID(RevMoveConf.GetM_MovementConfirm_ID());
                         revLines.SetConfirmedQty(Decimal.Negate(revLines.GetConfirmedQty()));
                         revLines.SetDifferenceQty(Decimal.Negate(revLines.GetDifferenceQty()));
@@ -978,7 +978,7 @@ namespace VAdvantage.Model
             log.Info("ReverseCorrectIt - " + ToString());
             //Move Confirm Reversal Arpit
             MMovementConfirm reversal = new MMovementConfirm(GetCtx(), 0, Get_TrxName());
-            CopyValues(this, reversal, GetAD_Client_ID(), GetAD_Org_ID());
+            CopyValues(this, reversal, GetVAF_Client_ID(), GetVAF_Org_ID());
             reversal.SetDocStatus(DOCSTATUS_Drafted);
             reversal.SetDocAction(DOCACTION_Complete);
             reversal.SetIsApproved(false);
@@ -994,7 +994,7 @@ namespace VAdvantage.Model
                     {
                         MMovementLineConfirm linesfrom = new MMovementLineConfirm(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_MovementLineConfirm_ID"]), Get_TrxName());
                         MMovementLineConfirm linesTo = new MMovementLineConfirm(GetCtx(), 0, Get_TrxName());
-                        CopyValues(linesfrom, linesTo, GetAD_Client_ID(), GetAD_Org_ID());
+                        CopyValues(linesfrom, linesTo, GetVAF_Client_ID(), GetVAF_Org_ID());
                         linesTo.SetM_MovementConfirm_ID(reversal.GetM_MovementConfirm_ID());
                         linesTo.SetConfirmedQty(Decimal.Negate(linesfrom.GetConfirmedQty()));
                         linesTo.SetDifferenceQty(Decimal.Negate(linesfrom.GetDifferenceQty()));
@@ -1081,7 +1081,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetUpdatedBy();

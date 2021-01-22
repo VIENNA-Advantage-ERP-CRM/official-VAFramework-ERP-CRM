@@ -8,27 +8,27 @@ namespace VAdvantage.Model
     using VAdvantage.Classes;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_QueryLog
+    /** Generated Model for VAF_DBQueryLog
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_QueryLog : PO
+    public class X_VAF_DBQueryLog : PO
 {
-public X_AD_QueryLog (Context ctx, int AD_QueryLog_ID, Trx trxName) : base (ctx, AD_QueryLog_ID, trxName)
+public X_VAF_DBQueryLog (Context ctx, int VAF_DBQueryLog_ID, Trx trxName) : base (ctx, VAF_DBQueryLog_ID, trxName)
 {
-/** if (AD_QueryLog_ID == 0)
+/** if (VAF_DBQueryLog_ID == 0)
 {
-SetAD_QueryLog_ID (0);
+SetVAF_DBQueryLog_ID (0);
 SetAD_Session_ID (0);
 SetRecordCount (0);
 SetWhereClause (null);
 }
  */
 }
-public X_AD_QueryLog (Ctx ctx, int AD_QueryLog_ID, Trx trxName) : base (ctx, AD_QueryLog_ID, trxName)
+public X_VAF_DBQueryLog (Ctx ctx, int VAF_DBQueryLog_ID, Trx trxName) : base (ctx, VAF_DBQueryLog_ID, trxName)
 {
-/** if (AD_QueryLog_ID == 0)
+/** if (VAF_DBQueryLog_ID == 0)
 {
-SetAD_QueryLog_ID (0);
+SetVAF_DBQueryLog_ID (0);
 SetAD_Session_ID (0);
 SetRecordCount (0);
 SetWhereClause (null);
@@ -40,7 +40,7 @@ SetWhereClause (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_QueryLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBQueryLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -48,7 +48,7 @@ public X_AD_QueryLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_QueryLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBQueryLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -56,13 +56,13 @@ public X_AD_QueryLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_QueryLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_DBQueryLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_QueryLog()
+static X_VAF_DBQueryLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -71,12 +71,12 @@ static X_AD_QueryLog()
 //static long serialVersionUID = 27562514363269L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046480L;
-/** AD_Table_ID=942 */
+/** VAF_TableView_ID=942 */
 public static int Table_ID;
  // =942;
 
-/** TableName=AD_QueryLog */
-public static String Table_Name="AD_QueryLog";
+/** TableName=VAF_DBQueryLog */
+public static String Table_Name="VAF_DBQueryLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -110,21 +110,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_QueryLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_DBQueryLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Query Log.
-@param AD_QueryLog_ID Database query log */
-public void SetAD_QueryLog_ID (int AD_QueryLog_ID)
+@param VAF_DBQueryLog_ID Database query log */
+public void SetVAF_DBQueryLog_ID (int VAF_DBQueryLog_ID)
 {
-if (AD_QueryLog_ID < 1) throw new ArgumentException ("AD_QueryLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_QueryLog_ID", AD_QueryLog_ID);
+if (VAF_DBQueryLog_ID < 1) throw new ArgumentException ("VAF_DBQueryLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_DBQueryLog_ID", VAF_DBQueryLog_ID);
 }
 /** Get Query Log.
 @return Database query log */
-public int GetAD_QueryLog_ID() 
+public int GetVAF_DBQueryLog_ID() 
 {
-Object ii = Get_Value("AD_QueryLog_ID");
+Object ii = Get_Value("VAF_DBQueryLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -132,21 +132,21 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_QueryLog_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_DBQueryLog_ID().ToString());
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,18 +166,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -76,7 +76,7 @@ static X_C_Dunning()
 //static long serialVersionUID 27562514371936L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055147L;
-/** AD_Table_ID=301 */
+/** VAF_TableView_ID=301 */
 public static int Table_ID;
  // =301;
 

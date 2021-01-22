@@ -26,9 +26,9 @@ namespace VAModelAD.Model
             PORecord.AddParentChild(X_CM_Container_Element.Table_ID, X_CM_Container_Element.Table_Name);
 
             //cascade
-            PORecord.AddCascade(X_AD_Attachment.Table_ID, X_AD_Attachment.Table_Name);
-            PORecord.AddCascade(X_AD_Archive.Table_ID, X_AD_Archive.Table_Name);
-            PORecord.AddCascade(X_AD_Note.Table_ID, X_AD_Note.Table_Name);
+            PORecord.AddCascade(X_VAF_Attachment.Table_ID, X_VAF_Attachment.Table_Name);
+            PORecord.AddCascade(X_VAF_Archive.Table_ID, X_VAF_Archive.Table_Name);
+            PORecord.AddCascade(X_VAF_Notice.Table_ID, X_VAF_Notice.Table_Name);
             PORecord.AddCascade(X_MailAttachment1.Table_ID, X_MailAttachment1.Table_Name);
             PORecord.AddCascade(X_AppointmentsInfo.Table_ID, X_AppointmentsInfo.Table_Name);
             PORecord.AddCascade(X_K_Index.Table_ID, X_K_Index.Table_Name);
@@ -49,14 +49,14 @@ namespace VAModelAD.Model
         /// <returns></returns>
         private bool InsertTreeNode(PO po)
         {
-            int AD_Table_ID = po.Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, po.GetCtx()))
+            int VAF_TableView_ID = po.Get_Table_ID();
+            if (!MTree.HasTree(VAF_TableView_ID, po.GetCtx()))
                 return false;
             int id = po.Get_ID();
-            int AD_Client_ID = po.GetAD_Client_ID();
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, po.GetCtx());
+            int VAF_Client_ID = po.GetVAF_Client_ID();
+            String treeTableName = MTree.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
             int C_Element_ID = 0;
-            if (AD_Table_ID == X_C_ElementValue.Table_ID)
+            if (VAF_TableView_ID == X_C_ElementValue.Table_ID)
             {
                 int? ii = (int?)po.Get_Value("C_Element_ID");
                 if (ii != null)
@@ -65,44 +65,44 @@ namespace VAModelAD.Model
             //
             StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .Append(treeTableName)
-                .Append(" (AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, ")
-                .Append("AD_Tree_ID, Node_ID, Parent_ID, SeqNo) ")
+                .Append(" (VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, ")
+                .Append("VAF_TreeInfo_ID, Node_ID, Parent_ID, SeqNo) ")
                 //
-                .Append("SELECT t.AD_Client_ID,0, 'Y', SysDate, 0, SysDate, 0,")
-                .Append("t.AD_Tree_ID, ").Append(id).Append(", 0, 999 ")
-                .Append("FROM AD_Tree t ")
-                .Append("WHERE t.AD_Client_ID=").Append(AD_Client_ID).Append(" AND t.IsActive='Y'");
+                .Append("SELECT t.VAF_Client_ID,0, 'Y', SysDate, 0, SysDate, 0,")
+                .Append("t.VAF_TreeInfo_ID, ").Append(id).Append(", 0, 999 ")
+                .Append("FROM VAF_TreeInfo t ")
+                .Append("WHERE t.VAF_Client_ID=").Append(VAF_Client_ID).Append(" AND t.IsActive='Y'");
             //	Account Element Value handling
             if (C_Element_ID != 0)
                 sb.Append(" AND EXISTS (SELECT * FROM C_Element ae WHERE ae.C_Element_ID=")
-                    .Append(C_Element_ID).Append(" AND t.AD_Tree_ID=ae.AD_Tree_ID)");
+                    .Append(C_Element_ID).Append(" AND t.VAF_TreeInfo_ID=ae.VAF_TreeInfo_ID)");
             else	//	std trees
-                sb.Append(" AND t.IsAllNodes='Y' AND t.AD_Table_ID=").Append(AD_Table_ID);
+                sb.Append(" AND t.IsAllNodes='Y' AND t.VAF_TableView_ID=").Append(VAF_TableView_ID);
             //	Duplicate Check
             sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(treeTableName).Append(" e ")
-                .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
+                .Append("WHERE e.VAF_TreeInfo_ID=t.VAF_TreeInfo_ID AND Node_ID=").Append(id).Append(")");
             //
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
-            if (AD_Table_ID == X_AD_Org.Table_ID)
+            if (VAF_TableView_ID == X_VAF_Org.Table_ID)
             {
-                X_AD_Org Org = new X_AD_Org(po.GetCtx(), id, null);
+                X_VAF_Org Org = new X_VAF_Org(po.GetCtx(), id, null);
                 if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
                 {
                     if (Org.IsOrgUnit())
                     {
-                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(po.GetAD_Client_ID(), AD_Table_ID);
-                        sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+                        int DefaultTree_ID = MTree.GetDefaultVAF_TreeInfo_ID(po.GetVAF_Client_ID(), VAF_TableView_ID);
+                        sb.Append(" AND t.VAF_TreeInfo_ID=").Append(DefaultTree_ID);
                     }
                 }
             }
             int no = DB.ExecuteQuery(sb.ToString(), null, po.Get_Trx());
             if (no > 0)
             {
-               po.GetLog().Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+               po.GetLog().Fine("#" + no.ToString() + " - VAF_TableView_ID=" + VAF_TableView_ID);
             }
             else
             {
-                po.GetLog().Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+                po.GetLog().Warning("#" + no.ToString() + " - VAF_TableView_ID=" + VAF_TableView_ID);
             }
             return no > 0;
         }
@@ -116,45 +116,45 @@ namespace VAModelAD.Model
             int id = po.Get_ID();
             if (id == 0)
                 id = po.Get_IDOld();
-            int AD_Table_ID = po.Get_Table_ID();
-            if (!MTree.HasTree(AD_Table_ID, po.GetCtx()))
+            int VAF_TableView_ID = po.Get_Table_ID();
+            if (!MTree.HasTree(VAF_TableView_ID, po.GetCtx()))
                 return false;
-            String treeTableName = MTree.GetNodeTableName(AD_Table_ID, po.GetCtx());
+            String treeTableName = MTree.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
             if (treeTableName == null)
                 return false;
             //
             StringBuilder sb = new StringBuilder("DELETE FROM ")
                 .Append(treeTableName)
                 .Append(" n WHERE Node_ID=").Append(id)
-                .Append(" AND EXISTS (SELECT * FROM AD_Tree t ")
-                .Append("WHERE t.AD_Tree_ID=n.AD_Tree_ID AND t.AD_Table_ID=")
-                .Append(AD_Table_ID).Append(")");
+                .Append(" AND EXISTS (SELECT * FROM VAF_TreeInfo t ")
+                .Append("WHERE t.VAF_TreeInfo_ID=n.VAF_TreeInfo_ID AND t.VAF_TableView_ID=")
+                .Append(VAF_TableView_ID).Append(")");
             //
             int no = DB.ExecuteQuery(sb.ToString(), null, po.Get_Trx());
             if (no > 0)
-               po.GetLog().Fine("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+               po.GetLog().Fine("#" + no.ToString() + " - VAF_TableView_ID=" + VAF_TableView_ID);
             else
-                po.GetLog().Warning("#" + no.ToString() + " - AD_Table_ID=" + AD_Table_ID);
+                po.GetLog().Warning("#" + no.ToString() + " - VAF_TableView_ID=" + VAF_TableView_ID);
             return no > 0;
         }
 
         public bool BeforeSave(PO po)
         {
 
-            if (po.GetAD_Org_ID() == 0
+            if (po.GetVAF_Org_ID() == 0
                 && (po.GetAccessLevel() == PO.ACCESSLEVEL_ORG
                     || (po.GetAccessLevel() == PO.ACCESSLEVEL_CLIENTORG
-                        && MClientShare.IsOrgLevelOnly(po.GetAD_Client_ID(), po.Get_Table_ID()))))
+                        && MClientShare.IsOrgLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))))
             {
-                po.GetLog().SaveError("FillMandatory", Msg.GetElement(po.GetCtx(), "AD_Org_ID"));
+                po.GetLog().SaveError("FillMandatory", Msg.GetElement(po.GetCtx(), "VAF_Org_ID"));
                 return false;
             }
 
             //	Should be Org 0
-            if (po.GetAD_Org_ID() != 0)
+            if (po.GetVAF_Org_ID() != 0)
             {
                 bool reset = po.GetAccessLevel() == PO.ACCESSLEVEL_SYSTEM;
-                if (!reset && MClientShare.IsClientLevelOnly(po.GetAD_Client_ID(), po.Get_Table_ID()))
+                if (!reset && MClientShare.IsClientLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))
                 {
                     reset = po.GetAccessLevel() == PO.ACCESSLEVEL_CLIENT
                         || po.GetAccessLevel() == PO.ACCESSLEVEL_SYSTEMCLIENT
@@ -163,7 +163,7 @@ namespace VAModelAD.Model
                 if (reset)
                 {
                     po.GetLog().Warning("Set Org to 0");
-                    po.SetAD_Org_ID(0);
+                    po.SetVAF_Org_ID(0);
                 }
             }
 
@@ -187,10 +187,10 @@ namespace VAModelAD.Model
                 // Get Master Data Properties
                 var MasterDetails = po.GetMasterDetails();
                 // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
-                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
+                if (MasterDetails != null && MasterDetails.VAF_TableView_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
                 {
                     // create object of parent table
-                    MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
+                    MTable tbl = MTable.Get(p_ctx, MasterDetails.VAF_TableView_ID);
                     PO _po = null;
                     bool updateMasID = false;
                     // check if Master table has single key or multiple keys or single key
@@ -227,7 +227,7 @@ namespace VAModelAD.Model
                     }
                     if (_po != null)
                     {
-                        _po.SetAD_Window_ID(MasterDetails.AD_Window_ID);
+                        _po.SetVAF_Screen_ID(MasterDetails.VAF_Screen_ID);
                         // copy date from Version table to Master table
                         bool saveSuccess = CopyVersionToMaster(_po,po);
                         if (!saveSuccess)
@@ -269,7 +269,7 @@ namespace VAModelAD.Model
             if (success)
                 DeleteTreeNode(po);
 
-            if(po.Get_Table_ID() == X_AD_Attachment.Table_ID)
+            if(po.Get_Table_ID() == X_VAF_Attachment.Table_ID)
             {
                 MAttachment.DeleteFileData(po.Get_Table_ID().ToString() + "_" + po.Get_ID().ToString());
             }
@@ -291,16 +291,16 @@ namespace VAModelAD.Model
             if (value == null)  //	not overwritten by DocType and not manually entered
             {
                 if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                    value = MSequence.GetDocumentNo(po.GetAD_Client_ID(), masDet.TableName, po.Get_Trx(), po.GetCtx());
+                    value = MSequence.GetDocumentNo(po.GetVAF_Client_ID(), masDet.TableName, po.Get_Trx(), po.GetCtx());
                 else
-                    value = MSequence.GetDocumentNo(po.GetAD_Client_ID(), po.GetTableName(), po.Get_Trx(), po.GetCtx());
+                    value = MSequence.GetDocumentNo(po.GetVAF_Client_ID(), po.GetTableName(), po.Get_Trx(), po.GetCtx());
             }
             return value;
         }
         
-        public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
+        public int GetNextID(int VAF_Client_ID, string TableName, Trx trx)
         {
-            return MSequence.GetNextID(AD_Client_ID, TableName, trx);
+            return MSequence.GetNextID(VAF_Client_ID, TableName, trx);
         }
 
         public string GetDocumentNo(PO po)
@@ -434,14 +434,14 @@ namespace VAModelAD.Model
            return  Common.GetColumnLookup(ctx, colInfo);
         }
 
-        public dynamic GetAttachment(Ctx ctx, int aD_Table_ID, int id)
+        public dynamic GetAttachment(Ctx ctx, int vaf_tableview_ID, int id)
         {
-           return  MAttachment.Get(ctx, aD_Table_ID, id);
+           return  MAttachment.Get(ctx, vaf_tableview_ID, id);
         }
 
-        public dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx)
+        public dynamic CreateAttachment(Ctx ctx, int vaf_tableview_ID, int id, Trx trx)
         {
-            return new  MAttachment(ctx, aD_Table_ID, id, trx);
+            return new  MAttachment(ctx, vaf_tableview_ID, id, trx);
         }
     }
 }

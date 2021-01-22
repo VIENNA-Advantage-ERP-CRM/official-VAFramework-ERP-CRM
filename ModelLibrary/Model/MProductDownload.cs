@@ -50,7 +50,7 @@ namespace VAdvantage.Model
                 return;
             //
             int count = 0;
-            sql = "SELECT AD_Client_ID, AD_Org_ID, M_Product_ID, Name, DownloadURL "
+            sql = "SELECT VAF_Client_ID, VAF_Org_ID, M_Product_ID, Name, DownloadURL "
                 + "FROM M_Product "
                 + "WHERE DownloadURL IS NOT NULL";
             IDataReader idr = null;
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    int AD_Client_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
-                    int AD_Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
+                    int VAF_Client_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
+                    int VAF_Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
                     int M_Product_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
                     String Name = idr[3].ToString();
                     String DownloadURL = idr[4].ToString();
                     //
                     MProductDownload pdl = new MProductDownload(ctx, 0, null);
-                    pdl.SetClientOrg(AD_Client_ID, AD_Org_ID);
+                    pdl.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
                     pdl.SetM_Product_ID(M_Product_ID);
                     pdl.SetName(Name);
                     pdl.SetDownloadURL(DownloadURL);

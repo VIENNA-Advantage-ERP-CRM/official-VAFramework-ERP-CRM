@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserMailConfigration
+/** Generated Model for VAF_UserMailConfigration
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserMailConfigration : PO
+public class X_VAF_UserMailConfigration : PO
 {
-public X_AD_UserMailConfigration (Context ctx, int AD_UserMailConfigration_ID, Trx trxName) : base (ctx, AD_UserMailConfigration_ID, trxName)
+public X_VAF_UserMailConfigration (Context ctx, int VAF_UserMailConfigration_ID, Trx trxName) : base (ctx, VAF_UserMailConfigration_ID, trxName)
 {
-/** if (AD_UserMailConfigration_ID == 0)
+/** if (VAF_UserMailConfigration_ID == 0)
 {
-SetAD_UserMailConfigration_ID (0);
+SetVAF_UserMailConfigration_ID (0);
 }
  */
 }
-public X_AD_UserMailConfigration (Ctx ctx, int AD_UserMailConfigration_ID, Trx trxName) : base (ctx, AD_UserMailConfigration_ID, trxName)
+public X_VAF_UserMailConfigration (Ctx ctx, int VAF_UserMailConfigration_ID, Trx trxName) : base (ctx, VAF_UserMailConfigration_ID, trxName)
 {
-/** if (AD_UserMailConfigration_ID == 0)
+/** if (VAF_UserMailConfigration_ID == 0)
 {
-SetAD_UserMailConfigration_ID (0);
+SetVAF_UserMailConfigration_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_UserMailConfigration_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMailConfigration (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserMailConfigration (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_UserMailConfigration (Context ctx, DataRow rs, Trx trxName) : base(c
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMailConfigration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserMailConfigration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_UserMailConfigration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMailConfigration (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserMailConfigration (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserMailConfigration()
+static X_VAF_UserMailConfigration()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -68,12 +68,12 @@ static X_AD_UserMailConfigration()
 //static long serialVersionUID 27589121536891L;
 /** Last Updated Timestamp 6/2/2011 12:00:20 PM */
 public static long updatedMS = 1306996220102L;
-/** AD_Table_ID=1000009 */
+/** VAF_TableView_ID=1000009 */
 public static int Table_ID;
  // =1000009;
 
-/** TableName=AD_UserMailConfigration */
-public static String Table_Name="AD_UserMailConfigration";
+/** TableName=VAF_UserMailConfigration */
+public static String Table_Name="VAF_UserMailConfigration";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -107,37 +107,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserMailConfigration[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserMailConfigration[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_UserMailConfigration_ID.
-@param AD_UserMailConfigration_ID AD_UserMailConfigration_ID */
-public void SetAD_UserMailConfigration_ID (int AD_UserMailConfigration_ID)
+/** Set VAF_UserMailConfigration_ID.
+@param VAF_UserMailConfigration_ID VAF_UserMailConfigration_ID */
+public void SetVAF_UserMailConfigration_ID (int VAF_UserMailConfigration_ID)
 {
-if (AD_UserMailConfigration_ID < 1) throw new ArgumentException ("AD_UserMailConfigration_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserMailConfigration_ID", AD_UserMailConfigration_ID);
+if (VAF_UserMailConfigration_ID < 1) throw new ArgumentException ("VAF_UserMailConfigration_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserMailConfigration_ID", VAF_UserMailConfigration_ID);
 }
-/** Get AD_UserMailConfigration_ID.
-@return AD_UserMailConfigration_ID */
-public int GetAD_UserMailConfigration_ID() 
+/** Get VAF_UserMailConfigration_ID.
+@return VAF_UserMailConfigration_ID */
+public int GetVAF_UserMailConfigration_ID() 
 {
-Object ii = Get_Value("AD_UserMailConfigration_ID");
+Object ii = Get_Value("VAF_UserMailConfigration_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -368,10 +368,10 @@ public String GetSmtpUsername()
 return (String)Get_Value("SmtpUsername");
 }
 
-/** TableAttach AD_Reference_ID=1000007 */
-public static int TABLEATTACH_AD_Reference_ID=1000007;
-/** User Contact = AD_User */
-public static String TABLEATTACH_UserContact = "AD_User";
+/** TableAttach VAF_Control_Ref_ID=1000007 */
+public static int TABLEATTACH_VAF_Control_Ref_ID=1000007;
+/** User Contact = VAF_UserContact */
+public static String TABLEATTACH_UserContact = "VAF_UserContact";
 /** Business Partner = C_BPartner */
 public static String TABLEATTACH_BusinessPartner = "C_BPartner";
 /** Is test a valid value.
@@ -379,14 +379,14 @@ public static String TABLEATTACH_BusinessPartner = "C_BPartner";
 @returns true if valid **/
 public bool IsTableAttachValid (String test)
 {
-return test == null || test.Equals("AD_User") || test.Equals("C_BPartner");
+return test == null || test.Equals("VAF_UserContact") || test.Equals("C_BPartner");
 }
 /** Set TableAttach.
 @param TableAttach TableAttach */
 public void SetTableAttach (String TableAttach)
 {
 if (!IsTableAttachValid(TableAttach))
-throw new ArgumentException ("TableAttach Invalid value - " + TableAttach + " - Reference_ID=1000007 - AD_User - C_BPartner");
+throw new ArgumentException ("TableAttach Invalid value - " + TableAttach + " - Reference_ID=1000007 - VAF_UserContact - C_BPartner");
 if (TableAttach != null && TableAttach.Length > 10)
 {
 log.Warning("Length > 10 - truncated");

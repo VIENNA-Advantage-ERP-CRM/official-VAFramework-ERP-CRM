@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         //	Translated Name			
         private String _trlName = null;
         //	Display Language		
-        private static String _AD_Language = null;
+        private static String _VAF_Language = null;
         //	Country Cache			
         //private static CCache<string, MCountry> s_countries = new CCache<string, MCountry>();
         private static CCache<String, MCountry> s_countries = null;
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
         private static void LoadAllCountries(Ctx ctx)
         {
             MClient client = MClient.Get(ctx);
-            MLanguage lang = MLanguage.Get(ctx, client.GetAD_Language());
+            MLanguage lang = MLanguage.Get(ctx, client.GetVAF_Language());
             MCountry usa = null;
             //
 
@@ -155,14 +155,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set the Language for Display (toString)
         /// </summary>
-        /// <param name="AD_Language">language or null</param>
-        public static void SetDisplayLanguage(String AD_Language)
+        /// <param name="VAF_Language">language or null</param>
+        public static void SetDisplayLanguage(String VAF_Language)
         {
-            _AD_Language = AD_Language;
-            //if (Language.isBaseLanguage(AD_Language))
-            if (GlobalVariable.AD_BASE_LANGUAGE == AD_Language)
+            _VAF_Language = VAF_Language;
+            //if (Language.isBaseLanguage(VAF_Language))
+            if (GlobalVariable.AD_BASE_LANGUAGE == VAF_Language)
             {
-                _AD_Language = null;
+                _VAF_Language = null;
             }
         }
 
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
         /// <returns>name</returns>
         public override String ToString()
         {
-            if (_AD_Language != null)
+            if (_VAF_Language != null)
             {
                 String nn = GetTrlName();
                 if (nn != null)
@@ -222,12 +222,12 @@ namespace VAdvantage.Model
         /// <returns>name</returns>
         public String GetTrlName()
         {
-            if (_trlName != null && _AD_Language != null)
+            if (_trlName != null && _VAF_Language != null)
             {
-                _trlName = Get_Translation("Name", _AD_Language);
+                _trlName = Get_Translation("Name", _VAF_Language);
                 if (_trlName == null)
                 {
-                    _AD_Language = null;	//	assume that there is no translation
+                    _VAF_Language = null;	//	assume that there is no translation
                 }
             }
             return _trlName;
@@ -310,8 +310,8 @@ namespace VAdvantage.Model
         //public static void main (String[] args)
         //{
         //    /**	Migration before
-        //    UPDATE C_Country SET AD_Client_ID=0, AD_Org_ID=0 WHERE AD_Client_ID<>0 OR AD_Org_ID<>0;
-        //    UPDATE C_Region SET AD_Client_ID=0, AD_Org_ID=0 WHERE AD_Client_ID<>0 OR AD_Org_ID<>0;
+        //    UPDATE C_Country SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
+        //    UPDATE C_Region SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
         //    IDs migration for C_Location, C_City, C_Tax (C_Country, C_Region)
         //    **
         //    //	from http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt

@@ -9,7 +9,7 @@ VIS.Msg.elements = {};
 
 
 /**
- *	Get translated text for AD_Message
+ *	Get translated text for VAF_Msg_Lable
  *  @param	key - Message Key
  *  @return translated text
  */
@@ -60,7 +60,7 @@ VIS.I18N.getLabelFromServer = function (key, params, object, property) {
 };
 
 /**
- *	Get translated text for AD_Message
+ *	Get translated text for VAF_Msg_Lable
  *  @param	key - Message Key
  *  @return translated text
  */
@@ -139,7 +139,7 @@ VIS.Msg.translate = function (ctx, text, multipleKeys) {
             datatype: "json",
             contentType: "application/json; charset=utf-8",
             async: false,
-            data: JSON.stringify({ Columns: text, AD_Language: VIS.Env.getAD_Language(ctx) })
+            data: JSON.stringify({ Columns: text, VAF_Language: VIS.Env.getVAF_Language(ctx) })
         }).done(function (json) {
             result = json;
         });
@@ -149,38 +149,38 @@ VIS.Msg.translate = function (ctx, text, multipleKeys) {
             result;
     }
     else {
-        return VIS.Msg.translate3(VIS.Env.getAD_Language(ctx), ctx.isSOTrx(), text);
+        return VIS.Msg.translate3(VIS.Env.getVAF_Language(ctx), ctx.isSOTrx(), text);
     }
 };
 
 VIS.Msg.getElement = function (ctx, text) {
-    return VIS.Msg.getElement3(VIS.Env.getAD_Language(ctx), text, true);
+    return VIS.Msg.getElement3(VIS.Env.getVAF_Language(ctx), text, true);
 };
 
 VIS.Msg.getElement1 = function (text) {
-    return VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), text, true);
+    return VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), text, true);
 };
 
-VIS.Msg.translate3 = function (ad_language, isSOTrx, text) {
+VIS.Msg.translate3 = function (VAF_Language, isSOTrx, text) {
 
     if (text == null || text.equals(""))
         return "";
-    var AD_Language = ad_language;
-    if (AD_Language == null || AD_Language.length == 0)
-        AD_Language = VIS.Env.getBaseAD_Language();
+    var VAF_Language = VAF_Language;
+    if (VAF_Language == null || VAF_Language.length == 0)
+        VAF_Language = VIS.Env.getBaseVAF_Language();
 
-    //	Check AD_Element
-    var retStr = VIS.Msg.getElement3(AD_Language, text, isSOTrx);
+    //	Check VAF_ColumnDic
+    var retStr = VIS.Msg.getElement3(VAF_Language, text, isSOTrx);
     if (!retStr.equals(""))
         return retStr.trim();
 
-    ////	Check AD_Message
+    ////	Check VAF_Msg_Lable
     //if (DatabaseType.IsMSSql)
     //{
     //    if (text.Equals("Date"))
     //        text = "DATETIME";
     //}
-    //retStr = Get().Lookup(AD_Language, text);
+    //retStr = Get().Lookup(VAF_Language, text);
 
     retStr = VIS.Msg.getMsg(text);
     if (retStr && retStr.length > 0) {
@@ -193,7 +193,7 @@ VIS.Msg.translate3 = function (ad_language, isSOTrx, text) {
 
 };
 
-VIS.Msg.getElement3 = function (ad_language, ColumnName, isSOTrx) {
+VIS.Msg.getElement3 = function (VAF_Language, ColumnName, isSOTrx) {
 
     var baseUrl = VIS.Application.contextUrl;
     var dataSetUrl = baseUrl + "JsonData/JDataSetWithCode";
@@ -240,20 +240,20 @@ VIS.Msg.getElement3 = function (ad_language, ColumnName, isSOTrx) {
 
     if (ColumnName == null || ColumnName.equals(""))
         return "";
-    var AD_Language = ad_language;
-    if (AD_Language == null || AD_Language.length == 0)
-        AD_Language = VIS.Env.getBaseAD_Language();
+    var VAF_Language = VAF_Language;
+    if (VAF_Language == null || VAF_Language.length == 0)
+        VAF_Language = VIS.Env.getBaseVAF_Language();
 
     if (VIS.Msg.elements[ColumnName])
         return VIS.Msg.elements[ColumnName];
 
 
-    //	Check AD_Element
+    //	Check VAF_ColumnDic
     var retStr = "";
     var sqlQry = "";
     var dr = null;
     try {
-        if (AD_Language == null || AD_Language.length == 0 || VIS.Env.isBaseLanguage(AD_Language, "AD_Element")) {
+        if (VAF_Language == null || VAF_Language.length == 0 || VIS.Env.isBaseLanguage(VAF_Language, "VAF_ColumnDic")) {
             sqlQry = "VIS_73";
             var param = [];
             param[0] = new VIS.DB.SqlParam("@ColumnName", ColumnName.toUpper());
@@ -263,7 +263,7 @@ VIS.Msg.getElement3 = function (ad_language, ColumnName, isSOTrx) {
             sqlQry = "VIS_74";
             var param = [];
             param[0] = new VIS.DB.SqlParam("@ColumnName", ColumnName.toUpper());
-            param[1] = new VIS.DB.SqlParam("@AD_Language", AD_Language);
+            param[1] = new VIS.DB.SqlParam("@VAF_Language", VAF_Language);
             dr = executeReader(sqlQry, param);
         }
 

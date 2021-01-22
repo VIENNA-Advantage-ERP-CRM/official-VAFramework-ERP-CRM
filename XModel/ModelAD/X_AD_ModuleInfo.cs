@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ModuleInfo
+    /** Generated Model for VAF_ModuleInfo
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ModuleInfo : PO
+    public class X_VAF_ModuleInfo : PO
     {
-        public X_AD_ModuleInfo(Context ctx, int AD_ModuleInfo_ID, Trx trxName)
-            : base(ctx, AD_ModuleInfo_ID, trxName)
+        public X_VAF_ModuleInfo(Context ctx, int VAF_ModuleInfo_ID, Trx trxName)
+            : base(ctx, VAF_ModuleInfo_ID, trxName)
         {
-            /** if (AD_ModuleInfo_ID == 0)
+            /** if (VAF_ModuleInfo_ID == 0)
             {
-            SetAD_ModuleInfo_ID (0);
+            SetVAF_ModuleInfo_ID (0);
             SetAssemblyName (null);
             SetNameSpace (null);
             SetPrefix (null);
@@ -30,12 +30,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_ModuleInfo(Ctx ctx, int AD_ModuleInfo_ID, Trx trxName)
-            : base(ctx, AD_ModuleInfo_ID, trxName)
+        public X_VAF_ModuleInfo(Ctx ctx, int VAF_ModuleInfo_ID, Trx trxName)
+            : base(ctx, VAF_ModuleInfo_ID, trxName)
         {
-            /** if (AD_ModuleInfo_ID == 0)
+            /** if (VAF_ModuleInfo_ID == 0)
             {
-            SetAD_ModuleInfo_ID (0);
+            SetVAF_ModuleInfo_ID (0);
             SetAssemblyName (null);
             SetNameSpace (null);
             SetPrefix (null);
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleInfo(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_ModuleInfo(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleInfo(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_ModuleInfo(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ModuleInfo(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_ModuleInfo(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_ModuleInfo()
+        static X_VAF_ModuleInfo()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -83,12 +83,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27631471166925L;
         /** Last Updated Timestamp 10/4/2012 3:47:30 PM */
         public static long updatedMS = 1349345850136L;
-        /** AD_Table_ID=1000350 */
+        /** VAF_TableView_ID=1000350 */
         public static int Table_ID;
         // =1000350;
 
-        /** TableName=AD_ModuleInfo */
-        public static String Table_Name = "AD_ModuleInfo";
+        /** TableName=VAF_ModuleInfo */
+        public static String Table_Name = "VAF_ModuleInfo";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -122,37 +122,37 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_ModuleInfo[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_ModuleInfo[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
-        /** Set AD_ModuleCategory_ID.
-        @param AD_ModuleCategory_ID AD_ModuleCategory_ID */
-        public void SetAD_ModuleCategory_ID(int AD_ModuleCategory_ID)
+        /** Set VAF_ModuleCategory_ID.
+        @param VAF_ModuleCategory_ID VAF_ModuleCategory_ID */
+        public void SetVAF_ModuleCategory_ID(int VAF_ModuleCategory_ID)
         {
-            if (AD_ModuleCategory_ID <= 0) Set_Value("AD_ModuleCategory_ID", null);
+            if (VAF_ModuleCategory_ID <= 0) Set_Value("VAF_ModuleCategory_ID", null);
             else
-                Set_Value("AD_ModuleCategory_ID", AD_ModuleCategory_ID);
+                Set_Value("VAF_ModuleCategory_ID", VAF_ModuleCategory_ID);
         }
-        /** Get AD_ModuleCategory_ID.
-        @return AD_ModuleCategory_ID */
-        public int GetAD_ModuleCategory_ID()
+        /** Get VAF_ModuleCategory_ID.
+        @return VAF_ModuleCategory_ID */
+        public int GetVAF_ModuleCategory_ID()
         {
-            Object ii = Get_Value("AD_ModuleCategory_ID");
+            Object ii = Get_Value("VAF_ModuleCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Module.
-        @param AD_ModuleInfo_ID Module */
-        public void SetAD_ModuleInfo_ID(int AD_ModuleInfo_ID)
+        @param VAF_ModuleInfo_ID Module */
+        public void SetVAF_ModuleInfo_ID(int VAF_ModuleInfo_ID)
         {
-            if (AD_ModuleInfo_ID < 1) throw new ArgumentException("AD_ModuleInfo_ID is mandatory.");
-            Set_ValueNoCheck("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+            if (VAF_ModuleInfo_ID < 1) throw new ArgumentException("VAF_ModuleInfo_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
         }
         /** Get Module.
         @return Module */
-        public int GetAD_ModuleInfo_ID()
+        public int GetVAF_ModuleInfo_ID()
         {
-            Object ii = Get_Value("AD_ModuleInfo_ID");
+            Object ii = Get_Value("VAF_ModuleInfo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

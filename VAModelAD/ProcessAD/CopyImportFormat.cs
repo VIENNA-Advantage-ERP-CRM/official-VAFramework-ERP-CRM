@@ -25,8 +25,8 @@ namespace VAdvantage.Process
 {
     public class CopyImportFormat : ProcessEngine.SvrProcess
     {
-        private int from_AD_ImpFormat_ID = 0;
-        private int to_AD_ImpFormat_ID = 0;
+        private int from_VAF_ImportFormat_ID = 0;
+        private int to_VAF_ImportFormat_ID = 0;
 
         /// <summary>
         ///  Prepare - e.g., get Parameters.
@@ -41,16 +41,16 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_ImpFormat_ID"))
+                else if (name.Equals("VAF_ImportFormat_ID"))
                 {
-                    from_AD_ImpFormat_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    from_VAF_ImportFormat_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else
                 {
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            to_AD_ImpFormat_ID = GetRecord_ID();
+            to_VAF_ImportFormat_ID = GetRecord_ID();
         }	//	prepare
 
 
@@ -60,20 +60,20 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("doIt = From=" + from_AD_ImpFormat_ID + " To=" + to_AD_ImpFormat_ID);
-            MImpFormat from = new MImpFormat(GetCtx(), from_AD_ImpFormat_ID, Get_Trx());
-            if (from.GetAD_ImpFormat_ID() != from_AD_ImpFormat_ID)
+            log.Info("doIt = From=" + from_VAF_ImportFormat_ID + " To=" + to_VAF_ImportFormat_ID);
+            MImpFormat from = new MImpFormat(GetCtx(), from_VAF_ImportFormat_ID, Get_Trx());
+            if (from.GetVAF_ImportFormat_ID() != from_VAF_ImportFormat_ID)
             {
-                throw new Exception("From Format not found - " + from_AD_ImpFormat_ID);
+                throw new Exception("From Format not found - " + from_VAF_ImportFormat_ID);
             }
             //
-            MImpFormat to = new MImpFormat(GetCtx(), to_AD_ImpFormat_ID, Get_Trx());
-            if (to.GetAD_ImpFormat_ID() != to_AD_ImpFormat_ID)
+            MImpFormat to = new MImpFormat(GetCtx(), to_VAF_ImportFormat_ID, Get_Trx());
+            if (to.GetVAF_ImportFormat_ID() != to_VAF_ImportFormat_ID)
             {
-                throw new Exception("To Format not found - " + from_AD_ImpFormat_ID);
+                throw new Exception("To Format not found - " + from_VAF_ImportFormat_ID);
             }
             //
-            if (from.GetAD_Table_ID() != to.GetAD_Table_ID())
+            if (from.GetVAF_TableView_ID() != to.GetVAF_TableView_ID())
             {
                 throw new Exception("From-To do Not have same Format Table");
             }
