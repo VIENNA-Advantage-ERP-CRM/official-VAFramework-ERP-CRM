@@ -2946,7 +2946,7 @@ namespace VAdvantage.Model
 
                                 {
 
-                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateoOdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
+                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
                                 if (RecCount > 0)
                                     {
