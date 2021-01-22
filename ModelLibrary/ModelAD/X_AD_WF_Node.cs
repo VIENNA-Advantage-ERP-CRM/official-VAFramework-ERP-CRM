@@ -381,6 +381,8 @@ namespace VAdvantage.Model
         public static String ACTION_SMS = "S";
         /** Apps Task = T */
         public static String ACTION_AppsTask = "T";
+        /** User Message = U */
+        public static String ACTION_UserMessage = "U";
         /** Set Variable = V */
         public static String ACTION_SetVariable = "V";
         /** User Window = W */
@@ -1351,6 +1353,24 @@ namespace VAdvantage.Model
             Object ii = Get_Value("ZoomWindow_ID"); 
             if (ii == null) 
                 return 0; 
+            return Convert.ToInt32(ii); 
+        }
+        /** Set Message/Label.
+        @param AD_Message_ID System Message */
+        public void SetAD_Message_ID(int AD_Message_ID)
+        {
+            if (AD_Message_ID <= 0) 
+                Set_Value("AD_Message_ID", null);
+            else
+                Set_Value("AD_Message_ID", AD_Message_ID);
+        }
+        /** Get Message/Label.
+        @return System Message */
+        public int GetAD_Message_ID() 
+        {
+            Object ii = Get_Value("AD_Message_ID");
+            if (ii == null) 
+                return 0;
             return Convert.ToInt32(ii); 
         }
     }
