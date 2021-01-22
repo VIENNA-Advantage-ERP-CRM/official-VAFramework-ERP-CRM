@@ -1407,6 +1407,11 @@ namespace VIS.Helpers
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
                 }
 
+                if (value == DBNull.Value)
+                    value = null;
+                if (oldValue == DBNull.Value)
+                    oldValue = null;
+
                 //	RowID
                 if (DisplayType.IsDate(field.DisplayType))
                 {
