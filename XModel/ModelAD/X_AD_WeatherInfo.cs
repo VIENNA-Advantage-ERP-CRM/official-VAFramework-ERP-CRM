@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_WeatherInfo
+    /** Generated Model for VAF_WeatherInfo
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_WeatherInfo : PO
+    public class X_VAF_WeatherInfo : PO
     {
-        public X_AD_WeatherInfo(Context ctx, int AD_WeatherInfo_ID, Trx trxName)
-            : base(ctx, AD_WeatherInfo_ID, trxName)
+        public X_VAF_WeatherInfo(Context ctx, int VAF_WeatherInfo_ID, Trx trxName)
+            : base(ctx, VAF_WeatherInfo_ID, trxName)
         {
-            /** if (AD_WeatherInfo_ID == 0)
+            /** if (VAF_WeatherInfo_ID == 0)
             {
-            SetAD_WeatherInfo_ID (0);
+            SetVAF_WeatherInfo_ID (0);
             }
              */
         }
-        public X_AD_WeatherInfo(Ctx ctx, int AD_WeatherInfo_ID, Trx trxName)
-            : base(ctx, AD_WeatherInfo_ID, trxName)
+        public X_VAF_WeatherInfo(Ctx ctx, int VAF_WeatherInfo_ID, Trx trxName)
+            : base(ctx, VAF_WeatherInfo_ID, trxName)
         {
-            /** if (AD_WeatherInfo_ID == 0)
+            /** if (VAF_WeatherInfo_ID == 0)
             {
-            SetAD_WeatherInfo_ID (0);
+            SetVAF_WeatherInfo_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_WeatherInfo(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_WeatherInfo(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_WeatherInfo(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_WeatherInfo(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_WeatherInfo(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_WeatherInfo(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_WeatherInfo()
+        static X_VAF_WeatherInfo()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000028;
 
-        /** TableName=AD_WeatherInfo */
-        public static String Table_Name = "AD_WeatherInfo";
+        /** TableName=VAF_WeatherInfo */
+        public static String Table_Name = "VAF_WeatherInfo";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -112,37 +112,37 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_WeatherInfo[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_WeatherInfo[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set User/Contact.
-        @param AD_User_ID User within the system - Internal or Business Partner Contact */
-        public void SetAD_User_ID(int AD_User_ID)
+        @param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }
         /** Get User/Contact.
         @return User within the system - Internal or Business Partner Contact */
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            Object ii = Get_Value("AD_User_ID");
+            Object ii = Get_Value("VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set AD_WeatherInfo_ID.
-        @param AD_WeatherInfo_ID AD_WeatherInfo_ID */
-        public void SetAD_WeatherInfo_ID(int AD_WeatherInfo_ID)
+        /** Set VAF_WeatherInfo_ID.
+        @param VAF_WeatherInfo_ID VAF_WeatherInfo_ID */
+        public void SetVAF_WeatherInfo_ID(int VAF_WeatherInfo_ID)
         {
-            if (AD_WeatherInfo_ID < 1) throw new ArgumentException("AD_WeatherInfo_ID is mandatory.");
-            Set_ValueNoCheck("AD_WeatherInfo_ID", AD_WeatherInfo_ID);
+            if (VAF_WeatherInfo_ID < 1) throw new ArgumentException("VAF_WeatherInfo_ID is mandatory.");
+            Set_ValueNoCheck("VAF_WeatherInfo_ID", VAF_WeatherInfo_ID);
         }
-        /** Get AD_WeatherInfo_ID.
-        @return AD_WeatherInfo_ID */
-        public int GetAD_WeatherInfo_ID()
+        /** Get VAF_WeatherInfo_ID.
+        @return VAF_WeatherInfo_ID */
+        public int GetVAF_WeatherInfo_ID()
         {
-            Object ii = Get_Value("AD_WeatherInfo_ID");
+            Object ii = Get_Value("VAF_WeatherInfo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

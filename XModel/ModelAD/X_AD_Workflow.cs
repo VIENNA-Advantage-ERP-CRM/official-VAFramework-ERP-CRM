@@ -153,34 +153,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Node.
-@param AD_WF_Node_ID Workflow Node (activity), step or process */
-public void SetAD_WF_Node_ID (int AD_WF_Node_ID)
+@param VAF_WFlow_Node_ID Workflow Node (activity), step or process */
+public void SetVAF_WFlow_Node_ID (int VAF_WFlow_Node_ID)
 {
-if (AD_WF_Node_ID <= 0) Set_Value ("AD_WF_Node_ID", null);
+if (VAF_WFlow_Node_ID <= 0) Set_Value ("VAF_WFlow_Node_ID", null);
 else
-Set_Value ("AD_WF_Node_ID", AD_WF_Node_ID);
+Set_Value ("VAF_WFlow_Node_ID", VAF_WFlow_Node_ID);
 }
 /** Get Node.
 @return Workflow Node (activity), step or process */
-public int GetAD_WF_Node_ID() 
+public int GetVAF_WFlow_Node_ID() 
 {
-Object ii = Get_Value("AD_WF_Node_ID");
+Object ii = Get_Value("VAF_WFlow_Node_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Responsible.
-@param AD_WF_Responsible_ID Responsible for Workflow Execution */
-public void SetAD_WF_Responsible_ID (int AD_WF_Responsible_ID)
+@param VAF_WFlow_Incharge_ID Responsible for Workflow Execution */
+public void SetVAF_WFlow_Incharge_ID (int VAF_WFlow_Incharge_ID)
 {
-if (AD_WF_Responsible_ID <= 0) Set_Value ("AD_WF_Responsible_ID", null);
+if (VAF_WFlow_Incharge_ID <= 0) Set_Value ("VAF_WFlow_Incharge_ID", null);
 else
-Set_Value ("AD_WF_Responsible_ID", AD_WF_Responsible_ID);
+Set_Value ("VAF_WFlow_Incharge_ID", VAF_WFlow_Incharge_ID);
 }
 /** Get Workflow Responsible.
 @return Responsible for Workflow Execution */
-public int GetAD_WF_Responsible_ID() 
+public int GetVAF_WFlow_Incharge_ID() 
 {
-Object ii = Get_Value("AD_WF_Responsible_ID");
+Object ii = Get_Value("VAF_WFlow_Incharge_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

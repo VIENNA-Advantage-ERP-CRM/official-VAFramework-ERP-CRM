@@ -44,7 +44,7 @@
         windowNoParent = pwindowNo;
         mLocatorId = M_Locator_ID;
         if (windowNoParent != -1) {
-            //winQry = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID"));
+            //winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID"));
             //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry, null, null));
 
             // Added by Bharat on 01 May 2017 to remove client side queries

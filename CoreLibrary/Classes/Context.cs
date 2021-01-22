@@ -163,9 +163,9 @@ namespace VAdvantage.Classes
 
             if (value == null || value.ToString() == "")
             {
-                if (context.Equals("#AD_User_ID"))
+                if (context.Equals("#VAF_UserContact_ID"))
                     return GetContext("#" + context);
-                else if (context.Equals("#AD_User_Name"))
+                else if (context.Equals("#VAF_UserContact_Name"))
                     return GetContext("#" + context);
                 return "";
             }
@@ -204,13 +204,13 @@ namespace VAdvantage.Classes
         }	//	
 
         /// <summary>
-        /// Set Login AD_User_ID
+        /// Set Login VAF_UserContact_ID
         /// </summary>
-        /// <param name="AD_User_ID"></param>
-        public void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            SetContext("##AD_User_ID", AD_User_ID.ToString());
-        }	//	setAD_User_ID
+            SetContext("##VAF_UserContact_ID", VAF_UserContact_ID.ToString());
+        }	//	setVAF_UserContact_ID
 
         /// <summary>
         /// Add Role ID in list
@@ -244,18 +244,18 @@ namespace VAdvantage.Classes
         /// Get User Id from List
         /// </summary>
         /// <returns></returns>
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            return GetContextAsInt("#AD_User_ID");
+            return GetContextAsInt("#VAF_UserContact_ID");
         }
 
         /// <summary>
-        ///	Get Login AD_User_Name
+        ///	Get Login VAF_UserContact_Name
         /// </summary>
         /// <returns></returns>
-        public string GetAD_User_Name()
+        public string GetVAF_UserContact_Name()
         {
-            return GetContext("#AD_User_Name");
+            return GetContext("#VAF_UserContact_Name");
         }
 
         /// <summary>

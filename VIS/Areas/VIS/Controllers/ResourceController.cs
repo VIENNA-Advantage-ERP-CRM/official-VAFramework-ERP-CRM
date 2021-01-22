@@ -81,7 +81,7 @@ namespace VIS.Controllers
 
                 /* USER */
                 sb.Append(" VIS.MUser = {");
-                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetAD_User_ID()) + "' }; ");
+                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetVAF_UserContact_ID()) + "' }; ");
 
                 /* ROLE */
                 sb.Append(" VIS.MRole =  {");
@@ -89,7 +89,7 @@ namespace VIS.Controllers
                 sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
                 sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
 
-                sb.Append(", columnSynonym : { 'AD_User_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
+                sb.Append(", columnSynonym : { 'VAF_UserContact_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
                 sb.Append("};");
 
                 /* CTX */
@@ -152,8 +152,8 @@ namespace VIS.Controllers
         {
             LoginProcess process = new VAdvantage.Login.LoginProcess(_ctx);
 
-            if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetAD_User_ID()))
-                _ctx.SetContext("#SalesRep_ID", _ctx.GetAD_User_ID());
+            if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetVAF_UserContact_ID()))
+                _ctx.SetContext("#SalesRep_ID", _ctx.GetVAF_UserContact_ID());
             if (_ctx.GetVAF_Role_ID() == 0)	//	User is a Sys Admin
                 _ctx.SetContext("#SysAdmin", "Y");
 
@@ -172,8 +172,8 @@ namespace VIS.Controllers
 
             //1 first user and client 
 
-            string qry = "SELECT COALESCE(u.VAF_Theme_ID,c.VAF_Theme_ID) FROM AD_User u INNER JOIN VAF_Client c ON c.VAF_Client_ID = u.VAF_Client_ID " +
-                         " WHERE u.AD_User_ID ="+_ctx.GetAD_User_ID();
+            string qry = "SELECT COALESCE(u.VAF_Theme_ID,c.VAF_Theme_ID) FROM VAF_UserContact u INNER JOIN VAF_Client c ON c.VAF_Client_ID = u.VAF_Client_ID " +
+                         " WHERE u.VAF_UserContact_ID ="+_ctx.GetVAF_UserContact_ID();
 
             int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry,null,null));
 

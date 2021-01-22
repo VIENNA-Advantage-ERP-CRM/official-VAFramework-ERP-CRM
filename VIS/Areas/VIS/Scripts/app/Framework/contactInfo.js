@@ -3,7 +3,7 @@
     var windowWidth = $(document).width();
     var windowHeight = $(document).height();
     var $contactInfoRoot = null;
-    var ad_userID = 0;
+    var VAF_UserContactID = 0;
     var url = null;
     var NavigateURL = null;
     var $divDots = null;
@@ -26,14 +26,14 @@
             }
         }
 
-        ad_userID = userID;
+        VAF_UserContactID = userID;
 
         windowNo = winNo;
         $(".vis-apanel-busy").css("visibility", "visible");
 
-        url = VIS.Application.contextUrl + "WSP/Contacts/UserContactInfo?WinNo=" + windowNo + "&userID=" + ad_userID + "&isPartialViewLoad=" + true;
+        url = VIS.Application.contextUrl + "WSP/Contacts/UserContactInfo?WinNo=" + windowNo + "&userID=" + VAF_UserContactID + "&isPartialViewLoad=" + true;
 
-        LoadHtmlDesign(ad_userID, url);
+        LoadHtmlDesign(VAF_UserContactID, url);
 
         this.show = function () {
 
@@ -626,7 +626,7 @@
 
                         $history.on("click", function (e) {
                             // UserTableID, Record_ID, BP_ID, 0, "keyColumnName"
-                            var atHistory = new VIS.AttachmentHistory($slideruserTableID.val(), $slideruserID.text(), $sliderBpID.text(), 0, "AD_User_ID");
+                            var atHistory = new VIS.AttachmentHistory($slideruserTableID.val(), $slideruserID.text(), $sliderBpID.text(), 0, "VAF_UserContact_ID");
                             atHistory.show();
                         });
 
@@ -639,7 +639,7 @@
                             $(".vis-apanel-busy").css("z-index", "999999999999");
                             window.setTimeout(function () {
 
-                                VIS.AppointmentsForm.init($slideruserTableID.text(), $("#userID_" + windowNo).text(), VIS.context.getAD_User_ID(), $sliderhduserName.text(), false);
+                                VIS.AppointmentsForm.init($slideruserTableID.text(), $("#userID_" + windowNo).text(), VIS.context.getVAF_UserContact_ID(), $sliderhduserName.text(), false);
 
                                 $appointment.find("p").removeAttr("style");
                                 $(".vis-apanel-busy").css("visibility", "hidden");
@@ -666,7 +666,7 @@
                             window.setTimeout(function () {
                                 //   VIS.AppointmentsForm.init($slideruserTableID.text(), $("#userID_" + windowNo).text(), $("#userID_" + windowNo).text(), $sliderhduserName.text(), true);
 
-                                VIS.AppointmentsForm.init(0, $("#userID_" + windowNo).text(), VIS.context.getAD_User_ID(), $sliderhduserName.text(), true);
+                                VIS.AppointmentsForm.init(0, $("#userID_" + windowNo).text(), VIS.context.getVAF_UserContact_ID(), $sliderhduserName.text(), true);
                                 // $isBusy.hide();
                                 $activity.find("p").removeAttr("style");
                                 $(".vis-apanel-busy").css("visibility", "hidden");
@@ -891,7 +891,7 @@
 
 
     };
-    function LoadHtmlDesign(ad_userID, url) {
+    function LoadHtmlDesign(VAF_UserContactID, url) {
         $contactInfoRoot = null;
         NavigateURL = null;
         $divDots = null;

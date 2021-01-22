@@ -45,7 +45,7 @@
             this.aDisplayValue = (dispValue == null) ? this.aValue : dispValue;
         }
 
-        this.AD_Window_ID = mField.getAD_Window_ID();
+        this.VAF_Screen_ID = mField.getVAF_Screen_ID();
         this.aAttribute = mField.getColumnName();
         this.aDisplayAttribute = mField.getHeader();
         this.aDisplayType = mField.getDisplayType();
@@ -59,7 +59,7 @@
 
         this.VAF_Client_ID = VIS.context.getVAF_Client_ID();
         this.VAF_Org_ID = VIS.context.getWindowContext(this.windowNum, "VAF_Org_ID", true);
-        this.AD_User_ID = VIS.context.getAD_User_ID();
+        this.VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
         this.role = VIS.MRole.getDefault();
 
         function setBusy(isBusy) {
@@ -300,17 +300,17 @@
         sql += " AND VAF_Org_ID=" + valuetem;
         //	Optional User
         if (this.userchk) {
-            sql += " AND AD_User_ID=" + this.AD_User_ID;
+            sql += " AND VAF_UserContact_ID=" + this.VAF_UserContact_ID;
         }
         else {
-            sql += " AND AD_User_ID IS NULL";
+            sql += " AND VAF_UserContact_ID IS NULL";
         }
         //	Optional Window
         if (this.windowchk) {
-            sql += " AND AD_Window_ID=" + this.AD_Window_ID;
+            sql += " AND VAF_Screen_ID=" + this.VAF_Screen_ID;
         }
         else {
-            sql += " AND AD_Window_ID IS NULL";
+            sql += " AND VAF_Screen_ID IS NULL";
         }
         //	Attribute (Key)
         sql += " AND Attribute='" + this.aAttribute + "'";
@@ -397,10 +397,10 @@
                 clientId: this.tenantchk ? this.VAF_Client_ID : 0,
                 orgId: this.orgchk ? this.VAF_Org_ID : 0,
                 chkWindow: this.windowchk,
-                AD_Window_ID: this.AD_Window_ID,
+                VAF_Screen_ID: this.VAF_Screen_ID,
                 chkUser: this.userchk,
                 attribute: this.aAttribute,
-                userId: this.AD_User_ID,
+                userId: this.VAF_UserContact_ID,
                 value: this.aValue
             },
             success: function (data) {
@@ -419,7 +419,7 @@
 
     ValuePreference.prototype.getContextKey = function () {
         if (this.windowchk) {
-            return "P" + this.AD_Window_ID + "|" + this.aAttribute;
+            return "P" + this.VAF_Screen_ID + "|" + this.aAttribute;
         }
         else {
             return "P|" + this.aAttribute;

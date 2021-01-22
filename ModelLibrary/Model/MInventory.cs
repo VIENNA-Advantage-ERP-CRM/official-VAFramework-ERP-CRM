@@ -3078,7 +3078,7 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Owner (Responsible)
-         *	@return AD_User_ID
+         *	@return VAF_UserContact_ID
          */
         public int GetDoc_User_ID()
         {

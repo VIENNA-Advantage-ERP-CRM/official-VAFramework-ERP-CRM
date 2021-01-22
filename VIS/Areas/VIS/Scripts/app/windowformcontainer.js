@@ -28,8 +28,8 @@
             return curTab.getVAF_TableView_ID();
         }
 
-        this.getAD_Window_ID = function () {
-            return curTab.getAD_Window_ID();
+        this.getVAF_Screen_ID = function () {
+            return curTab.getVAF_Screen_ID();
         }
 
         this.getRecord_ID = function () {

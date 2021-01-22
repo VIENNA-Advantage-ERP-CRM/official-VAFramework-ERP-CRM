@@ -204,14 +204,14 @@ namespace VAdvantage.Process
                         throw new Exception("Commission Business Partner has no Users/Contact");
                     if (users.Length == 1)
                     {
-                        int SalesRep_ID = users[0].GetAD_User_ID();
+                        int SalesRep_ID = users[0].GetVAF_UserContact_ID();
                         sql.Append(" AND h.SalesRep_ID=").Append(SalesRep_ID);
                     }
                     else
                     {
                         log.Warning("Not 1 User/Contact for C_BPartner_ID="
                             + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID=")
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
                             .Append(m_com.GetC_BPartner_ID()).Append(")");
                     }
                 }
@@ -226,7 +226,7 @@ namespace VAdvantage.Process
                     }
                     if (users.Length == 1)
                     {
-                        int SaleRepID = users[0].GetAD_User_ID();
+                        int SaleRepID = users[0].GetVAF_UserContact_ID();
                         sql.Append(" AND h.SalesRep_ID = ");
                         sql.Append(SaleRepID);
                     }
@@ -234,7 +234,7 @@ namespace VAdvantage.Process
                     {
                         log.Warning("Not 1 User/Contact for C_BPartner_ID="
                             + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT AD_User_ID FROM AD_User WHERE C_BPartner_ID=")
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
                             .Append(m_com.GetC_BPartner_ID()).Append(")");
                     }
                 }

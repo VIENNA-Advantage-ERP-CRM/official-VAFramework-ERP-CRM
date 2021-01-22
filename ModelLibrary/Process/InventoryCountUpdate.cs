@@ -111,7 +111,7 @@ namespace VAdvantage.Process
                     + "WHERE s.M_Product_ID=l.M_Product_ID AND s.M_Locator_ID=l.M_Locator_ID"
                     + " AND s.M_AttributeSetInstance_ID=l.M_AttributeSetInstance_ID),"
                 + " Updated=SysDate,"
-                + " UpdatedBy=" + GetAD_User_ID()
+                + " UpdatedBy=" + GetVAF_UserContact_ID()
                 //
                 + " WHERE M_Inventory_ID=" + _m_Inventory_ID
                 + " AND EXISTS (SELECT * FROM M_Storage s "

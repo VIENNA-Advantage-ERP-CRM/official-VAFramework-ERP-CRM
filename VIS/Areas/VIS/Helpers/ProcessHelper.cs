@@ -134,7 +134,7 @@ namespace VIS.Helpers
 
             // Get Locks from Dictionary
             string lockedid = processInfo["Process_ID"].ToString() + "_" + processInfo["Record_ID"].ToString();
-            //string lockedidlog = lockedid + " -UserID- " + ctx.GetAD_User_ID() + " -SesstionID- " + ctx.GetAD_Session_ID();
+            //string lockedidlog = lockedid + " -UserID- " + ctx.GetVAF_UserContact_ID() + " -SesstionID- " + ctx.GetAD_Session_ID();
             var isBackground = processInfo["IsBackground"].Equals("True", StringComparison.OrdinalIgnoreCase);
             var currentLock = GetLock(lockedid);
             lock (currentLock)
@@ -187,7 +187,7 @@ namespace VIS.Helpers
                         MProcess pro = MProcess.Get(ctx, Convert.ToInt32(processInfo["Process_ID"]));
 
                         // Insert Notice
-                        MNote note = new MNote(ctx, msgID, ctx.GetAD_User_ID(), null);
+                        MNote note = new MNote(ctx, msgID, ctx.GetVAF_UserContact_ID(), null);
                         note.SetTextMsg(Msg.GetMsg(ctx, "ProcessCompleted") + ": " + pro.GetName());
 
                         note.SetDescription(pro.GetName());
@@ -215,7 +215,7 @@ namespace VIS.Helpers
             //Saved Action Log
             if (pi.GetIsReport())
                 VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetVAF_Job_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
-            pi.SetAD_User_ID(ctx.GetAD_User_ID());
+            pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             if (pi.GetVAF_JInstance_ID() == 0)
             {
@@ -366,10 +366,10 @@ namespace VIS.Helpers
             try
             {
                 //ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID);
-                //pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                //pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 //pi.SetVAF_JInstance_ID(VAF_JInstance_ID);
-                //pi.SetAD_Window_ID(AD_Window_ID);
+                //pi.SetVAF_Screen_ID(VAF_Screen_ID);
                 //pi.FileType = fileType;
                 //report = null;
 
@@ -443,7 +443,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="WindowNo"></param>
         /// <param name="fileType"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
         internal static ProcessReportInfo Process(Ctx ctx, Dictionary<string, string> processInfo)
         {
@@ -784,7 +784,7 @@ namespace VIS.Helpers
 
 
             ////////log/////
-            //string clientName = ctx.GetVAF_Org_Name() + "_" + ctx.GetAD_User_Name();
+            //string clientName = ctx.GetVAF_Org_Name() + "_" + ctx.GetVAF_UserContact_Name();
             //string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
             //storedPath += clientName;
             //VLogMgt.Initialize(true, storedPath);
@@ -806,7 +806,7 @@ namespace VIS.Helpers
             try
             {
 
-                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetVAF_JInstance_ID(ret.VAF_JInstance_ID);
 
@@ -891,7 +891,7 @@ namespace VIS.Helpers
                 //byte[] report = null;
                 //string ReportString = null;
                 //ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID, recIDs);
-                //pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                //pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 //pi.SetVAF_JInstance_ID(VAF_JInstance_ID);
                 //pi.IsArabicReportFromOutside = false;

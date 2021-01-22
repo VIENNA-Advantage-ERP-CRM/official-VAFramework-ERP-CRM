@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_AD_WF_Responsible
+ * Class Used     : X_VAF_WFlow_Incharge
  * Chronological Development
  * Veena Pandey     02-May-2009
  ******************************************************/
@@ -17,19 +17,19 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.WF
 {
-    public class MWFResponsible : X_AD_WF_Responsible
+    public class MWFResponsible : X_VAF_WFlow_Incharge
     {
         //	Cache
-        private static CCache<int, MWFResponsible> _cache = new CCache<int, MWFResponsible>("AD_WF_Responsible", 10);
+        private static CCache<int, MWFResponsible> _cache = new CCache<int, MWFResponsible>("VAF_WFlow_Incharge", 10);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Responsible_ID">id</param>
+        /// <param name="VAF_WFlow_Incharge_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFResponsible(Ctx ctx, int AD_WF_Responsible_ID, Trx trxName)
-            : base(ctx, AD_WF_Responsible_ID, trxName)
+        public MWFResponsible(Ctx ctx, int VAF_WFlow_Incharge_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_Incharge_ID, trxName)
         {
         }
 
@@ -48,15 +48,15 @@ namespace VAdvantage.WF
         /// Get WF Responsible from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Responsible_ID">id</param>
+        /// <param name="VAF_WFlow_Incharge_ID">id</param>
         /// <returns>MWFResponsible</returns>
-        public static MWFResponsible Get(Ctx ctx, int AD_WF_Responsible_ID)
+        public static MWFResponsible Get(Ctx ctx, int VAF_WFlow_Incharge_ID)
         {
-            int key = AD_WF_Responsible_ID;
+            int key = VAF_WFlow_Incharge_ID;
             MWFResponsible retValue = (MWFResponsible)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MWFResponsible(ctx, AD_WF_Responsible_ID, null);
+            retValue = new MWFResponsible(ctx, VAF_WFlow_Incharge_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -80,7 +80,7 @@ namespace VAdvantage.WF
         /// <returns>true if can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            //	if (RESPONSIBLETYPE_Human.equals(getResponsibleType()) && getAD_User_ID() == 0)
+            //	if (RESPONSIBLETYPE_Human.equals(getResponsibleType()) && getVAF_UserContact_ID() == 0)
             //		return true;
             if (RESPONSIBLETYPE_Role.Equals(GetResponsibleType())
                 && GetVAF_Role_ID() == 0
@@ -90,8 +90,8 @@ namespace VAdvantage.WF
                 return false;
             }
             //	User not used
-            if (!RESPONSIBLETYPE_Human.Equals(GetResponsibleType()) && GetAD_User_ID() == 0)
-                SetAD_User_ID(0);
+            if (!RESPONSIBLETYPE_Human.Equals(GetResponsibleType()) && GetVAF_UserContact_ID() == 0)
+                SetVAF_UserContact_ID(0);
             //	Role not used
             if (!RESPONSIBLETYPE_Role.Equals(GetResponsibleType()) && GetVAF_Role_ID() == 0)
                 SetVAF_Role_ID(0);
@@ -101,7 +101,7 @@ namespace VAdvantage.WF
             //Lakhwinder
             if (RESPONSIBLETYPE_Human.Equals(GetResponsibleType()))
             {
-                if (GetAD_User_ID() == 0)
+                if (GetVAF_UserContact_ID() == 0)
                 {
                     return false;
                 }
@@ -113,12 +113,12 @@ namespace VAdvantage.WF
                 {
                     return false;
                 }
-                SetAD_User_ID(0);
+                SetVAF_UserContact_ID(0);
             }
             else if (RESPONSIBLETYPE_Organization.Equals(GetResponsibleType()))
             {
                 SetVAF_Role_ID(0);
-                SetAD_User_ID(0);
+                SetVAF_UserContact_ID(0);
             }
             //Lakhwinder
             return true;
@@ -131,7 +131,7 @@ namespace VAdvantage.WF
         public bool IsHuman()
         {
             return RESPONSIBLETYPE_Human.Equals(GetResponsibleType())
-                && GetAD_User_ID() != 0;
+                && GetVAF_UserContact_ID() != 0;
         }
 
         /// <summary>
@@ -160,9 +160,9 @@ namespace VAdvantage.WF
         /// <returns>true if invoker</returns>
         public bool IsInvoker()
         {
-            return GetAD_User_ID() == 0 && GetVAF_Role_ID() == 0
-                && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_SQL
-                && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_Organization;
+            return GetVAF_UserContact_ID() == 0 && GetVAF_Role_ID() == 0
+                && GetResponsibleType() != X_VAF_WFlow_Incharge.RESPONSIBLETYPE_SQL
+                && GetResponsibleType() != X_VAF_WFlow_Incharge.RESPONSIBLETYPE_Organization;
         }
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace VAdvantage.WF
             sb.Append(Get_ID())
                 .Append("-").Append(GetName())
                 .Append(",Type=").Append(GetResponsibleType());
-            if (GetAD_User_ID() != 0)
-                sb.Append(",AD_User_ID=").Append(GetAD_User_ID());
+            if (GetVAF_UserContact_ID() != 0)
+                sb.Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID());
             if (GetVAF_Role_ID() != 0)
                 sb.Append(",VAF_Role_ID=").Append(GetVAF_Role_ID());
             sb.Append("]");

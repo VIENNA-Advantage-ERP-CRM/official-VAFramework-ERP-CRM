@@ -230,7 +230,7 @@ namespace VAdvantage.Model
             _gridTable.SetReadOnly(_vo.IsReadOnly || _vo.IsView);
             _gridTable.SetDeleteable(_vo.IsDeleteable);
             IniTab();
-            LoadData(_vo.GetCtx().GetAD_User_ID());
+            LoadData(_vo.GetCtx().GetVAF_UserContact_ID());
             InitIsAllowLetter();
 
         }
@@ -380,28 +380,28 @@ namespace VAdvantage.Model
             {
                 GridField created = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.VAF_Tab_ID, false, true, true));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, true, true));
                 _gridTable.AddField(created);
             }
             if (_gridTable.GetField("CreatedBy") == null)
             {
                 GridField createdBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.VAF_Tab_ID, false, true, false));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, true, false));
                 _gridTable.AddField(createdBy);
             }
             if (_gridTable.GetField("Updated") == null)
             {
                 GridField updated = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.VAF_Tab_ID, false, false, true));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, false, true));
                 _gridTable.AddField(updated);
             }
             if (_gridTable.GetField("UpdatedBy") == null)
             {
                 GridField updatedBy = new GridField(GridFieldVO.CreateStdField(_vo.GetCtx(),
                     _vo.windowNo, _vo.tabNo,
-                    _vo.AD_Window_ID, _vo.VAF_Tab_ID, false, false, false));
+                    _vo.VAF_Screen_ID, _vo.VAF_Tab_ID, false, false, false));
                 _gridTable.AddField(updatedBy);
             }
             return true;
@@ -1312,13 +1312,13 @@ namespace VAdvantage.Model
             //Comment by raghu 18-Aug-2011
             //else if (colName.Equals("CreatedBy") || colName.Equals("UpdatedBy"))
             //{
-            //    refColName = "AD_User_ID";
+            //    refColName = "VAF_UserContact_ID";
             //}
             // Updated by raghu 18-Aug-2011
             // resolved CreatedBy and UpdatedBy Search problem.i.e.Invoice(Vendor)
             else if (colName.Equals("CreatedBy"))
             {
-                //refColName = "AD_User_ID";
+                //refColName = "VAF_UserContact_ID";
                 refColName = "CreatedBy";
             }
             else if (colName.Equals("UpdatedBy"))
@@ -1393,7 +1393,7 @@ namespace VAdvantage.Model
             //	Column NOT in Tab - create EXISTS subquery
             String tableName = null;
             String tabKeyColumn = GetKeyColumnName();
-            ////	Column=SalesRep_ID, Key=AD_User_ID, Query=SalesRep_ID=101
+            ////	Column=SalesRep_ID, Key=VAF_UserContact_ID, Query=SalesRep_ID=101
 
             sql = "SELECT t.TableName "
                 + "FROM VAF_Column c"
@@ -1959,8 +1959,8 @@ namespace VAdvantage.Model
         /// Will be fetched while opening window only.
         /// </summary>
         /// Karan.... 18 Dec 2018
-        /// <param name="AD_User_ID"></param>
-        public void LoadData(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void LoadData(int VAF_UserContact_ID)
         {
 
             if (!CanHaveAttachment())
@@ -2024,7 +2024,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsPrivateRecordLock)
             {
-                sql = " SELECT Record_ID FROM VAF_Private_Rights WHERE AD_User_ID=" + AD_User_ID + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID";
+                sql = " SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_UserContact_ID=" + VAF_UserContact_ID + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2039,7 +2039,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsSubscribedRecord)
             {
-                sql = " Select cm_Subscribe_ID,Record_ID from CM_Subscribe where AD_User_ID=" + AD_User_ID + " AND vaf_tableview_ID=" + +_vo.VAF_TableView_ID;
+                sql = " Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + VAF_UserContact_ID + " AND vaf_tableview_ID=" + +_vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2668,10 +2668,10 @@ namespace VAdvantage.Model
         ///Get Window ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return _vo.AD_Window_ID;
-        }	//	getAD_Window_ID
+            return _vo.VAF_Screen_ID;
+        }	//	getVAF_Screen_ID
 
 
 
@@ -2690,14 +2690,14 @@ namespace VAdvantage.Model
 	 */
         public void LoadLocks()
         {
-            int AD_User_ID = Env.GetContext().GetAD_User_ID();
-            log.Fine("#" + _vo.tabNo + " - AD_User_ID=" + AD_User_ID);
+            int VAF_UserContact_ID = Env.GetContext().GetVAF_UserContact_ID();
+            log.Fine("#" + _vo.tabNo + " - VAF_UserContact_ID=" + VAF_UserContact_ID);
             if (!CanHaveAttachment())
                 return;
 
             String sql = "SELECT Record_ID "
                 + "FROM VAF_Private_Rights "
-                + "WHERE AD_User_ID=" + AD_User_ID.ToString() + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID.ToString() + " AND IsActive='Y' "
+                + "WHERE VAF_UserContact_ID=" + VAF_UserContact_ID.ToString() + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID.ToString() + " AND IsActive='Y' "
                 + "ORDER BY Record_ID";
             IDataReader dr = null;
             try
@@ -2752,13 +2752,13 @@ namespace VAdvantage.Model
         /// <param name="locks">true if lock, otherwise unlock</param>
         public void Locks(Ctx ctx, int Record_ID, bool locks)
         {
-            int AD_User_ID = ctx.GetAD_User_ID();
-            log.Finer("Lock=" + locks + ", AD_User_ID=" + AD_User_ID
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
+            log.Finer("Lock=" + locks + ", VAF_UserContact_ID=" + VAF_UserContact_ID
               + ", VAF_TableView_ID=" + _vo.VAF_TableView_ID + ", Record_ID=" + Record_ID);
-            MPrivateAccess access = MPrivateAccess.Get(ctx, AD_User_ID, _vo.VAF_TableView_ID, Record_ID);
+            MPrivateAccess access = MPrivateAccess.Get(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(ctx, AD_User_ID, _vo.VAF_TableView_ID, Record_ID);
+                access = new MPrivateAccess(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locks);
             access.Save();

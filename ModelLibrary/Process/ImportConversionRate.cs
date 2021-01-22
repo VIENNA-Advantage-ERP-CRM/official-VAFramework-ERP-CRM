@@ -110,7 +110,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
                 + " Updated = COALESCE (Updated, SysDate),"
-                + " UpdatedBy = ").Append(GetAD_User_ID()).Append(","
+                + " UpdatedBy = ").Append(GetVAF_UserContact_ID()).Append(","
                 + " I_ErrorMsg = NULL,"
                 + " Processed = 'N',"
                 + " I_IsImported = 'N' "

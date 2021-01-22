@@ -33,10 +33,10 @@
         getData: function (ctx, VAF_Tab_ID, VAF_TableView_ID, valueColumnName) {
             var VAF_Client_ID = ctx.getVAF_Client_ID();
             var dr = null;
-            //var sql = "SELECT Name," + valueColumnName + ", AD_UserQuery_ID FROM AD_UserQuery WHERE"
+            //var sql = "SELECT Name," + valueColumnName + ", VAF_UserSearch_ID FROM VAF_UserSearch WHERE"
             //    + " VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y'"
             //    + " AND (VAF_Tab_ID=" + VAF_Tab_ID + " OR VAF_TableView_ID=" + VAF_TableView_ID + ")"
-            //    + " ORDER BY Upper(Name), AD_UserQuery_ID";
+            //    + " ORDER BY Upper(Name), VAF_UserSearch_ID";
             try {
                 //dr = VIS.DB.executeDataReader(sql, null, null);
                 dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "ASearch/GetData", { "ColumnName": valueColumnName, "Tab_ID": VAF_Tab_ID, "Table_ID": VAF_TableView_ID }, null);
@@ -51,16 +51,16 @@
             return dr;
         },
 
-        getQueryLines: function (AD_UserQuery_ID) {
+        getQueryLines: function (VAF_UserSearch_ID) {
             var dr = null;
             var lines = [];
             //var sql = "SELECT KEYNAME,KEYVALUE,OPERATOR AS OPERATORNAME,VALUE1NAME," +
-            //    "VALUE1VALUE,VALUE2NAME,VALUE2VALUE,AD_USERQUERYLINE_ID FROM AD_UserQueryLine WHERE AD_UserQuery_ID=" +
-            //    AD_UserQuery_ID + " ORDER BY SeqNo";
+            //    "VALUE1VALUE,VALUE2NAME,VALUE2VALUE,VAF_USERSEARCHLINE_ID FROM VAF_UserSearchLine WHERE VAF_UserSearch_ID=" +
+            //    VAF_UserSearch_ID + " ORDER BY SeqNo";
             try {
                 //dr = VIS.DB.executeDataReader(sql, null, null);
 
-                dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "ASearch/GetQueryLines", { "UserQuery_ID": AD_UserQuery_ID }, null);
+                dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "ASearch/GetQueryLines", { "UserQuery_ID": VAF_UserSearch_ID }, null);
                 var optrName = "";
                 var optr = "";
                 //while (dr.read()) {
@@ -72,7 +72,7 @@
                 //    obj["VALUE1VALUE"] = dr.get("VALUE1VALUE");
                 //    obj["VALUE2NAME"] = dr.get("VALUE2NAME");
                 //    obj["VALUE2VALUE"] = dr.get("VALUE2VALUE");
-                //    obj["AD_USERQUERYLINE_ID"] = dr.get("AD_USERQUERYLINE_ID");
+                //    obj["VAF_USERSEARCHLINE_ID"] = dr.get("VAF_USERSEARCHLINE_ID");
 
                 //    optrName = dr.get("OPERATORNAME").toString();
                 //    optr = VIS.Query.prototype.OPERATORS[optrName];
@@ -90,7 +90,7 @@
                         obj["VALUE1VALUE"] = dr[i]["VALUE1VALUE"];
                         obj["VALUE2NAME"] = dr[i]["VALUE2NAME"];
                         obj["VALUE2VALUE"] = dr[i]["VALUE2VALUE"];
-                        obj["AD_USERQUERYLINE_ID"] = dr[i]["AD_USERQUERYLINE_ID"];
+                        obj["VAF_USERSEARCHLINE_ID"] = dr[i]["VAF_USERSEARCHLINE_ID"];
                         obj["FULLDAY"] = dr[i]["FULLDAY"];
                         optrName = dr[i]["OPERATORNAME"];
                         optr = VIS.Query.prototype.OPERATORS[optrName];
@@ -104,12 +104,12 @@
             return lines;
         },
 
-        deleteLines: function (AD_UserQuery_ID) {                                      // Not used any where
+        deleteLines: function (VAF_UserSearch_ID) {                                      // Not used any where
 
 
             var sqlQry = "VIS_147";
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_UserQuery_ID", AD_UserQuery_ID);
+            param[0] = new VIS.DB.SqlParam("@VAF_UserSearch_ID", VAF_UserSearch_ID);
 
             var no = executeQuery(sqlQry, param, null);
             //log.Info("#" + no);
@@ -117,14 +117,14 @@
             return no >= 0;
         },
 
-        deleteUserQuery: function (AD_UserQuery_ID) {
+        deleteUserQuery: function (VAF_UserSearch_ID) {
             var no = -1;
             $.ajax({
                 url: VIS.Application.contextUrl + 'ASearch/DeleteQuery',
                 type: "POST",
                 datatype: "json",
                 async: false,
-                data: { id: AD_UserQuery_ID }
+                data: { id: VAF_UserSearch_ID }
             }).done(function (json) {
                 no = parseInt(json);
             })
@@ -308,7 +308,7 @@
                 + '<th>' + VIS.Msg.translate(VIS.Env.getCtx(), "QueryValue2") + '</th>'
                 + '<th>' + VIS.Msg.getMsg("FullDay") + '</th>'
                 + '<th style="display:none">' + VIS.Msg.translate(VIS.Env.getCtx(), "VALUE2VALUE") + '</th>'
-                + '<th style="display:none">' + VIS.Msg.translate(VIS.Env.getCtx(), "AD_USERQUERYLINE_ID") + '</th>'
+                + '<th style="display:none">' + VIS.Msg.translate(VIS.Env.getCtx(), "VAF_USERSEARCHLINE_ID") + '</th>'
                 + '<th style="display:none">' + VIS.Msg.translate(VIS.Env.getCtx(), "Operator") + '</th>'
                 + '<th>' + VIS.Msg.translate(VIS.Env.getCtx(), "Action") + '</th>'
                 + '</tr>'
@@ -759,7 +759,7 @@
                         var uq;
                         window.setTimeout(function () {
 
-                            //var sql = "SELECT Count(*) FROM VAF_DefaultUserQuery WHERE AD_UserQuery_ID=" + obj + " AND AD_User_ID!=" + VIS.Env.getCtx().getAD_User_ID();
+                            //var sql = "SELECT Count(*) FROM VAF_DefaultUserQuery WHERE VAF_UserSearch_ID=" + obj + " AND VAF_UserContact_ID!=" + VIS.Env.getCtx().getVAF_UserContact_ID();
                             //var count = VIS.DB.executeScalar(sql);
                             var count = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "ASearch/GetQueryDefault", { "UserQuery_ID": obj }, null);
                             if (count > 0) {
@@ -933,7 +933,7 @@
             //    }
 
             //    html += '<li data-value="' + dr.get(1) + '" title="' + title + '"> ' + query + '</li>';
-            //    html1 += '<option value="' + dr.get("AD_UserQuery_ID") + '" title="' + title + '"> ' + query + '</option>';
+            //    html1 += '<option value="' + dr.get("VAF_UserSearch_ID") + '" title="' + title + '"> ' + query + '</option>';
             //}
 
             if (dr != null) {
@@ -945,7 +945,7 @@
                     }
 
                     html += '<li data-value="' + dr[i]["Code"] + '" title="' + title + '">' + query + '</li>';
-                    html1 += '<option value="' + dr[i]["AD_UserQuery_ID"] + '" title="' + title + '">' + query + '</option>';
+                    html1 += '<option value="' + dr[i]["VAF_UserSearch_ID"] + '" title="' + title + '">' + query + '</option>';
                 }
             }
 
@@ -1248,8 +1248,8 @@
                     htm += '<td>' + obj["KEYNAME"] + '</td><td style="display:none">' + obj["KEYVALUE"] + '</td><td>' + obj["OPERATORNAME"] +
                         '</td><td>' + obj["VALUE1NAME"] + '</td><td style="display:none">' + obj["VALUE1VALUE"] + '</td><td>' + obj["VALUE2NAME"] +
                         '</td><td style="display:none">' + obj["VALUE2VALUE"] + '</td><td>' + obj["FULLDAY"] +
-                        '</td><td style="display:none">' + obj["AD_USERQUERYLINE_ID"] + '</td><td style="display:none">' + obj["OPERATOR"] +
-                        '</td><td><i style="cursor:pointer" data-userQuery="' + obj["AD_USERQUERYLINE_ID"] + '" data-index = "' + i + '" class="vis vis-delete"></i></td>';
+                        '</td><td style="display:none">' + obj["VAF_USERSEARCHLINE_ID"] + '</td><td style="display:none">' + obj["OPERATOR"] +
+                        '</td><td><i style="cursor:pointer" data-userQuery="' + obj["VAF_USERSEARCHLINE_ID"] + '" data-index = "' + i + '" class="vis vis-delete"></i></td>';
                     htm += '</tr>';
                     html += htm;
                 }
@@ -1531,7 +1531,7 @@
                 obj["VALUE2VALUE"] = "NULL";
             else
                 obj["VALUE2VALUE"] = VIS.Utility.encodeText(VIS.Utility.Util.getValueOfString(value2Value));
-            obj["AD_USERQUERYLINE_ID"] = 0;
+            obj["VAF_USERSEARCHLINE_ID"] = 0;
             obj["OPERATOR"] = optr;
             dsAdvanceData.push(obj);
             bindGrid(dsAdvanceData);//for the time beeing commented today 3Dec.2010
@@ -2032,7 +2032,7 @@
     };
 
     Find.prototype.getIsUserColumn = function (columnName) {
-        if (columnName.endsWith("atedBy") || columnName.equals("AD_User_ID"))
+        if (columnName.endsWith("atedBy") || columnName.equals("VAF_UserContact_ID"))
             return true;
         if (columnName.equals("SalesRep_ID"))
             return true;

@@ -1290,8 +1290,8 @@ namespace VAdvantage.Model
                                     ISACTIVE       ,
                                     UPDATED       ,
                                     UPDATEDBY) VALUES (" + VAF_AttachmentLine_ID + "," + GetVAF_Attachment_ID() + "," + GetCtx().GetVAF_Client_ID() + "," + GetCtx().GetVAF_Org_ID() + @",
-                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetAD_User_ID() + ",NULL,'" + fileName + "'," + size + ",'" + ext + @"','Y',
-                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetAD_User_ID() + ")";
+                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetVAF_UserContact_ID() + ",NULL,'" + fileName + "'," + size + ",'" + ext + @"','Y',
+                                                        " + GlobalVariable.TO_DATE(DateTime.UtcNow, false) + "," + GetCtx().GetVAF_UserContact_ID() + ")";
             int res = DB.ExecuteQuery(sql);
             if (res == -1)
             {

@@ -697,7 +697,7 @@ namespace VAdvantage.Model
         }
         /// <summary>
         ///Get Zoom
-        ///Zoom AD_Window_ID
+        ///Zoom VAF_Screen_ID
         /// </summary>
         /// <returns></returns>
         public override  int GetZoomWindow()
@@ -719,8 +719,8 @@ namespace VAdvantage.Model
              * This will need to be expanded to add more tables if they have
              * multiple windows.
              */
-            int AD_Window_ID = ZoomTarget.GetZoomAD_Window_ID(_vInfo.tableName, _WindowNo, query.GetWhereClause(), GetCtx().IsSOTrx(_WindowNo),GetCtx());
-            return AD_Window_ID;
+            int VAF_Screen_ID = ZoomTarget.GetZoomVAF_Screen_ID(_vInfo.tableName, _WindowNo, query.GetWhereClause(), GetCtx().IsSOTrx(_WindowNo),GetCtx());
+            return VAF_Screen_ID;
         }
 
         /// <summary>

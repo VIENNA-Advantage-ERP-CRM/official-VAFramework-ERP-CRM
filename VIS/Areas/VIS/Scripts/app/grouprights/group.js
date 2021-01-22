@@ -285,7 +285,7 @@
         function userTemplate() {
             var script = ' <script type="text/x-handlebars-template">' +
                  '{{#each this}}' +
-            '<div class="vis-group-user-wrap"  data-UID="{{AD_UserID}}">' +
+            '<div class="vis-group-user-wrap"  data-UID="{{VAF_UserContactID}}">' +
                 '<input type="radio" class="vis-GroupUserRadio">' +
              '<div class="vis-group-user-profile vis-group-pro-width">' +
                         	'<div class="vis-group-user-img vis-chatimgwrap">' +
@@ -310,18 +310,18 @@
 
                         '<div class="vis-group-user-right">' +
                         	'<ul class="vis-flex-directionCol">' +
-                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="padding-bottom: 15px;" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_UserID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="padding-bottom: 15px;" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{VAF_UserContactID}}-{{UserTableID}}-{{UserWindowID}}"></span></li>' +
                             '{{#if IsActive }}' +
                                         '{{#if IsUpdate}}' +
-                                            '<li><span class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                            '<li><span class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="'+VIS.Msg.getMsg("Active")+'" data-UID="{{VAF_UserContactID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                '<li><span disabled class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                '<li><span disabled class="vis-group-user-ico vis-group-activeUser fa fa-check-circle" title="' + VIS.Msg.getMsg("Active") +'" data-UID="{{VAF_UserContactID}}"></span></li>' +           // if selected user cannot be updated
                                             '{{/if}}' +
                                  '{{else}}' +
                                         '{{#if IsUpdate}}' +
-                                                '<li><span class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'"  data-UID="{{AD_UserID}}"></span></li>' +           // if selected user can be updated
+                                                '<li><span class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'"  data-UID="{{VAF_UserContactID}}"></span></li>' +           // if selected user can be updated
                                         '{{else}}' +
-                                                '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'" data-UID="{{AD_UserID}}"></span></li>' +           // if selected user cannot be updated
+                                                '<li><span disabled class="vis-group-user-ico vis-group-inactiveUser fa fa-check-circle" title="' + VIS.Msg.getMsg("InActive") +'" data-UID="{{VAF_UserContactID}}"></span></li>' +           // if selected user cannot be updated
                                          '{{/if}}' +
                                  '{{/if}}' +
                             '</ul>' +
@@ -590,7 +590,7 @@
             if (target.hasClass('vis-group-user-ico vis-group-edit')) {
                 var UserID = target.data("uid").split('-');
                 var zoomQuery = new VIS.Query();
-                zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, UserID[0]);
+                zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, UserID[0]);
                 VIS.viewManager.startWindow(UserID[2], zoomQuery);
             }
             else if (target.hasClass('vis-group-user-ico vis-group-activeUser') && target.attr("disabled") != "disabled") {
@@ -632,7 +632,7 @@
             var name = $searchRole.val();
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/GetRoleInfo",
-                data: ({ AD_User_ID: userID, name: name }),
+                data: ({ VAF_UserContact_ID: userID, name: name }),
                 success: function (result) {
                     var data = JSON.parse(result);
                     $divRoleDataContainer.find('.vis-group-user-wrap').remove();
@@ -913,7 +913,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/UpdateUserRoles",
                 type: "Post",
-                data: { AD_User_ID: userID, roles: JSON.stringify(roleAssigned) },
+                data: { VAF_UserContact_ID: userID, roles: JSON.stringify(roleAssigned) },
                 success: function () {
                     $($($middlePanel.find('h7'))[0]).show();
                     $($($middlePanel.find('h7'))[0]).fadeOut(1600, "linear");
@@ -968,7 +968,7 @@
 
             $.ajax({
                 url: url,
-                data: ({ AD_User_ID: target.data('uid') }),
+                data: ({ VAF_UserContact_ID: target.data('uid') }),
                 success: function (result) {
                     var data = JSON.parse(result);
                     if (data < 1) {

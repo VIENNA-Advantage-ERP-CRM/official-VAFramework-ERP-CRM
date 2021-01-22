@@ -243,9 +243,9 @@ namespace VAdvantage.Model
                 MRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
                     role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
-                else if (goal.GetAD_User_ID() != 0)
+                else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());
+                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
                     MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];
@@ -320,9 +320,9 @@ namespace VAdvantage.Model
                 MRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
                     role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
-                else if (goal.GetAD_User_ID() != 0)
+                else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());
+                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
                     MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];
@@ -383,9 +383,9 @@ namespace VAdvantage.Model
                 MRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
                     role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
-                else if (goal.GetAD_User_ID() != 0)
+                else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());
+                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
                     MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];

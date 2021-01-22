@@ -84,11 +84,11 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set AD_User_ID from email
+         * 	Set VAF_UserContact_ID from email
          */
-        public void SetAD_User_ID()
+        public void SetVAF_UserContact_ID()
         {
-            if (GetAD_User_ID() != 0)
+            if (GetVAF_UserContact_ID() != 0)
                 return;
             String email = GetEMail();
             if (email != null && email.Length > 0)
@@ -96,25 +96,25 @@ namespace VAdvantage.Model
                 _user = MUser.Get(GetCtx(), email, Get_TrxName());
                 if (_user != null)
                 {
-                    base.SetAD_User_ID(_user.GetAD_User_ID());
+                    base.SetVAF_UserContact_ID(_user.GetVAF_UserContact_ID());
                     if (GetC_BPartner_ID() == 0)
                         SetC_BPartner_ID(_user.GetC_BPartner_ID());
                     else if (_user.GetC_BPartner_ID() != GetC_BPartner_ID())
                     {
                         log.Warning("@C_BPartner_ID@ (ID=" + GetC_BPartner_ID()
-                            + ") <> @AD_User_ID@ @C_BPartner_ID@ (ID=" + _user.GetC_BPartner_ID() + ")");
+                            + ") <> @VAF_UserContact_ID@ @C_BPartner_ID@ (ID=" + _user.GetC_BPartner_ID() + ")");
                     }
                 }
             }
         }
 
         /**
-         * 	Set AD_User_ID
-         *	@param AD_User_ID user
+         * 	Set VAF_UserContact_ID
+         *	@param VAF_UserContact_ID user
          */
-        public new void SetAD_User_ID(int AD_User_ID)
+        public new void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            base.SetAD_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
             GetUser();
         }
 
@@ -124,11 +124,11 @@ namespace VAdvantage.Model
          */
         public MUser GetUser()
         {
-            if (GetAD_User_ID() == 0)
+            if (GetVAF_UserContact_ID() == 0)
                 _user = null;
             else if (_user == null
-                || _user.GetAD_User_ID() != GetAD_User_ID())
-                _user = new MUser(GetCtx(), GetAD_User_ID(), Get_TrxName());
+                || _user.GetVAF_UserContact_ID() != GetVAF_UserContact_ID())
+                _user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
             return _user;
         }
 
@@ -329,7 +329,7 @@ namespace VAdvantage.Model
          */
         public String CreateBP()
         {
-            if (GetC_BPartner_ID() != 0 && GetAD_User_ID() != 0 && GetC_BPartner_Location_ID() == 0)
+            if (GetC_BPartner_ID() != 0 && GetVAF_UserContact_ID() != 0 && GetC_BPartner_Location_ID() == 0)
                 return "@AlreadyExists@: @C_BPartner_ID@ (ID=" + GetC_BPartner_ID() + ")";
 
             //	BPartner
@@ -428,9 +428,9 @@ namespace VAdvantage.Model
                         X_R_ContactInterest Prospect = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
                         Prospect.SetR_InterestArea_ID(Util.GetValueOfInt(dr[0]));
                         Prospect.SetC_BPartner_ID(GetRef_BPartner_ID());
-                        String query = "Select ad_user_id from ad_user where c_bpartner_id= " + GetRef_BPartner_ID();
+                        String query = "Select VAF_UserContact_id from VAF_UserContact where c_bpartner_id= " + GetRef_BPartner_ID();
                         int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_TrxName()));
-                        Prospect.SetAD_User_ID(UserId);
+                        Prospect.SetVAF_UserContact_ID(UserId);
                         query = "Select C_BPartner_Location_id from C_BPartner_Location where c_bpartner_id= " + GetRef_BPartner_ID();
 
                         int Id = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_TrxName()));
@@ -439,10 +439,10 @@ namespace VAdvantage.Model
                         Prospect.SetPhone(loc.GetPhone());
                         Prospect.SetFax(loc.GetFax());
 
-                        X_AD_User us = new X_AD_User(GetCtx(), UserId, Get_TrxName());
+                        X_VAF_UserContact us = new X_VAF_UserContact(GetCtx(), UserId, Get_TrxName());
                         Prospect.SetC_Job_ID(us.GetC_Job_ID());
                         Prospect.SetSubscribeDate(DateTime.Today);
-                        query = "Select Email from ad_user where ad_user_id= " + UserId;
+                        query = "Select Email from VAF_UserContact where VAF_UserContact_id= " + UserId;
                         String mail = Util.GetValueOfString(DB.ExecuteScalar(query, null, Get_TrxName()));
                         Prospect.SetEMail(mail);
                         if (Prospect.Save())
@@ -467,7 +467,7 @@ namespace VAdvantage.Model
         private String CreateBPContact()
         {
             //	Contact exists
-            if (GetAD_User_ID() != 0)
+            if (GetVAF_UserContact_ID() != 0)
                 return null;
 
             //	Something to save
@@ -510,7 +510,7 @@ namespace VAdvantage.Model
                 log.Warning("Contact not saved");
             }
             else
-                SetAD_User_ID(_user.GetAD_User_ID());
+                SetVAF_UserContact_ID(_user.GetVAF_UserContact_ID());
             return null;
         }
 
@@ -584,7 +584,7 @@ namespace VAdvantage.Model
             //
             _project.SetC_BPartner_ID(GetC_BPartner_ID());
             _project.SetC_BPartner_Location_ID(GetC_BPartner_Location_ID());
-            _project.SetAD_User_ID(GetAD_User_ID());
+            _project.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
             _project.SetC_BPartnerSR_ID(GetC_BPartnerSR_ID());
             _project.SetC_Campaign_ID(GetC_Campaign_ID());
 
@@ -652,7 +652,7 @@ namespace VAdvantage.Model
             _request.SetC_Lead_ID(GetC_Lead_ID());
             //
             _request.SetC_BPartner_ID(GetC_BPartner_ID());
-            _request.SetAD_User_ID(GetAD_User_ID());
+            _request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
             _request.SetC_Project_ID(GetC_Project_ID());
             _request.SetC_Campaign_ID(GetC_Campaign_ID());
             _request.SetR_Source_ID(GetR_Source_ID());
@@ -675,8 +675,8 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //	EMail Address specified
-            if (GetEMail() != null && GetAD_User_ID() == 0)
-                SetAD_User_ID();
+            if (GetEMail() != null && GetVAF_UserContact_ID() == 0)
+                SetVAF_UserContact_ID();
 
             if (newRecord || Is_ValueChanged("R_Status_ID"))
             {
@@ -701,11 +701,11 @@ namespace VAdvantage.Model
                 return success;
 
             //	Create Contact Interest
-            if (GetAD_User_ID() != 0 && GetR_InterestArea_ID() != 0
-                && (Is_ValueChanged("AD_User_ID") || Is_ValueChanged("R_InterestArea_ID")))
+            if (GetVAF_UserContact_ID() != 0 && GetR_InterestArea_ID() != 0
+                && (Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("R_InterestArea_ID")))
             {
                 MContactInterest ci = MContactInterest.Get(GetCtx(),
-                    GetR_InterestArea_ID(), GetAD_User_ID(),
+                    GetR_InterestArea_ID(), GetVAF_UserContact_ID(),
                     true, Get_TrxName());
                 ci.Save();		//	don't subscribe or re-activate
             }

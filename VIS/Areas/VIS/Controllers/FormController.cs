@@ -173,11 +173,11 @@ namespace VIS.Controllers
 
         #region Role
 
-        public ContentResult GetDocWhere(int AD_User_ID, string TableName)
+        public ContentResult GetDocWhere(int VAF_UserContact_ID, string TableName)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Content(model.GetDocWhere(AD_User_ID, TableName));
+            return Content(model.GetDocWhere(VAF_UserContact_ID, TableName));
         }
 
         #endregion

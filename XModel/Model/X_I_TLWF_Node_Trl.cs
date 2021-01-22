@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (I_TLWF_Node_Trl_ID == 0)
             {
-            SetAD_WF_Node_ID (0);
+            SetVAF_WFlow_Node_ID (0);
             SetI_TLLanguage_ID (0);
             SetI_TLWF_Node_Trl_ID (0);
             SetIsTranslated (false);
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         {
             /** if (I_TLWF_Node_Trl_ID == 0)
             {
-            SetAD_WF_Node_ID (0);
+            SetVAF_WFlow_Node_ID (0);
             SetI_TLLanguage_ID (0);
             SetI_TLWF_Node_Trl_ID (0);
             SetIsTranslated (false);
@@ -124,17 +124,17 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Node.
-        @param AD_WF_Node_ID Workflow Node (activity), step or process */
-        public void SetAD_WF_Node_ID(int AD_WF_Node_ID)
+        @param VAF_WFlow_Node_ID Workflow Node (activity), step or process */
+        public void SetVAF_WFlow_Node_ID(int VAF_WFlow_Node_ID)
         {
-            if (AD_WF_Node_ID < 1) throw new ArgumentException("AD_WF_Node_ID is mandatory.");
-            Set_ValueNoCheck("AD_WF_Node_ID", AD_WF_Node_ID);
+            if (VAF_WFlow_Node_ID < 1) throw new ArgumentException("VAF_WFlow_Node_ID is mandatory.");
+            Set_ValueNoCheck("VAF_WFlow_Node_ID", VAF_WFlow_Node_ID);
         }
         /** Get Node.
         @return Workflow Node (activity), step or process */
-        public int GetAD_WF_Node_ID()
+        public int GetVAF_WFlow_Node_ID()
         {
-            Object ii = Get_Value("AD_WF_Node_ID");
+            Object ii = Get_Value("VAF_WFlow_Node_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

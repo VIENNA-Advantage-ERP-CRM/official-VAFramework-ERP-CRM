@@ -418,7 +418,7 @@ namespace ViennaAdvantage.Process
             //	Open                          
             sql.Append(MPeriodControl.PERIODSTATUS_Open);
 
-            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetAD_User_ID());
+            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE
             sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID());
 

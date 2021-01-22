@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WF_NodeNext
+/** Generated Model for VAF_WFlow_NextNode
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WF_NodeNext : PO
+public class X_VAF_WFlow_NextNode : PO
 {
-public X_AD_WF_NodeNext (Context ctx, int AD_WF_NodeNext_ID, Trx trxName) : base (ctx, AD_WF_NodeNext_ID, trxName)
+public X_VAF_WFlow_NextNode (Context ctx, int VAF_WFlow_NextNode_ID, Trx trxName) : base (ctx, VAF_WFlow_NextNode_ID, trxName)
 {
-/** if (AD_WF_NodeNext_ID == 0)
+/** if (VAF_WFlow_NextNode_ID == 0)
 {
 SetAD_WF_Next_ID (0);
-SetAD_WF_NodeNext_ID (0);
-SetAD_WF_Node_ID (0);
+SetVAF_WFlow_NextNode_ID (0);
+SetVAF_WFlow_Node_ID (0);
 SetEntityType (null);	// U
 SetIsStdUserWorkflow (false);
 SetSeqNo (0);	// 10
 }
  */
 }
-public X_AD_WF_NodeNext (Ctx ctx, int AD_WF_NodeNext_ID, Trx trxName) : base (ctx, AD_WF_NodeNext_ID, trxName)
+public X_VAF_WFlow_NextNode (Ctx ctx, int VAF_WFlow_NextNode_ID, Trx trxName) : base (ctx, VAF_WFlow_NextNode_ID, trxName)
 {
-/** if (AD_WF_NodeNext_ID == 0)
+/** if (VAF_WFlow_NextNode_ID == 0)
 {
 SetAD_WF_Next_ID (0);
-SetAD_WF_NodeNext_ID (0);
-SetAD_WF_Node_ID (0);
+SetVAF_WFlow_NextNode_ID (0);
+SetVAF_WFlow_Node_ID (0);
 SetEntityType (null);	// U
 SetIsStdUserWorkflow (false);
 SetSeqNo (0);	// 10
@@ -47,7 +47,7 @@ SetSeqNo (0);	// 10
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_NodeNext (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_NextNode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_AD_WF_NodeNext (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_NodeNext (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_NextNode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_AD_WF_NodeNext (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_NodeNext (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_WFlow_NextNode (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WF_NodeNext()
+static X_VAF_WFlow_NextNode()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389049474L;
 public static int Table_ID;
  // =131;
 
-/** TableName=AD_WF_NodeNext */
-public static String Table_Name="AD_WF_NodeNext";
+/** TableName=VAF_WFlow_NextNode */
+public static String Table_Name="VAF_WFlow_NextNode";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WF_NodeNext[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_WFlow_NextNode[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -139,32 +139,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Node Transition.
-@param AD_WF_NodeNext_ID Workflow Node Transition */
-public void SetAD_WF_NodeNext_ID (int AD_WF_NodeNext_ID)
+@param VAF_WFlow_NextNode_ID Workflow Node Transition */
+public void SetVAF_WFlow_NextNode_ID (int VAF_WFlow_NextNode_ID)
 {
-if (AD_WF_NodeNext_ID < 1) throw new ArgumentException ("AD_WF_NodeNext_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_NodeNext_ID", AD_WF_NodeNext_ID);
+if (VAF_WFlow_NextNode_ID < 1) throw new ArgumentException ("VAF_WFlow_NextNode_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_NextNode_ID", VAF_WFlow_NextNode_ID);
 }
 /** Get Node Transition.
 @return Workflow Node Transition */
-public int GetAD_WF_NodeNext_ID() 
+public int GetVAF_WFlow_NextNode_ID() 
 {
-Object ii = Get_Value("AD_WF_NodeNext_ID");
+Object ii = Get_Value("VAF_WFlow_NextNode_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Node.
-@param AD_WF_Node_ID Workflow Node (activity), step or process */
-public void SetAD_WF_Node_ID (int AD_WF_Node_ID)
+@param VAF_WFlow_Node_ID Workflow Node (activity), step or process */
+public void SetVAF_WFlow_Node_ID (int VAF_WFlow_Node_ID)
 {
-if (AD_WF_Node_ID < 1) throw new ArgumentException ("AD_WF_Node_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_Node_ID", AD_WF_Node_ID);
+if (VAF_WFlow_Node_ID < 1) throw new ArgumentException ("VAF_WFlow_Node_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_Node_ID", VAF_WFlow_Node_ID);
 }
 /** Get Node.
 @return Workflow Node (activity), step or process */
-public int GetAD_WF_Node_ID() 
+public int GetVAF_WFlow_Node_ID() 
 {
-Object ii = Get_Value("AD_WF_Node_ID");
+Object ii = Get_Value("VAF_WFlow_Node_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -172,7 +172,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_WF_Node_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_WFlow_Node_ID().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */

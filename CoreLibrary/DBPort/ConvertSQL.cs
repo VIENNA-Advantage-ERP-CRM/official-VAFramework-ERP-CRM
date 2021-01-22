@@ -368,7 +368,7 @@ namespace VAdvantage.DBPort
                 "T_TRIALBALANCE",
 				// Do not log *Access records - teo_Sarca BF [ 2782095 ]
 				"VAF_JOB_RIGHTS",
-                "AD_WINDOW_ACCESS",
+                "VAF_SCREEN_RIGHTS",
                 "AD_WORKFLOW_ACCESS",
                 "VAF_Page_Rights",
 				//

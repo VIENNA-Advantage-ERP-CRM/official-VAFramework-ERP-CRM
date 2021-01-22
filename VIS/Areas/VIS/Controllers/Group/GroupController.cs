@@ -30,30 +30,30 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(users), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ActiveUser(int AD_User_ID)
+        public JsonResult ActiveUser(int VAF_UserContact_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             Group model = new Group(ct);
-            return Json(JsonConvert.SerializeObject(model.ActiveUser(AD_User_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.ActiveUser(VAF_UserContact_ID)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult InActiveUser(int AD_User_ID)
+        public JsonResult InActiveUser(int VAF_UserContact_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             Group model = new Group(ct);
-            return Json(JsonConvert.SerializeObject(model.InActiveUser(AD_User_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.InActiveUser(VAF_UserContact_ID)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetRoleInfo(int AD_User_ID,string name)
+        public JsonResult GetRoleInfo(int VAF_UserContact_ID,string name)
         {
             Ctx ct = Session["ctx"] as Ctx;
             Group model = new Group(ct);
-            List<RolesInfo> roles = model.GetRoleInfo(AD_User_ID,name);
+            List<RolesInfo> roles = model.GetRoleInfo(VAF_UserContact_ID,name);
             return Json(JsonConvert.SerializeObject(roles), JsonRequestBehavior.AllowGet);
         }
 
             [HttpPost]
-        public JsonResult UpdateUserRoles(int AD_User_ID, string roles)
+        public JsonResult UpdateUserRoles(int VAF_UserContact_ID, string roles)
         {
             Ctx ct = Session["ctx"] as Ctx;
             List<RolesInfo> rInfo = null;
@@ -62,7 +62,7 @@ namespace VIS.Controllers
                 rInfo = JsonConvert.DeserializeObject<List<RolesInfo>>(roles);
             }
             Group model = new Group(ct);
-            model.UpdateUserRoles(AD_User_ID, rInfo);
+            model.UpdateUserRoles(VAF_UserContact_ID, rInfo);
             return Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
         }
 

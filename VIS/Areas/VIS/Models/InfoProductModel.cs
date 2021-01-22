@@ -1946,7 +1946,7 @@ namespace VIS.Models
         {
             int window_ID = 0;
             int tab_ID = Util.GetValueOfInt(fields);
-            string sql = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + Util.GetValueOfInt(tab_ID);
+            string sql = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + Util.GetValueOfInt(tab_ID);
             window_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return window_ID;
         }

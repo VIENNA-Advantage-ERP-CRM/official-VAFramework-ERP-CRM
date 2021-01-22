@@ -82,24 +82,24 @@ namespace VAdvantage.Model
         }/** Get Table.
 @return Database Table information */
         public int GetVAF_TableView_ID() { Object ii = Get_Value("VAF_TableView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set User Query.
-@param AD_UserQuery_ID Saved User Query */
-        public void SetAD_UserQuery_ID(int AD_UserQuery_ID)
+@param VAF_UserSearch_ID Saved User Query */
+        public void SetVAF_UserSearch_ID(int VAF_UserSearch_ID)
         {
-            if (AD_UserQuery_ID <= 0) Set_Value("AD_UserQuery_ID", null);
+            if (VAF_UserSearch_ID <= 0) Set_Value("VAF_UserSearch_ID", null);
             else
-                Set_Value("AD_UserQuery_ID", AD_UserQuery_ID);
+                Set_Value("VAF_UserSearch_ID", VAF_UserSearch_ID);
         }/** Get User Query.
 @return Saved User Query */
-        public int GetAD_UserQuery_ID() { Object ii = Get_Value("AD_UserQuery_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+        public int GetVAF_UserSearch_ID() { Object ii = Get_Value("VAF_UserSearch_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set User/Contact.
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }/** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID() { Object ii = Get_Value("AD_User_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAF_UserContact_ID() { Object ii = Get_Value("VAF_UserContact_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */

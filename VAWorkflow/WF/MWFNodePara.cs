@@ -21,7 +21,7 @@ namespace VAdvantage.WF
     /// <summary>
     /// Workflow Node Process Parameter Model
     /// </summary>
-    public class MWFNodePara : X_AD_WF_Node_Para
+    public class MWFNodePara : X_VAF_WFlow_Node_Para
     {
         // Linked Process Parameter      
         private MProcessPara _processPara = null;
@@ -34,10 +34,10 @@ namespace VAdvantage.WF
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Node_Para_ID">id</param>
+        /// <param name="VAF_WFlow_Node_Para_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFNodePara(Ctx ctx, int AD_WF_Node_Para_ID, Trx trxName)
-            : base(ctx, AD_WF_Node_Para_ID, trxName)
+        public MWFNodePara(Ctx ctx, int VAF_WFlow_Node_Para_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_Node_Para_ID, trxName)
         {
         }
 
@@ -56,15 +56,15 @@ namespace VAdvantage.WF
         /// Get Parameters for a node
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_Node_ID">node</param>
+        /// <param name="VAF_WFlow_Node_ID">node</param>
         /// <returns>array of parameters</returns>
-        public static MWFNodePara[] GetParameters(Ctx ctx, int AD_WF_Node_ID)
+        public static MWFNodePara[] GetParameters(Ctx ctx, int VAF_WFlow_Node_ID)
         {
             List<MWFNodePara> list = new List<MWFNodePara>();
-            String sql = "SELECT * FROM AD_WF_Node_Para "
-                + "WHERE AD_WF_Node_ID=" + AD_WF_Node_ID;
+            String sql = "SELECT * FROM VAF_WFlow_Node_Para "
+                + "WHERE VAF_WFlow_Node_ID=" + VAF_WFlow_Node_ID;
 
-            //String sql = "SELECT * FROM VAF_Org WHERE VAF_Client_ID=" + AD_WF_Node_ID;
+            //String sql = "SELECT * FROM VAF_Org WHERE VAF_Client_ID=" + VAF_WFlow_Node_ID;
             DataSet ds = null;
 
             try

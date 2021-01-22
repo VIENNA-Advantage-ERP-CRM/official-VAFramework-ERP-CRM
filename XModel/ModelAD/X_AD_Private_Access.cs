@@ -21,7 +21,7 @@ public X_VAF_Private_Rights (Context ctx, int VAF_Private_Rights_ID, Trx trxName
 /** if (VAF_Private_Rights_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetRecord_ID (0);
 }
  */
@@ -31,7 +31,7 @@ public X_VAF_Private_Rights (Ctx ctx, int VAF_Private_Rights_ID, Trx trxName) : 
 /** if (VAF_Private_Rights_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetRecord_ID (0);
 }
  */
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Record ID.
 @param Record_ID Direct internal record ID */

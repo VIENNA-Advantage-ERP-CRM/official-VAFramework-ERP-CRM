@@ -383,7 +383,7 @@ namespace VAdvantage.Model
                 //
                 SetC_BPartner_ID(order.GetBill_BPartner_ID());
                 SetC_BPartner_Location_ID(order.GetBill_Location_ID());
-                SetAD_User_ID(order.GetBill_User_ID());
+                SetVAF_UserContact_ID(order.GetBill_User_ID());
             }
             catch (Exception e)
             {
@@ -410,7 +410,7 @@ namespace VAdvantage.Model
             SetDateAcct(GetDateInvoiced());
             //
             SetSalesRep_ID(ship.GetSalesRep_ID());
-            SetAD_User_ID(ship.GetAD_User_ID());
+            SetVAF_UserContact_ID(ship.GetVAF_UserContact_ID());
         }
 
         /// <summary>
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
         //    SetDateAcct(GetDateInvoiced());
         //    //
         //    SetSalesRep_ID(ship.GetSalesRep_ID());
-        //    SetAD_User_ID(ship.GetAD_User_ID());
+        //    SetVAF_UserContact_ID(ship.GetVAF_UserContact_ID());
         //}
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace VAdvantage.Model
             //
             SetC_BPartner_ID(line.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(line.GetC_BPartner_Location_ID());
-            SetAD_User_ID(line.GetAD_User_ID());
+            SetVAF_UserContact_ID(line.GetVAF_UserContact_ID());
         }
 
         /// <summary>
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
             //	Set Contact
             MUser[] contacts = bp.GetContacts(false);
             if (contacts != null && contacts.Length > 0)	//	get first User
-                SetAD_User_ID(contacts[0].GetAD_User_ID());
+                SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
         }
 
         /// <summary>
@@ -620,7 +620,7 @@ namespace VAdvantage.Model
             //vikas
             //MBPartner bp = new MBPartner(GetCtx(), ship.GetC_BPartner_ID(), null);
             SetBPartner(bp);
-            SetAD_User_ID(ord.GetBill_User_ID());
+            SetVAF_UserContact_ID(ord.GetBill_User_ID());
             //
             SetSendEMail(ship.IsSendEMail());
             //
@@ -696,7 +696,7 @@ namespace VAdvantage.Model
         //    }
 
         //    SetBPartner(bp);
-        //    SetAD_User_ID(ship.GetAD_User_ID());
+        //    SetVAF_UserContact_ID(ship.GetVAF_UserContact_ID());
         //    //
         //    SetSendEMail(ship.IsSendEMail());
         //    //
@@ -745,7 +745,7 @@ namespace VAdvantage.Model
         //            SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
         //        //	Overwrite Invoice Address
         //        SetC_BPartner_Location_ID(ord.GetBill_Location_ID());
-        //        SetAD_User_ID(ord.GetBill_User_ID());
+        //        SetVAF_UserContact_ID(ord.GetBill_User_ID());
         //    }
         //}
 
@@ -4099,9 +4099,9 @@ namespace VAdvantage.Model
                 }
                 //Credit Limit
                 //	User - Last Result/Contact
-                if (GetAD_User_ID() != 0)
+                if (GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = new MUser(GetCtx(), GetAD_User_ID(), Get_TrxName());
+                    MUser user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
                     //user.SetLastContact(new DateTime(System.currentTimeMillis()));
                     user.SetLastContact(DateTime.Now);
                     user.SetLastResult(Msg.Translate(GetCtx(), "C_Invoice_ID") + ": " + GetDocumentNo());
@@ -5487,7 +5487,7 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Owner (Responsible)
-         *	@return AD_User_ID
+         *	@return VAF_UserContact_ID
          */
         public int GetDoc_User_ID()
         {
@@ -5670,7 +5670,7 @@ namespace VAdvantage.Model
          *	Invoice Header- BPartner.
          *		- M_PriceList_ID (+ Ctx)
          *		- C_BPartner_Location_ID
-         *		- AD_User_ID
+         *		- VAF_UserContact_ID
          *		- POReference
          *		- SO_Description
          *		- IsDiscountPrinted
@@ -5696,12 +5696,12 @@ namespace VAdvantage.Model
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             bool isSOTrx = IsSOTrx();
@@ -5757,14 +5757,14 @@ namespace VAdvantage.Model
                         SetC_BPartner_Location_ID(locID);
                     }
                     //	Contact - overwritten by InfoBP selection
-                    int contID = (int)dr["AD_User_ID"];
+                    int contID = (int)dr["VAF_UserContact_ID"];
                     if (C_BPartner_ID.ToString().Equals(GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID")))
                     {
-                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
+                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                         if (cont.Length > 0)
                             contID = int.Parse(cont);
                     }
-                    SetAD_User_ID(contID);
+                    SetVAF_UserContact_ID(contID);
 
                     //	CreditAvailable
                     if (isSOTrx)
@@ -5903,7 +5903,7 @@ namespace VAdvantage.Model
                 if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VAPOS_MaintainCashbook FROM VAPOS_TerminalSetting WHERE 
                                                                       VAPOS_PosTerminal_ID = " + order.GetVAPOS_POSTerminal_ID())) == "E")
                 {
-                    empCBId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Cashbook_ID FROM VAPOS_TerminalUsers WHERE AD_User_ID = " + order.GetCreatedBy()));
+                    empCBId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Cashbook_ID FROM VAPOS_TerminalUsers WHERE VAF_UserContact_ID = " + order.GetCreatedBy()));
                 }
 
                 if (empCBId > 0)

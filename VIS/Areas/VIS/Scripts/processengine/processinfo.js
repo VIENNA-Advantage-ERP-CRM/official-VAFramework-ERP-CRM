@@ -7,7 +7,7 @@
         this.table_ID = Table_ID;
         this.tableName = "";
         this.record_ID = Record_ID;
-        this.AD_User_ID = 0;
+        this.VAF_UserContact_ID = 0;
         this.VAF_Client_ID = 0;
         this.className = null;
 
@@ -33,7 +33,7 @@
         this.fileType = VIS.ProcessCtl.prototype.REPORT_TYPE_PDF;
         this.windowNo = 0;
         this.tableName = "";
-        this.AD_Window_ID = 0;
+        this.VAF_Screen_ID = 0;
         this.VAF_ReportView_ID = 0;
         this.printFormatTableName = "";
         this.useCrystalReportViewer = false;
@@ -56,7 +56,7 @@
 
             "VAF_TableView_ID": this.table_ID,
             "VAF_TableViewName": this.tableName,
-            "AD_User_ID": this.AD_User_ID,
+            "VAF_UserContact_ID": this.VAF_UserContact_ID,
             "VAF_Client_ID": this.VAF_Client_ID,
             "Batch": this.batch,
             "TimeOut": this.timeout,
@@ -69,7 +69,7 @@
             "TotalPage": this.totalPage,
             "PageNo": this.pageNo,
             "FileType": this.fileType,
-            "AD_Window_ID": this.AD_Window_ID,
+            "VAF_Screen_ID": this.VAF_Screen_ID,
             "WindowNo": this.windowNo,
             "VAF_ReportView_ID": this.VAF_ReportView_ID,
             "UseCrystalReportViewer": this.useCrystalReportViewer,
@@ -104,7 +104,7 @@
         info.summary = o.Summary;
         info.table_ID = o.VAF_TableView_ID;
         info.tableName = o.VAF_TableViewName;
-        info.AD_User_ID = o.AD_User_ID;
+        info.VAF_UserContact_ID = o.VAF_UserContact_ID;
         info.VAF_Client_ID = o.VAF_Client_ID;;
         info.batch = o.Batch;
         info.timeout = o.TimeOut;
@@ -264,12 +264,12 @@
         return this.VAF_Client_ID;
     };
 
-    ProcessInfo.prototype.setAD_User_ID = function (AD_User_ID) {
-        this.AD_User_ID = AD_User_ID;
+    ProcessInfo.prototype.setVAF_UserContact_ID = function (VAF_UserContact_ID) {
+        this.VAF_UserContact_ID = VAF_UserContact_ID;
     };
 
-    ProcessInfo.prototype.getAD_User_ID = function () {
-        return this.AD_User_ID;
+    ProcessInfo.prototype.getVAF_UserContact_ID = function () {
+        return this.VAF_UserContact_ID;
     };
 
     ProcessInfo.prototype.getParameter = function () {
@@ -387,11 +387,11 @@
     }
 
 
-    ProcessInfo.prototype.setAD_Window_ID = function (Window_ID) {
-        this.AD_Window_ID = Window_ID;
+    ProcessInfo.prototype.setVAF_Screen_ID = function (Window_ID) {
+        this.VAF_Screen_ID = Window_ID;
     }
-    ProcessInfo.prototype.getAD_Window_ID = function () {
-        return this.AD_Window_ID;
+    ProcessInfo.prototype.getVAF_Screen_ID = function () {
+        return this.VAF_Screen_ID;
     }
 
     ProcessInfo.prototype.setIsBackground = function (Background) {
@@ -566,7 +566,7 @@
         this.table_ID = null;
         this.tableName = null;
         this.record_ID = null;
-        this.AD_User_ID = null;
+        this.VAF_UserContact_ID = null;
         this.VAF_Client_ID == null;
         this.className = null;
 

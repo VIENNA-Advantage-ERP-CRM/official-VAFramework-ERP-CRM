@@ -38,7 +38,7 @@ namespace VIS.Models
         public int SaveUserImage(Ctx ctx, byte[] buffer, string imageName, bool isSaveInDB)
         {
 
-            MUser user = new MUser(ctx, ctx.GetAD_User_ID(), null);
+            MUser user = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
             int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
             MImage mimg = new MImage(ctx, imageID, null);
@@ -99,7 +99,7 @@ namespace VIS.Models
         public int VAF_Image_ID { get; set; }
         public DateTime Cdate { get; set; }
         public string TableName { get; set; }
-        public int AD_User_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
         public string Identifier { get; set; }
     }
     //follups usrimage
@@ -124,7 +124,7 @@ namespace VIS.Models
     {
         public int VAF_Notice_ID { get; set; }
         public int VAF_TableView_ID { get; set; }
-        public int AD_Window_ID { get; set; }
+        public int VAF_Screen_ID { get; set; }
         public int Record_ID { get; set; }
         public string MsgType { get; set; }
         public string Title { get; set; }
@@ -142,7 +142,7 @@ namespace VIS.Models
     public class HomeRequest
     {
         public int R_Request_ID { get; set; }
-        public int AD_Window_ID { get; set; }
+        public int VAF_Screen_ID { get; set; }
         public string DocumentNo { get; set; }
         public string TableName { get; set; }
         public string Name { get; set; }

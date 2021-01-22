@@ -373,27 +373,27 @@
 
     /**
 	 *	Dynamic Initialization Single Window
-	 *  @param AD_Window_ID window
+	 *  @param VAF_Screen_ID window
 	 *  @param query selection criteria
      *  @param callback to add menu item for window
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initWindow = function (AD_Window_ID, query, callback, action, sel) {
+    AWindow.prototype.initWindow = function (VAF_Screen_ID, query, callback, action, sel) {
 
         this.cPanel = new VIS.APanel(); //initlize Apanel
         this.getContentGrid().css('display', 'flex'); // to support older design
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
-        this.id = windowNo + "_" + AD_Window_ID;
-        this.hid = action + "=" + AD_Window_ID;
+        this.id = windowNo + "_" + VAF_Screen_ID;
+        this.hid = action + "=" + VAF_Screen_ID;
 
         var self = this;
 
         this.hideHeader(true); 
 
 
-        VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
+        VIS.AEnv.getGridWindow(windowNo, VAF_Screen_ID, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
                 self.dispose();
@@ -444,7 +444,7 @@
             self = null;
         });
 
-        this.AD_Window_ID = AD_Window_ID;
+        this.VAF_Screen_ID = VAF_Screen_ID;
         this.windowNo = windowNo;
 
         this.getRootLayout().id = this.id;
@@ -641,8 +641,8 @@
         return this.title;
     };
 
-    AWindow.prototype.getAD_Window_ID = function () {
-        return this.AD_Window_ID;
+    AWindow.prototype.getVAF_Screen_ID = function () {
+        return this.VAF_Screen_ID;
     };
 
     /**
@@ -689,7 +689,7 @@
         //dispose all popover
        // this.cPanel.getRoot().find('.vis-ev-ctrlinfowrap').popover('dispose');
         if (this.onClosed) {
-            if (!this.onClosed(this.id, this.$layout, this.hid, this.AD_Window_ID))
+            if (!this.onClosed(this.id, this.$layout, this.hid, this.VAF_Screen_ID))
                 return;
         }
         this.onClosed = null;

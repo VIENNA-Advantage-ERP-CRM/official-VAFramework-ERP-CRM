@@ -94,7 +94,7 @@ namespace VAdvantage.Process
             else
                 return "-";
             //
-            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetAD_User_ID());
+            sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE
             sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID())
                 .Append(" AND PeriodStatus<>'P'")

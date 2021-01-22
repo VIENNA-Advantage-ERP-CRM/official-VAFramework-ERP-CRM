@@ -94,7 +94,7 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
-            string sql = "select count(*) from s_resource where ad_user_ID = " + GetAD_User_ID() + " and isactive = 'Y' and s_resource_ID <> " + GetS_Resource_ID();
+            string sql = "select count(*) from s_resource where VAF_UserContact_ID = " + GetVAF_UserContact_ID() + " and isactive = 'Y' and s_resource_ID <> " + GetS_Resource_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (count > 0)
             {

@@ -23,13 +23,13 @@ namespace VAdvantage.Model
         }	//	MAlertRecipient
 
 
-        public new int GetAD_User_ID()
+        public new int GetVAF_UserContact_ID()
         {
-            int ii = Util.GetValueOfInt(Get_Value("AD_User_ID"));
+            int ii = Util.GetValueOfInt(Get_Value("VAF_UserContact_ID"));
             //if (ii == null)
             //    return -1;
             return ii;
-        }	//	getAD_User_ID
+        }	//	getVAF_UserContact_ID
 
         public new int GetVAF_Role_ID()
         {
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAlertRecipient[");
             sb.Append(Get_ID())
-                .Append(",AD_User_ID=").Append(GetAD_User_ID())
+                .Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
                 .Append(",VAF_Role_ID=").Append(GetVAF_Role_ID())
                 .Append("]");
             return sb.ToString();

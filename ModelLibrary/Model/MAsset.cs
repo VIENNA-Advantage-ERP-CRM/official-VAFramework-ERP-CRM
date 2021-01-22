@@ -119,7 +119,7 @@ namespace VAdvantage.Model
             asset.SetDescription(description);
 
             //	User
-            asset.SetAD_User_ID(user.GetAD_User_ID());
+            asset.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
             asset.SetC_BPartner_ID(user.GetC_BPartner_ID());
             //	Product
             asset.SetM_Product_ID(product.GetM_Product_ID());
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
             // SetIsOwned(true);
             SetC_BPartner_ID(shipment.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(shipment.GetC_BPartner_Location_ID());
-            SetAD_User_ID(shipment.GetAD_User_ID());
+            SetVAF_UserContact_ID(shipment.GetVAF_UserContact_ID());
             SetM_Locator_ID(shipLine.GetM_Locator_ID());
             SetIsInPosession(true);
             SetAssetServiceDate(shipment.GetDateAcct());
@@ -348,7 +348,7 @@ namespace VAdvantage.Model
             //SetIsOwned(true);
             SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
-            SetAD_User_ID(invoice.GetAD_User_ID());
+            SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
             //SetM_Locator_ID(invoice.GetM_Locator_ID());
             SetIsInPosession(true);
 
@@ -821,26 +821,26 @@ namespace VAdvantage.Model
         /**
          * 	Confirm Asset EMail Delivery
          *	@param email email sent
-         * 	@param AD_User_ID recipient
+         * 	@param VAF_UserContact_ID recipient
          * 	@return asset delivery
          */
-        public MAssetDelivery ConfirmDelivery(EMail email, int AD_User_ID)
+        public MAssetDelivery ConfirmDelivery(EMail email, int VAF_UserContact_ID)
         {
             SetVersionNo(GetProductVersionNo());
-            MAssetDelivery ad = new MAssetDelivery(this, email, null, AD_User_ID);
+            MAssetDelivery ad = new MAssetDelivery(this, email, null, VAF_UserContact_ID);
             return ad;
         }
 
         /* 	Confirm Asset Download Delivery
         *	@param request request
-        * 	@param AD_User_ID recipient
+        * 	@param VAF_UserContact_ID recipient
         * 	@return asset delivery
         */
-        //public MAssetDelivery ConfirmDelivery(HttpServletRequest request, int AD_User_ID)
+        //public MAssetDelivery ConfirmDelivery(HttpServletRequest request, int VAF_UserContact_ID)
         //{
         //    SetVersionNo(GetProductVersionNo());
         //    SetLifeUseUnits(GetLifeUseUnits().add(Env.ONE));
-        //    MAssetDelivery ad = new MAssetDelivery(this, request, AD_User_ID);
+        //    MAssetDelivery ad = new MAssetDelivery(this, request, VAF_UserContact_ID);
         //    return ad;
         //}
 

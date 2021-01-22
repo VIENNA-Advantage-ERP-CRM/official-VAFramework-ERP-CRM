@@ -846,7 +846,7 @@
                             url: VIS.Application.contextUrl + 'Subscribe/UnSubscribe',
                             type: 'GET',
                             dataType: 'Json',
-                            data: { AD_Window_ID: arr[4], Record_ID: arr[1], VAF_TableView_ID: arr[3] },
+                            data: { VAF_Screen_ID: arr[4], Record_ID: arr[1], VAF_TableView_ID: arr[3] },
                             success: function (result) {
                                 if (result == false) {
                                     alert(VIS.Msg.getMsg("UnSubscription Failed"));
@@ -957,16 +957,16 @@
                                         dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                     }
                                     if (data.lstFollowups[cnt].VAF_Image_ID == 0) {
-                                        uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
+                                        uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "' class='fa fa-user'></i>";
                                     }
                                     else {
                                         for (var a in data.lstUserImg) {
                                             if (data.lstUserImg[a].VAF_Image_ID == data.lstFollowups[cnt].VAF_Image_ID) {
                                                 if (data.lstUserImg[a].UserImg != "NoRecordFound" && data.lstUserImg[a].UserImg != "FileDoesn'tExist" && data.lstUserImg[a].UserImg != null) {
-                                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>";
+                                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'><img data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>";
                                                 }
                                                 else {
-                                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
+                                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "' class='fa fa-user'></i>";
                                                 }
                                                 break;
                                             }
@@ -985,8 +985,8 @@
                                         + "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
                                         + uimg
                                         + "<p>"
-                                        + " <strong data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'>";
-                                    if (data.lstFollowups[cnt].AD_User_ID == VIS.Env.getCtx().getAD_User_ID()) {
+                                        + " <strong data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'>";
+                                    if (data.lstFollowups[cnt].VAF_UserContact_ID == VIS.Env.getCtx().getVAF_UserContact_ID()) {
                                         str += VIS.Msg.getMsg("Me") + " </strong> <br />"
                                     }
                                     else {
@@ -1051,18 +1051,18 @@
                                     dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                 }
                                 if (data.lstFollowups[cnt].VAF_Image_ID == 0) {
-                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>"
+                                    uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "' class='fa fa-user'></i>"
                                 }
                                 else {
                                     for (var b in data.lstUserImg) {
                                         if (data.lstUserImg[b].VAF_Image_ID == data.lstFollowups[cnt].VAF_Image_ID) {
                                             if (data.lstUserImg[b].UserImg != "NoRecordFound" && data.lstUserImg[b].UserImg != "FileDoesn'tExist" && data.lstUserImg[b].UserImg != null) {
-                                                uimg = "<div class='vis-feedimgwrap' data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>"
+                                                uimg = "<div class='vis-feedimgwrap' data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'><img  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>"
                                             }
                                             else {
-                                                //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
+                                                //uimg = "<img  style='cursor:pointer;'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + "Areas/VIS/Images/home/defaultUser46X46.png'/>"
 
-                                                uimg = "<i  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'    class='fa fa-user'></i>"
+                                                uimg = "<i  data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'    class='fa fa-user'></i>"
 
                                             }
                                             break;
@@ -1072,9 +1072,9 @@
                                 str += "<div class='vis-feedDetails-cmnt'  data-fll='fll-cmnt'>"
                                     + uimg
                                     + "<p>"
-                                    + " <strong  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'>";
+                                    + " <strong  data-fll='UID' data-UID='" + data.lstFollowups[cnt].VAF_UserContact_ID + "'>";
 
-                                if (data.lstFollowups[cnt].AD_User_ID == VIS.Env.getCtx().getAD_User_ID()) {
+                                if (data.lstFollowups[cnt].VAF_UserContact_ID == VIS.Env.getCtx().getVAF_UserContact_ID()) {
                                     str += VIS.Msg.getMsg("Me") + " </strong> <br />"
                                 }
                                 else {
@@ -1112,24 +1112,24 @@
                             var cd = new Date();
                             var cdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                             var user_image = data;
-                            var name = VIS.context.getContext("##AD_User_Name");
+                            var name = VIS.context.getContext("##VAF_UserContact_Name");
                             var uimg = "";
                             if (user_image !== null) {
 
                                 if (user_image != "NoRecordFound" && user_image != "FileDoesn'tExist") {
-                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' ><img data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' /></div>"
+                                    uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + VIS.Env.getCtx().getVAF_UserContact_ID() + "' ><img data-fll='UID' data-UID='" + VIS.Env.getCtx().getVAF_UserContact_ID() + "'  alt='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + user_image + "?" + new Date($.now()).getSeconds() + "' /></div>"
                                 }
                                 else {
-                                    uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
+                                    uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getVAF_UserContact_ID() + "' class='fa fa-user'></i>"
                                 }
                             }
                             else {
-                                uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "' class='fa fa-user'></i>"
+                                uimg = "<i data-fll='UID' data-UID='" + VIS.Env.getCtx().getVAF_UserContact_ID() + "' class='fa fa-user'></i>"
                             }
                             var str = "<div class='vis-feedDetails-cmnt' data-fll='fll-cmnt'>"
                                 + uimg
                                 + "<p>"
-                                + " <strong  data-fll='UID' data-UID='" + VIS.Env.getCtx().getAD_User_ID() + "'>" + VIS.Msg.getMsg("Me") + "</strong><br />"
+                                + " <strong  data-fll='UID' data-UID='" + VIS.Env.getCtx().getVAF_UserContact_ID() + "'>" + VIS.Msg.getMsg("Me") + "</strong><br />"
                                 + VIS.Utility.encodeText(cmntTxt)
                                 + "</p>"
                                 + "<p class='vis-feedDateTime'>" + cdate + "</p></div>";
@@ -1235,7 +1235,7 @@
                             }
 
                             + "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
-                            str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
+                            str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].VAF_Screen_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
                                 + "</ul>"
                                 + "</div>"
                                 + "</div>"
@@ -1353,7 +1353,7 @@
 
                             // Renaming of Approve highlight to Acknowledge under notification
                             str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].VAF_Notice_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
-                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].VAF_Notice_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].VAF_Notice_ID + "|" + data[s].TableName + "|" + data[s].VAF_Screen_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
                                 + "</ul>"
                                 + "  </div>"
                                 + "</div>"

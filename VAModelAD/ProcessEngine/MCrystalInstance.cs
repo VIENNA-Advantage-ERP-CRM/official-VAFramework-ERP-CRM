@@ -52,7 +52,7 @@ namespace VAdvantage.ProcessEngine
             //SetVAF_Job_ID(VAF_Job_ID);
             SetVAF_Page_ID(VAF_Page_ID);
             SetRecord_ID(Record_ID);
-            //SetAD_User_ID(ctx.GetAD_User_ID());
+            //SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             SetIsProcessing(false);
         }
 

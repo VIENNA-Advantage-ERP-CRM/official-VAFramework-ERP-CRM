@@ -102,7 +102,7 @@ namespace ViennaAdvantage.Process
             //MUser user = lead.GetUser();
             //if (user != null)
             //{
-            //    return "@AD_User_ID@: " + user.GetName();
+            //    return "@VAF_UserContact_ID@: " + user.GetName();
             //}
             //return "@SaveError@";
         }	//	doIt

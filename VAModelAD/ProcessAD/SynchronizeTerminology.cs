@@ -336,8 +336,8 @@ namespace VAdvantage.Process
                 + " 				  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' ')))"
                 + "AND NOT EXISTS ("
                 + "      SELECT *"
-                + "      FROM VAF_Tab t, AD_Window w, VAF_Column c, VAF_ColumnDicContext e"
-                + "      WHERE t.VAF_Tab_ID=f.VAF_Tab_ID AND w.AD_Window_ID=t.AD_Window_ID"
+                + "      FROM VAF_Tab t, VAF_Screen w, VAF_Column c, VAF_ColumnDicContext e"
+                + "      WHERE t.VAF_Tab_ID=f.VAF_Tab_ID AND w.VAF_Screen_ID=t.VAF_Screen_ID"
                 + "      AND c.VAF_Column_ID=f.VAF_Column_ID AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                 + "      AND e.VAF_ContextScope_ID=COALESCE(t.VAF_ContextScope_ID, w.VAF_ContextScope_ID))";
             Execute("Synchronize Field", sql, "  rows updated: ");
@@ -392,8 +392,8 @@ namespace VAdvantage.Process
                 + " 				  AND (trl.Name <> e.Name OR NVL(trl.Description,' ') <> NVL(e.Description,' ') OR NVL(trl.Help,' ') <> NVL(e.Help,' ')))"
                 + "AND NOT EXISTS ("
                 + "      SELECT *"
-                + "      FROM VAF_Tab t, AD_Window w, VAF_Column c, VAF_ColumnDicContext e, VAF_Field f"
-                + "      WHERE t.VAF_Tab_ID=f.VAF_Tab_ID AND w.AD_Window_ID=t.AD_Window_ID"
+                + "      FROM VAF_Tab t, VAF_Screen w, VAF_Column c, VAF_ColumnDicContext e, VAF_Field f"
+                + "      WHERE t.VAF_Tab_ID=f.VAF_Tab_ID AND w.VAF_Screen_ID=t.VAF_Screen_ID"
                 + "      AND c.VAF_Column_ID=f.VAF_Column_ID AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                 + "      AND e.VAF_ContextScope_ID=COALESCE(t.VAF_ContextScope_ID, w.VAF_ContextScope_ID)"
                 + "      AND f.VAF_Field_ID = trl.VAF_Field_ID)";
@@ -416,9 +416,9 @@ namespace VAdvantage.Process
                   AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL
                   AND (f.Name <> e.PO_Name OR NVL(f.Description,' ') <> NVL(e.PO_Description,' ') OR NVL(f.Help,' ') <> NVL(e.PO_Help,' '))
                   AND e.PO_Name IS NOT NULL)
-      AND EXISTS (SELECT * FROM VAF_Tab t, AD_Window w
+      AND EXISTS (SELECT * FROM VAF_Tab t, VAF_Screen w
                 WHERE f.VAF_Tab_ID=t.VAF_Tab_ID
-                  AND t.AD_Window_ID=w.AD_Window_ID
+                  AND t.VAF_Screen_ID=w.VAF_Screen_ID
                   AND w.IsSOTrx='N');
     DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
     */
@@ -437,9 +437,9 @@ namespace VAdvantage.Process
                                 + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                                 + " 			  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' '))"
                                 + " 			  AND e.Name IS NOT NULL)"
-                                + "   AND EXISTS (SELECT * FROM VAF_Tab t, AD_Window w"
+                                + "   AND EXISTS (SELECT * FROM VAF_Tab t, VAF_Screen w"
                                 + " 			WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
-                                + " 			  AND t.AD_Window_ID=w.AD_Window_ID" 
+                                + " 			  AND t.VAF_Screen_ID=w.VAF_Screen_ID" 
                                 + " 			  AND w.VAF_ContextScope_ID IS NULL" 
                                 + " 			  AND t.VAF_ContextScope_ID IS NULL)";
                         executesql("Synchronize PO Translations", sql,  "  rows updated: ");
@@ -470,10 +470,10 @@ namespace VAdvantage.Process
                   AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
                   AND (trl.Name <> e.PO_Name OR NVL(trl.Description,' ') <> NVL(e.PO_Description,' ') OR NVL(trl.Help,' ') <> NVL(e.PO_Help,' '))
                   AND e.PO_Name IS NOT NULL)
-      AND EXISTS (SELECT * FROM VAF_Field f, VAF_Tab t, AD_Window w
+      AND EXISTS (SELECT * FROM VAF_Field f, VAF_Tab t, VAF_Screen w
                 WHERE trl.VAF_Field_ID=f.VAF_Field_ID
                   AND f.VAF_Tab_ID=t.VAF_Tab_ID
-                  AND t.AD_Window_ID=w.AD_Window_ID
+                  AND t.VAF_Screen_ID=w.VAF_Screen_ID
                   AND w.IsSOTrx='N');
     DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
     */
@@ -500,10 +500,10 @@ namespace VAdvantage.Process
                     + " 				  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                     + " 				  AND (trl.Name <> e.Name OR NVL(trl.Description,' ') <> NVL(e.Description,' ') OR NVL(trl.Help,' ') <> NVL(e.Help,' '))"
                     + " 				  AND e.Name IS NOT NULL)"
-                    + " 	  AND EXISTS (SELECT * FROM VAF_Field f, VAF_Tab t, AD_Window w"
+                    + " 	  AND EXISTS (SELECT * FROM VAF_Field f, VAF_Tab t, VAF_Screen w"
                     + " 				WHERE trl.VAF_Field_ID=f.VAF_Field_ID"
                     + " 				  AND f.VAF_Tab_ID=t.VAF_Tab_ID"
-                    + " 				  AND t.AD_Window_ID=w.AD_Window_ID"
+                    + " 				  AND t.VAF_Screen_ID=w.VAF_Screen_ID"
                     + " 			  AND w.VAF_ContextScope_ID IS NULL" 
                     + " 			  AND t.VAF_ContextScope_ID IS NULL)";
             executesql("Synchronize PO Field Translations", sql,  "  rows updated: ");
@@ -513,30 +513,30 @@ namespace VAdvantage.Process
             sql = "	UPDATE VAF_Field f"
                 + " SET Name = (SELECT e.Name FROM VAF_ColumnDicContext e JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)"
                 + " 			WHERE c.VAF_Column_ID=f.VAF_Column_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
                 + " 	Description = (SELECT e.Description FROM VAF_ColumnDicContext e JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)"
                 + " 			WHERE c.VAF_Column_ID=f.VAF_Column_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
                 + " 	Help = (SELECT e.Help FROM VAF_ColumnDicContext e JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)"
                 + " 			WHERE c.VAF_Column_ID=f.VAF_Column_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
                 + " 	Updated = CURRENT_TIMESTAMP"
                 + " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
-                + "   AND EXISTS (SELECT * FROM VAF_ColumnDicContext e, VAF_Column c, VAF_Tab t, AD_Window w"
+                + "   AND EXISTS (SELECT * FROM VAF_ColumnDicContext e, VAF_Column c, VAF_Tab t, VAF_Screen w"
                 + " 			WHERE f.VAF_Column_ID=c.VAF_Column_ID"
                 + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                 + " 			  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' '))"
                 + " 			  AND e.Name IS NOT NULL"
-                + "               AND t.VAF_Tab_ID=f.VAF_Tab_ID AND w.AD_Window_ID=t.AD_Window_ID"
+                + "               AND t.VAF_Tab_ID=f.VAF_Tab_ID AND w.VAF_Screen_ID=t.VAF_Screen_ID"
                 + "		          AND e.VAF_ContextScope_ID = COALESCE(t.VAF_ContextScope_ID,w.VAF_ContextScope_ID))";
             Execute("Synchronize Fields with ElementCTX", sql, "  rows updated: ");
 
@@ -547,7 +547,7 @@ namespace VAdvantage.Process
                 + "					JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID) "
                 + "					JOIN VAF_Field f ON (c.VAF_Column_ID=f.VAF_Column_ID)"
                 + " 			WHERE et.VAF_Language=trl.VAF_Language AND f.VAF_Field_ID=trl.VAF_Field_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
@@ -556,7 +556,7 @@ namespace VAdvantage.Process
                 + "					JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID) "
                 + "					JOIN VAF_Field f ON (c.VAF_Column_ID=f.VAF_Column_ID)"
                 + " 			WHERE et.VAF_Language=trl.VAF_Language AND f.VAF_Field_ID=trl.VAF_Field_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
@@ -565,7 +565,7 @@ namespace VAdvantage.Process
                 + "					JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID) "
                 + "					JOIN VAF_Field f ON (c.VAF_Column_ID=f.VAF_Column_ID)"
                 + " 			WHERE et.VAF_Language=trl.VAF_Language AND f.VAF_Field_ID=trl.VAF_Field_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
@@ -574,12 +574,12 @@ namespace VAdvantage.Process
                 + "					JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID) "
                 + "					JOIN VAF_Field f ON (c.VAF_Column_ID=f.VAF_Column_ID)"
                 + " 			WHERE et.VAF_Language=trl.VAF_Language AND f.VAF_Field_ID=trl.VAF_Field_ID"
-                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)"
+                + "   				AND EXISTS (SELECT * FROM VAF_Tab t JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + " 					WHERE f.VAF_Tab_ID=t.VAF_Tab_ID"
                 + " 			  		AND (w.VAF_ContextScope_ID IS NOT NULL AND t.VAF_ContextScope_ID IS NULL AND e.VAF_ContextScope_ID=w.VAF_ContextScope_ID"
                 + " 			  			OR t.VAF_ContextScope_ID IS NOT NULL AND e.VAF_ContextScope_ID=t.VAF_ContextScope_ID))),"
                 + " 	Updated = CURRENT_TIMESTAMP"
-                + " 	WHERE EXISTS (SELECT * FROM VAF_Field f, VAF_ColumnDicContext_TL et, VAF_ColumnDicContext e,  VAF_Column c, VAF_Tab t, AD_Window w"
+                + " 	WHERE EXISTS (SELECT * FROM VAF_Field f, VAF_ColumnDicContext_TL et, VAF_ColumnDicContext e,  VAF_Column c, VAF_Tab t, VAF_Screen w"
                 + " 				WHERE trl.VAF_Field_ID=f.VAF_Field_ID"
                 + " 				  AND f.VAF_Column_ID=c.VAF_Column_ID"
                 + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=e.VAF_ColumnDicContext_ID AND c.VAF_Job_ID IS NULL"
@@ -587,7 +587,7 @@ namespace VAdvantage.Process
                 + " 				  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                 + " 				  AND (trl.Name <> et.Name OR NVL(trl.Description,' ') <> NVL(et.Description,' ') OR NVL(trl.Help,' ') <> NVL(et.Help,' '))"
                 + " 				  AND et.Name IS NOT NULL"
-                + "                   AND t.VAF_Tab_ID=f.VAF_Tab_ID AND w.AD_Window_ID=t.AD_Window_ID"
+                + "                   AND t.VAF_Tab_ID=f.VAF_Tab_ID AND w.VAF_Screen_ID=t.VAF_Screen_ID"
                 + "                   AND e.VAF_ContextScope_ID = COALESCE(t.VAF_ContextScope_ID,w.VAF_ContextScope_ID))";
             Execute("Synchronize fields with context specific element translations", sql, "  rows updated: ");
 
@@ -864,63 +864,63 @@ namespace VAdvantage.Process
 
             --	Workflow Node - Window
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node from Window');
-            UPDATE AD_WF_Node n
-                SET Name = (SELECT w.Name FROM AD_Window w
-                            WHERE w.AD_Window_ID=n.AD_Window_ID),
-                    Description = (SELECT w.Description FROM AD_Window w
-                            WHERE w.AD_Window_ID=n.AD_Window_ID),
-                    Help = (SELECT w.Help FROM AD_Window w
-                            WHERE w.AD_Window_ID=n.AD_Window_ID)
+            UPDATE VAF_WFlow_Node n
+                SET Name = (SELECT w.Name FROM VAF_Screen w
+                            WHERE w.VAF_Screen_ID=n.VAF_Screen_ID),
+                    Description = (SELECT w.Description FROM VAF_Screen w
+                            WHERE w.VAF_Screen_ID=n.VAF_Screen_ID),
+                    Help = (SELECT w.Help FROM VAF_Screen w
+                            WHERE w.VAF_Screen_ID=n.VAF_Screen_ID)
             WHERE n.IsCentrallyMaintained = 'Y'
-              AND EXISTS  (SELECT * FROM AD_Window w
-                        WHERE w.AD_Window_ID=n.AD_Window_ID
+              AND EXISTS  (SELECT * FROM VAF_Screen w
+                        WHERE w.VAF_Screen_ID=n.VAF_Screen_ID
                           AND (w.Name <> n.Name OR NVL(w.Description,' ') <> NVL(n.Description,' ') OR NVL(w.Help,' ') <> NVL(n.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node n " +
-                    " SET Name = (SELECT coalesce(w.DisplayName,w.Name) FROM AD_Window w " +
-                    " 	WHERE w.AD_Window_ID=n.AD_Window_ID), " +
-                    " Description = (SELECT w.Description FROM AD_Window w " +
-                    " 	WHERE w.AD_Window_ID=n.AD_Window_ID), " +
-                    " Help = (SELECT w.Help FROM AD_Window w " +
-                    " 	WHERE w.AD_Window_ID=n.AD_Window_ID) " +
+            sql = "	UPDATE VAF_WFlow_Node n " +
+                    " SET Name = (SELECT coalesce(w.DisplayName,w.Name) FROM VAF_Screen w " +
+                    " 	WHERE w.VAF_Screen_ID=n.VAF_Screen_ID), " +
+                    " Description = (SELECT w.Description FROM VAF_Screen w " +
+                    " 	WHERE w.VAF_Screen_ID=n.VAF_Screen_ID), " +
+                    " Help = (SELECT w.Help FROM VAF_Screen w " +
+                    " 	WHERE w.VAF_Screen_ID=n.VAF_Screen_ID) " +
                     " WHERE n.IsCentrallyMaintained = 'Y' " +
-                    " 	  AND EXISTS  (SELECT * FROM AD_Window w " +
-                    " 		WHERE w.AD_Window_ID=n.AD_Window_ID " +
+                    " 	  AND EXISTS  (SELECT * FROM VAF_Screen w " +
+                    " 		WHERE w.VAF_Screen_ID=n.VAF_Screen_ID " +
                     " 		  AND (w.Name <> n.Name OR NVL(w.Description,' ') <> NVL(n.Description,' ') OR NVL(w.Help,' ') <> NVL(n.Help,' '))) ";
             Execute("Synchronize Workflow Node from Window", sql, "  rows updated: ");
             /*
 
             --	Workflow Translations - Window
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node Trl from Window Trl');
-            UPDATE AD_WF_Node_Trl trl
-                SET Name = (SELECT t.Name FROM AD_Window_trl t, AD_WF_Node n
-                            WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID
+            UPDATE VAF_WFlow_Node_TL trl
+                SET Name = (SELECT t.Name FROM VAF_Screen_TL t, VAF_WFlow_Node n
+                            WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID
                               AND trl.VAF_Language=t.VAF_Language),
-                    Description = (SELECT t.Description FROM AD_Window_trl t, AD_WF_Node n
-                            WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID
+                    Description = (SELECT t.Description FROM VAF_Screen_TL t, VAF_WFlow_Node n
+                            WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID
                               AND trl.VAF_Language=t.VAF_Language),
-                    Help = (SELECT t.Help FROM AD_Window_trl t, AD_WF_Node n
-                            WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID
+                    Help = (SELECT t.Help FROM VAF_Screen_TL t, VAF_WFlow_Node n
+                            WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID
                               AND trl.VAF_Language=t.VAF_Language)
-            WHERE EXISTS (SELECT * FROM AD_Window_Trl t, AD_WF_Node n
-                        WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID
+            WHERE EXISTS (SELECT * FROM VAF_Screen_TL t, VAF_WFlow_Node n
+                        WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID
                           AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y'
                           AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node_Trl trl " +
-                    " SET Name = (SELECT t.Name FROM AD_Window_trl t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID " +
+            sql = "	UPDATE VAF_WFlow_Node_TL trl " +
+                    " SET Name = (SELECT t.Name FROM VAF_Screen_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language), " +
-                    " Description = (SELECT t.Description FROM AD_Window_trl t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID " +
+                    " Description = (SELECT t.Description FROM VAF_Screen_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language), " +
-                    " Help = (SELECT t.Help FROM AD_Window_trl t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID " +
+                    " Help = (SELECT t.Help FROM VAF_Screen_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
-                    " WHERE EXISTS (SELECT * FROM AD_Window_Trl t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Window_ID=t.AD_Window_ID " +
+                    " WHERE EXISTS (SELECT * FROM VAF_Screen_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Screen_ID=t.VAF_Screen_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y' " +
                     " 		  AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' '))) ";
             Execute("Synchronize Workflow Node Trl from Window Trl", sql, "  rows updated: ");
@@ -929,7 +929,7 @@ namespace VAdvantage.Process
 
             --	Workflow Node - Form
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node from Form');
-            UPDATE AD_WF_Node n
+            UPDATE VAF_WFlow_Node n
                 SET (Name, Description, Help) = (SELECT f.Name, f.Description, f.Help 
                         FROM VAF_Page f
                         WHERE f.VAF_Page_ID=n.VAF_Page_ID)
@@ -939,7 +939,7 @@ namespace VAdvantage.Process
                           AND (f.Name <> n.Name OR NVL(f.Description,' ') <> NVL(n.Description,' ') OR NVL(f.Help,' ') <> NVL(n.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node n" +
+            sql = "	UPDATE VAF_WFlow_Node n" +
                     " SET Name = (SELECT coalesce(f.DisplayName,f.Name) " +
                     "   FROM VAF_Page f " +
                     " 	WHERE f.VAF_Page_ID=n.VAF_Page_ID) " +
@@ -959,32 +959,32 @@ namespace VAdvantage.Process
 
             --	Workflow Translations - Form
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node Trl from Form Trl');
-            UPDATE AD_WF_Node_Trl trl
+            UPDATE VAF_WFlow_Node_TL trl
                 SET (Name, Description, Help) = (SELECT t.Name, t.Description, t.Help
-                    FROM VAF_Page_TL t, AD_WF_Node n
-                    WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID
+                    FROM VAF_Page_TL t, VAF_WFlow_Node n
+                    WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID
                       AND trl.VAF_Language=t.VAF_Language)
-            WHERE EXISTS (SELECT * FROM VAF_Page_TL t, AD_WF_Node n
-                        WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID
+            WHERE EXISTS (SELECT * FROM VAF_Page_TL t, VAF_WFlow_Node n
+                        WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID
                           AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y'
                           AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node_Trl trl " +
+            sql = "	UPDATE VAF_WFlow_Node_TL trl " +
                     " SET Name = (SELECT t.Name " +
-                    "   FROM VAF_Page_TL t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
+                    "   FROM VAF_Page_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
                     " 	  AND trl.VAF_Language=t.VAF_Language) " +
                      " ,  Description = (SELECT  t.Description " +
-                    "   FROM VAF_Page_TL t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
+                    "   FROM VAF_Page_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
                     " 	  AND trl.VAF_Language=t.VAF_Language) " +
                      " ,  Help = (SELECT  t.Help " +
-                    "   FROM VAF_Page_TL t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
+                    "   FROM VAF_Page_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
                     " 	  AND trl.VAF_Language=t.VAF_Language) " +
-                    " WHERE EXISTS (SELECT * FROM VAF_Page_TL t, AD_WF_Node n " +
-                    " 	WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
+                    " WHERE EXISTS (SELECT * FROM VAF_Page_TL t, VAF_WFlow_Node n " +
+                    " 	WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Page_ID=t.VAF_Page_ID " +
                     " 	  AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y' " +
                     " 	  AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' '))) ";
             Execute("Synchronize Workflow Node Trl from Form Trl", sql, "  rows updated: ");
@@ -993,7 +993,7 @@ namespace VAdvantage.Process
 
             --	Workflow Node - Report
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node from Process');
-            UPDATE AD_WF_Node n
+            UPDATE VAF_WFlow_Node n
                 SET (Name, Description, Help) = (SELECT f.Name, f.Description, f.Help 
                         FROM VAF_Job f
                         WHERE f.VAF_Job_ID=n.VAF_Job_ID)
@@ -1003,7 +1003,7 @@ namespace VAdvantage.Process
                           AND (f.Name <> n.Name OR NVL(f.Description,' ') <> NVL(n.Description,' ') OR NVL(f.Help,' ') <> NVL(n.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node n " +
+            sql = "	UPDATE VAF_WFlow_Node n " +
                     " SET Name = (SELECT f.Name " +
                     " 	FROM VAF_Job f " +
                     " 	WHERE f.VAF_Job_ID=n.VAF_Job_ID) " +
@@ -1023,32 +1023,32 @@ namespace VAdvantage.Process
 
             --	Workflow Translations - Form
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node Trl from Process Trl');
-            UPDATE AD_WF_Node_Trl trl
+            UPDATE VAF_WFlow_Node_TL trl
                 SET (Name, Description, Help) = (SELECT t.Name, t.Description, t.Help
-                    FROM VAF_Job_TL t, AD_WF_Node n
-                    WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
+                    FROM VAF_Job_TL t, VAF_WFlow_Node n
+                    WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
                       AND trl.VAF_Language=t.VAF_Language)
-            WHERE EXISTS (SELECT * FROM VAF_Job_TL t, AD_WF_Node n
-                        WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
+            WHERE EXISTS (SELECT * FROM VAF_Job_TL t, VAF_WFlow_Node n
+                        WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
                           AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y'
                           AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_WF_Node_Trl trl " +
+            sql = "	UPDATE VAF_WFlow_Node_TL trl " +
                     " SET Name = (SELECT t.Name " +
-                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
+                    " 		FROM VAF_Job_TL t, VAF_WFlow_Node n " +
+                    " 		WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
                     " ,  Description = (SELECT  t.Description " +
-                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
+                    " 		FROM VAF_Job_TL t, VAF_WFlow_Node n " +
+                    " 		WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
                     " ,  Help= (SELECT  t.Help " +
-                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
+                    " 		FROM VAF_Job_TL t, VAF_WFlow_Node n " +
+                    " 		WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
-                    " WHERE EXISTS (SELECT * FROM VAF_Job_TL t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
+                    " WHERE EXISTS (SELECT * FROM VAF_Job_TL t, VAF_WFlow_Node n " +
+                    " 		WHERE trl.VAF_WFlow_Node_ID=n.VAF_WFlow_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y' " +
                     " 		  AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' '))) ";
             Execute("Synchronize Workflow Node Trl from Process Trl", sql, "  rows updated: ");
@@ -1245,52 +1245,52 @@ namespace VAdvantage.Process
             --	Sync Names - Window
             DBMS_OUTPUT.PUT_LINE('Synchronizing Menu with Window');
             UPDATE	VAF_MenuConfig m
-            SET		Name = (SELECT Name FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID),
-                    Description = (SELECT Description FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID)
-            WHERE	AD_Window_ID IS NOT NULL
+            SET		Name = (SELECT Name FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID),
+                    Description = (SELECT Description FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID)
+            WHERE	VAF_Screen_ID IS NOT NULL
                 AND Action = 'W';
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             executesql("Synchronize Field Translations", sql,  "  rows updated: ");
         **/
             sql = "UPDATE VAF_MenuConfig m "
-                + "SET Name = (SELECT coalesce(w.DisplayName,w.Name) FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID),"
-                + "Description = (SELECT Description FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID) "
-                + "WHERE AD_Window_ID IS NOT NULL"
+                + "SET Name = (SELECT coalesce(w.DisplayName,w.Name) FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID),"
+                + "Description = (SELECT Description FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID) "
+                + "WHERE VAF_Screen_ID IS NOT NULL"
                 + " AND Action = 'W'";
             Execute("Synchronize Menu with Window", sql, "  rows updated: ");
 
             /*
                 UPDATE	VAF_MenuConfig_TL mt
-                SET		Name = (SELECT wt.Name FROM AD_Window_Trl wt, VAF_MenuConfig m 
-                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID 
+                SET		Name = (SELECT wt.Name FROM VAF_Screen_TL wt, VAF_MenuConfig m 
+                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID 
                                 AND mt.VAF_Language=wt.VAF_Language),
-                        Description = (SELECT wt.Description FROM AD_Window_Trl wt, VAF_MenuConfig m 
-                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID 
+                        Description = (SELECT wt.Description FROM VAF_Screen_TL wt, VAF_MenuConfig m 
+                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID 
                                 AND mt.VAF_Language=wt.VAF_Language),
-                        IsTranslated = (SELECT wt.IsTranslated FROM AD_Window_Trl wt, VAF_MenuConfig m 
-                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID 
+                        IsTranslated = (SELECT wt.IsTranslated FROM VAF_Screen_TL wt, VAF_MenuConfig m 
+                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID 
                                 AND mt.VAF_Language=wt.VAF_Language)
-                WHERE EXISTS (SELECT * FROM AD_Window_Trl wt, VAF_MenuConfig m 
-                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID 
+                WHERE EXISTS (SELECT * FROM VAF_Screen_TL wt, VAF_MenuConfig m 
+                                WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID 
                                 AND mt.VAF_Language=wt.VAF_Language
-                                AND m.AD_Window_ID IS NOT NULL
+                                AND m.VAF_Screen_ID IS NOT NULL
                                 AND m.Action = 'W');
                 DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
                 */
             sql = "	UPDATE VAF_MenuConfig_TL mt " +
-                    "	SET Name = (SELECT wt.Name FROM AD_Window_Trl wt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID " +
+                    "	SET Name = (SELECT wt.Name FROM VAF_Screen_TL wt, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID " +
                     "					AND mt.VAF_Language=wt.VAF_Language), " +
-                    "		Description = (SELECT wt.Description FROM AD_Window_Trl wt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID " +
+                    "		Description = (SELECT wt.Description FROM VAF_Screen_TL wt, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID " +
                     "					AND mt.VAF_Language=wt.VAF_Language), " +
-                    "			IsTranslated = (SELECT wt.IsTranslated FROM AD_Window_Trl wt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID " +
+                    "			IsTranslated = (SELECT wt.IsTranslated FROM VAF_Screen_TL wt, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID " +
                     "					AND mt.VAF_Language=wt.VAF_Language) " +
-                    "	WHERE EXISTS (SELECT * FROM AD_Window_Trl wt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Window_ID=wt.AD_Window_ID " +
+                    "	WHERE EXISTS (SELECT * FROM VAF_Screen_TL wt, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Screen_ID=wt.VAF_Screen_ID " +
                     "					AND mt.VAF_Language=wt.VAF_Language " +
-                    "					AND m.AD_Window_ID IS NOT NULL " +
+                    "					AND m.VAF_Screen_ID IS NOT NULL " +
                     "					AND m.Action = 'W')";
             Execute("Synchronize Menu with Window Trl", sql, "  rows updated: ");
 
@@ -1432,16 +1432,16 @@ namespace VAdvantage.Process
             /*
 
             UPDATE	VAF_MenuConfig_TL mt
-            SET		Name = (SELECT pt.Name FROM AD_Workflow_Trl pt, VAF_MenuConfig m
+            SET		Name = (SELECT pt.Name FROM VAF_Workflow_TL pt, VAF_MenuConfig m
                             WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language),
-                    Description = (SELECT pt.Description FROM AD_Workflow_Trl pt, VAF_MenuConfig m
+                    Description = (SELECT pt.Description FROM VAF_Workflow_TL pt, VAF_MenuConfig m
                             WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language),
-                    IsTranslated = (SELECT pt.IsTranslated FROM AD_Workflow_Trl pt, VAF_MenuConfig m
+                    IsTranslated = (SELECT pt.IsTranslated FROM VAF_Workflow_TL pt, VAF_MenuConfig m
                             WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language)
-            WHERE EXISTS (SELECT * FROM AD_Workflow_Trl pt, VAF_MenuConfig m
+            WHERE EXISTS (SELECT * FROM VAF_Workflow_TL pt, VAF_MenuConfig m
                             WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language
                             AND m.AD_Workflow_ID IS NOT NULL
@@ -1449,16 +1449,16 @@ namespace VAdvantage.Process
             DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE VAF_MenuConfig_TL mt " +
-                    "	SET Name = (SELECT pt.Name FROM AD_Workflow_Trl pt, VAF_MenuConfig m " +
+                    "	SET Name = (SELECT pt.Name FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
                     "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language), " +
-                    "			Description = (SELECT pt.Description FROM AD_Workflow_Trl pt, VAF_MenuConfig m " +
+                    "			Description = (SELECT pt.Description FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
                     "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language), " +
-                    "			IsTranslated = (SELECT pt.IsTranslated FROM AD_Workflow_Trl pt, VAF_MenuConfig m " +
+                    "			IsTranslated = (SELECT pt.IsTranslated FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
                     "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language) " +
-                    "	WHERE EXISTS (SELECT * FROM AD_Workflow_Trl pt, VAF_MenuConfig m " +
+                    "	WHERE EXISTS (SELECT * FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
                     "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language " +
                     "					AND m.AD_Workflow_ID IS NOT NULL " +

@@ -48,7 +48,7 @@
         var selectedItems = [];
 
         var ismobile = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());
-        //var sql = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAF_Tab_ID"));
+        //var sql = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAF_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
         var vaf_tab_ID = VIS.context.getWindowTabContext(windowNo, 0, "VAF_Tab_ID");
         window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", vaf_tab_ID.toString());

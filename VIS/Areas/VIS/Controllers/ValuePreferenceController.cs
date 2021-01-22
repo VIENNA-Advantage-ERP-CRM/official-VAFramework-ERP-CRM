@@ -38,7 +38,7 @@ namespace VIS.Controllers
             return Json(new { result = returnValue }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Save(string preferenceId, string clientId, string orgId, string chkWindow, string AD_Window_ID, string chkUser, string attribute, string userId, string value)
+        public JsonResult Save(string preferenceId, string clientId, string orgId, string chkWindow, string VAF_Screen_ID, string chkUser, string attribute, string userId, string value)
         {
             var returnValue = false;
 
@@ -46,7 +46,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as VAdvantage.Utility.Ctx;
                 ValuePreferenceModel obj = new ValuePreferenceModel();
-                returnValue = obj.SavePrefrence(ctx, preferenceId, clientId, orgId, chkWindow, AD_Window_ID, chkUser, attribute, userId, value);
+                returnValue = obj.SavePrefrence(ctx, preferenceId, clientId, orgId, chkWindow, VAF_Screen_ID, chkUser, attribute, userId, value);
             }
 
             return Json(new { result = returnValue }, JsonRequestBehavior.AllowGet);

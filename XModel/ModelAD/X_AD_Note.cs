@@ -168,34 +168,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Activity.
-@param AD_WF_Activity_ID Workflow Activity */
-public void SetAD_WF_Activity_ID (int AD_WF_Activity_ID)
+@param VAF_WFlow_Task_ID Workflow Activity */
+public void SetVAF_WFlow_Task_ID (int VAF_WFlow_Task_ID)
 {
-if (AD_WF_Activity_ID <= 0) Set_Value ("AD_WF_Activity_ID", null);
+if (VAF_WFlow_Task_ID <= 0) Set_Value ("VAF_WFlow_Task_ID", null);
 else
-Set_Value ("AD_WF_Activity_ID", AD_WF_Activity_ID);
+Set_Value ("VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
 }
 /** Get Workflow Activity.
 @return Workflow Activity */
-public int GetAD_WF_Activity_ID() 
+public int GetVAF_WFlow_Task_ID() 
 {
-Object ii = Get_Value("AD_WF_Activity_ID");
+Object ii = Get_Value("VAF_WFlow_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

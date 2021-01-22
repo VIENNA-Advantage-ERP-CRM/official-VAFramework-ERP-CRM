@@ -2040,21 +2040,21 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAHRUAE_AD_User_ID VAF_Control_Ref_ID=110 */
-        public static int VAHRUAE_AD_USER_ID_VAF_Control_Ref_ID = 110;
+        /** VAHRUAE_VAF_UserContact_ID VAF_Control_Ref_ID=110 */
+        public static int VAHRUAE_VAF_USERCONTACT_ID_VAF_Control_Ref_ID = 110;
         /** Set Report To.
-        @param VAHRUAE_AD_User_ID Report To */
-        public void SetVAHRUAE_AD_User_ID(int VAHRUAE_AD_User_ID)
+        @param VAHRUAE_VAF_UserContact_ID Report To */
+        public void SetVAHRUAE_VAF_UserContact_ID(int VAHRUAE_VAF_UserContact_ID)
         {
-            if (VAHRUAE_AD_User_ID <= 0) Set_Value("VAHRUAE_AD_User_ID", null);
+            if (VAHRUAE_VAF_UserContact_ID <= 0) Set_Value("VAHRUAE_VAF_UserContact_ID", null);
             else
-                Set_Value("VAHRUAE_AD_User_ID", VAHRUAE_AD_User_ID);
+                Set_Value("VAHRUAE_VAF_UserContact_ID", VAHRUAE_VAF_UserContact_ID);
         }
         /** Get Report To.
         @return Report To */
-        public int GetVAHRUAE_AD_User_ID()
+        public int GetVAHRUAE_VAF_UserContact_ID()
         {
-            Object ii = Get_Value("VAHRUAE_AD_User_ID");
+            Object ii = Get_Value("VAHRUAE_VAF_UserContact_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

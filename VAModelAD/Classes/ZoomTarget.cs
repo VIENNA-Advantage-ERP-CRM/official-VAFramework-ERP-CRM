@@ -49,29 +49,29 @@ namespace VAdvantage.Classes
             #endregion
 
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                    "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+            string sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+                    "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
                 + "FROM VAF_TableView t "
                 + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
             bool baseLanguage = Utility.Env.IsBaseLanguage(ctx, "");// GlobalVariable.IsBaseLanguage();
             if (baseLanguage)
             {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+                sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+                sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+                    + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')";
+                sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')";
+                sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')"
+                    + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "')";
             }
             sql += "WHERE t.TableName ='" + targetTableName
-                + "' AND w.AD_Window_ID <>" + curWindow_ID
+                + "' AND w.VAF_Screen_ID <>" + curWindow_ID
                 + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
+                + " AND (wp.VAF_Screen_ID IS NOT NULL "
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
 
@@ -165,7 +165,7 @@ namespace VAdvantage.Classes
                             if (EvaluateWhereClause(columnValues, windowList[i].whereClause))
                             {
                                 log.Fine("MatchFound : " + windowList[i].windowName);
-                                KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
+                                KeyNamePair pp = new KeyNamePair(windowList[i].VAF_Screen_ID, windowList[i].windowName);
                                 zoomList.Add(pp);
                                 // Use first window found. Ideally there should be just one matching
                                 break;
@@ -331,12 +331,12 @@ namespace VAdvantage.Classes
         /// <param name="targetWhereClause">Where Clause in the format "Record_ID=<value>"</param>
         /// <param name="isSOTrx">Sales contex of window from where zoom is invoked</param>
         /// <returns>PO_zoomWindow_ID</returns>
-        public static int GetZoomAD_Window_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx,VAdvantage.Utility.Ctx ctx )
+        public static int GetZoomVAF_Screen_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx,VAdvantage.Utility.Ctx ctx )
         {
             int zoomWindow_ID = 0;
             int PO_zoomWindow_ID = 0;
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT AD_Window_ID, PO_Window_ID "
+            string sql = "SELECT DISTINCT VAF_Screen_ID, PO_Window_ID "
                 + "FROM VAF_TableView t "
                 + "WHERE TableName ='" + targetTableName + "'";
             IDataReader dr = null;
@@ -348,7 +348,7 @@ namespace VAdvantage.Classes
                 dr = ExecuteQuery.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    zoomWindow_ID = Utility.Util.GetValueOfInt(dr["AD_Window_ID"].ToString());
+                    zoomWindow_ID = Utility.Util.GetValueOfInt(dr["VAF_Screen_ID"].ToString());
                     if (dr["PO_Window_ID"] != null && dr["PO_Window_ID"].ToString().Length > 0)
                         PO_zoomWindow_ID = Utility.Util.GetValueOfInt(dr["PO_Window_ID"].ToString());
                 }
@@ -363,25 +363,25 @@ namespace VAdvantage.Classes
                 }
                 // fill error log
                 log.Severe(e.ToString());
-                //VAdvantage.//Common.////ErrorLog.FillErrorLog("ZoomTarget.GetZoomAD_Window_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                //VAdvantage.//Common.////ErrorLog.FillErrorLog("ZoomTarget.GetZoomVAF_Screen_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
             }
             
 
             if (PO_zoomWindow_ID == 0)
                 return zoomWindow_ID;
 
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
 
             if (targetWhereClause != null && targetWhereClause.Length != 0)
             {
                 List<KeyNamePair> zoomList = new List<KeyNamePair>();
                 zoomList = ZoomTarget.GetZoomTargets(targetTableName, curWindow_ID, targetWhereClause,ctx);
                 if (zoomList != null && zoomList.Count > 0)
-                    AD_Window_ID = zoomList[0].GetKey();
+                    VAF_Screen_ID = zoomList[0].GetKey();
             }
-            if (AD_Window_ID != 0)
+            if (VAF_Screen_ID != 0)
             {
-                return AD_Window_ID;
+                return VAF_Screen_ID;
             }
 
             if (isSOTrx)
@@ -401,7 +401,7 @@ namespace VAdvantage.Classes
     {
 
         //Context ctx = Utility.Env.GetContext();
-        public int AD_Window_ID = 0;//Window	
+        public int VAF_Screen_ID = 0;//Window	
         public String windowName = "";// Window Name
         public String whereClause = "";// Window Where Clause
 
@@ -413,7 +413,7 @@ namespace VAdvantage.Classes
         /// <param name="where">Where Clause on the first tab of the window </param>
         public WindowWhereClause(int ad_Window_ID, String name, String where)
         {
-            this.AD_Window_ID = ad_Window_ID;
+            this.VAF_Screen_ID = ad_Window_ID;
             this.windowName = name;
             this.whereClause = where;
         }
@@ -425,8 +425,8 @@ namespace VAdvantage.Classes
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            //sb.append(Msg.translate(GetCtx(), "AD_Window_ID")).append("=")
-            //sb.Append(Msg.translate(ctx.GetContext(), "AD_Window_ID")).Append("=")
+            //sb.append(Msg.translate(GetCtx(), "VAF_Screen_ID")).append("=")
+            //sb.Append(Msg.translate(ctx.GetContext(), "VAF_Screen_ID")).Append("=")
             //  .Append(windowName).Append(" - ")
             // .Append(whereClause);
             return sb.ToString();

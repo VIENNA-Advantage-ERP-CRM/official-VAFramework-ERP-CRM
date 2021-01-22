@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserPreference
+/** Generated Model for VAF_UserPref_Info
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserPreference : PO
+public class X_VAF_UserPref_Info : PO
 {
-public X_AD_UserPreference (Context ctx, int AD_UserPreference_ID, Trx trxName) : base (ctx, AD_UserPreference_ID, trxName)
+public X_VAF_UserPref_Info (Context ctx, int VAF_UserPref_Info_ID, Trx trxName) : base (ctx, VAF_UserPref_Info_ID, trxName)
 {
-/** if (AD_UserPreference_ID == 0)
+/** if (VAF_UserPref_Info_ID == 0)
 {
-SetAD_UserPreference_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserPref_Info_ID (0);
+SetVAF_UserContact_ID (0);
 }
  */
 }
-public X_AD_UserPreference (Ctx ctx, int AD_UserPreference_ID, Trx trxName) : base (ctx, AD_UserPreference_ID, trxName)
+public X_VAF_UserPref_Info (Ctx ctx, int VAF_UserPref_Info_ID, Trx trxName) : base (ctx, VAF_UserPref_Info_ID, trxName)
 {
-/** if (AD_UserPreference_ID == 0)
+/** if (VAF_UserPref_Info_ID == 0)
 {
-SetAD_UserPreference_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserPref_Info_ID (0);
+SetVAF_UserContact_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_User_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserPreference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserPref_Info (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_UserPreference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserPreference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserPref_Info (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_UserPreference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserPreference (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserPref_Info (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserPreference()
+static X_VAF_UserPref_Info()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389048753L;
 public static int Table_ID;
  // =989;
 
-/** TableName=AD_UserPreference */
-public static String Table_Name="AD_UserPreference";
+/** TableName=VAF_UserPref_Info */
+public static String Table_Name="VAF_UserPref_Info";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserPreference[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserPref_Info[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User Preference.
-@param AD_UserPreference_ID Application User Preferences */
-public void SetAD_UserPreference_ID (int AD_UserPreference_ID)
+@param VAF_UserPref_Info_ID Application User Preferences */
+public void SetVAF_UserPref_Info_ID (int VAF_UserPref_Info_ID)
 {
-if (AD_UserPreference_ID < 1) throw new ArgumentException ("AD_UserPreference_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserPreference_ID", AD_UserPreference_ID);
+if (VAF_UserPref_Info_ID < 1) throw new ArgumentException ("VAF_UserPref_Info_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserPref_Info_ID", VAF_UserPref_Info_ID);
 }
 /** Get User Preference.
 @return Application User Preferences */
-public int GetAD_UserPreference_ID() 
+public int GetVAF_UserPref_Info_ID() 
 {
-Object ii = Get_Value("AD_UserPreference_ID");
+Object ii = Get_Value("VAF_UserPref_Info_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -42,8 +42,8 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 retDic["Bill_BPartner_ID"]= order.GetBill_BPartner_ID().ToString();
                 retDic["Bill_Location_ID"]= order.GetBill_Location_ID().ToString();
 
-                if (order.GetAD_User_ID() != 0)
-                    retDic["AD_User_ID"]= order.GetAD_User_ID().ToString();
+                if (order.GetVAF_UserContact_ID() != 0)
+                    retDic["VAF_UserContact_ID"]= order.GetVAF_UserContact_ID().ToString();
 
                 if (order.GetBill_User_ID() != 0)
                     retDic["Bill_User_ID"]= order.GetBill_User_ID().ToString();

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : MWFNodeNext inherits X_AD_WF_NodeNext
+ * Class Used     : MWFNodeNext inherits X_VAF_WFlow_NextNode
  * Chronological    Development
  * Raghunandan      01-May-2009
  * Veena Pandey     04-May-2009
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.WF
 {
-   public class MWFNodeNext : X_AD_WF_NodeNext
+   public class MWFNodeNext : X_VAF_WFlow_NextNode
     {
         /** Transition Conditions			*/
         private MWFNextCondition[] _conditions = null;
@@ -34,15 +34,15 @@ namespace VAdvantage.WF
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WF_NodeNext_ID">id</param>
+        /// <param name="VAF_WFlow_NextNode_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWFNodeNext(Ctx ctx, int AD_WF_NodeNext_ID, Trx trxName)
-            : base(ctx, AD_WF_NodeNext_ID, trxName) 
+        public MWFNodeNext(Ctx ctx, int VAF_WFlow_NextNode_ID, Trx trxName)
+            : base(ctx, VAF_WFlow_NextNode_ID, trxName) 
         {
-            if (AD_WF_NodeNext_ID == 0)
+            if (VAF_WFlow_NextNode_ID == 0)
             {
                 //	setAD_WF_Next_ID (0);
-                //	setAD_WF_Node_ID (0);
+                //	setVAF_WFlow_Node_ID (0);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsStdUserWorkflow(false);
                 SetSeqNo(10);	// 10
@@ -70,7 +70,7 @@ namespace VAdvantage.WF
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_WF_Node_ID(parent.GetAD_WF_Node_ID());
+            SetVAF_WFlow_Node_ID(parent.GetVAF_WFlow_Node_ID());
             SetAD_WF_Next_ID(AD_WF_Next_ID);
         }
 
@@ -95,7 +95,7 @@ namespace VAdvantage.WF
                 return _conditions;
             //
             List<MWFNextCondition> list = new List<MWFNextCondition>();
-            String sql = "SELECT * FROM AD_WF_NextCondition WHERE AD_WF_NodeNext_ID=" + GetAD_WF_NodeNext_ID() + " AND IsActive='Y' ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_WFlow_NextCondition WHERE VAF_WFlow_NextNode_ID=" + GetVAF_WFlow_NextNode_ID() + " AND IsActive='Y' ORDER BY SeqNo";
 
             try
             {
@@ -237,7 +237,7 @@ namespace VAdvantage.WF
         {
             StringBuilder sb = new StringBuilder("MWFNodeNext[");
             sb.Append(GetSeqNo())
-                .Append(":Node=").Append(GetAD_WF_Node_ID()).Append("->Next=").Append(GetAD_WF_Next_ID());
+                .Append(":Node=").Append(GetVAF_WFlow_Node_ID()).Append("->Next=").Append(GetAD_WF_Next_ID());
             if (_conditions != null)
                 sb.Append(",#").Append(_conditions.Length);
             if (GetDescription() != null && GetDescription().Length > 0)

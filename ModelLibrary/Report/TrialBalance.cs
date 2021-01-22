@@ -347,8 +347,8 @@ namespace VAdvantage.Report
             {
                 sql.Append(_VAF_Org_ID);
             }
-            sql.Append(", SysDate,").Append(GetAD_User_ID())
-                .Append(",SysDate,").Append(GetAD_User_ID()).Append(",");
+            sql.Append(", SysDate,").Append(GetVAF_UserContact_ID())
+                .Append(",SysDate,").Append(GetVAF_UserContact_ID()).Append(",");
             //	C_AcctSchema_ID, Account_ID, AccountValue, DateTrx, DateAcct, C_Period_ID,
             sql.Append(_C_AcctSchema_ID).Append(",");
             if (_Account_ID == 0 || _Account_ID == -1)

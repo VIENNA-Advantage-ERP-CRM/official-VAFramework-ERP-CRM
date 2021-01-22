@@ -240,7 +240,7 @@ namespace VAdvantage.Model
             }
 
             //	Insert Statement
-            int AD_User_ID = GetCtx().GetAD_User_ID();
+            int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
             String keyColumn = baseTable + "_ID";
             String insert = "";
             if (baseTable == "VAF_Client" || baseTable == "VAF_Org")
@@ -250,7 +250,7 @@ namespace VAdvantage.Model
                     + "CreatedBy,UpdatedBy "
                     + cols.ToString() + ") "
                     + "SELECT '" + GetVAF_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
-                    + AD_User_ID + "," + AD_User_ID
+                    + VAF_UserContact_ID + "," + VAF_UserContact_ID
                     + cols.ToString()
                     + " FROM " + baseTable
                     + " WHERE " + keyColumn + " NOT IN (SELECT " + keyColumn
@@ -264,7 +264,7 @@ namespace VAdvantage.Model
                     + "CreatedBy,UpdatedBy, "
                     + keyColumn + cols.ToString() + ") "
                     + "SELECT '" + GetVAF_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
-                    + AD_User_ID + "," + AD_User_ID + ", "
+                    + VAF_UserContact_ID + "," + VAF_UserContact_ID + ", "
                     + keyColumn + cols.ToString()
                     + " FROM " + baseTable
                     + " WHERE " + keyColumn + " NOT IN (SELECT " + keyColumn

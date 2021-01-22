@@ -63,7 +63,7 @@ namespace VAdvantage.Process
             int ind = filename.LastIndexOf(".");
             extension = filename.Substring(ind, filename.Length - ind);
             int client = Util.GetValueOfInt(GetVAF_Client_ID());
-            int user = GetAD_User_ID();
+            int user = GetVAF_UserContact_ID();
             int result = 0;
             if (extension.ToUpper() == ".XLS" || extension.ToUpper() == ".CSV" )
             {

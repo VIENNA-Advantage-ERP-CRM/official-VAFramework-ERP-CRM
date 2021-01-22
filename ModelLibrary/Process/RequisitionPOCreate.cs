@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Priority			
         private String _PriorityRule = null;
         // User				
-        private int _AD_User_ID = 0;
+        private int _VAF_UserContact_ID = 0;
         // Product				
         private int _M_Product_ID = 0;
         // Requisition			
@@ -103,9 +103,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _PriorityRule = (String)para[i].GetParameter();
                 }
-                else if (name.Equals("AD_User_ID"))
+                else if (name.Equals("VAF_UserContact_ID"))
                 {
-                    _AD_User_ID = para[i].GetParameterAsInt();
+                    _VAF_UserContact_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
@@ -159,7 +159,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ", DateDoc=" + _DateDoc_From + "/" + _DateDoc_To
                 + ", DateRequired=" + _DateRequired_From + "/" + _DateRequired_To
                 + ", PriorityRule=" + _PriorityRule
-                + ", AD_User_ID=" + _AD_User_ID
+                + ", VAF_UserContact_ID=" + _VAF_UserContact_ID
                 + ", M_Product_ID=" + _M_Product_ID
                 + ", ConsolidateDocument" + _ConsolidateDocument);
 
@@ -211,9 +211,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 sql.Append(" AND r.PriorityRule =>" + _PriorityRule);
             }
-            if (_AD_User_ID != 0)
+            if (_VAF_UserContact_ID != 0)
             {
-                sql.Append(" AND r.AD_User_ID=" + _AD_User_ID);
+                sql.Append(" AND r.VAF_UserContact_ID=" + _VAF_UserContact_ID);
             }
             //
             sql.Append(") ORDER BY ");

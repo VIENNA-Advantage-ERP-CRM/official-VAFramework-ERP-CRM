@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserBPAccess
+/** Generated Model for VAF_UserBPartRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserBPAccess : PO
+public class X_VAF_UserBPartRights : PO
 {
-public X_AD_UserBPAccess (Context ctx, int AD_UserBPAccess_ID, Trx trxName) : base (ctx, AD_UserBPAccess_ID, trxName)
+public X_VAF_UserBPartRights (Context ctx, int VAF_UserBPartRights_ID, Trx trxName) : base (ctx, VAF_UserBPartRights_ID, trxName)
 {
-/** if (AD_UserBPAccess_ID == 0)
+/** if (VAF_UserBPartRights_ID == 0)
 {
-SetAD_UserBPAccess_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserBPartRights_ID (0);
+SetVAF_UserContact_ID (0);
 SetBPAccessType (null);
 }
  */
 }
-public X_AD_UserBPAccess (Ctx ctx, int AD_UserBPAccess_ID, Trx trxName) : base (ctx, AD_UserBPAccess_ID, trxName)
+public X_VAF_UserBPartRights (Ctx ctx, int VAF_UserBPartRights_ID, Trx trxName) : base (ctx, VAF_UserBPartRights_ID, trxName)
 {
-/** if (AD_UserBPAccess_ID == 0)
+/** if (VAF_UserBPartRights_ID == 0)
 {
-SetAD_UserBPAccess_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserBPartRights_ID (0);
+SetVAF_UserContact_ID (0);
 SetBPAccessType (null);
 }
  */
@@ -41,7 +41,7 @@ SetBPAccessType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserBPAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserBPartRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_UserBPAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserBPAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserBPartRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_UserBPAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserBPAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserBPartRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserBPAccess()
+static X_VAF_UserBPartRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389048502L;
 public static int Table_ID;
  // =813;
 
-/** TableName=AD_UserBPAccess */
-public static String Table_Name="AD_UserBPAccess";
+/** TableName=VAF_UserBPartRights */
+public static String Table_Name="VAF_UserBPartRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserBPAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserBPartRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User BP Access.
-@param AD_UserBPAccess_ID User/concat access to Business Partner information and resources */
-public void SetAD_UserBPAccess_ID (int AD_UserBPAccess_ID)
+@param VAF_UserBPartRights_ID User/concat access to Business Partner information and resources */
+public void SetVAF_UserBPartRights_ID (int VAF_UserBPartRights_ID)
 {
-if (AD_UserBPAccess_ID < 1) throw new ArgumentException ("AD_UserBPAccess_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserBPAccess_ID", AD_UserBPAccess_ID);
+if (VAF_UserBPartRights_ID < 1) throw new ArgumentException ("VAF_UserBPartRights_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserBPartRights_ID", VAF_UserBPartRights_ID);
 }
 /** Get User BP Access.
 @return User/concat access to Business Partner information and resources */
-public int GetAD_UserBPAccess_ID() 
+public int GetVAF_UserBPartRights_ID() 
 {
-Object ii = Get_Value("AD_UserBPAccess_ID");
+Object ii = Get_Value("VAF_UserBPartRights_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -59,7 +59,7 @@ namespace VAdvantage.Process
 
             Project.SetName(CampaignType.GetName());
             Project.SetC_Campaign_ID(GetRecord_ID());
-            Project.SetSalesRep_ID(GetAD_User_ID());
+            Project.SetSalesRep_ID(GetVAF_UserContact_ID());
             Project.SetDateContract(Campaign.GetStartDate());
             Project.SetDateFinish(Campaign.GetEndDate());
             Project.SetSalesRep_ID(Campaign.GetSalesRep_ID());

@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         {
             if (VAF_Tab_ID == 0)
             {
-                //	setAD_Window_ID (0);
+                //	setVAF_Screen_ID (0);
                 //	setVAF_TableView_ID (0);
                 //	setName (null);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
         {
             ///this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
-            SetAD_Window_ID(parent.GetAD_Window_ID());
+            SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
             SetEntityType(parent.GetEntityType());
         }
 
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         {
             CopyValues(from, this);
             SetClientOrg(parent);
-            SetAD_Window_ID(parent.GetAD_Window_ID());
+            SetVAF_Screen_ID(parent.GetVAF_Screen_ID());
             SetEntityType(parent.GetEntityType());
         }
 
@@ -282,10 +282,10 @@ namespace VAdvantage.Model
             // check if there is any change in MaintainVersionOnApproval field on Tab
             if (Is_ValueChanged("MaintainVerOnApproval"))
             {
-                int windowID = GetAD_Window_ID();
+                int windowID = GetVAF_Screen_ID();
                 int SeqNo = GetSeqNo();
                 // Get all tabs from current window which have greater sequence than current tab
-                int[] TabIDs = MTab.GetAllIDs("VAF_Tab", "AD_Window_ID = " + windowID + " AND SeqNo > " + SeqNo, Get_TrxName());
+                int[] TabIDs = MTab.GetAllIDs("VAF_Tab", "VAF_Screen_ID = " + windowID + " AND SeqNo > " + SeqNo, Get_TrxName());
                 // if there are tabs with sequence greater than current tab
                 if (TabIDs.Length > 0)
                 {

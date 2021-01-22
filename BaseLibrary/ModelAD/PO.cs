@@ -1336,15 +1336,15 @@ namespace VAdvantage.Model
         }
 
         // vinay bhatt window id
-        private int AD_Window_ID = 0;
+        private int VAF_Screen_ID = 0;
 
-        public void SetAD_Window_ID(int ADWindow_ID)
+        public void SetVAF_Screen_ID(int ADWindow_ID)
         {
-            AD_Window_ID = ADWindow_ID;
+            VAF_Screen_ID = ADWindow_ID;
         }
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return AD_Window_ID;
+            return VAF_Screen_ID;
         }
 
         // Property for Master Data Versioning
@@ -1517,7 +1517,7 @@ namespace VAdvantage.Model
                 string colName = p_info.GetColumnName(i);
                 //  Set Standard Values
                 if (colName.EndsWith("tedBy"))
-                    _mNewValues[i] = p_ctx.GetAD_User_ID();
+                    _mNewValues[i] = p_ctx.GetVAF_UserContact_ID();
                 else if (colName.Equals("Created") || colName.Equals("Updated"))
                     _mNewValues[i] = DateTime.Now;
                 else if (colName.Equals(p_info.GetTableName() + "_ID"))    //  KeyColumn
@@ -2525,9 +2525,9 @@ namespace VAdvantage.Model
                     LOBAdd(value, i, dt);
                     if (!blnChanges & !blnUpdatedBy)
                     {
-                        int AD_User_ID = p_ctx.GetAD_User_ID();
-                        Set_ValueNoCheck("UpdatedBy", (int)AD_User_ID);
-                        sql.Append("UpdatedBy=").Append(AD_User_ID);
+                        int VAF_UserContact_ID = p_ctx.GetVAF_UserContact_ID();
+                        Set_ValueNoCheck("UpdatedBy", (int)VAF_UserContact_ID);
+                        sql.Append("UpdatedBy=").Append(VAF_UserContact_ID);
                         blnChanges = true;
                         blnUpdatedBy = true;
                     }
@@ -2650,9 +2650,9 @@ namespace VAdvantage.Model
                 }
                 if (!blnUpdatedBy)	//	UpdatedBy not explicitly set
                 {
-                    int AD_User_ID = p_ctx.GetAD_User_ID();
-                    Set_ValueNoCheck("UpdatedBy", (int)AD_User_ID);
-                    sql.Append(",UpdatedBy=").Append(AD_User_ID);
+                    int VAF_UserContact_ID = p_ctx.GetVAF_UserContact_ID();
+                    Set_ValueNoCheck("UpdatedBy", (int)VAF_UserContact_ID);
+                    sql.Append(",UpdatedBy=").Append(VAF_UserContact_ID);
                 }
                 sql.Append(" WHERE ").Append(strWhere);
 
@@ -3426,7 +3426,7 @@ namespace VAdvantage.Model
 
         private bool CheckActiveWF(int VAF_TableView_ID, int Record_ID, Trx trx)
         {
-            String sql = "SELECT COUNT(AD_WF_ACTIVITY_ID) FROM AD_WF_ACTIVITY " +
+            String sql = "SELECT COUNT(VAF_WFLOW_TASK_ID) FROM VAF_WFLOW_TASK " +
             "WHERE VAF_TableView_ID=@param1 AND Record_ID=@param2 AND PROCESSED='N'";
 
             List<object> lst = new List<object>();
@@ -3499,7 +3499,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get UpdatedBy
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetUpdatedBy()
         {
             object oo = Get_Value("UpdatedBy");
@@ -3699,7 +3699,7 @@ namespace VAdvantage.Model
                 String colName = p_info.GetColumnName(i);
                 //  Set Standard Values
                 if (colName.EndsWith("tedBy"))
-                    _mNewValues[i] = p_ctx.GetAD_User_ID();
+                    _mNewValues[i] = p_ctx.GetVAF_UserContact_ID();
                 else if (colName.Equals("Created") || colName.Equals("Updated"))
                     _mNewValues[i] = DateTime.Now;
                 else if (colName.Equals(p_info.GetTableName() + "_ID"))    //  KeyColumn
@@ -3820,7 +3820,7 @@ namespace VAdvantage.Model
 
         /**
         * 	Get CreatedBy
-        * 	@return AD_User_ID
+        * 	@return VAF_UserContact_ID
         */
         public int GetCreatedBy()
         {
@@ -3900,11 +3900,11 @@ namespace VAdvantage.Model
 
         /**
         * 	Set UpdatedBy
-        * 	@param AD_User_ID user
+        * 	@param VAF_UserContact_ID user
         */
-        protected void SetUpdatedBy(int AD_User_ID)
+        protected void SetUpdatedBy(int VAF_UserContact_ID)
         {
-            Set_ValueNoCheck("UpdatedBy", AD_User_ID);
+            Set_ValueNoCheck("UpdatedBy", VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -4040,7 +4040,7 @@ namespace VAdvantage.Model
                 String colName = dCopy.p_info.GetColumnName(i);
                 //  Set Standard Values
                 if (colName.EndsWith("tedBy"))
-                    dCopy._mNewValues[i] = p_ctx.GetAD_User_ID();
+                    dCopy._mNewValues[i] = p_ctx.GetVAF_UserContact_ID();
                 else if (colName.Equals("Created") || colName.Equals("Updated"))
                 {
                     dCopy._mNewValues[i] = (GlobalVariable.TO_DATE(DateTime.Now, dCopy.p_info.GetColumnDisplayType(i) == DisplayType.Date));
@@ -4063,7 +4063,7 @@ namespace VAdvantage.Model
 
 
             //if (colName.EndsWith("tedBy"))
-            //    _mNewValues[i] = p_ctx.GetAD_User_ID();
+            //    _mNewValues[i] = p_ctx.GetVAF_UserContact_ID();
             //else if (colName.Equals("Created") || colName.Equals("Updated"))
             //    _mNewValues[i] = new DateTime(CommonFunctions.CurrentTimeMillis());
             //else if (colName.Equals(p_info.GetTableName() + "_ID"))    //  KeyColumn
@@ -4092,7 +4092,7 @@ namespace VAdvantage.Model
                 //  Set Standard Values
                 else if (colName.EndsWith("tedBy") || colName.Equals("VAF_Client_ID") || colName.Equals("VAF_Org_ID"))
                 {
-                    // dCopy._mNewValues[i] = p_ctx.GetAD_User_ID();
+                    // dCopy._mNewValues[i] = p_ctx.GetVAF_UserContact_ID();
                     continue;
                 }
                 else if (colName.Equals("Created") || colName.Equals("Updated"))
@@ -4683,11 +4683,11 @@ namespace VAdvantage.Model
                     //	If no changes set UpdatedBy explicitly to ensure commit of lob
                     if (!changes & !updatedBy)
                     {
-                        int AD_User_ID = p_ctx.GetAD_User_ID();
-                        Set_ValueNoCheck("UpdatedBy", Util.GetValueOfInt(AD_User_ID));
+                        int VAF_UserContact_ID = p_ctx.GetVAF_UserContact_ID();
+                        Set_ValueNoCheck("UpdatedBy", Util.GetValueOfInt(VAF_UserContact_ID));
                         sql.Append("UpdatedBy=@param" + count);
                         count++;
-                        aParams.Add(AD_User_ID);
+                        aParams.Add(VAF_UserContact_ID);
                         changes = true;
                         updatedBy = true;
                     }
@@ -4905,11 +4905,11 @@ namespace VAdvantage.Model
                 }
                 if (!updatedBy)	//	UpdatedBy not explicitly set
                 {
-                    int AD_User_ID = p_ctx.GetAD_User_ID();
-                    Set_ValueNoCheck("UpdatedBy", Util.GetValueOfInt(AD_User_ID));
+                    int VAF_UserContact_ID = p_ctx.GetVAF_UserContact_ID();
+                    Set_ValueNoCheck("UpdatedBy", Util.GetValueOfInt(VAF_UserContact_ID));
                     sql.Append(",UpdatedBy=@param" + count);
                     count++;
-                    aParams.Add(AD_User_ID);
+                    aParams.Add(VAF_UserContact_ID);
                 }
                 sql.Append(" WHERE ").Append(GetUpdateWhereClause(false, count));
                 aParams.AddRange(Get_WhereClauseParams());

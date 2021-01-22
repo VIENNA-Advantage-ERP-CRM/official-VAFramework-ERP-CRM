@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             if (VAF_AttachmentNote_ID == 0)
             {
                 setVAF_Attachment_ID (0);
-                setAD_User_ID (0);
+                setVAF_UserContact_ID (0);
                 setTextMsg (null);
                 setTitle (null);
             }
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(attach);
             SetVAF_Attachment_ID(attach.GetVAF_Attachment_ID());
-            SetAD_User_ID(attach.GetCtx().GetAD_User_ID());
+            SetVAF_UserContact_ID(attach.GetCtx().GetVAF_UserContact_ID());
             SetTitle(Title);
             SetTextMsg(TextMsg);
         }

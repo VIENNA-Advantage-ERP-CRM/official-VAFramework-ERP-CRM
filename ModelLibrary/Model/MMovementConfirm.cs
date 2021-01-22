@@ -364,8 +364,8 @@ namespace VAdvantage.Model
         {
             if (isApproved && !IsApproved())
             {
-                int AD_User_ID = GetCtx().GetAD_User_ID();
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
                 String info = user.GetName()
                     + ": "
                     + Msg.Translate(GetCtx(), "IsApproved")
@@ -1081,7 +1081,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetUpdatedBy();

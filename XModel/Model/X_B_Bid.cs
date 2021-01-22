@@ -20,7 +20,7 @@ public X_B_Bid (Context ctx, int B_Bid_ID, Trx trxName) : base (ctx, B_Bid_ID, t
 {
 /** if (B_Bid_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetB_Bid_ID (0);
 SetB_BuyerFunds_ID (0);
 SetB_Topic_ID (0);
@@ -33,7 +33,7 @@ public X_B_Bid (Ctx ctx, int B_Bid_ID, Trx trxName) : base (ctx, B_Bid_ID, trxNa
 {
 /** if (B_Bid_ID == 0)
 {
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetB_Bid_ID (0);
 SetB_BuyerFunds_ID (0);
 SetB_Topic_ID (0);
@@ -121,17 +121,17 @@ StringBuilder sb = new StringBuilder ("X_B_Bid[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_Value ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

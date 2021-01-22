@@ -119,7 +119,7 @@
         var list = null;
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab.getVAF_Screen_ID();
         var VAF_TableView_ID = VAF_TableView_ID;
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
@@ -302,13 +302,13 @@
         var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
         var IsSummary = true;
         var pi = null;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab.getVAF_Screen_ID();
 
-        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, VAF_JInstance_ID, pageNO, fileType, VAF_Print_Rpt_Layout_ID, AD_Window_ID) {
+        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, VAF_JInstance_ID, pageNO, fileType, VAF_Print_Rpt_Layout_ID, VAF_Screen_ID) {
 
             if (!pi) {
                 pi = new VIS.ProcessInfo("", 0, vaf_tableview_ID, 0);
-                pi.setAD_User_ID(VIS.context.getAD_User_ID());
+                pi.setVAF_UserContact_ID(VIS.context.getVAF_UserContact_ID());
                 pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
             }
             pi.setTable_ID(vaf_tableview_ID);
@@ -316,8 +316,8 @@
             pi.setPageNo(pageNO);
             pi.setFileType(fileType);
             pi.set_VAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);
-            pi.setAD_Window_ID(AD_Window_ID);
-            if (AD_Window_ID > 0) {
+            pi.setVAF_Screen_ID(VAF_Screen_ID);
+            if (VAF_Screen_ID > 0) {
                 pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_WINDOW);
             }
             else {
@@ -354,7 +354,7 @@
             IsSummary = isSummary;
         };
 
-        this.setAD_Window_ID = function (windowID) {
+        this.setVAF_Screen_ID = function (windowID) {
             windowID = windowID;
         }
 
@@ -662,7 +662,7 @@
                 printReport();
             });
             btnCustomize.on('click', function () {
-                //var AD_Window_ID = 240;		// hardcoded               
+                //var VAF_Screen_ID = 240;		// hardcoded               
                 var zoomQuery = new VIS.Query();
                 zoomQuery.addRestriction("VAF_Print_Rpt_Layout_ID", VIS.Query.prototype.EQUAL, VAF_Print_Rpt_Layout_ID);
                 VIS.viewManager.startWindow(240, zoomQuery);
@@ -1315,7 +1315,7 @@
 
     function APrint(VAF_Job_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
         //var overla = null;
-        var windowID = curTab.getAD_Window_ID();
+        var windowID = curTab.getVAF_Screen_ID();
         $menu.off("click");
         $menu.on("click", "LI", function (e) {
             var filetype = $(e.target).data("val");

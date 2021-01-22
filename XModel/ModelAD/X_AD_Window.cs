@@ -11,16 +11,16 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Window
+    /** Generated Model for VAF_Screen
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Window : PO
+    public class X_VAF_Screen : PO
     {
-        public X_AD_Window(Context ctx, int AD_Window_ID, Trx trxName) : base(ctx, AD_Window_ID, trxName)
+        public X_VAF_Screen(Context ctx, int VAF_Screen_ID, Trx trxName) : base(ctx, VAF_Screen_ID, trxName)
         {
-            /** if (AD_Window_ID == 0)
+            /** if (VAF_Screen_ID == 0)
 {
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetEntityType (null);	// U
 SetIsBetaFunctionality (false);
 SetIsDefault (false);
@@ -29,11 +29,11 @@ SetWindowType (null);	// M
 }
              */
         }
-        public X_AD_Window(Ctx ctx, int AD_Window_ID, Trx trxName) : base(ctx, AD_Window_ID, trxName)
+        public X_VAF_Screen(Ctx ctx, int VAF_Screen_ID, Trx trxName) : base(ctx, VAF_Screen_ID, trxName)
         {
-            /** if (AD_Window_ID == 0)
+            /** if (VAF_Screen_ID == 0)
 {
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetEntityType (null);	// U
 SetIsBetaFunctionality (false);
 SetIsDefault (false);
@@ -47,7 +47,7 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_Screen(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -55,7 +55,7 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAF_Screen(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -63,13 +63,13 @@ SetWindowType (null);	// M
 @param rs result set 
 @param trxName transaction
 */
-        public X_AD_Window(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+        public X_VAF_Screen(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Window()
+        static X_VAF_Screen()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -82,8 +82,8 @@ SetWindowType (null);	// M
         public static int Table_ID;
         // =105;
 
-        /** TableName=AD_Window */
-        public static String Table_Name = "AD_Window";
+        /** TableName=VAF_Screen */
+        public static String Table_Name = "VAF_Screen";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -117,7 +117,7 @@ SetWindowType (null);	// M
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Window[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Screen[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set System Color.
@@ -169,17 +169,17 @@ SetWindowType (null);	// M
             return Convert.ToInt32(ii);
         }
         /** Set Window.
-@param AD_Window_ID Data entry or display window */
-        public void SetAD_Window_ID(int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+        public void SetVAF_Screen_ID(int VAF_Screen_ID)
         {
-            if (AD_Window_ID < 1) throw new ArgumentException("AD_Window_ID is mandatory.");
-            Set_ValueNoCheck("AD_Window_ID", AD_Window_ID);
+            if (VAF_Screen_ID < 1) throw new ArgumentException("VAF_Screen_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Screen_ID", VAF_Screen_ID);
         }
         /** Get Window.
 @return Data entry or display window */
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            Object ii = Get_Value("AD_Window_ID");
+            Object ii = Get_Value("VAF_Screen_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

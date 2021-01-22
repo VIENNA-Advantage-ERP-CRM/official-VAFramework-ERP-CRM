@@ -218,7 +218,7 @@ namespace VIS.Helpers
              */
                 //	Constants for Created/Updated(By)
                 DateTime now = DateTime.Now;
-                int user = ctx.GetAD_User_ID();
+                int user = ctx.GetVAF_UserContact_ID();
 
                 /**
                  *	for every column
@@ -984,7 +984,7 @@ namespace VIS.Helpers
                 InsRecord_ID = Util.GetValueOfInt(inn.VerRecID);
                 versionInfo.VAF_TableView_ID = VAF_TableView_ID;
                 versionInfo.Record_ID = Record_ID;
-                versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
+                versionInfo.VAF_Screen_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
 
@@ -1121,7 +1121,7 @@ namespace VIS.Helpers
             }
 
             // vinay bhatt window id
-            po.SetAD_Window_ID(inn.AD_WIndow_ID);
+            po.SetVAF_Screen_ID(inn.AD_WIndow_ID);
             //      
             // check and set field values based on Master Versions 
             // else execute normally
@@ -1131,7 +1131,7 @@ namespace VIS.Helpers
                 MTable tblParent = new MTable(ctx, VAF_TableView_ID, trx);
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
-                po.SetAD_Window_ID(Ver_Window_ID);
+                po.SetVAF_Screen_ID(Ver_Window_ID);
                 if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey, versionInfo.IsLatestVersion))
                     return;
             }
@@ -1337,7 +1337,7 @@ namespace VIS.Helpers
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
         }
 
-        private PO GetPO(Ctx ctx, int VAF_TableView_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int AD_Window_ID)
+        private PO GetPO(Ctx ctx, int VAF_TableView_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int VAF_Screen_ID)
         {
             MTable table = MTable.Get(ctx, VAF_TableView_ID);
             PO po = null;
@@ -1349,18 +1349,18 @@ namespace VIS.Helpers
             {
                 po = table.GetPO(ctx, whereClause, trx);
             }
-            AD_Window_ID = table.GetAD_Window_ID();
+            VAF_Screen_ID = table.GetVAF_Screen_ID();
             // Change to get Window ID based on the current window as there can be multiple windows 
 
             // created on one table, so in case of versioning fetched window ID with Name and Tab name
 
             if (isMaintainVer)
             {
-                StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Window WHERE AD_Window_ID = " + CurrWindow_ID)));
-                sbwName.Append(" Version_" + Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Tab WHERE AD_Window_ID = " + CurrWindow_ID + " AND VAF_TableView_ID = " + CurrTable_ID + " ORDER BY TabLevel")));
-                int VerWin_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE Name='" + sbwName.ToString() + "'", null, trx));
+                StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Screen WHERE VAF_Screen_ID = " + CurrWindow_ID)));
+                sbwName.Append(" Version_" + Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Tab WHERE VAF_Screen_ID = " + CurrWindow_ID + " AND VAF_TableView_ID = " + CurrTable_ID + " ORDER BY TabLevel")));
+                int VerWin_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='" + sbwName.ToString() + "'", null, trx));
                 if (VerWin_ID > 0)
-                    AD_Window_ID = VerWin_ID;
+                    VAF_Screen_ID = VerWin_ID;
             }
             return po;
         }
@@ -1443,7 +1443,7 @@ namespace VIS.Helpers
                     if (columnName.ToLower() == "created" || columnName.ToLower() == "updated")
                         value = System.DateTime.Now;
                     if (columnName.ToLower() == "createdby" || columnName.ToLower() == "updatedby")
-                        value = ctx.GetAD_User_ID();
+                        value = ctx.GetVAF_UserContact_ID();
                     if (!po.Set_ValueNoCheck(columnName, value))
                     {
                         outt.IsError = true;
@@ -2774,7 +2774,7 @@ namespace VIS.Helpers
         /// clean up
         /// </summary>
 
-        internal static CardViewData GetCardViewDetail(int AD_Window_ID, int VAF_Tab_ID, Ctx ctx)
+        internal static CardViewData GetCardViewDetail(int VAF_Screen_ID, int VAF_Tab_ID, Ctx ctx)
         {
             CardViewData cv = new CardViewData();
             cv.IncludedCols = new List<int>();
@@ -2782,8 +2782,8 @@ namespace VIS.Helpers
 
             int AD_CV_ID = -1;
 
-            string sql = "SELECT VAF_CardView_ID,VAF_Field_ID FROM VAF_CardView WHERE AD_Window_ID = " + AD_Window_ID + " AND VAF_Tab_ID = " + VAF_Tab_ID + " AND AD_USER_ID=" + ctx.GetAD_User_ID()
-                            + " AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " ORDER BY AD_USER_ID  ";
+            string sql = "SELECT VAF_CardView_ID,VAF_Field_ID FROM VAF_CardView WHERE VAF_Screen_ID = " + VAF_Screen_ID + " AND VAF_Tab_ID = " + VAF_Tab_ID + " AND VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID()
+                            + " AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " ORDER BY VAF_USERCONTACT_ID  ";
             IDataReader dr = null;
             try
             {
@@ -2797,8 +2797,8 @@ namespace VIS.Helpers
                 else
                 {
                     dr.Close();
-                    sql = "SELECT c.VAF_CardView_ID, c.VAF_Field_ID  FROM VAF_CardView c INNER JOIN VAF_CardView_Role r ON r.VAF_CardView_ID = r.VAF_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
-                                 + " c.VAF_Tab_ID=" + VAF_Tab_ID + " AND r.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND c.AD_User_ID IS NULL";
+                    sql = "SELECT c.VAF_CardView_ID, c.VAF_Field_ID  FROM VAF_CardView c INNER JOIN VAF_CardView_Role r ON r.VAF_CardView_ID = r.VAF_CardView_ID WHERE c.VAF_Screen_ID=" + VAF_Screen_ID + " AND "
+                                 + " c.VAF_Tab_ID=" + VAF_Tab_ID + " AND r.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND c.VAF_UserContact_ID IS NULL";
                     dr = DB.ExecuteReader(sql);
                     if (dr.Read())
                     {
@@ -2961,17 +2961,17 @@ namespace VIS.Helpers
 
         }
 
-        public void InsertUpdateDefaultSearch(Ctx _ctx, int VAF_Tab_ID, int VAF_TableView_ID, int AD_User_ID, int? AD_UserQuery_ID)
+        public void InsertUpdateDefaultSearch(Ctx _ctx, int VAF_Tab_ID, int VAF_TableView_ID, int VAF_UserContact_ID, int? VAF_UserSearch_ID)
         {
 
-            if (AD_UserQuery_ID == 0 || AD_UserQuery_ID == null)
+            if (VAF_UserSearch_ID == 0 || VAF_UserSearch_ID == null)
             {
-                DB.ExecuteQuery("DELETE FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND AD_User_ID=" + AD_User_ID);
+                DB.ExecuteQuery("DELETE FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID);
                 return;
             }
 
 
-            string sql = "SELECT VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND AD_User_ID=" + AD_User_ID;
+            string sql = "SELECT VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID;
             object id = DB.ExecuteScalar(sql);
             int VAF_DefaultUserQuery_ID = 0;
             if (id != null && id != DBNull.Value)
@@ -2983,8 +2983,8 @@ namespace VIS.Helpers
             X_VAF_DefaultUserQuery userQuery = new X_VAF_DefaultUserQuery(_ctx, VAF_DefaultUserQuery_ID, null);
             userQuery.SetVAF_Tab_ID(VAF_Tab_ID);
             userQuery.SetVAF_TableView_ID(VAF_TableView_ID);
-            userQuery.SetAD_User_ID(AD_User_ID);
-            userQuery.SetAD_UserQuery_ID(Convert.ToInt32(AD_UserQuery_ID));
+            userQuery.SetVAF_UserContact_ID(VAF_UserContact_ID);
+            userQuery.SetVAF_UserSearch_ID(Convert.ToInt32(VAF_UserSearch_ID));
             userQuery.Save();
 
 

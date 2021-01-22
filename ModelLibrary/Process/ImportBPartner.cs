@@ -197,8 +197,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Existing User ?
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET (C_BPartner_ID,AD_User_ID)="
-                    + "(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u "
+                + "SET (C_BPartner_ID,VAF_UserContact_ID)="
+                    + "(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u "
                     + "WHERE i.EMail=u.EMail AND u.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE i.EMail IS NOT NULL AND I_IsImported='N'").Append(clientCheck);
 
@@ -216,9 +216,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Existing Contact ? Match Name
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET AD_User_ID=(SELECT AD_User_ID FROM AD_User c"
+                + "SET VAF_UserContact_ID=(SELECT VAF_UserContact_ID FROM VAF_UserContact c"
                 + " WHERE i.ContactName=c.Name AND i.C_BPartner_ID=c.C_BPartner_ID AND c.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_BPartner_ID IS NOT NULL AND AD_User_ID IS NULL AND ContactName IS NOT NULL"
+                + "WHERE C_BPartner_ID IS NOT NULL AND VAF_UserContact_ID IS NULL AND ContactName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found Contact=" + no);
@@ -265,7 +265,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Fine("I_BPartner_ID=" + impBP.GetI_BPartner_ID()
                         + ", C_BPartner_ID=" + impBP.GetC_BPartner_ID()
                         + ", C_BPartner_Location_ID=" + impBP.GetC_BPartner_Location_ID()
-                        + ", AD_User_ID=" + impBP.GetAD_User_ID());
+                        + ", VAF_UserContact_ID=" + impBP.GetVAF_UserContact_ID());
 
 
                     //	****	Create/Update BPartner	****
@@ -403,9 +403,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	****	Create/Update Contact	****
                     MUser user = null;
-                    if (impBP.GetAD_User_ID() != 0)
+                    if (impBP.GetVAF_UserContact_ID() != 0)
                     {
-                        user = new MUser(GetCtx(), impBP.GetAD_User_ID(), Get_TrxName());
+                        user = new MUser(GetCtx(), impBP.GetVAF_UserContact_ID(), Get_TrxName());
                         if (user.GetC_BPartner_ID() == 0)
                             user.SetC_BPartner_ID(bp.GetC_BPartner_ID());
                         else if (user.GetC_BPartner_ID() != bp.GetC_BPartner_ID())
@@ -445,7 +445,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             user.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
                         if (user.Save())
                         {
-                            log.Finest("Update BP Contact - " + user.GetAD_User_ID());
+                            log.Finest("Update BP Contact - " + user.GetVAF_UserContact_ID());
                         }
                         else
                         {
@@ -481,8 +481,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 user.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
                             if (user.Save())
                             {
-                                log.Finest("Insert BP Contact - " + user.GetAD_User_ID());
-                                impBP.SetAD_User_ID(user.GetAD_User_ID());
+                                log.Finest("Insert BP Contact - " + user.GetVAF_UserContact_ID());
+                                impBP.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                             }
                             else
                             {
@@ -501,7 +501,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (impBP.GetR_InterestArea_ID() != 0 && user != null)
                     {
                         MContactInterest ci = MContactInterest.Get(GetCtx(),
-                            impBP.GetR_InterestArea_ID(), user.GetAD_User_ID(),
+                            impBP.GetR_InterestArea_ID(), user.GetVAF_UserContact_ID(),
                             true, Get_TrxName());
                         ci.Save();		//	don't subscribe or re-activate
                     }

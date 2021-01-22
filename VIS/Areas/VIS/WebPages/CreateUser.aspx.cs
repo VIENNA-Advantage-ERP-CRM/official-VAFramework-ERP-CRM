@@ -101,7 +101,7 @@ namespace VIS.Areas.VIS.WebPages
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MUserRoles uRoles = new MUserRoles(ctx, user.GetAD_User_ID(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]), null);
+                        MUserRoles uRoles = new MUserRoles(ctx, user.GetVAF_UserContact_ID(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]), null);
                         uRoles.SetVAF_Client_ID(VAF_Client_ID);
                         uRoles.SetVAF_Org_ID(VAF_Org_ID);
                         uRoles.Save();

@@ -624,7 +624,7 @@ namespace VAdvantage.Process
                     //String msg = "No DocAction Parameter added";  //  not translated
                 }
                 ProcessInfo pi = new ProcessInfo("WF", Process_ID);
-                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetVAF_JInstance_ID(pin.GetVAF_JInstance_ID());
                 pi.SetRecord_ID(Record_ID);

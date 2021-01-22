@@ -60,17 +60,17 @@ namespace VAdvantage.Model
         {
             if (isActive)
             {
-                DB.ExecuteQuery(@"UPDATE ad_window_access
+                DB.ExecuteQuery(@"UPDATE VAF_Screen_Rights
                                     SET IsActive      ='Y',IsReadWrite='Y'
-                                    WHERE ad_window_id=" + GetAD_Window_ID() + @"
+                                    WHERE ad_window_id=" + GetVAF_Screen_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
             else
             {
-                DB.ExecuteQuery(@"UPDATE ad_window_access
+                DB.ExecuteQuery(@"UPDATE VAF_Screen_Rights
                                     SET IsActive      ='N',IsReadWrite='N'
-                                    WHERE ad_window_id=" + GetAD_Window_ID() + @"
+                                    WHERE ad_window_id=" + GetVAF_Screen_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     MWindowAccess access = new MWindowAccess(GetCtx(), 0, null);
-                    access.SetAD_Window_ID(GetAD_Window_ID());
+                    access.SetVAF_Screen_ID(GetVAF_Screen_ID());
                     access.SetVAF_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     access.SetIsReadWrite(true);
                     access.Save();

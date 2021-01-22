@@ -520,7 +520,7 @@ namespace VAdvantage.Model
             SetC_BPartner_ID(ord.GetC_BPartner_ID());
             //SetC_BPartner_ID(invoice.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(ord.GetC_BPartner_Location_ID());	//	shipment address
-            SetAD_User_ID(ord.GetAD_User_ID());
+            SetVAF_UserContact_ID(ord.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(M_Warehouse_ID);
             SetIsSOTrx(invoice.IsSOTrx());
@@ -586,7 +586,7 @@ namespace VAdvantage.Model
             SetClientOrg(original);
             SetC_BPartner_ID(original.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(original.GetC_BPartner_Location_ID());	//	shipment address
-            SetAD_User_ID(original.GetAD_User_ID());
+            SetVAF_UserContact_ID(original.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(original.GetM_Warehouse_ID());
             SetIsSOTrx(original.IsSOTrx());
@@ -1034,7 +1034,7 @@ namespace VAdvantage.Model
             //
             SetC_BPartner_ID(order.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(order.GetC_BPartner_Location_ID());	//	shipment address
-            SetAD_User_ID(order.GetAD_User_ID());
+            SetVAF_UserContact_ID(order.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(order.GetM_Warehouse_ID());
             SetIsSOTrx(order.IsSOTrx());
@@ -1267,7 +1267,7 @@ namespace VAdvantage.Model
             //	Set Contact
             MUser[] contacts = bp.GetContacts(false);
             if (contacts != null && contacts.Length > 0)	//	get first User
-                SetAD_User_ID(contacts[0].GetAD_User_ID());
+                SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
         }
 
         /// <summary>
@@ -1287,10 +1287,10 @@ namespace VAdvantage.Model
                 return;
             String sql = "SELECT p.VAF_Language, p.POReference,"
                 + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID "
+                + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
             try
             {
@@ -1304,8 +1304,8 @@ namespace VAdvantage.Model
                     if (ii != 0)
                         SetC_BPartner_Location_ID(ii);
                     //	Contact
-                    ii = (int)dr["AD_User_ID"];
-                    SetAD_User_ID(ii);
+                    ii = (int)dr["VAF_UserContact_ID"];
+                    SetVAF_UserContact_ID(ii);
 
                     //	CreditAvailable
                     if (IsSOTrx() && !IsReturnTrx())
@@ -5458,7 +5458,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetSalesRep_ID();

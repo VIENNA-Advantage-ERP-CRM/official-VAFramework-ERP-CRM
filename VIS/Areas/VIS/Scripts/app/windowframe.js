@@ -362,26 +362,26 @@
 
     /**
 	 *	Dynamic Initialization Single Window
-	 *  @param AD_Window_ID window
+	 *  @param VAF_Screen_ID window
 	 *  @param query selection criteria
      *  @param callback to add menu item for window
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initWindow = function (AD_Window_ID, query, callback, action, sel) {
+    AWindow.prototype.initWindow = function (VAF_Screen_ID, query, callback, action, sel) {
 
         this.cPanel = new VIS.APanel(); //initlize Apanel
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
-        this.id = windowNo + "_" + AD_Window_ID;
-        this.hid = action + "=" + AD_Window_ID;
+        this.id = windowNo + "_" + VAF_Screen_ID;
+        this.hid = action + "=" + VAF_Screen_ID;
 
         // $(this.getRootLayout()).attr('tabindex', windowNo);
 
         var self = this;
 
 
-        VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
+        VIS.AEnv.getGridWindow(windowNo, VAF_Screen_ID, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
                 self.dispose();
@@ -415,7 +415,7 @@
             self = null;
         });
 
-        this.AD_Window_ID = AD_Window_ID;
+        this.VAF_Screen_ID = VAF_Screen_ID;
         this.windowNo = windowNo;
 
         this.getRootLayout().id = this.id;
@@ -591,8 +591,8 @@
         return this.title;
     };
 
-    AWindow.prototype.getAD_Window_ID = function () {
-        return this.AD_Window_ID;
+    AWindow.prototype.getVAF_Screen_ID = function () {
+        return this.VAF_Screen_ID;
     };
 
     /**
@@ -636,7 +636,7 @@
         //}
 
         if (this.onClosed) {
-            if (!this.onClosed(this.id, this.$layout, this.hid, this.AD_Window_ID))
+            if (!this.onClosed(this.id, this.$layout, this.hid, this.VAF_Screen_ID))
                 return;
         }
         this.onClosed = null;
@@ -858,21 +858,21 @@
 
                         $($txtSearch[2]).css("transform", "rotate(180deg)");
 
-                        //                        var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-                        //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
-                        //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )   ELSE null End as VAF_DefaultUserQuery_ID"
-                        //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =" + self.ctx.getVAF_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-                        //       + " AND (AD_UserQuery.VAF_Tab_ID           =" + self.curTab.getVAF_Tab_ID() + " OR AD_UserQuery.VAF_TableView_ID           =" + self.curTab.getVAF_TableView_ID() + ")"
-                        //       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+                        //                        var sqlUserSearch = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
+                        //+ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + self.ctx.getVAF_UserContact_ID() + "  )  "
+                        //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + self.ctx.getVAF_UserContact_ID() + "  )   ELSE null End as VAF_DefaultUserQuery_ID"
+                        //       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =" + self.ctx.getVAF_Client_ID() + " AND VAF_UserSearch.IsActive             ='Y' "
+                        //       + " AND (VAF_UserSearch.VAF_Tab_ID           =" + self.curTab.getVAF_Tab_ID() + " OR VAF_UserSearch.VAF_TableView_ID           =" + self.curTab.getVAF_TableView_ID() + ")"
+                        //       + " ORDER BY Upper(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
                         var sqlUserSearch = "VIS_114";
 
 
                         var param = [];
                         param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", self.curTab.getVAF_Tab_ID());
-                        param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
+                        param[1] = new VIS.DB.SqlParam("@VAF_UserContact_ID", self.ctx.getVAF_UserContact_ID());
                         param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", self.curTab.getVAF_Tab_ID());
-                        param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
+                        param[3] = new VIS.DB.SqlParam("@VAF_UserContact_ID1", self.ctx.getVAF_UserContact_ID());
                         param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", self.ctx.getVAF_Client_ID());
                         param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", self.curTab.getVAF_Tab_ID());
                         param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", self.curTab.getVAF_TableView_ID());
@@ -888,11 +888,11 @@
                                 var hasDefaultSearch = false;
                                 for (var i = 0; i < data.tables[0].rows.length; i++) {
                                     if (data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] > 0) {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
+                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
                                         hasDefaultSearch = true;
                                     }
                                     else {
-                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
+                                        userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'name': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"] });
                                     }
                                 }
                                 $selfpanel.toggleASearchIcons(true, hasDefaultSearch);
@@ -900,10 +900,10 @@
                             else {
 
                                 //          var sqlUserSearch = "SELECT count(*) "
-                                //+ " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON VAF_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
-                                //                   + " AD_UserQuery.VAF_Client_ID=" + self.ctx.getVAF_Client_ID() + " AND AD_UserQuery.IsActive='Y'"
-                                //                   + " AND (AD_UserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " OR AD_UserQuery.VAF_TableView_ID=" + self.curTab.getVAF_TableView_ID() + ")";
-                                //          sqlUserSearch += " ORDER BY AD_UserQuery.AD_UserQuery_ID";
+                                //+ " FROM VAF_UserSearch VAF_UserSearch LEFT OUTER JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON VAF_DefaultUserQuery.VAF_UserSearch_ID=VAF_UserSearch.VAF_UserSearch_ID WHERE"
+                                //                   + " VAF_UserSearch.VAF_Client_ID=" + self.ctx.getVAF_Client_ID() + " AND VAF_UserSearch.IsActive='Y'"
+                                //                   + " AND (VAF_UserSearch.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " OR VAF_UserSearch.VAF_TableView_ID=" + self.curTab.getVAF_TableView_ID() + ")";
+                                //          sqlUserSearch += " ORDER BY VAF_UserSearch.VAF_UserSearch_ID";
 
 
                                 var sqlUserSearch = "VIS_115";
@@ -1026,7 +1026,7 @@
                             $.ajax({
                                 url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultSearch",
                                 dataType: "json",
-                                data: { VAF_Tab_ID: self.curTab.getVAF_Tab_ID(), VAF_TableView_ID: self.curTab.getVAF_TableView_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
+                                data: { VAF_Tab_ID: self.curTab.getVAF_Tab_ID(), VAF_TableView_ID: self.curTab.getVAF_TableView_ID(), VAF_UserContact_ID: self.ctx.getVAF_UserContact_ID(), VAF_UserSearch_ID: uQueryID },
                                 success: function (data) {
 
                                 },
@@ -2002,20 +2002,20 @@
         };
 
         this.refreshSavedASearchList = function (showData, text) {
-            //            var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END  AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-            //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "  )  "
-            //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.AD_User_ID=" + self.ctx.getAD_User_ID() + "   )   ELSE null End as VAF_DefaultUserQuery_ID"
-            //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =" + self.ctx.getVAF_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-            //       + " AND (AD_UserQuery.VAF_Tab_ID           =" + self.curTab.getVAF_Tab_ID() + " OR AD_UserQuery.VAF_TableView_ID           =" + self.curTab.getVAF_TableView_ID() + ")"
-            //                   + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+            //            var sqlUserSearch = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END  AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
+            //+ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + self.ctx.getVAF_UserContact_ID() + "  )  "
+            //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + self.curTab.getVAF_Tab_ID() + " AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + self.ctx.getVAF_UserContact_ID() + "   )   ELSE null End as VAF_DefaultUserQuery_ID"
+            //       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =" + self.ctx.getVAF_Client_ID() + " AND VAF_UserSearch.IsActive             ='Y' "
+            //       + " AND (VAF_UserSearch.VAF_Tab_ID           =" + self.curTab.getVAF_Tab_ID() + " OR VAF_UserSearch.VAF_TableView_ID           =" + self.curTab.getVAF_TableView_ID() + ")"
+            //                   + " ORDER BY Upper(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
             var sqlUserSearch = "VIS_116";
 
             var param = [];
             param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", self.curTab.getVAF_Tab_ID());
-            param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
+            param[1] = new VIS.DB.SqlParam("@VAF_UserContact_ID", self.ctx.getVAF_UserContact_ID());
             param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", self.curTab.getVAF_Tab_ID());
-            param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
+            param[3] = new VIS.DB.SqlParam("@VAF_UserContact_ID1", self.ctx.getVAF_UserContact_ID());
             param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", self.ctx.getVAF_Client_ID());
             param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", self.curTab.getVAF_Tab_ID());
             param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", self.curTab.getVAF_TableView_ID());
@@ -2034,11 +2034,11 @@
                     for (var i = 0; i < data.tables[0].rows.length; i++) {
 
                         if (data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] > 0) {
-                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
+                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
                             hasDefaultSearch = true;
                         }
                         else {
-                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
+                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"] });
                         }
                     }
                     //$selfpanel.toggleASearchIcons(true, hasDefaultSearch);
@@ -2931,7 +2931,7 @@
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
             if (window.VADMS) {
                 var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
+                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getVAF_Screen_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
                 frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.hideHeader(true);
@@ -2948,7 +2948,7 @@
 
             if (window.VADMS) {
                 // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
+                window.VADMS.uploaddocument(0, tis.curTab.getVAF_Screen_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
 
             }
             else {
@@ -2964,7 +2964,7 @@
                 frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
                 frame.hideHeader(true);
                 doc.setWindowNo(VIS.Env.getWindowNo());
-                doc.setWindowID(tis.curTab.getAD_Window_ID());
+                doc.setWindowID(tis.curTab.getVAF_Screen_ID());
                 doc.setTableID(tis.curTab.getVAF_TableView_ID());
                 doc.setRecordID(tis.curTab.getRecord_ID());
                 doc.setWindowName(tis.gridWindow.getName());
@@ -2984,7 +2984,7 @@
                 if (documentID.length > 0) {
                     var dataIn = {
                         docID: documentID,
-                        winID: tis.curTab.getAD_Window_ID(),
+                        winID: tis.curTab.getVAF_Screen_ID(),
                         tableID: tis.curTab.getVAF_TableView_ID(),
                         recID: tis.curTab.getRecord_ID()
                     };
@@ -3177,13 +3177,13 @@
             //  m_curWindowNo
             // Change by Lokesh Chauhan 18/05/2015
             var chkModule = false;
-            if (this.curTab.getAD_Window_ID() == 341 || this.curTab.getAD_Window_ID() == 170) {
+            if (this.curTab.getVAF_Screen_ID() == 341 || this.curTab.getVAF_Screen_ID() == 170) {
                 if (window.MMPM) {
-                    var vvcf = MMPM.Requisition.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                    var vvcf = MMPM.Requisition.prototype.create(this.curTab.getVAF_Screen_ID(), this.curTab.getRecord_ID());
                     chkModule = true;
                 }
                 else if (window.DTD001) {
-                    var vvcf = DTD001.Requisition.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                    var vvcf = DTD001.Requisition.prototype.create(this.curTab.getVAF_Screen_ID(), this.curTab.getRecord_ID());
                     chkModule = true;
                 }
             }
@@ -3213,7 +3213,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.StickerProduct.prototype.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID());
+                var vvcf = DTD001.StickerProduct.prototype.create(this.curTab.getVAF_Screen_ID(), this.curTab.getRecord_ID());
             }
             return;
         }
@@ -3221,7 +3221,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.MRProductSticker.create(this.curTab.getAD_Window_ID(), this.curTab.getRecord_ID(), this.curTab.getTabLevel());
+                var vvcf = DTD001.MRProductSticker.create(this.curTab.getVAF_Screen_ID(), this.curTab.getRecord_ID(), this.curTab.getTabLevel());
             }
             return;
         }
@@ -3229,7 +3229,7 @@
         //requested by Mohit ,Mukesh Arora
         else if (columnName.equals("BGT01_CreateLinePo")) {
             if (window.BGT01) {
-                BGT01.CreateLineMovement(this.curTab.getAD_Window_ID(), this.curTab.getVAF_Tab_ID(), this.curTab.getRecord_ID());
+                BGT01.CreateLineMovement(this.curTab.getVAF_Screen_ID(), this.curTab.getVAF_Tab_ID(), this.curTab.getRecord_ID());
             }
             return;
         }
@@ -3257,7 +3257,7 @@
             var ps = this.curTab.getValue("Posted");
             if (ps != null && ps == "Y") {
                 //get Current record orgID by window no
-                var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curWindowNo, this.curTab.getAD_Window_ID());
+                var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curWindowNo, this.curTab.getVAF_Screen_ID());
                 if (obj != null) {
                     this.setBusy(false);
                     obj.showDialog();
@@ -3281,7 +3281,7 @@
                             }
                             if (window.FRPT && postingByNewLogic) {
                                 var orgID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "VAF_Org_ID"));
-                                var winID = selfLocal.curTab.getAD_Window_ID();
+                                var winID = selfLocal.curTab.getVAF_Screen_ID();
                                 var docTypeID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "C_DocType_ID"));
                                 var postObj = FRPT.PostingLogic(selfLocal.curWindowNo, selfLocal.curTab.getVAF_TableView_ID(), selfLocal.curTab.getRecord_ID(), force, orgID, winID, docTypeID);
                                 selfLocal.curGC.dataRefresh();
@@ -3340,7 +3340,7 @@
             ////	Mail Defaults
             //String title = getTitle();
             //String to = null;
-            //Object oo = m_curTab.getValue("AD_User_ID");
+            //Object oo = m_curTab.getValue("VAF_UserContact_ID");
             //if (oo instanceof Integer)
             //{
             //    MUser user = new MUser(Env.getCtx (), ((Integer)oo).intValue (), null);
@@ -3487,9 +3487,9 @@
         if (title == null || title.length == 0)
             title = columnName;
         var pi = new VIS.ProcessInfo(title, vButton.getProcess_ID(), table_ID, record_ID);
-        pi.setAD_User_ID(ctx.getAD_User_ID());
+        pi.setVAF_UserContact_ID(ctx.getVAF_UserContact_ID());
         pi.setVAF_Client_ID(ctx.getVAF_Client_ID());
-        pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
+        pi.setVAF_Screen_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.VAF_Screen_ID));// vinay bhatt window id
         pi.setIsBatch(batch);
         pi.setIsBackground(isbackground);
         //start process
@@ -3819,12 +3819,12 @@
 
         var $selfpanel = this;
 
-        //       var sqlUserSearch = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END  AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-        //+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + this.curTab.getVAF_Tab_ID() + "  AND VAF_DefaultUserQuery.AD_User_ID=" + this.ctx.getAD_User_ID() + "  )  "
-        //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + this.curTab.getVAF_Tab_ID() + "  AND VAF_DefaultUserQuery.AD_User_ID=" + this.ctx.getAD_User_ID() + "  )   ELSE null End as VAF_DefaultUserQuery_ID"
-        //       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =" + this.ctx.getVAF_Client_ID() + " AND AD_UserQuery.IsActive             ='Y' "
-        //       + " AND (AD_UserQuery.VAF_Tab_ID           =" + this.curTab.getVAF_Tab_ID() + " OR AD_UserQuery.VAF_TableView_ID           =" + this.curTab.getVAF_TableView_ID() + ")"
-        //       + " ORDER BY UPPER(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+        //       var sqlUserSearch = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END  AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
+        //+ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + this.curTab.getVAF_Tab_ID() + "  AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + this.ctx.getVAF_UserContact_ID() + "  )  "
+        //+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=" + this.curTab.getVAF_Tab_ID() + "  AND VAF_DefaultUserQuery.VAF_UserContact_ID=" + this.ctx.getVAF_UserContact_ID() + "  )   ELSE null End as VAF_DefaultUserQuery_ID"
+        //       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =" + this.ctx.getVAF_Client_ID() + " AND VAF_UserSearch.IsActive             ='Y' "
+        //       + " AND (VAF_UserSearch.VAF_Tab_ID           =" + this.curTab.getVAF_Tab_ID() + " OR VAF_UserSearch.VAF_TableView_ID           =" + this.curTab.getVAF_TableView_ID() + ")"
+        //       + " ORDER BY UPPER(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
 
 
@@ -3832,9 +3832,9 @@
 
         var param = [];
         param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", this.curTab.getVAF_Tab_ID());
-        param[1] = new VIS.DB.SqlParam("@AD_User_ID", this.ctx.getAD_User_ID());
+        param[1] = new VIS.DB.SqlParam("@VAF_UserContact_ID", this.ctx.getVAF_UserContact_ID());
         param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", this.curTab.getVAF_Tab_ID());
-        param[3] = new VIS.DB.SqlParam("@AD_User_ID1", this.ctx.getAD_User_ID());
+        param[3] = new VIS.DB.SqlParam("@VAF_UserContact_ID1", this.ctx.getVAF_UserContact_ID());
         param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", this.ctx.getVAF_Client_ID());
         param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", this.curTab.getVAF_Tab_ID());
         param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", this.curTab.getVAF_TableView_ID());
@@ -4682,7 +4682,7 @@
         //var table_ID = this.curTab.getVAF_TableView_ID();
         //var record_ID = this.curTab.getRecord_ID();
         //var pi = new VIS.ProcessInfo('Print', VAF_Job_ID, table_ID, record_ID);        
-        //pi.setAD_User_ID(VIS.context.getAD_User_ID());
+        //pi.setVAF_UserContact_ID(VIS.context.getVAF_UserContact_ID());
         //pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
 
         //pctrl.process(this.curWindowNo);
@@ -4765,7 +4765,7 @@
             self.curTab.loadSubscribe();
             self.aSubscribe.setPressed(self.curTab.HasSubscribed());
         };
-        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getAD_Window_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
+        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getVAF_Screen_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
     };
 
     APanel.prototype.cmd_ImportMap = function () {
@@ -4776,7 +4776,7 @@
                 return;
             }
 
-            var excel = new VDIU.ImportExcel(this.curTab.getAD_Window_ID(), this.gridWindow.getName());
+            var excel = new VDIU.ImportExcel(this.curTab.getVAF_Screen_ID(), this.gridWindow.getName());
             var c = new VIS.CFrame();
             c.setName(VIS.Msg.getMsg("Import"));
             c.setTitle(VIS.Msg.getMsg("Import"));
@@ -4818,17 +4818,17 @@
     APanel.prototype.cmd_history = function () {
         var atHistory = null;
         var c_Bpartner_ID = 0;
-        var AD_User_ID = 0;
+        var VAF_UserContact_ID = 0;
         if (Object.keys(this.curGC.getColumnNames()).indexOf("C_BPartner_ID") > 0 || (this.curTab.getField("C_BPartner_ID") != null && this.curTab.getField("C_BPartner_ID").getValue() > 0)) {
             c_Bpartner_ID = this.curTab.getField("C_BPartner_ID").getValue();
             //atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curTab.getField("C_BPartner_ID").getValue());
         }
 
-        if (Object.keys(this.curGC.getColumnNames()).indexOf("AD_User_ID") > 0 || (this.curTab.getField("AD_User_ID") != null && this.curTab.getField("AD_User_ID").getValue() > 0)) {
-            AD_User_ID = this.curTab.getField("AD_User_ID").getValue();
+        if (Object.keys(this.curGC.getColumnNames()).indexOf("VAF_UserContact_ID") > 0 || (this.curTab.getField("VAF_UserContact_ID") != null && this.curTab.getField("VAF_UserContact_ID").getValue() > 0)) {
+            VAF_UserContact_ID = this.curTab.getField("VAF_UserContact_ID").getValue();
         }
 
-        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, AD_User_ID, this.curTab.getKeyColumnName());
+        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, VAF_UserContact_ID, this.curTab.getKeyColumnName());
 
         atHistory.show();
     };
@@ -4924,11 +4924,11 @@
                 else
                     query.addRestriction(link, VIS.Query.prototype.EQUAL, VIS.context.getContext(this.curWindowNo, link));
             }
-            //AZoomAcross zoom = new AZoomAcross(aZoomAcross.GetDropDownButton(), _curTab.GetTableName(), query, _curTab.GetAD_Window_ID());
-            var zoom = new VIS.AZoomAcross(this.aZoomAcross, this.curTab.getTableName(), query, this.curTab.getAD_Window_ID(), this, this.aZoomAcross.getListItmIT(), link, Record_ID);
+            //AZoomAcross zoom = new AZoomAcross(aZoomAcross.GetDropDownButton(), _curTab.GetTableName(), query, _curTab.GetVAF_Screen_ID());
+            var zoom = new VIS.AZoomAcross(this.aZoomAcross, this.curTab.getTableName(), query, this.curTab.getVAF_Screen_ID(), this, this.aZoomAcross.getListItmIT(), link, Record_ID);
             zoom.init();
 
-            //zoom.ShowPopup(bnavZoomAcross, _curTab.GetTableName(), query, windowV0.AD_Window_ID);
+            //zoom.ShowPopup(bnavZoomAcross, _curTab.GetTableName(), query, windowV0.VAF_Screen_ID);
 
             //zoom = null;
         }
@@ -9767,7 +9767,7 @@
         this.cConditions = []; //Conditions
         this.cGroup = null;//Group Column
         this.mTab;
-        this.AD_Window_ID;
+        this.VAF_Screen_ID;
         this.VAF_Tab_ID;
         this.groupCtrls = [];
         this.fields = [];// card view fields
@@ -9805,7 +9805,7 @@
         //            url: url,
         //            dataType: "json",
         //            contentType: 'application/json; charset=utf-8',
-        //            data: { ad_Window_ID: self.mTab.getAD_Window_ID(), vaf_tab_ID: self.mTab.getVAF_Tab_ID() },
+        //            data: { ad_Window_ID: self.mTab.getVAF_Screen_ID(), vaf_tab_ID: self.mTab.getVAF_Tab_ID() },
         //            success: function (data) {
         //                data = JSON.parse(data);
 
@@ -10128,7 +10128,7 @@
         this.mTab = mTab;
         // this.aPanel = aPanel;
         var self = this;
-        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getVAF_Tab_ID(), function (retData) {
+        VIS.dataContext.getCardViewInfo(mTab.getVAF_Screen_ID(), mTab.getVAF_Tab_ID(), function (retData) {
             //init 
             //var retData = {};
             // retData.Group = "AccessLevel" //C_UOM_ID";
@@ -10338,7 +10338,7 @@
     /* Group Control */
     function VCardGroup(onlyOne, records, grpName, fields, conditions) {
 
-        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@AD_User_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
+        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
 
         var root = null;
         var body;

@@ -99,7 +99,7 @@ namespace VAdvantage.Classes
                             object[] parametersArray = new object[] 
                             { 
                                 users,
-                                _ctx.GetAD_User_ID(),
+                                _ctx.GetVAF_UserContact_ID(),
                                 metaDataID, 
                                 null, 
                                 //(Dictionary<string, string>)_ctx.GetMap(),
@@ -113,10 +113,10 @@ namespace VAdvantage.Classes
 
                         if (users != null && users.Count > 0)
                         {
-                            X_AD_User user = null;
+                            X_VAF_UserContact user = null;
                             for (int i = 0; i < users.Count; i++)
                             {
-                                user = new X_AD_User(_ctx, users[i], null);
+                                user = new X_VAF_UserContact(_ctx, users[i], null);
                                 userNames.Append(user.GetName() + ",");
 
                             }

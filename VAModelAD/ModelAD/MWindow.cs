@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MWindow
  * Purpose        : 
- * Class Used     : MWindow inherits X_AD_Window
+ * Class Used     : MWindow inherits X_VAF_Screen
  * Chronological    Development
  * Raghunandan      05-May-2009 
   ******************************************************/
@@ -24,10 +24,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MWindow : X_AD_Window
+    public class MWindow : X_VAF_Screen
     {
         //Cache
-        private static CCache<int, MWindow> s_cache = new CCache<int, MWindow>("AD_Window_ID", 20);
+        private static CCache<int, MWindow> s_cache = new CCache<int, MWindow>("VAF_Screen_ID", 20);
         //The Lines						
         private MTab[] _tabs = null;
         //	Static Logger	
@@ -37,15 +37,15 @@ namespace VAdvantage.Model
         ///Get MWindow from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Window_ID">id</param>
+        /// <param name="VAF_Screen_ID">id</param>
         /// <returns>MWindow</returns>
-        public static MWindow Get(Ctx ctx, int AD_Window_ID)
+        public static MWindow Get(Ctx ctx, int VAF_Screen_ID)
         {
-            int key = AD_Window_ID;
+            int key = VAF_Screen_ID;
             MWindow retValue = (MWindow)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MWindow(ctx, AD_Window_ID, null);
+            retValue = new MWindow(ctx, VAF_Screen_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -58,12 +58,12 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="whereClause">whereClause where clause w/o the actual WHERE</param>
         /// <returns>nodes</returns>
-        //public static X_AD_WF_Node[] GetWFNodes(Ctx ctx, string whereClause)
+        //public static X_VAF_WFlow_Node[] GetWFNodes(Ctx ctx, string whereClause)
         //{
-        //    String sql = "SELECT * FROM AD_WF_Node";
+        //    String sql = "SELECT * FROM VAF_WFlow_Node";
         //    if (whereClause != null && whereClause.Length > 0)
         //        sql += " WHERE " + whereClause;
-        //    List<X_AD_WF_Node> list = new List<X_AD_WF_Node>();
+        //    List<X_VAF_WFlow_Node> list = new List<X_VAF_WFlow_Node>();
         //    DataSet ds = null;
         //    try
         //    {
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
         //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         //        {
         //            DataRow rs = ds.Tables[0].Rows[i];
-        //            list.Add(new X_AD_WF_Node(ctx, rs, null));
+        //            list.Add(new X_VAF_WFlow_Node(ctx, rs, null));
         //        }
         //        ds = null;
         //    }
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         //        _log.Log(Level.SEVERE, sql, e);
         //    }
 
-        //    X_AD_WF_Node[] retValue = new X_AD_WF_Node[list.Count];
+        //    X_VAF_WFlow_Node[] retValue = new X_VAF_WFlow_Node[list.Count];
         //    //list.toArray(retValue);
         //    retValue = list.ToArray();
         //    return retValue;
@@ -90,12 +90,12 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Window_ID">AD_Window_ID</param>
+        /// <param name="VAF_Screen_ID">VAF_Screen_ID</param>
         /// <param name="trxName">transaction</param>
-        public MWindow(Ctx ctx, int AD_Window_ID, Trx trxName)
-            : base(ctx, AD_Window_ID, trxName)
+        public MWindow(Ctx ctx, int VAF_Screen_ID, Trx trxName)
+            : base(ctx, VAF_Screen_ID, trxName)
         {
-            if (AD_Window_ID == 0)
+            if (VAF_Screen_ID == 0)
             {
                 SetWindowType(WINDOWTYPE_Maintain);	// M
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
         {
             if (_tabs != null && !reload)
                 return _tabs;
-            String sql = "SELECT * FROM VAF_Tab WHERE AD_Window_ID=" + GetAD_Window_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_Tab WHERE VAF_Screen_ID=" + GetVAF_Screen_ID() + " ORDER BY SeqNo";
             List<MTab> list = new List<MTab>();
             DataSet ds = null;
             try
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
             else if (Is_ValueChanged("IsActive") || Is_ValueChanged("Name")
                 || Is_ValueChanged("Description") || Is_ValueChanged("Help"))
             {
-                MMenu[] menues = MMenu.Get(GetCtx(), "AD_Window_ID=" + GetAD_Window_ID());
+                MMenu[] menues = MMenu.Get(GetCtx(), "VAF_Screen_ID=" + GetVAF_Screen_ID());
                 for (int i = 0; i < menues.Length; i++)
                 {
                     menues[i].SetName(GetName());
@@ -212,7 +212,7 @@ namespace VAdvantage.Model
                     menues[i].Save();
                 }
                 //
-                X_AD_WF_Node[] nodes = GetWFNodes(GetCtx(), "AD_Window_ID=" + GetAD_Window_ID());
+                X_VAF_WFlow_Node[] nodes = GetWFNodes(GetCtx(), "VAF_Screen_ID=" + GetVAF_Screen_ID());
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     bool changed = false;
@@ -241,12 +241,12 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="whereClause">whereClause where clause w/o the actual WHERE</param>
         /// <returns>nodes</returns>
-        public static X_AD_WF_Node[] GetWFNodes(Ctx ctx, string whereClause)
+        public static X_VAF_WFlow_Node[] GetWFNodes(Ctx ctx, string whereClause)
         {
-            String sql = "SELECT * FROM AD_WF_Node";
+            String sql = "SELECT * FROM VAF_WFlow_Node";
             if (whereClause != null && whereClause.Length > 0)
                 sql += " WHERE " + whereClause;
-            List<X_AD_WF_Node> list = new List<X_AD_WF_Node>();
+            List<X_VAF_WFlow_Node> list = new List<X_VAF_WFlow_Node>();
             DataSet ds = null;
             try
             {
@@ -254,7 +254,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    list.Add(new X_AD_WF_Node(ctx, rs, null));
+                    list.Add(new X_VAF_WFlow_Node(ctx, rs, null));
                 }
                 ds = null;
             }
@@ -263,7 +263,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            X_AD_WF_Node[] retValue = new X_AD_WF_Node[list.Count];
+            X_VAF_WFlow_Node[] retValue = new X_VAF_WFlow_Node[list.Count];
             //list.toArray(retValue);
             retValue = list.ToArray();
             return retValue;

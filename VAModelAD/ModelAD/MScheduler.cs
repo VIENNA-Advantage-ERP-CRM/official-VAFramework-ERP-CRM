@@ -315,10 +315,10 @@ namespace VAdvantage.Model
         }	//	getRecipients
 
         /// <summary>
-        /// Get Recipient AD_User_IDs
+        /// Get Recipient VAF_UserContact_IDs
         /// </summary>
         /// <returns>array of user IDs</returns>
-        public int[] GetRecipientAD_User_IDs()
+        public int[] GetRecipientVAF_UserContact_IDs()
         {
             List<int> list = new List<int>();
             MSchedulerRecipient[] recipients = GetRecipients(false);
@@ -327,9 +327,9 @@ namespace VAdvantage.Model
                 MSchedulerRecipient recipient = recipients[i];
                 if (!recipient.IsActive())
                     continue;
-                if (recipient.GetAD_User_ID() != 0)
+                if (recipient.GetVAF_UserContact_ID() != 0)
                 {
-                    int ii = recipient.GetAD_User_ID();
+                    int ii = recipient.GetVAF_UserContact_ID();
                     if (!list.Contains(ii))
                         list.Add(ii);
                 }
@@ -341,7 +341,7 @@ namespace VAdvantage.Model
                         MUserRoles ur = urs[j];
                         if (!ur.IsActive())
                             continue;
-                        int ii = ur.GetAD_User_ID();
+                        int ii = ur.GetVAF_UserContact_ID();
                         if (!list.Contains(ii))
                             list.Add(ii);
                     }
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
             int[] recipientIDs = new int[list.Count()];
             recipientIDs = list.ToArray();
             return recipientIDs;
-        }	//	getRecipientAD_User_IDs
+        }	//	getRecipientVAF_UserContact_IDs
 
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace VAdvantage.Model
             }
             //
             ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
-            pi.SetAD_User_ID(GetUpdatedBy());
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
             pi.SetVAF_Client_ID(GetVAF_Client_ID());
             pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
             pi.SetVAF_Org_ID(GetVAF_Org_ID());
@@ -568,7 +568,7 @@ namespace VAdvantage.Model
 
             //	Notice
             int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
-            int[] userIDs = GetRecipientAD_User_IDs();
+            int[] userIDs = GetRecipientVAF_UserContact_IDs();
             byte[] report = null;
             bool success = false;
             if (re != null)
@@ -628,18 +628,18 @@ namespace VAdvantage.Model
         /// Send actual EMail
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="email"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="pdf"></param>
         /// <param name="isHTML"></param>
-        private bool SendEMail(MClient client, int AD_User_ID, String email, String subject,
+        private bool SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, byte[] bArray = null)
         {
-            if (AD_User_ID != 0)
+            if (VAF_UserContact_ID != 0)
             {
-                MUser user = MUser.Get(GetCtx(), AD_User_ID);
+                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
                 email = user.GetEMail();
 
                 if (!user.IsActive() || email == null)
@@ -812,14 +812,14 @@ namespace VAdvantage.Model
             ctx.SetContext("VAF_Client_ID", GetVAF_Client_ID());
             ctx.SetVAF_Org_ID(GetVAF_Org_ID());
             ctx.SetContext("VAF_Org_ID", GetVAF_Org_ID());
-            ctx.SetAD_User_ID(GetUpdatedBy());
-            ctx.SetContext("AD_User_ID", GetUpdatedBy());
+            ctx.SetVAF_UserContact_ID(GetUpdatedBy());
+            ctx.SetContext("VAF_UserContact_ID", GetUpdatedBy());
             ctx.SetContext("#SalesRep_ID", GetUpdatedBy());
 
 
 
             ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
-            pi.SetAD_User_ID(GetUpdatedBy());
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
             pi.SetVAF_Client_ID(GetVAF_Client_ID());
             pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
 
@@ -942,12 +942,12 @@ namespace VAdvantage.Model
                                         colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_Client WHERE VAF_Client_ID=" + value);
                                     }
                                 }
-                                else if (sPara.GetColumnName().ToLower() == "ad_user_id")
+                                else if (sPara.GetColumnName().ToLower() == "VAF_UserContact_id")
                                 {
                                     DataSet ds = DB.ExecuteDataset(@"SELECT
                                                                   (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
-                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='AD_User' )
-                                                                  ) AS name FROM AD_User WHERE AD_User_ID=" + value);
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_UserContact' )
+                                                                  ) AS name FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
 
                                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                                     {
@@ -959,7 +959,7 @@ namespace VAdvantage.Model
                                             }
                                             colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
                                         }
-                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM AD_User WHERE AD_User_ID=" + value);
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
                                     }
 
                                 }
@@ -1372,7 +1372,7 @@ namespace VAdvantage.Model
         //            int Record_ID = 0;
 
         //            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
-        //            int[] userIDs = GetRecipientAD_User_IDs();
+        //            int[] userIDs = GetRecipientVAF_UserContact_IDs();
 
         //            bool success = false;
         //            if (report != null)

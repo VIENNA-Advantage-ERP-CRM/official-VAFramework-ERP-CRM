@@ -25,7 +25,7 @@ namespace VAdvantage.Process
 {
     public class UserPassword : SvrProcess
     {
-        private int p_AD_User_ID = -1;
+        private int p_VAF_UserContact_ID = -1;
         private String p_OldPassword = null;
         private String p_CurrentPassword = null;
         private String p_NewPassword = null;
@@ -42,8 +42,8 @@ namespace VAdvantage.Process
                 if (para[i].GetParameter() == null)
                 {
                 }
-                else if (name.Equals("AD_User_ID"))
-                    p_AD_User_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAF_UserContact_ID"))
+                    p_VAF_UserContact_ID = para[i].GetParameterAsInt();
                 else if (name.Equals("OldPassword"))
                     p_OldPassword = para[i].GetParameter().ToString();
                 else if (name.Equals("CurrentPassword"))
@@ -63,22 +63,22 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             VLogger log = VLogger.GetVLogger(this.GetType().FullName);
-            log.Log(Level.SEVERE, "UserPassword Change Log=>" + Convert.ToString(p_AD_User_ID));
-            if (p_AD_User_ID == -1)
-                p_AD_User_ID = GetAD_User_ID();
+            log.Log(Level.SEVERE, "UserPassword Change Log=>" + Convert.ToString(p_VAF_UserContact_ID));
+            if (p_VAF_UserContact_ID == -1)
+                p_VAF_UserContact_ID = GetVAF_UserContact_ID();
 
-            MUser user = MUser.Get(GetCtx(), p_AD_User_ID);
-            MUser current = MUser.Get(GetCtx(), GetAD_User_ID());
+            MUser user = MUser.Get(GetCtx(), p_VAF_UserContact_ID);
+            MUser current = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
 
 
-            if (!current.IsAdministrator() && p_AD_User_ID != GetAD_User_ID() && user.HasRole())
+            if (!current.IsAdministrator() && p_VAF_UserContact_ID != GetVAF_UserContact_ID() && user.HasRole())
                 throw new ArgumentException("@UserCannotUpdate@");
 
             // SuperUser and System passwords can only be updated by themselves
-            if (user.IsSystemAdministrator() && p_AD_User_ID != GetAD_User_ID() && GetAD_User_ID() != 100)
+            if (user.IsSystemAdministrator() && p_VAF_UserContact_ID != GetVAF_UserContact_ID() && GetVAF_UserContact_ID() != 100)
                 throw new ArgumentException("@UserCannotUpdate@");
 
-            log.Log(Level.SEVERE, "UserPassword Change Log Step Check for valid user=>" + Convert.ToString(p_AD_User_ID));
+            log.Log(Level.SEVERE, "UserPassword Change Log Step Check for valid user=>" + Convert.ToString(p_VAF_UserContact_ID));
             if (string.IsNullOrEmpty(p_CurrentPassword))
             {
                 if (string.IsNullOrEmpty(p_OldPassword))
@@ -99,13 +99,13 @@ namespace VAdvantage.Process
             if (validatePwd.Length > 0)
                 throw new ArgumentException(Msg.GetMsg(GetCtx(), validatePwd));
 
-            log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_AD_User_ID));
+            log.Log(Level.SEVERE, "UserPassword Change Log Step Password Change=>" + Convert.ToString(p_VAF_UserContact_ID));
             String originalPwd = p_NewPassword;
 
-            String sql = "UPDATE AD_User SET Updated=SYSDATE,FailedloginCount=0, UpdatedBy=" + GetAD_User_ID();
-            if (user.GetAD_User_ID() == current.GetAD_User_ID())
+            String sql = "UPDATE VAF_UserContact SET Updated=SYSDATE,FailedloginCount=0, UpdatedBy=" + GetVAF_UserContact_ID();
+            if (user.GetVAF_UserContact_ID() == current.GetVAF_UserContact_ID())
             {
-                Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_AD_User_ID, GetAD_User_ID(), -1, GetCtx());
+                Common.Common.UpdatePasswordAndValidity(p_NewPassword, p_VAF_UserContact_ID, GetVAF_UserContact_ID(), -1, GetCtx());
             }
             else
             {
@@ -126,7 +126,7 @@ namespace VAdvantage.Process
                 sql += ", EmailUser=" + GlobalVariable.TO_STRING(p_NewEMailUser);
             if (!string.IsNullOrEmpty(p_NewEMailUserPW))
                 sql += ", EmailUserPW=" + GlobalVariable.TO_STRING(p_NewEMailUserPW);
-            sql += " WHERE AD_User_ID=" + p_AD_User_ID;
+            sql += " WHERE VAF_UserContact_ID=" + p_VAF_UserContact_ID;
             log.Log(Level.SEVERE, "UserPassword Change Log=>" + sql);
             int iRes = DB.ExecuteQuery(sql, null, Get_Trx());
             if (iRes > 0)

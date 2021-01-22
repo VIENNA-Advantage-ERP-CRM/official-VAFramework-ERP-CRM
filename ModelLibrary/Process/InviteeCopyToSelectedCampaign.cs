@@ -78,7 +78,7 @@ namespace VAdvantage.Process
                         invi.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
                         invi.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
                         invi.SetC_Campaign_ID(_Campaign_ID);
-                        invi.SetAD_User_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]));
+                        invi.SetVAF_UserContact_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                         invi.SetName(Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]));
                         invi.SetC_Lead_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Lead_ID"]));
                         invi.SetPhone(Util.GetValueOfString(ds.Tables[0].Rows[i]["Phone"]));

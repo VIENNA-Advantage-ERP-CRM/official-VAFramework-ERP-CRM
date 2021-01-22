@@ -3018,7 +3018,7 @@ namespace VIS.Controllers
         //    List<Dictionary<string, object>> retDic = null;
         //    string sql = "SELECT DISTINCT t.VAF_TableView_ID, t.Name "
         //        + "FROM VAF_TableView t INNER JOIN VAF_Tab tab ON (tab.VAF_TableView_ID=t.VAF_TableView_ID)"
-        //        + " INNER JOIN AD_Window_Access wa ON (tab.AD_Window_ID=wa.AD_Window_ID) "
+        //        + " INNER JOIN VAF_Screen_Rights wa ON (tab.VAF_Screen_ID=wa.VAF_Screen_ID) "
         //        + "WHERE wa.VAF_Role_ID=" + VAF_Role_ID
         //        + " AND t.IsActive='Y' AND tab.IsActive='Y' "
         //        + "ORDER BY 2";
@@ -3041,11 +3041,11 @@ namespace VIS.Controllers
         //public List<Dictionary<string, object>> GetUser(Ctx ctx)
         //{
         //    List<Dictionary<string, object>> retDic = null;
-        //    string sql = "SELECT AD_User_ID, Name "
-        //        + "FROM AD_User u WHERE EXISTS "
-        //            + "(SELECT * FROM AD_User_Roles ur WHERE u.AD_User_ID=ur.AD_User_ID) "
+        //    string sql = "SELECT VAF_UserContact_ID, Name "
+        //        + "FROM VAF_UserContact u WHERE EXISTS "
+        //            + "(SELECT * FROM VAF_UserContact_Roles ur WHERE u.VAF_UserContact_ID=ur.VAF_UserContact_ID) "
         //        + "ORDER BY 2";
-        //    sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_User", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
+        //    sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserContact", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
         //    DataSet ds = DB.ExecuteDataset(sql);
         //    if (ds != null && ds.Tables[0].Rows.Count > 0)
         //    {
@@ -3053,7 +3053,7 @@ namespace VIS.Controllers
         //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         //        {
         //            Dictionary<string, object> obj = new Dictionary<string, object>();
-        //            obj["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]);
+        //            obj["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
         //            obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
         //            retDic.Add(obj);
         //        }
@@ -3075,7 +3075,7 @@ namespace VIS.Controllers
         //            obj["NAME"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["NAME"]);
         //            obj["DESCRIPTION"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["DESCRIPTION"]);
         //            obj["HELP"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["HELP"]);
-        //            obj["CREATEDBY"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_User WHERE AD_User_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["CREATEDBY"])));
+        //            obj["CREATEDBY"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_UserContact WHERE VAF_UserContact_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["CREATEDBY"])));
         //            obj["CREATED"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["CREATED"]);
         //            obj["VAF_ARCHIVE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_ARCHIVE_ID"]);
         //            retDic.Add(obj);

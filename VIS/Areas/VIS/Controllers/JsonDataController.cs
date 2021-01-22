@@ -71,9 +71,9 @@ namespace VIS.Controllers
         /// retrun Grid window Model json object against window Id
         /// </summary>
         /// <param name="windowNo">window number</param>
-        /// <param name="AD_Window_ID">window Id</param>
+        /// <param name="VAF_Screen_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetGridWindow(int windowNo, int AD_Window_ID)
+        public JsonResult GetGridWindow(int windowNo, int VAF_Screen_ID)
         {
             GridWindow wVo = null;
             string retJSON = "";
@@ -84,7 +84,7 @@ namespace VIS.Controllers
             {
                 Ctx lctx = Session["ctx"] as Ctx;
                 Ctx ctx = new Ctx(lctx.GetMap());
-                GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, AD_Window_ID, 0);
+                GridWindowVO vo = AEnv.GetMWindowVO(ctx, windowNo, VAF_Screen_ID, 0);
                 if (vo != null)
                 {
                     try
@@ -114,7 +114,7 @@ namespace VIS.Controllers
         /// retrun Grid window Model json object against window Id
         /// </summary>
         /// <param name="windowNo">window number</param>
-        /// <param name="AD_Window_ID">window Id</param>
+        /// <param name="VAF_Screen_ID">window Id</param>
         /// <returns>grid window json result</returns>
         public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int VAF_TableView_ID, List<string> obscureFields)
         {
@@ -178,7 +178,7 @@ namespace VIS.Controllers
         /// retrun Grid window Model json object against window Id
         /// </summary>
         /// <param name="windowNo">window number</param>
-        /// <param name="AD_Window_ID">window Id</param>
+        /// <param name="VAF_Screen_ID">window Id</param>
         /// <returns>grid window json result</returns>
         public JsonResult GetWindowRecordsForTreeNode(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int VAF_TableView_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
@@ -206,7 +206,7 @@ namespace VIS.Controllers
         /// retrun Grid window Model json object against window Id
         /// </summary>
         /// <param name="windowNo">window number</param>
-        /// <param name="AD_Window_ID">window Id</param>
+        /// <param name="VAF_Screen_ID">window Id</param>
         /// <returns>grid window json result</returns>
         public JsonResult GetRecordCountForTreeNode(string sqlIn, int VAF_TableView_ID, int treeID, int treeNodeID, int windowNo, bool summaryOnly)
         {
@@ -299,12 +299,12 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(gOut), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateOrInsertPersonalLock(int AD_User_ID, int VAF_TableView_ID, int Record_ID, bool locked)
+        public JsonResult UpdateOrInsertPersonalLock(int VAF_UserContact_ID, int VAF_TableView_ID, int Record_ID, bool locked)
         {
-            MPrivateAccess access = MPrivateAccess.Get(Session["ctx"] as Ctx, AD_User_ID, VAF_TableView_ID, Record_ID);
+            MPrivateAccess access = MPrivateAccess.Get(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(Session["ctx"] as Ctx, AD_User_ID, VAF_TableView_ID, Record_ID);
+                access = new MPrivateAccess(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locked);
             bool ret = access.Save();
@@ -805,13 +805,13 @@ namespace VIS.Controllers
                     {
                         strMetaId = strDocIds[j].Split('-');
                         Ctx ctx = Session["ctx"] as Ctx;
-                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID where dlink.VAF_TableView_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.AD_Window_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
+                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID where dlink.VAF_TableView_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.VAF_Screen_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
                         int count = Convert.ToInt32(DB.ExecuteScalar(sql1));
                         if (count > 0)
                         {
                             return Json(JsonConvert.SerializeObject("NotSaved"), JsonRequestBehavior.AllowGet);
                         }
-                        string sql = "Select VADMS_WindowDocLink_ID from VADMS_WindowDocLink where VAF_TableView_ID=" + tableID + " AND record_ID=" + recID + " AND AD_Window_ID=" + winID + " AND VADMS_Document_ID=" + strMetaId[0];
+                        string sql = "Select VADMS_WindowDocLink_ID from VADMS_WindowDocLink where VAF_TableView_ID=" + tableID + " AND record_ID=" + recID + " AND VAF_Screen_ID=" + winID + " AND VADMS_Document_ID=" + strMetaId[0];
                         int ID = Convert.ToInt32(DB.ExecuteScalar(sql));
                         if (ID > 0)
                         {
@@ -830,7 +830,7 @@ namespace VIS.Controllers
                         wlink.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wlink.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                         wlink.SetVAF_TableView_ID(tableID);
-                        wlink.SetAD_Window_ID(winID);
+                        wlink.SetVAF_Screen_ID(winID);
                         wlink.SetRecord_ID(recID);
                         if (strDocIds[j].Trim() != string.Empty)
                         {
@@ -912,17 +912,17 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int VAF_Tab_ID)
+        public JsonResult GetCardViewDetail(int VAF_Screen_ID, int VAF_Tab_ID)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, VAF_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(VAF_Screen_ID, VAF_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult InsertUpdateDefaultSearch(int VAF_Tab_ID, int VAF_TableView_ID, int AD_User_ID, int? AD_UserQuery_ID)
+        public JsonResult InsertUpdateDefaultSearch(int VAF_Tab_ID, int VAF_TableView_ID, int VAF_UserContact_ID, int? VAF_UserSearch_ID)
         {
             Ctx _ctx = Session["ctx"] as Ctx;
 
             WindowHelper wHelper = new WindowHelper();
-            wHelper.InsertUpdateDefaultSearch(_ctx, VAF_Tab_ID, VAF_TableView_ID, AD_User_ID, AD_UserQuery_ID);
+            wHelper.InsertUpdateDefaultSearch(_ctx, VAF_Tab_ID, VAF_TableView_ID, VAF_UserContact_ID, VAF_UserSearch_ID);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -1104,7 +1104,7 @@ namespace VIS.Controllers
     }
 
     /// <summary>
-    /// handle Tree Creation Request for AD_Window
+    /// handle Tree Creation Request for VAF_Screen
     /// </summary>
     public class TreeController : Controller
     {

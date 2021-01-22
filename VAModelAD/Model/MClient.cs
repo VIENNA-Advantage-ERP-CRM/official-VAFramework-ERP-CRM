@@ -197,7 +197,7 @@ namespace VAModelAD.Model
                 //    if (server != null)
                 //    {	//	See ServerBean
                 //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -249,7 +249,7 @@ namespace VAModelAD.Model
                 //    if (server != null)
                 //    {	//	See ServerBean
                 //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -526,7 +526,7 @@ namespace VAModelAD.Model
                 //    if (server != null)
                 //    {	//	See ServerBean
                 //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -575,7 +575,7 @@ namespace VAModelAD.Model
                 //    if (server != null)
                 //    {	//	See ServerBean
                 //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
-                //            from.GetAD_User_ID(),
+                //            from.GetVAF_UserContact_ID(),
                 //            toEMail, toName,
                 //            subject, message);
                 //    }
@@ -689,14 +689,14 @@ namespace VAModelAD.Model
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public bool SendEMail(int AD_User_ID, String subject, String message, FileInfo attachment)
+        public bool SendEMail(int VAF_UserContact_ID, String subject, String message, FileInfo attachment)
         {
-            MUser to = MUser.Get(GetCtx(), AD_User_ID);
+            MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
             String toEMail = to.GetEMail();
             if (toEMail == null || toEMail.Length == 0)
             {
@@ -820,9 +820,9 @@ namespace VAModelAD.Model
         {
             String msg = email.Send();
             //
-            X_AD_UserMail um = new X_AD_UserMail(GetCtx(), 0, null);
+            X_VAF_UserMailLog um = new X_VAF_UserMailLog(GetCtx(), 0, null);
             um.SetClientOrg(this);
-            um.SetAD_User_ID(to.GetAD_User_ID());
+            um.SetVAF_UserContact_ID(to.GetVAF_UserContact_ID());
             um.SetSubject(email.GetSubject());
             um.SetMailText(email.GetMessageCRLF());
             if (email.IsSentOK())
@@ -830,7 +830,7 @@ namespace VAModelAD.Model
             else
             {
                 um.SetMessageID(email.GetSentMsg());
-                um.SetIsDelivered(X_AD_UserMail.ISDELIVERED_No);
+                um.SetIsDelivered(X_VAF_UserMailLog.ISDELIVERED_No);
             }
             um.Save();
 
@@ -862,9 +862,9 @@ namespace VAModelAD.Model
         {
             String msg = email.Send();
             //
-            X_AD_UserMail um = new X_AD_UserMail(GetCtx(), 0, null);
+            X_VAF_UserMailLog um = new X_VAF_UserMailLog(GetCtx(), 0, null);
             um.SetClientOrg(this);
-            um.SetAD_User_ID((int)to.Get_Value("AD_User_ID"));
+            um.SetVAF_UserContact_ID((int)to.Get_Value("VAF_UserContact_ID"));
             um.SetSubject(email.GetSubject());
             um.SetMailText(email.GetMessageCRLF());
             if (email.IsSentOK())
@@ -872,7 +872,7 @@ namespace VAModelAD.Model
             else
             {
                 um.SetMessageID(email.GetSentMsg());
-                um.SetIsDelivered(X_AD_UserMail.ISDELIVERED_No);
+                um.SetIsDelivered(X_VAF_UserMailLog.ISDELIVERED_No);
             }
             um.Save();
 

@@ -11,7 +11,7 @@
         this.cConditions = []; //Conditions
         this.cGroup = null;//Group Column
         this.mTab;
-        this.AD_Window_ID;
+        this.VAF_Screen_ID;
         this.VAF_Tab_ID;
         this.groupCtrls = [];
         this.fields = [];// card view fields
@@ -49,7 +49,7 @@
         //            url: url,
         //            dataType: "json",
         //            contentType: 'application/json; charset=utf-8',
-        //            data: { ad_Window_ID: self.mTab.getAD_Window_ID(), vaf_tab_ID: self.mTab.getVAF_Tab_ID() },
+        //            data: { ad_Window_ID: self.mTab.getVAF_Screen_ID(), vaf_tab_ID: self.mTab.getVAF_Tab_ID() },
         //            success: function (data) {
         //                data = JSON.parse(data);
 
@@ -372,7 +372,7 @@
         this.mTab = mTab;
         // this.aPanel = aPanel;
         var self = this;
-        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getVAF_Tab_ID(), function (retData) {
+        VIS.dataContext.getCardViewInfo(mTab.getVAF_Screen_ID(), mTab.getVAF_Tab_ID(), function (retData) {
             //init 
             //var retData = {};
             // retData.Group = "AccessLevel" //C_UOM_ID";
@@ -582,7 +582,7 @@
     /* Group Control */
     function VCardGroup(onlyOne, records, grpName, fields, conditions) {
 
-        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@AD_User_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
+        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
 
         var root = null;
         var body;

@@ -72,7 +72,7 @@ namespace VAdvantage.Model
 	/** Image Indicator				*/
 	private String      m_imageIndicator;
 	/** Window ID       */
-    private int         AD_Window_ID;
+    private int         VAF_Screen_ID;
     /** Process ID      */
     private int         VAF_Job_ID;
     /** Form ID         */
@@ -140,18 +140,18 @@ namespace VAdvantage.Model
 	/**
      * Get Window ID
      */
-    public int GetAD_Window_ID()
+    public int GetVAF_Screen_ID()
     {
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }
     
     /**
      * Set Window ID
      * @param int windowID
      */
-    public void SetAD_Window_ID(int windowID) 
+    public void SetVAF_Screen_ID(int windowID) 
     {
-        this.AD_Window_ID = windowID;
+        this.VAF_Screen_ID = windowID;
     }
     
     /**
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
 
 	/**************************************************************************
 	 *  Get Image Indicator/Index
-	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_AD_WF_Node.ACTION_
+	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_VAF_WFlow_Node.ACTION_
 	 *  @return index of image
 	 */
 	public static int GetImageIndex (String imageIndicator)
@@ -346,41 +346,41 @@ namespace VAdvantage.Model
         {
             ;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserWindow)		//	Window 
-            || imageIndicator.Equals(X_AD_WF_Node.ACTION_UserForm))
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserWindow)		//	Window 
+            || imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserForm))
         {
             imageIndex = TYPE_WINDOW;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsReport))		//	Report
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsReport))		//	Report
         {
             imageIndex = TYPE_REPORT;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsProcess)		//	Process
-            || imageIndicator.Equals(X_AD_WF_Node.ACTION_AppsTask))
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsProcess)		//	Process
+            || imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_AppsTask))
         {
             imageIndex = TYPE_PROCESS;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_SubWorkflow))		//	WorkFlow
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_SubWorkflow))		//	WorkFlow
         {
             imageIndex = TYPE_WORKFLOW;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserWorkbench))	//	Workbench
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserWorkbench))	//	Workbench
         {
             imageIndex = TYPE_WORKBENCH;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_SetVariable))		//	Set Variable
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_SetVariable))		//	Set Variable
         {
             imageIndex = TYPE_SETVARIABLE;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_UserChoice))		//	User Choice
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_UserChoice))		//	User Choice
         {
             imageIndex = TYPE_USERCHOICE;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_DocumentAction))	//	Document Action
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_DocumentAction))	//	Document Action
         {
             imageIndex = TYPE_DOCACTION;
         }
-        else if (imageIndicator.Equals(X_AD_WF_Node.ACTION_WaitSleep))		//	Sleep
+        else if (imageIndicator.Equals(X_VAF_WFlow_Node.ACTION_WaitSleep))		//	Sleep
         {
             ;
         }
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
 
 	/**
 	 *  Set Image Indicator and Index
-	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_AD_WF_Node.ACTION_
+	 *  @param imageIndicator image indicator (W/X/R/P/F/T/B) X_VAF_WFlow_Node.ACTION_
 	 */
 	public void SetImageIndicator (String imageIndicator)
 	{

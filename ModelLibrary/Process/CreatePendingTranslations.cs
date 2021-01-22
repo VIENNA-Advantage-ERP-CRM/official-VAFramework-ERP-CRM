@@ -300,15 +300,15 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_Window_TRL 
+                    sql.Append(@"Update VAF_Screen_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help
-                                        WHERE AD_Window_ID=" + tlWin.GetAD_Window_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Screen_ID=" + tlWin.GetVAF_Screen_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlWin.GetAD_Window_ID() + " WindowNotTranslated.");
+                        res.Append(tlWin.GetVAF_Screen_ID() + " WindowNotTranslated.");
                         break;
                     }
                     tlWin.SetIsTranslated(true);
@@ -599,7 +599,7 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_Workflow_TRL 
+                    sql.Append(@"Update VAF_Workflow_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
@@ -649,15 +649,15 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_WF_Node_TRL 
+                    sql.Append(@"Update VAF_WFlow_Node_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help                                         
-                                        WHERE AD_WF_Node_ID=" + tlps.GetAD_WF_Node_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_WFlow_Node_ID=" + tlps.GetVAF_WFlow_Node_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_WF_Node_ID() + " WF_NodeflowNotTranslated.");
+                        res.Append(tlps.GetVAF_WFlow_Node_ID() + " WF_NodeflowNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);

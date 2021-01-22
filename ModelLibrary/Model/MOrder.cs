@@ -295,7 +295,7 @@ namespace VAdvantage.Model
             //
             SetC_BPartner_ID(project.GetC_BPartner_ID());
             SetC_BPartner_Location_ID(project.GetC_BPartner_Location_ID());
-            SetAD_User_ID(project.GetAD_User_ID());
+            SetVAF_UserContact_ID(project.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(project.GetM_Warehouse_ID());
             SetM_PriceList_ID(project.GetM_PriceList_ID());
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
                 MUser[] contacts = bp.GetContacts(false);
                 if (contacts != null && contacts.Length == 1)
                 {
-                    SetAD_User_ID(contacts[0].GetAD_User_ID());
+                    SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
                 }
             }
             catch
@@ -478,14 +478,14 @@ namespace VAdvantage.Model
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " lship.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
                 + " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
                 + " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             bool isSOTrx = IsSOTrx();
@@ -549,14 +549,14 @@ namespace VAdvantage.Model
                         SetBill_Location_ID(shipTo_ID);
 
                     //	Contact - overwritten by InfoBP selection
-                    int contID = Utility.Util.GetValueOfInt(dr["AD_User_ID"].ToString());
+                    int contID = Utility.Util.GetValueOfInt(dr["VAF_UserContact_ID"].ToString());
                     if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == C_BPartner_ID)
                     {
-                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
+                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                         if (cont.Length > 0)
                             contID = int.Parse(cont);
                     }
-                    SetAD_User_ID(contID);
+                    SetVAF_UserContact_ID(contID);
                     SetBill_User_ID(contID);
 
                     //	CreditAvailable 
@@ -667,12 +667,12 @@ namespace VAdvantage.Model
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "c.AD_User_ID,"
+                + "c.VAF_UserContact_ID,"
                 + "p.PO_PriceList_ID, p.PaymentRulePO, p.PO_PaymentTerm_ID,"
                 + "lbill.C_BPartner_Location_ID AS Bill_Location_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             bool isSOTrx = IsSOTrx();
@@ -711,10 +711,10 @@ namespace VAdvantage.Model
                         SetBill_Location_ID(bill_Location_ID);
 
                     //	Contact - overwritten by InfoBP selection
-                    int contID = Utility.Util.GetValueOfInt(dr["AD_User_ID"].ToString());
+                    int contID = Utility.Util.GetValueOfInt(dr["VAF_UserContact_ID"].ToString());
                     if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == bill_BPartner_ID)
                     {
-                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "AD_User_ID");
+                        String cont = GetCtx().GetContext(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                         if (cont.Length > 0)
                             contID = int.Parse(cont);
                     }
@@ -809,11 +809,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Business Partner Contact (Ship+Bill)
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
-        public new void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user</param>
+        public new void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            base.SetAD_User_ID(AD_User_ID);
-            base.SetBill_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
+            base.SetBill_User_ID(VAF_UserContact_ID);
         }
 
         /*	Set Ship Business Partner
@@ -835,11 +835,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Ship Business Partner Contact
-         *	@param AD_User_ID user
+         *	@param VAF_UserContact_ID user
          */
-        public void SetShip_User_ID(int AD_User_ID)
+        public void SetShip_User_ID(int VAF_UserContact_ID)
         {
-            base.SetAD_User_ID(AD_User_ID);
+            base.SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
 
@@ -1564,7 +1564,7 @@ namespace VAdvantage.Model
                 SetOrig_InOut_ID(-1);
                 SetC_BPartner_ID(origOrder.GetC_BPartner_ID());
                 SetC_BPartner_Location_ID(origOrder.GetC_BPartner_Location_ID());
-                SetAD_User_ID(origOrder.GetAD_User_ID());
+                SetVAF_UserContact_ID(origOrder.GetVAF_UserContact_ID());
                 SetBill_BPartner_ID(origOrder.GetBill_BPartner_ID());
                 SetBill_Location_ID(origOrder.GetBill_Location_ID());
                 SetBill_User_ID(origOrder.GetBill_User_ID());
@@ -4004,7 +4004,7 @@ namespace VAdvantage.Model
         /// <returns>DataSet of Posting Records</returns>
         private DataSet BudgetControlling()
         {
-            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_181'")); // Purchase Order
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_181'")); // Purchase Order
             DataSet result = new DataSet();
             Type type = null;
             MethodInfo methodInfo = null;
@@ -5974,7 +5974,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         public int GetDoc_User_ID()
         {
             return GetSalesRep_ID();

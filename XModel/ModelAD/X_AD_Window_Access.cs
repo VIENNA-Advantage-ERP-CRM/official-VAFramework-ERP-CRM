@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Window_Access
+/** Generated Model for VAF_Screen_Rights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Window_Access : PO
+public class X_VAF_Screen_Rights : PO
 {
-public X_AD_Window_Access (Context ctx, int AD_Window_Access_ID, Trx trxName) : base (ctx, AD_Window_Access_ID, trxName)
+public X_VAF_Screen_Rights (Context ctx, int VAF_Screen_Rights_ID, Trx trxName) : base (ctx, VAF_Screen_Rights_ID, trxName)
 {
-/** if (AD_Window_Access_ID == 0)
+/** if (VAF_Screen_Rights_ID == 0)
 {
 SetVAF_Role_ID (0);
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetIsReadWrite (false);
 }
  */
 }
-public X_AD_Window_Access (Ctx ctx, int AD_Window_Access_ID, Trx trxName) : base (ctx, AD_Window_Access_ID, trxName)
+public X_VAF_Screen_Rights (Ctx ctx, int VAF_Screen_Rights_ID, Trx trxName) : base (ctx, VAF_Screen_Rights_ID, trxName)
 {
-/** if (AD_Window_Access_ID == 0)
+/** if (VAF_Screen_Rights_ID == 0)
 {
 SetVAF_Role_ID (0);
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsReadWrite (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Window_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Screen_Rights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Window_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Window_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Screen_Rights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Window_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Window_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Screen_Rights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Window_Access()
+static X_VAF_Screen_Rights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389049709L;
 public static int Table_ID;
  // =201;
 
-/** TableName=AD_Window_Access */
-public static String Table_Name="AD_Window_Access";
+/** TableName=VAF_Screen_Rights */
+public static String Table_Name="VAF_Screen_Rights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Window_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Screen_Rights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -136,17 +136,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID < 1) throw new ArgumentException ("AD_Window_ID is mandatory.");
-Set_ValueNoCheck ("AD_Window_ID", AD_Window_ID);
+if (VAF_Screen_ID < 1) throw new ArgumentException ("VAF_Screen_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

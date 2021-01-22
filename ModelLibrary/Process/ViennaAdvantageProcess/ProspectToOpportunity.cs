@@ -49,7 +49,7 @@ namespace ViennaAdvantage.Process
                              // opp.SetR_Source_ID (lead.GetR_Source_ID());
                              //opp.SetOpportunityStatus ("N");
                              // opp.SetVAF_Client_ID(GetVAF_Client_ID());
-                             opp.SetAD_User_ID(lead.GetAD_User_ID());
+                             opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                              VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), Pospect, Get_TrxName());
                              //X_C_BPartner_Location loc = new X_C_BPartner_Location(GetCtx(), Pospect, Get_TrxName());
 
@@ -86,7 +86,7 @@ namespace ViennaAdvantage.Process
                          //    opp.SetC_Campaign_ID(lead.GetC_Campaign_ID());
                          //    opp.SetR_Source_ID(lead.GetR_Source_ID());
                          //    opp.SetOpportunityStatus("N");
-                         //    opp.SetAD_User_ID(lead.GetAD_User_ID());
+                         //    opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                          //    VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), ExCustomer, Get_TrxName());
                          //    VAdvantage.Model.X_C_BPartner_Location loc = new VAdvantage.Model.X_C_BPartner_Location(GetCtx(), ExCustomer, Get_TrxName());
 

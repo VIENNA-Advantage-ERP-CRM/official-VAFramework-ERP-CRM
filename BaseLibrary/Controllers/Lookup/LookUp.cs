@@ -255,7 +255,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Zoom - default implementation
         /// </summary>
-        /// <returns>Zoom AD_Window_ID</returns>
+        /// <returns>Zoom VAF_Screen_ID</returns>
         public virtual int GetZoomWindow()
         {
             return 0;

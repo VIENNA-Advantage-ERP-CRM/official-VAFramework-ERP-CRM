@@ -11,37 +11,37 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserQueryLine
+/** Generated Model for VAF_UserSearchLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserQueryLine : PO
+public class X_VAF_UserSearchLine : PO
 {
-public X_AD_UserQueryLine (Context ctx, int AD_UserQueryLine_ID, Trx trxName) : base (ctx, AD_UserQueryLine_ID, trxName)
+public X_VAF_UserSearchLine (Context ctx, int VAF_UserSearchLine_ID, Trx trxName) : base (ctx, VAF_UserSearchLine_ID, trxName)
 {
-/** if (AD_UserQueryLine_ID == 0)
+/** if (VAF_UserSearchLine_ID == 0)
 {
-SetAD_UserQueryLine_ID (0);
-SetAD_UserQuery_ID (0);
+SetVAF_UserSearchLine_ID (0);
+SetVAF_UserSearch_ID (0);
 SetIsAnd (true);	// Y
 SetKeyName (null);
 SetKeyValue (null);
 SetOperator (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_UserQueryLine WHERE AD_UserQuery_ID=@AD_UserQuery_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_UserSearchLine WHERE VAF_UserSearch_ID=@VAF_UserSearch_ID@
 SetValue1Name (null);
 }
  */
 }
-public X_AD_UserQueryLine (Ctx ctx, int AD_UserQueryLine_ID, Trx trxName) : base (ctx, AD_UserQueryLine_ID, trxName)
+public X_VAF_UserSearchLine (Ctx ctx, int VAF_UserSearchLine_ID, Trx trxName) : base (ctx, VAF_UserSearchLine_ID, trxName)
 {
-/** if (AD_UserQueryLine_ID == 0)
+/** if (VAF_UserSearchLine_ID == 0)
 {
-SetAD_UserQueryLine_ID (0);
-SetAD_UserQuery_ID (0);
+SetVAF_UserSearchLine_ID (0);
+SetVAF_UserSearch_ID (0);
 SetIsAnd (true);	// Y
 SetKeyName (null);
 SetKeyValue (null);
 SetOperator (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_UserQueryLine WHERE AD_UserQuery_ID=@AD_UserQuery_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_UserSearchLine WHERE VAF_UserSearch_ID=@VAF_UserSearch_ID@
 SetValue1Name (null);
 }
  */
@@ -51,7 +51,7 @@ SetValue1Name (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserQueryLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserSearchLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_UserQueryLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserQueryLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserSearchLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_UserQueryLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserQueryLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserSearchLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserQueryLine()
+static X_VAF_UserSearchLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389048800L;
 public static int Table_ID;
  // =981;
 
-/** TableName=AD_UserQueryLine */
-public static String Table_Name="AD_UserQueryLine";
+/** TableName=VAF_UserSearchLine */
+public static String Table_Name="VAF_UserSearchLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -121,36 +121,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserQueryLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserSearchLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User Query Line.
-@param AD_UserQueryLine_ID Line of the user query */
-public void SetAD_UserQueryLine_ID (int AD_UserQueryLine_ID)
+@param VAF_UserSearchLine_ID Line of the user query */
+public void SetVAF_UserSearchLine_ID (int VAF_UserSearchLine_ID)
 {
-if (AD_UserQueryLine_ID < 1) throw new ArgumentException ("AD_UserQueryLine_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserQueryLine_ID", AD_UserQueryLine_ID);
+if (VAF_UserSearchLine_ID < 1) throw new ArgumentException ("VAF_UserSearchLine_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserSearchLine_ID", VAF_UserSearchLine_ID);
 }
 /** Get User Query Line.
 @return Line of the user query */
-public int GetAD_UserQueryLine_ID() 
+public int GetVAF_UserSearchLine_ID() 
 {
-Object ii = Get_Value("AD_UserQueryLine_ID");
+Object ii = Get_Value("VAF_UserSearchLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User Query.
-@param AD_UserQuery_ID Saved User Query */
-public void SetAD_UserQuery_ID (int AD_UserQuery_ID)
+@param VAF_UserSearch_ID Saved User Query */
+public void SetVAF_UserSearch_ID (int VAF_UserSearch_ID)
 {
-if (AD_UserQuery_ID < 1) throw new ArgumentException ("AD_UserQuery_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserQuery_ID", AD_UserQuery_ID);
+if (VAF_UserSearch_ID < 1) throw new ArgumentException ("VAF_UserSearch_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserSearch_ID", VAF_UserSearch_ID);
 }
 /** Get User Query.
 @return Saved User Query */
-public int GetAD_UserQuery_ID() 
+public int GetVAF_UserSearch_ID() 
 {
-Object ii = Get_Value("AD_UserQuery_ID");
+Object ii = Get_Value("VAF_UserSearch_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -158,7 +158,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_UserQuery_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserSearch_ID().ToString());
 }
 /** Set And.
 @param IsAnd Use AND Logic to concatinate lines (not OR) */

@@ -1303,7 +1303,7 @@ namespace VAdvantage.Model
              */
                 //	Constants for Created/Updated(By)
                 DateTime now = DateTime.Now;
-                int user = _ctx.GetAD_User_ID();
+                int user = _ctx.GetVAF_UserContact_ID();
 
                 /**
                  *	for every column

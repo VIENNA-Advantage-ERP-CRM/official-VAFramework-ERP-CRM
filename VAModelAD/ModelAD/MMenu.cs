@@ -110,8 +110,8 @@ namespace VAdvantage.Model
                 action = "";
             }
             //	Clean up references
-            if (GetAD_Window_ID() != 0 && !action.Equals(ACTION_Window))
-                SetAD_Window_ID(0);
+            if (GetVAF_Screen_ID() != 0 && !action.Equals(ACTION_Window))
+                SetVAF_Screen_ID(0);
             if (GetVAF_Page_ID() != 0 && !action.Equals(ACTION_Form))
                 SetVAF_Page_ID(0);
             if (GetAD_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))

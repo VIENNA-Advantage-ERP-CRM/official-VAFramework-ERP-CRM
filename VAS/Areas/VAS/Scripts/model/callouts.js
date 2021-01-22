@@ -573,7 +573,7 @@
     /// - M_PriceList_ID (+ Context)
     /// - C_BPartner_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
-    /// 	- AD_User_ID
+    /// 	- VAF_UserContact_ID
     /// 	- POReference
     /// 	- SO_Description
     /// 	- IsDiscountPrinted
@@ -824,16 +824,16 @@
                     }
                 }
 
-                var contID = Util.getValueOfInt(dr["AD_User_ID"]);
+                var contID = Util.getValueOfInt(dr["VAF_UserContact_ID"]);
                 if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
-                    var cont = ctx.getContext("AD_User_ID");
+                    var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.length > 0)
                         contID = Util.getValueOfInt(cont);
                 }
                 if (contID == 0)
-                    mTab.setValue("AD_User_ID", null);
+                    mTab.setValue("VAF_UserContact_ID", null);
                 else {
-                    mTab.setValue("AD_User_ID", contID);
+                    mTab.setValue("VAF_UserContact_ID", contID);
                     mTab.setValue("Bill_User_ID", contID);
                 }
 
@@ -1008,14 +1008,14 @@
             //sql += " p.IsDiscountPrinted,"
             //+ " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
             //+ " p.CreditStatusSettingOn,p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //+ " lship.C_BPartner_Location_ID,c.AD_User_ID,"
+            //+ " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
             //+ " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
             //+ " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
             //+ " FROM C_BPartner p"
             //+ " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
             //+ " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
             //+ " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-            //+ " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+            //+ " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
             //+ "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
             //var isSOTrx = ctx.isSOTrx(windowNo);
 
@@ -1091,17 +1091,17 @@
 
             ////payment method ID set to Column----Anuj- 04-09-2015-----------------------------------------
 
-            //var contID = Util.getValueOfInt(dr.get("ad_user_id"));
+            //var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
 
             //if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
-            //    var cont = ctx.getContext("AD_User_ID");
+            //    var cont = ctx.getContext("VAF_UserContact_ID");
             //    if (cont.length > 0)
             //        contID = Util.getValueOfInt(cont);
             //}
             //if (contID == 0)
-            //    mTab.setValue("AD_User_ID", null);
+            //    mTab.setValue("VAF_UserContact_ID", null);
             //else {
-            //    mTab.setValue("AD_User_ID", contID);
+            //    mTab.setValue("VAF_UserContact_ID", contID);
             //    mTab.setValue("Bill_User_ID", contID);
             //}
 
@@ -1258,7 +1258,7 @@
     /// Order Header - C_BPartner_Location.
     /// - C_BPartner_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
-    /// 	- AD_User_ID
+    /// 	- VAF_UserContact_ID
     /// 	- POReference
     /// 	- SO_Description
     /// 	- IsDiscountPrinted
@@ -1426,12 +1426,12 @@
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "c.AD_User_ID,"
+                + "c.VAF_UserContact_ID,"
                 + "p.PO_PriceList_ID, p.PaymentRulePO, p.PO_PaymentTerm_ID,"
                 + "lbill.C_BPartner_Location_ID AS Bill_Location_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             var isSOTrx = "Y" == (ctx.getWindowContext(windowNo, "IsSOTrx", true));
@@ -1477,9 +1477,9 @@
                     mTab.setValue("Bill_Location_ID", Util.getValueOfInt(bill_Location_ID));
 
                 //	Contact - overwritten by InfoBP selection
-                var contID = Util.getValueOfInt(dr.get("ad_user_id"));
+                var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
                 if (bill_BPartner_ID.toString() == (ctx.getContext("C_BPartner_ID"))) {
-                    var cont = ctx.getContext("AD_User_ID");
+                    var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.length > 0)
                         contID = Util.getValueOfInt(cont);
                 }
@@ -3710,8 +3710,8 @@
             mTab.setValue("Bill_BPartner_ID", Util.getValueOfInt(order["Bill_BPartner_ID"]));
             mTab.setValue("Bill_Location_ID", Util.getValueOfInt(order["Bill_Location_ID"]));
 
-            if (order["AD_User_ID"] != 0)
-                mTab.setValue("AD_User_ID", Util.getValueOfInt(order["AD_User_ID"]));
+            if (order["VAF_UserContact_ID"] != 0)
+                mTab.setValue("VAF_UserContact_ID", Util.getValueOfInt(order["VAF_UserContact_ID"]));
 
             if (order["Bill_User_ID"] != 0)
                 mTab.setValue("Bill_User_ID", Util.getValueOfInt(order["Bill_User_ID"]));
@@ -11989,7 +11989,7 @@
      *	Invoice Header- BPartner.
      *		- M_PriceList_ID (+ Context)
      *		- C_BPartner_Location_ID
-     *		- AD_User_ID
+     *		- VAF_UserContact_ID
      *		- POReference
      *		- SO_Description
      *		- IsDiscountPrinted
@@ -12019,12 +12019,12 @@
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //    + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+            //    + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
             //    + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
             //    + "FROM C_BPartner p"
             //    + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
             //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-            //    + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             //-----------------ANuj----Code----------
@@ -12040,13 +12040,13 @@
             }
 
             sql += "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID, "
                 + " p.SalesRep_ID,p.IsSalesRep, p.C_Withholding_ID "
                 + " FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             var isSOTrx = ctx.isSOTrx(windowNo);
@@ -12175,18 +12175,18 @@
                     }
 
                     //	Contact - overwritten by InfoBP selection
-                    var contID = Util.getValueOfInt(dr.get("ad_user_id"));
+                    var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
                     if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                        var cont = ctx.getContext("AD_User_ID");
+                        var cont = ctx.getContext("VAF_UserContact_ID");
                         if (cont && cont.toString().length > 0) {
                             contID = parseInt(cont);
                         }
                     }
                     if (contID == 0) {
-                        mTab.setValue("AD_User_ID", null);
+                        mTab.setValue("VAF_UserContact_ID", null);
                     }
                     else {
-                        mTab.setValue("AD_User_ID", contID);
+                        mTab.setValue("VAF_UserContact_ID", contID);
                     }
                     //Arpit 15th Apr,2017 -To set SalesRepID
                     //var isSalesRep = Util.getValueOfBoolean(dr.get("issalesrep"))
@@ -14248,7 +14248,7 @@
     /// <summary>
     ///  Invoice Batch Line - BPartner.
     //		- C_BPartner_Location_ID
-    //		- AD_User_ID
+    //		- VAF_UserContact_ID
     //		- PaymentRule
     //		- C_PaymentTerm_ID
     /// </summary>
@@ -14272,12 +14272,12 @@
             + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             + " p.SO_Description,p.IsDiscountPrinted,"
             + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            + " l.C_BPartner_Location_ID,c.AD_User_ID,"
+            + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
             + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
             + "FROM C_BPartner p"
             + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
             + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-            + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+            + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
             + "WHERE p.C_BPartner_ID=@Param1 AND p.IsActive='Y'";		//	#1
 
         var IsSOTrx = ctx.isSOTrx();
@@ -14326,19 +14326,19 @@
                 }
 
                 //	Contact - overwritten by InfoBP selection
-                //var contID = Util.getValueOfInt(idr["AD_User_ID"]);
-                var contID = Util.getValueOfInt(idr.get("ad_user_id"));
+                //var contID = Util.getValueOfInt(idr["VAF_UserContact_ID"]);
+                var contID = Util.getValueOfInt(idr.get("VAF_UserContact_id"));
                 if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                    var cont = ctx.getContext("AD_User_ID");
+                    var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.toString().length > 0) {
                         contID = Util.getValueOfInt(cont);
                     }
                 }
                 if (contID == 0) {
-                    mTab.setValue("AD_User_ID", null);
+                    mTab.setValue("VAF_UserContact_ID", null);
                 }
                 else {
-                    mTab.setValue("AD_User_ID", Util.getValueOfInt(contID));
+                    mTab.setValue("VAF_UserContact_ID", Util.getValueOfInt(contID));
                 }
                 //	CreditAvailable
                 if (IsSOTrx) {
@@ -15492,12 +15492,12 @@
 
     //    this.setCalloutActive(true);
 
-    //    var sql = "Select AD_User_ID FROM AD_User WHERE IsActive='Y' AND C_BPartner_ID=" + value;
-    //    var AD_User_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql));
+    //    var sql = "Select VAF_UserContact_ID FROM VAF_UserContact WHERE IsActive='Y' AND C_BPartner_ID=" + value;
+    //    var VAF_UserContact_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql));
 
-    //    if (AD_User_ID) {
-    //        mTab.setValue("AD_User_ID", 0);
-    //        mTab.setValue("AD_User_ID", AD_User_ID);
+    //    if (VAF_UserContact_ID) {
+    //        mTab.setValue("VAF_UserContact_ID", 0);
+    //        mTab.setValue("VAF_UserContact_ID", VAF_UserContact_ID);
     //    }
 
     //    this.setCalloutActive(false);
@@ -16413,7 +16413,7 @@
         try {
             this.setCalloutActive(true);
             // Util.getValueOfInt(value);
-            var sql = "select ProfileType from S_Resource where AD_User_ID = " + Util.getValueOfInt(value);
+            var sql = "select ProfileType from S_Resource where VAF_UserContact_ID = " + Util.getValueOfInt(value);
             var pType = Util.getValueOfString(VIS.DB.executeScalar(sql, null, null));
             if (pType != "") {
                 if (pType.toUpper() == "I") {
@@ -17197,17 +17197,17 @@
 
             //sql = "SELECT p.VAF_Language, p.POReference,"
             //    + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //    + "l.C_BPartner_Location_ID, c.AD_User_ID "
+            //    + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID "
             //    + "FROM C_BPartner p"
             //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-            //    + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
             sql = "SELECT p.VAF_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus "
+                + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID , p.SOCreditStatus "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1 // SD
 
 
@@ -17226,13 +17226,13 @@
                     }
                 }
                 //	Contact
-                ii = Util.getValueOfInt(idr.get("ad_user_id"));
+                ii = Util.getValueOfInt(idr.get("VAF_UserContact_id"));
                 //if (dr.wasNull())
                 if (ii == 0) {
-                    mTab.setValue("AD_User_ID", null);
+                    mTab.setValue("VAF_UserContact_ID", null);
                 }
                 else {
-                    mTab.setValue("AD_User_ID", ii);
+                    mTab.setValue("VAF_UserContact_ID", ii);
                 }
 
                 // Skip credit check for returns
@@ -19491,7 +19491,7 @@
     /// - M_PriceList_ID (+ Context)
     /// - C_BPartner_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
-    /// 	- AD_User_ID
+    /// 	- VAF_UserContact_ID
     /// 	- POReference
     /// 	- SO_Description
     /// 	- IsDiscountPrinted
@@ -19577,14 +19577,14 @@
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " lship.C_BPartner_Location_ID,c.AD_User_ID,"
+                + " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
                 + " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
                 + "FROM C_BPartner p"
                 + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
                 + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
                 + " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-                + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
                 + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
@@ -19629,16 +19629,16 @@
                         mTab.setValue("Bill_Location_ID", shipTo_ID);
                 }
                 //	Contact - overwritten by InfoBP selection
-                var contID = Util.getValueOfInt(dr.get("ad_user_id").toString());
+                var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id").toString());
                 if (C_BPartner_ID.toString().toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                    var cont = ctx.getContext("AD_User_ID");
+                    var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.toString().length > 0)
                         contID = Util.getValueOfInt(cont);
                 }
                 if (contID == 0)
-                    mTab.setValue("AD_User_ID", null);
+                    mTab.setValue("VAF_UserContact_ID", null);
                 else {
-                    mTab.setValue("AD_User_ID", contID);
+                    mTab.setValue("VAF_UserContact_ID", contID);
                     mTab.setValue("Bill_User_ID", contID);
                 }
 
@@ -21031,11 +21031,11 @@
                         mTab.setValue("C_BPartner_Location_ID", null);
                     else
                         mTab.setValue("C_BPartner_Location_ID", _Location_ID);
-                    var _User_ID = VIS.Utility.Util.getValueOfInt(dr["AD_User_ID"]);
+                    var _User_ID = VIS.Utility.Util.getValueOfInt(dr["VAF_UserContact_ID"]);
                     if (_User_ID == 0)
-                        mTab.setValue("AD_User_ID", null);
+                        mTab.setValue("VAF_UserContact_ID", null);
                     else
-                        mTab.setValue("AD_User_ID", _User_ID);
+                        mTab.setValue("VAF_UserContact_ID", _User_ID);
                 }
             }
             else if (mField.getColumnName() == "C_BPartnerSR_ID") {
@@ -21050,14 +21050,14 @@
                         mTab.setValue("C_BPartner_Location_ID", null);
                     else
                         mTab.setValue("C_BPartner_Location_ID", _Location_ID);
-                    var _User_ID = VIS.Utility.Util.getValueOfInt(dr["AD_User_ID"]);
+                    var _User_ID = VIS.Utility.Util.getValueOfInt(dr["VAF_UserContact_ID"]);
                     if (_User_ID == 0)
-                        mTab.setValue("AD_User_ID", null);
+                        mTab.setValue("VAF_UserContact_ID", null);
                     else
-                        mTab.setValue("AD_User_ID", _User_ID);
+                        mTab.setValue("VAF_UserContact_ID", _User_ID);
                 }
             }
-            //var sql = "SELECT au.ad_user_id,  cl.c_bpartner_location_id FROM c_bpartner cp  INNER JOIN c_bpartner_location cl ON cl.c_bpartner_id=cp.c_bpartner_id INNER JOIN Ad_User au ON au.c_bpartner_id   =cp.c_bpartner_id WHERE cp.c_bpartner_id= " + VIS.Utility.Util.getValueOfString(mTab.getValue("C_BPartner_ID")) + " AND cp.isactive       ='Y'  ORDER BY cp.created";
+            //var sql = "SELECT au.VAF_UserContact_id,  cl.c_bpartner_location_id FROM c_bpartner cp  INNER JOIN c_bpartner_location cl ON cl.c_bpartner_id=cp.c_bpartner_id INNER JOIN VAF_UserContact au ON au.c_bpartner_id   =cp.c_bpartner_id WHERE cp.c_bpartner_id= " + VIS.Utility.Util.getValueOfString(mTab.getValue("C_BPartner_ID")) + " AND cp.isactive       ='Y'  ORDER BY cp.created";
 
             //var ds = CalloutDB.executeCalloutDataSet(sql, null);
             //for (var i = 0; i < ds.tables[0].rows.length; i++) {
@@ -21069,11 +21069,11 @@
             //        else
             //            mTab.setValue("C_BPartner_Location_ID", _Location_ID);
 
-            //        var _User_ID = VIS.Utility.Util.getValueOfInt(dr.getCell("AD_User_ID"));
+            //        var _User_ID = VIS.Utility.Util.getValueOfInt(dr.getCell("VAF_UserContact_ID"));
             //        if (_User_ID == 0)
-            //            mTab.setValue("AD_User_ID", null);
+            //            mTab.setValue("VAF_UserContact_ID", null);
             //        else
-            //            mTab.setValue("AD_User_ID", _User_ID);
+            //            mTab.setValue("VAF_UserContact_ID", _User_ID);
             //    }
             //}
 
@@ -22297,7 +22297,7 @@
                 mTab.setValue("Bill_BPartner_ID", result["Bill_BPartner_ID"]);
                 mTab.setValue("C_BPartner_Location_ID", result["C_BPartner_Location_ID"]);
                 mTab.setValue("Bill_Location_ID", result["Bill_Location_ID"]);
-                mTab.setValue("AD_User_ID", result["AD_User_ID"]);
+                mTab.setValue("VAF_UserContact_ID", result["VAF_UserContact_ID"]);
                 mTab.setValue("Bill_User_ID", result["Bill_User_ID"]);
                 mTab.setValue("M_Warehouse_ID", result["M_Warehouse_ID"]);
                 mTab.setValue("PriorityRule", result["PriorityRule"]);

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_User
+ * Class Used     : X_VAF_UserContact
  * Chronological Development
  * 
  * Veena Pandey     14-May-2009
@@ -28,10 +28,10 @@ namespace VAdvantage.Model
     /// <summary>
     /// User Model
     /// </summary>
-    public class MUser : X_AD_User
+    public class MUser : X_VAF_UserContact
     {
         /**	Cache					*/
-        private static CCache<int, MUser> cache = new CCache<int, MUser>("AD_User", 30, 60);
+        private static CCache<int, MUser> cache = new CCache<int, MUser>("VAF_UserContact", 30, 60);
         //	Static Logger			
         private static VLogger _log = VLogger.GetVLogger(typeof(MUser).FullName);
         /**	Roles of User with Org	*/
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
         /** Is System Admin			*/
         private bool? _isSystemAdministrator = null;
         /** User Access Rights		*/
-        private X_AD_UserBPAccess[] _bpAccess = null;
+        private X_VAF_UserBPartRights[] _bpAccess = null;
         /** User Preference			*/
         private MUserPreference _preference = null;
         private bool updateYellowFinUser = true;
@@ -61,12 +61,12 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_User_ID">id</param>
+        /// <param name="VAF_UserContact_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MUser(Ctx ctx, int AD_User_ID, Trx trxName)
-            : base(ctx, AD_User_ID, trxName)
+        public MUser(Ctx ctx, int VAF_UserContact_ID, Trx trxName)
+            : base(ctx, VAF_UserContact_ID, trxName)
         {
-            if (AD_User_ID == 0)
+            if (VAF_UserContact_ID == 0)
             {
                 SetIsFullBPAccess(true);
                 SetNotificationType(NOTIFICATIONTYPE_EMail);
@@ -105,23 +105,23 @@ namespace VAdvantage.Model
         /// <returns>user</returns>
         public static MUser Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_User_ID());
+            return Get(ctx, ctx.GetVAF_UserContact_ID());
         }
 
         /// <summary>
         /// Get User (cached). Also loads Admninistrator (0)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_User_ID">id</param>
+        /// <param name="VAF_UserContact_ID">id</param>
         /// <returns>user</returns>
-        public static MUser Get(Ctx ctx, int AD_User_ID)
+        public static MUser Get(Ctx ctx, int VAF_UserContact_ID)
         {
-            int key = AD_User_ID;
+            int key = VAF_UserContact_ID;
             MUser retValue = (MUser)cache[key];
             if (retValue == null)
             {
-                retValue = new MUser(ctx, AD_User_ID, null);
-                if (AD_User_ID == 0)
+                retValue = new MUser(ctx, VAF_UserContact_ID, null);
+                if (VAF_UserContact_ID == 0)
                 {
                     Trx trxName = null;
                     retValue.Load(trxName);	//	load System Record
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
 
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             MUser retValue = null;
-            String sql = "SELECT * FROM AD_User "
+            String sql = "SELECT * FROM VAF_UserContact "
                 + "WHERE EMail='" + email + "' AND VAF_Client_ID=" + VAF_Client_ID;
             try
             {
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             MUser retValue = null;
-            String sql = "SELECT * FROM AD_User "
+            String sql = "SELECT * FROM VAF_UserContact "
                 + "WHERE Name='" + name + "' AND Password='" + password + "' AND IsActive='Y' AND VAF_Client_ID=" + VAF_Client_ID;
             try
             {
@@ -214,15 +214,15 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get Name of AD_User
+        /// Get Name of VAF_UserContact
         /// </summary>
-        /// <param name="AD_User_ID">id</param>
+        /// <param name="VAF_UserContact_ID">id</param>
         /// <returns>Name of user or ?</returns>
-        public static String GetNameOfUser(int AD_User_ID)
+        public static String GetNameOfUser(int VAF_UserContact_ID)
         {
             String name = "?";
             //	Get ID
-            String sql = "SELECT Name FROM AD_User WHERE AD_User_ID=" + AD_User_ID;
+            String sql = "SELECT Name FROM VAF_UserContact WHERE VAF_UserContact_ID=" + VAF_UserContact_ID;
             IDataReader dr = null;
             try
             {
@@ -253,7 +253,7 @@ namespace VAdvantage.Model
         public static MUser[] GetOfBPartner(Ctx ctx, int C_BPartner_ID)
         {
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM AD_User WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y'";
 
             try
             {
@@ -281,12 +281,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>access list</returns>
-        public X_AD_UserBPAccess[] GetBPAccess(bool requery)
+        public X_VAF_UserBPartRights[] GetBPAccess(bool requery)
         {
             if (_bpAccess != null && !requery)
                 return _bpAccess;
-            String sql = "SELECT * FROM AD_UserBPAccess WHERE AD_User_ID=" + GetAD_User_ID() + " AND IsActive='Y'";
-            List<X_AD_UserBPAccess> list = new List<X_AD_UserBPAccess>();
+            String sql = "SELECT * FROM VAF_UserBPartRights WHERE VAF_UserContact_ID=" + GetVAF_UserContact_ID() + " AND IsActive='Y'";
+            List<X_VAF_UserBPartRights> list = new List<X_VAF_UserBPartRights>();
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -294,7 +294,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new X_AD_UserBPAccess(GetCtx(), dr, null));
+                        list.Add(new X_VAF_UserBPartRights(GetCtx(), dr, null));
                     }
                 }
             }
@@ -302,7 +302,7 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            _bpAccess = new X_AD_UserBPAccess[list.Count];
+            _bpAccess = new X_VAF_UserBPartRights[list.Count];
             _bpAccess = list.ToArray();
             return _bpAccess;
         }
@@ -334,28 +334,28 @@ namespace VAdvantage.Model
             //    + "WHERE r.IsActive='Y'"
             //    + " AND EXISTS (SELECT * FROM VAF_Role_OrgRights ro"
             //        + " WHERE r.VAF_Role_ID=ro.VAF_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)"
-            //    + " AND EXISTS (SELECT * FROM AD_User_Roles ur"
-            //        + " WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=@userid) "
+            //    + " AND EXISTS (SELECT * FROM VAF_UserContact_Roles ur"
+            //        + " WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.VAF_UserContact_ID=@userid) "
             //    + "ORDER BY VAF_Role_ID";
 
             // SqlParameter[] param = new SqlParameter[2];
             // param[0] = new SqlParameter("@orgid", VAF_Org_ID);
-            // param[1] = new SqlParameter("@userid", GetAD_User_ID());
+            // param[1] = new SqlParameter("@userid", GetVAF_UserContact_ID());
 
 
             // Commented code above to resolve issue in Fetching Roles of selected user against Organization
             // and rewritten query 
             String sql = @"SELECT * FROM VAF_Role r WHERE r.IsActive='Y' 
-                        AND EXISTS (SELECT * FROM AD_User_Roles ur WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID = @userid)
+                        AND EXISTS (SELECT * FROM VAF_UserContact_Roles ur WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.VAF_UserContact_ID = @userid)
                         AND ((r.isaccessallorgs = 'Y') OR (r.IsUseUserOrgAccess <> 'Y' AND EXISTS (SELECT * FROM VAF_Role_OrgRights ro WHERE r.VAF_Role_ID=ro.VAF_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)) 
-                        OR (r.IsUseUserOrgAccess = 'Y' AND EXISTS (SELECT * FROM AD_User_OrgAccess uo WHERE uo.AD_User_ID=@userid1 AND uo.IsActive='Y' AND uo.VAF_Org_ID=@orgid1))) ORDER BY VAF_Role_ID";
+                        OR (r.IsUseUserOrgAccess = 'Y' AND EXISTS (SELECT * FROM VAF_UserContact_OrgRights uo WHERE uo.VAF_UserContact_ID=@userid1 AND uo.IsActive='Y' AND uo.VAF_Org_ID=@orgid1))) ORDER BY VAF_Role_ID";
 
             SqlParameter[] param = new SqlParameter[4];
-            param[0] = new SqlParameter("@userid", GetAD_User_ID());
+            param[0] = new SqlParameter("@userid", GetVAF_UserContact_ID());
 
             param[1] = new SqlParameter("@orgid", VAF_Org_ID);
 
-            param[2] = new SqlParameter("@userid1", GetAD_User_ID());
+            param[2] = new SqlParameter("@userid1", GetVAF_UserContact_ID());
             param[3] = new SqlParameter("@orgid1", VAF_Org_ID);
 
             try
@@ -386,10 +386,10 @@ namespace VAdvantage.Model
         public static MUser[] GetWithRole(MRole role)
         {
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM AD_User u "
+            String sql = "SELECT * FROM VAF_UserContact u "
                 + "WHERE u.IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM AD_User_Roles ur "
-                    + "WHERE ur.AD_User_ID=u.AD_User_ID AND ur.VAF_Role_ID=" + role.GetVAF_Role_ID() + " AND ur.IsActive='Y')";
+                + " AND EXISTS (SELECT * FROM VAF_UserContact_Roles ur "
+                    + "WHERE ur.VAF_UserContact_ID=u.VAF_UserContact_ID AND ur.VAF_Role_ID=" + role.GetVAF_Role_ID() + " AND ur.IsActive='Y')";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -459,20 +459,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// User is SalesRep
         /// </summary>
-        /// <param name="AD_User_ID">id</param>
+        /// <param name="VAF_UserContact_ID">id</param>
         /// <returns>true if sales rep</returns>
-        public static bool IsSalesRep(int AD_User_ID)
+        public static bool IsSalesRep(int VAF_UserContact_ID)
         {
-            if (AD_User_ID == 0)
+            if (VAF_UserContact_ID == 0)
                 return false;
 
 
 
-            String sql = "SELECT MAX(AD_User_ID) FROM AD_User u"
+            String sql = "SELECT MAX(VAF_UserContact_ID) FROM VAF_UserContact u"
                 + " INNER JOIN C_BPartner bp ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-                + "WHERE bp.IsSalesRep='Y' AND AD_User_ID=" + AD_User_ID;
+                + "WHERE bp.IsSalesRep='Y' AND VAF_UserContact_ID=" + VAF_UserContact_ID;
             int no = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
-            return no == AD_User_ID;
+            return no == VAF_UserContact_ID;
         }
 
         /// <summary>
@@ -485,14 +485,14 @@ namespace VAdvantage.Model
                 return true;
 
             int roleCount = 0;
-            String sql = "SELECT COUNT(*) FROM AD_User_Roles ur "
-                    + "WHERE ur.AD_User_ID=@userid AND ur.IsActive='Y'";
+            String sql = "SELECT COUNT(*) FROM VAF_UserContact_Roles ur "
+                    + "WHERE ur.VAF_UserContact_ID=@userid AND ur.IsActive='Y'";
 
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
-                param[0] = new SqlParameter("@userid", GetAD_User_ID());
+                param[0] = new SqlParameter("@userid", GetVAF_UserContact_ID());
                 idr = ExecuteQuery.ExecuteReader(sql, param);
                 while (idr.Read())
                 {
@@ -539,7 +539,7 @@ namespace VAdvantage.Model
 
 
 
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Value) = lower('" + GetValue() + "')"));
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_UserContact WHERE lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
                     {
                         log.SaveError("", Msg.GetMsg(GetCtx(), "SearchShouldBeUnique", true));
@@ -548,7 +548,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE AD_User_ID !=" + GetAD_User_ID() + " AND lower(Value) = lower('" + GetValue() + "')"));
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_UserContact WHERE VAF_UserContact_ID !=" + GetVAF_UserContact_ID() + " AND lower(Value) = lower('" + GetValue() + "')"));
                     if (count > 0)
                     {
                         log.SaveError("", Msg.GetMsg(GetCtx(), "SearchShouldBeUnique", true));
@@ -572,7 +572,7 @@ namespace VAdvantage.Model
 
                 if (newRecord)
                 {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE lower(Ldapuser) = lower('" + GetLDAPUser() + "')"));
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_UserContact WHERE lower(Ldapuser) = lower('" + GetLDAPUser() + "')"));
                     if (count > 0)
                     {
                         log.SaveError("", Msg.GetMsg(GetCtx(), "LDAPShouldBeUnique", true));
@@ -581,7 +581,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_User WHERE AD_User_ID !=" + GetAD_User_ID() + " AND lower(Ldapuser) = lower('" + GetLDAPUser() + "')"));
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_UserContact WHERE VAF_UserContact_ID !=" + GetVAF_UserContact_ID() + " AND lower(Ldapuser) = lower('" + GetLDAPUser() + "')"));
                     if (count > 0)
                     {
                         log.SaveError("", Msg.GetMsg(GetCtx(), "LDAPShouldBeUnique", true));
@@ -592,10 +592,10 @@ namespace VAdvantage.Model
 
             }
 
-            //	MUser operator = MUser.get(getCtx(), getCtx().getAD_User_ID());
+            //	MUser operator = MUser.get(getCtx(), getCtx().getVAF_UserContact_ID());
             //	You cannot change a password of a user with a role unless you are the user
             if (!newRecord && Is_ValueChanged("Password")
-                    && HasRole() && GetCtx().GetAD_User_ID() != GetAD_User_ID())
+                    && HasRole() && GetCtx().GetVAF_UserContact_ID() != GetVAF_UserContact_ID())
             {
                 log.SaveError("Warning", Msg.GetMsg(GetCtx(), "UserCannotUpdate", true));
                 return false;
@@ -604,7 +604,7 @@ namespace VAdvantage.Model
             {
                 string pwd = GetPassword();
                 string oldPwd = Util.GetValueOfString(Get_ValueOld("Password"));
-                if ((pwd == null && GetCtx().GetAD_User_ID() == GetAD_User_ID()) || (pwd == null && !HasRole() && GetCtx().GetAD_User_ID() != GetAD_User_ID()))
+                if ((pwd == null && GetCtx().GetVAF_UserContact_ID() == GetVAF_UserContact_ID()) || (pwd == null && !HasRole() && GetCtx().GetVAF_UserContact_ID() != GetVAF_UserContact_ID()))
                 {
                     log.SaveInfo("Info", Msg.GetMsg(GetCtx(), "PasswordSetNull", true) + " " + GetName());
                     return true;
@@ -619,7 +619,7 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-                if (!newRecord && GetCtx().GetAD_User_ID() == GetAD_User_ID())
+                if (!newRecord && GetCtx().GetVAF_UserContact_ID() == GetVAF_UserContact_ID())
                 {
                     int validity = GetCtx().GetContextAsInt("#" + Common.Common.Password_Valid_Upto_Key);
                     base.SetPasswordExpireOn(DateTime.Now.AddMonths(validity));
@@ -628,7 +628,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        string sql = "SELECT count(AD_User_ID) FROM AD_USER WHERE IsLoginUser='Y' AND IsActive = 'Y' AND VAF_Client_ID=";
+        string sql = "SELECT count(VAF_UserContact_ID) FROM VAF_USERCONTACT WHERE IsLoginUser='Y' AND IsActive = 'Y' AND VAF_Client_ID=";
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
@@ -639,7 +639,7 @@ namespace VAdvantage.Model
                 return success;
             }
             log.Info("Aftersave start" + "");
-            UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
+            UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetVAF_UserContact_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
             // Following Work is For Creating and Updating Yellowfin User if Yellowfin Module exists...................
             #region
             if (success)
@@ -660,7 +660,7 @@ namespace VAdvantage.Model
                             var BIUser = Dll.GetType("VA037.BIProcess.BIUsers");
                             var objBIUser = Activator.CreateInstance(BIUser);
                             var BICreateUser = BIUser.GetMethod("CreateBIUser");
-                            object[] args = new object[] { GetCtx(), GetAD_User_ID(), "" };
+                            object[] args = new object[] { GetCtx(), GetVAF_UserContact_ID(), "" };
                             BICreateUser.Invoke(objBIUser, args);
                             string value = (string)BIUser.GetProperty("UserInfo").GetValue(objBIUser, null);
                             Error = (string)args[2];
@@ -691,7 +691,7 @@ namespace VAdvantage.Model
             }
             #endregion
             //End
-            //UpdateCustomerUser(GetCtx().Get("#AppFullUrl"), GetAD_User_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
+            //UpdateCustomerUser(GetCtx().Get("#AppFullUrl"), GetVAF_UserContact_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
             return success;
         }
 
@@ -709,7 +709,7 @@ namespace VAdvantage.Model
                     var JasperUser = Dll.GetType("VA039.Classes.Users");
                     var objJasperUser = Activator.CreateInstance(JasperUser);
                     var BICreateUser = JasperUser.GetMethod("CreateUser");
-                    object[] args = new object[] { GetCtx(), GetAD_User_ID(), "" };
+                    object[] args = new object[] { GetCtx(), GetVAF_UserContact_ID(), "" };
                     BICreateUser.Invoke(objJasperUser, args);
                     Error = (string)args[2];
                     if (Error != "")
@@ -728,11 +728,11 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public bool UpdateCustomerUser(string appUrl, int AD_User_ID, string Name, int VAF_Client_ID, int count, bool isLoginUser, bool isDelete)
+        public bool UpdateCustomerUser(string appUrl, int VAF_UserContact_ID, string Name, int VAF_Client_ID, int count, bool isLoginUser, bool isDelete)
         {
 
             Thread thread = new Thread(new ParameterizedThreadStart(WorkThreadFunction));
-            thread.Start(new ThreadParameter() { appUrl = appUrl, AD_User_ID = AD_User_ID, Name = Name, VAF_Client_ID = VAF_Client_ID, count = count, isLoginUser = isLoginUser, isDelete = isDelete });
+            thread.Start(new ThreadParameter() { appUrl = appUrl, VAF_UserContact_ID = VAF_UserContact_ID, Name = Name, VAF_Client_ID = VAF_Client_ID, count = count, isLoginUser = isLoginUser, isDelete = isDelete });
 
 
             return true;
@@ -761,7 +761,7 @@ namespace VAdvantage.Model
             //        }
             //    };
             //    //log.SaveInfo("Url=> ", "Url=> " + Envs.GetApplicationURL());
-            //    //log.SaveInfo("UserID=> ", "UserID=> " + GetAD_User_ID());
+            //    //log.SaveInfo("UserID=> ", "UserID=> " + GetVAF_UserContact_ID());
             //    //log.SaveInfo("Name=> ", "Name=> " + GetName());
             //    //log.SaveInfo("teanant=> ", "teanant=> " + GetVAF_Client_ID());
             //    //log.SaveInfo("Count=> ", "Count=> " + count);
@@ -769,7 +769,7 @@ namespace VAdvantage.Model
             //    try
             //    {
             //        ServicePointManager.Expect100Continue = false;
-            //        client.CreateCustomerUserAsync(tp.appUrl, tp.AD_User_ID, tp.Name, tp.VAF_Client_ID, count, tp.isLoginUser, false,
+            //        client.CreateCustomerUserAsync(tp.appUrl, tp.VAF_UserContact_ID, tp.Name, tp.VAF_Client_ID, count, tp.isLoginUser, false,
             //            ServerEndPoint.GetAccesskey());
             //    }
             //    catch
@@ -778,7 +778,7 @@ namespace VAdvantage.Model
 
             //    //try
             //    //{
-            //    //    string res = client.CreateCustomerUser(appUrl, AD_User_ID, Name, VAF_Client_ID, count, isLoginUser, false, ServerEndPoint.GetAccesskey());
+            //    //    string res = client.CreateCustomerUser(appUrl, VAF_UserContact_ID, Name, VAF_Client_ID, count, isLoginUser, false, ServerEndPoint.GetAccesskey());
             //    //    if (res != null)
             //    //    {
             //    //        log.SaveInfo("UserCloudResult=> ", "Result=> " + res);
@@ -797,8 +797,8 @@ namespace VAdvantage.Model
 
         protected override bool AfterDelete(bool success)
         {
-            UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetAD_User_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), true);
-            // UpdateCustomerUser(GetCtx().Get("#AppFullUrl"), GetAD_User_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
+            UpdateCustomerUser(Env.GetApplicationURL(GetCtx()), GetVAF_UserContact_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), true);
+            // UpdateCustomerUser(GetCtx().Get("#AppFullUrl"), GetVAF_UserContact_ID(), GetName(), GetVAF_Client_ID(), 0, IsLoginUser(), false);
             //return true;
             return success;
         }
@@ -807,14 +807,14 @@ namespace VAdvantage.Model
         {
             try
             {
-                //string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where ad_user_ID=" + GetAD_User_ID() + " and VAF_Client_ID=" + GetVAF_Client_ID();
+                //string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where VAF_UserContact_ID=" + GetVAF_UserContact_ID() + " and VAF_Client_ID=" + GetVAF_Client_ID();
                 //object ID = DB.ExecuteScalar(sql);
                 //if (ID == null || ID == DBNull.Value)
                 //{
                 //    ID = 0;
                 //    return true;
                 //}
-                //sql = "Select Gmail_UID from ad_user where ad_user_ID=" + GetAD_User_ID();
+                //sql = "Select Gmail_UID from VAF_UserContact where VAF_UserContact_ID=" + GetVAF_UserContact_ID();
                 //object UEmailID = DB.ExecuteScalar(sql);
                 //if (UEmailID == null || UEmailID == DBNull.Value)
                 //{
@@ -822,7 +822,7 @@ namespace VAdvantage.Model
                 //}
 
                 //X_WSP_DeletedUserLog dlUser = new X_WSP_DeletedUserLog(Envs.GetCtx(), 0, null);
-                //dlUser.SetAD_User_ID(Envs.GetCtx().GetAD_User_ID());
+                //dlUser.SetVAF_UserContact_ID(Envs.GetCtx().GetVAF_UserContact_ID());
                 //dlUser.SetVAF_Client_ID(GetVAF_Client_ID());
                 //dlUser.SetVAF_Org_ID(GetVAF_Org_ID());
                 //dlUser.SetWSP_IsDeletedFromGmail(false);
@@ -992,17 +992,17 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_User_ID
+        /// Get VAF_UserContact_ID
         /// </summary>
         /// <param name="email">mail</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <returns> user id or 0</returns>
         /// <author>Raghu</author>
-        public static int GetAD_User_ID(String email, int VAF_Client_ID)
+        public static int GetVAF_UserContact_ID(String email, int VAF_Client_ID)
         {
-            int AD_User_ID = 0;
+            int VAF_UserContact_ID = 0;
             IDataReader idr = null;
-            String sql = "SELECT AD_User_ID FROM AD_User "
+            String sql = "SELECT VAF_UserContact_ID FROM VAF_UserContact "
                 + "WHERE UPPER(EMail)=@param1"
                 + " AND VAF_Client_ID=@param2";
             try
@@ -1013,7 +1013,7 @@ namespace VAdvantage.Model
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
-                    AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
+                    VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
                 }
                 idr.Close();
             }
@@ -1026,7 +1026,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, email, e);
             }
 
-            return AD_User_ID;
+            return VAF_UserContact_ID;
         }
 
 
@@ -1099,9 +1099,9 @@ namespace VAdvantage.Model
                 return null;
         }
 
-        public static bool GetIsEmployee(Ctx ctx, int AD_USER_ID)
+        public static bool GetIsEmployee(Ctx ctx, int VAF_USERCONTACT_ID)
         {
-            MUser user = MUser.Get(ctx, AD_USER_ID);
+            MUser user = MUser.Get(ctx, VAF_USERCONTACT_ID);
             X_C_BPartner bp = new X_C_BPartner(ctx, user.GetC_BPartner_ID(), null);
             user = null;
             if (bp == null)
@@ -1114,7 +1114,7 @@ namespace VAdvantage.Model
     public class ThreadParameter
     {
         public string appUrl { get; set; }
-        public int AD_User_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
         public string Name { get; set; }
         public int VAF_Client_ID { get; set; }
         public int count { get; set; }

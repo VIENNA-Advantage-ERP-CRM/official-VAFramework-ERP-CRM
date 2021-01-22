@@ -31,15 +31,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
         static private String VAF_ORG_ID = "VAF_Org_ID";
         static private String C_BPARTNER_ID = "C_BPartner_ID";
-        static private String AD_USER_ID = "AD_User_ID";
+        static private String VAF_USERCONTACT_ID = "VAF_UserContact_ID";
         static private String M_PRODUCT_ID = "M_Product_ID";
 
         private String columnName = null;
 
         /** Tables to delete (not update) for VAF_Org	*/
         static private String[] s_delete_Org = new String[] { "VAF_OrgDetail" };
-        /** Tables to delete (not update) for AD_User	*/
-        static private String[] s_delete_User = new String[] { "AD_User_Roles" };
+        /** Tables to delete (not update) for VAF_UserContact	*/
+        static private String[] s_delete_User = new String[] { "VAF_UserContact_Roles" };
         /** Tables to delete (not update) for C_BPartner	*/
         static private String[] s_delete_BPartner = new String[]
 		{"C_BP_Employee_Acct", "C_BP_Vendor_Acct", "C_BP_Customer_Acct", 
@@ -86,15 +86,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     columnName = VAF_ORG_ID;
                     m_deleteTables = s_delete_Org;
                 }
-                else if (name.Equals("AD_User_ID"))
+                else if (name.Equals("VAF_UserContact_ID"))
                 {
                     from_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();					
                 }
-                else if (name.Equals("AD_User_To_ID"))
+                else if (name.Equals("VAF_UserContact_To_ID"))
                 {
                     to_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                     m_deleteTables = s_delete_User;
-                    columnName = AD_USER_ID;
+                    columnName = VAF_USERCONTACT_ID;
                 }
                 else if (name.Equals("C_BPartner_ID"))
                 {
@@ -147,7 +147,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             // JID_1226: Both Users must have same business partner or no Business partner
-            if (columnName == AD_USER_ID)
+            if (columnName == VAF_USERCONTACT_ID)
             {
                 MUser fromUsr = new MUser(GetCtx(), from_ID, Get_TrxName());
                 MUser toUsr = new MUser(GetCtx(), to_ID, Get_TrxName());
@@ -422,7 +422,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 
             }
-            else if (ColumnName.Equals(AD_USER_ID))
+            else if (ColumnName.Equals(VAF_USERCONTACT_ID))
             {
 
             }

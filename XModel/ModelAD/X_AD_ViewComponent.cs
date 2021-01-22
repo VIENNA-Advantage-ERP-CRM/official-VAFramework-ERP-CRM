@@ -11,34 +11,34 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ViewComponent
+/** Generated Model for VAF_DBViewElement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ViewComponent : PO
+public class X_VAF_DBViewElement : PO
 {
-public X_AD_ViewComponent (Context ctx, int AD_ViewComponent_ID, Trx trxName) : base (ctx, AD_ViewComponent_ID, trxName)
+public X_VAF_DBViewElement (Context ctx, int VAF_DBViewElement_ID, Trx trxName) : base (ctx, VAF_DBViewElement_ID, trxName)
 {
-/** if (AD_ViewComponent_ID == 0)
+/** if (VAF_DBViewElement_ID == 0)
 {
-SetAD_ViewComponent_ID (0);
+SetVAF_DBViewElement_ID (0);
 SetEntityType (null);	// U
 SetFromClause (null);
 SetName (null);
 SetReferenced_Table_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_ViewComponent WHERE AD_View_ID=@AD_View_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_DBViewElement WHERE AD_View_ID=@AD_View_ID@
 }
  */
 }
-public X_AD_ViewComponent (Ctx ctx, int AD_ViewComponent_ID, Trx trxName) : base (ctx, AD_ViewComponent_ID, trxName)
+public X_VAF_DBViewElement (Ctx ctx, int VAF_DBViewElement_ID, Trx trxName) : base (ctx, VAF_DBViewElement_ID, trxName)
 {
-/** if (AD_ViewComponent_ID == 0)
+/** if (VAF_DBViewElement_ID == 0)
 {
-SetAD_ViewComponent_ID (0);
+SetVAF_DBViewElement_ID (0);
 SetEntityType (null);	// U
 SetFromClause (null);
 SetName (null);
 SetReferenced_Table_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_ViewComponent WHERE AD_View_ID=@AD_View_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_DBViewElement WHERE AD_View_ID=@AD_View_ID@
 }
  */
 }
@@ -47,7 +47,7 @@ SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_V
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewComponent (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBViewElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_AD_ViewComponent (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewComponent (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBViewElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_AD_ViewComponent (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewComponent (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_DBViewElement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ViewComponent()
+static X_VAF_DBViewElement()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389049129L;
 public static int Table_ID;
  // =934;
 
-/** TableName=AD_ViewComponent */
-public static String Table_Name="AD_ViewComponent";
+/** TableName=VAF_DBViewElement */
+public static String Table_Name="VAF_DBViewElement";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ViewComponent[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_DBViewElement[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -143,17 +143,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_TableView_ID().ToString());
 }
 /** Set View Component.
-@param AD_ViewComponent_ID Component (Select statement) of the view */
-public void SetAD_ViewComponent_ID (int AD_ViewComponent_ID)
+@param VAF_DBViewElement_ID Component (Select statement) of the view */
+public void SetVAF_DBViewElement_ID (int VAF_DBViewElement_ID)
 {
-if (AD_ViewComponent_ID < 1) throw new ArgumentException ("AD_ViewComponent_ID is mandatory.");
-Set_ValueNoCheck ("AD_ViewComponent_ID", AD_ViewComponent_ID);
+if (VAF_DBViewElement_ID < 1) throw new ArgumentException ("VAF_DBViewElement_ID is mandatory.");
+Set_ValueNoCheck ("VAF_DBViewElement_ID", VAF_DBViewElement_ID);
 }
 /** Get View Component.
 @return Component (Select statement) of the view */
-public int GetAD_ViewComponent_ID() 
+public int GetVAF_DBViewElement_ID() 
 {
-Object ii = Get_Value("AD_ViewComponent_ID");
+Object ii = Get_Value("VAF_DBViewElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

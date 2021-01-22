@@ -25,7 +25,7 @@ SetVAF_TreeInfoCMM_ID (0);
 SetVAF_TreeInfoCMS_ID (0);
 SetVAF_TreeInfoCMT_ID (0);
 SetCM_WebProject_ID (0);
-SetMeta_Author (null);	// @AD_User_Name@
+SetMeta_Author (null);	// @VAF_UserContact_Name@
 SetMeta_Content (null);	// 'text/html;
  charset=UTF-8'
 SetMeta_Copyright (null);	// @VAF_Client_Name@
@@ -44,7 +44,7 @@ SetVAF_TreeInfoCMM_ID (0);
 SetVAF_TreeInfoCMS_ID (0);
 SetVAF_TreeInfoCMT_ID (0);
 SetCM_WebProject_ID (0);
-SetMeta_Author (null);	// @AD_User_Name@
+SetMeta_Author (null);	// @VAF_UserContact_Name@
 SetMeta_Content (null);	// 'text/html;
  charset=UTF-8'
 SetMeta_Copyright (null);	// @VAF_Client_Name@

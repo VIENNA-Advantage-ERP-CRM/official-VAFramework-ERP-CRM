@@ -268,9 +268,9 @@ namespace VAdvantage.Process
             return Msg.GetMsg(GetCtx(), "InviteeCteationDone");
         }
 
-        //String query1 = "Select Ad_User_id from Ad_user where C_bpartner_id=1001864";
+        //String query1 = "Select VAF_UserContact_id from VAF_UserContact where C_bpartner_id=1001864";
         //int AD_Id = Util.GetValueOfInt(DB.ExecuteScalar(query1));
-        //X_AD_User user = new X_AD_User(GetCtx(), AD_Id, null);
+        //X_VAF_UserContact user = new X_VAF_UserContact(GetCtx(), AD_Id, null);
         //return "";
 
 
@@ -324,9 +324,9 @@ namespace VAdvantage.Process
         public void invitee(int bpid)
         {
             VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), bpid, Get_Trx());
-            String query = "Select Ad_User_id from Ad_user where C_bpartner_id=" + bpid;
+            String query = "Select VAF_UserContact_id from VAF_UserContact where C_bpartner_id=" + bpid;
             int AD_Id = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_Trx()));
-            string sql = "Select C_InviteeList_id from C_InviteeList where Ad_User_id=" + AD_Id + " and C_Campaign_id=" + GetRecord_ID();
+            string sql = "Select C_InviteeList_id from C_InviteeList where VAF_UserContact_id=" + AD_Id + " and C_Campaign_id=" + GetRecord_ID();
             object id = DB.ExecuteScalar(sql, null, Get_Trx());
             VAdvantage.Model.X_C_InviteeList Invt;
             if (Util.GetValueOfInt(id) != 0)
@@ -338,9 +338,9 @@ namespace VAdvantage.Process
             else
             {
                 Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
-                Invt.SetAD_User_ID(AD_Id);
+                Invt.SetVAF_UserContact_ID(AD_Id);
             }
-            VAdvantage.Model.X_AD_User user = new VAdvantage.Model.X_AD_User(GetCtx(), AD_Id, Get_Trx());
+            VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), AD_Id, Get_Trx());
             int BpLoc = user.GetC_BPartner_Location_ID();
             if (BpLoc != 0)
             {

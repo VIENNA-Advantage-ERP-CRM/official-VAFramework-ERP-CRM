@@ -47,7 +47,7 @@ namespace VAdvantage.Process
 
         private DataSet ds; //Stores all the fetched records
 
-        String[] _ExceptionTables = new String[] { "VAF_Role", "AD_User" };   //Stores tables which are not be included
+        String[] _ExceptionTables = new String[] { "VAF_Role", "VAF_UserContact" };   //Stores tables which are not be included
 
         // lock for simultaneous process
         private object _lock = new object();
@@ -453,7 +453,7 @@ namespace VAdvantage.Process
                                     int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
-                                    if (tableName == "AD_Workflow" && colName == "AD_WF_Node_ID")
+                                    if (tableName == "AD_Workflow" && colName == "VAF_WFlow_Node_ID")
                                     {
                                         continue;
                                     }

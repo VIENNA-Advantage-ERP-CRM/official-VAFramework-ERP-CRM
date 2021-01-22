@@ -222,7 +222,7 @@ namespace VIS.Classes
 
             queryList.VIS_63 = "SELECT NoOfDays FROM C_Frequency WHERE C_Frequency_ID=@Param";
 
-            queryList.VIS_64 = "SELECT ProfileType FROM S_Resource WHERE AD_User_ID=@Param";
+            queryList.VIS_64 = "SELECT ProfileType FROM S_Resource WHERE VAF_UserContact_ID=@Param";
 
             queryList.VIS_65 = "SELECT M_Product_ID, MovementQty, M_AttributeSetInstance_ID FROM M_InOutLine WHERE M_InOutLine_ID=@Param";
 
@@ -257,12 +257,12 @@ namespace VIS.Classes
 
             queryList.VIS_77 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='Y' WHERE VAF_Print_Rpt_Layout_ID=@printForamt";
 
-            queryList.VIS_78 = "SELECT DISTINCT AD_Window_ID, PO_Window_ID FROM VAF_TableView t WHERE TableName = @targetTableName";
+            queryList.VIS_78 = "SELECT DISTINCT VAF_Screen_ID, PO_Window_ID FROM VAF_TableView t WHERE TableName = @targetTableName";
 
             queryList.VIS_79 = " SELECT p.IsSOTrx FROM @ParentTable p, @targetTableName c  WHERE @targetWhereClause AND p.@ParentTable1_ID = c.@ParentTable2_ID";
 
 
-            queryList.VIS_80 = "SELECT AD_Window_ID, Name FROM AD_Window WHERE Name LIKE 'Work Center%' OR NAME LIKE 'Production Resource'";
+            queryList.VIS_80 = "SELECT VAF_Screen_ID, Name FROM VAF_Screen WHERE Name LIKE 'Work Center%' OR NAME LIKE 'Production Resource'";
 
             queryList.VIS_81 = "SELECT ISREPORT FROM VAF_Job WHERE VAF_Job_ID=@VAF_Job_ID";
 
@@ -310,7 +310,7 @@ namespace VIS.Classes
                         + " INNER JOIN VAF_Column dc ON (rt.Column_Display_ID=dc.VAF_Column_ID)"
                         + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID) "
                         + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
-            queryList.VIS_88 = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID =@VAF_Tab_ID";
+            queryList.VIS_88 = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID =@VAF_Tab_ID";
 
             queryList.VIS_89 = "SELECT VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WHERE VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName=@tableName) AND IsActive='Y'"
                     + " ORDER BY ISCUSTOMDEFAULT DESC , VAF_QuickSearchWindow_ID ASC ";
@@ -373,15 +373,15 @@ namespace VIS.Classes
 
             queryList.VIS_106 = "SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName=@colName";	//	#2 Tab Key Column
 
-            queryList.VIS_107 = "SELECT  AD_UserQuery.Code,VAF_DefaultUserQuery.ad_user_id,VAF_DefaultUserQuery.vaf_tab_id FROM AD_UserQuery AD_UserQuery JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON AD_UserQuery.AD_UserQuery_ID=VAF_DefaultUserQuery.AD_UserQuery_ID WHERE AD_UserQuery.IsActive                 ='Y'" +
-             "AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID AND AD_UserQuery.VAF_Client_ID =@VAF_Client_ID AND (AD_UserQuery.VAF_Tab_ID =@VAF_Tab_ID OR AD_UserQuery.VAF_TableView_ID                 = @VAF_TableView_ID)";
+            queryList.VIS_107 = "SELECT  VAF_UserSearch.Code,VAF_DefaultUserQuery.VAF_UserContact_id,VAF_DefaultUserQuery.vaf_tab_id FROM VAF_UserSearch VAF_UserSearch JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON VAF_UserSearch.VAF_UserSearch_ID=VAF_DefaultUserQuery.VAF_UserSearch_ID WHERE VAF_UserSearch.IsActive                 ='Y'" +
+             "AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_UserSearch.VAF_Client_ID =@VAF_Client_ID AND (VAF_UserSearch.VAF_Tab_ID =@VAF_Tab_ID OR VAF_UserSearch.VAF_TableView_ID                 = @VAF_TableView_ID)";
 
             queryList.VIS_108 = "SELECT Record_ID "
             + "FROM VAF_Private_Rights "
-            + "WHERE AD_User_ID=@AD_User_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' "
+            + "WHERE VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' "
             + "ORDER BY Record_ID";
 
-            queryList.VIS_109 = "SELECT CM_Subscribe_ID, Record_ID FROM CM_Subscribe WHERE AD_User_ID=@AD_User_ID AND VAF_TableView_ID=@VAF_TableView_ID";
+            queryList.VIS_109 = "SELECT CM_Subscribe_ID, Record_ID FROM CM_Subscribe WHERE VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_TableView_ID=@VAF_TableView_ID";
 
             queryList.VIS_110 = "SELECT vadms_windowdoclink_id,record_id FROM vadms_windowdoclink wdl JOIN vadms_document doc "
                  + " ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID  WHERE doc.vadms_docstatus!='DD' AND vaf_tableview_id=@vaf_tableview_id";
@@ -394,37 +394,37 @@ namespace VIS.Classes
 
             queryList.VIS_113 = "SELECT VAF_ExportData_ID, Record_ID FROM VAF_ExportData WHERE VAF_TableView_ID=@VAF_TableView_ID";
 
-            queryList.VIS_114 = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
-+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
-       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =@VAF_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND AD_UserQuery.VAF_Tab_ID           =@VAF_Tab_ID2 AND AD_UserQuery.VAF_TableView_ID           =@VAF_TableView_ID"
-       + " AND lower(AD_UserQuery.Name) like lower('%'||@queryData||'%')"
-       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+            queryList.VIS_114 = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
++ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID  )  "
++ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
+       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =@VAF_Client_ID AND VAF_UserSearch.IsActive             ='Y' "
+       + " AND VAF_UserSearch.VAF_Tab_ID           =@VAF_Tab_ID2 AND VAF_UserSearch.VAF_TableView_ID           =@VAF_TableView_ID"
+       + " AND lower(VAF_UserSearch.Name) like lower('%'||@queryData||'%')"
+       + " ORDER BY Upper(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
 
             queryList.VIS_115 = "SELECT count(*) "
-            + " FROM AD_UserQuery AD_UserQuery LEFT OUTER JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON VAF_DefaultUserQuery.AD_UserQuery_ID=AD_UserQuery.AD_UserQuery_ID WHERE"
-                               + " AD_UserQuery.VAF_Client_ID=@VAF_Client_ID AND AD_UserQuery.IsActive='Y'"
-                               + " AND (AD_UserQuery.VAF_Tab_ID=@VAF_Tab_ID AND AD_UserQuery.VAF_TableView_ID=@VAF_TableView_ID)"
-                               + " ORDER BY AD_UserQuery.AD_UserQuery_ID";
+            + " FROM VAF_UserSearch VAF_UserSearch LEFT OUTER JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON VAF_DefaultUserQuery.VAF_UserSearch_ID=VAF_UserSearch.VAF_UserSearch_ID WHERE"
+                               + " VAF_UserSearch.VAF_Client_ID=@VAF_Client_ID AND VAF_UserSearch.IsActive='Y'"
+                               + " AND (VAF_UserSearch.VAF_Tab_ID=@VAF_Tab_ID AND VAF_UserSearch.VAF_TableView_ID=@VAF_TableView_ID)"
+                               + " ORDER BY VAF_UserSearch.VAF_UserSearch_ID";
 
 
 
-            queryList.VIS_116 = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
-+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
-       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =@VAF_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND AD_UserQuery.VAF_Tab_ID           =@VAF_Tab_ID2 AND AD_UserQuery.VAF_TableView_ID           =@VAF_TableView_ID"
-       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+            queryList.VIS_116 = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
++ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID  )  "
++ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
+       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =@VAF_Client_ID AND VAF_UserSearch.IsActive             ='Y' "
+       + " AND VAF_UserSearch.VAF_Tab_ID           =@VAF_Tab_ID2 AND VAF_UserSearch.VAF_TableView_ID           =@VAF_TableView_ID"
+       + " ORDER BY Upper(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
 
-            queryList.VIS_117 = "SELECT  CASE WHEN length(AD_Userquery.Name)>25 THEN substr(AD_Userquery.name ,0,25)||'...' ELSE AD_Userquery.Name END AS Name,AD_Userquery.Name as title, AD_UserQuery.Code, AD_UserQuery.AD_UserQuery_ID, AD_UserQuery.AD_User_ID, AD_UserQuery.VAF_Tab_ID, "
-+ " case  WHEN AD_UserQuery.AD_UserQuery_ID IN (Select AD_UserQuery_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID  )  "
-+ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
-       + " FROM AD_UserQuery AD_UserQuery WHERE AD_UserQuery.VAF_Client_ID       =@VAF_Client_ID AND AD_UserQuery.IsActive             ='Y' "
-       + " AND AD_UserQuery.VAF_Tab_ID           =@VAF_Tab_ID2 AND AD_UserQuery.VAF_TableView_ID           =@VAF_TableView_ID"
-       + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
+            queryList.VIS_117 = "SELECT  CASE WHEN length(VAF_UserSearch.Name)>25 THEN substr(VAF_UserSearch.name ,0,25)||'...' ELSE VAF_UserSearch.Name END AS Name,VAF_UserSearch.Name as title, VAF_UserSearch.Code, VAF_UserSearch.VAF_UserSearch_ID, VAF_UserSearch.VAF_UserContact_ID, VAF_UserSearch.VAF_Tab_ID, "
++ " case  WHEN VAF_UserSearch.VAF_UserSearch_ID IN (Select VAF_UserSearch_ID FROM VAF_DefaultUserQuery WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID  )  "
++ "then (Select VAF_DefaultUserQuery_ID FROM VAF_DefaultUserQuery  WHERE VAF_DefaultUserQuery.VAF_Tab_ID=@VAF_Tab_ID1 AND VAF_DefaultUserQuery.VAF_UserContact_ID=@VAF_UserContact_ID1 )   ELSE null End as VAF_DefaultUserQuery_ID"
+       + " FROM VAF_UserSearch VAF_UserSearch WHERE VAF_UserSearch.VAF_Client_ID       =@VAF_Client_ID AND VAF_UserSearch.IsActive             ='Y' "
+       + " AND VAF_UserSearch.VAF_Tab_ID           =@VAF_Tab_ID2 AND VAF_UserSearch.VAF_TableView_ID           =@VAF_TableView_ID"
+       + " ORDER BY Upper(VAF_UserSearch.NAME), VAF_UserSearch.VAF_UserSearch_ID";
 
 
             queryList.VIS_118 = "select VAF_ReportLayout_id FROM VAF_Job WHERE VAF_Job_ID=@VAF_Job_ID";
@@ -470,7 +470,7 @@ namespace VIS.Classes
 
             queryList.VIS_128 = "UPDATE C_ValidCombination SET Alias=@f_alies WHERE C_ValidCombination_ID=@IDvalue";
 
-            queryList.VIS_129 = "SELECT AD_Window_ID FROM AD_Window WHERE Name='All Requests'";
+            queryList.VIS_129 = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='All Requests'";
 
             queryList.VIS_130 = "select VAF_RecrodType_id, entitytype, name from VAF_RecrodType";
 
@@ -533,13 +533,13 @@ namespace VIS.Classes
 
             queryList.VIS_145 = "SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'";
 
-            queryList.VIS_146 = "SELECT adt.TableName, adt.AD_Window_ID, adt.PO_Window_ID, " +
-            "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null AND rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
+            queryList.VIS_146 = "SELECT adt.TableName, adt.VAF_Screen_ID, adt.PO_Window_ID, " +
+            "case when adwfa.VAF_Screen_ID is null then (select VAF_SCREEN_ID from VAF_WFlow_Task where VAF_WFlow_Handler_ID = (select VAF_WFlow_Handler_ID from VAF_WFlow_Task where VAF_WFlow_Task_ID = adwfa.VAF_WFlow_Task_ID) and VAF_SCREEN_ID is not null AND rownum = 1) else adwfa.VAF_Screen_ID end as ActivityWindow " +
             "FROM VAF_TableView adt " +
-            "LEFT JOIN AD_WF_Activity adwfa on adt.VAF_TableView_ID = adwfa.VAF_TableView_ID " +
-            "WHERE adt.VAF_TableView_ID = @VAF_TableView_ID and adwfa.AD_WF_Activity_ID = @AD_WF_Activity_ID";
+            "LEFT JOIN VAF_WFlow_Task adwfa on adt.VAF_TableView_ID = adwfa.VAF_TableView_ID " +
+            "WHERE adt.VAF_TableView_ID = @VAF_TableView_ID and adwfa.VAF_WFlow_Task_ID = @VAF_WFlow_Task_ID";
 
-            queryList.VIS_147 = "DELETE FROM AD_UserQueryLine WHERE AD_UserQueryLine_ID=@AD_UserQuery_ID";
+            queryList.VIS_147 = "DELETE FROM VAF_UserSearchLine WHERE VAF_UserSearchLine_ID=@VAF_UserSearch_ID";
 
             queryList.VIS_148 = "SELECT l.Value, t.Name FROM VAF_CtrlRef_List l, VAF_CtrlRef_TL t "
                    + "WHERE l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID"

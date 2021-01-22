@@ -192,9 +192,9 @@ namespace VAdvantage.Model
         /// Field Window Id
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
-            return _vo.AD_Window_ID;
+            return _vo.VAF_Screen_ID;
         }
 
         /// <summary>
@@ -1084,7 +1084,7 @@ namespace VAdvantage.Model
             /**
                      *	(d) Preference (user) - P|
                      */
-            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.AD_Window_ID, _vo.ColumnName, false);
+            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.VAF_Screen_ID, _vo.ColumnName, false);
             if (!defStr.Equals(""))
             {
                 log.Fine("[UserPreference] " + _vo.ColumnName + "=" + defStr);
@@ -1094,7 +1094,7 @@ namespace VAdvantage.Model
             /**
              *	(e) Preference (System) - # $
              */
-            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.AD_Window_ID, _vo.ColumnName, true);
+            defStr = Utility.Env.GetPreference(_vo.GetCtx(), _vo.VAF_Screen_ID, _vo.ColumnName, true);
             if (!defStr.Equals(""))
             {
                 log.Fine("[SystemPreference] " + _vo.ColumnName + "=" + defStr);
@@ -1577,19 +1577,19 @@ namespace VAdvantage.Model
         /// <param name="WindowNo"></param>
         /// <param name="TabNo"></param>
         /// <param name="VAF_Tab_ID"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
         public static GridField[] CreateFields(Ctx ctx, int windowNo, int tabNo,
-             int VAF_Tab_ID, int AD_UserDef_Win_ID)
+             int VAF_Tab_ID, int VAF_UserCustom_Win_ID)
         {
             List<GridFieldVO> listVO = new List<GridFieldVO>();
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
             bool readOnly = false;
 
             String[] stdFieldNames = new String[] { "Created", "CreatedBy", "Updated", "UpdatedBy" };
             bool[] stdFieldsFound = new bool[] { false, false, false, false };
 
-            String sql = GridFieldVO.GetSQL(ctx, AD_UserDef_Win_ID);
+            String sql = GridFieldVO.GetSQL(ctx, VAF_UserCustom_Win_ID);
             System.Data.IDataReader dr = null;
             System.Data.SqlClient.SqlParameter[] param = null;
             try
@@ -1601,7 +1601,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     GridFieldVO vo = GridFieldVO.Create(ctx, windowNo, tabNo,
-                        AD_Window_ID, VAF_Tab_ID, readOnly, dr);
+                        VAF_Screen_ID, VAF_Tab_ID, readOnly, dr);
                     listVO.Add(vo);
                     String columnName = vo.ColumnName;
                     for (int i = 0; i < stdFieldsFound.Length; i++)
@@ -1628,13 +1628,13 @@ namespace VAdvantage.Model
 
             //	Standard Fields
             if (!stdFieldsFound[0])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, VAF_Tab_ID, false, true, true));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, true, true));
             if (!stdFieldsFound[1])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, VAF_Tab_ID, false, true, false));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, true, false));
             if (!stdFieldsFound[2])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, VAF_Tab_ID, false, false, true));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, false, true));
             if (!stdFieldsFound[3])
-                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, AD_Window_ID, VAF_Tab_ID, false, false, false));
+                listVO.Add(GridFieldVO.CreateStdField(ctx, windowNo, tabNo, VAF_Screen_ID, VAF_Tab_ID, false, false, false));
             //
             GridField[] retValue = new GridField[listVO.Count];
             for (int i = 0; i < listVO.Count; i++)

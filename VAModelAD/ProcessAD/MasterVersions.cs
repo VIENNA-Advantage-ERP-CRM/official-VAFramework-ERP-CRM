@@ -134,12 +134,12 @@ namespace VAdvantage.Process
                     tblVer.SetTableName(tableName + "_Ver");
                     tblVer.SetName(tableName + " Ver");
                     tblVer.Set_Value("Export_ID", null);
-                    tblVer.Set_Value("AD_Window_ID", null);
+                    tblVer.Set_Value("VAF_Screen_ID", null);
                     tblVer.SetIsDeleteable(false);
                     tblVer.SetDescription("Table for maintaining versions of " + tableName);
                     tblVer.SetHelp("Table for maintaining versions of " + tableName);
                     tblVer.SetIsMaintainVersions(false);
-                    //tblVer.SetAD_Window_ID(Ver_AD_Window_ID);
+                    //tblVer.SetVAF_Screen_ID(Ver_VAF_Screen_ID);
                     if (!tblVer.Save())
                     {
                         ValueNamePair vnp = VLogger.RetrieveError();

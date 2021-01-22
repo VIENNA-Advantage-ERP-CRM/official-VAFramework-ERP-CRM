@@ -432,7 +432,7 @@
             }
             var pi = null;
             pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.VAF_Job_ID, 0, 0);
-            pi.setAD_User_ID(self.ctx.getAD_User_ID());
+            pi.setVAF_UserContact_ID(self.ctx.getVAF_UserContact_ID());
             pi.setVAF_Client_ID(self.ctx.getVAF_Client_ID());
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));

@@ -125,9 +125,9 @@ namespace VAdvantage.DataBase
                 }
             }
 
-            if (oraStatement.StartsWith("CREATE UNIQUE INDEX ") && (oraStatement.IndexOf("TO_NCHAR(AD_User_ID)") > 0)) //jz hack number pad
+            if (oraStatement.StartsWith("CREATE UNIQUE INDEX ") && (oraStatement.IndexOf("TO_NCHAR(VAF_UserContact_ID)") > 0)) //jz hack number pad
             {
-                oraStatement = oraStatement.Replace("TO_NCHAR(AD_User_ID)", "TO_CHAR(AD_User_ID,'9999999')::VARCHAR");
+                oraStatement = oraStatement.Replace("TO_NCHAR(VAF_UserContact_ID)", "TO_CHAR(VAF_UserContact_ID,'9999999')::VARCHAR");
             }
 
             if (oraStatement.StartsWith("ALTER TABLE") && (oraStatement.IndexOf(" ADD (") > 0)) //jz remove () for add

@@ -280,9 +280,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_BPartner_Location_ID"));
 
             //	Contcat/User
-            sql = "UPDATE AD_User x " + set;
+            sql = "UPDATE VAF_UserContact x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "AD_User_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAF_UserContact_ID"));
 
             //	BankAcct
             sql = "UPDATE C_BP_BankAccount x " + set;
@@ -309,12 +309,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("generalOwnership - R_ContactInterest=" + no);
             }
 
-            //	AD_User_Roles
-            sql = "UPDATE AD_User_Roles " + set;
+            //	VAF_UserContact_Roles
+            sql = "UPDATE VAF_UserContact_Roles " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - AD_User_Roles=" + no);
+                log.Fine("generalOwnership - VAF_UserContact_Roles=" + no);
             }
 
             //	C_BPartner_Product

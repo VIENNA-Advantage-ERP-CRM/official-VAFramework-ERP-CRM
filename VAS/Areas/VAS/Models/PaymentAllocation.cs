@@ -220,7 +220,7 @@ namespace VIS.Models
             //	Create Allocation - but don't save yet
             // allocation should be created with current date 
             MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
-                DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
+                DateTime.Now, C_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
             alloc.SetVAF_Org_ID(VAF_Org_ID);
             alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
             alloc.SetC_ConversionType_ID(_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
@@ -1696,7 +1696,7 @@ namespace VIS.Models
                 //	Create Allocation - but don't save yet
                 // to be save Current date on allocation -- not to pick either payment or schedule date (on behalf of mukesh sir)
                 MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
-                    DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
+                    DateTime.Now, C_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
                 alloc.SetVAF_Org_ID(VAF_Org_ID);
                 //to set transaction and account date on allocation header
                 alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
@@ -4454,7 +4454,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             List<int> neg_Invoice_IDs = new List<int>(negList.Count);
 
             MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
-               DateTime.Now, C_Currency_ID, ctx.GetContext("#AD_User_Name"), trx);
+               DateTime.Now, C_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
             alloc.SetVAF_Org_ID(VAF_Org_ID);
             alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
             alloc.Set_Value("C_ConversionType_ID", C_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
@@ -5811,7 +5811,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                 //}
 
                 VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("WF", Process_ID);
-                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetVAF_JInstance_ID(pin.GetVAF_JInstance_ID());
                 pi.SetRecord_ID(Record_ID);

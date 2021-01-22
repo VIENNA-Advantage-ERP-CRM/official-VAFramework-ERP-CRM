@@ -148,7 +148,7 @@ namespace VIS.Controllers
 
                     /* fix for User Value Null value */
 
-                    if (string.IsNullOrEmpty(ctx.GetContext("##AD_User_Value")))
+                    if (string.IsNullOrEmpty(ctx.GetContext("##VAF_UserContact_Value")))
                     {
                         return new AccountController().LogOff();
 
@@ -178,8 +178,8 @@ namespace VIS.Controllers
                     model = new LoginModel();
                     model.Login1Model = new Login1Model();
                     model.Login2Model = new Login2Model();
-                    model.Login1Model.UserValue = ctx.GetContext("##AD_User_Value");
-                    model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
+                    model.Login1Model.UserValue = ctx.GetContext("##VAF_UserContact_Value");
+                    model.Login1Model.DisplayName = ctx.GetContext("##VAF_UserContact_Name");
                     model.Login1Model.LoginLanguage = ctx.GetVAF_Language();
 
                     model.Login2Model.Role = ctx.GetVAF_Role_ID().ToString();
@@ -196,12 +196,12 @@ namespace VIS.Controllers
                     string username = "";
                     IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
 
-                    int AD_User_ID = 0;
+                    int VAF_UserContact_ID = 0;
                     if (drRoles.Read())
                     {
                         do  //	read all roles
                         {
-                            AD_User_ID = Util.GetValueOfInt(drRoles[0].ToString());
+                            VAF_UserContact_ID = Util.GetValueOfInt(drRoles[0].ToString());
                             int VAF_Role_ID = Util.GetValueOfInt(drRoles[1].ToString());
                             String Name = drRoles[2].ToString();
                             KeyNamePair p = new KeyNamePair(VAF_Role_ID, Name);
@@ -212,7 +212,7 @@ namespace VIS.Controllers
                     }
                     drRoles.Close();
 
-                    model.Login1Model.AD_User_ID = AD_User_ID;
+                    model.Login1Model.VAF_UserContact_ID = VAF_UserContact_ID;
                     model.Login1Model.DisplayName = username;
 
                     //string diableMenu = ctx.GetContext("#DisableMenu");
@@ -249,7 +249,7 @@ namespace VIS.Controllers
                     //  LoginHelper.GetClients(id)
 
                     ClientList = LoginHelper.GetClients(ctx.GetVAF_Role_ID());// .Add(new KeyNamePair(ctx.GetVAF_Client_ID(), ctx.GetVAF_Client_Name()));
-                    OrgList = LoginHelper.GetOrgs(ctx.GetVAF_Role_ID(), ctx.GetAD_User_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
+                    OrgList = LoginHelper.GetOrgs(ctx.GetVAF_Role_ID(), ctx.GetVAF_UserContact_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
                     WareHouseList = LoginHelper.GetWarehouse(ctx.GetVAF_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#M_Warehouse_Name")));
 
 
@@ -460,7 +460,7 @@ namespace VIS.Controllers
             HomeFolloUpsInfo fllInfo = objHomeHelp.getFolloUps(ct, 10, 1);
             HM.HomeFolloUpsInfo = fllInfo;
             ViewBag.lang = ct.GetVAF_Language();
-            ViewBag.User_ID = ct.GetAD_User_ID();
+            ViewBag.User_ID = ct.GetVAF_UserContact_ID();
             ViewBag.isRTL = ct.GetIsRightToLeft();
 
             string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
@@ -698,11 +698,11 @@ namespace VIS.Controllers
             Ctx ct = Session["ctx"] as Ctx;
             WebImage wi = new WebImage(imageBytes);
             wi.Resize(30, 30);
-            string filepath = Path.Combine(HostingEnvironment.MapPath(@"~/Images/30by30"), ct.GetAD_User_ID().ToString());
+            string filepath = Path.Combine(HostingEnvironment.MapPath(@"~/Images/30by30"), ct.GetVAF_UserContact_ID().ToString());
             wi.Save(filepath);
             wi = new WebImage(imageBytes);
             wi.Resize(100, 100);
-            filepath = Path.Combine(HostingEnvironment.MapPath(@"~/Images/100by100"), ct.GetAD_User_ID().ToString());
+            filepath = Path.Combine(HostingEnvironment.MapPath(@"~/Images/100by100"), ct.GetVAF_UserContact_ID().ToString());
             wi.Save(filepath);
             format = "." + wi.ImageFormat;
             return wi.GetBytes();
@@ -802,7 +802,7 @@ namespace VIS.Controllers
                 ctx = Session["ctx"] as Ctx;
 
             }
-            MUser objUser = new MUser(ctx, ctx.GetAD_User_ID(), null);
+            MUser objUser = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
             objUser.SetComments(status);
             if (!objUser.Save())
             {

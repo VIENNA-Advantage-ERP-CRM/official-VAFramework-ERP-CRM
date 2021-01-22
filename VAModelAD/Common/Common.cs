@@ -62,13 +62,13 @@ namespace VAdvantage.Common
         /// <param name="_trx"></param>
         /// <param name="VAF_TableViewID"></param>
         /// <param name="recordID"></param>
-        /// <param name="AD_UserID"></param>
+        /// <param name="VAF_UserContactID"></param>
         /// <param name="VAF_ClientID"></param>
         /// <param name="nodeName"></param>
         /// <param name="windowID"></param>
         /// <param name="WFActivity"></param>
         /// <returns>file info.</returns>
-        public FileInfo GetPdfReportForMail(Ctx ctx, Trx _trx, int VAF_TableViewID, int recordID, int AD_UserID, int VAF_ClientID, string nodeName, int windowID, int WFActivity)
+        public FileInfo GetPdfReportForMail(Ctx ctx, Trx _trx, int VAF_TableViewID, int recordID, int VAF_UserContactID, int VAF_ClientID, string nodeName, int windowID, int WFActivity)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace VAdvantage.Common
 
                 ProcessInfo pi = new ProcessInfo(nodeName, reportID,
                               VAF_TableViewID, recordID);
-                pi.SetAD_User_ID(AD_UserID);
+                pi.SetVAF_UserContact_ID(VAF_UserContactID);
                 pi.SetVAF_Client_ID(VAF_ClientID);
                 MPInstance pInstance = new MPInstance(process, recordID);
                 //FillParameter(pInstance, trx);
@@ -191,11 +191,11 @@ namespace VAdvantage.Common
                     // If windowID is not available then find windowID in workflow activity
                     if (windowID == 0)
                     {
-                        sql1 = @"SELECT  adt.AD_Window_ID, adt.TableName, adt.PO_Window_ID, " +
-                                    "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null and rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
+                        sql1 = @"SELECT  adt.VAF_Screen_ID, adt.TableName, adt.PO_Window_ID, " +
+                                    "case when adwfa.VAF_Screen_ID is null then (select VAF_SCREEN_ID from VAF_WFlow_Task where VAF_WFlow_Handler_ID = (select VAF_WFlow_Handler_ID from VAF_WFlow_Task where VAF_WFlow_Task_ID = adwfa.VAF_WFlow_Task_ID) and VAF_SCREEN_ID is not null and rownum = 1) else adwfa.VAF_Screen_ID end as ActivityWindow " +
                                     "FROM VAF_TableView adt " +
-                                    "LEFT JOIN AD_WF_Activity adwfa on adt.VAF_TableView_ID = adwfa.VAF_TableView_ID " +
-                                    "WHERE adt.VAF_TableView_ID = " + tableID + " and adwfa.AD_WF_Activity_ID =  " + WFActivity + " ";
+                                    "LEFT JOIN VAF_WFlow_Task adwfa on adt.VAF_TableView_ID = adwfa.VAF_TableView_ID " +
+                                    "WHERE adt.VAF_TableView_ID = " + tableID + " and adwfa.VAF_WFlow_Task_ID =  " + WFActivity + " ";
 
                         processID = DB.ExecuteScalar(sql1);
                         if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
@@ -211,7 +211,7 @@ namespace VAdvantage.Common
 
 
                     // Chgeck if Report is linked to TAB of selected report.
-                    sql1 = "SELECT VAF_Job_ID FROM VAF_Tab WHERE AD_Window_ID=" + windowID + " AND VAF_TableView_ID=" + tableID;
+                    sql1 = "SELECT VAF_Job_ID FROM VAF_Tab WHERE VAF_Screen_ID=" + windowID + " AND VAF_TableView_ID=" + tableID;
                     processID = DB.ExecuteScalar(sql1);
                     if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
                     {
@@ -382,7 +382,7 @@ namespace VAdvantage.Common
             try
             {
 
-                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
                 ProcessCtl ctl = new ProcessCtl();
@@ -448,12 +448,12 @@ namespace VAdvantage.Common
         ///  Otherwise supply password validity
         /// </summary>
         /// <param name="newPwd"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="UpdatedBy"></param>
         /// <param name="passwordValidity"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public static bool UpdatePasswordAndValidity(string newPwd, int AD_User_ID, int UpdatedBy, int passwordValidity = -1, Ctx ctx = null)
+        public static bool UpdatePasswordAndValidity(string newPwd, int VAF_UserContact_ID, int UpdatedBy, int passwordValidity = -1, Ctx ctx = null)
         {
             //If validity is unknow but context  available, then get from context
             if (passwordValidity == -1 && ctx != null)
@@ -476,7 +476,7 @@ namespace VAdvantage.Common
 
             string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(passwordValidity), true);
 
-            string sql = "UPDATE AD_User set Updated=Sysdate,UpdatedBy=" + UpdatedBy + ",PasswordExpireOn=" + newpwdExpireDate + ",password='" + newPwd + "' WHERE AD_User_ID=" + AD_User_ID;
+            string sql = "UPDATE VAF_UserContact set Updated=Sysdate,UpdatedBy=" + UpdatedBy + ",PasswordExpireOn=" + newpwdExpireDate + ",password='" + newPwd + "' WHERE VAF_UserContact_ID=" + VAF_UserContact_ID;
             int count = DB.ExecuteQuery(sql);
             if (count > 0)
                 return true;

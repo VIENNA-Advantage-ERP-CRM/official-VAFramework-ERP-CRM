@@ -21,7 +21,7 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             MModuleWindow mWindow = new MModuleWindow(GetCtx(), GetRecord_ID(), null);
-            _windowNo = mWindow.GetAD_Window_ID();
+            _windowNo = mWindow.GetVAF_Screen_ID();
 
             if (_windowNo == 0)
             {

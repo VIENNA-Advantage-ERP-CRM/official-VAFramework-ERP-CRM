@@ -501,10 +501,10 @@ VIS.MRole.getKeyColumnName = function (tableInfo, keyColumnName) {
     //	We have a synonym - ignore it if base table inquired
     for (var i = 0 ; i < tableInfo.length; i++) {
         var element = tableInfo[i];
-        if (keyColumnName.equals("AD_User_ID")) {
+        if (keyColumnName.equals("VAF_UserContact_ID")) {
 
             //	List of tables where not to use SalesRep_ID
-            if (element.getTableName().equals("AD_User"))
+            if (element.getTableName().equals("VAF_UserContact"))
                 return keyColumnName;
         }
         else if (keyColumnName.equals("VAF_ColumnDicValue_ID")) {
@@ -608,7 +608,7 @@ VIS.MRole.getRecordWhere = function (VAF_TableView_ID, keyColumnName, rw) {
 
         if (!this.vo.tableData[VAF_TableView_ID].IsView && this.vo.tableData[VAF_TableView_ID].HasKey) {
             var lockedIDs = " NOT IN ( SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID = "
-                    + VAF_TableView_ID + " AND AD_User_ID <> " + this.vo.AD_User_ID + " AND IsActive = 'Y' )";
+                    + VAF_TableView_ID + " AND VAF_UserContact_ID <> " + this.vo.VAF_UserContact_ID + " AND IsActive = 'Y' )";
             //if (lockedIDs.length > 0) {
             if (sb.length() > 0)
                 sb.append(" AND ");
@@ -697,32 +697,32 @@ VIS.MRole.getDocWhere = function (TableName) {
     if (!hasBPColumn)
         return "";
 
-    var AD_User_ID = VIS.context.getAD_User_ID();
+    var VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
 
-    //var docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+    //var docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
     //    + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-    //    + " WHERE u.AD_User_ID="
-    //    + AD_User_ID
+    //    + " WHERE u.VAF_UserContact_ID="
+    //    + VAF_UserContact_ID
     //    + " AND bp.C_BPartner_ID="
     //    + TableName
     //    + ".C_BPartner_ID)"
-    //    + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+    //    + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
     //    + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-    //    + " WHERE u.AD_User_ID="
-    //    + AD_User_ID
+    //    + " WHERE u.VAF_UserContact_ID="
+    //    + VAF_UserContact_ID
     //    + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
     //var hasUserColumn = false;
     //var sql1 = "SELECT count(*) FROM VAF_TableView t "
     //    + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
     //    + "WHERE t.tableName='" + TableName
-    //    + "' AND c.ColumnName='AD_User_ID' ";
+    //    + "' AND c.ColumnName='VAF_UserContact_ID' ";
 
     //ret = executeScalar(sql);
     //hasUserColumn = (ret ? parseInt(ret) : 0) != 0;
 
     //if (hasUserColumn)
-    //    docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+    //    docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
     //docAccess += ")";
 
 
@@ -733,7 +733,7 @@ VIS.MRole.getDocWhere = function (TableName) {
         async: false,
         url: VIS.Application.contextUrl + "Form/GetDocWhere",
         data: {
-            AD_User_ID: AD_User_ID,
+            VAF_UserContact_ID: VAF_UserContact_ID,
             TableName: TableName
         },
         success: function (data) {
@@ -925,8 +925,8 @@ VIS.MRole.addAccessSQL = function (SQL, TableNameIn, fullyQualified, rw, addOrgA
     return retSQL.toString();
 };
 
-VIS.MRole.getWindowAccess = function (AD_Window_ID) {
-    if (this.vo.windowAccess[AD_Window_ID])
+VIS.MRole.getWindowAccess = function (VAF_Screen_ID) {
+    if (this.vo.windowAccess[VAF_Screen_ID])
         return true;
     else return false;
 }; //get window access

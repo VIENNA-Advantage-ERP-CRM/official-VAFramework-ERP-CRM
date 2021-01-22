@@ -31,17 +31,17 @@ namespace VAdvantage.Controller
         /// Return the SQL statement used for the MFieldVO.create
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>Sql string</returns>
-        public static String GetSQL(Ctx ctx, int AD_UserDef_Win_ID)
+        public static String GetSQL(Ctx ctx, int VAF_UserCustom_Win_ID)
         {
             //	IsActive is part of View
             String sql = "SELECT * FROM VAF_Field_v WHERE VAF_Tab_ID=@tabID";
             if (!Env.IsBaseLanguage(ctx, "VAF_Tab"))
                 sql = "SELECT * FROM VAF_Field_vt WHERE VAF_Tab_ID=@tabID"
                     + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
-            if (AD_UserDef_Win_ID != 0)
-                sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
+            if (VAF_UserCustom_Win_ID != 0)
+                sql += " AND VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID;
             sql += " ORDER BY IsDisplayed DESC, SeqNo";
             return sql;
         }
@@ -58,16 +58,16 @@ namespace VAdvantage.Controller
         /// <param name="ctx">context</param>
         /// <param name="WindowNo">window number</param>
         /// <param name="TabNo">tab number</param>
-        /// <param name="AD_Window_ID">window Id</param>
+        /// <param name="VAF_Screen_ID">window Id</param>
         /// <param name="VAF_Tab_ID">Tab Id</param>
         /// <param name="readOnly">is readonly</param>
         /// <param name="dr">datarow</param>
         /// <returns>object of this Class</returns>
         public static GridFieldVO Create(Ctx ctx, int windowNo, int tabNo,
-            int AD_Window_ID, int VAF_Tab_ID, bool readOnly, IDataReader dr)
+            int VAF_Screen_ID, int VAF_Tab_ID, bool readOnly, IDataReader dr)
         {
             GridFieldVO vo = new GridFieldVO(ctx, windowNo, tabNo,
-                AD_Window_ID, VAF_Tab_ID, readOnly);
+                VAF_Screen_ID, VAF_Tab_ID, readOnly);
             String columnName = "ColumnName";
             try
             {
@@ -426,7 +426,7 @@ namespace VAdvantage.Controller
         public static GridFieldVO CreateCrystalParameter(GridFieldVO voF)
         {
             GridFieldVO voT = new GridFieldVO(voF.ctx, voF.windowNo, voF.tabNo,
-                voF.AD_Window_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
+                voF.VAF_Screen_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
             voT.isProcess = true;
             voT.IsDisplayedf = true;
             voT.IsReadOnly = false;
@@ -459,7 +459,7 @@ namespace VAdvantage.Controller
         public static GridFieldVO CreateParameter(GridFieldVO voF)
         {
             GridFieldVO voT = new GridFieldVO(voF.ctx, voF.windowNo, voF.tabNo,
-                voF.AD_Window_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
+                voF.VAF_Screen_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
             voT.isProcess = true;
             voT.IsDisplayedf = true;
             voT.IsReadOnly = false;
@@ -491,24 +491,24 @@ namespace VAdvantage.Controller
         /// <param name="ctx">context</param>
         /// <param name="windowNo">window number</param>
         /// <param name="tabNo">tab number</param>
-        /// <param name="AD_Window_ID">Window_ID</param>
+        /// <param name="VAF_Screen_ID">Window_ID</param>
         /// <param name="VAF_Tab_ID">Tab Id</param>
         /// <param name="tabReadOnly">tab readonly</param>
         /// <param name="isCreated">is prefic created column</param>
         /// <param name="isTimestamp">is prefix "update" column</param>
         /// <returns></returns>
         public static GridFieldVO CreateStdField(Ctx ctx, int windowNo, int tabNo,
-            int AD_Window_ID, int VAF_Tab_ID, bool tabReadOnly,
+            int VAF_Screen_ID, int VAF_Tab_ID, bool tabReadOnly,
             bool isCreated, bool isTimestamp)
         {
             GridFieldVO vo = new GridFieldVO(ctx, windowNo, tabNo,
-                AD_Window_ID, VAF_Tab_ID, tabReadOnly);
+                VAF_Screen_ID, VAF_Tab_ID, tabReadOnly);
             vo.ColumnName = isCreated ? "Created" : "Updated";
             if (!isTimestamp)
                 vo.ColumnName += "By";
             vo.displayType = isTimestamp ? DisplayType.DateTime : DisplayType.Table;
             if (!isTimestamp)
-                vo.VAF_Control_Ref_Value_ID = 110;		//	AD_User Table Reference
+                vo.VAF_Control_Ref_Value_ID = 110;		//	VAF_UserContact Table Reference
             vo.IsDisplayedf = false;
             vo.IsMandatoryUI = false;
             vo.IsReadOnly = false;
@@ -637,7 +637,7 @@ namespace VAdvantage.Controller
             ctx = newCtx;
             windowNo = windowNm;
             tabNo = tabNm;
-            AD_Window_ID = ad_Window_ID;
+            VAF_Screen_ID = ad_Window_ID;
             VAF_Tab_ID = vaf_tab_ID;
             tabReadOnly = TabReadOnly;
         }   //  MFieldVO

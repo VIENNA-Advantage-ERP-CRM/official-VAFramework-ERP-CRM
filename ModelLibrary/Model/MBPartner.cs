@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         // Prim Address					
         private int? _primaryC_BPartner_Location_ID = null;
         // Prim User						
-        private int? _primaryAD_User_ID = null;
+        private int? _primaryVAF_UserContact_ID = null;
         // Credit Limit recently calcualted		
         private bool _TotalOpenBalanceSet = false;
         // BP Group						
@@ -393,7 +393,7 @@ namespace VAdvantage.Model
                 return _contacts;
             //
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM AD_User WHERE C_BPartner_ID=" + GetC_BPartner_ID();
+            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + GetC_BPartner_ID();
             DataSet ds = null;
             try
             {
@@ -418,16 +418,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get specified or first Contact
         /// </summary>
-        /// <param name="AD_User_ID">optional user</param>
+        /// <param name="VAF_UserContact_ID">optional user</param>
         /// <returns>contact or null</returns>
-        public MUser GetContact(int AD_User_ID)
+        public MUser GetContact(int VAF_UserContact_ID)
         {
             MUser[] users = GetContacts(false);
             if (users.Length == 0)
                 return null;
-            for (int i = 0; AD_User_ID != 0 && i < users.Length; i++)
+            for (int i = 0; VAF_UserContact_ID != 0 && i < users.Length; i++)
             {
-                if (users[i].GetAD_User_ID() == AD_User_ID)
+                if (users[i].GetVAF_UserContact_ID() == VAF_UserContact_ID)
                     return users[i];
             }
             return users[0];
@@ -639,23 +639,23 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get Primary AD_User_ID
+        /// Get Primary VAF_UserContact_ID
         /// </summary>
-        /// <returns>AD_User_ID</returns>
-        public int GetPrimaryAD_User_ID()
+        /// <returns>VAF_UserContact_ID</returns>
+        public int GetPrimaryVAF_UserContact_ID()
         {
-            if (_primaryAD_User_ID == null)
+            if (_primaryVAF_UserContact_ID == null)
             {
                 MUser[] users = GetContacts(false);
                 //	for (int i = 0; i < users.Length; i++)
                 //	{
                 //	}
-                if (_primaryAD_User_ID == null && users.Length > 0)
-                    SetPrimaryAD_User_ID(users[0].GetAD_User_ID());
+                if (_primaryVAF_UserContact_ID == null && users.Length > 0)
+                    SetPrimaryVAF_UserContact_ID(users[0].GetVAF_UserContact_ID());
             }
-            if (_primaryAD_User_ID == null)
+            if (_primaryVAF_UserContact_ID == null)
                 return 0;
-            return (int)_primaryAD_User_ID;
+            return (int)_primaryVAF_UserContact_ID;
         }
 
         /// <summary>
@@ -668,12 +668,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Set Primary AD_User_ID
+        /// Set Primary VAF_UserContact_ID
         /// </summary>
-        /// <param name="AD_User_ID">id</param>
-        public void SetPrimaryAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">id</param>
+        public void SetPrimaryVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            _primaryAD_User_ID = AD_User_ID;
+            _primaryVAF_UserContact_ID = VAF_UserContact_ID;
         }
 
         /// <summary>
@@ -1383,17 +1383,17 @@ namespace VAdvantage.Model
                     if (_Emp_ID > 0)
                     {
                         _sql.Clear();
-                        _sql.Append(@"SELECT AD_USER_ID FROM AD_USER WHERE C_BPARTNER_ID=" + _Emp_ID + " AND VAF_CLIENT_ID =" + GetVAF_Client_ID());
-                        int AD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
+                        _sql.Append(@"SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE C_BPARTNER_ID=" + _Emp_ID + " AND VAF_CLIENT_ID =" + GetVAF_Client_ID());
+                        int VAF_UserContact_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
                         _sql.Clear();
-                        if (AD_User_ID > 0)
+                        if (VAF_UserContact_ID > 0)
                         {
-                            _sql.Append(@"UPDATE AD_USER SET SUPERVISOR_ID=" + AD_User_ID + " WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
+                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=" + VAF_UserContact_ID + " WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
 
                         }
                         else
                         {
-                            _sql.Append(@"UPDATE AD_USER SET SUPERVISOR_ID=null WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
+                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=null WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
                         }
                         int _count = Util.GetValueOfInt(DB.ExecuteQuery(_sql.ToString(), null, null));
                         _sql.Clear();

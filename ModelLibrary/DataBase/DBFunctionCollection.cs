@@ -910,7 +910,7 @@ namespace VAdvantage.DataBase
                              WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , 
                              VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)
                              CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT 
-                             FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             FROM (SELECT us.Name FROM VAF_UserContact us JOIN C_BPartner_Location bp ON bp.VAF_UserContact_ID = us.VAF_UserContact_ID 
                              WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @")) WHERE rn = cnt START WITH RN = 1 
                              CONNECT BY rn = PRIOR rn + 1) WHERE C_BPartner_ID = " + C_BPartner_ID);
             }
@@ -918,8 +918,8 @@ namespace VAdvantage.DataBase
             {
                 sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(VA077_LocNo, ', ') AS Name 
                              FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
-                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM AD_User us 
-                             JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM VAF_UserContact us 
+                             JOIN C_BPartner_Location bp ON bp.VAF_UserContact_ID = us.VAF_UserContact_ID 
                              WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @") AS U) WHERE C_BPartner_ID = " + C_BPartner_ID);
             }
             return sql.ToString();

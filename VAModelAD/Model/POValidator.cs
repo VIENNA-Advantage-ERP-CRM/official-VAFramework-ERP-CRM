@@ -227,7 +227,7 @@ namespace VAModelAD.Model
                     }
                     if (_po != null)
                     {
-                        _po.SetAD_Window_ID(MasterDetails.AD_Window_ID);
+                        _po.SetVAF_Screen_ID(MasterDetails.VAF_Screen_ID);
                         // copy date from Version table to Master table
                         bool saveSuccess = CopyVersionToMaster(_po,po);
                         if (!saveSuccess)

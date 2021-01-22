@@ -44,21 +44,21 @@ namespace ViennaAdvantage.Model
                             //PO pos = table.GetPO(GetCtx(), 0, null);
 
                             //pos.Set_Value("VAF_TableView_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]));
-                            //pos.Set_Value("AD_User_ID", GetAD_User_ID());
+                            //pos.Set_Value("VAF_UserContact_ID", GetVAF_UserContact_ID());
                             //pos.Set_Value("Record_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]));
                             //pos.Set_Value("C_Team_ID", GetC_Team_ID());
                             //pos.Set_Value("VADMS_Access", "20");
                             //pos.Save();
 
 
-                            string strQuery = "SELECT VADMS_ACCESS FROM (SELECT record_id,vadms_access,VAF_Role_id, NULL as AD_USER_ID " +
+                            string strQuery = "SELECT VADMS_ACCESS FROM (SELECT record_id,vadms_access,VAF_Role_id, NULL as VAF_USERCONTACT_ID " +
                             ",vadms_role_access.vadms_role_access_id,null as vadms_user_access_ID " +
                              "FROM vadms_role_access WHERE RECORD_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]) + " AND vaf_tableview_id = " + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]) + "  AND record_id NOT IN" +
-                             "(SELECT record_id FROM vadms_user_access WHERE ad_user_id = " + GetAD_User_ID() + " and vaf_tableview_id = " + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]) + ") " +
+                             "(SELECT record_id FROM vadms_user_access WHERE VAF_UserContact_id = " + GetVAF_UserContact_ID() + " and vaf_tableview_id = " + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]) + ") " +
 
                              "UNION " +
 
-                             "SELECT record_id, vadms_access, NULL as VAF_Role_ID, AD_USER_ID ,NULL AS vadms_role_access_id,vadms_user_access.vadms_user_access_ID FROM vadms_user_access WHERE RECORD_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]) + " AND ad_user_id = " + GetAD_User_ID() + " and vaf_tableview_id =" + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]) +
+                             "SELECT record_id, vadms_access, NULL as VAF_Role_ID, VAF_USERCONTACT_ID ,NULL AS vadms_role_access_id,vadms_user_access.vadms_user_access_ID FROM vadms_user_access WHERE RECORD_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]) + " AND VAF_UserContact_id = " + GetVAF_UserContact_ID() + " and vaf_tableview_id =" + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]) +
                              ") ARQ ";
 
                             int documentAccess = Convert.ToInt32(DB.ExecuteScalar(strQuery));
@@ -71,7 +71,7 @@ namespace ViennaAdvantage.Model
                                 PO posUserAccess = tableUserAccess.GetPO(GetCtx(), 0, null);
 
                                 posUserAccess.Set_Value("VAF_TableView_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]));
-                                posUserAccess.Set_Value("AD_User_ID", GetAD_User_ID());
+                                posUserAccess.Set_Value("VAF_UserContact_ID", GetVAF_UserContact_ID());
                                 posUserAccess.Set_Value("Record_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]));
                                 posUserAccess.Set_Value("VADMS_Access", "20");
                                 posUserAccess.Save();
@@ -92,7 +92,7 @@ namespace ViennaAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            string Sql = "SELECT AD_USER_ID FROM C_TEAMMEMBER WHERE AD_USER_ID = " + GetAD_User_ID() + " AND C_TEAM_ID = "+ GetC_Team_ID();
+            string Sql = "SELECT VAF_USERCONTACT_ID FROM C_TEAMMEMBER WHERE VAF_USERCONTACT_ID = " + GetVAF_UserContact_ID() + " AND C_TEAM_ID = "+ GetC_Team_ID();
             int UserID = Util.GetValueOfInt(DB.ExecuteScalar(Sql));
             if (UserID > 0)
             {

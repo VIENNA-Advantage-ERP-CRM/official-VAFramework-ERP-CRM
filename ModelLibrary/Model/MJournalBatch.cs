@@ -982,7 +982,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID (Created By)</returns>
+        /// <returns>VAF_UserContact_ID (Created By)</returns>
         public int GetDoc_User_ID()
         {
             return GetCreatedBy();

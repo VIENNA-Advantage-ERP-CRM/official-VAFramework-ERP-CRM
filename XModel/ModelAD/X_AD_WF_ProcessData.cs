@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WF_ProcessData
+/** Generated Model for VAF_WFlow_DataHandler
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WF_ProcessData : PO
+public class X_VAF_WFlow_DataHandler : PO
 {
-public X_AD_WF_ProcessData (Context ctx, int AD_WF_ProcessData_ID, Trx trxName) : base (ctx, AD_WF_ProcessData_ID, trxName)
+public X_VAF_WFlow_DataHandler (Context ctx, int VAF_WFlow_DataHandler_ID, Trx trxName) : base (ctx, VAF_WFlow_DataHandler_ID, trxName)
 {
-/** if (AD_WF_ProcessData_ID == 0)
+/** if (VAF_WFlow_DataHandler_ID == 0)
 {
-SetAD_WF_ProcessData_ID (0);
-SetAD_WF_Process_ID (0);
+SetVAF_WFlow_DataHandler_ID (0);
+SetVAF_WFlow_Handler_ID (0);
 SetAttributeName (null);
 }
  */
 }
-public X_AD_WF_ProcessData (Ctx ctx, int AD_WF_ProcessData_ID, Trx trxName) : base (ctx, AD_WF_ProcessData_ID, trxName)
+public X_VAF_WFlow_DataHandler (Ctx ctx, int VAF_WFlow_DataHandler_ID, Trx trxName) : base (ctx, VAF_WFlow_DataHandler_ID, trxName)
 {
-/** if (AD_WF_ProcessData_ID == 0)
+/** if (VAF_WFlow_DataHandler_ID == 0)
 {
-SetAD_WF_ProcessData_ID (0);
-SetAD_WF_Process_ID (0);
+SetVAF_WFlow_DataHandler_ID (0);
+SetVAF_WFlow_Handler_ID (0);
 SetAttributeName (null);
 }
  */
@@ -41,7 +41,7 @@ SetAttributeName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ProcessData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_DataHandler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_WF_ProcessData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ProcessData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_DataHandler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_WF_ProcessData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ProcessData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_WFlow_DataHandler (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WF_ProcessData()
+static X_VAF_WFlow_DataHandler()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389049552L;
 public static int Table_ID;
  // =648;
 
-/** TableName=AD_WF_ProcessData */
-public static String Table_Name="AD_WF_ProcessData";
+/** TableName=VAF_WFlow_DataHandler */
+public static String Table_Name="VAF_WFlow_DataHandler";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WF_ProcessData[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_WFlow_DataHandler[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Workflow Process Data.
-@param AD_WF_ProcessData_ID Workflow Process Context */
-public void SetAD_WF_ProcessData_ID (int AD_WF_ProcessData_ID)
+@param VAF_WFlow_DataHandler_ID Workflow Process Context */
+public void SetVAF_WFlow_DataHandler_ID (int VAF_WFlow_DataHandler_ID)
 {
-if (AD_WF_ProcessData_ID < 1) throw new ArgumentException ("AD_WF_ProcessData_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_ProcessData_ID", AD_WF_ProcessData_ID);
+if (VAF_WFlow_DataHandler_ID < 1) throw new ArgumentException ("VAF_WFlow_DataHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_DataHandler_ID", VAF_WFlow_DataHandler_ID);
 }
 /** Get Workflow Process Data.
 @return Workflow Process Context */
-public int GetAD_WF_ProcessData_ID() 
+public int GetVAF_WFlow_DataHandler_ID() 
 {
-Object ii = Get_Value("AD_WF_ProcessData_ID");
+Object ii = Get_Value("VAF_WFlow_DataHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Process.
-@param AD_WF_Process_ID Actual Workflow Process Instance */
-public void SetAD_WF_Process_ID (int AD_WF_Process_ID)
+@param VAF_WFlow_Handler_ID Actual Workflow Process Instance */
+public void SetVAF_WFlow_Handler_ID (int VAF_WFlow_Handler_ID)
 {
-if (AD_WF_Process_ID < 1) throw new ArgumentException ("AD_WF_Process_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_Process_ID", AD_WF_Process_ID);
+if (VAF_WFlow_Handler_ID < 1) throw new ArgumentException ("VAF_WFlow_Handler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
 }
 /** Get Workflow Process.
 @return Actual Workflow Process Instance */
-public int GetAD_WF_Process_ID() 
+public int GetVAF_WFlow_Handler_ID() 
 {
-Object ii = Get_Value("AD_WF_Process_ID");
+Object ii = Get_Value("VAF_WFlow_Handler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_WF_Process_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_WFlow_Handler_ID().ToString());
 }
 /** Set Attribute Name.
 @param AttributeName Name of the Attribute */

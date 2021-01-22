@@ -487,7 +487,7 @@ namespace VAdvantage.Process
                     order.SetC_DocTypeTarget_ID(_C_DocType_ID);
                     MBPartner bp = new MBPartner(GetCtx(), replenish.GetC_BPartner_ID(), Get_TrxName());
                     order.SetBPartner(bp);
-                    order.SetSalesRep_ID(GetAD_User_ID());
+                    order.SetSalesRep_ID(GetVAF_UserContact_ID());
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
                     order.SetVAF_Org_ID(wh.GetVAF_Org_ID());
@@ -534,7 +534,7 @@ namespace VAdvantage.Process
                     || requisition.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
                 {
                     requisition = new MRequisition(GetCtx(), 0, Get_TrxName());
-                    requisition.SetAD_User_ID(GetAD_User_ID());
+                    requisition.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                     requisition.SetC_DocType_ID(_C_DocType_ID);
                     requisition.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH

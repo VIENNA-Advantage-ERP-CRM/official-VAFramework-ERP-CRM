@@ -87,7 +87,7 @@
         //    fileType: this.fileType,
         //    pageSize: this.PAGE_SIZE,
         //    pageNo: this.pageNo,
-        //    AD_Window_ID: (this.parent.$parentWindow === undefined ? 0 : this.parent.$parentWindow.AD_Window_ID) // vinay bhatt window id
+        //    VAF_Screen_ID: (this.parent.$parentWindow === undefined ? 0 : this.parent.$parentWindow.VAF_Screen_ID) // vinay bhatt window id
         //}
 
         VIS.dataContext.process(data, function (jsonStr) {

@@ -359,8 +359,8 @@
 
             function designSchema(obj) {
                 //  Model
-                var AD_Window_ID = 153;		//	Mavarain Account Combinations 
-                VIS.AEnv.getGridWindow(windowNo, AD_Window_ID, function (json) {
+                var VAF_Screen_ID = 153;		//	Mavarain Account Combinations 
+                VIS.AEnv.getGridWindow(windowNo, VAF_Screen_ID, function (json) {
                     if (json.error != null) {
                         VIS.ADialog.error(json.error);    //log error
                         self.dispose();

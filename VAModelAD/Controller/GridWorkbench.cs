@@ -29,12 +29,12 @@ namespace VAdvantage.Model
         ///  No Workbench - Just Frame for Window
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
 
-        public GridWorkbench(Ctx ctx, int AD_Window_ID)
+        public GridWorkbench(Ctx ctx, int VAF_Screen_ID)
         {
             _ctx = ctx;
-            _windows.Add(new WBWindow(TYPE_WINDOW, AD_Window_ID));
+            _windows.Add(new WBWindow(TYPE_WINDOW, VAF_Screen_ID));
         }   //  MWorkbench
 
         /** Properties      */
@@ -247,7 +247,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         private bool InitWorkbenchWindows()
         {
-            String sql = "SELECT AD_Window_ID, VAF_Page_ID, VAF_Job_ID, AD_Task_ID "
+            String sql = "SELECT VAF_Screen_ID, VAF_Page_ID, VAF_Job_ID, AD_Task_ID "
                 + "FROM AD_WorkbenchWindow "
                 + "WHERE AD_Workbench_ID=" + AD_Workbench_ID.ToString() + " AND IsActive='Y'"
                 + "ORDER BY SeqNo";
@@ -257,13 +257,13 @@ namespace VAdvantage.Model
                 dr = DataBase.DB.ExecuteReader(sql, null);
                 while (dr.Read())
                 {
-                    int AD_Window_ID = Utility.Util.GetValueOfInt(dr[0]);
+                    int VAF_Screen_ID = Utility.Util.GetValueOfInt(dr[0]);
                     int VAF_Page_ID = Utility.Util.GetValueOfInt(dr[1]);
                     int VAF_Job_ID = Utility.Util.GetValueOfInt(dr[2]);
                     int AD_Task_ID = Utility.Util.GetValueOfInt(dr[3]);
                     //
-                    if (AD_Window_ID > 0)
-                        _windows.Add(new WBWindow(TYPE_WINDOW, AD_Window_ID));
+                    if (VAF_Screen_ID > 0)
+                        _windows.Add(new WBWindow(TYPE_WINDOW, VAF_Screen_ID));
                     else if (VAF_Page_ID > 0)
                         _windows.Add(new WBWindow(TYPE_FORM, VAF_Page_ID));
                     else if (VAF_Job_ID > 0)

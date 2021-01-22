@@ -708,7 +708,7 @@
 
     ///**	Operators for IDs					*/
     //VIS.Query.prototype.OPERATORS_DYNAMIC_ID = {
-    //    "@#AD_User_ID@": VIS.Msg.getMsg("LoginUser")		//	0
+    //    "@#VAF_UserContact_ID@": VIS.Msg.getMsg("LoginUser")		//	0
     //    //new ValueNamePair (NOT_EQUAL,		" != ")
     //    //	,new ValueNamePair (IN,				" IN "),			
     //    //	new ValueNamePair (NOT_IN,			" !() ")			
@@ -731,7 +731,7 @@
     /**	Operators for IDs					*/
     VIS.Query.prototype.OPERATORS_DYNAMIC_ID = {
 
-        "@#AD_User_ID@": "LoginUser"		//	0
+        "@#VAF_UserContact_ID@": "LoginUser"		//	0
         //new ValueNamePair (NOT_EQUAL,		" != ")
         //	,new ValueNamePair (IN,				" IN "),			
         //	new ValueNamePair (NOT_IN,			" !() ")			
@@ -1309,7 +1309,7 @@
 	 * 	@param targetWhereClause Where Clause in the format "Record_ID=<value>"
 	 *  @param isSOTrx Sales contex of window from where zoom is invoked
 	 */
-        getZoomAD_Window_ID: function (targetTableName, curWindow_ID, targetWhereClause, isSOTrx) {
+        getZoomVAF_Screen_ID: function (targetTableName, curWindow_ID, targetWhereClause, isSOTrx) {
 
             var zoomWindow_ID = 0;
             var PO_zoomWindow_ID = 0;
@@ -1348,7 +1348,7 @@
                 //                ResourceGroup.equals(X_M_Product.RESOURCEGROUP_Equipment)))
                 //{
                 //    var windowID = 0;
-                //    var sql11 = " SELECT AD_Window_ID FROM AD_Window WHERE NAME LIKE 'Production Resource'";
+                //    var sql11 = " SELECT VAF_Screen_ID FROM VAF_Screen WHERE NAME LIKE 'Production Resource'";
                 //    try
                 //    {
                 //        pstmt = DB.prepareStatement(sql11, (Trx) null);
@@ -1436,17 +1436,17 @@
                 }
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
 
             if (targetWhereClause != null && targetWhereClause.length != 0) {
                 var zoomList = [];
                 zoomList = this.getZoomTargets(targetTableName, curWindow_ID, targetWhereClause);
                 if (zoomList != null && zoomList.length > 0)
-                    AD_Window_ID = zoomList[0].Key;
+                    VAF_Screen_ID = zoomList[0].Key;
             }
 
-            if (AD_Window_ID != 0)
-                return AD_Window_ID;
+            if (VAF_Screen_ID != 0)
+                return VAF_Screen_ID;
 
             if (isSOTrx)
                 return zoomWindow_ID;
@@ -1621,32 +1621,32 @@
             }
 
             //var costWindow = MWindow.get(Env.getCtx(), 344);
-            //var cost = new KeyNamePair(costWindow.getAD_Window_ID(),costWindow.getName());
+            //var cost = new KeyNamePair(costWindow.getVAF_Screen_ID(),costWindow.getName());
             ///var WcCost = new KeyNamePair(WorkCenterCostWindowID,WorkCenterCostWindowName);
 
             /** End Hard Code for product and work center window */
 
             // Find windows where the first tab is based on the table
-            //var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-            //        "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+            //var sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+            //        "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
             //    + "FROM VAF_TableView t "
             //    + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
-            //var baseLanguage = VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "AD_Window");
+            //var baseLanguage = VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "VAF_Screen");
             //if (baseLanguage) {
-            //    sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-            //    sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-            //        + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+            //    sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+            //    sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+            //        + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             //}
             //else {
-            //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language=@para1)";
-            //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language=@para2)"
-            //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language=@para3)";
+            //    sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language=@para1)";
+            //    sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language=@para2)"
+            //        + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language=@para3)";
             //}
             //sql += "WHERE t.TableName = @para4"
-            //    + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
+            //    + " AND w.VAF_Screen_ID <> @para5 AND w.isActive='Y'"
             //    + " AND tt.SeqNo=10"
-            //    + " AND (wp.AD_Window_ID IS NOT NULL "
-            //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
+            //    + " AND (wp.VAF_Screen_ID IS NOT NULL "
+            //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
             //    + " ORDER BY 2";
 
             try {
@@ -1684,7 +1684,7 @@
                     // Multiple window support only for Order, Invoice, Shipment/Receipt which have PO windows
                     if (PO_Window_ID == 0)
                         break;
-                    windowList.push({ "AD_Window_ID": dr.getInt(0), "windowName": dr.getString(1), "whereClause": whereClause });
+                    windowList.push({ "VAF_Screen_ID": dr.getInt(0), "windowName": dr.getString(1), "whereClause": whereClause });
                 }
             }
             catch (e) {
@@ -1773,7 +1773,7 @@
                             //log.fine("Window : "+windowList.get(i).windowName + " WhereClause : " + windowList.get(i).whereClause);
                             if (this.evaluateWhereClause(columnValues, windowList[j].whereClause)) {
                                 //log.fine("MatchFound : "+windowList.get(i).windowName );
-                                var pp = { "Key": windowList[j].AD_Window_ID, "Value": windowList[j].windowName };
+                                var pp = { "Key": windowList[j].VAF_Screen_ID, "Value": windowList[j].windowName };
                                 zoomList.push(pp);
                                 // Use first window found. Ideally there should be just one matching
                                 break;

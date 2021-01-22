@@ -79,7 +79,7 @@
 
         var _VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
         var _VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
-        var _by = VIS.Env.getCtx().getAD_User_ID();
+        var _by = VIS.Env.getCtx().getVAF_UserContact_ID();
 
         var MATCH_INVOICE = 0;
         var MATCH_SHIPMENT = 1;

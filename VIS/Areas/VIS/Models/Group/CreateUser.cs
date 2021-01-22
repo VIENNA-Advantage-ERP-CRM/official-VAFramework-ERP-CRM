@@ -74,7 +74,7 @@ namespace VIS.Models
                     for (int i = 0; i < OrgID.Count; i++)
                     {
                         MOrg org = new MOrg(ctx, OrgID[i], null);
-                        MUserOrgAccess roles = new MUserOrgAccess(org, user.GetAD_User_ID());
+                        MUserOrgAccess roles = new MUserOrgAccess(org, user.GetVAF_UserContact_ID());
                         roles.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         roles.SetVAF_Org_ID(OrgID[i]);
                         roles.SetIsReadOnly(false);
@@ -134,8 +134,8 @@ namespace VIS.Models
                 + " AND (r.IsAccessAllOrgs='Y' "
                     + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
                         + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
-                        + "WHERE ua.AD_User_ID='" + ctx.GetAD_User_ID() + "' AND ua.IsActive='Y'))"		//	#3
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                        + "WHERE ua.VAF_UserContact_ID='" + ctx.GetVAF_UserContact_ID() + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
             DataSet ds = DB.ExecuteDataset(sql);

@@ -142,12 +142,12 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //	To User
-                MUser to = new MUser(GetCtx(), entry.GetAD_User_ID(), Get_TrxName());
+                MUser to = new MUser(GetCtx(), entry.GetVAF_UserContact_ID(), Get_TrxName());
                 if (_EMailPDF)
                 {
                     if (to.Get_ID() == 0)
                     {
-                        AddLog(entry.Get_ID(), null, null, "@NotFound@: @AD_User_ID@ - " + bp.GetName());
+                        AddLog(entry.Get_ID(), null, null, "@NotFound@: @VAF_UserContact_ID@ - " + bp.GetName());
                         errors++;
                         continue;
                     }
@@ -233,7 +233,7 @@ namespace VAdvantage.Process
                         }
                     }
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, entry.GetAD_User_ID(), email);
+                    MUserMail um = new MUserMail(mText, entry.GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

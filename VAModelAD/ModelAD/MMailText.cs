@@ -407,14 +407,14 @@ namespace VAdvantage.Model
                         SetBPartner(C_BPartner_ID);
                     }
                 }
-                index = po.Get_ColumnIndex("AD_User_ID");
+                index = po.Get_ColumnIndex("VAF_UserContact_ID");
                 if (index > 0)
                 {
                     Object oo = po.Get_Value(index);
                     if (oo != null && oo.GetType() == typeof(int))
                     {
-                        int AD_User_ID = int.Parse(oo.ToString());
-                        SetUser(AD_User_ID);
+                        int VAF_UserContact_ID = int.Parse(oo.ToString());
+                        SetUser(VAF_UserContact_ID);
                     }
                 }
             }
@@ -424,10 +424,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set User for parse
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
-        public void SetUser(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user</param>
+        public void SetUser(int VAF_UserContact_ID)
         {
-            _user = MUser.Get(GetCtx(), AD_User_ID);
+            _user = MUser.Get(GetCtx(), VAF_UserContact_ID);
         }
 
         /// <summary>

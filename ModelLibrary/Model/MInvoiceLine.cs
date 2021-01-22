@@ -3202,7 +3202,7 @@ namespace VAdvantage.Model
                     MRequest request = new MRequest(GetCtx(), 0, Get_TrxName());
                     request.SetClientOrg(this);
                     request.SetSummary(summary);
-                    request.SetAD_User_ID(invoice.GetAD_User_ID());
+                    request.SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
                     request.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
                     request.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                     request.SetC_Order_ID(invoice.GetC_Order_ID());
@@ -3221,7 +3221,7 @@ namespace VAdvantage.Model
                     MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
                     lead.SetClientOrg(this);
                     lead.SetDescription(summary);
-                    lead.SetAD_User_ID(invoice.GetAD_User_ID());
+                    lead.SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
                     lead.SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
                     lead.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
                     lead.SetC_Campaign_ID(invoice.GetC_Campaign_ID());

@@ -496,24 +496,24 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_Org_ID"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <param name="VAF_Page_ID"></param>
         /// <returns></returns>
         public MWindowLog WindowLog(int VAF_Client_ID, int VAF_Org_ID,
-        int AD_Window_ID, int VAF_Page_ID)
+        int VAF_Screen_ID, int VAF_Page_ID)
         {
             MWindowLog wlog = null;
             try
             {
                 wlog = new MWindowLog(GetCtx(), GetAD_Session_ID(),
                     VAF_Client_ID, VAF_Org_ID,
-                    AD_Window_ID, VAF_Page_ID);
+                    VAF_Screen_ID, VAF_Page_ID);
                 wlog.Save();
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Window_ID=" + AD_Window_ID + ", VAF_Page_ID=" + VAF_Page_ID
+                    + ", VAF_Screen_ID=" + VAF_Screen_ID + ", VAF_Page_ID=" + VAF_Page_ID
                     , e);
             }
             return wlog;

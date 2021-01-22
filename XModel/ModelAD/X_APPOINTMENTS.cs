@@ -111,16 +111,16 @@ StringBuilder sb = new StringBuilder ("X_Appointments[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (Decimal? AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (Decimal? VAF_UserContact_ID)
 {
-Set_Value ("AD_User_ID", (Decimal?)AD_User_ID);
+Set_Value ("VAF_UserContact_ID", (Decimal?)VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public Decimal GetAD_User_ID() 
+public Decimal GetVAF_UserContact_ID() 
 {
-Object bd =Get_Value("AD_User_ID");
+Object bd =Get_Value("VAF_UserContact_ID");
 if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }

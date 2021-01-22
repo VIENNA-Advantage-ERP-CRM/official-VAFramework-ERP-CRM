@@ -375,7 +375,7 @@ namespace VAdvantage.Classes
             bool isTranslated = false;
             string keyColumn = columnName;
 
-            string sql = "SELECT t.AD_Window_ID,t.PO_Window_ID "
+            string sql = "SELECT t.VAF_Screen_ID,t.PO_Window_ID "
                 + "FROM VAF_TableView t "
                 + "WHERE tableName=@tableName ";
 
@@ -653,7 +653,7 @@ namespace VAdvantage.Classes
         {
             //	get display column names
             String sql0 = "SELECT c.ColumnName,c.IsTranslated,c.VAF_Control_Ref_ID,"
-                + "c.VAF_Control_Ref_Value_ID,t.AD_Window_ID,t.PO_Window_ID "
+                + "c.VAF_Control_Ref_Value_ID,t.VAF_Screen_ID,t.PO_Window_ID "
                 + "FROM VAF_TableView t"
                 + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE tableName=@tableName"
@@ -790,7 +790,7 @@ namespace VAdvantage.Classes
 
             string sql0 = "SELECT t.TableName,ck.ColumnName AS KeyColumn,"				//	1..2
             + "cd.ColumnName AS DisplayColumn,rt.IsValueDisplayed,cd.IsTranslated,"	//	3..5
-            + "rt.WhereClause,rt.OrderByClause,t.AD_Window_ID,t.PO_Window_ID, "		//	6..9
+            + "rt.WhereClause,rt.OrderByClause,t.VAF_Screen_ID,t.PO_Window_ID, "		//	6..9
             + "t.VAF_TableView_ID , rt.IsDisplayIdentifiers "								//	10..11
             + "FROM VAF_CtrlRef_Table rt"
             + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID)"

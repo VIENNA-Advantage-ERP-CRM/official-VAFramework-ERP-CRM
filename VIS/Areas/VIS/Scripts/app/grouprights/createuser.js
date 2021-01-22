@@ -201,7 +201,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/GetRoleInfo",
-                data: ({ AD_User_ID: 0 }),
+                data: ({ VAF_UserContact_ID: 0 }),
                 success: function (result) {
                     var data = JSON.parse(result);
 

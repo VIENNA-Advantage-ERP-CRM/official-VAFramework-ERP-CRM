@@ -940,7 +940,7 @@
     /**
      * Get Zoom
      * 
-     * @return Zoom AD_Window_ID
+     * @return Zoom VAF_Screen_ID
      */
     MLookup.prototype.getZoomWindow = function () {
         if (arguments.length == 0) {
@@ -955,9 +955,9 @@
     * more tables if they have multiple windows.
     */
 
-        var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID(this.info.tableName,
+        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID(this.info.tableName,
             this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }; // getZoomWindow
     /**
      * Get Zoom Query String
@@ -1469,7 +1469,7 @@
     /**
     * Get Zoom
     * 
-    * @return Zoom AD_Window_ID
+    * @return Zoom VAF_Screen_ID
     */
     MLocatorLookup.prototype.getZoomWindow = function () {
         if (arguments.length == 0) {
@@ -1484,9 +1484,9 @@
     * more tables if they have multiple windows.
     */
 
-        var AD_Window_ID = VIS.ZoomTarget.getZoomAD_Window_ID("M_Locator",
+        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID("M_Locator",
             this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
-        return AD_Window_ID;
+        return VAF_Screen_ID;
     }; // getZoomWindow
 
 

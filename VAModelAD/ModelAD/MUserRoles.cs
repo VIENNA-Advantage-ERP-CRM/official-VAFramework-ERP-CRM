@@ -12,7 +12,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUserRoles : X_AD_User_Roles
+    public class MUserRoles : X_VAF_UserContact_Roles
     {
         Ctx role_ctx = null;
         /// <summary>
@@ -23,7 +23,7 @@ namespace VAdvantage.Model
         /// <returns>Array of user roles</returns>
         public static MUserRoles[] GetOfRole(Ctx ctx, int VAF_Role_ID)
         {
-            String sql = "SELECT * FROM AD_User_Roles WHERE VAF_Role_ID=@roleid";
+            String sql = "SELECT * FROM VAF_UserContact_Roles WHERE VAF_Role_ID=@roleid";
             List<MUserRoles> list = new List<MUserRoles>();
             try
             {
@@ -53,16 +53,16 @@ namespace VAdvantage.Model
         /// Get User Roles Of User
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_User_ID">ad user id</param>
+        /// <param name="VAF_UserContact_ID">ad user id</param>
         /// <returns>array of user roles</returns>
-        public static MUserRoles[] GetOfUser(Ctx ctx, int AD_User_ID)
+        public static MUserRoles[] GetOfUser(Ctx ctx, int VAF_UserContact_ID)
         {
-            String sql = "SELECT * FROM AD_User_Roles WHERE AD_User_ID=@userid";
+            String sql = "SELECT * FROM VAF_UserContact_Roles WHERE VAF_UserContact_ID=@userid";
             List<MUserRoles> list = new List<MUserRoles>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@userid", AD_User_ID);
+                param[0] = new SqlParameter("@userid", VAF_UserContact_ID);
 
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -118,14 +118,14 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_User_ID">user id</param>
+        /// <param name="VAF_UserContact_ID">user id</param>
         /// <param name="VAF_Role_ID">role id</param>
         /// <param name="trxName">optional transaction name</param>
-        public MUserRoles(Ctx ctx, int AD_User_ID, int VAF_Role_ID, Trx trxName)
+        public MUserRoles(Ctx ctx, int VAF_UserContact_ID, int VAF_Role_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
             role_ctx = ctx;
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetVAF_Role_ID(VAF_Role_ID);
         }	//	MUserRoles
 
@@ -133,11 +133,11 @@ namespace VAdvantage.Model
         /// Set User/Contact.
         /// User within the system - Internal or Business Partner Contact
         /// </summary>
-        /// <param name="AD_User_ID">user</param>
-        public new void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user</param>
+        public new void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            Set_ValueNoCheck("AD_User_ID", AD_User_ID);
-        }	//	setAD_User_ID
+            Set_ValueNoCheck("VAF_UserContact_ID", VAF_UserContact_ID);
+        }	//	setVAF_UserContact_ID
 
         /// <summary>
         /// Set Role
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
                     deleteRoleForLogin();
                 }
                 //Update Role on Japser User..............
-                MUser obj = new MUser(role_ctx, GetAD_User_ID(), null);
+                MUser obj = new MUser(role_ctx, GetVAF_UserContact_ID(), null);
                 if(obj.IsVA039_IsJasperUser())
                 {
                     obj.createJasperUser();
@@ -172,7 +172,7 @@ namespace VAdvantage.Model
             if (success)
             {
                 deleteRoleForLogin();
-                MUser obj = new MUser(role_ctx, GetAD_User_ID(), null);
+                MUser obj = new MUser(role_ctx, GetVAF_UserContact_ID(), null);
                 if (obj.IsVA039_IsJasperUser())
                 {
                     obj.createJasperUser();
@@ -183,7 +183,7 @@ namespace VAdvantage.Model
 
         private void deleteRoleForLogin()
         {
-            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + GetAD_User_ID() + " AND VAF_Role_ID = " + GetVAF_Role_ID());
+            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_UserContact_ID=" + GetVAF_UserContact_ID() + " AND VAF_Role_ID = " + GetVAF_Role_ID());
         }
     }
 }

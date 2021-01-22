@@ -199,27 +199,27 @@
         //    var ctx = VIS.context.ctx;
         //    var windowList = [];
         //    // Find windows where the first tab is based on the table
-        //    //var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-        //    //        "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+        //    //var sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+        //    //        "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
         //    //    + "FROM VAF_TableView t "
         //    //    + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
         //    //var baseLanguage = VIS.Env.isBaseLanguage();// GlobalVariable.IsBaseLanguage();
         //    //if (baseLanguage) {
-        //    //    sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-        //    //    sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-        //    //        + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+        //    //    sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+        //    //    sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+        //    //        + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
         //    //}
         //    //else {
-        //    //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
-        //    //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language='" + VIS.Env.getVAF_Language() + "')"
-        //    //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
+        //    //    sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
+        //    //    sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language='" + VIS.Env.getVAF_Language() + "')"
+        //    //        + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
         //    //}
         //    //sql += "WHERE t.TableName ='" + targetTableName
-        //    //    + "' AND w.AD_Window_ID <>" + curWindow_ID
+        //    //    + "' AND w.VAF_Screen_ID <>" + curWindow_ID
         //    //    + " AND tt.SeqNo=10"
-        //    //    + " AND (wp.AD_Window_ID IS NOT NULL "
-        //    //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
+        //    //    + " AND (wp.VAF_Screen_ID IS NOT NULL "
+        //    //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
         //    //    + " ORDER BY 2";
 
 
@@ -247,7 +247,7 @@
         //                break;
 
         //            var windowClause = {};
-        //            windowClause.AD_Window_ID = ds.getTables()[0].getRows()[j].getCell(0);
+        //            windowClause.VAF_Screen_ID = ds.getTables()[0].getRows()[j].getCell(0);
         //            windowClause.windowName = ds.getTables()[0].getRows()[j].getCell(1);
         //            windowClause.whereClause = whereClause;
 
@@ -309,9 +309,9 @@
         //                        //log.Fine("Window : " + windowList[i].windowName + " WhereClause : " + windowList[i].whereClause);
         //                        if (evaluateWhereClause(columnValues, windowList[i].whereClause)) {
         //                            //log.Fine("MatchFound : " + windowList[i].windowName);
-        //                            //KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
+        //                            //KeyNamePair pp = new KeyNamePair(windowList[i].VAF_Screen_ID, windowList[i].windowName);
         //                            var zoomitm = {};
-        //                            zoomitm.ID = windowList[i].AD_Window_ID;
+        //                            zoomitm.ID = windowList[i].VAF_Screen_ID;
         //                            zoomitm.Name = windowList[i].windowName;
         //                            //zoomList.Add(pp);
         //                            zoomList.push(zoomitm);

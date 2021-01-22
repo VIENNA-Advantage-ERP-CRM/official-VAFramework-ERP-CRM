@@ -485,7 +485,7 @@ namespace VAdvantage.Model
                     menues[i].SetDescription(GetDescription());
                     menues[i].Save();
                 }
-                X_AD_WF_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "VAF_Job_ID=" + GetVAF_Job_ID());
+                X_VAF_WFlow_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "VAF_Job_ID=" + GetVAF_Job_ID());
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     bool changed = false;

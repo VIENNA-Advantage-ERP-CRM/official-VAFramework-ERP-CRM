@@ -658,7 +658,7 @@ namespace VAdvantage.Classes
             if (columnName == null)
                 return null;
             if (columnName.Equals("SalesRep_ID"))
-                return "AD_User_ID";
+                return "VAF_UserContact_ID";
             if (columnName.Equals("C_DocTypeTarget_ID"))
                 return "C_DocType_ID";
             if (columnName.Equals("Bill_BPartner_ID"))

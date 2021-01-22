@@ -2,7 +2,7 @@
  * Project Name         : VAdvantage
  * Module/Class Name    : Change Log Model
  * Purpose              : Track all the changes
- * Class Used           : MWindow inherits X_AD_Window
+ * Class Used           : MWindow inherits X_VAF_Screen
  * Chronological        Development
  * Mukesh Arora          05-May-2009 
   ******************************************************/
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
         {
 
             if (VAF_TableView_ID == X_VAF_AlterLog.Table_ID
-                   || VAF_TableView_ID == X_AD_WindowLog.Table_ID
+                   || VAF_TableView_ID == X_VAF_ScreenLog.Table_ID
                    || VAF_TableView_ID == X_VAF_DBQueryLog.Table_ID
                    || VAF_TableView_ID == X_VAF_Issue.Table_ID
                    || VAF_Column_ID == 6652 // VAF_Job.Statistics_Count

@@ -128,7 +128,7 @@ namespace VIS.Models
                             INNER JOIN VAF_TableView t
                             ON (c.VAF_TableView_ID=t.VAF_TableView_ID)                            
                             INNER JOIN VAF_Tab tab
-                            ON (t.AD_Window_ID=tab.AD_Window_ID)
+                            ON (t.VAF_Screen_ID=tab.VAF_Screen_ID)
                             INNER JOIN VAF_Field f
                             ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
                             AND f.VAF_Column_ID =c.VAF_Column_ID)
@@ -154,7 +154,7 @@ namespace VIS.Models
                             INNER JOIN VAF_Column_TL trl
                             ON (c.vaf_column_ID=trl.VAF_Column_ID)
                             INNER JOIN VAF_Tab tab
-                            ON (t.AD_Window_ID=tab.AD_Window_ID)
+                            ON (t.VAF_Screen_ID=tab.VAF_Screen_ID)
                             INNER JOIN VAF_Field f
                             ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
                             AND f.VAF_Column_ID =c.VAF_Column_ID)

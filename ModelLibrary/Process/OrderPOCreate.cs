@@ -503,7 +503,7 @@ namespace VAdvantage.Process
             //{
             //    po.SetShip_BPartner_ID(so.GetC_BPartner_ID());
             //    po.SetShip_Location_ID(so.GetC_BPartner_Location_ID());
-            //    po.SetShip_User_ID(so.GetAD_User_ID());
+            //    po.SetShip_User_ID(so.GetVAF_UserContact_ID());
             //}
 
             if (_shipDrop == "Y")

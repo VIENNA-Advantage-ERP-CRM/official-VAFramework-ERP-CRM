@@ -4075,7 +4075,7 @@
 
 
         function CreateNewTree() {
-            var sql = "SELECT AD_Window_ID FROM AD_Window WHERE Name='Tree'";
+            var sql = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name='Tree'";
             var n_win = executeScalar(sql);
 
             var zoomQuery = new VIS.Query();

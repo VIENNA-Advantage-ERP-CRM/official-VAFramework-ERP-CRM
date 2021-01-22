@@ -47,19 +47,19 @@ namespace VIS.Models
 //        public List<RolesInfo> FillRole(Ctx ctx)
 //        {
 
-//            string sql = @"  SELECT u.AD_User_ID ,
+//            string sql = @"  SELECT u.VAF_UserContact_ID ,
 //                          r.VAF_Role_ID       ,
 //                          r.Name             ,
 //                          u.ConnectionProfile,
 //                          u.Password
-//                           FROM AD_User u
-//                        INNER JOIN AD_User_Roles ur
-//                             ON (u.AD_User_ID=ur.AD_User_ID
+//                           FROM VAF_UserContact u
+//                        INNER JOIN VAF_UserContact_Roles ur
+//                             ON (u.VAF_UserContact_ID=ur.VAF_UserContact_ID
 //                        AND ur.IsActive      ='Y')
 //                        INNER JOIN VAF_Role r
 //                             ON (ur.VAF_Role_ID             =r.VAF_Role_ID
 //                        AND r.IsActive                     ='Y')
-//                          WHERE COALESCE(u.LDAPUser,u.Name)='" + ctx.GetAD_User_Name() + @"'
+//                          WHERE COALESCE(u.LDAPUser,u.Name)='" + ctx.GetVAF_UserContact_Name() + @"'
 //                        AND u.IsActive                     ='Y'
 //                        AND u.IsLoginUser                  ='Y'
 //                        AND EXISTS
@@ -83,7 +83,7 @@ namespace VIS.Models
 //                {
 //                    lstRole.Add(new RolesInfo()
 //                    {
-//                        UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]),
+//                        UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]),
 //                        VAF_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]),
 //                        Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
 //                        ConnectionProfile = Convert.ToString(ds.Tables[0].Rows[i]["ConnectionProfile"]),
@@ -103,7 +103,7 @@ namespace VIS.Models
 //        public Dictionary<string, string> GetSavedGmailCredential(Ctx ctx)
 //        {
 //            Dictionary<string, string> retDic = new Dictionary<string, string>();
-//            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where AD_User_ID=" + ctx.GetAD_User_ID() + " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
+//            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
 //            //+ " and VAF_Org_ID=" + ctx.GetVAF_Org_ID();
 //            DataSet dsConfig = DB.ExecuteDataset(sql, null);
 //            if (dsConfig != null && dsConfig.Tables[0].Rows.Count > 0)
@@ -156,7 +156,7 @@ namespace VIS.Models
 //                role = role_ID;
 //            }
 //            UpdateExistingRecord = chkUpdateExisting;
-//            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
+//            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() +
 //                    " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
 //            DataSet ds = DB.ExecuteDataset(sql, null);
 //            X_WSP_GmailConfiguration Configs = null;
@@ -191,7 +191,7 @@ namespace VIS.Models
 //            }
 
 
-//            Configs.SetAD_User_ID(ctx.GetAD_User_ID());
+//            Configs.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
 //            if (!Configs.Save())
 //            {
 
@@ -221,9 +221,9 @@ namespace VIS.Models
 ////                role = role_ID;
 ////            }
 ////            UpdateExistingRecord = chkUpdateExisting;
-////            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
+////            string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() +
 ////                    " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
-////            //string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
+////            //string sql = "Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where  isActive='Y' and VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() +
 ////            //       " and VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " and VAF_Org_ID=" + ctx.GetVAF_Org_ID(); added by  BY Sarab
 ////            DataSet ds = DB.ExecuteDataset(sql, null);
 ////            X_WSP_GmailConfiguration Configs = null;
@@ -258,7 +258,7 @@ namespace VIS.Models
 ////            }
 
 
-////            Configs.SetAD_User_ID(ctx.GetAD_User_ID());
+////            Configs.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
 ////            if (!Configs.Save())
 ////            {
 ////                return "false";
@@ -564,7 +564,7 @@ namespace VIS.Models
 //                ExistingdisplayAddress.Add(Addres);
 //                if (j < dsempdtls.Tables[0].Rows.Count - 1)
 //                {
-//                    if (dsempdtls.Tables[0].Rows[j]["AD_USER_ID"].ToString() == dsempdtls.Tables[0].Rows[j + 1]["AD_USER_ID"].ToString())//Check if next row contains same user,,If yes then insert that row's address in Current row...
+//                    if (dsempdtls.Tables[0].Rows[j]["VAF_USERCONTACT_ID"].ToString() == dsempdtls.Tables[0].Rows[j + 1]["VAF_USERCONTACT_ID"].ToString())//Check if next row contains same user,,If yes then insert that row's address in Current row...
 //                    {
 //                        j++;
 //                    }
@@ -610,10 +610,10 @@ namespace VIS.Models
 
 
 
-//            //sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM AD_user WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
-//            //    + " and  GMAIL_UID is not null and VAF_Org_ID in (" + strorg.ToString() + ") and createdby=" + ctx.GetAD_User_ID(); //by sarab
+//            //sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
+//            //    + " and  GMAIL_UID is not null and VAF_Org_ID in (" + strorg.ToString() + ") and createdby=" + ctx.GetVAF_UserContact_ID(); //by sarab
 
-//            sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM AD_user WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
+//            sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
 //                           + " and  GMAIL_UID is not null and VAF_Org_ID in (" + strorg.ToString() + ")";
 //            DataSet ds = DB.ExecuteDataset(sql, null);
 //            if (ds != null && ds.Tables[0].Rows.Count != 0)
@@ -624,18 +624,18 @@ namespace VIS.Models
 //                }
 //            }
 
-//            sql = @" SELECT Distinct AD_User.email  ,bp.Name As BPName,bp.C_BP_Group_ID,
-//                      AD_User.name         ,
-//                      AD_User.mobile       ,AD_User.phone,AD_User.phone2,AD_User.birthday,
-//                      AD_User.AD_User_ID   ,
-//                      AD_User.c_bpartner_id,
-//                      AD_User.GMAIL_UID,
+//            sql = @" SELECT Distinct VAF_UserContact.email  ,bp.Name As BPName,bp.C_BP_Group_ID,
+//                      VAF_UserContact.name         ,
+//                      VAF_UserContact.mobile       ,VAF_UserContact.phone,VAF_UserContact.phone2,VAF_UserContact.birthday,
+//                      VAF_UserContact.VAF_UserContact_ID   ,
+//                      VAF_UserContact.c_bpartner_id,
+//                      VAF_UserContact.GMAIL_UID,
 //                      bp.isemployee, bp.isvendor, bp.iscustomer, bp.c_bp_group_id,
 //                      cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
 //                                              cbl.C_Bpartner_Location_ID,CBL.c_location_ID 
-//                     FROM ad_user AD_User
+//                     FROM VAF_UserContact VAF_UserContact
 //                     Left outer JOIN c_bpartner BP
-//                     ON AD_User.c_bpartner_id=bp.c_bpartner_id
+//                     ON VAF_UserContact.c_bpartner_id=bp.c_bpartner_id
 //                     Left Outer JOIn c_bpartner_location CBL on bp.c_bpartner_id= cbl.c_bpartner_id 
 //                     Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
 //                     Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
@@ -643,9 +643,9 @@ namespace VIS.Models
 //                     Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id";
 
 
-//            //sql = MRole.GetDefault().AddAccessSQL(sql, "AD_User", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+//            //sql = MRole.GetDefault().AddAccessSQL(sql, "VAF_UserContact", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
-//            sql += " order by AD_User.AD_User_ID desc";
+//            sql += " order by VAF_UserContact.VAF_UserContact_ID desc";
 //            dsCheckExist = DB.ExecuteDataset(sql, null);
 
 //        }
@@ -660,7 +660,7 @@ namespace VIS.Models
 ////        {
 
 ////            mc.IsContactExist = true;
-////            mc.AD_User_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["AD_USER_ID"].ToString());
+////            mc.VAF_UserContact_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["VAF_USERCONTACT_ID"].ToString());
 ////            mc.BPartner_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["C_BPARTNER_ID"].ToString());
 ////            mc.UserUEmailID = dsCheckExist.Tables[0].Rows[j]["GMAIL_UID"].ToString();
 
@@ -902,9 +902,9 @@ namespace VIS.Models
 ////                        if (((MyContacts)objMyContact[i]).IsContactExist)
 ////                        {
 ////                            sql.Clear();
-////                            if (((MyContacts)objMyContact[i]).AD_User_ID != 0 && ((MyContacts)objMyContact[i]).AD_User_ID != null)
+////                            if (((MyContacts)objMyContact[i]).VAF_UserContact_ID != 0 && ((MyContacts)objMyContact[i]).VAF_UserContact_ID != null)
 ////                            {
-////                                MUser user = new MUser(ctx, ((MyContacts)objMyContact[i]).AD_User_ID, null);
+////                                MUser user = new MUser(ctx, ((MyContacts)objMyContact[i]).VAF_UserContact_ID, null);
 ////                                string re = insertORUpdateUser(ctx, user, i, Org_ID, objMyContact, trx, ref count);
 ////                                result.Append(re);
 ////                                if (re != "")
@@ -956,13 +956,13 @@ namespace VIS.Models
 ////                                        else
 ////                                        {
 ////                                            DateTime updatedTime = user.GetUpdated();
-////                                            int ID = user.GetAD_User_ID();
-////                                            string sql1 = "Update ad_user set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where ad_user_ID=" + ID;
+////                                            int ID = user.GetVAF_UserContact_ID();
+////                                            string sql1 = "Update VAF_UserContact set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAF_UserContact_ID=" + ID;
 ////                                            if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////                                            {
 ////                                                trx.Rollback();
 ////                                                trx.Close();
-////                                                result.Append("ad_user " + user.GetName() + " not Updated");
+////                                                result.Append("VAF_UserContact " + user.GetName() + " not Updated");
 ////                                                count--;
 ////                                                bpCount--;
 ////                                                continue;
@@ -1003,18 +1003,18 @@ namespace VIS.Models
 
 ////                        try
 ////                        {
-////                            //------------------ Create Location_ID from home Address for AD_user.C_Location---------------------------//
+////                            //------------------ Create Location_ID from home Address for VAF_UserContact.C_Location---------------------------//
 
 
 
 
-////                            //--------------Add AD_user---------------------//
+////                            //--------------Add VAF_UserContact---------------------//
 
 ////                            sql.Clear();
 ////                            MUser user = null;
 ////                            if (BP_ID != null && BP_ID != 0)
 ////                            {
-////                                sql.Append("SELECT AD_User_ID FROM aD_user WHERE c_bpartner_id=" + BP_ID + " and name ='" + ((MyContacts)objMyContact[i]).ContactName + "'");
+////                                sql.Append("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE c_bpartner_id=" + BP_ID + " and name ='" + ((MyContacts)objMyContact[i]).ContactName + "'");
 ////                                object userID = DB.ExecuteScalar(sql.ToString());
 ////                                if (userID != null && userID != DBNull.Value)
 ////                                {
@@ -1088,13 +1088,13 @@ namespace VIS.Models
 ////                                }
 
 ////                                DateTime updatedTime = user.GetUpdated();
-////                                int ID = user.GetAD_User_ID();
-////                                string sql1 = "Update ad_user set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where ad_user_ID=" + ID;
+////                                int ID = user.GetVAF_UserContact_ID();
+////                                string sql1 = "Update VAF_UserContact set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAF_UserContact_ID=" + ID;
 ////                                if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////                                {
 ////                                    trx.Rollback();
 ////                                    trx.Close();
-////                                    result.Append("ad_user " + user.GetName() + " not Updated");
+////                                    result.Append("VAF_UserContact " + user.GetName() + " not Updated");
 ////                                    count--;
 ////                                    bpCount--;
 ////                                    continue;
@@ -1170,20 +1170,20 @@ namespace VIS.Models
 ////        /// <returns></returns>
 ////        private string IsUserAunthicated(Ctx ctx)
 ////        {
-////            string sql = " SELECT AD_Window_ID FROM vaf_tableview WHERE upper(tablename)='C_BPARTNER'";
+////            string sql = " SELECT VAF_Screen_ID FROM vaf_tableview WHERE upper(tablename)='C_BPARTNER'";
 ////            DataSet ds = DB.ExecuteDataset(sql, null);
 ////            if (ds == null || ds.Tables[0].Rows.Count == 0)
 ////            {
 ////                return "NWF";
 ////            }
 ////            MRole role = new MRole(ctx, ctx.GetVAF_Role_ID(), null);
-////            if (ds.Tables[0].Rows[0]["AD_WINDOW_ID"] != null && ds.Tables[0].Rows[0]["AD_WINDOW_ID"].ToString() != "")
+////            if (ds.Tables[0].Rows[0]["VAF_SCREEN_ID"] != null && ds.Tables[0].Rows[0]["VAF_SCREEN_ID"].ToString() != "")
 ////            {
-////                if (role.GetWindowAccess(Util.GetValueOfInt(Util.GetValueOfString(ds.Tables[0].Rows[0]["AD_WINDOW_ID"]))) == null)
+////                if (role.GetWindowAccess(Util.GetValueOfInt(Util.GetValueOfString(ds.Tables[0].Rows[0]["VAF_SCREEN_ID"]))) == null)
 ////                {
 ////                    return "NA";
 ////                }
-////                if (!(bool)role.GetWindowAccess(Util.GetValueOfInt(Util.GetValueOfString(ds.Tables[0].Rows[0]["AD_WINDOW_ID"]))))
+////                if (!(bool)role.GetWindowAccess(Util.GetValueOfInt(Util.GetValueOfString(ds.Tables[0].Rows[0]["VAF_SCREEN_ID"]))))
 ////                {
 ////                    return "NA";
 ////                }
@@ -1410,7 +1410,7 @@ namespace VIS.Models
 ////            //}
 
 ////            sql.Clear();
-////            sql.Append("Update AD_user set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " WHERE    aD_User_ID=" + user.GetAD_User_ID());
+////            sql.Append("Update VAF_UserContact set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " WHERE    VAF_UserContact_ID=" + user.GetVAF_UserContact_ID());
 ////            if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////            {
 ////                trx.Rollback();
@@ -1528,7 +1528,7 @@ namespace VIS.Models
 ////            }
 
 
-////            //----------------- Update AD_user----------------------------------------\\
+////            //----------------- Update VAF_UserContact----------------------------------------\\
 ////            user.SetC_BPartner_ID(partner.GetC_BPartner_ID());
 ////            if (!user.Save(trx))
 ////            {
@@ -1542,13 +1542,13 @@ namespace VIS.Models
 ////            }
 
 ////            updatedTime = user.GetUpdated();
-////            ID = user.GetAD_User_ID();
-////            sql1 = "Update ad_user set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where ad_user_ID=" + ID;
+////            ID = user.GetVAF_UserContact_ID();
+////            sql1 = "Update VAF_UserContact set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAF_UserContact_ID=" + ID;
 ////            if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////            {
 ////                trx.Rollback();
 ////                trx.Close();
-////                result.Append("ad_user " + user.GetName() + " not Updated");
+////                result.Append("VAF_UserContact " + user.GetName() + " not Updated");
 ////                count--;
 ////                bpCount--;
 ////                // continue;
@@ -1844,7 +1844,7 @@ namespace VIS.Models
 //            {
 
 //                bool CanUpdateExiastingRecord = true;
-//                string sql = "SELECT WSP_GmailConfiguration_ID FROM WSP_GmailConfiguration WHERE WSP_GmailConfiguration.AD_USER_ID=" + ctx.GetAD_User_ID() + " and WSP_GmailConfiguration.isactive='Y' AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();// +" AND VAF_Org_ID=" + ctx.GetVAF_Org_ID();
+//                string sql = "SELECT WSP_GmailConfiguration_ID FROM WSP_GmailConfiguration WHERE WSP_GmailConfiguration.VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID() + " and WSP_GmailConfiguration.isactive='Y' AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();// +" AND VAF_Org_ID=" + ctx.GetVAF_Org_ID();
 //                // sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "WSP_GmailConfiguration", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
 //                Object gID = DB.ExecuteScalar(sql, null, null);
@@ -2188,7 +2188,7 @@ namespace VIS.Models
 //                                                    alreadyImported = true;
 
 //                                                    mc.ContactName = Util.GetValueOfString(dsempdtls.Tables[0].Rows[j]["NAME"]);
-//                                                    mc.AD_User_ID = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["AD_User_ID"]);
+//                                                    mc.VAF_UserContact_ID = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["VAF_UserContact_ID"]);
 //                                                    mc.IsContactExist = true;
 //                                                    //-----------------------------------
 
@@ -2341,21 +2341,21 @@ namespace VIS.Models
 //        private DataSet SetEmployeeDetails()
 //        {
 //            //            string sql = @"select usr.GMAIL_UID, bp.isemployee, bp.isvendor, bp.iscustomer, bp.c_bp_group_id,bp.c_bpartner_ID, bp.name as BPName,
-//            //                            usr.value from c_bpartner bp join AD_user usr on bp.c_bpartner_id= usr.c_bpartner_id where usr.GMAIL_UID is not null";
+//            //                            usr.value from c_bpartner bp join VAF_UserContact usr on bp.c_bpartner_id= usr.c_bpartner_id where usr.GMAIL_UID is not null";
 
-//            string sql = @"SELECT AD_user.GMAIL_UID, C_BPartner.isemployee, C_BPartner.isvendor, C_BPartner.iscustomer, C_BPartner.c_bp_group_id,C_BPartner.c_bpartner_ID, C_BPartner.name as BPName,
-//                          AD_user.AD_User_ID,       AD_user.value ,AD_user.name,
+//            string sql = @"SELECT VAF_UserContact.GMAIL_UID, C_BPartner.isemployee, C_BPartner.isvendor, C_BPartner.iscustomer, C_BPartner.c_bp_group_id,C_BPartner.c_bpartner_ID, C_BPartner.name as BPName,
+//                          VAF_UserContact.VAF_UserContact_ID,       VAF_UserContact.value ,VAF_UserContact.name,
 //                          cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
 //                          cbl.C_Bpartner_Location_ID,CBL.c_location_ID 
-//                          FROM c_bpartner C_BPartner right outer join AD_user AD_user on C_BPartner.c_bpartner_id= AD_user.c_bpartner_id 
+//                          FROM c_bpartner C_BPartner right outer join VAF_UserContact VAF_UserContact on C_BPartner.c_bpartner_id= VAF_UserContact.c_bpartner_id 
 //                          Left Outer JOIn c_bpartner_location CBL on C_BPartner.c_bpartner_id= cbl.c_bpartner_id 
 //                          Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
 //                          Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
 //                          Left outer JOIn c_city CCI on CCI.c_city_ID=cl.c_city_ID
 //                          Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id
-//                          WHERE AD_user.GMAIL_UID is not null ";
+//                          WHERE VAF_UserContact.GMAIL_UID is not null ";
 
-//            sql += " order by AD_user.AD_User_ID";
+//            sql += " order by VAF_UserContact.VAF_UserContact_ID";
 
 //            DataSet ds = DB.ExecuteDataset(sql, null);
 //            if (ds != null && ds.Tables[0].Rows.Count != 0)
@@ -3036,19 +3036,19 @@ namespace VIS.Models
             }
         }
 
-        private int ad_User_ID;
-        public int AD_User_ID
+        private int VAF_UserContact_ID;
+        public int VAF_UserContact_ID
         {
             get
             {
-                return ad_User_ID;
+                return VAF_UserContact_ID;
             }
             set
             {
-                if (value != ad_User_ID)
+                if (value != VAF_UserContact_ID)
                 {
-                    ad_User_ID = value;
-                    //NotifyProperty("AD_User_ID");
+                    VAF_UserContact_ID = value;
+                    //NotifyProperty("VAF_UserContact_ID");
                 }
             }
         }

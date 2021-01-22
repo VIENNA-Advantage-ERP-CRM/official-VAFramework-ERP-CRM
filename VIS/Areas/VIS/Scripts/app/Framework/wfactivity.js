@@ -104,8 +104,8 @@
                         if (result && result.length > 0) {
                             var windowExist = false;
                             for (var i = 0; i < result.length; i++) {
-                                $cmbWindows.append('<option value="' + result[i].AD_Window_ID + '_' + result[i].AD_Node_ID + '">' + result[i].WindowName + '</option>');
-                                if (result[i].AD_Window_ID + '_' + result[i].AD_Node_ID == winNideID) {
+                                $cmbWindows.append('<option value="' + result[i].VAF_Screen_ID + '_' + result[i].AD_Node_ID + '">' + result[i].WindowName + '</option>');
+                                if (result[i].VAF_Screen_ID + '_' + result[i].AD_Node_ID == winNideID) {
                                     windowExist = true;
                                 }
                             }
@@ -342,7 +342,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "WFActivity/GetActivities",
-                data: { pageNo: 1, pageSize: 10, refresh: true, searchText: $txtSearch.val(), "AD_Window_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
+                data: { pageNo: 1, pageSize: 10, refresh: true, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
                 dataType: "json",
                 type: "POST",
 
@@ -435,7 +435,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "WFActivity/GetActivities",
-                data: { pageNo: pageNo, pageSize: paeSize, refresh: refresh, searchText: $txtSearch.val(), "AD_Window_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
+                data: { pageNo: pageNo, pageSize: paeSize, refresh: refresh, searchText: $txtSearch.val(), "VAF_Screen_ID": windowID, "dateFrom": $dateFrom.val(), "dateTo": $dateTo.val(), "AD_Node_ID": nodeID },
                 dataType: "json",
                 type: "POST",
                 error: function () {
@@ -565,7 +565,7 @@
                 var divActions = $("<div class='vis-feedTitleBar'>");
 
                 // create checkbox to be added in header on workflow activities
-                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-right:5px" data-ids="' + data[item].AD_Window_ID + "_" + data[item].AD_Node_ID + "_" + data[item].AD_WF_Activity_ID + '" ></input>');
+                var chkSelect = $('<input class="wfActivity-selectchk" type="checkbox" style="float:left;margin-right:5px" data-ids="' + data[item].VAF_Screen_ID + "_" + data[item].AD_Node_ID + "_" + data[item].VAF_WFlow_Task_ID + '" ></input>');
 
                 var header = $("<h3>");
                 header.css('font-weight', 'normal');
@@ -645,7 +645,7 @@
                 dataIem.index = item;
 
                 dataIem.recordID = data[item].Record_ID;
-                dataIem.wfActivityID = data[item].AD_WF_Activity_ID;
+                dataIem.wfActivityID = data[item].VAF_WFlow_Task_ID;
 
                 dataItemDivs.push(dataIem);
 
@@ -793,7 +793,7 @@
                 data: {
                     activityID: wfActivityID,
                     nodeID: fulldata[index].AD_Node_ID,
-                    wfProcessID: fulldata[index].AD_WF_Process_ID
+                    wfProcessID: fulldata[index].VAF_WFlow_Handler_ID
                 },
                 error: function () {
                     //alert(VIS.Msg.getMsg('ErrorWhileGettingData'));
@@ -836,7 +836,7 @@
             lstDetailCtrls = [];
             detailCtrl.Index = index;
             var docnameval;
-            // var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/GetActivityInfo", { "activityID": wfActivityID, "nodeID": data[index].AD_Node_ID, "wfProcessID": data[index].AD_WF_Process_ID })).result;
+            // var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/GetActivityInfo", { "activityID": wfActivityID, "nodeID": data[index].AD_Node_ID, "wfProcessID": data[index].VAF_WFlow_Handler_ID })).result;
 
 
             divDetail.empty();
@@ -1018,7 +1018,7 @@
                 detailCtrl.Action = 'C';
             }
             else if (info.NodeAction == 'W') {
-                var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-window="' + info.AD_Window_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
+                var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-window="' + info.VAF_Screen_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
                 detailCtrl.AnswerCtrl = ansBtn;
                 liAInput.append(ansBtn);
                 ansBtn.on('click', function () {
@@ -1041,8 +1041,8 @@
             liAInput.append($("<p style='margin-bottom: 0'>").append(VIS.Msg.getMsg('Forward')));
 
             //Get User Lookup
-            var lookup = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "AD_User_ID", 0, false, null);
-            var txtb = new VIS.Controls.VTextBoxButton("AD_User_ID", false, false, true, VIS.DisplayType.Search, lookup);
+            var lookup = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "VAF_UserContact_ID", 0, false, null);
+            var txtb = new VIS.Controls.VTextBoxButton("VAF_UserContact_ID", false, false, true, VIS.DisplayType.Search, lookup);
             detailCtrl.FwdCtrl = txtb;
             txtb.getBtn();
 
@@ -1220,14 +1220,14 @@
         var zoom = function (index) {
 
             // vinay bhatt window id
-            VIS.AEnv.wfzoom(fulldata[index].VAF_TableView_ID, fulldata[index].Record_ID, fulldata[index].AD_WF_Activity_ID);
+            VIS.AEnv.wfzoom(fulldata[index].VAF_TableView_ID, fulldata[index].Record_ID, fulldata[index].VAF_WFlow_Task_ID);
             //
 
             /*
             //alert(index);
             //data[index].Record_ID;
 
-            var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + fulldata[index].VAF_TableView_ID;
+            var sql = "SELECT TableName, VAF_Screen_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + fulldata[index].VAF_TableView_ID;
 
 
             //var sql = "select ad_window_id from ad_window where name='Mail Configuration'";// Upper( name)=Upper('user' )
@@ -1267,7 +1267,7 @@
                             }
 
                             //var info = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
-                            //    { "activityID": fulldata[index].AD_WF_Activity_ID, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer })).result;
+                            //    { "activityID": fulldata[index].VAF_WFlow_Task_ID, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer })).result;
 
                             var activitIDs = "";
                             // if checkbox is selected, then join activity ID using comma splitter.
@@ -1280,14 +1280,14 @@
                                 }
                             }
                             else {
-                                activitIDs = fulldata[index].AD_WF_Activity_ID;
+                                activitIDs = fulldata[index].VAF_WFlow_Task_ID;
                             }
 
                             // set window ID of activity
-                            windowID = fulldata[index].AD_Window_ID;
+                            windowID = fulldata[index].VAF_Screen_ID;
 
                             VIS.dataContext.getJSONData(VIS.Application.contextUrl + "WFActivity/ApproveIt",
-                                { "activityID": activitIDs, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "AD_Window_ID": windowID }, function apprvoIt(info) {
+                                { "activityID": activitIDs, "nodeID": fulldata[index].AD_Node_ID, "txtMsg": msg, "fwd": fwdTo, "answer": answer, "VAF_Screen_ID": windowID }, function apprvoIt(info) {
 
                                     if (info.result == '') {
                                         //refresh
@@ -1383,10 +1383,10 @@
             }
         };
 
-        var ansBtnClick = function (index, AD_Window_ID, columnName) {
+        var ansBtnClick = function (index, VAF_Screen_ID, columnName) {
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(columnName, VIS.Query.prototype.EQUAL, fulldata[index].Record_ID);
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
         };
 
         this.clear = function () {

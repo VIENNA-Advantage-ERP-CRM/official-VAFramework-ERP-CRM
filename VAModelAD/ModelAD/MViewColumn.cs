@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MViewColumn
  * Purpose        : Database View Column Model
- * Class Used     : X_AD_ViewColumn
+ * Class Used     : X_VAF_DBViewColumn
  * Chronological    Development
  * Deepak           14-Jan-2010
   ******************************************************/
@@ -23,16 +23,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MViewColumn : X_AD_ViewColumn
+    public class MViewColumn : X_VAF_DBViewColumn
     {      
 	//private static long serialVersionUID = 1L;
     /// <summary>
     /// Standard Constructor	
     /// </summary>
     /// <param name="ctx">context</param>
-    /// <param name="AD_ViewColumn_ID">view</param>
+    /// <param name="VAF_DBViewColumn_ID">view</param>
     /// <param name="trxName">trx</param>    
-	public MViewColumn(Ctx ctx, int AD_ViewColumn_ID, Trx trxName):base(ctx, AD_ViewColumn_ID, trxName)
+	public MViewColumn(Ctx ctx, int VAF_DBViewColumn_ID, Trx trxName):base(ctx, VAF_DBViewColumn_ID, trxName)
 	{
 		
 	}
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
 	public MViewColumn (MViewComponent parent):this (parent.GetCtx(), 0, parent.Get_TrxName())
 	{		
 		SetClientOrg (parent);
-		SetAD_ViewComponent_ID (parent.GetAD_ViewComponent_ID());
+		SetVAF_DBViewElement_ID (parent.GetVAF_DBViewElement_ID());
 	}	//	MViewColumn
 
 	

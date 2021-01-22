@@ -35,8 +35,8 @@ namespace VAdvantage.Classes
             if (!Env.IsBaseLanguage(ctx, "VAF_Tab"))
                 sql = "SELECT * FROM VAF_Field_vt WHERE VAF_Tab_ID=@tabID"
                     + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
-            //if (AD_UserDef_Win_ID != 0)
-            //    sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
+            //if (VAF_UserCustom_Win_ID != 0)
+            //    sql += " AND VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID;
             sql += " ORDER BY IsDisplayed DESC, SeqNo";
             return sql;
         }

@@ -97,7 +97,7 @@ namespace ViennaAdvantage.Process
             extension = filename.Substring(ind, filename.Length - ind);
 
             int client = Util.GetValueOfInt(GetVAF_Client_ID());
-            int user = GetAD_User_ID();
+            int user = GetVAF_UserContact_ID();
 
             sql = "select VAF_TreeInfo_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
             int VAF_TreeInfo_id = 0;

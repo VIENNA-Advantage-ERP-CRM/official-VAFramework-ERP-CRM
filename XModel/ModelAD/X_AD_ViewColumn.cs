@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ViewColumn
+/** Generated Model for VAF_DBViewColumn
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ViewColumn : PO
+public class X_VAF_DBViewColumn : PO
 {
-public X_AD_ViewColumn (Context ctx, int AD_ViewColumn_ID, Trx trxName) : base (ctx, AD_ViewColumn_ID, trxName)
+public X_VAF_DBViewColumn (Context ctx, int VAF_DBViewColumn_ID, Trx trxName) : base (ctx, VAF_DBViewColumn_ID, trxName)
 {
-/** if (AD_ViewColumn_ID == 0)
+/** if (VAF_DBViewColumn_ID == 0)
 {
-SetAD_ViewColumn_ID (0);
-SetAD_ViewComponent_ID (0);
+SetVAF_DBViewColumn_ID (0);
+SetVAF_DBViewElement_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
 }
  */
 }
-public X_AD_ViewColumn (Ctx ctx, int AD_ViewColumn_ID, Trx trxName) : base (ctx, AD_ViewColumn_ID, trxName)
+public X_VAF_DBViewColumn (Ctx ctx, int VAF_DBViewColumn_ID, Trx trxName) : base (ctx, VAF_DBViewColumn_ID, trxName)
 {
-/** if (AD_ViewColumn_ID == 0)
+/** if (VAF_DBViewColumn_ID == 0)
 {
-SetAD_ViewColumn_ID (0);
-SetAD_ViewComponent_ID (0);
+SetVAF_DBViewColumn_ID (0);
+SetVAF_DBViewElement_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
 }
@@ -43,7 +43,7 @@ SetEntityType (null);	// U
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBViewColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_ViewColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_DBViewColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_ViewColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ViewColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_DBViewColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ViewColumn()
+static X_VAF_DBViewColumn()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389049098L;
 public static int Table_ID;
  // =935;
 
-/** TableName=AD_ViewColumn */
-public static String Table_Name="AD_ViewColumn";
+/** TableName=VAF_DBViewColumn */
+public static String Table_Name="VAF_DBViewColumn";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ViewColumn[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_DBViewColumn[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set View Column.
-@param AD_ViewColumn_ID Select column in View */
-public void SetAD_ViewColumn_ID (int AD_ViewColumn_ID)
+@param VAF_DBViewColumn_ID Select column in View */
+public void SetVAF_DBViewColumn_ID (int VAF_DBViewColumn_ID)
 {
-if (AD_ViewColumn_ID < 1) throw new ArgumentException ("AD_ViewColumn_ID is mandatory.");
-Set_ValueNoCheck ("AD_ViewColumn_ID", AD_ViewColumn_ID);
+if (VAF_DBViewColumn_ID < 1) throw new ArgumentException ("VAF_DBViewColumn_ID is mandatory.");
+Set_ValueNoCheck ("VAF_DBViewColumn_ID", VAF_DBViewColumn_ID);
 }
 /** Get View Column.
 @return Select column in View */
-public int GetAD_ViewColumn_ID() 
+public int GetVAF_DBViewColumn_ID() 
 {
-Object ii = Get_Value("AD_ViewColumn_ID");
+Object ii = Get_Value("VAF_DBViewColumn_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set View Component.
-@param AD_ViewComponent_ID Component (Select statement) of the view */
-public void SetAD_ViewComponent_ID (int AD_ViewComponent_ID)
+@param VAF_DBViewElement_ID Component (Select statement) of the view */
+public void SetVAF_DBViewElement_ID (int VAF_DBViewElement_ID)
 {
-if (AD_ViewComponent_ID < 1) throw new ArgumentException ("AD_ViewComponent_ID is mandatory.");
-Set_ValueNoCheck ("AD_ViewComponent_ID", AD_ViewComponent_ID);
+if (VAF_DBViewElement_ID < 1) throw new ArgumentException ("VAF_DBViewElement_ID is mandatory.");
+Set_ValueNoCheck ("VAF_DBViewElement_ID", VAF_DBViewElement_ID);
 }
 /** Get View Component.
 @return Component (Select statement) of the view */
-public int GetAD_ViewComponent_ID() 
+public int GetVAF_DBViewElement_ID() 
 {
-Object ii = Get_Value("AD_ViewComponent_ID");
+Object ii = Get_Value("VAF_DBViewElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -150,7 +150,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_ViewComponent_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_DBViewElement_ID().ToString());
 }
 /** Set DB Column Name.
 @param ColumnName Name of the column in the database */

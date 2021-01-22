@@ -84,7 +84,7 @@ namespace VAdvantage.ProcessEngine
                 return;
             SetVAF_Job_ID(process.GetVAF_Job_ID());
             SetRecord_ID(Record_ID);
-            SetAD_User_ID(process.GetCtx().GetAD_User_ID());
+            SetVAF_UserContact_ID(process.GetCtx().GetVAF_UserContact_ID());
 
             // PO Save below
             if (!Save())		//	need to save for parameters
@@ -112,7 +112,7 @@ namespace VAdvantage.ProcessEngine
         {
             SetVAF_Job_ID(VAF_Job_ID);
             SetRecord_ID(Record_ID);
-            SetAD_User_ID(ctx.GetAD_User_ID());
+            SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             SetIsProcessing(false);
         }
 

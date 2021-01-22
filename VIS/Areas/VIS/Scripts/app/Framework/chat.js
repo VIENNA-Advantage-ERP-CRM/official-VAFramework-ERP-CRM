@@ -124,8 +124,8 @@
 
 
                     if (data.subChat[chat].VAF_Image_ID == 0) {
-                        //str += "<img  data-uID='" + data.subChat[chat].AD_User_ID + "'  src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
-                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";                        
+                        //str += "<img  data-uID='" + data.subChat[chat].VAF_UserContact_ID + "'  src= '" + VIS.Application.contextUrl + "Areas/VIS/Images/Home/userAvatar.png'/>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].VAF_UserContact_ID + "'></i>";                        
 
                         ispic = true;
                     }
@@ -133,7 +133,7 @@
                         for (var a in data.userimages) {
                             if (data.userimages[a].VAF_Image_ID == data.subChat[chat].VAF_Image_ID && data.userimages[a].UserImg != "NoRecordFound" && data.userimages[a].UserImg != "FileDoesn'tExist") {
 
-                                str += '<img  data-uID="' + data.subChat[chat].AD_User_ID + '" src="' + VIS.Application.contextUrl + data.userimages[a].UserImg + '" />';
+                                str += '<img  data-uID="' + data.subChat[chat].VAF_UserContact_ID + '" src="' + VIS.Application.contextUrl + data.userimages[a].UserImg + '" />';
                                 ispic = true;
                                 break;
                             }
@@ -143,20 +143,20 @@
 
 
                     if (ispic == false) {
-                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].AD_User_ID + "'></i>";
+                        str += "<i class='fa fa-user' data-uID='" + data.subChat[chat].VAF_UserContact_ID + "'></i>";
                     }
 
 
                     str += '</div><div class="vis-chatdetailwrap"><div style="display: flex;">';
 
                     if (VIS.Application.isRTL) {
-                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '" class="vis-chatusername">';
+                        str += '<span data-uID="' + data.subChat[chat].VAF_UserContact_ID + '" class="vis-chatusername">';
                     }
                     else {
-                        str += '<span data-uID="' + data.subChat[chat].AD_User_ID + '" class="vis-chatusername">';
+                        str += '<span data-uID="' + data.subChat[chat].VAF_UserContact_ID + '" class="vis-chatusername">';
                     }
 
-                    if (VIS.Env.getCtx().getAD_User_ID() == data.subChat[chat].AD_User_ID) {
+                    if (VIS.Env.getCtx().getVAF_UserContact_ID() == data.subChat[chat].VAF_UserContact_ID) {
                         str += "Me";
                     }
                     else {

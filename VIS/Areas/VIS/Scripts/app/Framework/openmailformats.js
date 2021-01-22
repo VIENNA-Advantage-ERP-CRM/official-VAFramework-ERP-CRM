@@ -29,13 +29,13 @@
             //sql += "  VAF_TEXTTEMPLATE_ID,"
             //sql += "  nvl( UPDATED,sysdate)         as UPDATED  ,"
             //sql += "  UPDATEDBY         ,"
-            //sql += "  AD_Window_ID         ,"
+            //sql += "  VAF_Screen_ID         ,"
             //sql += "  nvl(ISDYNAMICCONTENT,'N') as ISDYNAMICCONTENT"
             //sql += "   FROM VAF_TextTemplate"
-            //sql += "   WHERE IsActive='Y' and (AD_Window_ID IS NULL ";
+            //sql += "   WHERE IsActive='Y' and (VAF_Screen_ID IS NULL ";
 
             //if (window_ID > 0) {
-            //    sql += " OR AD_Window_ID=" + window_ID;
+            //    sql += " OR VAF_Screen_ID=" + window_ID;
             //}
 
             //sql += ")";

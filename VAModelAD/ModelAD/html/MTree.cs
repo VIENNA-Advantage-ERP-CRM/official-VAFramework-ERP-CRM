@@ -142,12 +142,12 @@ namespace VAdvantage.Model
             this.onDemand = onDemand;
             this.windowNo = windowNO;
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -164,12 +164,12 @@ namespace VAdvantage.Model
             this.VAF_Tab_ID = VAF_Tab_ID;
             this.onDemand = onDemand;
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
 
@@ -187,12 +187,12 @@ namespace VAdvantage.Model
             this.VAF_Tab_ID = VAF_Tab_ID;
             m_editable = editable;
             currentNodeID = nodeid;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -209,12 +209,12 @@ namespace VAdvantage.Model
             this.VAF_Tab_ID = VAF_Tab_ID;
             m_editable = editable;
             currentNodeID = nodeid;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
 
@@ -274,12 +274,12 @@ namespace VAdvantage.Model
             : this(ctx, VAF_TreeInfo_ID, trxName)
         {
             m_editable = editable;
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             m_clientTree = clientTree;
-            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+            log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
                 + ", Editable=" + editable + ", OnClient=" + clientTree);
             //
-            LoadNodes(AD_User_ID);
+            LoadNodes(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -775,11 +775,11 @@ namespace VAdvantage.Model
                 sourceTable = "VAF_MenuConfig";
                 if (baseLang)
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.AD_Window_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.AD_Window_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
@@ -818,7 +818,7 @@ namespace VAdvantage.Model
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
                     sqlNode.Append(hasWhere ? " AND " : " WHERE ");
-                    sqlNode.Append("(VAF_MenuConfig.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE VAF_MenuConfig.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))")
+                    sqlNode.Append("(VAF_MenuConfig.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen w WHERE VAF_MenuConfig.VAF_Screen_ID=w.VAF_Screen_ID AND w.IsBetaFunctionality='N'))")
                         .Append(" AND (VAF_MenuConfig.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job p WHERE VAF_MenuConfig.VAF_Job_ID=p.VAF_Job_ID AND p.IsBetaFunctionality='N'))")
                         .Append(" AND (VAF_MenuConfig.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE VAF_MenuConfig.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N'))");
                 }
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
         /// <param name="orderClause">Order By clause</param>
         public void GetTreeNodes(Ctx ctx, string orderClause)
         {
-            LoadNodes(ctx.GetAD_User_ID(), orderClause);
+            LoadNodes(ctx.GetVAF_UserContact_ID(), orderClause);
         }
 
 
@@ -955,15 +955,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Load Nodes and Bar
         /// </summary>
-        /// <param name="AD_User_ID">user for tree bar</param>
-        private void LoadNodes(int AD_User_ID,string orderClause="")
+        /// <param name="VAF_UserContact_ID">user for tree bar</param>
+        private void LoadNodes(int VAF_UserContact_ID,string orderClause="")
         {
             ////  SQL for TreeNodes
             StringBuilder sql = new StringBuilder("SELECT "
                 + "tn.Node_ID,COALESCE(tn.Parent_ID, -1) AS Parent_ID,tn.SeqNo,tb.IsActive "
                 + "FROM ").Append(GetNodeTableName()).Append(" tn"
                 + " LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID"
-                + " AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=@userid) ");	//	#1
+                + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) ");	//	#1
 
             string tblName = MTable.GetTableName(p_ctx, GetVAF_TableView_ID());
             //on (mp.M_Product_ID= tn.Node_ID)
@@ -1049,7 +1049,7 @@ namespace VAdvantage.Model
                 GetNodeDetails();
                 //
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@userid", AD_User_ID);
+                param[0] = new SqlParameter("@userid", VAF_UserContact_ID);
                 param[1] = new SqlParameter("@treeId", GetVAF_TreeInfo_ID());
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
 
@@ -1276,7 +1276,7 @@ namespace VAdvantage.Model
         /// <returns>VTreeNode </returns>
         private VTreeNode GetNodeDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         {
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
             int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
             int AD_Workflow_ID = 0;
@@ -1309,7 +1309,7 @@ namespace VAdvantage.Model
                     //	Menu only
                     if (GetTreeType().Equals(TREETYPE_Menu) && !isSummary)
                     {
-                        AD_Window_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Screen_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
                         VAF_Job_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
@@ -1327,7 +1327,7 @@ namespace VAdvantage.Model
 
 
                         if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
-                            blnAccess = role.GetWindowAccess(AD_Window_ID);
+                            blnAccess = role.GetWindowAccess(VAF_Screen_ID);
                         else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
                         || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
                             blnAccess = role.GetProcessAccess(VAF_Job_ID);
@@ -1369,7 +1369,7 @@ namespace VAdvantage.Model
             if (retValue != null)
             {
                 // set VTreeNode ID's
-                retValue.AD_Window_ID = AD_Window_ID;
+                retValue.VAF_Screen_ID = VAF_Screen_ID;
                 retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.AD_Workflow_ID = AD_Workflow_ID;
@@ -1603,26 +1603,26 @@ namespace VAdvantage.Model
         //    _imgList = imgList;
         //    _itemClickHandler = source;
         //    m_editable = editable;
-        //    int AD_User_ID = ctx.GetAD_User_ID();
+        //    int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
         //    m_clientTree = clientTree;
-        //    log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", AD_User_ID=" + AD_User_ID
+        //    log.Info("VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID
         //        + ", Editable=" + editable + ", OnClient=" + clientTree);
         //    //
-        //    LoadStartMenu(AD_User_ID);
+        //    LoadStartMenu(VAF_UserContact_ID);
         //}
 
         /// <summary>
         /// Load Nodes and Bar
         /// </summary>
-        /// <param name="AD_User_ID">user for tree bar</param>
-        //private void LoadStartMenu(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID">user for tree bar</param>
+        //private void LoadStartMenu(int VAF_UserContact_ID)
         //{
         //    ////  SQL for TreeNodes
         //    StringBuilder sql = new StringBuilder("SELECT "
         //        + "tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive "
         //        + "FROM ").Append(GetNodeTableName()).Append(" tn"
         //        + " LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID"
-        //        + " AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=@userid) "	//	#1
+        //        + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) "	//	#1
         //        + "WHERE tn.VAF_TreeInfo_ID=@treeId");								//	#2
         //    if (!m_editable)
         //        sql.Append(" AND tn.IsActive='Y'");
@@ -1637,7 +1637,7 @@ namespace VAdvantage.Model
         //        GetNodeDetails();
         //        //
         //        SqlParameter[] param = new SqlParameter[2];
-        //        param[0] = new SqlParameter("@userid", AD_User_ID);
+        //        param[0] = new SqlParameter("@userid", VAF_UserContact_ID);
         //        param[1] = new SqlParameter("@treeId", GetVAF_TreeInfo_ID());
         //        //PreparedStatement pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
 
@@ -1812,7 +1812,7 @@ namespace VAdvantage.Model
         /// <returns>VTreeNode </returns>
         //private VToolStripMenuItem GetStartMenuDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         //{
-        //    int AD_Window_ID = 0;
+        //    int VAF_Screen_ID = 0;
         //    int VAF_Job_ID = 0;
         //    int VAF_Page_ID = 0;
         //    int AD_Workflow_ID = 0;
@@ -1845,7 +1845,7 @@ namespace VAdvantage.Model
         //            //	Menu only
         //            if (GetTreeType().Equals(TREETYPE_Menu) && !isSummary)
         //            {
-        //                AD_Window_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Screen_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
         //                VAF_Job_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
@@ -1863,7 +1863,7 @@ namespace VAdvantage.Model
 
 
         //                if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
-        //                    blnAccess = role.GetWindowAccess(AD_Window_ID);
+        //                    blnAccess = role.GetWindowAccess(VAF_Screen_ID);
         //                else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
         //                || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
         //                    blnAccess = role.GetProcessAccess(VAF_Job_ID);
@@ -1905,7 +1905,7 @@ namespace VAdvantage.Model
         //    if (retValue != null)
         //    {
         //        // set VTreeNode ID's
-        //        retValue.AD_Window_ID = AD_Window_ID;
+        //        retValue.VAF_Screen_ID = VAF_Screen_ID;
         //        retValue.VAF_Job_ID = VAF_Job_ID;
         //        retValue.VAF_Page_ID = VAF_Page_ID;
         //        retValue.AD_Workflow_ID = AD_Workflow_ID;

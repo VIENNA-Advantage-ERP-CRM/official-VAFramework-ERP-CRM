@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         //String sql = "SELECT * FROM A_Asset a "
         //    + "WHERE EXISTS (SELECT * FROM A_Asset_Group ag "	//	Tracking Assets
         //        + "WHERE a.A_Asset_Group_ID=ag.A_Asset_Group_ID AND ag.IsTrackIssues='Y')"
-        //    + " AND EXISTS (SELECT * FROM AD_User u "
+        //    + " AND EXISTS (SELECT * FROM VAF_UserContact u "
         //        + "WHERE (a.C_BPartner_ID=u.C_BPartner_ID OR a.C_BPartnerSR_ID=u.C_BPartner_ID)"
         //        + " AND u.EMail=@param1)"					//	#1 EMail
         //    + " AND (SerNo IS NULL OR SerNo=@param2)";	//	#2 Name

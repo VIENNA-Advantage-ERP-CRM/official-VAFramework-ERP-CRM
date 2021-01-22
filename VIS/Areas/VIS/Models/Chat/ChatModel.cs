@@ -194,8 +194,8 @@ namespace VIS.Models
                 if (!entry.IsActive() || !entry.IsConfidentialTypeValid(confidentialType))
                     continue;
                 //status for first chat
-                string sql = "SELECT au.name, aimg.VAF_Image_id FROM ad_user au LEFT OUTER JOIN VAF_Image aimg";
-                sql += " ON(au.VAF_Image_id= aimg.VAF_Image_id) where au.ad_user_id =" + entry.GetCreatedBy();
+                string sql = "SELECT au.name, aimg.VAF_Image_id FROM VAF_UserContact au LEFT OUTER JOIN VAF_Image aimg";
+                sql += " ON(au.VAF_Image_id= aimg.VAF_Image_id) where au.VAF_UserContact_id =" + entry.GetCreatedBy();
                 ds = DB.ExecuteDataset(sql, null);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -224,7 +224,7 @@ namespace VIS.Models
                     ChatData = entry.GetCharacterData(),
                     ChatDate = _createdDate,
                     VAF_Image_ID = imgID,
-                    AD_User_ID = entry.GetCreatedBy()
+                    VAF_UserContact_ID = entry.GetCreatedBy()
                 }
                 );
             }
@@ -333,7 +333,7 @@ namespace VIS.Models
         public Object ChatDate { get; set; }
         public string UserName { get; set; }
         public int VAF_Image_ID { get; set; }
-        public int AD_User_ID { get; set; }
+        public int VAF_UserContact_ID { get; set; }
     }
 
     public class UserImages

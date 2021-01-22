@@ -31,7 +31,7 @@ namespace VAdvantage.DBPort
 
         /// <summary>
         ///  Evaluate the clause.
-        ///  e.g.    tb.AD_User_ID(+)=?
+        ///  e.g.    tb.VAF_UserContact_ID(+)=?
         ///          f.VAF_Column_ID = c.VAF_Column_ID(+)
         /// </summary>
         /// <param name="joinClause">joinClause</param>
@@ -158,7 +158,7 @@ namespace VAdvantage.DBPort
 
         /// <summary>
         ///This Join is a condition of the first Join.
-        ///  e.g. tb.AD_User_ID(+)=?  or tb.AD_User_ID(+)='123'
+        ///  e.g. tb.VAF_UserContact_ID(+)=?  or tb.VAF_UserContact_ID(+)='123'
         /// </summary>
         /// <param name="first">first</param>
         /// <returns>true if condition</returns>

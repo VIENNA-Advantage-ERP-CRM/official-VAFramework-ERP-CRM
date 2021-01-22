@@ -283,7 +283,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	BP from EMail
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET (C_BPartner_ID,AD_User_ID)=(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u"
+                  + "SET (C_BPartner_ID,VAF_UserContact_ID)=(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE o.EMail=u.EMail AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
                   + "WHERE C_BPartner_ID IS NULL AND EMail IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -291,10 +291,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Fine("Set BP from EMail=" + no);
             //	BP from ContactName
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET (C_BPartner_ID,AD_User_ID)=(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u"
+                  + "SET (C_BPartner_ID,VAF_UserContact_ID)=(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
                   + "WHERE C_BPartner_ID IS NULL AND ContactName IS NOT NULL"
-                  + " AND EXISTS (SELECT Name FROM AD_User u WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
+                  + " AND EXISTS (SELECT Name FROM VAF_UserContact u WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from ContactName=" + no);
@@ -558,7 +558,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 || name.Equals(imp.GetName()))
                             {
                                 user = users[i];
-                                imp.SetAD_User_ID(user.GetAD_User_ID());
+                                imp.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                             }
                         }
                         if (user == null)
@@ -571,7 +571,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             user.SetEMail(imp.GetEMail());
                             user.SetPhone(imp.GetPhone());
                             if (user.Save())
-                                imp.SetAD_User_ID(user.GetAD_User_ID());
+                                imp.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                         }
                     }
                     imp.Save();
@@ -655,8 +655,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //	Ship Partner
                         order.SetC_BPartner_ID(imp.GetC_BPartner_ID());
                         order.SetC_BPartner_Location_ID(imp.GetC_BPartner_Location_ID());
-                        if (imp.GetAD_User_ID() != 0)
-                            order.SetAD_User_ID(imp.GetAD_User_ID());
+                        if (imp.GetVAF_UserContact_ID() != 0)
+                            order.SetVAF_UserContact_ID(imp.GetVAF_UserContact_ID());
                         //	Bill Partner
                         order.SetBill_BPartner_ID(imp.GetC_BPartner_ID());
                         order.SetBill_Location_ID(imp.GetBillTo_ID());
@@ -674,7 +674,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (imp.GetSalesRep_ID() != 0)
                             order.SetSalesRep_ID(imp.GetSalesRep_ID());
                         if (order.GetSalesRep_ID() == 0)
-                            order.SetSalesRep_ID(GetAD_User_ID());
+                            order.SetSalesRep_ID(GetVAF_UserContact_ID());
                         //
                         if (imp.GetVAF_OrgTrx_ID() != 0)
                             order.SetVAF_OrgTrx_ID(imp.GetVAF_OrgTrx_ID());

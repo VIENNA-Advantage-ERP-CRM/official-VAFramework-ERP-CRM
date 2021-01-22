@@ -1428,7 +1428,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
         /// <summary>
         /// Get Document Owner (Responsible)
         /// </summary>
-        /// <returns>AD_User_ID (Created)</returns>
+        /// <returns>VAF_UserContact_ID (Created)</returns>
         public int GetDoc_User_ID()
         {
             return GetCreatedBy();

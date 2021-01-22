@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WF_ActivityResult
+/** Generated Model for VAF_WFlow_TaskResult
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WF_ActivityResult : PO
+public class X_VAF_WFlow_TaskResult : PO
 {
-public X_AD_WF_ActivityResult (Context ctx, int AD_WF_ActivityResult_ID, Trx trxName) : base (ctx, AD_WF_ActivityResult_ID, trxName)
+public X_VAF_WFlow_TaskResult (Context ctx, int VAF_WFlow_TaskResult_ID, Trx trxName) : base (ctx, VAF_WFlow_TaskResult_ID, trxName)
 {
-/** if (AD_WF_ActivityResult_ID == 0)
+/** if (VAF_WFlow_TaskResult_ID == 0)
 {
-SetAD_WF_ActivityResult_ID (0);
-SetAD_WF_Activity_ID (0);
+SetVAF_WFlow_TaskResult_ID (0);
+SetVAF_WFlow_Task_ID (0);
 SetAttributeName (null);
 }
  */
 }
-public X_AD_WF_ActivityResult (Ctx ctx, int AD_WF_ActivityResult_ID, Trx trxName) : base (ctx, AD_WF_ActivityResult_ID, trxName)
+public X_VAF_WFlow_TaskResult (Ctx ctx, int VAF_WFlow_TaskResult_ID, Trx trxName) : base (ctx, VAF_WFlow_TaskResult_ID, trxName)
 {
-/** if (AD_WF_ActivityResult_ID == 0)
+/** if (VAF_WFlow_TaskResult_ID == 0)
 {
-SetAD_WF_ActivityResult_ID (0);
-SetAD_WF_Activity_ID (0);
+SetVAF_WFlow_TaskResult_ID (0);
+SetVAF_WFlow_Task_ID (0);
 SetAttributeName (null);
 }
  */
@@ -41,7 +41,7 @@ SetAttributeName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ActivityResult (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_TaskResult (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_WF_ActivityResult (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ActivityResult (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_TaskResult (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_WF_ActivityResult (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_ActivityResult (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_WFlow_TaskResult (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WF_ActivityResult()
+static X_VAF_WFlow_TaskResult()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389049223L;
 public static int Table_ID;
  // =650;
 
-/** TableName=AD_WF_ActivityResult */
-public static String Table_Name="AD_WF_ActivityResult";
+/** TableName=VAF_WFlow_TaskResult */
+public static String Table_Name="VAF_WFlow_TaskResult";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WF_ActivityResult[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_WFlow_TaskResult[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Workflow Activity Result.
-@param AD_WF_ActivityResult_ID Result of the Workflow Process Activity */
-public void SetAD_WF_ActivityResult_ID (int AD_WF_ActivityResult_ID)
+@param VAF_WFlow_TaskResult_ID Result of the Workflow Process Activity */
+public void SetVAF_WFlow_TaskResult_ID (int VAF_WFlow_TaskResult_ID)
 {
-if (AD_WF_ActivityResult_ID < 1) throw new ArgumentException ("AD_WF_ActivityResult_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_ActivityResult_ID", AD_WF_ActivityResult_ID);
+if (VAF_WFlow_TaskResult_ID < 1) throw new ArgumentException ("VAF_WFlow_TaskResult_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_TaskResult_ID", VAF_WFlow_TaskResult_ID);
 }
 /** Get Workflow Activity Result.
 @return Result of the Workflow Process Activity */
-public int GetAD_WF_ActivityResult_ID() 
+public int GetVAF_WFlow_TaskResult_ID() 
 {
-Object ii = Get_Value("AD_WF_ActivityResult_ID");
+Object ii = Get_Value("VAF_WFlow_TaskResult_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Activity.
-@param AD_WF_Activity_ID Workflow Activity */
-public void SetAD_WF_Activity_ID (int AD_WF_Activity_ID)
+@param VAF_WFlow_Task_ID Workflow Activity */
+public void SetVAF_WFlow_Task_ID (int VAF_WFlow_Task_ID)
 {
-if (AD_WF_Activity_ID < 1) throw new ArgumentException ("AD_WF_Activity_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_Activity_ID", AD_WF_Activity_ID);
+if (VAF_WFlow_Task_ID < 1) throw new ArgumentException ("VAF_WFlow_Task_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
 }
 /** Get Workflow Activity.
 @return Workflow Activity */
-public int GetAD_WF_Activity_ID() 
+public int GetVAF_WFlow_Task_ID() 
 {
-Object ii = Get_Value("AD_WF_Activity_ID");
+Object ii = Get_Value("VAF_WFlow_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_WF_Activity_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_WFlow_Task_ID().ToString());
 }
 /** Set Attribute Name.
 @param AttributeName Name of the Attribute */

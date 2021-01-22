@@ -562,7 +562,7 @@ namespace ViennaAdvantage.Process
             VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, null);
             inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-            inv.SetAD_User_ID(tExp.GetAD_User_ID());
+            inv.SetVAF_UserContact_ID(tExp.GetVAF_UserContact_ID());
             inv.SetC_BPartner_ID(tLine.GetC_BPartner_ID());
             inv.SetC_BPartner_Location_ID(C_BPartner_Location_ID);
             inv.SetC_Currency_ID(tLine.GetC_Currency_ID());

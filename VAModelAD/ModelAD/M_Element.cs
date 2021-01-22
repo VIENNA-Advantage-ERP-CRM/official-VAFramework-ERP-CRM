@@ -235,7 +235,7 @@ namespace VAdvantage.Model
 				.Append(" WHERE VAF_Column_ID IN (SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_ColumnDic_ID=")
 				.Append(Get_ID())
 				.Append(") AND IsCentrallyMaintained='Y'")
-				.Append(" AND VAF_Tab_ID IN (SELECT VAF_Tab_ID FROM VAF_Tab t INNER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID) WHERE t.VAF_ContextScope_ID IS NULL AND w.VAF_ContextScope_ID IS NULL)");
+				.Append(" AND VAF_Tab_ID IN (SELECT VAF_Tab_ID FROM VAF_Tab t INNER JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID) WHERE t.VAF_ContextScope_ID IS NULL AND w.VAF_ContextScope_ID IS NULL)");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("Fields updated #" + no);

@@ -43,7 +43,7 @@
 
 
     function ARequest(invoker, VAF_TableView_ID, Record_ID, C_BPartner_ID, iBusy, container) {
-        var AD_Window_ID = 232;
+        var VAF_Screen_ID = 232;
         var m_where = '';
         var window = null;
         var tab = null;
@@ -61,7 +61,7 @@
             m_where = "(VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + ")";
 
             if (VAF_TableView_ID == 114) {// MUser.Table_ID){
-                m_where += " OR AD_User_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
+                m_where += " OR VAF_UserContact_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 291) {//MBPartner.Table_ID){
                 m_where += " OR C_BPartner_ID=" + Record_ID;
@@ -147,7 +147,7 @@
 
             e.stopImmediatePropagation();
             //var vm=new VIS.viewManager();
-            window = VIS.viewManager.startWindow(AD_Window_ID, null);
+            window = VIS.viewManager.startWindow(VAF_Screen_ID, null);
             window.onLoad = function () {
                 var gc = window.cPanel.curGC;
 
@@ -168,7 +168,7 @@
                     if (VAF_TableView_ID == 291)// MBPartner.Table_ID)
                         tab.setValue("C_BPartner_ID", Record_ID);
                     else if (VAF_TableView_ID == 114)//MUser.Table_ID)
-                        tab.setValue("AD_User_ID", Record_ID);
+                        tab.setValue("VAF_UserContact_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 203)// MProject.Table_ID)
                         tab.setValue("C_Project_ID", Record_ID);
@@ -208,7 +208,7 @@
             e.stopImmediatePropagation();
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction("(" + m_where + ") AND Processed='N'");
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             var overlay = $('#w2ui-overlay');
             overlay.hide();
             overlay = null;
@@ -219,7 +219,7 @@
             e.stopImmediatePropagation();
             var zoomQuery = new VIS.Query();
             zoomQuery.addRestriction(m_where);
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             var overlay = $('#w2ui-overlay');
             overlay.hide();
             overlay = null;

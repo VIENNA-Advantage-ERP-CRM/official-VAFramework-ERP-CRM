@@ -62,7 +62,7 @@ namespace VAdvantage.Process
             if (_VAF_Tab_ID <= 0)
                 return Msg.GetMsg(GetCtx(), "TabNotFound");
 
-            int Ver_AD_Window_ID = 0;
+            int Ver_VAF_Screen_ID = 0;
             int Ver_VAF_Tab_ID = 0;
 
             // Created object of MTab with Tab ID (either selected from parameter or from Record ID)
@@ -84,35 +84,35 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "VerTableNotFound");
 
             // Get Display Name of Window linked with the tab
-            string displayName = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Window WHERE AD_Window_ID = " + tab.GetAD_Window_ID(), null, Get_TrxName())) + " Version";
+            string displayName = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_Screen WHERE VAF_Screen_ID = " + tab.GetVAF_Screen_ID(), null, Get_TrxName())) + " Version";
 
-            Ver_AD_Window_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE Name = '" + displayName + "_" + tab.GetName() + "'", null, Get_TrxName()));
+            Ver_VAF_Screen_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name = '" + displayName + "_" + tab.GetName() + "'", null, Get_TrxName()));
             // Check if Version window do not exist, then create new version window
-            if (Ver_AD_Window_ID <= 0)
+            if (Ver_VAF_Screen_ID <= 0)
             {
-                Ver_AD_Window_ID = CreateVerWindow(displayName, tab.GetName());
+                Ver_VAF_Screen_ID = CreateVerWindow(displayName, tab.GetName());
                 // if window not created then return message
-                if (Ver_AD_Window_ID <= 0)
+                if (Ver_VAF_Screen_ID <= 0)
                     return Msg.GetMsg(GetCtx(), "VersionWinNotCreated");
                 else
                     // Update Version Window ID on Version Table
-                    DB.ExecuteQuery("UPDATE VAF_TableView SET AD_Window_ID = " + Ver_AD_Window_ID + " WHERE  VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, Get_Trx());
+                    DB.ExecuteQuery("UPDATE VAF_TableView SET VAF_Screen_ID = " + Ver_VAF_Screen_ID + " WHERE  VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, Get_Trx());
             }
 
             // check access for Version window
-            int countAcc = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Role_ID) FROM AD_Window_Access WHERE AD_Window_ID = " + Ver_AD_Window_ID + " AND IsReadWrite = 'Y'", null, Get_Trx()));
+            int countAcc = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Role_ID) FROM VAF_Screen_Rights WHERE VAF_Screen_ID = " + Ver_VAF_Screen_ID + " AND IsReadWrite = 'Y'", null, Get_Trx()));
             if (countAcc <= 0)
             {
                 // Provide access to Version window, for the roles which parent (Master window) has
-                countAcc = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_Window_Access SET IsReadWrite = 'Y' WHERE AD_Window_ID = " + Ver_AD_Window_ID + @" 
-                            AND VAF_Role_ID IN (SELECT VAF_Role_ID FROM AD_Window_Access WHERE AD_Window_ID = " + tab.GetAD_Window_ID() + @"  AND IsReadWrite = 'Y')", null, Get_Trx()));
+                countAcc = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAF_Screen_Rights SET IsReadWrite = 'Y' WHERE VAF_Screen_ID = " + Ver_VAF_Screen_ID + @" 
+                            AND VAF_Role_ID IN (SELECT VAF_Role_ID FROM VAF_Screen_Rights WHERE VAF_Screen_ID = " + tab.GetVAF_Screen_ID() + @"  AND IsReadWrite = 'Y')", null, Get_Trx()));
             }
 
             // check for version tab
-            Ver_VAF_Tab_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Tab_ID FROM VAF_Tab WHERE AD_Window_ID = " + Ver_AD_Window_ID, null, Get_TrxName()));
+            Ver_VAF_Tab_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Tab_ID FROM VAF_Tab WHERE VAF_Screen_ID = " + Ver_VAF_Screen_ID, null, Get_TrxName()));
             // if version tab do not exist, then create new version tab
             if (Ver_VAF_Tab_ID <= 0)
-                Ver_VAF_Tab_ID = CreateVerTab(tab, Ver_AD_Window_ID, Ver_VAF_TableView_ID);
+                Ver_VAF_Tab_ID = CreateVerTab(tab, Ver_VAF_Screen_ID, Ver_VAF_TableView_ID);
             else
             {
                 MTab verTab = new MTab(GetCtx(), Ver_VAF_Tab_ID, Get_TrxName());
@@ -165,22 +165,22 @@ namespace VAdvantage.Process
                 return 0;
             }
             // Return Window ID
-            return verWnd.GetAD_Window_ID();
+            return verWnd.GetVAF_Screen_ID();
         }
 
         /// <summary>
         /// function to create tab against Version Window
         /// </summary>
         /// <param name="tab">Object of MTab</param>
-        /// <param name="ver_AD_Window_ID">Version Window ID</param>
+        /// <param name="ver_VAF_Screen_ID">Version Window ID</param>
         /// <param name="Ver_VAF_TableView_ID">Version Table ID</param>
         /// <returns>int (Version Tab ID)</returns>
-        private int CreateVerTab(MTab tab, int ver_AD_Window_ID, int Ver_VAF_TableView_ID)
+        private int CreateVerTab(MTab tab, int ver_VAF_Screen_ID, int Ver_VAF_TableView_ID)
         {
             MTab verTab = new MTab(GetCtx(), 0, Get_TrxName());
             // copy Master table tab to Version tab
             tab.CopyTo(verTab);
-            verTab.SetAD_Window_ID(ver_AD_Window_ID);
+            verTab.SetVAF_Screen_ID(ver_VAF_Screen_ID);
             verTab.SetVAF_TableView_ID(Ver_VAF_TableView_ID);
             verTab.SetIsReadOnly(true);
             verTab.SetIsSingleRow(true);
@@ -228,7 +228,7 @@ namespace VAdvantage.Process
                 tbPnl.SetVAF_Client_ID(tab.GetVAF_Client_ID());
                 tbPnl.SetVAF_Org_ID(tab.GetVAF_Org_ID());
                 tbPnl.SetVAF_Tab_ID(tab.GetVAF_Tab_ID());
-                tbPnl.SetAD_Window_ID(tab.GetAD_Window_ID());
+                tbPnl.SetVAF_Screen_ID(tab.GetVAF_Screen_ID());
                 tbPnl.SetClassname(className);
                 tbPnl.SetName(tab.GetName() + " " + Msg.GetMsg(GetCtx(), "VersionHistory"));
                 tbPnl.SetIsDefault(true);

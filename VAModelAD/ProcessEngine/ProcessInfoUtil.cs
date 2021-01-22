@@ -128,7 +128,7 @@ namespace VAdvantage.ProcessEngine
                                       ip.Info_To,
                                       i.VAF_Client_ID,
                                       i.VAF_Org_ID,
-                                      i.AD_User_ID,
+                                      i.VAF_UserContact_ID,
                                       NVL(PP.LOADRECURSIVEDATA,'N') as LOADRECURSIVEDATA,
                                      nvl(pp.ShowChildOfSelected,'N') as ShowChildOfSelected,nvl(pp.VAF_Control_Ref_ID,0) as VAF_Control_Ref_ID
                                     FROM VAF_JInstance_Para ip JOIN VAF_JInstance i ON (ip.VAF_JInstance_ID=i.VAF_JInstance_ID)
@@ -271,8 +271,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     if (pi.GetVAF_Client_ID() == null)
                         pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
-                    if (pi.GetAD_User_ID() == null)
-                        pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    if (pi.GetVAF_UserContact_ID() == null)
+                        pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 
@@ -473,7 +473,7 @@ namespace VAdvantage.ProcessEngine
             String sql = "SELECT p.ParameterName,"         			    	//  1
                    + " p.P_String,p.P_String_To, p.P_Number,p.P_Number_To,"    //  2/3 4/5
                    + " p.P_Date,p.P_Date_To, p.Info,p.Info_To, "               //  6/7 8/9
-                   + " i.VAF_Client_ID, i.VAF_Org_ID, i.AD_User_ID "				//	10..12
+                   + " i.VAF_Client_ID, i.VAF_Org_ID, i.VAF_UserContact_ID "				//	10..12
                 // +" p.P_Date_Time,p.P_Date_Time_To,p.P_Time, p.P_Time_To "
                    + "FROM VAF_JInstance_Para p"
                    + " INNER JOIN VAF_JInstance i ON (p.VAF_JInstance_ID=i.VAF_JInstance_ID) "
@@ -492,7 +492,7 @@ namespace VAdvantage.ProcessEngine
             //                                      ip.Info_To,
             //                                      i.VAF_Client_ID,
             //                                      i.VAF_Org_ID,
-            //                                      i.AD_User_ID,
+            //                                      i.VAF_UserContact_ID,
             //                                      ip.P_Date_Time,
             //                                      ip.P_Date_Time_To,
             //                                      ip.P_Time,
@@ -598,8 +598,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     if (pi.GetVAF_Client_ID() == null)
                         pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
-                    if (pi.GetAD_User_ID() == null)
-                        pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    if (pi.GetVAF_UserContact_ID() == null)
+                        pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 
@@ -687,8 +687,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     //if (pi.GetVAF_Client_ID() == null)
                     //    pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
-                    //if (pi.GetAD_User_ID() == null)
-                    //    pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
+                    //if (pi.GetVAF_UserContact_ID() == null)
+                    //    pi.SetVAF_UserContact_ID(int.Parse(dr[11].ToString()));
                 }
                 dr.Close();
 

@@ -43,8 +43,8 @@ namespace VIS.Models
         public List<UserInfo> GetUserInfo(string searchText, int sortBy, int pageNo, int pageSize)
         {
             List<UserInfo> uInfo = new List<UserInfo>();
-            int UserTableID = MTable.Get_Table_ID("AD_User");
-            int UserWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Window_ID from AD_Window WHERE Name='User'", null, null));
+            int UserTableID = MTable.Get_Table_ID("VAF_UserContact");
+            int UserWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='User'", null, null));
 
             if (!(bool)MRole.GetDefault(ctx).GetWindowAccess(UserWindowID))
             {
@@ -57,39 +57,39 @@ namespace VIS.Models
             }
 
 
-            string sql = @"SELECT AD_User.Name,
-                                      AD_User.Email,
-                                      AD_User.AD_User_ID,
-                                      AD_User.IsActive,
-                                      AD_User.VAF_Image_ID,
-                                        AD_User.VAF_Client_ID,
-                                        AD_User.VAF_Org_ID,
+            string sql = @"SELECT VAF_UserContact.Name,
+                                      VAF_UserContact.Email,
+                                      VAF_UserContact.VAF_UserContact_ID,
+                                      VAF_UserContact.IsActive,
+                                      VAF_UserContact.VAF_Image_ID,
+                                        VAF_UserContact.VAF_Client_ID,
+                                        VAF_UserContact.VAF_Org_ID,
                                       C_Country.Name as CName
-                                    FROM AD_User
+                                    FROM VAF_UserContact
                                     LEFT OUTER JOIN C_LOcation
-                                    ON AD_User.C_Location_ID=C_Location.C_Location_ID
+                                    ON VAF_UserContact.C_Location_ID=C_Location.C_Location_ID
                                     LEFT OUTER JOIN C_Country
                                     ON C_Country.C_Country_ID=C_Location.C_Country_ID WHERE IsLoginUser='Y' ";
             if (!String.IsNullOrEmpty(searchText))
             {
-                sql += " AND ( upper(AD_User.Value) like Upper('%" + searchText + "%') OR upper(AD_User.Name) like Upper('%" + searchText + "%')  OR  upper(AD_User.Email) like Upper('%" + searchText + "%'))";
+                sql += " AND ( upper(VAF_UserContact.Value) like Upper('%" + searchText + "%') OR upper(VAF_UserContact.Name) like Upper('%" + searchText + "%')  OR  upper(VAF_UserContact.Email) like Upper('%" + searchText + "%'))";
             }
-            sql += " ORDER BY  AD_User.IsActive desc";
+            sql += " ORDER BY  VAF_UserContact.IsActive desc";
 
             if (sortBy == -1 || sortBy == 1)
             {
-                sql += " , upper(AD_User.Name) ASC";
+                sql += " , upper(VAF_UserContact.Name) ASC";
             }
             else if (sortBy == 2)
             {
-                sql += " , upper(AD_User.Value) ASC";
+                sql += " , upper(VAF_UserContact.Value) ASC";
             }
             else if (sortBy == 3)
             {
-                sql += " , upper(AD_User.Email) ASC";
+                sql += " , upper(VAF_UserContact.Email) ASC";
             }
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_User", true, false);
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserContact", true, false);
 
             DataSet ds = DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
 
@@ -99,10 +99,10 @@ namespace VIS.Models
                 {
                     UserInfo userInfo = new UserInfo();
 
-                    userInfo.HasAccess = MRole.GetDefault(ctx).IsRecordAccess(UserTableID, Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]), true);
+                    userInfo.HasAccess = MRole.GetDefault(ctx).IsRecordAccess(UserTableID, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]), true);
                     userInfo.Username = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                     userInfo.Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]);
-                    userInfo.AD_UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    userInfo.VAF_UserContactID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
                     userInfo.VAF_OrgID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Org_ID"]);
                     userInfo.VAF_ClientID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Client_ID"]);
                     userInfo.Country = Convert.ToString(ds.Tables[0].Rows[i]["CName"]);
@@ -110,7 +110,7 @@ namespace VIS.Models
                     userInfo.UserWindowID = UserWindowID;
                     userInfo.IsActive = ds.Tables[0].Rows[i]["IsActive"].ToString() == "Y" ? true : false;
 
-                    userInfo.IsUpdate = MRole.GetDefault(ctx).CanUpdate(userInfo.VAF_ClientID, userInfo.VAF_OrgID, userInfo.UserTableID, userInfo.AD_UserID, false);
+                    userInfo.IsUpdate = MRole.GetDefault(ctx).CanUpdate(userInfo.VAF_ClientID, userInfo.VAF_OrgID, userInfo.UserTableID, userInfo.VAF_UserContactID, false);
 
                     if (ds.Tables[0].Rows[i]["VAF_Image_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_Image_ID"] != null && Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Image_ID"]) > 0)
                     {
@@ -138,47 +138,47 @@ namespace VIS.Models
         /// <summary>
         /// Set current user Active
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <returns></returns>
-        public int ActiveUser(int AD_User_ID)
+        public int ActiveUser(int VAF_UserContact_ID)
         {
-            return DB.ExecuteQuery("Update AD_User Set IsActive='Y' WHERE AD_User_ID=" + AD_User_ID, null, null);
+            return DB.ExecuteQuery("Update VAF_UserContact Set IsActive='Y' WHERE VAF_UserContact_ID=" + VAF_UserContact_ID, null, null);
         }
 
         /// <summary>
         /// Set current user inActive
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <returns></returns>
-        public int InActiveUser(int AD_User_ID)
+        public int InActiveUser(int VAF_UserContact_ID)
         {
-            return DB.ExecuteQuery("Update AD_User Set IsActive='N' WHERE AD_User_ID=" + AD_User_ID, null, null);
+            return DB.ExecuteQuery("Update VAF_UserContact Set IsActive='N' WHERE VAF_UserContact_ID=" + VAF_UserContact_ID, null, null);
         }
 
         /// <summary>
         /// Get all the roles of current User. if a role is assigned then it will be shown as checked otherwise unchecked
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public List<RolesInfo> GetRoleInfo(int AD_User_ID, string name)
+        public List<RolesInfo> GetRoleInfo(int VAF_UserContact_ID, string name)
         {
             List<RolesInfo> rInfo = new List<RolesInfo>();
 
-            int RoleWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Window_ID from AD_Window WHERE Name='Role'", null, null));
+            int RoleWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='Role'", null, null));
 
             if (!(bool)MRole.GetDefault(ctx).GetWindowAccess(RoleWindowID))
             {
                 return rInfo;
             }
 
-            int UserTableID = MTable.Get_Table_ID("AD_User");
+            int UserTableID = MTable.Get_Table_ID("VAF_UserContact");
             bool IsUpdate = true;
-            String sql = "SELECT VAF_Client_ID, vaf_org_ID from AD_User WHERE AD_User_ID=" + AD_User_ID;
+            String sql = "SELECT VAF_Client_ID, vaf_org_ID from VAF_UserContact WHERE VAF_UserContact_ID=" + VAF_UserContact_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                IsUpdate = MRole.GetDefault(ctx).CanUpdate(Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Client_ID"]), Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), UserTableID, AD_User_ID, false);
+                IsUpdate = MRole.GetDefault(ctx).CanUpdate(Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Client_ID"]), Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), UserTableID, VAF_UserContact_ID, false);
             }
 
 
@@ -192,10 +192,10 @@ namespace VIS.Models
             //            string sql = @"SELECT VAF_Role.VAF_Role_ID,
             //                          VAF_Role.Name
             //                        FROM VAF_Role
-            //                        JOIN ad_user_roles
+            //                        JOIN VAF_UserContact_Roles
             //
-            //                        on VAF_Role.VAF_Role_ID=ad_user_roles.VAF_Role_ID
-            //                    WHERE AD_User_Roles.IsActive='Y' AND VAF_Role.IsActive='Y' AND  AD_User_Roles.AD_User_ID=" + ctx.GetAD_User_ID();
+            //                        on VAF_Role.VAF_Role_ID=VAF_UserContact_Roles.VAF_Role_ID
+            //                    WHERE VAF_UserContact_Roles.IsActive='Y' AND VAF_Role.IsActive='Y' AND  VAF_UserContact_Roles.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
 
             if (name != null && name.Length > 0)
             {
@@ -220,7 +220,7 @@ namespace VIS.Models
                 }
 
 
-                sql = "Select VAF_Role_ID, IsActive from ad_user_roles where AD_User_ID=" + AD_User_ID;
+                sql = "Select VAF_Role_ID, IsActive from VAF_UserContact_Roles where VAF_UserContact_ID=" + VAF_UserContact_ID;
                 DataSet dsURoles = DB.ExecuteDataset(sql);
                 if (dsURoles != null && dsURoles.Tables[0].Rows.Count > 0)
                 {
@@ -248,13 +248,13 @@ namespace VIS.Models
         }
 
         /// <summary>
-        /// Set User's Role Active/InActive in AD_User_Roles if already exist. If not exist for current role and user then create new entry.
+        /// Set User's Role Active/InActive in VAF_UserContact_Roles if already exist. If not exist for current role and user then create new entry.
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="roles"></param>
-        public void UpdateUserRoles(int AD_User_ID, List<RolesInfo> roles)
+        public void UpdateUserRoles(int VAF_UserContact_ID, List<RolesInfo> roles)
         {
-            string sql = "SELECT isActive, VAF_Role_ID FROM AD_User_Roles WHERE AD_User_ID= " + AD_User_ID;
+            string sql = "SELECT isActive, VAF_Role_ID FROM VAF_UserContact_Roles WHERE VAF_UserContact_ID= " + VAF_UserContact_ID;
             DataSet ds = DB.ExecuteDataset(sql);
 
             StringBuilder setActive = new StringBuilder();
@@ -273,16 +273,16 @@ namespace VIS.Models
                             {
                                 setActive.Append(" OR ");
                             }
-                            setActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
+                            setActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID + ")");
                         }
                         else
                         {
-                            CreateNewUserRole(roles[i].VAF_Role_ID, AD_User_ID);
+                            CreateNewUserRole(roles[i].VAF_Role_ID, VAF_UserContact_ID);
                         }
                     }
                     else
                     {
-                        CreateNewUserRole(roles[i].VAF_Role_ID, AD_User_ID);
+                        CreateNewUserRole(roles[i].VAF_Role_ID, VAF_UserContact_ID);
                     }
                 }
                 else
@@ -294,7 +294,7 @@ namespace VIS.Models
                         {
                             setInActive.Append(" OR ");
                         }
-                        setInActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
+                        setInActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND VAF_UserContact_ID=" + VAF_UserContact_ID + ")");
                     }
                 }
 
@@ -302,11 +302,11 @@ namespace VIS.Models
 
             if (setActive.Length > 0)
             {
-                DB.ExecuteQuery("Update AD_User_Roles Set IsActive='Y' WHERE " + setActive.ToString(), null, null);
+                DB.ExecuteQuery("Update VAF_UserContact_Roles Set IsActive='Y' WHERE " + setActive.ToString(), null, null);
             }
             if (setInActive.Length > 0)
             {
-                DB.ExecuteQuery("Update AD_User_Roles Set IsActive='N' WHERE " + setInActive.ToString(), null, null);
+                DB.ExecuteQuery("Update VAF_UserContact_Roles Set IsActive='N' WHERE " + setInActive.ToString(), null, null);
             }
 
 
@@ -316,13 +316,13 @@ namespace VIS.Models
         /// Assign New Role to Current User.
         /// </summary>
         /// <param name="VAF_Role_ID"></param>
-        /// <param name="AD_User_ID"></param>
-        private void CreateNewUserRole(int VAF_Role_ID, int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        private void CreateNewUserRole(int VAF_Role_ID, int VAF_UserContact_ID)
         {
             MUserRoles role = new MUserRoles(ctx, 0, null);
             role.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
             role.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-            role.SetAD_User_ID(AD_User_ID);
+            role.SetVAF_UserContact_ID(VAF_UserContact_ID);
             role.SetVAF_Role_ID(VAF_Role_ID);
             role.Save();
         }
@@ -336,7 +336,7 @@ namespace VIS.Models
         public List<GroupInfo> GetGroupInfo(int VAF_Role_ID, string name)
         {
             List<GroupInfo> gInfo = new List<GroupInfo>();
-            int groupWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Window_ID from AD_Window WHERE Name='Group Rights'", null, null));
+            int groupWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='Group Rights'", null, null));
 
             if (MRole.GetDefault(ctx).GetWindowAccess(groupWindowID) == null || !(bool)MRole.GetDefault(ctx).GetWindowAccess(groupWindowID))
             {
@@ -503,7 +503,7 @@ namespace VIS.Models
         /// <param name="grantAccess"></param>
         private void ProvideWindowAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
-            string sql = "SELECT AD_Window_ID from VAF_Group_Window WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
+            string sql = "SELECT VAF_Screen_ID from VAF_Group_Window WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             List<int> groupWindowIDs = new List<int>();     // will contains all windows of group
             Dictionary<int, bool> roleWindowIDsDictinary = new Dictionary<int, bool>();     // this will contain all windows access for current role...
@@ -512,27 +512,27 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (ds.Tables[0].Rows[i]["AD_Window_ID"] != null && ds.Tables[0].Rows[i]["AD_Window_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Screen_ID"] != null && ds.Tables[0].Rows[i]["VAF_Screen_ID"] != DBNull.Value)
                     {
                         if (winIDs.Length > 0)
                         {
                             winIDs.Append(",");
                         }
-                        winIDs.Append(ds.Tables[0].Rows[i]["AD_Window_ID"].ToString());
-                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]));
+                        winIDs.Append(ds.Tables[0].Rows[i]["VAF_Screen_ID"].ToString());
+                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]));
                     }
                 }
 
                 groupWindowIDs.Sort();
 
                 // get windowsID from WIndow Access for current role and windows in group 
-                sql = "SELECT AD_Window_ID,IsReadWrite FROM AD_Window_Access WHERE VAF_Role_ID=" + VAF_Role_ID + " AND AD_Window_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT VAF_Screen_ID,IsReadWrite FROM VAF_Screen_Rights WHERE VAF_Role_ID=" + VAF_Role_ID + " AND VAF_Screen_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
+                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
                     }
                 }
 
@@ -547,11 +547,11 @@ namespace VIS.Models
                             //bool savenew = wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
+                                sql = "UPDATE VAF_Screen_Rights Set IsReadWrite='Y',IsActive='Y' WHERE VAF_Screen_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
+                                sql = "UPDATE VAF_Screen_Rights Set IsReadWrite='N',IsActive='N' WHERE VAF_Screen_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
 
@@ -565,7 +565,7 @@ namespace VIS.Models
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                         wAccess.SetVAF_Role_ID(VAF_Role_ID);
-                        wAccess.SetAD_Window_ID(groupWindowIDs[i]);
+                        wAccess.SetVAF_Screen_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         bool savenew = wAccess.Save();
                     }
@@ -806,22 +806,22 @@ namespace VIS.Models
         {
             WindowID wID = new WindowID();
 
-            DataSet ds = DB.ExecuteDataset("SELECT name,AD_Window_ID from AD_Window where Name  In ( 'User','Role', 'Group Rights')");
+            DataSet ds = DB.ExecuteDataset("SELECT name,VAF_Screen_ID from VAF_Screen where Name  In ( 'User','Role', 'Group Rights')");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     if ("User".Equals(ds.Tables[0].Rows[i]["Name"].ToString()))
                     {
-                        wID.UserWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]);
+                        wID.UserWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]);
                     }
                     else if ("Role".Equals(ds.Tables[0].Rows[i]["Name"].ToString()))
                     {
-                        wID.RoleWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]);
+                        wID.RoleWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]);
                     }
                     if ("Group Rights".Equals(ds.Tables[0].Rows[i]["Name"].ToString()))
                     {
-                        wID.GroupWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]);
+                        wID.GroupWindowID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]);
                     }
                 }
             }
@@ -856,7 +856,7 @@ namespace VIS.Models
 
 
             sql = @"SELECT AD_WIndow.Name FROM VAF_Group_Window  JOIN AD_WIndow
-                         ON VAF_Group_Window.AD_Window_ID=AD_Window.AD_Window_ID
+                         ON VAF_Group_Window.VAF_Screen_ID=VAF_Screen.VAF_Screen_ID
                          WHERE VAF_Group_Window.IsActive='Y' AND VAF_Group_Window.VAF_GroupInfo_ID=" + groupID + " ORDER BY AD_WIndow.Name";
 
             ds = DB.ExecuteDataset(sql);
@@ -1087,7 +1087,7 @@ namespace VIS.Models
     public class UserInfo
     {
         public string Username { get; set; }
-        public int AD_UserID { get; set; }
+        public int VAF_UserContactID { get; set; }
         public int VAF_OrgID { get; set; }
         public int VAF_ClientID { get; set; }
         public string Email { get; set; }

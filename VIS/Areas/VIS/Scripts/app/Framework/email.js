@@ -698,7 +698,7 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                //var sql = "Select AD_User_ID,email from ad_user where isEmail='Y' AND c_bpartner_ID=" + bpID[i];
+                //var sql = "Select VAF_UserContact_ID,email from VAF_UserContact where isEmail='Y' AND c_bpartner_ID=" + bpID[i];
                 //var ds = VIS.DB.executeDataSet(sql);
                 var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Email/GetUser", { "BPartner_ID": bpID[i] }, null);
                 var isBroken = false;
@@ -2035,7 +2035,7 @@
 
 
                 $bsyDiv[0].style.visibility = "visible";
-                var datainit = { mails: VIS.Utility.encodeText(mails), AD_User_ID: ctx.getAD_User_ID(), VAF_Client_ID: ctx.getVAF_Client_ID(), VAF_Org_ID: ctx.getVAF_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment), fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()), notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo) };
+                var datainit = { mails: VIS.Utility.encodeText(mails), VAF_UserContact_ID: ctx.getVAF_UserContact_ID(), VAF_Client_ID: ctx.getVAF_Client_ID(), VAF_Org_ID: ctx.getVAF_Org_ID(), attachment_ID: attachmentID, fileNamesFornNewAttach: JSON.stringify(filesforAttachmentforNewAttachment), fileNamesForopenFormat: JSON.stringify(filesforAttachmentforOpenFormat), mailFormat: VIS.Utility.encodeText($textAreakeno.value()), notify: wantNotification, strDocAttach: VIS.context.getContext("DocumentAttachViaEmail_" + self.windowNo) };
                 $.ajax({
                     url: VIS.Application.contextUrl + "Email/SendMail",
                     data: datainit,
@@ -2271,7 +2271,7 @@
         function open(e) {
             var openDailogshow = 0;
             openCallAgain = 0;
-            var mailformat = new VIS.Openmailformat(_curGC.gTab.getAD_Window_ID(), isEmail);
+            var mailformat = new VIS.Openmailformat(_curGC.gTab.getVAF_Screen_ID(), isEmail);
             getMailFormat = mailformat;
 
             if (!isEmail) {
@@ -2327,7 +2327,7 @@
 
                     }
 
-                    if (selectedRow.AD_Window_ID != null && selectedRow.AD_Window_ID != undefined && selectedRow.AD_Window_ID > 0) {
+                    if (selectedRow.VAF_Screen_ID != null && selectedRow.VAF_Screen_ID != undefined && selectedRow.VAF_Screen_ID > 0) {
                         saveForAllWindows = false;
                     }
                     else {
@@ -2400,7 +2400,7 @@
                 subject: VIS.Utility.encodeText($subject.val()),
                 text: VIS.Utility.encodeText($textAreakeno.value()),
                 saveforAll: saveForAllWindows,
-                AD_Window_ID: _curtab.getAD_Window_ID(),
+                VAF_Screen_ID: _curtab.getVAF_Screen_ID(),
                 folderName: folder,
                 attachmentID: attachmentID
             };

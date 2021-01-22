@@ -280,7 +280,7 @@
                         $.ajax({
                             url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultSearch",
                             dataType: "json",
-                            data: { VAF_Tab_ID: self.curTab.getVAF_Tab_ID(), VAF_TableView_ID: self.curTab.getVAF_TableView_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
+                            data: { VAF_Tab_ID: self.curTab.getVAF_Tab_ID(), VAF_TableView_ID: self.curTab.getVAF_TableView_ID(), VAF_UserContact_ID: self.ctx.getVAF_UserContact_ID(), VAF_UserSearch_ID: uQueryID },
                             success: function (data) {
 
                             },
@@ -960,9 +960,9 @@
             var sqlUserSearch = "VIS_116";
             var param = [];
             param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", self.curTab.getVAF_Tab_ID());
-            param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
+            param[1] = new VIS.DB.SqlParam("@VAF_UserContact_ID", self.ctx.getVAF_UserContact_ID());
             param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", self.curTab.getVAF_Tab_ID());
-            param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
+            param[3] = new VIS.DB.SqlParam("@VAF_UserContact_ID1", self.ctx.getVAF_UserContact_ID());
             param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", self.ctx.getVAF_Client_ID());
             param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", self.curTab.getVAF_Tab_ID());
             param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", self.curTab.getVAF_TableView_ID());
@@ -980,11 +980,11 @@
                     for (var i = 0; i < data.tables[0].rows.length; i++) {
 
                         if (data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] > 0) {
-                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
+                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
                             hasDefaultSearch = true;
                         }
                         else {
-                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"] });
+                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["VAF_UserSearch_id"] });
                         }
                     }
                 }
@@ -1919,7 +1919,7 @@
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
             if (window.VADMS) {
                 var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
+                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getVAF_Screen_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
                 frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.hideHeader(true);
@@ -1936,7 +1936,7 @@
 
             if (window.VADMS) {
                 // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
+                window.VADMS.uploaddocument(0, tis.curTab.getVAF_Screen_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
 
             }
             else {
@@ -1952,7 +1952,7 @@
                 frame.setTitle(VIS.Msg.getMsg("VADMS_Document"));
                 frame.hideHeader(true);
                 doc.setWindowNo(VIS.Env.getWindowNo());
-                doc.setWindowID(tis.curTab.getAD_Window_ID());
+                doc.setWindowID(tis.curTab.getVAF_Screen_ID());
                 doc.setTableID(tis.curTab.getVAF_TableView_ID());
                 doc.setRecordID(tis.curTab.getRecord_ID());
                 doc.setWindowName(tis.gridWindow.getName());
@@ -1972,7 +1972,7 @@
                 if (documentID.length > 0) {
                     var dataIn = {
                         docID: documentID,
-                        winID: tis.curTab.getAD_Window_ID(),
+                        winID: tis.curTab.getVAF_Screen_ID(),
                         tableID: tis.curTab.getVAF_TableView_ID(),
                         recID: tis.curTab.getRecord_ID()
                     };
@@ -2178,13 +2178,13 @@
             //  m_curWindowNo
             // Change by Lokesh Chauhan 18/05/2015
             var chkModule = false;
-            if (curTab.getAD_Window_ID() == 341 || curTab.getAD_Window_ID() == 170) {
+            if (curTab.getVAF_Screen_ID() == 341 || curTab.getVAF_Screen_ID() == 170) {
                 if (window.MMPM) {
-                    var vvcf = MMPM.Requisition.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
+                    var vvcf = MMPM.Requisition.prototype.create(curTab.getVAF_Screen_ID(), curTab.getRecord_ID());
                     chkModule = true;
                 }
                 else if (window.DTD001) {
-                    var vvcf = DTD001.Requisition.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
+                    var vvcf = DTD001.Requisition.prototype.create(curTab.getVAF_Screen_ID(), curTab.getRecord_ID());
                     chkModule = true;
                 }
             }
@@ -2214,7 +2214,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.StickerProduct.prototype.create(curTab.getAD_Window_ID(), curTab.getRecord_ID());
+                var vvcf = DTD001.StickerProduct.prototype.create(curTab.getVAF_Screen_ID(), curTab.getRecord_ID());
             }
             return;
         }
@@ -2222,7 +2222,7 @@
 
             if (window.DTD001) {
 
-                var vvcf = DTD001.MRProductSticker.create(curTab.getAD_Window_ID(), curTab.getRecord_ID(), curTab.getTabLevel());
+                var vvcf = DTD001.MRProductSticker.create(curTab.getVAF_Screen_ID(), curTab.getRecord_ID(), curTab.getTabLevel());
             }
             return;
         }
@@ -2230,7 +2230,7 @@
         //requested by Mohit ,Mukesh Arora
         else if (columnName.equals("BGT01_CreateLinePo")) {
             if (window.BGT01) {
-                BGT01.CreateLineMovement(curTab.getAD_Window_ID(), curTab.getVAF_Tab_ID(), curTab.getRecord_ID());
+                BGT01.CreateLineMovement(curTab.getVAF_Screen_ID(), curTab.getVAF_Tab_ID(), curTab.getRecord_ID());
             }
             return;
         }
@@ -2258,7 +2258,7 @@
             var ps = curTab.getValue("Posted");
             if (ps != null && ps == "Y") {
                 //get Current record orgID by window no
-                var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), curTab.getVAF_TableView_ID(), curTab.getRecord_ID(), curWindowNo, curTab.getAD_Window_ID());
+                var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), curTab.getVAF_TableView_ID(), curTab.getRecord_ID(), curWindowNo, curTab.getVAF_Screen_ID());
                 if (obj != null) {
                     aPanel.setBusy(false);
                     obj.showDialog();
@@ -2282,7 +2282,7 @@
                             }
                             if (window.FRPT && postingByNewLogic) {
                                 var orgID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "VAF_Org_ID"));
-                                var winID = curTab.getAD_Window_ID();
+                                var winID = curTab.getVAF_Screen_ID();
                                 var docTypeID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "C_DocType_ID"));
                                 var postObj = FRPT.PostingLogic(curWindowNo, curTab.getVAF_TableView_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID);
                                 curGC.dataRefresh();
@@ -2341,7 +2341,7 @@
             ////	Mail Defaults
             //String title = getTitle();
             //String to = null;
-            //Object oo = m_curTab.getValue("AD_User_ID");
+            //Object oo = m_curTab.getValue("VAF_UserContact_ID");
             //if (oo instanceof Integer)
             //{
             //    MUser user = new MUser(Env.getCtx (), ((Integer)oo).intValue (), null);
@@ -2487,9 +2487,9 @@
         if (title == null || title.length == 0)
             title = columnName;
         var pi = new VIS.ProcessInfo(title, vButton.getProcess_ID(), table_ID, record_ID);
-        pi.setAD_User_ID(ctx.getAD_User_ID());
+        pi.setVAF_UserContact_ID(ctx.getVAF_UserContact_ID());
         pi.setVAF_Client_ID(ctx.getVAF_Client_ID());
-        pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
+        pi.setVAF_Screen_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.VAF_Screen_ID));// vinay bhatt window id
         pi.setIsBatch(batch);
         pi.setIsBackground(isbackground);
         //start process
@@ -2841,9 +2841,9 @@
 
         var param = [];
         param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", this.curTab.getVAF_Tab_ID());
-        param[1] = new VIS.DB.SqlParam("@AD_User_ID", this.ctx.getAD_User_ID());
+        param[1] = new VIS.DB.SqlParam("@VAF_UserContact_ID", this.ctx.getVAF_UserContact_ID());
         param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", this.curTab.getVAF_Tab_ID());
-        param[3] = new VIS.DB.SqlParam("@AD_User_ID1", this.ctx.getAD_User_ID());
+        param[3] = new VIS.DB.SqlParam("@VAF_UserContact_ID1", this.ctx.getVAF_UserContact_ID());
         param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", this.ctx.getVAF_Client_ID());
         param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", this.curTab.getVAF_Tab_ID());
         param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", this.curTab.getVAF_TableView_ID());
@@ -3665,7 +3665,7 @@
         //var table_ID = this.curTab.getVAF_TableView_ID();
         //var record_ID = this.curTab.getRecord_ID();
         //var pi = new VIS.ProcessInfo('Print', VAF_Job_ID, table_ID, record_ID);        
-        //pi.setAD_User_ID(VIS.context.getAD_User_ID());
+        //pi.setVAF_UserContact_ID(VIS.context.getVAF_UserContact_ID());
         //pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
 
         //pctrl.process(this.curWindowNo);
@@ -3748,7 +3748,7 @@
             self.curTab.loadSubscribe();
             self.aSubscribe.setPressed(self.curTab.HasSubscribed());
         };
-        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getAD_Window_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
+        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getVAF_Screen_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
     };
 
     APanel.prototype.cmd_ImportMap = function () {
@@ -3759,7 +3759,7 @@
                 return;
             }
 
-            var excel = new VDIU.ImportExcel(this.curTab.getAD_Window_ID(), this.gridWindow.getName());
+            var excel = new VDIU.ImportExcel(this.curTab.getVAF_Screen_ID(), this.gridWindow.getName());
             var c = new VIS.CFrame();
             c.setName(VIS.Msg.getMsg("Import"));
             c.setTitle(VIS.Msg.getMsg("Import"));
@@ -3802,17 +3802,17 @@
     APanel.prototype.cmd_history = function () {
         var atHistory = null;
         var c_Bpartner_ID = 0;
-        var AD_User_ID = 0;
+        var VAF_UserContact_ID = 0;
         if (Object.keys(this.curGC.getColumnNames()).indexOf("C_BPartner_ID") > 0 || (this.curTab.getField("C_BPartner_ID") != null && this.curTab.getField("C_BPartner_ID").getValue() > 0)) {
             c_Bpartner_ID = this.curTab.getField("C_BPartner_ID").getValue();
             //atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curTab.getField("C_BPartner_ID").getValue());
         }
 
-        if (Object.keys(this.curGC.getColumnNames()).indexOf("AD_User_ID") > 0 || (this.curTab.getField("AD_User_ID") != null && this.curTab.getField("AD_User_ID").getValue() > 0)) {
-            AD_User_ID = this.curTab.getField("AD_User_ID").getValue();
+        if (Object.keys(this.curGC.getColumnNames()).indexOf("VAF_UserContact_ID") > 0 || (this.curTab.getField("VAF_UserContact_ID") != null && this.curTab.getField("VAF_UserContact_ID").getValue() > 0)) {
+            VAF_UserContact_ID = this.curTab.getField("VAF_UserContact_ID").getValue();
         }
 
-        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, AD_User_ID, this.curTab.getKeyColumnName());
+        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, VAF_UserContact_ID, this.curTab.getKeyColumnName());
 
         atHistory.show();
     };
@@ -3915,11 +3915,11 @@
                 else
                     query.addRestriction(link, VIS.Query.prototype.EQUAL, VIS.context.getContext(this.curWindowNo, link));
             }
-            //AZoomAcross zoom = new AZoomAcross(aZoomAcross.GetDropDownButton(), _curTab.GetTableName(), query, _curTab.GetAD_Window_ID());
-            var zoom = new VIS.AZoomAcross(this.aZoomAcross, this.curTab.getTableName(), query, this.curTab.getAD_Window_ID(), this, this.aZoomAcross.getListItmIT(), link, Record_ID);
+            //AZoomAcross zoom = new AZoomAcross(aZoomAcross.GetDropDownButton(), _curTab.GetTableName(), query, _curTab.GetVAF_Screen_ID());
+            var zoom = new VIS.AZoomAcross(this.aZoomAcross, this.curTab.getTableName(), query, this.curTab.getVAF_Screen_ID(), this, this.aZoomAcross.getListItmIT(), link, Record_ID);
             zoom.init();
 
-            //zoom.ShowPopup(bnavZoomAcross, _curTab.GetTableName(), query, windowV0.AD_Window_ID);
+            //zoom.ShowPopup(bnavZoomAcross, _curTab.GetTableName(), query, windowV0.VAF_Screen_ID);
 
             //zoom = null;
         }

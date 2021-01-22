@@ -31,7 +31,7 @@ namespace VIS.Helpers
                                   (
                                   CASE
                                     WHEN o.Action = 'W'
-                                    THEN o.AD_Window_ID
+                                    THEN o.VAF_Screen_ID
                                     WHEN o.Action='P'
                                     OR o.Action  ='R'
                                     THEN o.VAF_Job_ID
@@ -75,7 +75,7 @@ namespace VIS.Helpers
 
             sql.Append(" WHERE o.VAF_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
 
-            sql.Append(@"AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM Ad_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+            sql.Append(@"AND (o.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen_Rights w WHERE w.VAF_Screen_ID=o.VAF_Screen_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.ad_form_id=o.VAF_Page_ID AND f.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_id=o.VAF_Job_ID AND p.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))");
             sql.Append("  ORDER BY SeqNo");
@@ -312,7 +312,7 @@ namespace VIS.Helpers
                                   AND o.IsActive         ='Y'
                                   AND o.IsChild          = 'Y'
                                  AND o.Parent_ID =  " + VAF_Shortcut_ID + @"
-                        AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen_Rights w WHERE w.VAF_Screen_ID=o.VAF_Screen_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_ID=o.VAF_Page_ID AND f.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_ID=o.VAF_Job_ID AND p.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         ORDER BY SeqNo";

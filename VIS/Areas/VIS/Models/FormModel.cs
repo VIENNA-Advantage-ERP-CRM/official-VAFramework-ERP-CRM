@@ -28,7 +28,7 @@ namespace VIS.Models
 
             if (VAF_TableView_ID == 114)
             {// MUser.Table_ID){
-                m_where += " OR AD_User_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
+                m_where += " OR VAF_UserContact_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 291)
             {//MBPartner.Table_ID){
@@ -225,12 +225,12 @@ namespace VIS.Models
         /// <param name="targetWhereClause">Where Clause in the format "Record_ID=<value>"</param>
         /// <param name="isSOTrx">Sales contex of window from where zoom is invoked</param>
         /// <returns>PO_zoomWindow_ID</returns>
-        public int GetZoomAD_Window_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx)
+        public int GetZoomVAF_Screen_ID(string targetTableName, int curWindow_ID, string targetWhereClause, bool isSOTrx)
         {
             int zoomWindow_ID = 0;
             int PO_zoomWindow_ID = 0;
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT AD_Window_ID, PO_Window_ID "
+            string sql = "SELECT DISTINCT VAF_Screen_ID, PO_Window_ID "
                 + "FROM VAF_TableView t "
                 + "WHERE TableName ='" + targetTableName + "'";
             IDataReader dr = null;
@@ -242,7 +242,7 @@ namespace VIS.Models
                 dr = DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    zoomWindow_ID = Util.GetValueOfInt(dr["AD_Window_ID"].ToString());
+                    zoomWindow_ID = Util.GetValueOfInt(dr["VAF_Screen_ID"].ToString());
                     if (dr["PO_Window_ID"] != null && dr["PO_Window_ID"].ToString().Length > 0)
                         PO_zoomWindow_ID = Util.GetValueOfInt(dr["PO_Window_ID"].ToString());
                 }
@@ -256,25 +256,25 @@ namespace VIS.Models
                     dr.Close();
                 }
                 // fill error log
-                //VAdvantage.Common.ErrorLog.FillErrorLog("ZoomTarget.GetZoomAD_Window_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                //VAdvantage.Common.ErrorLog.FillErrorLog("ZoomTarget.GetZoomVAF_Screen_ID", GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
             }
 
 
             if (PO_zoomWindow_ID == 0)
                 return zoomWindow_ID;
 
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
 
             if (targetWhereClause != null && targetWhereClause.Length != 0)
             {
                 List<KeyNamePair> zoomList = new List<KeyNamePair>();
                 zoomList = ZoomTarget.GetZoomTargets(targetTableName, curWindow_ID, targetWhereClause, _ctx);
                 if (zoomList != null && zoomList.Count > 0)
-                    AD_Window_ID = zoomList[0].GetKey();
+                    VAF_Screen_ID = zoomList[0].GetKey();
             }
-            if (AD_Window_ID != 0)
+            if (VAF_Screen_ID != 0)
             {
-                return AD_Window_ID;
+                return VAF_Screen_ID;
             }
 
             if (isSOTrx)
@@ -308,29 +308,29 @@ namespace VIS.Models
             #endregion
 
             // Find windows where the first tab is based on the table
-            string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                    "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+            string sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+                    "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
                 + "FROM VAF_TableView t "
                 + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
             bool baseLanguage = Env.IsBaseLanguage(ctx, "");// GlobalVariable.IsBaseLanguage();
             if (baseLanguage)
             {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+                sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+                sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+                    + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
+                sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
+                sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
+                    + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
             }
             sql += "WHERE t.TableName ='" + targetTableName
-                + "' AND w.AD_Window_ID <>" + curWindow_ID
+                + "' AND w.VAF_Screen_ID <>" + curWindow_ID
                 + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
+                + " AND (wp.VAF_Screen_ID IS NOT NULL "
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
 
@@ -424,7 +424,7 @@ namespace VIS.Models
                             if (EvaluateWhereClause(columnValues, windowList[i].whereClause))
                             {
                                 //log.Fine("MatchFound : " + windowList[i].windowName);
-                                KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
+                                KeyNamePair pp = new KeyNamePair(windowList[i].VAF_Screen_ID, windowList[i].windowName);
                                 zoomList.Add(pp);
                                 // Use first window found. Ideally there should be just one matching
                                 //this break is remove by karan on 18 jan 2021, to show a record which can exist in more than one window.
@@ -458,7 +458,7 @@ namespace VIS.Models
 
         public int GetWorkflowWindowID(int VAF_TableView_ID)
         {
-            object windowID = DB.ExecuteScalar("SELECT AD_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID);
+            object windowID = DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID);
             if (windowID != null && windowID != DBNull.Value)
             {
                 return Convert.ToInt32(windowID);
@@ -469,7 +469,7 @@ namespace VIS.Models
         public List<JTable> GetZoomWindowID(int VAF_TableView_ID)
         {
             SqlParamsIn sqlP = new SqlParamsIn();
-            sqlP.sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
+            sqlP.sql = "SELECT TableName, VAF_Screen_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
 
             VIS.Helpers.SqlHelper help = new Helpers.SqlHelper();
             return help.ExecuteJDataSet(sqlP);
@@ -477,28 +477,28 @@ namespace VIS.Models
 
         public List<JTable> GetZoomTargetClass(Ctx ctx, string targetTableName, int curWindow_ID)
         {
-            string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
-                              "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
+            string sql = "SELECT DISTINCT w.VAF_Screen_ID, w.Name, tt.WhereClause, t.TableName, " +
+                              "wp.VAF_Screen_ID, wp.Name, ws.VAF_Screen_ID, ws.Name "
                           + "FROM VAF_TableView t "
                           + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
-            var baseLanguage = Env.IsBaseLanguage(ctx, "AD_Window");
+            var baseLanguage = Env.IsBaseLanguage(ctx, "VAF_Screen");
             if (baseLanguage)
             {
-                sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
-                sql += " LEFT OUTER JOIN AD_Window ws ON (t.AD_Window_ID=ws.AD_Window_ID)"
-                    + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
+                sql += "INNER JOIN VAF_Screen w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID)";
+                sql += " LEFT OUTER JOIN VAF_Screen ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID)"
+                    + " LEFT OUTER JOIN VAF_Screen wp ON (t.PO_Window_ID=wp.VAF_Screen_ID)";
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language=@para1)";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language=@para2)"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language=@para3)";
+                sql += "INNER JOIN VAF_Screen_TL w ON (tt.VAF_Screen_ID=w.VAF_Screen_ID AND w.VAF_Language=@para1)";
+                sql += " LEFT OUTER JOIN VAF_Screen_TL ws ON (t.VAF_Screen_ID=ws.VAF_Screen_ID AND ws.VAF_Language=@para2)"
+                    + " LEFT OUTER JOIN VAF_Screen_TL wp ON (t.PO_Window_ID=wp.VAF_Screen_ID AND wp.VAF_Language=@para3)";
             }
             sql += "WHERE t.TableName = @para4"
-                + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
+                + " AND w.VAF_Screen_ID <> @para5 AND w.isActive='Y'"
                 + " AND tt.SeqNo=10"
-                + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
+                + " AND (wp.VAF_Screen_ID IS NOT NULL "
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.VAF_Screen_ID = ws.VAF_Screen_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
             List<SqlParams> param = new List<SqlParams>();
@@ -560,7 +560,7 @@ namespace VIS.Models
             }
             else if (_columnName.Equals("SalesRep_ID"))
             {
-                sql += "SELECT AD_User_ID FROM AD_User WHERE UPPER(Name) LIKE ";
+                sql += "SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE UPPER(Name) LIKE ";
                 sql += DB.TO_STRING(text);
             }
             return sql;
@@ -642,32 +642,32 @@ namespace VIS.Models
             return help.ExecuteJDataSet(sqlP);
         }
 
-        public string GetDocWhere(int AD_User_ID, string TableName)
+        public string GetDocWhere(int VAF_UserContact_ID, string TableName)
         {
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
             + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-            + " WHERE u.AD_User_ID="
-            + AD_User_ID
+            + " WHERE u.VAF_UserContact_ID="
+            + VAF_UserContact_ID
             + " AND bp.C_BPartner_ID="
             + TableName
             + ".C_BPartner_ID)"
-            + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+            + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
             + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-            + " WHERE u.AD_User_ID="
-            + AD_User_ID
+            + " WHERE u.VAF_UserContact_ID="
+            + VAF_UserContact_ID
             + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
             var hasUserColumn = false;
             var sql1 = "SELECT count(*) FROM VAF_TableView t "
                 + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE t.tableName='" + TableName
-                + "' AND c.ColumnName='AD_User_ID' ";
+                + "' AND c.ColumnName='VAF_UserContact_ID' ";
 
             int ret = Util.GetValueOfInt(DB.ExecuteScalar(docAccess));
             hasUserColumn = ret > 0 ? true : false;
 
             if (hasUserColumn)
-                docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+                docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
             docAccess += ")";
             return docAccess;
         }
@@ -790,11 +790,11 @@ namespace VIS.Models
             }
             if (ServerValues.IsPLock)
             {
-                sqlArray.Add("SELECT Record_ID FROM VAF_Private_Rights WHERE AD_User_ID=" + ServerValues.AD_User_ID + " AND VAF_TableView_ID=" + ServerValues.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID");
+                sqlArray.Add("SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND VAF_TableView_ID=" + ServerValues.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID");
             }
             if (ServerValues.IsSubscribeRecord)
             {
-                sqlArray.Add("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where AD_User_ID=" + ServerValues.AD_User_ID + " AND vaf_tableview_ID=" + ServerValues.VAF_TableView_ID);
+                sqlArray.Add("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND vaf_tableview_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsViewDocument)
             {
@@ -841,7 +841,7 @@ namespace VIS.Models
                     sql.Append("UPDATE " + tableName + " SET " + columnSortName + "=0");
                     if (columnYesNoName != null)
                         sql.Append("," + columnYesNoName + "='N'");
-                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetAD_User_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
+                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
                     MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
@@ -856,7 +856,7 @@ namespace VIS.Models
                     sql.Append("UPDATE " + tableName + " SET " + columnSortName + "=" + (yesCount + 1) + "0");	//	10 steps
                     if (columnYesNoName != null)
                         sql.Append("," + columnYesNoName + "='Y'");
-                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetAD_User_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
+                    sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
                     MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),

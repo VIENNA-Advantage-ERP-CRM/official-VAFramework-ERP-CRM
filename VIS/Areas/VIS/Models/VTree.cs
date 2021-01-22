@@ -77,7 +77,7 @@ namespace VAdvantage.Classes
             .Append(" tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive ")
             .Append(" FROM " + GetTableName() + "  tn")
             .Append(" LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID")
-            .Append(" AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=" + ctx.GetAD_User_ID() + ") ")	//	#1
+            .Append(" AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + ") ")	//	#1
             .Append(" WHERE tn.VAF_TreeInfo_ID=" + VAF_TreeInfo_ID);
             
             if (!_editable)
@@ -234,7 +234,7 @@ namespace VAdvantage.Classes
 
         private VTreeNode GetNodeDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         {
-            int AD_Window_ID = 0;
+            int VAF_Screen_ID = 0;
             int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
             int AD_Workflow_ID = 0;
@@ -279,7 +279,7 @@ namespace VAdvantage.Classes
                     if (treeType == TreeType.MM)
                     {
                         actionColor = dr[index++].ToString();
-                        AD_Window_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Screen_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
                         VAF_Job_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
@@ -294,7 +294,7 @@ namespace VAdvantage.Classes
                         MRole role = MRole.GetDefault(ctx);
                         if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
                         {
-                            blnAccess = role.GetWindowAccess(AD_Window_ID);
+                            blnAccess = role.GetWindowAccess(VAF_Screen_ID);
                         }
                         else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
                                 || VTreeNode.ACTION_REPORT.Equals(actionColor))
@@ -334,7 +334,7 @@ namespace VAdvantage.Classes
             if (retValue != null && treeType == TreeType.MM)
             {
                 // set VTreeNode ID's
-                retValue.AD_Window_ID = AD_Window_ID;
+                retValue.VAF_Screen_ID = VAF_Screen_ID;
                 retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.AD_Workflow_ID = AD_Workflow_ID;
@@ -393,8 +393,8 @@ namespace VAdvantage.Classes
                     //+ " AND (r.IsAccessAllOrgs='Y' "
                     //    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
                     //        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
-                    //    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
-                    //        + "WHERE ua.AD_User_ID=" + ctx.GetAD_User_ID + " AND ua.IsActive='Y'))"
+                    //    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                    //        + "WHERE ua.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID + " AND ua.IsActive='Y'))"
                     //    + ") "
                     + "ORDER BY o.VAF_ORG_ID";
             }
@@ -404,13 +404,13 @@ namespace VAdvantage.Classes
                  bool isBase = Utility.Env.IsBaseLanguage(ctx, "VAF_MENUCONFIG");
                  if (isBase)
                  {
-                     strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.AD_Window_ID,
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
                        m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                        FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
-                     strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.AD_Window_ID,
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
                         m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                       FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
@@ -419,7 +419,7 @@ namespace VAdvantage.Classes
                      strSql += " m.IsActive='Y' AND ";
                  }
                  strSql += @" 
-                       (m.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))
+                       (m.VAF_Screen_ID IS NULL OR EXISTS (SELECT * FROM VAF_Screen w WHERE m.VAF_Screen_ID=w.VAF_Screen_ID AND w.IsBetaFunctionality='N'))
                        AND 
                        (m.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID AND p.IsBetaFunctionality='N')) 
                        AND 
@@ -534,11 +534,11 @@ namespace VAdvantage.Classes
         public bool SaveNodeToBar(int iNodeId)
         {
             bool blnReturn = true;
-            string strSql = @"Insert into VAF_TreeInfoBar (VAF_CLIENT_ID, VAF_ORG_ID, VAF_TreeInfo_ID, AD_USER_ID, 
+            string strSql = @"Insert into VAF_TreeInfoBar (VAF_CLIENT_ID, VAF_ORG_ID, VAF_TreeInfo_ID, VAF_USERCONTACT_ID, 
                              CREATEDBY, ISACTIVE, NODE_ID,UPDATEDBY) 
                              values (" + ctx.GetVAF_Client_ID() + "," + ctx.GetVAF_Org_ID() + @",
-                                     " + _VAF_TreeInfo_ID + "," + ctx.GetAD_User_ID() + "," + ctx.GetAD_User_ID() + @",
-                                    " + "'Y'," + iNodeId.ToString() + "," + ctx.GetAD_User_ID() + ")";
+                                     " + _VAF_TreeInfo_ID + "," + ctx.GetVAF_UserContact_ID() + "," + ctx.GetVAF_UserContact_ID() + @",
+                                    " + "'Y'," + iNodeId.ToString() + "," + ctx.GetVAF_UserContact_ID() + ")";
             try
             {
 
@@ -627,7 +627,7 @@ namespace VAdvantage.Classes
         {
             bool blnReturn = true;
             string strSql = @"Delete from VAF_TreeInfoBar Where " +
-                             " VAF_TreeInfo_ID = " + _VAF_TreeInfo_ID + " and AD_USER_ID=" + ctx.GetAD_User_ID() + " and  NODE_ID=" + strNodeId;
+                             " VAF_TreeInfo_ID = " + _VAF_TreeInfo_ID + " and VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID() + " and  NODE_ID=" + strNodeId;
             try
             {
                 SqlExec.ExecuteQuery.ExecuteNonQuery(strSql);
@@ -658,7 +658,7 @@ namespace VAdvantage.Classes
     //           //if (getTreeType().equals(TREETYPE_Menu) && !isSummary)
     //           //{
 
-    //           AD_Window_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : int.Parse(dt.Rows[i][index].ToString());
+    //           VAF_Screen_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : int.Parse(dt.Rows[i][index].ToString());
     //           index++;
     //           VAF_Job_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
@@ -677,7 +677,7 @@ namespace VAdvantage.Classes
 
     //               if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
     //               {
-    //                   blnAccess = VAF_ROLE.GetWindowAccess(AD_Window_ID);
+    //                   blnAccess = VAF_ROLE.GetWindowAccess(VAF_Screen_ID);
     //               }
     //               else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
     //                       || VTreeNode.ACTION_REPORT.Equals(actionColor))

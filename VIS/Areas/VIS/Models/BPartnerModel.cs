@@ -114,7 +114,7 @@ namespace VIS.Models
                 _pLocation = _partner.GetLocation(
                     Env.GetCtx().GetContextAsInt(WinNo, "C_BPartner_Location_ID"));
                 _user = _partner.GetContact(
-                   Env.GetCtx().GetContextAsInt(WinNo, "AD_User_ID"));
+                   Env.GetCtx().GetContextAsInt(WinNo, "VAF_UserContact_ID"));
             }
 
             isCustomer = _partner.IsCustomer();
@@ -259,7 +259,7 @@ namespace VIS.Models
         public int GetBPartnerID(int userID)
         {
             int c_BPartner_ID = 0;
-            string sqlQuery = "select c_bpartner_id from ad_user where ad_user_id =" + userID;
+            string sqlQuery = "select c_bpartner_id from VAF_UserContact where VAF_UserContact_id =" + userID;
             c_BPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
             return c_BPartner_ID;
         }
@@ -271,7 +271,7 @@ namespace VIS.Models
         public int GetCOrderID(int userID)
         {
             int c_Order_ID = 0;
-            string sqlQuery = "select C_ORDER_ID from C_ORDER where ad_user_id =" + userID;
+            string sqlQuery = "select C_ORDER_ID from C_ORDER where VAF_UserContact_id =" + userID;
             c_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
             return c_Order_ID;
         }
@@ -448,10 +448,10 @@ namespace VIS.Models
             _partner.SetIsCustomer(isSOTrx);
             _partner.SetIsVendor(!isSOTrx);
             // JID_1197 IN Business partner  updating Createdby,Updatedby,Created,Updated fields as per changed date
-            _partner.Set_ValueNoCheck("CreatedBy", ctx.GetAD_User_ID());
+            _partner.Set_ValueNoCheck("CreatedBy", ctx.GetVAF_UserContact_ID());
             _partner.Set_ValueNoCheck("Created", DateTime.Now);
             _partner.Set_ValueNoCheck("Updated", DateTime.Now);
-            _partner.Set_ValueNoCheck("UpdatedBy", ctx.GetAD_User_ID());
+            _partner.Set_ValueNoCheck("UpdatedBy", ctx.GetVAF_UserContact_ID());
             if (BPtype != null && (!isCustomer && !isVendor))
             {
                 if (BPtype.Contains("Customer"))
@@ -641,13 +641,13 @@ namespace VIS.Models
                 {
                     if (fileUrl != null && fileUrl != string.Empty)
                     {
-                        _user.SetVAF_Image_ID(SaveUserImage(ctx, fileUrl, _user.GetAD_User_ID()));
+                        _user.SetVAF_Image_ID(SaveUserImage(ctx, fileUrl, _user.GetVAF_UserContact_ID()));
                     }
                     if (_user.Save())
                     {
-                        log.Fine("AD_User_ID(VAF_Image_ID)=" + _user.GetAD_User_ID() + "(" + _user.GetVAF_Image_ID() + ")");
+                        log.Fine("VAF_UserContact_ID(VAF_Image_ID)=" + _user.GetVAF_UserContact_ID() + "(" + _user.GetVAF_Image_ID() + ")");
                     }
-                    log.Fine("AD_User_ID=" + _user.GetAD_User_ID());
+                    log.Fine("VAF_UserContact_ID=" + _user.GetVAF_UserContact_ID());
                 }
                 else
                 {
@@ -731,7 +731,7 @@ namespace VIS.Models
         /// <returns></returns>
         public int GetWindowID(string windowName)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_WINDOW_ID FROM AD_WINDOW WHERE NAME='" + windowName + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_SCREEN_ID FROM VAF_SCREEN WHERE NAME='" + windowName + "' AND ISACTIVE='Y'", null, null));
 
         }
         /// <summary>
@@ -741,7 +741,7 @@ namespace VIS.Models
         /// <returns></returns>
         public int GetUserID(int C_BPartner_ID)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_USER_ID FROM AD_USER WHERE C_BPARTNER_ID='" + C_BPartner_ID + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE C_BPARTNER_ID='" + C_BPartner_ID + "' AND ISACTIVE='Y'", null, null));
 
         }
 

@@ -194,63 +194,63 @@ namespace ViennaAdvantage.Model
         ///<summary>
         /// SetWorkflow Activity
         ///</summary>
-        ///<param name="AD_WF_Activity_ID">Workflow Activity</param>
-        public void SetAD_WF_Activity_ID(int AD_WF_Activity_ID)
+        ///<param name="VAF_WFlow_Task_ID">Workflow Activity</param>
+        public void SetVAF_WFlow_Task_ID(int VAF_WFlow_Task_ID)
         {
-            if (AD_WF_Activity_ID <= 0) Set_Value("AD_WF_Activity_ID", null);
+            if (VAF_WFlow_Task_ID <= 0) Set_Value("VAF_WFlow_Task_ID", null);
             else
-                Set_Value("AD_WF_Activity_ID", AD_WF_Activity_ID);
+                Set_Value("VAF_WFlow_Task_ID", VAF_WFlow_Task_ID);
         }
 
         ///<summary>
         /// GetWorkflow Activity
         ///</summary>
         ///<returns> Workflow Activity</returns>
-        public int GetAD_WF_Activity_ID()
+        public int GetVAF_WFlow_Task_ID()
         {
-            Object ii = Get_Value("AD_WF_Activity_ID");
+            Object ii = Get_Value("VAF_WFlow_Task_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetWorkflow Event Audit
         ///</summary>
-        ///<param name="AD_WF_EventAudit_ID">Workflow Process Activity Event Audit Information</param>
-        public void SetAD_WF_EventAudit_ID(int AD_WF_EventAudit_ID)
+        ///<param name="VAF_WFlow_EventLog_ID">Workflow Process Activity Event Audit Information</param>
+        public void SetVAF_WFlow_EventLog_ID(int VAF_WFlow_EventLog_ID)
         {
-            if (AD_WF_EventAudit_ID <= 0) Set_Value("AD_WF_EventAudit_ID", null);
+            if (VAF_WFlow_EventLog_ID <= 0) Set_Value("VAF_WFlow_EventLog_ID", null);
             else
-                Set_Value("AD_WF_EventAudit_ID", AD_WF_EventAudit_ID);
+                Set_Value("VAF_WFlow_EventLog_ID", VAF_WFlow_EventLog_ID);
         }
 
         ///<summary>
         /// GetWorkflow Event Audit
         ///</summary>
         ///<returns> Workflow Process Activity Event Audit Information</returns>
-        public int GetAD_WF_EventAudit_ID()
+        public int GetVAF_WFlow_EventLog_ID()
         {
-            Object ii = Get_Value("AD_WF_EventAudit_ID");
+            Object ii = Get_Value("VAF_WFlow_EventLog_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 
         ///<summary>
         /// SetWorkflow Process
         ///</summary>
-        ///<param name="AD_WF_Process_ID">Actual Workflow Process Instance</param>
-        public void SetAD_WF_Process_ID(int AD_WF_Process_ID)
+        ///<param name="VAF_WFlow_Handler_ID">Actual Workflow Process Instance</param>
+        public void SetVAF_WFlow_Handler_ID(int VAF_WFlow_Handler_ID)
         {
-            if (AD_WF_Process_ID <= 0) Set_Value("AD_WF_Process_ID", null);
+            if (VAF_WFlow_Handler_ID <= 0) Set_Value("VAF_WFlow_Handler_ID", null);
             else
-                Set_Value("AD_WF_Process_ID", AD_WF_Process_ID);
+                Set_Value("VAF_WFlow_Handler_ID", VAF_WFlow_Handler_ID);
         }
 
         ///<summary>
         /// GetWorkflow Process
         ///</summary>
         ///<returns> Actual Workflow Process Instance</returns>
-        public int GetAD_WF_Process_ID()
+        public int GetVAF_WFlow_Handler_ID()
         {
-            Object ii = Get_Value("AD_WF_Process_ID");
+            Object ii = Get_Value("VAF_WFlow_Handler_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 

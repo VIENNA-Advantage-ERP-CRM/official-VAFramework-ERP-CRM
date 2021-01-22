@@ -31,7 +31,7 @@ namespace VIS.Controllers
             string res = "";
             try
             {
-                //string clientName = ctx.GetVAF_Org_Name() + "_" + ctx.GetAD_User_Name();
+                //string clientName = ctx.GetVAF_Org_Name() + "_" + ctx.GetVAF_UserContact_Name();
                 //string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
                 //storedPath += clientName;
                 //VLogMgt.Initialize(true, storedPath);

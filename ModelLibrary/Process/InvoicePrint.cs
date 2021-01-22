@@ -153,11 +153,11 @@ namespace VAdvantage.Process
 			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MInvoice
 			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.VAF_Print_Rpt_Layout_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
-			+ " bpc.AD_User_ID, i.DocumentNo,"										//	6..7
+			+ " bpc.VAF_UserContact_ID, i.DocumentNo,"										//	6..7
 			+ " bp.C_BPartner_ID "													//	8
 			+ "FROM C_Invoice i"
 			+ " INNER JOIN C_BPartner bp ON (i.C_BPartner_ID=bp.C_BPartner_ID)"
-			+ " LEFT OUTER JOIN AD_User bpc ON (i.AD_User_ID=bpc.AD_User_ID)"
+			+ " LEFT OUTER JOIN VAF_UserContact bpc ON (i.VAF_UserContact_ID=bpc.VAF_UserContact_ID)"
 			+ " INNER JOIN VAF_Client c ON (i.VAF_Client_ID=c.VAF_Client_ID)"
 			+ " INNER JOIN VAF_Print_Rpt_Page pf ON (i.VAF_Client_ID=pf.VAF_Client_ID)"
 			+ " INNER JOIN C_DocType dt ON (i.C_DocType_ID=dt.C_DocType_ID)")
@@ -272,10 +272,10 @@ namespace VAdvantage.Process
                 {
                     copies = 1;
                 }
-                //    int AD_User_ID = rs.getInt(6);
-                int AD_User_ID = Utility.Util.GetValueOfInt(idr[5]);
-                //    MUser to = new MUser (getCtx(), AD_User_ID, get_TrxName());
-                MUser to = new MUser(GetCtx(), AD_User_ID, Get_TrxName());
+                //    int VAF_UserContact_ID = rs.getInt(6);
+                int VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[5]);
+                //    MUser to = new MUser (getCtx(), VAF_UserContact_ID, get_TrxName());
+                MUser to = new MUser(GetCtx(), VAF_UserContact_ID, Get_TrxName());
                 //    String DocumentNo = rs.getString(7);
                 String DocumentNo = Utility.Util.GetValueOfString(idr[6]);
                 //    C_BPartner_ID = rs.getInt(8);
@@ -364,7 +364,7 @@ namespace VAdvantage.Process
 
                     //
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, GetAD_User_ID(), email);
+                    MUserMail um = new MUserMail(mText, GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

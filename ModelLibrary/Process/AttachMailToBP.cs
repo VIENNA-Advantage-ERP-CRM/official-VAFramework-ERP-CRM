@@ -16,7 +16,7 @@ namespace VAdvantage.Process
 {
     public class AttachMailToBP : ProcessEngine.SvrProcess
     {
-        int AD_User_ID = 0;
+        int VAF_UserContact_ID = 0;
         int VAF_Client_ID = 0;
         int VAF_Org_ID = 0;
         private Imap imapMail;
@@ -37,9 +37,9 @@ namespace VAdvantage.Process
             //    {
             //        ;
             //    }
-            //    else if (name.Equals("AD_User_ID"))
+            //    else if (name.Equals("VAF_UserContact_ID"))
             //    {
-            //        AD_User_ID = para[i].GetParameterAsInt();
+            //        VAF_UserContact_ID = para[i].GetParameterAsInt();
             //    }
             //    else
             //    {
@@ -55,15 +55,15 @@ namespace VAdvantage.Process
                                   umail.imappassword,
                                   umail.imapport,
                                   umail.imapusername,
-                                  umail.AD_User_ID,
+                                  umail.VAF_UserContact_ID,
                                   umail.vaf_client_ID,
                                   umail.VAF_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
-                                FROM ad_usermailconfigration umail
+                                FROM VAF_UserMailConfigration umail
                                 WHERE umail.IsActive ='Y' ";
 
-            //if (AD_User_ID > 0)
+            //if (VAF_UserContact_ID > 0)
             //{
-            //    sql += " AND umail.AD_User_ID=" + AD_User_ID;
+            //    sql += " AND umail.VAF_UserContact_ID=" + VAF_UserContact_ID;
             //}
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
@@ -93,7 +93,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    log.Log(Level.SEVERE, "UserName not found for AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                    log.Log(Level.SEVERE, "UserName not found for VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                     continue;
                 }
 
@@ -103,7 +103,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    log.Log(Level.SEVERE, "password not found for AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                    log.Log(Level.SEVERE, "password not found for VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                     continue;
                 }
 
@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    log.Log(Level.SEVERE, "SSL not found for AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                    log.Log(Level.SEVERE, "SSL not found for VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                     continue;
                 }
 
@@ -123,7 +123,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    log.Log(Level.SEVERE, "imapport not found for AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                    log.Log(Level.SEVERE, "imapport not found for VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                     continue;
                 }
 
@@ -133,14 +133,14 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    log.Log(Level.SEVERE, "imaphost not found for AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                    log.Log(Level.SEVERE, "imaphost not found for VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                     continue;
                 }
 
 
-                if (ds.Tables[0].Rows[i]["AD_User_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_User_ID"] != null)
+                if (ds.Tables[0].Rows[i]["VAF_UserContact_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_UserContact_ID"] != null)
                 {
-                    AD_User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    VAF_UserContact_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
                 }
 
                 //VAF_Client_ID
@@ -154,10 +154,10 @@ namespace VAdvantage.Process
                     VAF_Org_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Org_ID"]);
                 }
 
-                if (AD_User_ID > 0)
+                if (VAF_UserContact_ID > 0)
                 {
 
-                    GetMails(user, AD_User_ID, VAF_Client_ID, VAF_Org_ID);
+                    GetMails(user, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID);
 
                 }
             }
@@ -167,9 +167,9 @@ namespace VAdvantage.Process
             return retVal.ToString();
         }
 
-        private void GetMails(UserInformation user, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID)
+        private void GetMails(UserInformation user, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
-            DataSet dsUser = DB.ExecuteDataset("select isemail,notificationtype from ad_user where ad_user_id=" + AD_User_ID);
+            DataSet dsUser = DB.ExecuteDataset("select isemail,notificationtype from VAF_UserContact where VAF_UserContact_id=" + VAF_UserContact_ID);
             string login = Login(user);
             if (login.Equals(""))
             {
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
 
                 //DocumentService ser = new DocumentService();
                 byte[] bytes = null;
-                string tableName = "AD_User";
+                string tableName = "VAF_UserContact";
                 int _tableID = -1;
                 int existRec = -1;
                 StringBuilder attachmentID = new StringBuilder();
@@ -271,7 +271,7 @@ namespace VAdvantage.Process
                             mAttachment.SetMailAddressCc(cc);
                             mAttachment.SetMailAddressFrom(mailFrom);
                             mAttachment.SetRecord_ID(Convert.ToInt32(recordID));
-                            //if (sender == "AD_User")
+                            //if (sender == "VAF_UserContact")
                             //{
                             //    mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
                             //    record_ID = Convert.ToInt32(dt.Rows[j][0]);
@@ -339,9 +339,9 @@ namespace VAdvantage.Process
                                             continue;
                                         }
                                     }
-                                    if (sender == "AD_User")
+                                    if (sender == "VAF_UserContact")
                                     {
-                                        _tableID = PO.Get_Table_ID("AD_User");
+                                        _tableID = PO.Get_Table_ID("VAF_UserContact");
                                         existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][0]), Convert.ToInt32(uid), folderName);
                                         userOrBp = Msg.GetMsg(GetCtx(), "User");
                                     }
@@ -416,7 +416,7 @@ namespace VAdvantage.Process
                                     mAttachment.SetMailAddressCc(cc);
                                     mAttachment.SetMailAddressFrom(mailFrom);
 
-                                    if (sender == "AD_User")
+                                    if (sender == "VAF_UserContact")
                                     {
                                         mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
                                         record_ID = Convert.ToInt32(dt.Rows[j][0]);
@@ -509,26 +509,26 @@ namespace VAdvantage.Process
                     }
                     if (isEmail && isNotice)
                     {
-                        SendEmailOrNotification(ctx, AD_User_ID, false, false, true, tableID, str, message, recordID, searchKey);
+                        SendEmailOrNotification(ctx, VAF_UserContact_ID, false, false, true, tableID, str, message, recordID, searchKey);
                     }
                     else if (isEmail)
                     {
-                        SendEmailOrNotification(ctx, AD_User_ID, true, false, false, tableID, str, message, recordID, searchKey);
+                        SendEmailOrNotification(ctx, VAF_UserContact_ID, true, false, false, tableID, str, message, recordID, searchKey);
                     }
                 }
                 else
                 {
                     if (Convert.ToString(dsUser.Tables[0].Rows[0]["NOTIFICATIONTYPE"]) == "E")
                     {
-                        SendEmailOrNotification(ctx, AD_User_ID, true, false, false, tableID, str, message, recordID, searchKey);
+                        SendEmailOrNotification(ctx, VAF_UserContact_ID, true, false, false, tableID, str, message, recordID, searchKey);
                     }
                     else if (Convert.ToString(dsUser.Tables[0].Rows[0]["NOTIFICATIONTYPE"]) == "N")
                     {
-                        SendEmailOrNotification(ctx, AD_User_ID, false, true, false, tableID, str, message, recordID, searchKey);
+                        SendEmailOrNotification(ctx, VAF_UserContact_ID, false, true, false, tableID, str, message, recordID, searchKey);
                     }
                     else if (Convert.ToString(dsUser.Tables[0].Rows[0]["NOTIFICATIONTYPE"]) == "B")
                     {
-                        SendEmailOrNotification(ctx, AD_User_ID, false, false, true, tableID, str, message, recordID, searchKey);
+                        SendEmailOrNotification(ctx, VAF_UserContact_ID, false, false, true, tableID, str, message, recordID, searchKey);
                     }
                 }
             }
@@ -540,7 +540,7 @@ namespace VAdvantage.Process
             //******************Temporary Commented******************
             // VAdvantage.Classes.Context ctx = new VAdvantage.Classes.Context(ctxmap);
 
-            string emailID = Convert.ToString(DB.ExecuteScalar("SELECT EMAIL FROM AD_USER WHERE AD_USER_ID=" + userID));
+            string emailID = Convert.ToString(DB.ExecuteScalar("SELECT EMAIL FROM VAF_USERCONTACT WHERE VAF_USERCONTACT_ID=" + userID));
             message += " (" + searchKey + ")";
 
             try
@@ -574,7 +574,7 @@ namespace VAdvantage.Process
                     //  log.Log(Level.SEVERE, "SendOnlyNoticeToSubscribeUser");
 
                     MNote note = new MNote(ctx, 0, null);
-                    note.SetAD_User_ID(userID);
+                    note.SetVAF_UserContact_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
                     //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
                     note.SetClientOrg(ctx.GetVAF_Client_ID(), 0);
@@ -610,7 +610,7 @@ namespace VAdvantage.Process
                     objEmail.SetSubject(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     objEmail.Send();
                     MNote note = new MNote(ctx, 0, null);
-                    note.SetAD_User_ID(userID);
+                    note.SetVAF_UserContact_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
                     //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
                     note.SetClientOrg(ctx.GetVAF_Client_ID(), 0);

@@ -350,7 +350,7 @@ namespace VAdvantage.Model
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, AD_User c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
+                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
                 + "WHERE bp.C_BPartner_ID=?"        // #1
                 + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
                 + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
@@ -359,7 +359,7 @@ namespace VAdvantage.Model
                 + " AND a.C_Country_ID=cc.C_Country_ID "
                 */
                 + "FROM C_BPartner bp "
-                + "LEFT OUTER JOIN AD_User c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
+                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
                 + "INNER JOIN C_BPartner_Location l ON (bp.C_BPartner_ID=l.C_BPartner_ID) "
                 + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
                 + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
@@ -453,7 +453,7 @@ namespace VAdvantage.Model
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, AD_User c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
+                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
                 + "WHERE bp.C_BPartner_ID=?"        // #1
                 + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
                 + " AND bp.C_BPartner_ID=l.C_BPartner_ID"

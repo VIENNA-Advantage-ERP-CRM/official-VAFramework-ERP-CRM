@@ -473,8 +473,8 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_User_ID() == -1)	//	Summary Project in Dimensions
-                SetAD_User_ID(0);
+            if (GetVAF_UserContact_ID() == -1)	//	Summary Project in Dimensions
+                SetVAF_UserContact_ID(0);
 
             //	Set Currency
             if (Is_ValueChanged("M_PriceList_Version_ID") && GetM_PriceList_Version_ID() != 0)

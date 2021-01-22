@@ -179,7 +179,7 @@ namespace VAdvantage.Model
             {
                 String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetVAF_Language(GetCtx()));
                 String sql = "SELECT 'C'||(SELECT " + count + " FROM VAF_Client)"
-                    + " ||'U'||(SELECT " + count + " FROM AD_User)"
+                    + " ||'U'||(SELECT " + count + " FROM VAF_UserContact)"
                     + " ||'B'||(SELECT " + count + " FROM C_BPartner)"
                     + " ||'P'||(SELECT " + count + " FROM M_Product)"
                     + " ||'I'||(SELECT " + count + " FROM C_Invoice)"
@@ -457,11 +457,11 @@ namespace VAdvantage.Model
         /// </summary>
         private void SetInternalUsers()
         {
-            String sql = "SELECT COUNT(DISTINCT (u.AD_User_ID)) AS iu "
-                + "FROM AD_User u"
-                + " INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID) "
+            String sql = "SELECT COUNT(DISTINCT (u.VAF_UserContact_ID)) AS iu "
+                + "FROM VAF_UserContact u"
+                + " INNER JOIN VAF_UserContact_Roles ur ON (u.VAF_UserContact_ID=ur.VAF_UserContact_ID) "
                 + "WHERE u.VAF_Client_ID<>11"			//	no Demo
-                + " AND u.AD_User_ID NOT IN (0,100)";	//	no System/SuperUser
+                + " AND u.VAF_UserContact_ID NOT IN (0,100)";	//	no System/SuperUser
             IDataReader idr = null;
             try
             {

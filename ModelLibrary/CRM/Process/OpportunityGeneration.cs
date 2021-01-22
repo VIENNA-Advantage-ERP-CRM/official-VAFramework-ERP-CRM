@@ -60,16 +60,16 @@ namespace VAdvantage.Process
             int c_bpartner_id = 0;
             int c_bpartnerSR_id = 0;
 
-            String sql = "select bp.iscustomer,bp.isprospect,bp.name,bp.c_bpartner_id,au.ad_user_id, bpl.c_bpartner_location_id"
+            String sql = "select bp.iscustomer,bp.isprospect,bp.name,bp.c_bpartner_id,au.VAF_UserContact_id, bpl.c_bpartner_location_id"
                            + " from c_bpartner bp left join c_bpartner_location bpl on(bpl.c_bpartner_id= bp.c_bpartner_id)"
-                           + " left JOIN ad_user au on(au.c_bpartner_id= bp.c_bpartner_id) where bp.c_bpartner_id=" + "1001892" + " and bp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
+                           + " left JOIN VAF_UserContact au on(au.c_bpartner_id= bp.c_bpartner_id) where bp.c_bpartner_id=" + "1001892" + " and bp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
             IDataReader idr = null;
             idr = DB.ExecuteReader(sql);
             if (idr.Read())
             {
                 Customer= Util.GetValueOfInt(idr["C_BPartner_ID"]);
                 opportunity = Util.GetValueOfString(idr["Name"]);
-                User = Util.GetValueOfInt(idr["AD_User_ID"]);
+                User = Util.GetValueOfInt(idr["VAF_UserContact_ID"]);
                 Location = Util.GetValueOfInt(idr["C_BPartner_Location_ID"]);
                 startDate = Util.GetValueOfDateTime(System.DateTime.Now);
                 if (Util.GetValueOfString(idr["IsCustomer"]) == "Y")
@@ -90,15 +90,15 @@ namespace VAdvantage.Process
                 }
                 idr1.Close();
 
-                int Owner = Util.GetValueOfInt(GetCtx().GetAD_User_ID());
-                //Util.GetValueOfString(GetCtx().GetAD_User_ID());
+                int Owner = Util.GetValueOfInt(GetCtx().GetVAF_UserContact_ID());
+                //Util.GetValueOfString(GetCtx().GetVAF_UserContact_ID());
 
                 VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
                 opp.SetIsOpportunity(true);
                 opp.SetName(opportunity);
                 opp.SetC_BPartner_ID(c_bpartner_id);
                 opp.SetC_BPartnerSR_ID(c_bpartnerSR_id);
-                opp.SetAD_User_ID(User);
+                opp.SetVAF_UserContact_ID(User);
                 opp.SetSalesRep_ID(Owner);
                 opp.SetDateContract(startDate.Value.Date);
                 opp.SetC_BPartner_Location_ID(Location);

@@ -17,7 +17,7 @@ namespace VIS.Helpers
             r.IsAccessAllOrgs = role.IsAccessAllOrgs();
             r.IsAdministrator = role.IsAdministrator();
             r.VAF_Client_ID = role.GetVAF_Client_ID();
-            r.AD_User_ID = role.GetAD_User_ID();
+            r.VAF_UserContact_ID = role.GetVAF_UserContact_ID();
             r.UserLevel = role.GetUserLevel();
             r.IsCanExport = role.IsCanExport();
             r.IsCanReport = role.IsCanReport();
@@ -78,7 +78,7 @@ namespace VIS.Helpers
         public bool IsAccessAllOrgs;
         public bool IsAdministrator;
         public int VAF_Client_ID;
-        public int AD_User_ID;
+        public int VAF_UserContact_ID;
         public string UserLevel;
         public bool IsCanExport;
         public bool IsCanReport;

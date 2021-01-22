@@ -72,7 +72,7 @@ namespace VIS.Models
 
         internal bool UpdateForUser(int id, int uid)
         {
-            DBase.DB.ExecuteQuery("UPDATE AD_User SET VAF_Theme_ID =  " + id + " WHERE AD_User_ID = " + uid, null, null);
+            DBase.DB.ExecuteQuery("UPDATE VAF_UserContact SET VAF_Theme_ID =  " + id + " WHERE VAF_UserContact_ID = " + uid, null, null);
             return true;
         }
         internal bool UpdateForClient(int id, int tid)

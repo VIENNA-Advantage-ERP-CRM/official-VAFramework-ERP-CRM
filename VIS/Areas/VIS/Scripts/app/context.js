@@ -24,9 +24,9 @@ VIS.context.m_map = {}; //window's context
     var value = VIS.context.ctx[context];
     //m_map[context];
     if (!value) {
-        if (context == "#AD_User_ID")
+        if (context == "#VAF_UserContact_ID")
             return VIS.context.getContext("#" + context);
-        if (context == "#AD_User_Name")
+        if (context == "#VAF_UserContact_Name")
             return VIS.context.getContext("#" + context);
         return "";
     }
@@ -180,12 +180,12 @@ VIS.context.clearTabContext = function (windowNo, tabNo) {
 };
 
 
-VIS.context.getAD_User_ID = function () {
-    return VIS.context.getContext("##AD_User_ID");
+VIS.context.getVAF_UserContact_ID = function () {
+    return VIS.context.getContext("##VAF_UserContact_ID");
 };
 
-VIS.context.getAD_User_Name = function () {
-    return this.getContext("#AD_User_Name");
+VIS.context.getVAF_UserContact_Name = function () {
+    return this.getContext("#VAF_UserContact_Name");
 };
 
 VIS.context.getVAF_Role_ID = function () {

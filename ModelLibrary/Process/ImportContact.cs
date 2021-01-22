@@ -136,7 +136,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             MUser user = MUser.Get(GetCtx(), imp.GetEMail(), Get_TrxName());
             //	New User
-            if (user == null || user.GetAD_User_ID() == 0)
+            if (user == null || user.GetVAF_UserContact_ID() == 0)
             {
                 if (imp.IsEMailBounced())
                     return ProcessFail(imp, "No User found with email - cannou set Bounced flag");
@@ -185,7 +185,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
                 lead.SetName(imp.GetContactName());
                 lead.SetDescription(imp.GetContactDescription());
-                lead.SetAD_User_ID(user.GetAD_User_ID());
+                lead.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                 lead.SetC_BPartner_ID(user.GetC_BPartner_ID());
                 lead.Save();
                 imp.SetC_Lead_ID(lead.GetC_Lead_ID());
@@ -195,12 +195,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (imp.GetR_InterestArea_ID() != 0 && user != null)
             {
                 MContactInterest ci = MContactInterest.Get(GetCtx(),
-                    imp.GetR_InterestArea_ID(), user.GetAD_User_ID(),
+                    imp.GetR_InterestArea_ID(), user.GetVAF_UserContact_ID(),
                     true, Get_TrxName());
                 ci.Save();		//	don't subscribe or re-activate
             }
 
-            imp.SetAD_User_ID(user.GetAD_User_ID());
+            imp.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
             imp.SetI_IsImported(true);
             imp.SetI_ErrorMsg(null);
             imp.Save();

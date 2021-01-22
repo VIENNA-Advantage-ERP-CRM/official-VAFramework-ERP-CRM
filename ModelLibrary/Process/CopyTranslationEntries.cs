@@ -357,7 +357,7 @@ namespace VAdvantage.Process
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_window_trl
+                                               FROM VAF_Screen_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -370,7 +370,7 @@ namespace VAdvantage.Process
                     win.SetVAF_Org_ID(0);
                     if (dsTab.Tables[0].Rows[j]["ad_window_id"] != null && dsTab.Tables[0].Rows[j]["ad_window_id"] != DBNull.Value)
                     {
-                        win.SetAD_Window_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_window_id"]));
+                        win.SetVAF_Screen_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_window_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
@@ -580,7 +580,7 @@ namespace VAdvantage.Process
                     {
                         if (dsCol.Tables[0].Rows[0]["ad_window_id"] != null && dsCol.Tables[0].Rows[0]["ad_window_id"] != DBNull.Value)
                         {
-                            field.SetAD_Window_ID(Util.GetValueOfInt(dsCol.Tables[0].Rows[0]["ad_window_id"]));
+                            field.SetVAF_Screen_ID(Util.GetValueOfInt(dsCol.Tables[0].Rows[0]["ad_window_id"]));
                         }
                         if (dsCol.Tables[0].Rows[0]["VAF_ColumnDic_id"] != null && dsCol.Tables[0].Rows[0]["VAF_ColumnDic_id"] != DBNull.Value)
                         {
@@ -888,7 +888,7 @@ namespace VAdvantage.Process
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_workflow_trl
+                                               FROM VAF_Workflow_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -953,13 +953,13 @@ namespace VAdvantage.Process
             }
             /////////WFNode Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_wf_node_id,
+            sql.Append(@" SELECT VAF_WFlow_Node_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_wf_node_trl
+                                               FROM VAF_WFlow_Node_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -970,9 +970,9 @@ namespace VAdvantage.Process
                     wfNode.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     wfNode.SetVAF_Client_ID(0);
                     wfNode.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_wf_node_id"] != null && dsTab.Tables[0].Rows[j]["ad_wf_node_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"] != null && dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"] != DBNull.Value)
                     {
-                        wfNode.SetAD_WF_Node_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_wf_node_id"]));
+                        wfNode.SetVAF_WFlow_Node_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
@@ -1376,7 +1376,7 @@ namespace VAdvantage.Process
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_window_trl
+                                               FROM VAF_Screen_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -1384,7 +1384,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsTab.Tables[0].Rows.Count; j++)
                 {
                     sql.Clear();
-                    sql.Append("SELECT Count(*) FROM I_TLWindow_Trl WHERE AD_Window_ID=" + dsTab.Tables[0].Rows[j]["AD_Window_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
+                    sql.Append("SELECT Count(*) FROM I_TLWindow_Trl WHERE VAF_Screen_ID=" + dsTab.Tables[0].Rows[j]["VAF_Screen_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
                     count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
                     if (count > 0)
                     {
@@ -1396,7 +1396,7 @@ namespace VAdvantage.Process
                     win.SetVAF_Org_ID(0);
                     if (dsTab.Tables[0].Rows[j]["ad_window_id"] != null && dsTab.Tables[0].Rows[j]["ad_window_id"] != DBNull.Value)
                     {
-                        win.SetAD_Window_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_window_id"]));
+                        win.SetVAF_Screen_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_window_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
@@ -1620,7 +1620,7 @@ namespace VAdvantage.Process
                     {
                         if (dsCol.Tables[0].Rows[0]["ad_window_id"] != null && dsCol.Tables[0].Rows[0]["ad_window_id"] != DBNull.Value)
                         {
-                            field.SetAD_Window_ID(Util.GetValueOfInt(dsCol.Tables[0].Rows[0]["ad_window_id"]));
+                            field.SetVAF_Screen_ID(Util.GetValueOfInt(dsCol.Tables[0].Rows[0]["ad_window_id"]));
                         }
                         if (dsCol.Tables[0].Rows[0]["VAF_ColumnDic_id"] != null && dsCol.Tables[0].Rows[0]["VAF_ColumnDic_id"] != DBNull.Value)
                         {
@@ -1956,7 +1956,7 @@ namespace VAdvantage.Process
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_workflow_trl
+                                               FROM VAF_Workflow_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -2028,13 +2028,13 @@ namespace VAdvantage.Process
             }
             /////////WFNode Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_wf_node_id,
+            sql.Append(@" SELECT VAF_WFlow_Node_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_wf_node_trl
+                                               FROM VAF_WFlow_Node_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -2042,7 +2042,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsTab.Tables[0].Rows.Count; j++)
                 {
                     sql.Clear();
-                    sql.Append("SELECT Count(*) FROM I_TLWF_NODE_Trl WHERE AD_WF_NODE_ID=" + dsTab.Tables[0].Rows[j]["AD_wf_node_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
+                    sql.Append("SELECT Count(*) FROM I_TLWF_NODE_Trl WHERE VAF_WFLOW_NODE_ID=" + dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
                     count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
                     if (count > 0)
                     {
@@ -2052,9 +2052,9 @@ namespace VAdvantage.Process
                     wfNode.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     wfNode.SetVAF_Client_ID(0);
                     wfNode.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_wf_node_id"] != null && dsTab.Tables[0].Rows[j]["ad_wf_node_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"] != null && dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"] != DBNull.Value)
                     {
-                        wfNode.SetAD_WF_Node_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_wf_node_id"]));
+                        wfNode.SetVAF_WFlow_Node_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_WFlow_Node_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {

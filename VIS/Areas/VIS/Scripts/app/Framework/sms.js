@@ -274,7 +274,7 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                //var sql = "Select AD_User_ID,issms,mobile from ad_user where c_bpartner_ID=" + bpID[i];
+                //var sql = "Select VAF_UserContact_ID,issms,mobile from VAF_UserContact where c_bpartner_ID=" + bpID[i];
                 //var ds = VIS.DB.executeDataSet(sql);
                 //var isBroken = false;
                 //if (ds != null && ds.getTables()[0].getRows().length > 0) {

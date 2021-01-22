@@ -129,7 +129,7 @@
             //this.log.log(VIS.Logging.Level.OFF, "OFF");
             $busyDiv[0].style.visibility = 'visible';
 
-            $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getAD_User_ID(), function (event) {
+            $root.load(VIS.Application.contextUrl + 'UserPreference/Index/?windowno=' + windowNo + '&adUserId=' + VIS.context.getVAF_UserContact_ID(), function (event) {
 
               
 
@@ -588,7 +588,7 @@
                                 if (VIS.themeMgr)
                     VIS.themeMgr.applyTheme(clr);
                 //save theme 
-                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getAD_User_ID() }, function (e) {
+                VIS.dataContext.postJSONData(VIS.Application.contextUrl + 'Theme/SaveForUser', { id: id, uid: VIS.context.getVAF_UserContact_ID() }, function (e) {
 
                 });
                 
@@ -790,7 +790,7 @@
                     dataType: "json",
                     data: {
 
-                        AD_User_ID: VIS.context.getAD_User_ID(),
+                        VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID(),
                         currentPws: currentPws,
                         newPws: newPws,
 
@@ -866,7 +866,7 @@
                     dataType: "json",
                     data: {
 
-                        AD_User_ID: VIS.context.getAD_User_ID(),
+                        VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID(),
                         currentPws: currentPws,
                         newPws: newPws,
                         conformPws: conformPws,
@@ -908,7 +908,7 @@
                     ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "Mail Configuration" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
                     if (ad_window_Id > 0) {
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_User_ID());
+                        zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
                         VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
                     }
                 }
@@ -932,7 +932,7 @@
                     ad_window_Id = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "UserPreference/GetWindowID", { "WindowName": "User Substitute" }, null); // spelling corrected by vinay bhatt on 18 oct 2018
                     if (ad_window_Id > 0) {
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction("AD_User_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_User_ID());
+                        zoomQuery.addRestriction("VAF_UserContact_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_UserContact_ID());
                         VIS.viewManager.startWindow(ad_window_Id, zoomQuery);
                     }
                 }
@@ -1568,7 +1568,7 @@
                 url: VIS.Application.contextUrl + "UserPreference/GetDefaultLogin",
                 dataType: "json",
                 //async: false,
-                data: { AD_User_ID: VIS.context.getAD_User_ID() },
+                data: { VAF_UserContact_ID: VIS.context.getVAF_UserContact_ID() },
                 success: function (data) {
                     var di = JSON.parse(data);
                     defaultLogin.VAF_Role_ID = di.VAF_Role_ID;
@@ -1582,12 +1582,12 @@
         var loadRoles = function () {
             var sql = "SELECT  r.Name,r.VAF_Role_ID" +
                //" u.ConnectionProfile, u.Password "+	//	4,5
-               " FROM AD_User u" +
-               " INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')" +
+               " FROM VAF_UserContact u" +
+               " INNER JOIN VAF_UserContact_Roles ur ON (u.VAF_UserContact_ID=ur.VAF_UserContact_ID AND ur.IsActive='Y')" +
                " INNER JOIN VAF_Role r ON (ur.VAF_Role_ID=r.VAF_Role_ID AND r.IsActive='Y') " +
                 //.Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
                " WHERE " +//(COALESCE(u.LDAPUser,u.Name)=@username OR COALESCE(u.LDAPUser,u.Value)=@username)"+
-               " u.AD_User_ID=" + VIS.context.getAD_User_ID() + " AND u.IsActive='Y' " +
+               " u.VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND u.IsActive='Y' " +
                " AND u.IsLoginUser='Y' " +
                " AND EXISTS (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')" +
                " AND EXISTS (SELECT * FROM VAF_Client c WHERE r.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')" +
@@ -1664,8 +1664,8 @@
                 + " AND (r.IsAccessAllOrgs='Y' "
                     + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
                         + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
-                        + "WHERE ua.AD_User_ID='" + VIS.context.getAD_User_ID() + "' AND ua.IsActive='Y'))"		//	#3
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_UserContact_OrgRights ua "
+                        + "WHERE ua.VAF_UserContact_ID='" + VIS.context.getVAF_UserContact_ID() + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
 

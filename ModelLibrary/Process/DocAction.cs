@@ -252,7 +252,7 @@ namespace VAdvantage.Process
         /// <summary>
         /// Get Document Owner
         /// </summary>
-        /// <returns>AD_User_ID</returns>
+        /// <returns>VAF_UserContact_ID</returns>
         int GetDoc_User_ID();
 
         /// <summary>

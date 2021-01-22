@@ -95,7 +95,7 @@
             txtUTenant = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantAdmin') + '">');
             dUTenant.append(dUTenantInner);
             dUTenantInner.append(txtUTenant);
-            dUTenantInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @VAF_Client_ID@")));           
+            dUTenantInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@VAF_UserContact_ID@ @VAF_Client_ID@")));           
             dTForm.append(dUTenant);
 
             var dUOrg = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
@@ -103,7 +103,7 @@
             txtUOrg = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantUser') + '">');
             dUOrg.append(dUOrgInner);
             dUOrgInner.append(txtUOrg);
-            dUOrgInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @VAF_Org_ID@")));          
+            dUOrgInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@VAF_UserContact_ID@ @VAF_Org_ID@")));          
             dTForm.append(dUOrg);
 
 

@@ -29,7 +29,7 @@ namespace VAdvantage.Classes
         /** Image Indicator				*/
         private string _imageIndicator;
         /** Window ID       */
-        private int _AD_Window_ID;
+        private int _VAF_Screen_ID;
         /** Process ID      */
         private int _VAF_Job_ID;
         /** Form ID         */
@@ -157,7 +157,7 @@ namespace VAdvantage.Classes
 
             _imageIndicator = node.ImageKey;
 
-            _AD_Window_ID = node.AD_Window_ID;
+            _VAF_Screen_ID = node.VAF_Screen_ID;
 
             _VAF_Job_ID = node.VAF_Job_ID;
 
@@ -202,7 +202,7 @@ namespace VAdvantage.Classes
 
             _imageIndicator = node.ImageKey;
 
-            _AD_Window_ID = node.AD_Window_ID;
+            _VAF_Screen_ID = node.VAF_Screen_ID;
 
             _VAF_Job_ID = node.VAF_Job_ID;
 
@@ -275,15 +275,15 @@ namespace VAdvantage.Classes
         /// <summary>
         /// get and set  window id
         /// </summary>
-        public int AD_Window_ID
+        public int VAF_Screen_ID
         {
             get
             {
-                return _AD_Window_ID;
+                return _VAF_Screen_ID;
             }
             set
             {
-                _AD_Window_ID = value;
+                _VAF_Screen_ID = value;
             }
         }
 
@@ -586,7 +586,7 @@ namespace VAdvantage.Classes
 
             if (ACTION_WINDOW == _imageIndicator)
             {
-                id = AD_Window_ID;
+                id = VAF_Screen_ID;
             }
             else if (ACTION_FORM == _imageIndicator)
             {

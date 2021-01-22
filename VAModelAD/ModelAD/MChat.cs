@@ -259,7 +259,7 @@ namespace VAdvantage.Model
         "<td>&nbsp;</td>" +
       "</tr>" +
       "<tr>" +
-        "<td width='76px' class='grey'>" + GetCtx().GetAD_User_Name() + " :</td>" +//Show the Login User Name
+        "<td width='76px' class='grey'>" + GetCtx().GetVAF_UserContact_Name() + " :</td>" +//Show the Login User Name
         "<td width='100%' Style='text-align:left' ><hr /></td>" +
       "</tr>" +
       "<tr>" +
@@ -281,11 +281,11 @@ namespace VAdvantage.Model
                     //{
 
                     //    //_createdDate
-                    //    data += ctx.GetAD_User_Name() + ":__________\n  " + _createdDate.Date+"\n\n" + entry.GetCharacterData();
+                    //    data += ctx.GetVAF_UserContact_Name() + ":__________\n  " + _createdDate.Date+"\n\n" + entry.GetCharacterData();
                     //}
                     //else
                     //{
-                    //    data1 += "\n\n" + ctx.GetAD_User_Name() + ":_____________________\n        " + _createdDate.Date + "\n\n" + entry.GetCharacterData();
+                    //    data1 += "\n\n" + ctx.GetVAF_UserContact_Name() + ":_____________________\n        " + _createdDate.Date + "\n\n" + entry.GetCharacterData();
                     //}
                 }
             }

@@ -26,45 +26,45 @@ namespace VIS.Models
         /// Fetch all the workflow activities which are open
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="AD_User_ID">Login User ID</param>
+        /// <param name="VAF_UserContact_ID">Login User ID</param>
         /// <param name="VAF_Client_ID"> Login Client ID </param>
         /// <param name="pageNo"> Current Page Number </param>
         /// <param name="pageSize"> Sepcify number of records per page</param>
         /// <param name="refresh"> Refresh Data? </param>
         /// <param name="searchText"> search Activities based on summary </param>
-        /// <param name="AD_Window_ID"> Window ID based on which serach Activities </param>
+        /// <param name="VAF_Screen_ID"> Window ID based on which serach Activities </param>
         /// <param name="dateFrom">Activities Start From</param>
         /// <param name="dateTo"> Activities Date To </param>
         /// <param name="AD_Node_ID">Window ID based on which serach Activities</param>
         /// <returns></returns>
-        public WFInfo GetActivities(Ctx ctx, int AD_User_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int AD_Window_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
+        public WFInfo GetActivities(Ctx ctx, int VAF_UserContact_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
         {
             string sql = "";
             List<MTable> mtable = new List<MTable>();
             int count = 0;
 
             // If window is selected or search text is available..
-            if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
+            if (VAF_Screen_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             {
                 sql = @"SELECT DISTINCT tabl.vaf_tableview_ID,Tab.VAF_Tab_ID FROM Ad_Window Wind Join vaf_tab Tab 
                     ON Wind.Ad_Window_Id=Tab.Ad_Window_Id JOIN  vaf_tableview Tabl On Tab.vaf_tableview_Id=Tabl.vaf_tableview_Id 
                     WHERE Tab.IsActive    ='Y'";
 
-                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " and tab.vaf_tableview_ID IN (Select Distinct VAF_TableView_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.VAF_Tab_ID Asc";
+                sql += " AND wind.VAF_Screen_ID=" + VAF_Screen_ID + " and tab.vaf_tableview_ID IN (Select Distinct VAF_TableView_ID FROM VAF_WFlow_Task where VAF_Screen_ID=" + VAF_Screen_ID + ") ORDER BY Tab.VAF_Tab_ID Asc";
 
                 //if window is selected then search for tables associated with window.
                 DataSet ds = DB.ExecuteDataset(sql);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    //for each table , create where clause based on columns such as Name, DocumentNo,C_Bpatner_ID, AD_User_ID exist in that table or not.
+                    //for each table , create where clause based on columns such as Name, DocumentNo,C_Bpatner_ID, VAF_UserContact_ID exist in that table or not.
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         count++;
                         MTable table = new MTable(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
 
                         GetFromClause(ctx, table.GetTableName(), "", "", "");
-                        GetWhereClause(ctx, table, searchText, AD_Window_ID, AD_Node_ID);
+                        GetWhereClause(ctx, table, searchText, VAF_Screen_ID, AD_Node_ID);
                         SynonymNext();
                     }
                 }
@@ -73,14 +73,14 @@ namespace VIS.Models
 
             if (count == 0)
             {
-                GetWhereClause(ctx, null, searchText, AD_Window_ID, AD_Node_ID);
+                GetWhereClause(ctx, null, searchText, VAF_Screen_ID, AD_Node_ID);
             }
 
             GetDateWiseWhereClause(dateFrom, dateTo, searchText);
 
 
 
-            // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
+            // if (VAF_Screen_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             if (whereClause.Length > 7)
             {
                 sql = @"SELECT mytable.* FROM (";
@@ -109,69 +109,69 @@ OR
 
             sql += @" SELECT a.*
 " + dmsCheck + @" 
-                            FROM AD_WF_Activity a
+                            FROM VAF_WFlow_Task a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
                             AND a.VAF_Client_ID =" + VAF_Client_ID + @" 
-                            AND ( (a.AD_User_ID=" + AD_User_ID + @" 
-                            OR a.AD_User_ID   IN
-                              (SELECT AD_User_ID
-                              FROM AD_User_Substitute
+                            AND ( (a.VAF_UserContact_ID=" + VAF_UserContact_ID + @" 
+                            OR a.VAF_UserContact_ID   IN
+                              (SELECT VAF_UserContact_ID
+                              FROM VAF_UserContact_Standby
                               WHERE IsActive   ='Y'
-                              AND Substitute_ID=" + AD_User_ID + @" 
+                              AND Substitute_ID=" + VAF_UserContact_ID + @" 
                               AND (validfrom  <=sysdate)
                               AND (sysdate    <=validto )
                               ))
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                              AND COALESCE(r.AD_User_ID,0)=0
-                              AND (a.AD_User_ID           =" + AD_User_ID + @" 
-                              OR a.AD_User_ID            IS NULL
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              FROM VAF_WFlow_Incharge r
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                              AND COALESCE(r.VAF_UserContact_ID,0)=0
+                              AND (a.VAF_UserContact_ID           =" + VAF_UserContact_ID + @" 
+                              OR a.VAF_UserContact_ID            IS NULL
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + AD_User_ID + @" 
+                                AND Substitute_ID=" + VAF_UserContact_ID + @" 
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
                               )
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                              AND (r.AD_User_ID           =" + AD_User_ID + @" 
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              FROM VAF_WFlow_Incharge r
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                              AND (r.VAF_UserContact_ID           =" + VAF_UserContact_ID + @" 
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + AD_User_ID + @" 
+                                AND Substitute_ID=" + VAF_UserContact_ID + @" 
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
                               )
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              INNER JOIN AD_User_Roles ur
+                              FROM VAF_WFlow_Incharge r
+                              INNER JOIN VAF_UserContact_Roles ur
                               ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
                               AND ur.IsActive = 'Y'
-                              AND (ur.AD_User_ID          =" + AD_User_ID + @" 
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              AND (ur.VAF_UserContact_ID          =" + VAF_UserContact_ID + @" 
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + AD_User_ID + @" 
+                                AND Substitute_ID=" + VAF_UserContact_ID + @" 
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
                               AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) ) ";
 
-            // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
+            // if (VAF_Screen_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             if (whereClause.Length > 7)
             {
                 // Applied Role access on workflow Activities
@@ -182,8 +182,8 @@ OR
                 sql += "  ORDER BY myTable.Priority DESC, myTable.Created DESC";
 
                 //LEFT OUTER Join 
-                //                           Ad_Wf_Activity Wf On Abc.Ad_Wf_Activity_Id=Wf.Ad_Wf_Activity_Id
-                //                           LEFT OUTER Join Ad_Wf_Node Wfn On Wfn.Ad_Wf_Node_Id=Wf.Ad_Wf_Node_Id
+                //                           VAF_WFlow_Task Wf On Abc.VAF_WFlow_Task_Id=Wf.VAF_WFlow_Task_Id
+                //                           LEFT OUTER Join VAF_WFlow_Node Wfn On Wfn.VAF_WFlow_Node_Id=Wf.VAF_WFlow_Node_Id
                 //                           WHERE upper(wfn.value) like Upper('%" + searchText + "%') OR upper(wfn.Name) like Upper('%" + searchText + @"%')
                 //                           ORDER BY Abc.Priority DESC, Abc.Created";
             }
@@ -196,12 +196,12 @@ OR
 
             //temp ORDER BY Created desc,a.Priority DESC
             //final  ORDER BY a.Priority DESC,Created
-            //int AD_User_ID = Envs.GetContext().GetAD_User_ID();
+            //int VAF_UserContact_ID = Envs.GetContext().GetVAF_UserContact_ID();
             try
             {
                 //SqlParameter[] param = new SqlParameter[2];
                 //param[0] = new SqlParameter("@clientid", VAF_Client_ID);
-                //param[1] = new SqlParameter("@userid", AD_User_ID);
+                //param[1] = new SqlParameter("@userid", VAF_UserContact_ID);
                 VLogger.Get().Log(Level.SEVERE, sql);
                 DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
                 if (ds == null || ds.Tables[0].Rows.Count == 0)
@@ -215,12 +215,12 @@ OR
                     itm = new WFActivityInfo();
 
                     itm.VAF_TableView_ID = Util.GetValueOfInt(dr["VAF_TableView_ID"]);
-                    itm.AD_User_ID = Util.GetValueOfInt(dr["AD_User_ID"]);
-                    itm.AD_WF_Activity_ID = Util.GetValueOfInt(dr["AD_WF_Activity_ID"]);
+                    itm.VAF_UserContact_ID = Util.GetValueOfInt(dr["VAF_UserContact_ID"]);
+                    itm.VAF_WFlow_Task_ID = Util.GetValueOfInt(dr["VAF_WFlow_Task_ID"]);
 
-                    itm.AD_Node_ID = Util.GetValueOfInt(dr["AD_WF_Node_ID"]);
-                    itm.AD_WF_Process_ID = Util.GetValueOfInt(dr["AD_WF_Process_ID"]);
-                    itm.AD_WF_Responsible_ID = Util.GetValueOfInt(dr["AD_WF_Responsible_ID"]);
+                    itm.AD_Node_ID = Util.GetValueOfInt(dr["VAF_WFlow_Node_ID"]);
+                    itm.VAF_WFlow_Handler_ID = Util.GetValueOfInt(dr["VAF_WFlow_Handler_ID"]);
+                    itm.VAF_WFlow_Incharge_ID = Util.GetValueOfInt(dr["VAF_WFlow_Incharge_ID"]);
                     itm.AD_Workflow_ID = Util.GetValueOfInt(dr["AD_Workflow_ID"]);
                     itm.CreatedBy = Util.GetValueOfInt(dr["CreatedBy"]);
                     itm.DynPriorityStart = Util.GetValueOfInt(dr["DynPriorityStart"]);
@@ -237,14 +237,14 @@ OR
                     itm.WfState = Util.GetValueOfString(dr["WfState"]);
                     itm.EndWaitTime = Util.GetValueOfDateTime(dr["EndWaitTime"]);
                     itm.Created = Util.GetValueOfString(dr["Created"]);
-                    MWFActivity act = new MWFActivity(ctx, itm.AD_WF_Activity_ID, null);
+                    MWFActivity act = new MWFActivity(ctx, itm.VAF_WFlow_Task_ID, null);
                     itm.NodeName = act.GetNodeName();
                     itm.Summary = act.GetSummary();
                     itm.Description = act.GetNodeDescription();
                     itm.Help = act.GetNodeHelp();
                     itm.History = act.GetHistoryHTML();
                     itm.Priority = Util.GetValueOfInt(dr["Priority"]);
-                    itm.AD_Window_ID = Util.GetValueOfInt(dr["AD_Window_ID"]);
+                    itm.VAF_Screen_ID = Util.GetValueOfInt(dr["VAF_Screen_ID"]);
                     lstInfo.Add(itm);
 
                 }
@@ -256,67 +256,67 @@ OR
                 if (refresh)
                 {
                     sql = "";
-                    //if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
+                    //if (VAF_Screen_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
                     //if (whereClause.Length > 7)
                     //{
                     sql = @"SELECT count(*) FROM (";
                     //}
                     sql += @" SELECT a.*
-                            FROM AD_WF_Activity a
+                            FROM VAF_WFlow_Task a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
                             AND a.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @"
-                            AND ( (a.AD_User_ID=" + ctx.GetAD_User_ID() + @"
-                            OR a.AD_User_ID   IN
-                              (SELECT AD_User_ID
-                              FROM AD_User_Substitute
+                            AND ( (a.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + @"
+                            OR a.VAF_UserContact_ID   IN
+                              (SELECT VAF_UserContact_ID
+                              FROM VAF_UserContact_Standby
                               WHERE IsActive   ='Y'
-                              AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                              AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                               AND (validfrom  <=sysdate)
                               AND (sysdate    <=validto )
                               ))
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                              AND COALESCE(r.AD_User_ID,0)=0
-                              AND (a.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                              OR a.AD_User_ID            IS NULL
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              FROM VAF_WFlow_Incharge r
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                              AND COALESCE(r.VAF_UserContact_ID,0)=0
+                              AND (a.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                              OR a.VAF_UserContact_ID            IS NULL
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
                               )
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                              AND (r.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              FROM VAF_WFlow_Incharge r
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                              AND (r.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
                               )
                             OR EXISTS
                               (SELECT *
-                              FROM AD_WF_Responsible r
-                              INNER JOIN AD_User_Roles ur
+                              FROM VAF_WFlow_Incharge r
+                              INNER JOIN VAF_UserContact_Roles ur
                               ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
-                              WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                              AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
-                              OR a.AD_User_ID            IN
-                                (SELECT AD_User_ID
-                                FROM AD_User_Substitute
+                              WHERE a.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                              AND (ur.VAF_UserContact_ID          =" + ctx.GetVAF_UserContact_ID() + @"
+                              OR a.VAF_UserContact_ID            IN
+                                (SELECT VAF_UserContact_ID
+                                FROM VAF_UserContact_Standby
                                 WHERE IsActive   ='Y'
-                                AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
@@ -331,8 +331,8 @@ OR
                         sql += whereClause;
 
                         //                        sql += @" )  Abc LEFT OUTER Join 
-                        //                           Ad_Wf_Activity Wf On Abc.Ad_Wf_Activity_Id=Wf.Ad_Wf_Activity_Id
-                        //                           LEFT OUTER Join Ad_Wf_Node Wfn On Wfn.Ad_Wf_Node_Id=Wf.Ad_Wf_Node_Id
+                        //                           VAF_WFlow_Task Wf On Abc.VAF_WFlow_Task_Id=Wf.VAF_WFlow_Task_Id
+                        //                           LEFT OUTER Join VAF_WFlow_Node Wfn On Wfn.VAF_WFlow_Node_Id=Wf.VAF_WFlow_Node_Id
                         //                           Where Upper(Wfn.Value) Like Upper('%" + searchText + "%') Or Upper(Wfn.Name) Like Upper('%" + searchText + @"%')
                         //                           ORDER BY Abc.Priority DESC,Abc.Created";
                     }
@@ -385,8 +385,8 @@ OR
         /// <param name="ctx"></param>
         /// <param name="table"></param>
         /// <param name="searchText"></param>
-        /// <param name="AD_Window_ID"></param>
-        private void GetWhereClause(Ctx ctx, MTable table, string searchText, int AD_Window_ID, int AD_Node_ID)
+        /// <param name="VAF_Screen_ID"></param>
+        private void GetWhereClause(Ctx ctx, MTable table, string searchText, int VAF_Screen_ID, int AD_Node_ID)
         {
             if (whereClause.Length > 7 && searchText.Length > 0)
             {
@@ -395,16 +395,16 @@ OR
             else
             {
                 whereClause = " WHERE ";
-                if (AD_Window_ID > 0)
+                if (VAF_Screen_ID > 0)
                 {
-                    whereClause += " MyTable.AD_Window_ID=" + AD_Window_ID + " AND MyTable.AD_WF_NODE_ID=" + AD_Node_ID;
+                    whereClause += " MyTable.VAF_Screen_ID=" + VAF_Screen_ID + " AND MyTable.VAF_WFLOW_NODE_ID=" + AD_Node_ID;
                 }
             }
 
             if (searchText.Length > 0 && table != null)
             {
                 StringBuilder sb = new StringBuilder();
-                if (AD_Window_ID > 0)
+                if (VAF_Screen_ID > 0)
                 {
                     sb.Append(" AND (");
                 }
@@ -439,12 +439,12 @@ OR
                 //int? sr = null;
                 if (index != -1)
                 {
-                    GetFromClause(ctx, "AD_User", table.GetTableName(), localSynonmus, "SalesRep_ID");
+                    GetFromClause(ctx, "VAF_UserContact", table.GetTableName(), localSynonmus, "SalesRep_ID");
                 }
                 //sr = (int?)_po.Get_Value(index);
                 else
                 {
-                    index = _po.Get_ColumnIndex("AD_User_ID");
+                    index = _po.Get_ColumnIndex("VAF_UserContact_ID");
                     //if (index != -1)
                     //    sr = (int?)_po.Get_Value(index);
                 }
@@ -456,7 +456,7 @@ OR
 
                     SynonymNext();
 
-                    GetFromClause(ctx, "AD_User", table.GetTableName(), localSynonmus, "AD_User_ID");
+                    GetFromClause(ctx, "VAF_UserContact", table.GetTableName(), localSynonmus, "VAF_UserContact_ID");
 
                     sb.Append(" || ' '  || ").Append(_synonym).Append(".").Append("Name");
 
@@ -486,7 +486,7 @@ OR
                 sb.Append(")");
 
                 whereClause += sb + " like upper('%" + searchText + "%')";
-                if (AD_Window_ID > 0)
+                if (VAF_Screen_ID > 0)
                 {
                     whereClause += " OR Upper(myTable.TextMsg) like Upper('%" + searchText + "%') OR Upper(myTable.Summary) like Upper('%" + searchText + "%'))";
                 }
@@ -602,7 +602,7 @@ OR
                 }
                 else if (MWFNode.ACTION_UserWindow.Equals(node.GetAction()))
                 {
-                    info.AD_Window_ID = node.GetAD_Window_ID();
+                    info.VAF_Screen_ID = node.GetVAF_Screen_ID();
                     MWFActivity activity = new MWFActivity(ctx, activityID, null);
                     info.KeyCol = activity.GetPO().Get_TableName() + "_ID";
                 }
@@ -613,18 +613,18 @@ OR
 
 
 
-                string sql = @"SELECT node.ad_wf_node_ID,
+                string sql = @"SELECT node.VAF_WFlow_Node_ID,
                                   node.Name AS NodeName,
                                   usr.Name AS UserName,
                                   wfea.wfstate,
                                   wfea.TextMsg
-                              FROM ad_wf_eventaudit wfea
-                                INNER JOIN Ad_WF_Node node
-                                ON (node.Ad_Wf_node_ID=wfea.AD_Wf_Node_id)
-                                INNER JOIN AD_User usr
-                                ON (usr.Ad_User_ID         =wfea.ad_User_ID)
-                              WHERE wfea.AD_WF_Process_ID=" + wfProcessID + @"
-                              Order By wfea.ad_wf_eventaudit_id desc";
+                              FROM VAF_WFlow_EventLog wfea
+                                INNER JOIN VAF_WFlow_Node node
+                                ON (node.VAF_WFlow_Node_ID=wfea.VAF_WFlow_Node_id)
+                                INNER JOIN VAF_UserContact usr
+                                ON (usr.VAF_UserContact_ID         =wfea.VAF_UserContact_ID)
+                              WHERE wfea.VAF_WFlow_Handler_ID=" + wfProcessID + @"
+                              Order By wfea.VAF_WFlow_EventLog_id desc";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -634,7 +634,7 @@ OR
                     NodeHistory nh = null;
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        if (!nodes.Contains(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Node_ID"])))
+                        if (!nodes.Contains(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Node_ID"])))
                         {
                             ni = new NodeInfo();
                             ni.Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["NodeName"]);
@@ -652,12 +652,12 @@ OR
                                 nh.TextMsg = ds.Tables[0].Rows[i]["TextMsg"].ToString();
                             }
                             ni.History.Add(nh);
-                            nodes.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Node_ID"]));
+                            nodes.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Node_ID"]));
                             nodeInfo.Add(ni);
                         }
                         else
                         {
-                            int index = nodes.IndexOf(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Node_ID"]));
+                            int index = nodes.IndexOf(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_WFlow_Node_ID"]));
                             nh = new NodeHistory();
                             nh.State = Util.GetValueOfString(ds.Tables[0].Rows[i]["WFState"]);
                             nh.ApprovedBy = Util.GetValueOfString(ds.Tables[0].Rows[i]["UserName"]);
@@ -690,12 +690,12 @@ OR
         /// <param name="nodeID"> Noda ID </param>
         /// <param name="activityID"> string of activites separated by comma </param>
         /// <param name="textMsg">Message used while approving or forwarding activiy</param>
-        /// <param name="forward">AD_User_ID to whom activity is forwarded</param>
+        /// <param name="forward">VAF_UserContact_ID to whom activity is forwarded</param>
         /// <param name="answer"> Message</param>
         /// <param name="ctx">Context</param>
-        /// <param name="AD_Window_ID">AD_Window_ID</param>
+        /// <param name="VAF_Screen_ID">VAF_Screen_ID</param>
         /// <returns></returns>
-        public string ApproveIt(int nodeID, string activityID, string textMsg, object forward, object answer, Ctx ctx, int AD_Window_ID)
+        public string ApproveIt(int nodeID, string activityID, string textMsg, object forward, object answer, Ctx ctx, int VAF_Screen_ID)
         {
             if (!string.IsNullOrEmpty(activityID) && activityID.Length > 0)
             {
@@ -707,15 +707,15 @@ OR
                     MWFNode node = activity.GetNode();
                     // Change done to set zoom window from Node
                     if (node.GetZoomWindow_ID() > 0)
-                        activity.SetAD_Window_ID(node.GetZoomWindow_ID());
+                        activity.SetVAF_Screen_ID(node.GetZoomWindow_ID());
                     int approvalLevel = node.GetApprovalLeval();
-                    int AD_User_ID = ctx.GetAD_User_ID();
+                    int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
                     MColumn column = node.GetColumn();
 
                     if (forward != null) // Prefer Forward 
                     {
                         int fw = int.Parse(forward.ToString());
-                        if (fw == AD_User_ID || fw == 0)
+                        if (fw == VAF_UserContact_ID || fw == 0)
                         {
                             return "";
                         }
@@ -742,7 +742,7 @@ OR
                                 return "FillMandatory";
                             }
                             //
-                            string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
+                            string res = SetUserChoice(VAF_UserContact_ID, value, dt, textMsg, activity, node, VAF_Screen_ID);
                             if (res != "OK")
                             {
                                 return res;
@@ -763,24 +763,24 @@ OR
                         //        return;
                         //    }
 
-                        //    SetUserChoice(AD_User_ID, attrib.GetAttributeSetInstance().ToString(), 0, textMsg, activity, node);
+                        //    SetUserChoice(VAF_UserContact_ID, attrib.GetAttributeSetInstance().ToString(), 0, textMsg, activity, node);
                         //}
 
                         else if (forward == null && node.IsMultiApproval() && approvalLevel > 0 && answer.ToString().Equals("Y"))
                         {
 
-                            int eventCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(WFE.AD_WF_EventAudit_ID) FROM AD_WF_EventAudit WFE
-                                                                                INNER JOIN AD_WF_Process WFP ON (WFP.AD_WF_Process_ID=WFE.AD_WF_Process_ID)
-                                                                                INNER JOIN AD_WF_Activity WFA ON (WFA.AD_WF_Process_ID=WFP.AD_WF_Process_ID)
-                                                                                WHERE WFE.AD_WF_Node_ID=" + node.GetAD_WF_Node_ID() + " AND WFA.AD_WF_Activity_ID=" + activity.GetAD_WF_Activity_ID()));
+                            int eventCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(WFE.VAF_WFlow_EventLog_ID) FROM VAF_WFlow_EventLog WFE
+                                                                                INNER JOIN VAF_WFlow_Handler WFP ON (WFP.VAF_WFlow_Handler_ID=WFE.VAF_WFlow_Handler_ID)
+                                                                                INNER JOIN VAF_WFlow_Task WFA ON (WFA.VAF_WFlow_Handler_ID=WFP.VAF_WFlow_Handler_ID)
+                                                                                WHERE WFE.VAF_WFlow_Node_ID=" + node.GetVAF_WFlow_Node_ID() + " AND WFA.VAF_WFlow_Task_ID=" + activity.GetVAF_WFlow_Task_ID()));
                             if (eventCount < approvalLevel) //Forward Activity
                             {
-                                int AD_WF_Responsible_ID = 0;
-                                if (node.GetAD_WF_Responsible_ID() > 0)
-                                    AD_WF_Responsible_ID = node.GetAD_WF_Responsible_ID();
-                                else if (node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
-                                    AD_WF_Responsible_ID = node.GetWorkflow().GetAD_WF_Responsible_ID();
-                                MWFResponsible resp = new MWFResponsible(ctx, AD_WF_Responsible_ID, null);
+                                int VAF_WFlow_Incharge_ID = 0;
+                                if (node.GetVAF_WFlow_Incharge_ID() > 0)
+                                    VAF_WFlow_Incharge_ID = node.GetVAF_WFlow_Incharge_ID();
+                                else if (node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
+                                    VAF_WFlow_Incharge_ID = node.GetWorkflow().GetVAF_WFlow_Incharge_ID();
+                                MWFResponsible resp = new MWFResponsible(ctx, VAF_WFlow_Incharge_ID, null);
                                 int superVisiorID = 0;
                                 bool setRespOrg = false;
                                 int parentOrg_ID = -1;
@@ -792,14 +792,14 @@ OR
                                         setRespOrg = true;
                                 }
                                 else
-                                    superVisiorID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + activity.GetAD_User_ID()));
+                                    superVisiorID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM VAF_UserContact WHERE IsActive='Y' AND VAF_UserContact_ID=" + activity.GetVAF_UserContact_ID()));
                                 if (setRespOrg)
                                     activity.SetResponsibleOrg_ID(parentOrg_ID);
                                 if (superVisiorID == 0)//Approve
                                 {
-                                    //SetUserConfirmation(AD_User_ID, textMsg, activity, node);
+                                    //SetUserConfirmation(VAF_UserContact_ID, textMsg, activity, node);
 
-                                    string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
+                                    string res = SetUserChoice(VAF_UserContact_ID, value, dt, textMsg, activity, node, VAF_Screen_ID);
                                     if (res != "OK")
                                     {
                                         return res;
@@ -823,9 +823,9 @@ OR
                             else //Approve
                             {
 
-                                //SetUserConfirmation(AD_User_ID, textMsg, activity, node);
+                                //SetUserConfirmation(VAF_UserContact_ID, textMsg, activity, node);
 
-                                string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
+                                string res = SetUserChoice(VAF_UserContact_ID, value, dt, textMsg, activity, node, VAF_Screen_ID);
                                 if (res != "OK")
                                 {
                                     return res;
@@ -835,7 +835,7 @@ OR
                         else
                         {
 
-                            string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
+                            string res = SetUserChoice(VAF_UserContact_ID, value, dt, textMsg, activity, node, VAF_Screen_ID);
                             if (res != "OK")
                             {
                                 return res;
@@ -850,7 +850,7 @@ OR
                         //   log.Config("Action=" + node.GetAction() + " - " + textMsg);
                         //try
                         //{
-                        //    activity.SetUserConfirmation(AD_User_ID, textMsg);
+                        //    activity.SetUserConfirmation(VAF_UserContact_ID, textMsg);
                         //}
                         //catch (Exception exx)
                         //{
@@ -863,7 +863,7 @@ OR
                         //            });
                         //    return;
                         //}
-                        activity.SetUserConfirmation(AD_User_ID, textMsg);
+                        activity.SetUserConfirmation(VAF_UserContact_ID, textMsg);
 
                     }
                 }
@@ -884,19 +884,19 @@ OR
                 return Msg.GetMsg(ctx, "ApproverNotFound");
             else
             {
-                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM AD_User WHERE AD_User_ID = " + User_ID)).ToLower() == "y";
+                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAF_UserContact WHERE VAF_UserContact_ID = " + User_ID)).ToLower() == "y";
                 if (!chkActiveUser)
                     return Msg.GetMsg(ctx, "ApproverNotActive"); ;
             }
             return "";
         }
 
-        private string SetUserChoice(int AD_User_ID, string value, int dt, string textMsg, MWFActivity _activity, MWFNode _node, int AD_Window_ID)
+        private string SetUserChoice(int VAF_UserContact_ID, string value, int dt, string textMsg, MWFActivity _activity, MWFNode _node, int VAF_Screen_ID)
         {
             try
             {
-                // Passed AD_Window_ID to process to set windowID at all levels of current activity
-                _activity.SetUserChoice(AD_User_ID, value, dt, textMsg,AD_Window_ID);
+                // Passed VAF_Screen_ID to process to set windowID at all levels of current activity
+                _activity.SetUserChoice(VAF_UserContact_ID, value, dt, textMsg,VAF_Screen_ID);
                 return "OK";
             }
             catch (Exception ex)
@@ -920,10 +920,10 @@ OR
                 DataSet ds = DB.ExecuteDataset(@"SELECT 
                                                             WFP.VAF_TableView_ID,
                                                             WFP.Record_ID
-                                                            FROM AD_WF_Process WFP
-                                                            INNER JOIN AD_WF_Activity WFA
-                                                            ON (WFA.AD_WF_Process_ID=WFP.AD_WF_Process_ID)
-                                                            WHERE WFA.AD_WF_Activity_ID=" + activityID, null);
+                                                            FROM VAF_WFlow_Handler WFP
+                                                            INNER JOIN VAF_WFlow_Task WFA
+                                                            ON (WFA.VAF_WFlow_Handler_ID=WFP.VAF_WFlow_Handler_ID)
+                                                            WHERE WFA.VAF_WFlow_Task_ID=" + activityID, null);
                 PO doc = GetPO(Util.GetValueOfInt(ds.Tables[0].Rows[0][0]), Util.GetValueOfInt(ds.Tables[0].Rows[0][1]), ctx);
                 ds = null;
                 aInfo.GenAttributeSetID = Util.GetValueOfInt(doc.Get_Value("C_GenAttributeSet_ID"));
@@ -966,62 +966,63 @@ OR
             string sql = "";
             if (baseLang)
             {
-                sql = @"SELECT DISTINCT AD_Window.AD_window_ID,  AD_Window.DisplayName  || ' (' || Ad_Wf_Node.Name || ')' As Name,AD_WF_NODE.AD_WF_NODE_ID FROM AD_WF_Activity AD_WF_Activity
-                            JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
-                            JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
-                            WHERE AD_Window.IsActive ='Y'  AND Ad_Wf_Activity.Processed = 'N'  AND Ad_Wf_Activity.WFState      ='OS' ";
-                sql += " AND Ad_Wf_Activity.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
-                            AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
-                            OR Ad_Wf_Activity.AD_User_ID   IN
-                              (SELECT AD_User_ID
-                              FROM AD_User_Substitute
+                sql = @"SELECT DISTINCT VAF_Screen.AD_window_ID,  VAF_Screen.DisplayName  || ' (' || VAF_WFlow_Node.Name || ')' As Name,VAF_WFLOW_NODEVAF_WFlow_Node_Para
+.VAF_WFLOW_NODE_ID FROM VAF_WFlow_Task VAF_WFlow_Task
+                            JOIN VAF_Screen VAF_Screen ON VAF_WFlow_Task.Ad_Window_Id = VAF_Screen.Ad_Window_Id
+                            JOIN VAF_WFLOW_NODE VAF_WFLOW_NODE ON VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID=VAF_WFlow_Task.VAF_WFLOW_NODE_ID
+                            WHERE VAF_Screen.IsActive ='Y'  AND VAF_WFlow_Task.Processed = 'N'  AND VAF_WFlow_Task.WFState      ='OS' ";
+                sql += " AND VAF_WFlow_Task.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
+                            AND  ((VAF_WFlow_Task.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + @" 
+                            OR VAF_WFlow_Task.VAF_UserContact_ID   IN
+                              (SELECT VAF_UserContact_ID
+                              FROM VAF_UserContact_Standby
                               WHERE IsActive   ='Y'
-                              AND Substitute_ID=" + ctx.GetAD_User_ID() + @" 
+                              AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @" 
                               AND (validfrom  <=sysdate)
                               AND (sysdate    <=validto )
                               ))
                                 OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND COALESCE(r.AD_User_ID,0)=0
-                                  AND (AD_WF_Activity.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IS NULL
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  FROM VAF_WFlow_Incharge r
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND COALESCE(r.VAF_UserContact_ID,0)=0
+                                  AND (VAF_WFlow_Task.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IS NULL
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
                                   )
                                 OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND (r.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  FROM VAF_WFlow_Incharge r
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND (r.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
                                   )
                                 OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  INNER JOIN AD_User_Roles ur
+                                  FROM VAF_WFlow_Incharge r
+                                  INNER JOIN VAF_UserContact_Roles ur
                                   ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND (ur.VAF_UserContact_ID          =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
@@ -1031,68 +1032,68 @@ OR
             else
             {
                 sql = @"SELECT DISTINCT Ad_Window.Ad_Window_Id,
-                        Ad_Window_Trl.Name || ' (' || Ad_Wf_Node.Name || ')' As Name,AD_WF_NODE.AD_WF_NODE_ID
-                        FROM Ad_Wf_Activity Ad_Wf_Activity
-                        JOIN AD_Window AD_Window
-                        ON Ad_Wf_Activity.Ad_Window_Id = Ad_Window.Ad_Window_Id
-                        JOIN AD_window_Trl AD_window_Trl
-                        ON AD_window_Trl.AD_Window_ID=AD_window.AD_window_ID
-                        JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
-                        WHERE AD_Window.IsActive     ='Y'
-                        AND Ad_Wf_Activity.Processed = 'N'
-                        AND Ad_Wf_Activity.WFState   ='OS' AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
-                sql += " AND Ad_Wf_Activity.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
-                            AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
-                            OR Ad_Wf_Activity.AD_User_ID   IN
-                              (SELECT AD_User_ID
-                              FROM AD_User_Substitute
+                        VAF_Screen_TL.Name || ' (' || VAF_WFlow_Node.Name || ')' As Name,VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID
+                        FROM VAF_WFlow_Task VAF_WFlow_Task
+                        JOIN VAF_Screen VAF_Screen
+                        ON VAF_WFlow_Task.Ad_Window_Id = Ad_Window.Ad_Window_Id
+                        JOIN VAF_Screen_TL VAF_Screen_TL
+                        ON VAF_Screen_TL.VAF_Screen_ID=AD_window.AD_window_ID
+                        JOIN VAF_WFLOW_NODE VAF_WFLOW_NODE ON VAF_WFLOW_NODE.VAF_WFLOW_NODE_ID=VAF_WFlow_Task.VAF_WFLOW_NODE_ID
+                        WHERE VAF_Screen.IsActive     ='Y'
+                        AND VAF_WFlow_Task.Processed = 'N'
+                        AND VAF_WFlow_Task.WFState   ='OS' AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
+                sql += " AND VAF_WFlow_Task.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
+                            AND  ((VAF_WFlow_Task.VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() + @" 
+                            OR VAF_WFlow_Task.VAF_UserContact_ID   IN
+                              (SELECT VAF_UserContact_ID
+                              FROM VAF_UserContact_Standby
                               WHERE IsActive   ='Y'
-                              AND Substitute_ID=" + ctx.GetAD_User_ID() + @" 
+                              AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @" 
                               AND (validfrom  <=sysdate)
                               AND (sysdate    <=validto )
                               ))
                                   OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND COALESCE(r.AD_User_ID,0)=0
-                                  AND (AD_WF_Activity.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IS NULL
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  FROM VAF_WFlow_Incharge r
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND COALESCE(r.VAF_UserContact_ID,0)=0
+                                  AND (VAF_WFlow_Task.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IS NULL
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
                                   )
                                 OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND (r.AD_User_ID           =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  FROM VAF_WFlow_Incharge r
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND (r.VAF_UserContact_ID           =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
                                   )
                                 OR EXISTS
                                   (SELECT *
-                                  FROM AD_WF_Responsible r
-                                  INNER JOIN AD_User_Roles ur
+                                  FROM VAF_WFlow_Incharge r
+                                  INNER JOIN VAF_UserContact_Roles ur
                                   ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
-                                  WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
-                                  AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
-                                  OR AD_WF_Activity.AD_User_ID            IN
-                                    (SELECT AD_User_ID
-                                    FROM AD_User_Substitute
+                                  WHERE VAF_WFlow_Task.VAF_WFlow_Incharge_ID=r.VAF_WFlow_Incharge_ID
+                                  AND (ur.VAF_UserContact_ID          =" + ctx.GetVAF_UserContact_ID() + @"
+                                  OR VAF_WFlow_Task.VAF_UserContact_ID            IN
+                                    (SELECT VAF_UserContact_ID
+                                    FROM VAF_UserContact_Standby
                                     WHERE IsActive   ='Y'
-                                    AND Substitute_ID=" + ctx.GetAD_User_ID() + @"
+                                    AND Substitute_ID=" + ctx.GetVAF_UserContact_ID() + @"
                                     AND (validfrom  <=sysdate)
                                     AND (sysdate    <=validto )
                                     ))
@@ -1102,7 +1103,7 @@ OR
 
 
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_WF_Activity", true, true);
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_WFlow_Task", true, true);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1110,8 +1111,8 @@ OR
                 {
                     WorkflowWindowList wwl = new WorkflowWindowList();
                     wwl.WindowName = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
-                    wwl.AD_Window_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Window_ID"]);
-                    wwl.AD_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_WF_NODE_ID"]);
+                    wwl.VAF_Screen_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Screen_ID"]);
+                    wwl.AD_Node_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_WFLOW_NODE_ID"]);
                     list.Add(wwl);
                 }
             }
@@ -1121,7 +1122,7 @@ OR
 
     public class WorkflowWindowList
     {
-        public int AD_Window_ID { get; set; }
+        public int VAF_Screen_ID { get; set; }
         public string WindowName { get; set; }
         public int AD_Node_ID { get; set; }
     }
@@ -1149,12 +1150,12 @@ OR
             get;
             set;
         }
-        public int AD_User_ID
+        public int VAF_UserContact_ID
         {
             get;
             set;
         }
-        public int AD_WF_Activity_ID
+        public int VAF_WFlow_Task_ID
         {
             get;
             set;
@@ -1164,12 +1165,12 @@ OR
             get;
             set;
         }
-        public int AD_WF_Process_ID
+        public int VAF_WFlow_Handler_ID
         {
             get;
             set;
         }
-        public int AD_WF_Responsible_ID
+        public int VAF_WFlow_Incharge_ID
         {
             get;
             set;
@@ -1247,7 +1248,7 @@ OR
             set;
         }
 
-        public int AD_Window_ID
+        public int VAF_Screen_ID
         {
             get;
             set;
@@ -1297,7 +1298,7 @@ OR
             get;
             set;
         }
-        public int AD_Window_ID
+        public int VAF_Screen_ID
         {
             get;
             set;

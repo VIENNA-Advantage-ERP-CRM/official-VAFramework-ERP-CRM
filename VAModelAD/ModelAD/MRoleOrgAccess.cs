@@ -290,26 +290,26 @@ namespace VAdvantage.Model
             else
             {
 
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID FROM ad_user_orgaccess WHERE VAF_Org_ID=" + GetVAF_Org_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID FROM VAF_UserContact_OrgRights WHERE VAF_Org_ID=" + GetVAF_Org_ID());
                 List<int> UIDs = new List<int>();
                 if (ds != null || ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        UIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]));
+                        UIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                     }
 
                 }
 
-                string sql = "SELECT AD_User_ID FROM VAF_Loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_Role_ID=" + GetVAF_Role_ID();
+                string sql = "SELECT VAF_UserContact_ID FROM VAF_Loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_Role_ID=" + GetVAF_Role_ID();
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i <= ds.Tables[0].Rows.Count; i++)
                     {
-                        if (UIDs.IndexOf(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"])) == -1)
+                        if (UIDs.IndexOf(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"])) == -1)
                         {
-                            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_UserContact_ID=" + ds.Tables[0].Rows[i]["VAF_UserContact_ID"].ToString());
                         }
                     }
                 }

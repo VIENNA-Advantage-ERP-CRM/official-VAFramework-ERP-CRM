@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Access Module 1
  * Purpose        : Role model.
-                    Includes AD_User runtime info for Personal Access 
+                    Includes VAF_UserContact runtime info for Personal Access 
  * Class Used     : context.cs,
  * Created By     : Harwinder 
  * Date           : --
@@ -49,13 +49,13 @@ namespace VAdvantage.Model
         //	Access SQL Not Fully Qualified	
         public const bool SQL_NOTQUALIFIED = false;
 
-        //	The AD_User_ID of the SuperUser
+        //	The VAF_UserContact_ID of the SuperUser
         public const int SUPERUSER_USER_ID = 100;
-        //	The AD_User_ID of the System Administrator	
+        //	The VAF_UserContact_ID of the System Administrator	
         public const int SYSTEM_USER_ID = 0;
 
         //  User
-        private int _AD_User_ID = -1;
+        private int _VAF_UserContact_ID = -1;
         // private int _VAF_Role_ID = 0;
         // Log						
         private static VLogger s_log = VLogger.GetVLogger(typeof(MRole).FullName);
@@ -180,22 +180,22 @@ namespace VAdvantage.Model
         public static MRole GetDefault(Ctx ctx, bool reload)
         {
             int VAF_Role_ID = ctx.GetVAF_Role_ID();
-            int AD_User_ID = ctx.GetAD_User_ID();
+            int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             //if (!Ini.IsClient())	//	none for Server
-            //    AD_User_ID = 0; //Form Preference
+            //    VAF_UserContact_ID = 0; //Form Preference
 
             MRole role = (MRole)s_cache.Get(VAF_Role_ID);
             lock (_lock)
             {
                 if (reload || role == null)
                 {
-                    role = Get(ctx, VAF_Role_ID, AD_User_ID, true);
+                    role = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
                     s_cache[VAF_Role_ID] = role;
                 }
                 else if (role.GetVAF_Role_ID() != VAF_Role_ID
-                || role.GetAD_User_ID() != AD_User_ID)
+                || role.GetVAF_UserContact_ID() != VAF_UserContact_ID)
                 {
-                    role = Get(ctx, VAF_Role_ID, AD_User_ID, true);
+                    role = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
                     s_cache[VAF_Role_ID] = role;
                 }
             }
@@ -204,16 +204,16 @@ namespace VAdvantage.Model
 
             //if (reload || _defaultRole == null)
             //{
-            //    _defaultRole = Get(ctx, VAF_Role_ID, AD_User_ID, reload);
+            //    _defaultRole = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, reload);
             //}
             //else if (_defaultRole.GetVAF_Role_ID() != VAF_Role_ID
-            //|| _defaultRole.GetAD_User_ID() != AD_User_ID)
+            //|| _defaultRole.GetVAF_UserContact_ID() != VAF_UserContact_ID)
             //{
-            //    _defaultRole = Get(ctx, VAF_Role_ID, AD_User_ID, true);
+            //    _defaultRole = Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
             //}
             ////	Update Cache
             //if (reload && _defaultRole != null)
-            //    Get(ctx, VAF_Role_ID, AD_User_ID, true);
+            //    Get(ctx, VAF_Role_ID, VAF_UserContact_ID, true);
             //return _defaultRole;
 
         }
@@ -223,19 +223,19 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="VAF_Role_ID"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="reload"></param>
         /// <returns></returns>
-        public static MRole Get(Ctx ctx, int VAF_Role_ID, int AD_User_ID, bool reload)
+        public static MRole Get(Ctx ctx, int VAF_Role_ID, int VAF_UserContact_ID, bool reload)
         {
-            s_log.Info("VAF_Role_ID=" + VAF_Role_ID + ", AD_User_ID=" + AD_User_ID + ", reload=" + reload);
+            s_log.Info("VAF_Role_ID=" + VAF_Role_ID + ", VAF_UserContact_ID=" + VAF_UserContact_ID + ", reload=" + reload);
             MRole role = new MRole(ctx, VAF_Role_ID, null);
             if (VAF_Role_ID == 0)
             {
                 Trx trxName = null;
                 role.Load(trxName);			//	special Handling
             }
-            role.SetAD_User_ID(AD_User_ID);
+            role.SetVAF_UserContact_ID(VAF_UserContact_ID);
             role.LoadAccess(reload);
             s_log.Info(role.ToString());
             return role;
@@ -293,12 +293,12 @@ namespace VAdvantage.Model
 
         /// <summary>
         ///	 Get Logged in user
-        ///	 AD_User_ID user requesting info
+        ///	 VAF_UserContact_ID user requesting info
         /// </summary>
         /// <returns></returns>
-        public int GetAD_User_ID()
+        public int GetVAF_UserContact_ID()
         {
-            return _AD_User_ID;
+            return _VAF_UserContact_ID;
         }	//
 
         public MRole(Ctx ctx, DataRow dr, Trx trxName)
@@ -310,24 +310,24 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Logged in user
         /// </summary>
-        /// <param name="AD_User_ID"></param>
-        public void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            _AD_User_ID = AD_User_ID;
-        }	//	setAD_User_ID
+            _VAF_UserContact_ID = VAF_UserContact_ID;
+        }	//	setVAF_UserContact_ID
 
         /// <summary>
         /// Check User has access To window against role
         /// </summary>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
-        //public static bool? GetWindowAccess1(int AD_Window_ID)
+        //public static bool? GetWindowAccess1(int VAF_Screen_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcWindow_access == null)
         //    {
         //        _dcWindow_access = new Dictionary<string, string>();
-        //        string strQry = "SELECT AD_Window_ID, IsReadWrite FROM AD_Window_Access WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
+        //        string strQry = "SELECT VAF_Screen_ID, IsReadWrite FROM VAF_Screen_Rights WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
         //            IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(strQry);
@@ -343,7 +343,7 @@ namespace VAdvantage.Model
         //            _dcWindow_access = null;
         //        }
         //    }
-        //    if (_dcWindow_access.ContainsKey(AD_Window_ID.ToString()))
+        //    if (_dcWindow_access.ContainsKey(VAF_Screen_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -499,15 +499,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check User has access To window against role
         /// </summary>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <returns></returns>
-        public bool? GetWindowAccess(int AD_Window_ID)
+        public bool? GetWindowAccess(int VAF_Screen_ID)
         {
             bool? blnReturn = null;
             if (_dcWindow_access == null)
             {
                 _dcWindow_access = new Dictionary<int, bool>();
-                string strQry = "SELECT AD_Window_ID, IsReadWrite FROM AD_Window_Access WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
+                string strQry = "SELECT VAF_Screen_ID, IsReadWrite FROM VAF_Screen_Rights WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
                 IDataReader dr = null;
                 try
                 {
@@ -532,9 +532,9 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (_dcWindow_access.ContainsKey(AD_Window_ID))
+            if (_dcWindow_access.ContainsKey(VAF_Screen_ID))
             {
-                blnReturn = _dcWindow_access[AD_Window_ID];
+                blnReturn = _dcWindow_access[VAF_Screen_ID];
             }
 
             return blnReturn;
@@ -692,15 +692,15 @@ namespace VAdvantage.Model
                 + GetUpdatedBy() + ", SysDate," + GetUpdatedBy()
                 + ",'Y' ";	//	IsReadWrite
 
-            String sqlWindow = "INSERT INTO AD_Window_Access "
-                + "(AD_Window_ID, VAF_Role_ID,"
+            String sqlWindow = "INSERT INTO VAF_Screen_Rights "
+                + "(VAF_Screen_ID, VAF_Role_ID,"
                 + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
-                + "SELECT DISTINCT w.AD_Window_ID, " + roleClientOrgUser
-                + "FROM AD_Window w"
-                + " INNER JOIN VAF_Tab t ON (w.AD_Window_ID=t.AD_Window_ID)"
+                + "SELECT DISTINCT w.VAF_Screen_ID, " + roleClientOrgUser
+                + "FROM VAF_Screen w"
+                + " INNER JOIN VAF_Tab t ON (w.VAF_Screen_ID=t.VAF_Screen_ID)"
                 + " INNER JOIN VAF_TableView tt ON (t.VAF_TableView_ID=tt.VAF_TableView_ID) "
                 + "WHERE t.SeqNo=(SELECT MIN(SeqNo) FROM VAF_Tab xt "	// only check first tab
-                    + "WHERE xt.AD_Window_ID=w.AD_Window_ID)"
+                    + "WHERE xt.VAF_Screen_ID=w.VAF_Screen_ID)"
                 + "AND tt.AccessLevel IN ";
 
             String sqlProcess = "INSERT INTO VAF_Job_Rights "
@@ -767,7 +767,7 @@ namespace VAdvantage.Model
             //
             String whereDel = " WHERE VAF_Role_ID=" + GetVAF_Role_ID();
             //
-            int winDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Window_Access" + whereDel, null, Get_TrxName());
+            int winDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Screen_Rights" + whereDel, null, Get_TrxName());
             int win = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWindow + roleAccessLevelWin, null, Get_TrxName());
             int procDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Job_Rights" + whereDel, null, Get_TrxName());
             int proc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlProcess + roleAccessLevel, null, Get_TrxName());
@@ -779,14 +779,14 @@ namespace VAdvantage.Model
             // called function to add Document action access
             string daAccess = AddDocActionAccess();
 
-            log.Fine("AD_Window_ID=" + winDel + "+" + win
+            log.Fine("VAF_Screen_ID=" + winDel + "+" + win
                 + ", VAF_Job_ID=" + procDel + "+" + proc
                 + ", VAF_Page_ID=" + formDel + "+" + form
                 + ", AD_Workflow_ID=" + wfDel + "+" + wf
                 + daAccess);
 
             LoadAccess(true);
-            return "@AD_Window_ID@ #" + win
+            return "@VAF_Screen_ID@ #" + win
                 + " -  @VAF_Job_ID@ #" + proc
                 + " -  @VAF_Page_ID@ #" + form
                 + " -  @AD_Workflow_ID@ #" + wf
@@ -1696,8 +1696,8 @@ namespace VAdvantage.Model
         /// <param name="list"></param>
         private void LoadOrgAccessUser(List<OrgAccess> list)
         {
-            string sql = "SELECT * FROM AD_User_OrgAccess "
-                + "WHERE AD_User_ID=" + GetCtx().GetAD_User_ID() + " AND IsActive='Y'";
+            string sql = "SELECT * FROM VAF_UserContact_OrgRights "
+                + "WHERE VAF_UserContact_ID=" + GetCtx().GetVAF_UserContact_ID() + " AND IsActive='Y'";
 
             DataTable dt = null;
             IDataReader dr = null;
@@ -2224,22 +2224,22 @@ namespace VAdvantage.Model
             if (!hasBPColumn)
                 return "";
 
-            int AD_User_ID = GetCtx().GetAD_User_ID();
+            int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
 
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN AD_User u "
+            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
                                         + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
-                                        + " WHERE u.AD_User_ID=" + AD_User_ID
+                                        + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
                                         + " AND bp.C_BPartner_ID=" + TableName + ".C_BPartner_ID)"
-                                + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN AD_User u "
+                                + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
                                         + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
-                                        + " WHERE u.AD_User_ID=" + AD_User_ID
+                                        + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
                                         + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
 
             bool hasUserColumn = false;
             string sql1 = "SELECT count(*) FROM VAF_TableView t "
                             + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                             + "WHERE t.tableName='" + TableName
-                            + "' AND c.ColumnName='AD_User_ID' ";
+                            + "' AND c.ColumnName='VAF_UserContact_ID' ";
             try
             {
 
@@ -2255,7 +2255,7 @@ namespace VAdvantage.Model
             }
 
             if (hasUserColumn)
-                docAccess += " OR " + TableName + ".AD_User_ID =" + AD_User_ID;
+                docAccess += " OR " + TableName + ".VAF_UserContact_ID =" + VAF_UserContact_ID;
             docAccess += ")";
 
             return docAccess;
@@ -2319,7 +2319,7 @@ namespace VAdvantage.Model
                 MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
                 if (!table.IsView() && table.Haskey(VAF_TableView_ID))
                 {
-                    string lockedIDs = MPrivateAccess.GetLockedRecordWhere(VAF_TableView_ID, _AD_User_ID);
+                    string lockedIDs = MPrivateAccess.GetLockedRecordWhere(VAF_TableView_ID, _VAF_UserContact_ID);
                     if (lockedIDs != null)
                     {
                         if (sb.Length > 0)
@@ -2725,25 +2725,25 @@ namespace VAdvantage.Model
 
             if (!IsUseUserOrgAccess())
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM VAF_Role_OrgRights WHERE IsActive='Y' AND VAF_Role_ID = " + GetVAF_Role_ID() + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
                     }
                 }
             }
             else
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID,vaf_org_ID From VAF_Loginsetting WHERE VAF_Role_ID = " + GetVAF_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM AD_User_OrgAccess WHERE IsActive='Y' AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
+                    if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM VAF_UserContact_OrgRights WHERE IsActive='Y' AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND VAF_UserContact_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]) + " AND VAF_Role_ID = " + GetVAF_Role_ID());
                     }
                 }
             }

@@ -65,7 +65,7 @@ namespace VAdvantage.Process
         private int _VAF_Client_ID = 0;
         private String _VAF_Language = null;
 
-        internal static List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "VAF_Shortcut" };
+        internal static List<String> lstTableHasDisplayCol = new List<string>() { "VAF_SCREEN", "AD_FORM", "VAF_Shortcut" };
 
         //XmlDeclaration xmlDec;
 
@@ -802,8 +802,8 @@ namespace VAdvantage.Process
             if (baseTableName.Equals("VAF_TableView"))
                 return "1=2";
             //	AccessLevel 4=System only
-            if (baseTableName.Equals("AD_Window"))
-                return "o.AD_Window_ID IN (SELECT t.AD_Window_ID FROM VAF_Tab tab"
+            if (baseTableName.Equals("VAF_Screen"))
+                return "o.VAF_Screen_ID IN (SELECT t.VAF_Screen_ID FROM VAF_Tab tab"
                     + " INNER JOIN VAF_TableView tt ON (tab.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
             if (baseTableName.Equals("VAF_Tab"))

@@ -106,10 +106,10 @@ namespace VAdvantage.Model
         public int GetFirstUserVAF_Role_ID()
         {
             GetRecipients(false);
-            int AD_User_ID = GetFirstAD_User_ID();
-            if (AD_User_ID != -1)
+            int VAF_UserContact_ID = GetFirstVAF_UserContact_ID();
+            if (VAF_UserContact_ID != -1)
             {
-                MUserRoles[] urs = MUserRoles.GetOfUser(GetCtx(), AD_User_ID);
+                MUserRoles[] urs = MUserRoles.GetOfUser(GetCtx(), VAF_UserContact_ID);
                 foreach (MUserRoles element in urs)
                 {
                     if (element.IsActive())
@@ -120,16 +120,16 @@ namespace VAdvantage.Model
         }	//	getFirstUserVAF_Role_ID
 
 
-        public int GetFirstAD_User_ID()
+        public int GetFirstVAF_UserContact_ID()
         {
             GetRecipients(false);
             foreach (MAlertRecipient element in m_recipients)
             {
-                if (element.GetAD_User_ID() != -1)
-                    return element.GetAD_User_ID();
+                if (element.GetVAF_UserContact_ID() != -1)
+                    return element.GetVAF_UserContact_ID();
             }
             return -1;
-        }	//	getFirstAD_User_ID
+        }	//	getFirstVAF_UserContact_ID
 
 
         public override string ToString()

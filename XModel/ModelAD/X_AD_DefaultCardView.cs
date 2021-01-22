@@ -73,15 +73,15 @@ namespace VAdvantage.Model
         public void SetAD_DefaultCardView_ID(int AD_DefaultCardView_ID) { if (AD_DefaultCardView_ID < 1) throw new ArgumentException("AD_DefaultCardView_ID is mandatory."); Set_ValueNoCheck("AD_DefaultCardView_ID", AD_DefaultCardView_ID); }/** Get AD_DefaultCardView_ID.
 @return AD_DefaultCardView_ID */
         public int GetAD_DefaultCardView_ID() { Object ii = Get_Value("AD_DefaultCardView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-        public void SetAD_User_ID(int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            if (AD_User_ID <= 0) Set_Value("AD_User_ID", null);
+            if (VAF_UserContact_ID <= 0) Set_Value("VAF_UserContact_ID", null);
             else
-                Set_Value("AD_User_ID", AD_User_ID);
+                Set_Value("VAF_UserContact_ID", VAF_UserContact_ID);
         }/** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-        public int GetAD_User_ID() { Object ii = Get_Value("AD_User_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAF_UserContact_ID() { Object ii = Get_Value("VAF_UserContact_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */

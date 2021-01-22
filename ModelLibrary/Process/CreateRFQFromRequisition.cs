@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                         rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
-                        rfq.SetSalesRep_ID(GetCtx().GetAD_User_ID());
+                        rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                         rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);
                         rfq.SetM_Requisition_ID(Requisition_ID);
                         rfq.SetDateWorkStart(System.DateTime.Now);
@@ -279,7 +279,7 @@ namespace VAdvantage.Process
                         rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
-                        rfq.SetSalesRep_ID(GetCtx().GetAD_User_ID());
+                        rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                         rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);
                         rfq.SetDateWorkStart(System.DateTime.Now);
                         rfq.SetDateResponse(DateResponse);      // Added by Bharat on 15 Jan 2019 as asked by Puneet

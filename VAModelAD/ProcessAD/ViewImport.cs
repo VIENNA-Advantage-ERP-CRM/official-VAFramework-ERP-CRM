@@ -310,7 +310,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
 
                         //clean view components and their columns
-                        String vcdel = "DELETE FROM AD_ViewComponent WHERE (VAF_TableView_ID, VAF_Client_ID) IN (SELECT VAF_TableView_ID, VAF_Client_ID FROM VAF_TableView WHERE TableName = '" + tableName + "')";
+                        String vcdel = "DELETE FROM VAF_DBViewElement WHERE (VAF_TableView_ID, VAF_Client_ID) IN (SELECT VAF_TableView_ID, VAF_Client_ID FROM VAF_TableView WHERE TableName = '" + tableName + "')";
                         try
                         {
                             DataBase.DB.ExecuteQuery(vcdel, null);
@@ -320,7 +320,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             log.Log(Level.SEVERE, vcdel, e);
                         }
 
-                        //insert into ad_viewComponent for each union part
+                        //insert into VAF_DBViewElement for each union part
                         Acommand = command.Substring(iSel);
                         //String[] selects =command.Split(new char[]{','});//UNION'},0); // currently does not handle other set operators (e.g. INTERSECT)
                         Regex reg = new Regex(Acommand);
@@ -434,7 +434,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 break;
                             }
 
-                            //insert into AD_ViewComponent
+                            //insert into VAF_DBViewElement
                             //MViewComponent mvc = new MViewComponent(Env.getCtx(), 0, myTrx.getTrxName());
                             MViewComponent mvc = new MViewComponent(Env.GetCtx(), 0, null);
                             mvc.SetName("VC_" + tableName);
@@ -468,14 +468,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 break;
                             }
 
-                            //insert into AD_ViewColumn
+                            //insert into VAF_DBViewColumn
                             MViewColumn mvcol = null;
                             for (int j = 0; j < colName.Count; j++)
                             {
                                 //mvcol = new MViewColumn(Env.getCtx(), 0, myTrx.getTrxName());
                                 mvcol = new MViewColumn(Env.GetCtx(), 0, null);
                                 //mvcol.setVAF_Org_ID(0);
-                                mvcol.SetAD_ViewComponent_ID(mvc.Get_ID());
+                                mvcol.SetVAF_DBViewElement_ID(mvc.Get_ID());
                                 mvcol.SetIsActive(true);
                                 mvcol.SetEntityType(entityType);
                                 log.Info("Importing View " + tableName + "(i,j) = (" + i + ", " + j + ")");

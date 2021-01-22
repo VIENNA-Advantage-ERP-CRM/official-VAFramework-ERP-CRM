@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MViewComponent
  * Purpose        : Database View Component Model
- * Class Used     : X_AD_ViewComponent
+ * Class Used     : X_VAF_DBViewElement
  * Chronological    Development
  * Deepak           14-Jan-2010
   ******************************************************/
@@ -22,18 +22,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MViewComponent:X_AD_ViewComponent
+    public class MViewComponent:X_VAF_DBViewElement
     {    
 	///private static  long serialVersionUID = 1L;
 	/// <summary>
 	/// Standard Constructor	
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="AD_ViewComponent_ID">id</param>
+	/// <param name="VAF_DBViewElement_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MViewComponent(Ctx ctx, int AD_ViewComponent_ID,
+	public MViewComponent(Ctx ctx, int VAF_DBViewElement_ID,
         Trx trxName)
-        : base(ctx, AD_ViewComponent_ID, trxName)
+        : base(ctx, VAF_DBViewElement_ID, trxName)
 	{
 		
 	}	//	MViewComponent
@@ -72,13 +72,13 @@ namespace VAdvantage.Model
 	{
 		if (_columns != null && !reload)
 			return _columns;
-		String sql = "SELECT * FROM AD_ViewColumn WHERE AD_ViewComponent_ID=@param ORDER BY AD_ViewColumn_ID";
+		String sql = "SELECT * FROM VAF_DBViewColumn WHERE VAF_DBViewElement_ID=@param ORDER BY VAF_DBViewColumn_ID";
 		List<MViewColumn> list = new List<MViewColumn>();
 		SqlParameter[] param=new SqlParameter[1];
         IDataReader idr=null;
 		try
 		{
-            param[0]=new SqlParameter("@param",GetAD_ViewComponent_ID());			
+            param[0]=new SqlParameter("@param",GetVAF_DBViewElement_ID());			
 			idr=DataBase.DB.ExecuteReader(sql,param,Get_TrxName());			
 			while(idr.Read())
 			{
@@ -141,16 +141,16 @@ namespace VAdvantage.Model
 				String dt = vc.GetDBDataType();
 				if (dt!=null)
 				{
-					if (dt.Equals(X_AD_ViewColumn.DBDATATYPE_CharacterFixed) || 
-							dt.Equals(X_AD_ViewColumn.DBDATATYPE_CharacterVariable))
+					if (dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_CharacterFixed) || 
+							dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_CharacterVariable))
 							colSQL = "NULLIF('a','a')";
 					else
-					if (dt.Equals(X_AD_ViewColumn.DBDATATYPE_Decimal) || 
-							dt.Equals(X_AD_ViewColumn.DBDATATYPE_Integer) ||
-							dt.Equals(X_AD_ViewColumn.DBDATATYPE_Number))
+					if (dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_Decimal) || 
+							dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_Integer) ||
+							dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_Number))
 							colSQL = "NULLIF(1,1)";
 					else
-					if (dt.Equals(X_AD_ViewColumn.DBDATATYPE_Timestamp))
+					if (dt.Equals(X_VAF_DBViewColumn.DBDATATYPE_Timestamp))
 						colSQL = "NULL";
 				}
 				else

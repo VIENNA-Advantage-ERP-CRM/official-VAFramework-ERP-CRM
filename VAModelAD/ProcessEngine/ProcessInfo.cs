@@ -75,7 +75,7 @@ namespace VAdvantage.ProcessEngine
         int _table_ID;
         string _tableName;
         int _record_ID;
-        int _AD_User_ID;
+        int _VAF_UserContact_ID;
         int _VAF_Client_ID;              //7    
         int? _VAF_Org_ID;
         String _className = null;
@@ -137,7 +137,7 @@ namespace VAdvantage.ProcessEngine
             lst.Add("ClassName", _className);
             lst.Add("VAF_TableView_ID", _table_ID);
             lst.Add("VAF_TableViewName", _tableName);
-            lst.Add("AD_User_ID", _AD_User_ID);             //10
+            lst.Add("VAF_UserContact_ID", _VAF_UserContact_ID);             //10
             lst.Add("VAF_Client_ID", _VAF_Client_ID);
             lst.Add("Batch", _batch);
             lst.Add("TimeOut", _timeout);
@@ -155,7 +155,7 @@ namespace VAdvantage.ProcessEngine
             lst.Add("TotalPage", _totalPage);                           //24
             lst.Add("FileType", _fileType);                           //25
             lst.Add("PageNo", _pageNo);
-            lst.Add("AD_Window_ID", _ad_window_ID);
+            lst.Add("VAF_Screen_ID", _ad_window_ID);
             lst.Add("WindowNo", _windowNo);
             lst.Add("PrintFormatTableName", _VAF_Print_Rpt_Layout_TableName);
             lst.Add("VAF_ReportView_ID", _VAF_ReportView_ID);
@@ -178,7 +178,7 @@ namespace VAdvantage.ProcessEngine
             info._className = Util.GetValueOfString(lst["ClassName"]);
             info._table_ID = Util.GetValueOfInt(lst["VAF_TableView_ID"]);
             info._tableName = Util.GetValueOfString(lst["VAF_TableViewName"]);
-            info._AD_User_ID = Util.GetValueOfInt(lst["AD_User_ID"]);
+            info._VAF_UserContact_ID = Util.GetValueOfInt(lst["VAF_UserContact_ID"]);
             info._VAF_Client_ID = Util.GetValueOfInt(lst["VAF_Client_ID"]); ;
             // info._batch = Convert.ToBoolean(lst["Batch"]);
             info._timeout = Convert.ToBoolean(lst["TimeOut"]);
@@ -201,7 +201,7 @@ namespace VAdvantage.ProcessEngine
 
             info._pageNo = Util.GetValueOfInt(lst["PageNo"]);
 
-            info._ad_window_ID = Util.GetValueOfInt(lst["AD_Window_ID"]);
+            info._ad_window_ID = Util.GetValueOfInt(lst["VAF_Screen_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
             info.ActionOrigin = Util.GetValueOfString(lst["ActionOrigin"]);
             info.OriginName = Util.GetValueOfString(lst["OriginName"]);
@@ -237,14 +237,14 @@ namespace VAdvantage.ProcessEngine
             _pageNo = PageNo;
         }
 
-        public int GetAD_Window_ID()
+        public int GetVAF_Screen_ID()
         {
             return _ad_window_ID;
         }
 
-        public void SetAD_Window_ID(int AD_Window_ID)
+        public void SetVAF_Screen_ID(int VAF_Screen_ID)
         {
-            _ad_window_ID = AD_Window_ID;
+            _ad_window_ID = VAF_Screen_ID;
         }
         //
         public override string ToString()
@@ -622,19 +622,19 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set user id
         /// </summary>
-        /// <param name="AD_User_ID"></param>
-        public void SetAD_User_ID(int AD_User_ID)
+        /// <param name="VAF_UserContact_ID"></param>
+        public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
-            _AD_User_ID = AD_User_ID;
+            _VAF_UserContact_ID = VAF_UserContact_ID;
         }
 
         /// <summary>
         /// get user id
         /// </summary>
         /// <returns></returns>
-        public int? GetAD_User_ID()
+        public int? GetVAF_UserContact_ID()
         {
-            return _AD_User_ID;
+            return _VAF_UserContact_ID;
         }
 
         /// <summary>
@@ -809,7 +809,7 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set user id
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         public void Set_VAF_Print_Rpt_Layout_Table_ID(int VAF_Print_Rpt_Layout_Table_ID)
         {
 
@@ -827,7 +827,7 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set user id
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         public void Set_VAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
             _VAF_Print_Rpt_Layout_ID = VAF_Print_Rpt_Layout_ID;
@@ -840,7 +840,7 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set user id
         /// </summary>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         public void SetPrintAllPages(bool all)
         {
             PrintAllPages = all;
@@ -888,7 +888,7 @@ namespace VAdvantage.ProcessEngine
             return _totalrecords;
         }
 
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         public void Set_VAF_ReportView_ID(int VAF_ReportView_ID)
         {
             _VAF_ReportView_ID = VAF_ReportView_ID;

@@ -1576,9 +1576,9 @@
             }
 
             if ((this.lookup &&
-                (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                (this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact.VAF_UserContact_id"
+                    || this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact_id"))
+                || columnName === "VAF_UserContact_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -1752,12 +1752,12 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
 
             // No target record to be zoomed - then zoom querry set null to show all records.
@@ -1767,12 +1767,12 @@
 
 
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
 
             //setCursor(Cursor.getDefaultCursor());
         };
@@ -2254,9 +2254,9 @@
             }
 
             if ((this.lookup &&
-                (this.lookup.info.keyColumn.toLowerCase() == "ad_user.ad_user_id"
-                    || this.lookup.info.keyColumn.toLowerCase() == "ad_user_id"))
-                || columnName === "AD_User_ID" || columnName === "SalesRep_ID") {
+                (this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact.VAF_UserContact_id"
+                    || this.lookup.info.keyColumn.toLowerCase() == "VAF_UserContact_id"))
+                || columnName === "VAF_UserContact_ID" || columnName === "SalesRep_ID") {
                 options[VIS.Actions.contact] = true;
             }
 
@@ -2516,8 +2516,8 @@
                 ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
             }
             else if (_columnName.equals("SalesRep_ID")) {
-                _tableName = "AD_User";
-                _keyColumnName = "AD_User_ID";
+                _tableName = "VAF_UserContact";
+                _keyColumnName = "VAF_UserContact_ID";
             }
 
             $.ajax({
@@ -2930,7 +2930,7 @@
 
                 // Added by Bharat    For Product Info
                 //VIS.context.getContext(self.lookup.windowNo, "0|VAF_Tab_ID", true)
-                //query = "SELECT AD_Window_ID FROM AD_Window WHERE Name = '" + VIS.context.getContext(self.lookup.windowNo, "WindowName") + "'";
+                //query = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE Name = '" + VIS.context.getContext(self.lookup.windowNo, "WindowName") + "'";
                 query = "VIS_88";
                 var param = [];
                 param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", VIS.context.getContext(self.lookup.windowNo, "0|VAF_Tab_ID", true));
@@ -3138,23 +3138,23 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField != null && self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
 
 
 
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
 
             //setCursor(Cursor.getDefaultCursor());
 
@@ -4181,20 +4181,20 @@
                 zoomQuery.setRecordCount(1);	//	guess
             }
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
             //
-            //this.log.info(this.getColumnName() + " - AD_Window_ID=" + AD_Window_ID
+            //this.log.info(this.getColumnName() + " - VAF_Screen_ID=" + VAF_Screen_ID
             //    + " - Query=" + zoomQuery + " - Value=" + value);
             //
             //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             //
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
             //setCursor(Cursor.getDefaultCursor());
 
         });
@@ -5909,15 +5909,15 @@
             zoomQuery.setRecordCount(1);	//	guess
             //}
 
-            var AD_Window_ID = 0;
+            var VAF_Screen_ID = 0;
             if (self.mField.getZoomWindow_ID() > 0) {
-                AD_Window_ID = self.mField.getZoomWindow_ID();
+                VAF_Screen_ID = self.mField.getZoomWindow_ID();
             }
             else {
-                AD_Window_ID = self.lookup.getZoomWindow(zoomQuery);
+                VAF_Screen_ID = self.lookup.getZoomWindow(zoomQuery);
             }
             //Open Window
-            VIS.viewManager.startWindow(AD_Window_ID, zoomQuery);
+            VIS.viewManager.startWindow(VAF_Screen_ID, zoomQuery);
         };
 
         this.getText = function () {

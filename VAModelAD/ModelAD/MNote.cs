@@ -59,13 +59,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_Msg_Lable_ID">message</param>
-        /// <param name="AD_User_ID">targeted user</param>
+        /// <param name="VAF_UserContact_ID">targeted user</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID, Trx trxName)
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int VAF_UserContact_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
             SetVAF_Msg_Lable_ID(VAF_Msg_Lable_ID);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_Msg_LableValue">message</param>
-        /// <param name="AD_User_ID">targeted user</param>
+        /// <param name="VAF_UserContact_ID">targeted user</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, string VAF_Msg_LableValue, int AD_User_ID, Trx trxName)
-            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), AD_User_ID, trxName)
+        public MNote(Ctx ctx, string VAF_Msg_LableValue, int VAF_UserContact_ID, Trx trxName)
+            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), VAF_UserContact_ID, trxName)
         {
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
             SetVAF_Org_ID(0);
@@ -87,15 +87,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_Msg_Lable_ID">message</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record</param>
         /// <param name="Reference">reference</param>
         /// <param name="TextMsg">text message</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID,
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int VAF_UserContact_ID,
             int VAF_TableView_ID, int Record_ID, String Reference, String TextMsg, Trx trxName)
-            : this(ctx, VAF_Msg_Lable_ID, AD_User_ID, trxName)
+            : this(ctx, VAF_Msg_Lable_ID, VAF_UserContact_ID, trxName)
         {
             SetRecord(VAF_TableView_ID, Record_ID);
             SetReference(Reference);
@@ -110,14 +110,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="VAF_Msg_Lable_ID"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="Reference"></param>
         /// <param name="trxName"></param>
-        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int VAF_TableView_ID, int Record_ID, String Reference, Trx trxName)
-            : this(ctx,VAF_Msg_Lable_ID, AD_User_ID, trxName)
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int VAF_TableView_ID, int Record_ID, String Reference, Trx trxName)
+            : this(ctx,VAF_Msg_Lable_ID, VAF_UserContact_ID, trxName)
         {
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             SetRecord(VAF_TableView_ID, Record_ID);
@@ -131,13 +131,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_Msg_LableValue">message</param>
-        /// <param name="AD_User_ID">targeteduser</param>
+        /// <param name="VAF_UserContact_ID">targeteduser</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, string VAF_Msg_LableValue, int AD_User_ID,
+        public MNote(Ctx ctx, string VAF_Msg_LableValue, int VAF_UserContact_ID,
             int VAF_Client_ID, int VAF_Org_ID, Trx trxName)
-            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), AD_User_ID, trxName)
+            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), VAF_UserContact_ID, trxName)
         {
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.

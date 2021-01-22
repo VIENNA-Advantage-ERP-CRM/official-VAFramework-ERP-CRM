@@ -61,9 +61,9 @@ namespace VIS.Models
         public string EmailPws { get; set; }
 
 
-        public UserPreferenceModel GetUserSettings(Ctx ctx, int ad_User_Id)
+        public UserPreferenceModel GetUserSettings(Ctx ctx, int VAF_UserContact_Id)
         {
-            MUser user = new MUser(ctx, ad_User_Id, null);
+            MUser user = new MUser(ctx, VAF_UserContact_Id, null);
             UserPreferenceModel obj = new UserPreferenceModel();
             obj.EmailUserName = user.GetEMailUser();
             obj.EmailPws = user.GetEMailUserPW();
@@ -71,35 +71,35 @@ namespace VIS.Models
             obj.SMS = user.IsSms();
             obj.Email = user.IsEmail();
 
-            if (type == X_AD_User.NOTIFICATIONTYPE_NoticePlusFaxEMail)
+            if (type == X_VAF_UserContact.NOTIFICATIONTYPE_NoticePlusFaxEMail)
             {
                 obj.Notice = true;
                 obj.Fax = true;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice)
             {
                 obj.Email = true;
                 obj.Notice = true;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_EMailPlusFaxEMail)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail)
             {
                 obj.Email = true;
                 obj.Fax = true;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_None)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_None)
             {
                 obj.Notice = false;
                 obj.Fax = false;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_Notice)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_Notice)
             {
                 obj.Notice = true;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_FaxEMail)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_FaxEMail)
             {
                 obj.Fax = true;
             }
-            else if (type == X_AD_User.NOTIFICATIONTYPE_EMail)
+            else if (type == X_VAF_UserContact.NOTIFICATIONTYPE_EMail)
             {
                 obj.Email = true;
             }
@@ -130,11 +130,11 @@ namespace VIS.Models
             ctx.SetContext("#ShowAdvanced", pref["IsShowAdvanced"].Equals("Y") ? true : false);
             return preference.Save();
         }
-        public UserSetting SaveChangePassword(Ctx ctx, int AD_User_ID, string currentPws, string newPws)
+        public UserSetting SaveChangePassword(Ctx ctx, int VAF_UserContact_ID, string currentPws, string newPws)
         {
             UserSetting obj = new UserSetting();
             obj.Msg = Msg.GetMsg(ctx, "RecordSaved");
-            MUser user = new MUser(ctx, AD_User_ID, null);
+            MUser user = new MUser(ctx, VAF_UserContact_ID, null);
             obj.IsSaved = false;
             if (currentPws.Length > 0 && newPws.Length > 0)
             {
@@ -153,12 +153,12 @@ namespace VIS.Models
             return obj;
         }
         //save user settings
-        public UserSetting SaveUserSettings(Ctx ctx, int AD_User_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
+        public UserSetting SaveUserSettings(Ctx ctx, int VAF_UserContact_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
            bool chkSMS, bool chkFax, string emailUserName, string emailPws, int VAF_Role_ID, int VAF_Client_ID, int VAF_Org_ID, int M_Warehouse_ID)
         {
             UserSetting obj = new UserSetting();
             obj.Msg = Msg.GetMsg(ctx, "RecordSaved");
-            MUser user = new MUser(ctx, AD_User_ID, null);
+            MUser user = new MUser(ctx, VAF_UserContact_ID, null);
             obj.IsSaved = false;
             //if (currentPws.Length > 0 && newPws.Length > 0)
             //{
@@ -172,34 +172,34 @@ namespace VIS.Models
             //}
 
             //user.SetIsEmail(chkEmail);
-            //user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMail);
+            //user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMail);
             ////notice
             //user.SetIsSms(chkSMS);
-            //user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_SMS);
+            //user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_SMS);
 
             //if (chkNotice && chkFax)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_NoticePlusFaxEMail);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_NoticePlusFaxEMail);
             //}
             //else if (chkEmail && chkNotice)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice);
             //}
             //else if (chkEmail && chkFax)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMailPlusFaxEMail);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail);
             //}
             //else if (chkEmail && chkSMS && !chkNotice && !chkFax)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_None);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_None);
             //}
             //else if (chkNotice && chkSMS)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_Notice);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_Notice);
             //}
             //else if (chkFax && chkSMS)
             //{
-            //    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_FaxEMail);
+            //    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_FaxEMail);
             //}
 
             user.SetIsEmail(chkEmail);
@@ -207,46 +207,46 @@ namespace VIS.Models
 
             if (chkEmail)
             {
-                user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMail);
+                user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMail);
 
                 if (chkNotice)
                 {
-                    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice);
+                    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice);
                 }
                 if (chkFax)
                 {
-                    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_EMailPlusFaxEMail);
+                    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail);
                 }
             }
             if (chkSMS)
             {
-                user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_SMS);
+                user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_SMS);
 
                 if (chkNotice)
                 {
-                    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_Notice);
+                    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_Notice);
                 }
                 if (chkFax)
                 {
-                    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_FaxEMail);
+                    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_FaxEMail);
                 }
             }
             if (chkFax)
             {
-                user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_FaxEMail);
+                user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_FaxEMail);
             }
             if (chkNotice)
             {
-                user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_Notice);
+                user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_Notice);
                 if (chkFax)
                 {
-                    user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_NoticePlusFaxEMail);
+                    user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_NoticePlusFaxEMail);
                 }
             }
 
             if (!chkNotice && !chkFax)
             {
-                user.SetNotificationType(X_AD_User.NOTIFICATIONTYPE_None);
+                user.SetNotificationType(X_VAF_UserContact.NOTIFICATIONTYPE_None);
             }
 
             //fax
@@ -260,7 +260,7 @@ namespace VIS.Models
             try
             {
                 //LoginSettings
-                int VAF_LoginSetting_ID = Util.GetValueOfInt(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_LoginSetting_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID, null, null));
+                int VAF_LoginSetting_ID = Util.GetValueOfInt(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_LoginSetting_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND VAF_UserContact_ID=" + VAF_UserContact_ID, null, null));
                 StringBuilder sql = new StringBuilder("");
                 if (VAF_LoginSetting_ID > 0)//UPdate
                 {
@@ -276,15 +276,15 @@ namespace VIS.Models
                 else//Insert
                 {
                     VAF_LoginSetting_ID = MSequence.GetNextID(ctx.GetVAF_Client_ID(), "VAF_LoginSetting", null);
-                    sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,VAF_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
-                    sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + VAF_Role_ID + "," + AD_User_ID + ",");
-                    sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetAD_User_ID() + ",NULL,");
+                    sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,VAF_ROLE_ID,VAF_USERCONTACT_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
+                    sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + VAF_Role_ID + "," + VAF_UserContact_ID + ",");
+                    sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetVAF_UserContact_ID() + ",NULL,");
                     if (M_Warehouse_ID == 0)
                         sql.Append("NULL");
                     else
                         sql.Append(M_Warehouse_ID);
 
-                    sql.Append("," + GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetAD_User_ID() + ")");
+                    sql.Append("," + GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetVAF_UserContact_ID() + ")");
 
 
                 }
@@ -310,7 +310,7 @@ namespace VIS.Models
         {
             bool isSyncTask = chkIsSyncTask;
 
-            string sql = @"Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
+            string sql = @"Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID() +
             //sql = MRole.GetDefault().AddAccessSQL(sql, "WS_GmailConfiguration", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();// +" and VAF_Org_ID=" + Envs.GetCtx().GetVAF_Org_ID();
             DataSet ds = DB.ExecuteDataset(sql, null);
@@ -378,7 +378,7 @@ namespace VIS.Models
         public Dictionary<string, string> GetSavedDetail(Ctx ctx, bool isTask)
         {
             Dictionary<string, string> retDic = new Dictionary<string, string>();
-            string sql = @"Select WSP_isSyncTaskBackground,WSP_IsSyncCalendarBackground,WSP_TaskRefreshToken,WSP_CalendarRefreshToken,WSP_ContactRefreshToken from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID()
+            string sql = @"Select WSP_isSyncTaskBackground,WSP_IsSyncCalendarBackground,WSP_TaskRefreshToken,WSP_CalendarRefreshToken,WSP_ContactRefreshToken from WSP_GmailConfiguration where isActive='Y' and VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID()
                      + " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql, null);
 
@@ -456,9 +456,9 @@ namespace VIS.Models
             }
         }
 
-        public DefaultLoginData GetDefaultLogin(int AD_User_ID)
+        public DefaultLoginData GetDefaultLogin(int VAF_UserContact_ID)
         {
-            string sql = "SELECT VAF_Role_ID,VAF_Client_ID,VAF_Org_ID,M_Warehouse_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID;
+            string sql = "SELECT VAF_Role_ID,VAF_Client_ID,VAF_Org_ID,M_Warehouse_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND VAF_UserContact_ID=" + VAF_UserContact_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             DefaultLoginData dfd = null;
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -477,7 +477,7 @@ namespace VIS.Models
         // Added by Bharat on 12 June 2017, updated by vinay bhatt on 18 oct 2018
         public int GetWindowID(string windowName)
         {
-            string sql = "SELECT AD_Window_ID FROM AD_Window WHERE IsActive='Y' AND Name = '" + windowName + "'";
+            string sql = "SELECT VAF_Screen_ID FROM VAF_Screen WHERE IsActive='Y' AND Name = '" + windowName + "'";
             int windowID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             return windowID;
         }

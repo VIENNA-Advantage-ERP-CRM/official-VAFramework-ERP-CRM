@@ -34,24 +34,24 @@ namespace VAdvantage.Model
 	 * 	Get Contact Interest
 	 *	@param ctx context
 	 *	@param R_InterestArea_ID interest ares
-	 *	@param AD_User_ID user
+	 *	@param VAF_UserContact_ID user
 	 * 	@param isActive create as active
 	 *	@param trxName transaction
 	 *	@return Contact Interest 
 	 */
         public static MContactInterest Get(Ctx ctx,
-            int R_InterestArea_ID, int AD_User_ID, Boolean isActive, Trx trxName)
+            int R_InterestArea_ID, int VAF_UserContact_ID, Boolean isActive, Trx trxName)
         {
             MContactInterest retValue = null;
             String sql = "SELECT * FROM R_ContactInterest "
-                + "WHERE R_InterestArea_ID=@R_InterestArea_ID AND AD_User_ID=@AD_User_ID";
+                + "WHERE R_InterestArea_ID=@R_InterestArea_ID AND VAF_UserContact_ID=@VAF_UserContact_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@R_InterestArea_ID", R_InterestArea_ID);
-                param[1] = new SqlParameter("@AD_User_ID", AD_User_ID);
+                param[1] = new SqlParameter("@VAF_UserContact_ID", VAF_UserContact_ID);
 
                 idr = DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
             //	New
             if (retValue == null)
             {
-                retValue = new MContactInterest(ctx, R_InterestArea_ID, AD_User_ID,isActive, trxName);
+                retValue = new MContactInterest(ctx, R_InterestArea_ID, VAF_UserContact_ID,isActive, trxName);
                 	_log.Fine("NOT found - " + retValue);
             }
             else
@@ -108,17 +108,17 @@ namespace VAdvantage.Model
          * 	Constructor
          * 	@param ctx context
          * 	@param R_InterestArea_ID interest area
-         * 	@param AD_User_ID partner contact
+         * 	@param VAF_UserContact_ID partner contact
          * 	@param isActive create as active
          *	@param trxName transaction
          */
-        public MContactInterest(Ctx ctx, int R_InterestArea_ID, int AD_User_ID,
+        public MContactInterest(Ctx ctx, int R_InterestArea_ID, int VAF_UserContact_ID,
             Boolean isActive, Trx trxName) :
             base(ctx, 0, trxName)
         {
             //super(ctx, 0, trxName);
             SetR_InterestArea_ID(R_InterestArea_ID);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetIsActive(isActive);
         }	//	MContactInterest
 
@@ -238,9 +238,9 @@ namespace VAdvantage.Model
                     MSource source = MSource.Get(GetCtx(), ia.GetR_Source_ID());
                     MUser user = null;
                     if (Get_TrxName() == null)
-                        user = MUser.Get(GetCtx(), GetAD_User_ID());
+                        user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
                     else
-                        user = new MUser(GetCtx(), GetAD_User_ID(), Get_TrxName());
+                        user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
                     //	Create Request
                     if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
                         || MSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
@@ -248,7 +248,7 @@ namespace VAdvantage.Model
                         MRequest request = new MRequest(GetCtx(), 0, Get_TrxName());
                         request.SetClientOrg(this);
                         request.SetSummary(summary);
-                        request.SetAD_User_ID(GetAD_User_ID());
+                        request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                         request.SetC_BPartner_ID(user.GetC_BPartner_ID());
                         request.SetR_Source_ID(source.GetR_Source_ID());
                         request.Save();
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
                         MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
                         lead.SetClientOrg(this);
                         lead.SetDescription(summary);
-                        lead.SetAD_User_ID(GetAD_User_ID());
+                        lead.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                         lead.SetR_InterestArea_ID(GetR_InterestArea_ID());
                         lead.SetC_BPartner_ID(user.GetC_BPartner_ID());
                         lead.SetR_Source_ID(source.GetR_Source_ID());
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MContactInterest[")
                 .Append("R_InterestArea_ID=").Append(GetR_InterestArea_ID())
-                .Append(",AD_User_ID=").Append(GetAD_User_ID())
+                .Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
                 .Append(",Subscribed=").Append(IsSubscribed())
                 .Append("]");
             return sb.ToString();

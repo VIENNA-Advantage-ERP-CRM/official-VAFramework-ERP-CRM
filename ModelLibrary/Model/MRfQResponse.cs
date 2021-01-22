@@ -73,7 +73,7 @@ namespace VAdvantage.Model
             : this(rfq, subscriber,
                 subscriber.GetC_BPartner_ID(),
                 subscriber.GetC_BPartner_Location_ID(),
-                subscriber.GetAD_User_ID())
+                subscriber.GetVAF_UserContact_ID())
         {
 
         }
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
             : this(rfq, null,
                 partner.GetC_BPartner_ID(),
                 partner.GetPrimaryC_BPartner_Location_ID(),
-                partner.GetPrimaryAD_User_ID())
+                partner.GetPrimaryVAF_UserContact_ID())
         {
 
         }
@@ -102,9 +102,9 @@ namespace VAdvantage.Model
         /// <param name="subscriber">optional subscriber</param>
         /// <param name="C_BPartner_ID">bpartner</param>
         /// <param name="C_BPartner_Location_ID">bpartner location</param>
-        /// <param name="AD_User_ID">bpartner user</param>
+        /// <param name="VAF_UserContact_ID">bpartner user</param>
         public MRfQResponse(MRfQ rfq, MRfQTopicSubscriber subscriber,
-            int C_BPartner_ID, int C_BPartner_Location_ID, int AD_User_ID)
+            int C_BPartner_ID, int C_BPartner_Location_ID, int VAF_UserContact_ID)
             : this(rfq.GetCtx(), 0, rfq.Get_TrxName())
         {
 
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
             //	Subscriber info
             SetC_BPartner_ID(C_BPartner_ID);
             SetC_BPartner_Location_ID(C_BPartner_Location_ID);
-            SetAD_User_ID(AD_User_ID);
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
 
             //	Create Lines
             MRfQLine[] lines = rfq.GetLines();
@@ -236,7 +236,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MUser to = MUser.Get(GetCtx(), GetAD_User_ID());
+                MUser to = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
                 MClient client = MClient.Get(GetCtx());
                 MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetR_MailText_ID(), Get_TrxName());
 

@@ -22,7 +22,7 @@ public X_VAF_ModuleWindow (Context ctx, int VAF_ModuleWindow_ID, Trx trxName) : 
 {
 SetVAF_ModuleInfo_ID (0);
 SetVAF_ModuleWindow_ID (0);
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 }
  */
 }
@@ -32,7 +32,7 @@ public X_VAF_ModuleWindow (Ctx ctx, int VAF_ModuleWindow_ID, Trx trxName) : base
 {
 SetVAF_ModuleInfo_ID (0);
 SetVAF_ModuleWindow_ID (0);
-SetAD_Window_ID (0);
+SetVAF_Screen_ID (0);
 }
  */
 }
@@ -145,17 +145,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID)
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID)
 {
-if (AD_Window_ID < 1) throw new ArgumentException ("AD_Window_ID is mandatory.");
-Set_ValueNoCheck ("AD_Window_ID", AD_Window_ID);
+if (VAF_Screen_ID < 1) throw new ArgumentException ("VAF_Screen_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Screen_ID", VAF_Screen_ID);
 }
 /** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() 
+public int GetVAF_Screen_ID() 
 {
-Object ii = Get_Value("AD_Window_ID");
+Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

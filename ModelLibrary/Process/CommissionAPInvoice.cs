@@ -118,7 +118,7 @@ namespace VAdvantage.Process
                 }
             }
             //	invoice.setDocumentNo (comRun.getDocumentNo());		//	may cause unique constraint
-            invoice.SetSalesRep_ID(GetAD_User_ID());	//	caller
+            invoice.SetSalesRep_ID(GetVAF_UserContact_ID());	//	caller
             //
             if (com.GetC_Currency_ID() != invoice.GetC_Currency_ID())
             {

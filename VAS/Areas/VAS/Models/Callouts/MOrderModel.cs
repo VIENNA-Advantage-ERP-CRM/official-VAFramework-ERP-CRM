@@ -35,8 +35,8 @@ namespace VIS.Models
             retDic["C_BPartner_Location_ID"] = Util.GetValueOfString(order.GetC_BPartner_Location_ID());
             retDic["Bill_BPartner_ID"] = Util.GetValueOfString(order.GetBill_BPartner_ID());
             retDic["Bill_Location_ID"] = Util.GetValueOfString(order.GetBill_Location_ID());
-            if (order.GetAD_User_ID() != 0)
-                retDic["AD_User_ID"] = Util.GetValueOfString(order.GetAD_User_ID());
+            if (order.GetVAF_UserContact_ID() != 0)
+                retDic["VAF_UserContact_ID"] = Util.GetValueOfString(order.GetVAF_UserContact_ID());
             if (order.GetBill_User_ID() != 0)
                 retDic["Bill_User_ID"] = Util.GetValueOfString(order.GetBill_User_ID());
             retDic["M_PriceList_ID"] = Util.GetValueOfString(order.GetM_PriceList_ID());
@@ -251,7 +251,7 @@ namespace VIS.Models
             Dictionary<String, object> retDir = null;
             if (_Order_ID > 0)
             {
-                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, C_DOCTYPETARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, C_BPARTNER_ID, BILL_BPARTNER_ID, C_BPARTNER_LOCATION_ID, BILL_LOCATION_ID, AD_USER_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, C_CURRENCY_ID, C_CONVERSIONTYPE_ID, SALESREP_ID,");
+                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, C_DOCTYPETARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, C_BPARTNER_ID, BILL_BPARTNER_ID, C_BPARTNER_LOCATION_ID, BILL_LOCATION_ID, VAF_USERCONTACT_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, C_CURRENCY_ID, C_CONVERSIONTYPE_ID, SALESREP_ID,");
                 if (_PrefixVA009)
                 {
                     sql.Append("VA009_PAYMENTMETHOD_ID,");
@@ -275,7 +275,7 @@ namespace VIS.Models
                     retDir["Bill_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_BPartner_ID"]);
                     retDir["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
                     retDir["Bill_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_Location_ID"]);
-                    retDir["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_User_ID"]);
+                    retDir["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]);
                     retDir["Bill_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_User_ID"]);
                     retDir["M_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]);
                     retDir["PriorityRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PriorityRule"]);

@@ -35,7 +35,7 @@ namespace VIS.Controllers
 
 
         [HttpPost]
-        public JsonResult SendMail(string mails, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify,string strDocAttach)
+        public JsonResult SendMail(string mails, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify,string strDocAttach)
         {
             List<int> lstDoc = new List<int>();
             Ctx ct = Session["ctx"] as Ctx;
@@ -68,16 +68,16 @@ namespace VIS.Controllers
 
             }
 
-            string result = model.SendMails(lstMails, AD_User_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, filesNamesFornNewAttach, filesNamesForopenFormat, Server.HtmlDecode(mailFormat), notify, lstDoc);
+            string result = model.SendMails(lstMails, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, filesNamesFornNewAttach, filesNamesForopenFormat, Server.HtmlDecode(mailFormat), notify, lstDoc);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folderName, int attachmentID)
+        public JsonResult SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int VAF_Screen_ID, string folderName, int attachmentID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             EmailModel model = new EmailModel(ct);
-            int result = model.SaveFormats(id, VAF_Client_ID, VAF_Org_ID, Server.HtmlDecode(name), isDynamic, Server.HtmlDecode(subject), Server.HtmlDecode(text), saveforAll, AD_Window_ID, folderName, attachmentID);
+            int result = model.SaveFormats(id, VAF_Client_ID, VAF_Org_ID, Server.HtmlDecode(name), isDynamic, Server.HtmlDecode(subject), Server.HtmlDecode(text), saveforAll, VAF_Screen_ID, folderName, attachmentID);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 

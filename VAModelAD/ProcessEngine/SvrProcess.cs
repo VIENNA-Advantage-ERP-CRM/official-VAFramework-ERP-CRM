@@ -132,7 +132,7 @@ namespace VAdvantage.ProcessEngine
                 }
 
                 ctxContext.SetVAF_Client_ID(GetVAF_Client_ID());
-                if (_pi.GetAD_User_ID().HasValue)
+                if (_pi.GetVAF_UserContact_ID().HasValue)
                 {
                     ctxContext.SetVAF_Client_ID(GetVAF_Client_ID());
                 }
@@ -185,11 +185,11 @@ namespace VAdvantage.ProcessEngine
         /// User ID
         /// </summary>
         /// <returns>return user id</returns>
-        protected int GetAD_User_ID()
+        protected int GetVAF_UserContact_ID()
         {
-            if (_pi.GetAD_User_ID() == null || _pi.GetVAF_Client_ID() == null)
+            if (_pi.GetVAF_UserContact_ID() == null || _pi.GetVAF_Client_ID() == null)
             {
-                String sql = "SELECT AD_User_ID, VAF_Client_ID FROM VAF_JInstance WHERE VAF_JInstance_ID=@instanceid";
+                String sql = "SELECT VAF_UserContact_ID, VAF_Client_ID FROM VAF_JInstance WHERE VAF_JInstance_ID=@instanceid";
                 IDataReader dr = null;
                 try
                 {
@@ -198,7 +198,7 @@ namespace VAdvantage.ProcessEngine
                     dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
                     while (dr.Read())
                     {
-                        _pi.SetAD_User_ID(Utility.Util.GetValueOfInt(dr[0].ToString()));
+                        _pi.SetVAF_UserContact_ID(Utility.Util.GetValueOfInt(dr[0].ToString()));
                         _pi.SetVAF_Client_ID(Utility.Util.GetValueOfInt(dr[1].ToString()));
                     }
                     dr.Close();
@@ -212,9 +212,9 @@ namespace VAdvantage.ProcessEngine
                     log.Log(Level.SEVERE, e.Message);
                 }
             }
-            if (_pi.GetAD_User_ID() == 0)
+            if (_pi.GetVAF_UserContact_ID() == 0)
                 return 0;
-            return (int)_pi.GetAD_User_ID();
+            return (int)_pi.GetVAF_UserContact_ID();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace VAdvantage.ProcessEngine
         {
             if (_pi.GetVAF_Client_ID() == null)
             {
-                GetAD_User_ID();	//	Sets also Client
+                GetVAF_UserContact_ID();	//	Sets also Client
                 if (_pi.GetVAF_Client_ID() == null)
                     return 0;
             }

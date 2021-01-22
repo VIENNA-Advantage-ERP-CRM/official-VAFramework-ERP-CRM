@@ -47,7 +47,7 @@ namespace VIS.Models
         /// Used to send mails .... Fetechs credentails used to send mails...
         /// </summary>
         /// <param name="mails"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_Org_ID"></param>
         /// <param name="attachment_ID"></param>
@@ -56,7 +56,7 @@ namespace VIS.Models
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMails(List<NewMailMessage> mails, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds)
+        public string SendMails(List<NewMailMessage> mails, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, List<int> lstDocumentIds)
         {
 
 
@@ -77,13 +77,13 @@ namespace VIS.Models
             {
                 System.Threading.ThreadPool.QueueUserWorkItem(delegate
                 {
-                    SendMailstart(mails, AD_User_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                    SendMailstart(mails, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
                 });
                 return "";
             }
             else
             {
-                return SendMailstart(mails, AD_User_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
+                return SendMailstart(mails, VAF_UserContact_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, fileNames, fileNameForOpenFormat, mailFormat, notify, sendmail, lstDocumentIds);
             }
         }
 
@@ -91,7 +91,7 @@ namespace VIS.Models
         /// this method actually send mail, both static and dynamic.... and save info in MailAttachment....
         /// </summary>
         /// <param name="mails"></param>
-        /// <param name="AD_User_ID"></param>
+        /// <param name="VAF_UserContact_ID"></param>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_Org_ID"></param>
         /// <param name="attachment_ID"></param>
@@ -100,7 +100,7 @@ namespace VIS.Models
         /// <param name="mailFormat"></param>
         /// <param name="notify"></param>
         /// <returns></returns>
-        public string SendMailstart(List<NewMailMessage> mails, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails, List<int> documentID)
+        public string SendMailstart(List<NewMailMessage> mails, int VAF_UserContact_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, List<string> fileNames, List<string> fileNameForOpenFormat, string mailFormat, bool notify, VAdvantage.Utility.EMail sendmails, List<int> documentID)
         {
 
 
@@ -113,7 +113,7 @@ namespace VIS.Models
 
             UserInformation userinfo = new UserInformation();
             SMTPConfig config = null;
-            config = MailConfigMethod.GetUSmtpConfig(AD_User_ID, ctx);
+            config = MailConfigMethod.GetUSmtpConfig(VAF_UserContact_ID, ctx);
             // var config = "";
             if (config == null)
             {
@@ -377,7 +377,7 @@ namespace VIS.Models
 
             if (notify)             //  make an entry in Notice window.....
             {
-                MNote note = new MNote(ctx, "SentMailNotice", AD_User_ID,
+                MNote note = new MNote(ctx, "SentMailNotice", VAF_UserContact_ID,
                     VAF_Client_ID, VAF_Org_ID, null);
                 //  Reference
                 note.SetReference(ToString());	//	Document
@@ -467,11 +467,11 @@ namespace VIS.Models
         /// <param name="subject"></param>
         /// <param name="text"></param>
         /// <param name="saveforAll"></param>
-        /// <param name="AD_Window_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
         /// <param name="folder"></param>
         /// <param name="attachmentID"></param>
         /// <returns></returns>
-        public int SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folder, int attachmentID)
+        public int SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int VAF_Screen_ID, string folder, int attachmentID)
         {
             X_VAF_TextTemplate _textTemplate = new X_VAF_TextTemplate(ctx, id, null);
             _textTemplate.Set_Value("VAF_Client_ID", VAF_Client_ID);
@@ -493,7 +493,7 @@ namespace VIS.Models
 
             if (!saveforAll)
             {
-                _textTemplate.Set_Value("AD_Window_ID", AD_Window_ID);
+                _textTemplate.Set_Value("VAF_Screen_ID", VAF_Screen_ID);
             }
             if (_textTemplate.Save())
             {
@@ -814,7 +814,7 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetUser(int bpartner)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "Select AD_User_ID, Email FROM AD_User WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
+            string sql = "Select VAF_UserContact_ID, Email FROM VAF_UserContact WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -823,7 +823,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
-                    obj["AD_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]);
+                    obj["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
                     obj["Email"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Email"]);
                     retDic.Add(obj);
                 }
@@ -838,11 +838,11 @@ namespace VIS.Models
             string sql = @"SELECT NAME, NVL(SUBJECT,' ') AS SUBJECT, NVL(MAILTEXT,' ') as MAILTEXT,
                     NVL(CREATED,sysdate) AS CREATED, VAF_CLIENT_ID, VAF_ORG_ID, CREATEDBY, 
                     NVL(ISACTIVE,'Y') AS ISACTIVE, NVL(ISHTML,'Y') AS ISHTML, VAF_TEXTTEMPLATE_ID, 
-                    NVL(UPDATED,sysdate) AS UPDATED, UPDATEDBY, AD_Window_ID, NVL(ISDYNAMICCONTENT,'N') AS ISDYNAMICCONTENT
-                    FROM VAF_TextTemplate WHERE IsActive = 'Y' AND (AD_Window_ID IS NULL ";
+                    NVL(UPDATED,sysdate) AS UPDATED, UPDATEDBY, VAF_Screen_ID, NVL(ISDYNAMICCONTENT,'N') AS ISDYNAMICCONTENT
+                    FROM VAF_TextTemplate WHERE IsActive = 'Y' AND (VAF_Screen_ID IS NULL ";
             if (window_ID > 0)
             {
-                sql += " OR AD_Window_ID=" + window_ID;
+                sql += " OR VAF_Screen_ID=" + window_ID;
             }
             sql += ")";
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);

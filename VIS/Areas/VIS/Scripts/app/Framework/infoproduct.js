@@ -544,7 +544,7 @@
 
         InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
-        //var winQry = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "VAF_Tab_ID"));
+        //var winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "VAF_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
 
         // Added by Bharat on 31 May 2017 to remove client side queries

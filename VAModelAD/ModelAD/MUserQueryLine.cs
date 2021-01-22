@@ -2,7 +2,7 @@
  * Module Name    : Search/HighVolume
  * Purpose        : Contains functions used to set query lines of user query of 
  *                  Advanced tab of "Find" window.
- * Class Used     : Inherited from class X_AD_UserQueryLine.cs
+ * Class Used     : Inherited from class X_VAF_UserSearchLine.cs
  * Chronological Development
  * Veena Pandey     10-Feb-2009
   ******************************************************/
@@ -22,18 +22,18 @@ namespace VAdvantage.Model
     /// Contains functions used to set query lines of user query of 
     /// Advanced tab of "Find" window in context.
     /// </summary>
-    public class MUserQueryLine : X_AD_UserQueryLine
+    public class MUserQueryLine : X_VAF_UserSearchLine
     {
         /// <summary>
         /// Parameterized constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_UserQueryLine_ID">AD_UserQueryLine_ID</param>
+        /// <param name="VAF_UserSearchLine_ID">VAF_UserSearchLine_ID</param>
         /// <param name="trxName">transaction name</param>
-        public MUserQueryLine(Context ctx, int AD_UserQueryLine_ID, Trx trxName)
-            : base(ctx, AD_UserQueryLine_ID, trxName)
+        public MUserQueryLine(Context ctx, int VAF_UserSearchLine_ID, Trx trxName)
+            : base(ctx, VAF_UserSearchLine_ID, trxName)
         {
-            if (AD_UserQueryLine_ID == 0)
+            if (VAF_UserSearchLine_ID == 0)
             {
                 SetIsAnd(true);	// Y
             }
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_UserQuery_ID(parent.GetAD_UserQuery_ID());
+            SetVAF_UserSearch_ID(parent.GetVAF_UserSearch_ID());
             SetSeqNo(seqNo);
             //
             SetKeyValue(keyValue);
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
         //    : base(parent.GetCtx(), 0, parent.Get_TrxName())
         //{
         //    setClientOrg(parent);
-        //    SetAD_UserQuery_ID(parent.GetAD_UserQuery_ID());
+        //    SetVAF_UserSearch_ID(parent.GetVAF_UserSearch_ID());
         //    SetSeqNo(seqNo);
         //    //
         //    SetKeyValue(column.getValue());
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
             if (GetSeqNo() == 0)
             {
                 int no = DataBase.DB.GetSQLValue(null,
-                    "SELECT COALESCE(MAX(SeqNo),0)+10 FROM AD_UserQueryLine WHERE AD_UserQuery_ID=" + GetAD_UserQuery_ID());
+                    "SELECT COALESCE(MAX(SeqNo),0)+10 FROM VAF_UserSearchLine WHERE VAF_UserSearch_ID=" + GetVAF_UserSearch_ID());
                 SetSeqNo(no);
             }
             return true;

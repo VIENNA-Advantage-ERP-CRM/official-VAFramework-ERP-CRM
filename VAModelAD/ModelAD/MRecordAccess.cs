@@ -148,7 +148,7 @@ namespace VAdvantage.Model
         /// <returns>Synonym Column Name</returns>
         public String GetSynonym()
         {
-            if ("AD_User_ID".Equals(GetKeyColumnName()))
+            if ("VAF_UserContact_ID".Equals(GetKeyColumnName()))
             {
                 return "SalesRep_ID";
             }
@@ -196,10 +196,10 @@ namespace VAdvantage.Model
             //	We have a synonym - ignore it if base table inquired
             for (int i = 0; i < tableInfo.Length; i++)
             {
-                if (_keyColumnName.Equals("AD_User_ID"))
+                if (_keyColumnName.Equals("VAF_UserContact_ID"))
                 {
                     //	List of tables where not to use SalesRep_ID
-                    if (tableInfo[i].GetTableName().Equals("AD_User"))
+                    if (tableInfo[i].GetTableName().Equals("VAF_UserContact"))
                         return _keyColumnName;
                 }
                 else if (_keyColumnName.Equals("VAF_ColumnDicValue_ID"))

@@ -1399,11 +1399,11 @@ namespace VAdvantage.Acct
                     && _docLine != null
                     && _docLine.GetC_RevenueRecognition_ID() != 0)
                 {
-                    int AD_User_ID = 0;
+                    int VAF_UserContact_ID = 0;
                     SetAccount_ID(
                         CreateRevenueRecognition(
                             _docLine.GetC_RevenueRecognition_ID(), _docLine.Get_ID(),
-                            GetVAF_Client_ID(), GetVAF_Org_ID(), AD_User_ID,
+                            GetVAF_Client_ID(), GetVAF_Org_ID(), VAF_UserContact_ID,
                             GetAccount_ID(), GetC_SubAcct_ID(),
                             GetM_Product_ID(), GetC_BPartner_ID(), GetVAF_OrgTrx_ID(),
                             GetC_LocFrom_ID(), GetC_LocTo_ID(),
@@ -1429,7 +1429,7 @@ namespace VAdvantage.Acct
         /// <param name="C_InvoiceLine_ID">invoice line</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">Org</param>
-        /// <param name="AD_User_ID">user</param>
+        /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="Account_ID">of Revenue Account</param>
         /// <param name="C_SubAcct_ID"> sub account</param>
         /// <param name="M_Product_ID">product</param>
@@ -1448,7 +1448,7 @@ namespace VAdvantage.Acct
         /// <returns></returns>
         private int CreateRevenueRecognition(
             int C_RevenueRecognition_ID, int C_InvoiceLine_ID,
-            int VAF_Client_ID, int VAF_Org_ID, int AD_User_ID,
+            int VAF_Client_ID, int VAF_Org_ID, int VAF_UserContact_ID,
             int Account_ID, int C_SubAcct_ID,
             int M_Product_ID, int C_BPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int C_SRegion_ID, int C_Project_ID,

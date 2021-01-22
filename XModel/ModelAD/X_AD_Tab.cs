@@ -3,19 +3,19 @@ namespace VAdvantage.Model{
 using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_Tab
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAF_Tab : PO{public X_VAF_Tab (Context ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
+public class X_VAF_Tab : PO{public X_VAF_Tab (Context ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetEntityType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
 SetIsReadOnly (false);SetIsSingleRow (false);SetIsSortTab (false);// N
-SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE AD_Window_ID=@AD_Window_ID@
+SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE VAF_Screen_ID=@VAF_Screen_ID@
 SetTabLevel (0);} */
-}public X_VAF_Tab (Ctx ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
+}public X_VAF_Tab (Ctx ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetVAF_Screen_ID (0);SetEntityType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
 SetIsReadOnly (false);SetIsSingleRow (false);SetIsSortTab (false);// N
-SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE AD_Window_ID=@AD_Window_ID@
+SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE VAF_Screen_ID=@VAF_Screen_ID@
 SetTabLevel (0);} */
 }/** Load Constructor 
 @param ctx context
@@ -103,12 +103,12 @@ public int GetVAF_Tab_ID() {Object ii = Get_Value("VAF_Tab_ID");if (ii == null) 
 public void SetVAF_TableView_ID (int VAF_TableView_ID){if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");Set_Value ("VAF_TableView_ID", VAF_TableView_ID);}/** Get Table.
 @return Database Table information */
 public int GetVAF_TableView_ID() {Object ii = Get_Value("VAF_TableView_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Window.
-@param AD_Window_ID Data entry or display window */
-public void SetAD_Window_ID (int AD_Window_ID){if (AD_Window_ID < 1) throw new ArgumentException ("AD_Window_ID is mandatory.");Set_ValueNoCheck ("AD_Window_ID", AD_Window_ID);}/** Get Window.
+@param VAF_Screen_ID Data entry or display window */
+public void SetVAF_Screen_ID (int VAF_Screen_ID){if (VAF_Screen_ID < 1) throw new ArgumentException ("VAF_Screen_ID is mandatory.");Set_ValueNoCheck ("VAF_Screen_ID", VAF_Screen_ID);}/** Get Window.
 @return Data entry or display window */
-public int GetAD_Window_ID() {Object ii = Get_Value("AD_Window_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
+public int GetVAF_Screen_ID() {Object ii = Get_Value("VAF_Screen_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetAD_Window_ID().ToString());}/** Set Commit Warning.
+public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetVAF_Screen_ID().ToString());}/** Set Commit Warning.
 @param CommitWarning Warning displayed when saving */
 public void SetCommitWarning (String CommitWarning){if (CommitWarning != null && CommitWarning.Length > 2000){log.Warning("Length > 2000 - truncated");CommitWarning = CommitWarning.Substring(0,2000);}Set_Value ("CommitWarning", CommitWarning);}/** Get Commit Warning.
 @return Warning displayed when saving */

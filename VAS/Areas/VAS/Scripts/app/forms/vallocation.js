@@ -2598,7 +2598,7 @@
 
             var chk = $vchkMultiCurrency.is(':checked');
             var VAF_Role_ID = ctx.getVAF_Role_ID();
-            var AD_User_ID = ctx.getAD_User_ID();
+            var VAF_UserContact_ID = ctx.getVAF_UserContact_ID();
             var role = VIS.MRole.getDefault();
             //  Need to have both values
             //	Async BPartner Test

@@ -822,7 +822,7 @@ namespace VAdvantage.Model
                 return m_vcs;
             //
             List<MViewComponent> list = new List<MViewComponent>();
-            String sql = "SELECT * FROM AD_ViewComponent WHERE VAF_TableView_ID = " + this.GetVAF_TableView_ID() + " AND IsActive = 'Y'";
+            String sql = "SELECT * FROM VAF_DBViewElement WHERE VAF_TableView_ID = " + this.GetVAF_TableView_ID() + " AND IsActive = 'Y'";
             IDataReader idr = null;
             try
             {

@@ -69,12 +69,12 @@ namespace VAdvantage.Process
                     if (bpartnerloc.IsShipTo() == true)
                     {
                         order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetAD_User_ID(fromProject.GetAD_User_ID());
+                        order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
                         order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetBill_User_ID(fromProject.GetAD_User_ID());
+                        order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
                 if (C_BPartnerSR_ID != 0)
@@ -92,12 +92,12 @@ namespace VAdvantage.Process
                     if (bpartnerloc.IsShipTo() == true)
                     {
                         order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetAD_User_ID(fromProject.GetAD_User_ID());
+                        order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
                         order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
-                        order.SetBill_User_ID(fromProject.GetAD_User_ID());
+                        order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
                // String sql = "select c_doctype_id from c_doctype where docbasetype= 'SOO' and  = 'Sales Quotation'";

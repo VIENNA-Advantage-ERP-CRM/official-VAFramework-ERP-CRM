@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserHomePageSetting
+/** Generated Model for VAF_UserHomePageSetting
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserHomePageSetting : PO
+public class X_VAF_UserHomePageSetting : PO
 {
-public X_AD_UserHomePageSetting (Context ctx, int AD_UserHomePageSetting_ID, Trx trxName) : base (ctx, AD_UserHomePageSetting_ID, trxName)
+public X_VAF_UserHomePageSetting (Context ctx, int VAF_UserHomePageSetting_ID, Trx trxName) : base (ctx, VAF_UserHomePageSetting_ID, trxName)
 {
-/** if (AD_UserHomePageSetting_ID == 0)
+/** if (VAF_UserHomePageSetting_ID == 0)
 {
-SetAD_UserHomePageSetting_ID (0);
+SetVAF_UserHomePageSetting_ID (0);
 }
  */
 }
-public X_AD_UserHomePageSetting (Ctx ctx, int AD_UserHomePageSetting_ID, Trx trxName) : base (ctx, AD_UserHomePageSetting_ID, trxName)
+public X_VAF_UserHomePageSetting (Ctx ctx, int VAF_UserHomePageSetting_ID, Trx trxName) : base (ctx, VAF_UserHomePageSetting_ID, trxName)
 {
-/** if (AD_UserHomePageSetting_ID == 0)
+/** if (VAF_UserHomePageSetting_ID == 0)
 {
-SetAD_UserHomePageSetting_ID (0);
+SetVAF_UserHomePageSetting_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_UserHomePageSetting_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserHomePageSetting (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserHomePageSetting (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_UserHomePageSetting (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserHomePageSetting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserHomePageSetting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_UserHomePageSetting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserHomePageSetting (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserHomePageSetting (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserHomePageSetting()
+static X_VAF_UserHomePageSetting()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1411366672345L;
 public static int Table_ID;
  // =1000544;
 
-/** TableName=AD_UserHomePageSetting */
-public static String Table_Name="AD_UserHomePageSetting";
+/** TableName=VAF_UserHomePageSetting */
+public static String Table_Name="VAF_UserHomePageSetting";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -107,7 +107,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserHomePageSetting[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserHomePageSetting[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -126,34 +126,34 @@ Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_UserHomePageSetting_ID.
-@param AD_UserHomePageSetting_ID AD_UserHomePageSetting_ID */
-public void SetAD_UserHomePageSetting_ID (int AD_UserHomePageSetting_ID)
+/** Set VAF_UserHomePageSetting_ID.
+@param VAF_UserHomePageSetting_ID VAF_UserHomePageSetting_ID */
+public void SetVAF_UserHomePageSetting_ID (int VAF_UserHomePageSetting_ID)
 {
-if (AD_UserHomePageSetting_ID < 1) throw new ArgumentException ("AD_UserHomePageSetting_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserHomePageSetting_ID", AD_UserHomePageSetting_ID);
+if (VAF_UserHomePageSetting_ID < 1) throw new ArgumentException ("VAF_UserHomePageSetting_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserHomePageSetting_ID", VAF_UserHomePageSetting_ID);
 }
-/** Get AD_UserHomePageSetting_ID.
-@return AD_UserHomePageSetting_ID */
-public int GetAD_UserHomePageSetting_ID() 
+/** Get VAF_UserHomePageSetting_ID.
+@return VAF_UserHomePageSetting_ID */
+public int GetVAF_UserHomePageSetting_ID() 
 {
-Object ii = Get_Value("AD_UserHomePageSetting_ID");
+Object ii = Get_Value("VAF_UserHomePageSetting_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Customer/Prospect Contact. */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID <= 0) Set_Value ("AD_User_ID", null);
+if (VAF_UserContact_ID <= 0) Set_Value ("VAF_UserContact_ID", null);
 else
-Set_Value ("AD_User_ID", AD_User_ID);
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Customer/Prospect Contact. */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

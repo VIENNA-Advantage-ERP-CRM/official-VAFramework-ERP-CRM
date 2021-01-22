@@ -163,7 +163,7 @@ namespace VAdvantage.Process
 
             if (p_IsEncrypted == column.IsEncrypted() && !error)      // Done By Karan on 10-nov-2016, to encrypt/decrypt passwords according to settings.
             {
-                //object colID = DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID =(SELECT VAF_TableView_ID From VAF_TableView WHERE TableName='AD_User') AND ColumnName='Password'", null, Get_Trx());
+                //object colID = DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID =(SELECT VAF_TableView_ID From VAF_TableView WHERE TableName='VAF_UserContact') AND ColumnName='Password'", null, Get_Trx());
 
 
 
@@ -200,7 +200,7 @@ namespace VAdvantage.Process
                                     //    return "Encryption=" + false;
                                     //}
                                     string p_NewPassword = SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString());
-                                    String sql = "UPDATE " + tableName + " SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+                                    String sql = "UPDATE " + tableName + " SET Updated=SYSDATE, UpdatedBy=" + GetVAF_UserContact_ID();
                                     if (!string.IsNullOrEmpty(p_NewPassword))
                                     {
                                         sql += ", " + column.GetColumnName() + "=" + GlobalVariable.TO_STRING(p_NewPassword);
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                                 //}
 
                                 string p_NewPassword = SecureEngine.Decrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString());
-                                String sql = "UPDATE " + tableName + "  SET Updated=SYSDATE, UpdatedBy=" + GetAD_User_ID();
+                                String sql = "UPDATE " + tableName + "  SET Updated=SYSDATE, UpdatedBy=" + GetVAF_UserContact_ID();
                                 if (!string.IsNullOrEmpty(p_NewPassword))
                                 {
                                     sql += ", " + column.GetColumnName() + "=" + GlobalVariable.TO_STRING(p_NewPassword);

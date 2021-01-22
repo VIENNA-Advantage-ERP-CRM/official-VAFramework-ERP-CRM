@@ -173,11 +173,11 @@ namespace VAdvantage.Utility
         ///  </pre>
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Window_ID">window no</param>
+        /// <param name="VAF_Screen_ID">window no</param>
         /// <param name="context">Entity to search</param>
         /// <param name="system">System level preferences (vs. user defined)</param>
         /// <returns>preference value</returns>
-        public static String GetPreference(Ctx ctx, int AD_Window_ID, String context, bool system)
+        public static String GetPreference(Ctx ctx, int VAF_Screen_ID, String context, bool system)
         {
             if (ctx == null || context == null)
                 throw new ArgumentException("Require Context");
@@ -185,7 +185,7 @@ namespace VAdvantage.Utility
             //
             if (!system)	//	User Preferences
             {
-                retValue = ctx.GetContext("P" + AD_Window_ID + "|" + context);//	Window Pref
+                retValue = ctx.GetContext("P" + VAF_Screen_ID + "|" + context);//	Window Pref
                 if (retValue.Length == 0)
                     retValue = ctx.GetContext("P|" + context);  			//	Global Pref
             }
@@ -615,7 +615,7 @@ namespace VAdvantage.Utility
             StringBuilder sb = new StringBuilder();
             if (windowNo > 0)
                 sb.Append(ctx.GetContext(windowNo, "WindowName", false)).Append("  ");
-            sb.Append(ctx.GetContext("##AD_User_Name")).Append("@")
+            sb.Append(ctx.GetContext("##VAF_UserContact_Name")).Append("@")
                 .Append(ctx.GetContext("#VAF_Org_Name")).Append(".")
                 .Append(ctx.GetContext("#VAF_Client_Name"))
                 .Append(" [").Append(VConnection.Get().ToString()).Append("]");//                   CConnection.get().toString()).append("]");

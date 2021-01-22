@@ -339,7 +339,7 @@ namespace VAdvantage.Model
                         col.SetIsUpdateable(false);
                         col.SetIsMandatory(false);
                     }
-                    colName = "AD_User_ID";
+                    colName = "VAF_UserContact_ID";
                     addlColumns.Add(colName);
                     if (target.GetColumn(colName) == null)
                     {

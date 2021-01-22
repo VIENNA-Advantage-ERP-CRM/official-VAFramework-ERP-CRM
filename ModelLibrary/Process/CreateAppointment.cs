@@ -130,9 +130,9 @@ namespace ViennaAdvantageServer.Process
                 {
                     string subject = name + "_" + task.GetName();
                     string desc = task.GetDescription();
-                    int AD_User_ID = task.GetSalesRep_ID();
+                    int VAF_UserContact_ID = task.GetSalesRep_ID();
                     //DateTime? sDate = task.
-                    if (AD_User_ID != 0)
+                    if (VAF_UserContact_ID != 0)
                     {
                         VAdvantage.Model.X_AppointmentsInfo appoint = new VAdvantage.Model.X_AppointmentsInfo(GetCtx(), 0, Get_Trx());
                         appoint.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
@@ -144,7 +144,7 @@ namespace ViennaAdvantageServer.Process
                         appoint.SetDescription(task.GetDescription());
                         appoint.SetAppointmentCategory_ID(1000000);
                         appoint.SetIsRead(true);
-                        appoint.SetAD_User_ID(AD_User_ID);
+                        appoint.SetVAF_UserContact_ID(VAF_UserContact_ID);
                         appoint.SetIsPrivate(false);
                         appoint.SetPriorityKey(5);
                         appoint.SetIsTask(true);
@@ -172,9 +172,9 @@ namespace ViennaAdvantageServer.Process
                 {
                     string subject = name + "_" + task.GetName();
                     string desc = task.GetDescription();
-                    int AD_User_ID = task.GetSalesRep_ID();
+                    int VAF_UserContact_ID = task.GetSalesRep_ID();
                     //DateTime? sDate = task.
-                    if (AD_User_ID != 0)
+                    if (VAF_UserContact_ID != 0)
                     {
                         VAdvantage.Model.X_AppointmentsInfo appoint = new VAdvantage.Model.X_AppointmentsInfo(GetCtx(), Util.GetValueOfInt(task.GetAppointmentsInfo_ID()), Get_Trx());
                         appoint.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
@@ -186,7 +186,7 @@ namespace ViennaAdvantageServer.Process
                         appoint.SetDescription(task.GetDescription());
                         appoint.SetAppointmentCategory_ID(1000000);
                         appoint.SetIsRead(true);
-                        appoint.SetAD_User_ID(AD_User_ID);
+                        appoint.SetVAF_UserContact_ID(VAF_UserContact_ID);
                         appoint.SetIsPrivate(false);
                         appoint.SetIsTask(true);
                         if (!appoint.Save(Get_Trx()))

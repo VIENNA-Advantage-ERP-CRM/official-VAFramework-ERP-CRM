@@ -139,17 +139,17 @@ namespace VAdvantage.DBPort
             }
 
             /** Single column
-                SELECT t.TableName, w.Name FROM VAF_TableView t, AD_Window w
-                WHERE t.AD_Window_ID=w.AD_Window_ID(+)
+                SELECT t.TableName, w.Name FROM VAF_TableView t, VAF_Screen w
+                WHERE t.VAF_Screen_ID=w.VAF_Screen_ID(+)
                 --	275 rows
                 SELECT t.TableName, w.Name FROM VAF_TableView t
-                LEFT OUTER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)
+                LEFT OUTER JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)
 
-                SELECT t.TableName, w.Name FROM VAF_TableView t, AD_Window w
-                WHERE t.AD_Window_ID(+)=w.AD_Window_ID
+                SELECT t.TableName, w.Name FROM VAF_TableView t, VAF_Screen w
+                WHERE t.VAF_Screen_ID(+)=w.VAF_Screen_ID
                 --	239 rows
                 SELECT t.TableName, w.Name FROM VAF_TableView t
-                RIGHT OUTER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)
+                RIGHT OUTER JOIN VAF_Screen w ON (t.VAF_Screen_ID=w.VAF_Screen_ID)
 
             **  Multiple columns
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
@@ -159,17 +159,17 @@ namespace VAdvantage.DBPort
                 --  235 rows
                 SELECT	tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
                 FROM VAF_TreeInfoChild tn LEFT OUTER JOIN VAF_TreeInfoBar tb
-                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.AD_User_ID=0)
+                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.VAF_UserContact_ID=0)
                 WHERE tn.VAF_TreeInfo_ID=10
 
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
                 FROM VAF_TreeInfoChild tn, VAF_TreeInfoBar tb
                 WHERE tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID(+) AND tn.Node_ID=tb.Node_ID(+)
-                 AND tn.VAF_TreeInfo_ID=10 AND tb.AD_User_ID(+)=0
+                 AND tn.VAF_TreeInfo_ID=10 AND tb.VAF_UserContact_ID(+)=0
                 --  214 rows
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
                 FROM VAF_TreeInfoChild tn LEFT OUTER JOIN VAF_TreeInfoBar tb
-                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.AD_User_ID=0)
+                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.VAF_UserContact_ID=0)
                 WHERE tn.VAF_TreeInfo_ID=10
 
              */
@@ -261,7 +261,7 @@ namespace VAdvantage.DBPort
                             {
                                 if (trace)
                                     log.Info("-Third-dep: " + third);
-                                //   FROM ((C_BPartner p LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID))
+                                //   FROM ((C_BPartner p LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID))
                                 //  LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID))
                                 //  LEFT OUTER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID)
                                 newFrom.Insert(6, '(');     //  _FROM ...

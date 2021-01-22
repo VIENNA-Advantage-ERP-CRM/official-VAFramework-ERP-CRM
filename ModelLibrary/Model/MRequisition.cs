@@ -55,7 +55,7 @@ namespace VAdvantage.Model
                 if (M_Requisition_ID == 0)
                 {
                     //	setDocumentNo (null);
-                    //	setAD_User_ID (0);
+                    //	setVAF_UserContact_ID (0);
                     //	setM_PriceList_ID (0);
                     //	setM_Warehouse_ID(0);
                     //SetDateDoc(new Timestamp(System.currentTimeMillis()));
@@ -298,7 +298,7 @@ namespace VAdvantage.Model
                 }
 
                 //	Invalid
-                if (GetAD_User_ID() == 0
+                if (GetVAF_UserContact_ID() == 0
                     || GetM_PriceList_ID() == 0
                     || GetM_Warehouse_ID() == 0)
                     return DocActionVariables.STATUS_INVALID;
@@ -679,7 +679,7 @@ namespace VAdvantage.Model
         /// <returns>DataSet of Posting Records</returns>
         private DataSet BudgetControlling()
         {
-            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_322'"));
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Screen_ID FROM VAF_Screen WHERE  Export_ID = 'VIS_322'"));
             DataSet result = new DataSet();
             Type type = null;
             MethodInfo methodInfo = null;
@@ -1110,11 +1110,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Owner
-         *	@return AD_User_ID
+         *	@return VAF_UserContact_ID
          */
         public int GetDoc_User_ID()
         {
-            return GetAD_User_ID();
+            return GetVAF_UserContact_ID();
         }
 
         /**
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
          */
         public String GetUserName()
         {
-            return MUser.Get(GetCtx(), GetAD_User_ID()).GetName();
+            return MUser.Get(GetCtx(), GetVAF_UserContact_ID()).GetName();
         }
         #region DocAction Members
 

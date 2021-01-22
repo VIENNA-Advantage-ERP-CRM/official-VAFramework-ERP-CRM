@@ -23,7 +23,7 @@ namespace VAdvantage.Model
             {
             SetVAF_GroupInfo_ID (0);
             SetVAF_Role_ID (0);
-            SetAD_User_ID (0);
+            SetVAF_UserContact_ID (0);
             }
              */
         }
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
             {
             SetVAF_GroupInfo_ID (0);
             SetVAF_Role_ID (0);
-            SetAD_User_ID (0);
+            SetVAF_UserContact_ID (0);
             }
              */
         }

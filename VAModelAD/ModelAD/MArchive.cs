@@ -92,7 +92,7 @@ namespace VAdvantage.Model
         public String GetCreatedByName()
         {
             String name = "?";
-            String sql = "SELECT Name FROM AD_User WHERE AD_User_ID=@param";
+            String sql = "SELECT Name FROM VAF_UserContact WHERE VAF_UserContact_ID=@param";
             IDataReader dr = null;
             try
             {

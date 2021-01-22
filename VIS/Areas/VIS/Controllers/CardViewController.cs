@@ -79,12 +79,12 @@ namespace VIS.Controllers
             CardViewModel objCardViewModel = new CardViewModel();
             if (isNewRecord)
             {
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].VAF_Tab_ID, lstCardView[0].UserID, lstCardView[0].VAF_GroupField_ID, ctx, 0, LstRoleID, lstCardViewCondition);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].VAF_Screen_ID, lstCardView[0].VAF_Tab_ID, lstCardView[0].UserID, lstCardView[0].VAF_GroupField_ID, ctx, 0, LstRoleID, lstCardViewCondition);
             }
             else
             {
                 objCardViewModel.DeleteAllCardViewColumns(lstCardView[0].CardViewID, ctx);
-                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].AD_Window_ID, lstCardView[0].VAF_Tab_ID, lstCardView[0].UserID, lstCardView[0].VAF_GroupField_ID, ctx, lstCardView[0].CardViewID, LstRoleID, lstCardViewCondition);
+                id = objCardViewModel.SaveCardViewRecord(lstCardView[0].CardViewName, lstCardView[0].VAF_Screen_ID, lstCardView[0].VAF_Tab_ID, lstCardView[0].UserID, lstCardView[0].VAF_GroupField_ID, ctx, lstCardView[0].CardViewID, LstRoleID, lstCardViewCondition);
             }
 
             if (lstCardView[0].IsDefault)

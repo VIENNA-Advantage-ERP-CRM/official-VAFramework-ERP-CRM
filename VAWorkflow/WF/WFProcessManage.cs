@@ -27,11 +27,11 @@ namespace VAdvantage.WF
         //Abort It				
         private bool p_IsAbort = false;
         //New User				
-        private int p_AD_User_ID = 0;
+        private int p_VAF_UserContact_ID = 0;
         // New Responsible		
-        private int p_AD_WF_Responsible_ID = 0;
+        private int p_VAF_WFlow_Incharge_ID = 0;
         // Record				
-        private int p_AD_WF_Process_ID = 0;
+        private int p_VAF_WFlow_Handler_ID = 0;
         String msg = null;
         /// <summary>
         ///Prepare - e.g., get Parameters.
@@ -48,14 +48,14 @@ namespace VAdvantage.WF
                 }
                 else if (name.Equals("IsAbort"))
                     p_IsAbort = "Y".Equals(para[i].GetParameter());
-                else if (name.Equals("AD_User_ID"))
-                    p_AD_User_ID = para[i].GetParameterAsInt();
-                else if (name.Equals("AD_WF_Responsible_ID"))
-                    p_AD_WF_Responsible_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAF_UserContact_ID"))
+                    p_VAF_UserContact_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAF_WFlow_Incharge_ID"))
+                    p_VAF_WFlow_Incharge_ID = para[i].GetParameterAsInt();
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
-            p_AD_WF_Process_ID = GetRecord_ID();
+            p_VAF_WFlow_Handler_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -64,16 +64,16 @@ namespace VAdvantage.WF
         /// <returns>Message (variables are parsed)</returns>
         protected override String DoIt()
         {
-            MWFProcess process = new MWFProcess(GetCtx(), p_AD_WF_Process_ID, Get_Trx());
+            MWFProcess process = new MWFProcess(GetCtx(), p_VAF_WFlow_Handler_ID, Get_Trx());
             log.Info("doIt - " + process);
 
-            MUser user = MUser.Get(GetCtx(), GetAD_User_ID());
+            MUser user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
             //	Abort
             if (p_IsAbort)
             {
                 msg = user.GetName() + ": Abort";
                 process.SetTextMsg(msg);
-                process.SetAD_User_ID(GetAD_User_ID());
+                process.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                 process.SetWFState(StateEngine.STATE_ABORTED);
 
                 //JID_0278 : To mark processing checkbox false.
@@ -91,22 +91,22 @@ namespace VAdvantage.WF
             }
 
             //	Change User
-            if (p_AD_User_ID != 0 && process.GetAD_User_ID() != p_AD_User_ID)
+            if (p_VAF_UserContact_ID != 0 && process.GetVAF_UserContact_ID() != p_VAF_UserContact_ID)
             {
-                MUser from = MUser.Get(GetCtx(), process.GetAD_User_ID());
-                MUser to = MUser.Get(GetCtx(), p_AD_User_ID);
+                MUser from = MUser.Get(GetCtx(), process.GetVAF_UserContact_ID());
+                MUser to = MUser.Get(GetCtx(), p_VAF_UserContact_ID);
                 msg = user.GetName() + ": " + from.GetName() + " -> " + to.GetName();
                 process.SetTextMsg(msg);
-                process.SetAD_User_ID(p_AD_User_ID);
+                process.SetVAF_UserContact_ID(p_VAF_UserContact_ID);
             }
             //	Change Responsible
-            if (p_AD_WF_Responsible_ID != 0 && process.GetAD_WF_Responsible_ID() != p_AD_WF_Responsible_ID)
+            if (p_VAF_WFlow_Incharge_ID != 0 && process.GetVAF_WFlow_Incharge_ID() != p_VAF_WFlow_Incharge_ID)
             {
-                MWFResponsible from = MWFResponsible.Get(GetCtx(), process.GetAD_WF_Responsible_ID());
-                MWFResponsible to = MWFResponsible.Get(GetCtx(), p_AD_WF_Responsible_ID);
+                MWFResponsible from = MWFResponsible.Get(GetCtx(), process.GetVAF_WFlow_Incharge_ID());
+                MWFResponsible to = MWFResponsible.Get(GetCtx(), p_VAF_WFlow_Incharge_ID);
                 String msg1 = user.GetName() + ": " + from.GetName() + " -> " + to.GetName();
                 process.SetTextMsg(msg1);
-                process.SetAD_WF_Responsible_ID(p_AD_WF_Responsible_ID);
+                process.SetVAF_WFlow_Incharge_ID(p_VAF_WFlow_Incharge_ID);
                 if (msg == null)
                     msg = msg1;
                 else

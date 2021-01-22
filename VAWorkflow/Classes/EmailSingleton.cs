@@ -52,7 +52,7 @@ namespace VAWorkflow.Classes
                 while (true)
                 {
                     // Get records from mail queue table to send them one by one as email
-                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, VAF_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, VAF_MailQueue_ID, AD_WF_Process_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
+                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, VAF_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, VAF_WFlow_Task_ID, VAF_WFlow_EventLog_ID, VAF_MailQueue_ID, VAF_WFlow_Handler_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
 
                     if (mailds != null && mailds.Tables.Count > 0 && mailds.Tables[0].Rows.Count > 0)
                     {
@@ -60,7 +60,7 @@ namespace VAWorkflow.Classes
                         {
                             int VAF_Org_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Org_ID"]);
                             int VAF_Client_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Client_ID"]);
-                            int AD_User_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["CreatedBy"]);
+                            int VAF_UserContact_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["CreatedBy"]);
                             int VAF_Role_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Role_ID"]);
 
                             String toEMail = Util.GetValueOfString(mailds.Tables[0].Rows[m]["ToEMail"]);
@@ -73,9 +73,9 @@ namespace VAWorkflow.Classes
                             int Record_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["Record_ID"]);
                             byte[] array = null;
                             String fileName = null;
-                            int AD_WF_Activity_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_Activity_ID"]);
-                            int AD_WF_EventAudit_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_EventAudit_ID"]);
-                            int AD_WF_Process_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_Process_ID"]);
+                            int VAF_WFlow_Task_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_Task_ID"]);
+                            int VAF_WFlow_EventLog_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_EventLog_ID"]);
+                            int VAF_WFlow_Handler_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_WFlow_Handler_ID"]);
                             int VAF_MailQueue_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_MailQueue_ID"]);
 
 
@@ -83,17 +83,17 @@ namespace VAWorkflow.Classes
                             Ctx _ctx = new Ctx();
                             _ctx.SetVAF_Org_ID(VAF_Org_ID);
                             _ctx.SetVAF_Client_ID(VAF_Client_ID);
-                            _ctx.SetAD_User_ID(AD_User_ID);
+                            _ctx.SetVAF_UserContact_ID(VAF_UserContact_ID);
                             _ctx.SetVAF_Role_ID(VAF_Role_ID);
 
 
-                            string sql = "SELECT AD_WF_NODE_ID FROM AD_WF_Activity WHERE AD_WF_Activity_ID=" + AD_WF_Activity_ID;
+                            string sql = "SELECT VAF_WFLOW_NODE_ID FROM VAF_WFlow_Task WHERE VAF_WFlow_Task_ID=" + VAF_WFlow_Task_ID;
                             object nodeID = DB.ExecuteScalar(sql);
-                            X_AD_WF_Node node = null;
+                            X_VAF_WFlow_Node node = null;
 
                             if (nodeID != null && nodeID != DBNull.Value)
                             {
-                                node = new X_AD_WF_Node(_ctx, Convert.ToInt32(nodeID), null);
+                                node = new X_VAF_WFlow_Node(_ctx, Convert.ToInt32(nodeID), null);
                             }
                             FileInfo pdf = null;
                             MTable table = MTable.Get(_ctx, VAF_TableView_ID);
@@ -101,8 +101,8 @@ namespace VAWorkflow.Classes
                             if (node.IsAttachReport())
                             {
                                 VAdvantage.Common.Common com = new Common();
-                                pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, AD_User_ID, VAF_Client_ID,
-                                   "", 0, AD_WF_Activity_ID);
+                                pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, VAF_UserContact_ID, VAF_Client_ID,
+                                   "", 0, VAF_WFlow_Task_ID);
                             }
                             else if (po is VAdvantage.Process.DocAction)
                             {
@@ -118,8 +118,8 @@ namespace VAWorkflow.Classes
                             //VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
                             //attachment = doc.CreatePDF();
                             //VAdvantage.Common.Common com = new Common();
-                            //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, AD_User_ID, VAF_Client_ID,
-                            //   "", 0, AD_WF_Activity_ID);
+                            //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, VAF_UserContact_ID, VAF_Client_ID,
+                            //   "", 0, VAF_WFlow_Task_ID);
                             if (pdf != null)
                             {
                                 array = File.ReadAllBytes(pdf.FullName);
@@ -136,9 +136,9 @@ namespace VAWorkflow.Classes
                             if (mailsent)
                             {
                                 mailQueue.SetMailStatus("S");
-                                int act1 = DB.ExecuteQuery("UPDATE AD_WF_Activity SET WFSTATE = 'CC' WHERE AD_WF_Activity_ID = " + AD_WF_Activity_ID);
-                                int aud1 = DB.ExecuteQuery("UPDATE AD_WF_EventAudit SET WFSTATE = 'CC' WHERE AD_WF_EventAudit_ID = " + AD_WF_EventAudit_ID);
-                                int wpro = DB.ExecuteQuery("UPDATE AD_WF_Process SET WFSTATE = 'CC' WHERE AD_WF_Process_ID = " + AD_WF_Process_ID + " AND WFState = 'BK' ");
+                                int act1 = DB.ExecuteQuery("UPDATE VAF_WFlow_Task SET WFSTATE = 'CC' WHERE VAF_WFlow_Task_ID = " + VAF_WFlow_Task_ID);
+                                int aud1 = DB.ExecuteQuery("UPDATE VAF_WFlow_EventLog SET WFSTATE = 'CC' WHERE VAF_WFlow_EventLog_ID = " + VAF_WFlow_EventLog_ID);
+                                int wpro = DB.ExecuteQuery("UPDATE VAF_WFlow_Handler SET WFSTATE = 'CC' WHERE VAF_WFlow_Handler_ID = " + VAF_WFlow_Handler_ID + " AND WFState = 'BK' ");
                             }
                             else
                             {

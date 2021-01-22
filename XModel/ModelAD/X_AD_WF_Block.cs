@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WF_Block
+/** Generated Model for VAF_WFlow_Block
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WF_Block : PO
+public class X_VAF_WFlow_Block : PO
 {
-public X_AD_WF_Block (Context ctx, int AD_WF_Block_ID, Trx trxName) : base (ctx, AD_WF_Block_ID, trxName)
+public X_VAF_WFlow_Block (Context ctx, int VAF_WFlow_Block_ID, Trx trxName) : base (ctx, VAF_WFlow_Block_ID, trxName)
 {
-/** if (AD_WF_Block_ID == 0)
+/** if (VAF_WFlow_Block_ID == 0)
 {
-SetAD_WF_Block_ID (0);
+SetVAF_WFlow_Block_ID (0);
 SetAD_Workflow_ID (0);
 SetName (null);
 }
  */
 }
-public X_AD_WF_Block (Ctx ctx, int AD_WF_Block_ID, Trx trxName) : base (ctx, AD_WF_Block_ID, trxName)
+public X_VAF_WFlow_Block (Ctx ctx, int VAF_WFlow_Block_ID, Trx trxName) : base (ctx, VAF_WFlow_Block_ID, trxName)
 {
-/** if (AD_WF_Block_ID == 0)
+/** if (VAF_WFlow_Block_ID == 0)
 {
-SetAD_WF_Block_ID (0);
+SetVAF_WFlow_Block_ID (0);
 SetAD_Workflow_ID (0);
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_Block (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_Block (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_WF_Block (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_Block (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlow_Block (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_WF_Block (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WF_Block (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_WFlow_Block (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WF_Block()
+static X_VAF_WFlow_Block()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389049255L;
 public static int Table_ID;
  // =647;
 
-/** TableName=AD_WF_Block */
-public static String Table_Name="AD_WF_Block";
+/** TableName=VAF_WFlow_Block */
+public static String Table_Name="VAF_WFlow_Block";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WF_Block[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_WFlow_Block[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Workflow Block.
-@param AD_WF_Block_ID Workflow Transaction Execution Block */
-public void SetAD_WF_Block_ID (int AD_WF_Block_ID)
+@param VAF_WFlow_Block_ID Workflow Transaction Execution Block */
+public void SetVAF_WFlow_Block_ID (int VAF_WFlow_Block_ID)
 {
-if (AD_WF_Block_ID < 1) throw new ArgumentException ("AD_WF_Block_ID is mandatory.");
-Set_ValueNoCheck ("AD_WF_Block_ID", AD_WF_Block_ID);
+if (VAF_WFlow_Block_ID < 1) throw new ArgumentException ("VAF_WFlow_Block_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlow_Block_ID", VAF_WFlow_Block_ID);
 }
 /** Get Workflow Block.
 @return Workflow Transaction Execution Block */
-public int GetAD_WF_Block_ID() 
+public int GetVAF_WFlow_Block_ID() 
 {
-Object ii = Get_Value("AD_WF_Block_ID");
+Object ii = Get_Value("VAF_WFlow_Block_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

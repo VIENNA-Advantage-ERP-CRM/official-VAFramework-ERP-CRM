@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_UserMail
+/** Generated Model for VAF_UserMailLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_UserMail : PO
+public class X_VAF_UserMailLog : PO
 {
-public X_AD_UserMail (Context ctx, int AD_UserMail_ID, Trx trxName) : base (ctx, AD_UserMail_ID, trxName)
+public X_VAF_UserMailLog (Context ctx, int VAF_UserMailLog_ID, Trx trxName) : base (ctx, VAF_UserMailLog_ID, trxName)
 {
-/** if (AD_UserMail_ID == 0)
+/** if (VAF_UserMailLog_ID == 0)
 {
-SetAD_UserMail_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserMailLog_ID (0);
+SetVAF_UserContact_ID (0);
 }
  */
 }
-public X_AD_UserMail (Ctx ctx, int AD_UserMail_ID, Trx trxName) : base (ctx, AD_UserMail_ID, trxName)
+public X_VAF_UserMailLog (Ctx ctx, int VAF_UserMailLog_ID, Trx trxName) : base (ctx, VAF_UserMailLog_ID, trxName)
 {
-/** if (AD_UserMail_ID == 0)
+/** if (VAF_UserMailLog_ID == 0)
 {
-SetAD_UserMail_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserMailLog_ID (0);
+SetVAF_UserContact_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_User_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserMailLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_UserMail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_UserMailLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_UserMail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_UserMail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_UserMailLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_UserMail()
+static X_VAF_UserMailLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389048643L;
 public static int Table_ID;
  // =782;
 
-/** TableName=AD_UserMail */
-public static String Table_Name="AD_UserMail";
+/** TableName=VAF_UserMailLog */
+public static String Table_Name="VAF_UserMailLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_UserMail[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_UserMailLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User Mail.
-@param AD_UserMail_ID Mail sent to the user */
-public void SetAD_UserMail_ID (int AD_UserMail_ID)
+@param VAF_UserMailLog_ID Mail sent to the user */
+public void SetVAF_UserMailLog_ID (int VAF_UserMailLog_ID)
 {
-if (AD_UserMail_ID < 1) throw new ArgumentException ("AD_UserMail_ID is mandatory.");
-Set_ValueNoCheck ("AD_UserMail_ID", AD_UserMail_ID);
+if (VAF_UserMailLog_ID < 1) throw new ArgumentException ("VAF_UserMailLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserMailLog_ID", VAF_UserMailLog_ID);
 }
 /** Get User Mail.
 @return Mail sent to the user */
-public int GetAD_UserMail_ID() 
+public int GetVAF_UserMailLog_ID() 
 {
-Object ii = Get_Value("AD_UserMail_ID");
+Object ii = Get_Value("VAF_UserMailLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_ValueNoCheck ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_ValueNoCheck ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -146,7 +146,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_User_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Delivery Confirmation.
 @param DeliveryConfirmation EMail Delivery confirmation */

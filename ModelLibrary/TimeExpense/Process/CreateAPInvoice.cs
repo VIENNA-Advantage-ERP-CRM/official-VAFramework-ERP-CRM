@@ -259,7 +259,7 @@ namespace VAdvantage.Process
                         lineNo = lineNo + 10;
                         Decimal? price = 0;
                         //sql = "select s_resource_id from s_resource where c_bpartner_id = " + tLine.GetC_BPartner_ID()
-                        //    + " and ad_user_id = " + tExp.GetAD_User_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
+                        //    + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
                         //sql = "select s_resource_id from  where c_bpartner_id = " + tLine.GetC_BPartner_ID();
 
 
@@ -402,7 +402,7 @@ namespace VAdvantage.Process
             }
 
             //sql = "select s_resource_id from s_resource where c_bpartner_id = " + tLine.GetC_BPartner_ID()
-            //               + " and ad_user_id = " + tExp.GetAD_User_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
+            //               + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
             //int S_Resource_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             int S_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
             int C_Currency_ID = 0;
@@ -430,7 +430,7 @@ namespace VAdvantage.Process
             VAdvantage.Model.X_C_Invoice inv = new VAdvantage.Model.X_C_Invoice(GetCtx(), 0, null);
             inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-            inv.SetAD_User_ID(tExp.GetAD_User_ID());
+            inv.SetVAF_UserContact_ID(tExp.GetVAF_UserContact_ID());
             inv.SetC_BPartner_ID(C_BPartner_ID);
             inv.SetC_BPartner_Location_ID(C_BPartner_Location_ID);
             inv.SetC_Currency_ID(C_Currency_ID);

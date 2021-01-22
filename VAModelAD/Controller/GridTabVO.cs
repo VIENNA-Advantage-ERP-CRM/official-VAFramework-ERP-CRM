@@ -23,7 +23,7 @@ namespace VAdvantage.Controller
         /** Window No - replicated  */
         public int windowNo;
         /** AD Window - replicated  */
-        public int AD_Window_ID;
+        public int VAF_Screen_ID;
 
         /** Tab No (not VAF_Tab_ID) 0.. */
         public int tabNo;
@@ -173,15 +173,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
         public static GridTabVO Create(GridWindowVO wVO, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(wVO.GetCtx(), wVO.windowNo);
-            vo.AD_Window_ID = wVO.AD_Window_ID;
+            vo.VAF_Screen_ID = wVO.VAF_Screen_ID;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -201,7 +201,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateFields(vo, AD_UserDef_Win_ID);
+                CreateFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -232,15 +232,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
         public static GridTabVO CreateEditorTabs(GridWindowVO wVO, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(wVO.GetCtx(), wVO.windowNo);
-            vo.AD_Window_ID = wVO.AD_Window_ID;
+            vo.VAF_Screen_ID = wVO.VAF_Screen_ID;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -260,7 +260,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateEditorFields(vo, AD_UserDef_Win_ID);
+                CreateEditorFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -281,15 +281,15 @@ namespace VAdvantage.Controller
         /// <param name="dr">Datarow</param>
         /// <param name="isRO">Is Read Only</param>
         /// <param name="onlyCurrentDays">only current day</param>
-        /// <param name="AD_UserDef_Win_ID">window id</param>
+        /// <param name="VAF_UserCustom_Win_ID">window id</param>
         /// <returns>this object</returns>
-        public static GridTabVO Create(Ctx ctx, int windowNo, int AD_Window_Id, int TabNo, IDataReader dr,
-            bool isRO, int onlyCurrentDays, int AD_UserDef_Win_ID)
+        public static GridTabVO Create(Ctx ctx, int windowNo, int VAF_Screen_Id, int TabNo, IDataReader dr,
+            bool isRO, int onlyCurrentDays, int VAF_UserCustom_Win_ID)
         {
             VLogger.Get().Config("#" + TabNo);
 
             GridTabVO vo = new GridTabVO(ctx, windowNo);
-            vo.AD_Window_ID = AD_Window_Id;
+            vo.VAF_Screen_ID = VAF_Screen_Id;
             vo.tabNo = TabNo;
             //
             if (!LoadTabDetails(vo, dr))
@@ -309,7 +309,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                CreateFields(vo, AD_UserDef_Win_ID);
+                CreateFields(vo, VAF_UserCustom_Win_ID);
                 if (vo.fields == null || vo.fields.Count == 0)
                 {
                     VLogger.Get().Log(Level.SEVERE, vo.Name + ": No Fields");
@@ -517,13 +517,13 @@ namespace VAdvantage.Controller
         ///  Create Tab Fields
         /// </summary>
         /// <param name="mTabVO"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        private static bool CreateFields(GridTabVO mTabVO, int AD_UserDef_Win_ID)
+        private static bool CreateFields(GridTabVO mTabVO, int VAF_UserCustom_Win_ID)
         {
             mTabVO.fields = new List<GridFieldVO>();
 
-            String sql = GridFieldVO.GetSQL(mTabVO.ctx, AD_UserDef_Win_ID);
+            String sql = GridFieldVO.GetSQL(mTabVO.ctx, VAF_UserCustom_Win_ID);
             int VAF_Tab_ID = mTabVO.Referenced_Tab_ID;
             if (VAF_Tab_ID == 0)
                 VAF_Tab_ID = mTabVO.VAF_Tab_ID;
@@ -539,7 +539,7 @@ namespace VAdvantage.Controller
                 {
                     GridFieldVO voF = GridFieldVO.Create(mTabVO.ctx,
                         mTabVO.windowNo, mTabVO.tabNo,
-                        mTabVO.AD_Window_ID, VAF_Tab_ID,
+                        mTabVO.VAF_Screen_ID, VAF_Tab_ID,
                         mTabVO.IsReadOnly, dr);
                     if (voF != null)
                     {
@@ -669,9 +669,9 @@ namespace VAdvantage.Controller
         ///  Create Tab Fields
         /// </summary>
         /// <param name="mTabVO"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        private static bool CreateEditorFields(GridTabVO mTabVO, int AD_UserDef_Win_ID)
+        private static bool CreateEditorFields(GridTabVO mTabVO, int VAF_UserCustom_Win_ID)
         {
             mTabVO.fields = new List<GridFieldVO>();
 
@@ -682,17 +682,17 @@ namespace VAdvantage.Controller
             }
 
             StringBuilder sql = new StringBuilder(" SELECT ")
-           .Append(" t.AD_Window_ID                                                      AS AD_Window_ID         , ")
+           .Append(" t.VAF_Screen_ID                                                      AS VAF_Screen_ID         , ")
            .Append(" f.VAF_Tab_ID                                                         AS VAF_Tab_ID            , ")
            .Append(" f.VAF_Field_ID                                                       AS VAF_Field_ID          , ")
            .Append(" tbl.VAF_TableView_ID                                                     AS VAF_TableView_ID          , ")
            .Append(" f.VAF_Column_ID                                                      AS VAF_Column_ID         , ")
            .Append(" uw.VAF_Role_ID                                                       AS UserDef_Role_ID      , ")
-           .Append(" uw.AD_User_ID                                                       AS AD_User_ID           , ")
-           .Append(" uw.AD_UserDef_Win_ID                                                AS AD_UserDef_Win_ID    , ")
+           .Append(" uw.VAF_UserContact_ID                                                       AS VAF_UserContact_ID           , ")
+           .Append(" uw.VAF_UserCustom_Win_ID                                                AS VAF_UserCustom_Win_ID    , ")
            .Append(" uw.CustomizationName                                                AS CustomizationName    , ")
-           .Append(" u.AD_UserDef_Tab_ID                                                 AS AD_UserDef_Tab_ID    , ")
-           .Append(" u.AD_UserDef_Field_ID                                               AS AD_UserDef_Field_ID  , ");
+           .Append(" u.VAF_UserCustom_Tab_ID                                                 AS VAF_UserCustom_Tab_ID    , ")
+           .Append(" u.VAF_UserCustom_Field_ID                                               AS VAF_UserCustom_Field_ID  , ");
             if (!isBase)
             {
                 sql.Append(" COALESCE(u.Name,trl.Name)                                           AS Name                 , ")
@@ -772,8 +772,8 @@ namespace VAdvantage.Controller
             }
             sql.Append(" LEFT OUTER JOIN VAF_Column c  ON (f.VAF_Column_ID = c.VAF_Column_ID) INNER JOIN VAF_TableView tbl ON (c.VAF_TableView_ID = tbl.VAF_TableView_ID) ")
                .Append(" INNER JOIN VAF_Control_Ref r ON (c.VAF_Control_Ref_ID = r.VAF_Control_Ref_ID) LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) ")
-               .Append(" LEFT OUTER JOIN AD_UserDef_Field u ON (f.VAF_Field_ID=u.VAF_Field_ID) LEFT OUTER JOIN AD_UserDef_Tab ut ON (ut.AD_UserDef_Tab_ID=u.AD_UserDef_Tab_ID) ")
-               .Append(" LEFT OUTER JOIN AD_UserDef_Win uw ON (uw.AD_UserDef_Win_ID=ut.AD_UserDef_Win_ID) ")
+               .Append(" LEFT OUTER JOIN VAF_UserCustom_Field u ON (f.VAF_Field_ID=u.VAF_Field_ID) LEFT OUTER JOIN VAF_UserCustom_Tab ut ON (ut.VAF_UserCustom_Tab_ID=u.VAF_UserCustom_Tab_ID) ")
+               .Append(" LEFT OUTER JOIN VAF_UserCustom_Win uw ON (uw.VAF_UserCustom_Win_ID=ut.VAF_UserCustom_Win_ID) ")
 
                .Append(" WHERE f.VAF_Tab_ID=@tabID");
 
@@ -781,8 +781,8 @@ namespace VAdvantage.Controller
             {
                 sql.Append(" AND trl.VAF_Language='" + Env.GetVAF_Language(mTabVO.ctx) + "'");
             }
-            if (AD_UserDef_Win_ID != 0)
-                sql.Append(" AND u.AD_UserDef_Win_ID=" + AD_UserDef_Win_ID);
+            if (VAF_UserCustom_Win_ID != 0)
+                sql.Append(" AND u.VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID);
 
             sql.Append(" ORDER BY IsDisplayed DESC, SeqNo");
 
@@ -802,7 +802,7 @@ namespace VAdvantage.Controller
                 {
                     GridFieldVO voF = GridFieldVO.Create(mTabVO.ctx,
                         mTabVO.windowNo, mTabVO.tabNo,
-                        mTabVO.AD_Window_ID, VAF_Tab_ID,
+                        mTabVO.VAF_Screen_ID, VAF_Tab_ID,
                         mTabVO.IsReadOnly, dr);
                     if (voF != null)
                         mTabVO.fields.Add(voF);
@@ -826,17 +826,17 @@ namespace VAdvantage.Controller
         ///Return the SQL statement used for the MTabVO.create
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_UserDef_Win_ID"></param>
+        /// <param name="VAF_UserCustom_Win_ID"></param>
         /// <returns></returns>
-        public static String GetSQL(Ctx ctx, int AD_UserDef_Win_ID)
+        public static String GetSQL(Ctx ctx, int VAF_UserCustom_Win_ID)
         {
             //  View only returns IsActive='Y'
-            String sql = "SELECT * FROM VAF_Tab_v WHERE AD_Window_ID=@windowID";
-            if (!Env.IsBaseLanguage(ctx, "AD_Window"))
-                sql = "SELECT * FROM VAF_Tab_vtl WHERE AD_Window_ID=@windowID"
+            String sql = "SELECT * FROM VAF_Tab_v WHERE VAF_Screen_ID=@windowID";
+            if (!Env.IsBaseLanguage(ctx, "VAF_Screen"))
+                sql = "SELECT * FROM VAF_Tab_vtl WHERE VAF_Screen_ID=@windowID"
                     + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
-            if (AD_UserDef_Win_ID != 0)
-                sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
+            if (VAF_UserCustom_Win_ID != 0)
+                sql += " AND VAF_UserCustom_Win_ID=" + VAF_UserCustom_Win_ID;
             sql += " ORDER BY SeqNo";
             return sql;
         }
@@ -887,7 +887,7 @@ namespace VAdvantage.Controller
         public GridTabVO Clone(Ctx myCtx, int windowNo)
         {
             GridTabVO clone = new GridTabVO(myCtx, windowNo);
-            clone.AD_Window_ID = AD_Window_ID;
+            clone.VAF_Screen_ID = VAF_Screen_ID;
             clone.tabNo = tabNo;
 
             //
@@ -970,7 +970,7 @@ namespace VAdvantage.Controller
             {
                 GridFieldVO field = fields[i];
                 GridFieldVO cloneField = field.Clone(myCtx, windowNo, tabNo,
-                    AD_Window_ID, VAF_Tab_ID, IsReadOnly);
+                    VAF_Screen_ID, VAF_Tab_ID, IsReadOnly);
                 if (cloneField == null)
                     return null;
                 clone.fields.Add(cloneField);

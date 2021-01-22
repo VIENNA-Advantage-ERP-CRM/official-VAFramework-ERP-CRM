@@ -96,7 +96,7 @@ namespace VAdvantage.Controller
         /** Tab No                      */
         public int tabNo;
         /** AD_Winmdow_ID               */
-        public int AD_Window_ID;
+        public int VAF_Screen_ID;
         /** VAF_Tab_ID					*/
         public int VAF_Tab_ID;
         /** Is the Tab Read Only        */
@@ -565,7 +565,7 @@ namespace VAdvantage.Controller
         //    f.IsMandatoryUI = false;
         //    f.isDependentValue = this.isDependentValue;
         //    f.VAF_Control_Ref_Value_ID = this.VAF_Control_Ref_Value_ID;
-        //    f.AD_Window_ID = this.AD_Window_ID;
+        //    f.VAF_Screen_ID = this.VAF_Screen_ID;
 
 
         //    if(this.listBoxVO != null){

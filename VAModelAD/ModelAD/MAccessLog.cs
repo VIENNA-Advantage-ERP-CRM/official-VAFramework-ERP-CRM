@@ -97,19 +97,19 @@ namespace VAdvantage.Model
         {
             if (email == null || email.Length == 0)
                 return;
-            int AD_User_ID = GetAD_User_ID(email, GetVAF_Client_ID());
-            Set_ValueNoCheck("CreatedBy", AD_User_ID);
-            SetUpdatedBy(AD_User_ID);
-            GetCtx().SetContext("##AD_User_ID", AD_User_ID.ToString());
-            SetAD_User_ID(AD_User_ID);
+            int VAF_UserContact_ID = GetVAF_UserContact_ID(email, GetVAF_Client_ID());
+            Set_ValueNoCheck("CreatedBy", VAF_UserContact_ID);
+            SetUpdatedBy(VAF_UserContact_ID);
+            GetCtx().SetContext("##VAF_UserContact_ID", VAF_UserContact_ID.ToString());
+            SetVAF_UserContact_ID(VAF_UserContact_ID);
         }
 
 
-        private int GetAD_User_ID(String email, int VAF_Client_ID)
+        private int GetVAF_UserContact_ID(String email, int VAF_Client_ID)
         {
-            int AD_User_ID = 0;
+            int VAF_UserContact_ID = 0;
             IDataReader idr = null;
-            String sql = "SELECT AD_User_ID FROM AD_User "
+            String sql = "SELECT VAF_UserContact_ID FROM VAF_UserContact "
                 + "WHERE UPPER(EMail)=@param1"
                 + " AND VAF_Client_ID=@param2";
             try
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 while (idr.Read())
                 {
-                    AD_User_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
+                    VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[0].ToString());//.getInt(1);
                 }
                 idr.Close();
             }
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, email, e);
             }
 
-            return AD_User_ID;
+            return VAF_UserContact_ID;
         }
 
         /// <summary>

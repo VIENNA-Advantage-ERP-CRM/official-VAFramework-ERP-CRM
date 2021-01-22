@@ -297,22 +297,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set User from UserKey
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET AD_User_ID =(SELECT AD_User_ID FROM AD_User u"
+                  + " SET VAF_UserContact_ID =(SELECT VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID), "
-                  + " ContactName =(SELECT Name FROM AD_User u"
+                  + " ContactName =(SELECT Name FROM VAF_UserContact u"
                   + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID) "
-                  + " WHERE AD_User_ID IS NULL AND ContactValue IS NOT NULL"
+                  + " WHERE VAF_UserContact_ID IS NULL AND ContactValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set User from UserKey=" + no);
 
             //	Set User from UserName
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET AD_User_ID=(SELECT AD_User_ID FROM AD_User u"
+                  + " SET VAF_UserContact_ID=(SELECT VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID ),"
-                  + " ContactValue =(SELECT Value FROM AD_User u"
+                  + " ContactValue =(SELECT Value FROM VAF_UserContact u"
                   + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID )"
-                  + " WHERE AD_User_ID IS NULL AND ContactName IS NOT NULL"
+                  + " WHERE VAF_UserContact_ID IS NULL AND ContactName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set User from UserName=" + no);
@@ -322,9 +322,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid User, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
                       + " AND ("
-                      + " (r.AD_User_ID is NULL AND (r.ContactName is NOT NULL OR r.ContactValue IS NOT NULL))"
-                      + " OR (r.AD_User_ID is NOT NULL AND NOT EXISTS"
-                      + "(SELECT 1 FROM AD_USER u WHERE u.AD_User_ID = r.AD_User_ID "
+                      + " (r.VAF_UserContact_ID is NULL AND (r.ContactName is NOT NULL OR r.ContactValue IS NOT NULL))"
+                      + " OR (r.VAF_UserContact_ID is NOT NULL AND NOT EXISTS"
+                      + "(SELECT 1 FROM VAF_USERCONTACT u WHERE u.VAF_UserContact_ID = r.VAF_UserContact_ID "
                       + " AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID)))").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -332,9 +332,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set SalesRep from SalesRepKey
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET SalesRep_ID = (SELECT AD_User_ID FROM AD_User u"
+                  + " SET SalesRep_ID = (SELECT VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE r.SalesRepValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID ), "
-                  + " SalesRepName = (SELECT name FROM AD_User u"
+                  + " SalesRepName = (SELECT name FROM VAF_UserContact u"
                   + " WHERE r.SalesRepValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID ) "
                   + "WHERE SalesRep_ID IS NULL AND SalesRepValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -343,9 +343,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Representative from RepresentativeName
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET SalesRep_ID = (SELECT AD_User_ID FROM AD_User u"
+                  + " SET SalesRep_ID = (SELECT VAF_UserContact_ID FROM VAF_UserContact u"
                   + " WHERE r.SalesRepName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID ), "
-                  + " SalesRepValue =(SELECT  value FROM AD_User u"
+                  + " SalesRepValue =(SELECT  value FROM VAF_UserContact u"
                   + " WHERE r.SalesRepName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID )"
                   + " WHERE SalesRep_ID IS NULL AND SalesRepName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);

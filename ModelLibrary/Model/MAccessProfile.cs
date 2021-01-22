@@ -29,10 +29,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="CM_Container_ID">id</param>
-        /// <param name="AD_User_ID">id</param>
+        /// <param name="VAF_UserContact_ID">id</param>
         /// <returns>ture if access container</returns>
         public static bool IsAccessContainer(Ctx ctx, int CM_Container_ID,
-            int AD_User_ID)
+            int VAF_UserContact_ID)
         {
             //	NIT
             return true;

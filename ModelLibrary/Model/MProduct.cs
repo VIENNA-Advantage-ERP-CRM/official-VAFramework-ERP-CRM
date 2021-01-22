@@ -622,7 +622,7 @@ namespace VAdvantage.Model
             //	UOM reset
             if (_precision != null && Is_ValueChanged("C_UOM_ID"))
                 _precision = null;
-            if (Util.GetValueOfInt(Env.GetCtx().GetContext("#AD_User_ID")) != 100)
+            if (Util.GetValueOfInt(Env.GetCtx().GetContext("#VAF_UserContact_ID")) != 100)
             {
                 if (Is_ValueChanged("C_UOM_ID") || Is_ValueChanged("M_AttributeSet_ID"))
                 {

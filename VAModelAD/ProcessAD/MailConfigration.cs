@@ -18,7 +18,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class MailConfigration : ProcessEngine.SvrProcess 
     {
         // The Column				
-        private int p_AD_UserMailConfigration_ID = 0;
+        private int p_VAF_UserMailConfigration_ID = 0;
         private string processMode = "";
 //private IMAPConfig config = null;
         //private VLogger log = null;
@@ -45,7 +45,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            p_AD_UserMailConfigration_ID = GetRecord_ID();
+            p_VAF_UserMailConfigration_ID = GetRecord_ID();
         }//	prepare
 
 
@@ -58,8 +58,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             
 
-            log.Info("p_AD_UserMailConfigration_ID=" + p_AD_UserMailConfigration_ID);
-            if (p_AD_UserMailConfigration_ID == 0)
+            log.Info("p_VAF_UserMailConfigration_ID=" + p_VAF_UserMailConfigration_ID);
+            if (p_VAF_UserMailConfigration_ID == 0)
             {
                 //    return "";
                 throw new Exception("@No@ @VAF_Column_ID@");
@@ -68,17 +68,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             if (processMode == "D")
             {
-                //return MailBox.Classes.MailConfigMethod.DeleteLocalUMConfig(GetCtx()().GetAD_User_ID());
+                //return MailBox.Classes.MailConfigMethod.DeleteLocalUMConfig(GetCtx()().GetVAF_UserContact_ID());
 
             }
 
             if (processMode == "C")
             {
-                MUserMailConfigration mailConfig = new MUserMailConfigration(GetCtx(), p_AD_UserMailConfigration_ID, Get_TrxName());
+                MUserMailConfigration mailConfig = new MUserMailConfigration(GetCtx(), p_VAF_UserMailConfigration_ID, Get_TrxName());
                 if (mailConfig.Get_ID() == 0)
                 {
                     
-                    throw new Exception("@NotFound@ @AD_UserMailConfigration_ID@" + p_AD_UserMailConfigration_ID);
+                    throw new Exception("@NotFound@ @VAF_UserMailConfigration_ID@" + p_VAF_UserMailConfigration_ID);
                 }
 
                 //Create new 
@@ -93,7 +93,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             try
             {
-                //string configFile = System.Windows.Forms.Application.StartupPath + "\\" + DataBase.GlobalVariable.IMAP_CONFIG_FILE + GetCtx()().GetAD_User_ID() + ".cfg";
+                //string configFile = System.Windows.Forms.Application.StartupPath + "\\" + DataBase.GlobalVariable.IMAP_CONFIG_FILE + GetCtx()().GetVAF_UserContact_ID() + ".cfg";
                 //config = new IMAPConfig();
                 //config.Name = "";
                 //config.Host = mailConfig.GetImapHost();

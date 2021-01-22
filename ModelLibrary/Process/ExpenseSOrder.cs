@@ -286,7 +286,7 @@ namespace VAdvantage.Process
                 _order.SetSalesRep_ID(te.GetDoc_User_ID());
 
                 ////Added By Arpit asked by Surya Sir..................29-12-2015
-                //_order.SetSalesRep_ID(GetCtx().GetAD_User_ID());
+                //_order.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                 //End
                 if (tel.GetC_Activity_ID() != 0)
                 {

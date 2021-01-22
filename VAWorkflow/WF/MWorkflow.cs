@@ -100,7 +100,7 @@ namespace VAdvantage.WF
         {
             if (Utility.Env.IsBaseLanguage(GetCtx(), "") || Get_ID() == 0)
                 return;
-            String sql = "SELECT Name, Description, Help FROM AD_Workflow_Trl WHERE AD_Workflow_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";// lang.GetVAF_Language();
+            String sql = "SELECT Name, Description, Help FROM VAF_Workflow_TL WHERE AD_Workflow_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";// lang.GetVAF_Language();
             DataSet ds = null;
             try
             {
@@ -126,7 +126,7 @@ namespace VAdvantage.WF
         /// </summary>
         private void LoadNodes()
         {
-            String sql = "SELECT * FROM AD_WF_Node WHERE AD_Workflow_ID=" + Get_ID() + " AND IsActive='Y'"; //jz AD_WorkFlow_ID: changed in AD?
+            String sql = "SELECT * FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + Get_ID() + " AND IsActive='Y'"; //jz AD_WorkFlow_ID: changed in AD?
             DataSet ds = null;
             try
             {
@@ -184,7 +184,7 @@ namespace VAdvantage.WF
         /// <returns>array of next nodes</returns>
         public MWFNode GetFirstNode()
         {
-            return GetNode(GetAD_WF_Node_ID());
+            return GetNode(GetVAF_WFlow_Node_ID());
         }
 
         /// <summary>
@@ -327,14 +327,14 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get Node with ID in Workflow
         /// </summary>
-        /// <param name="AD_WF_Node_ID">ID</param>
+        /// <param name="VAF_WFlow_Node_ID">ID</param>
         /// <returns>node or null</returns>
-        protected MWFNode GetNode(int AD_WF_Node_ID)
+        protected MWFNode GetNode(int VAF_WFlow_Node_ID)
         {
             for (int i = 0; i < _nodes.Count; i++)
             {
                 MWFNode node = (MWFNode)_nodes[i];
-                if (node.GetAD_WF_Node_ID() == AD_WF_Node_ID)
+                if (node.GetVAF_WFlow_Node_ID() == VAF_WFlow_Node_ID)
                     return node;
             }
             return null;
@@ -343,12 +343,12 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get the next nodes
         /// </summary>
-        /// <param name="AD_WF_Node_ID">ID</param>
+        /// <param name="VAF_WFlow_Node_ID">ID</param>
         /// <param name="VAF_Client_ID">for client</param>
         /// <returns>array of next nodes or null</returns>
-        public MWFNode[] GetNextNodes(int AD_WF_Node_ID, int VAF_Client_ID)
+        public MWFNode[] GetNextNodes(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
-            MWFNode node = GetNode(AD_WF_Node_ID);
+            MWFNode node = GetNode(VAF_WFlow_Node_ID);
             if (node == null || node.GetNextNodeCount() == 0)
                 return null;
             MWFNodeNext[] nexts = node.GetTransitions(VAF_Client_ID);
@@ -374,7 +374,7 @@ namespace VAdvantage.WF
         private MWFNode[] GetNodesInOrder(int VAF_Client_ID)
         {
             List<MWFNode> list = new List<MWFNode>();
-            AddNodesSF(list, GetAD_WF_Node_ID(), VAF_Client_ID);	//	start with first
+            AddNodesSF(list, GetVAF_WFlow_Node_ID(), VAF_Client_ID);	//	start with first
             //	Remaining Nodes
             if (_nodes.Count != list.Count)
             {
@@ -390,7 +390,7 @@ namespace VAdvantage.WF
                         for (int i = 0; i < list.Count; i++)
                         {
                             MWFNode existing = (MWFNode)list[i];
-                            if (existing.GetAD_WF_Node_ID() == node.GetAD_WF_Node_ID())
+                            if (existing.GetVAF_WFlow_Node_ID() == node.GetVAF_WFlow_Node_ID())
                             {
                                 found = true;
                                 break;
@@ -414,11 +414,11 @@ namespace VAdvantage.WF
         ///	Add Nodes recursively (depth first) to Ordered List
         /// </summary>
         /// <param name="list">list to add to</param>
-        /// <param name="AD_WF_Node_ID">start node id</param>
+        /// <param name="VAF_WFlow_Node_ID">start node id</param>
         /// <param name="VAF_Client_ID">for client</param>
-        private void AddNodesDF(List<MWFNode> list, int AD_WF_Node_ID, int VAF_Client_ID)
+        private void AddNodesDF(List<MWFNode> list, int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
-            MWFNode node = GetNode(AD_WF_Node_ID);
+            MWFNode node = GetNode(VAF_WFlow_Node_ID);
             if (node != null && !list.Contains(node))
             {
                 list.Add(node);
@@ -436,11 +436,11 @@ namespace VAdvantage.WF
         /// Add Nodes recursively (sibling first) to Ordered List
         /// </summary>
         /// <param name="list">list to add to</param>
-        /// <param name="AD_WF_Node_ID">start node id</param>
+        /// <param name="VAF_WFlow_Node_ID">start node id</param>
         /// <param name="VAF_Client_ID">for client</param>
-        private void AddNodesSF(List<MWFNode> list, int AD_WF_Node_ID, int VAF_Client_ID)
+        private void AddNodesSF(List<MWFNode> list, int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
-            MWFNode node = GetNode(AD_WF_Node_ID);
+            MWFNode node = GetNode(VAF_WFlow_Node_ID);
             if (node != null
                 && (node.GetVAF_Client_ID() == 0 || node.GetVAF_Client_ID() == VAF_Client_ID))
             {
@@ -471,15 +471,15 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get first transition (Next Node) of ID
         /// </summary>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="VAF_Client_ID">for client</param>
-        /// <returns>next AD_WF_Node_ID or 0</returns>
-        public int GetNext(int AD_WF_Node_ID, int VAF_Client_ID)
+        /// <returns>next VAF_WFlow_Node_ID or 0</returns>
+        public int GetNext(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
             MWFNode[] nodes = GetNodesInOrder(VAF_Client_ID);
             for (int i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i].GetAD_WF_Node_ID() == AD_WF_Node_ID)
+                if (nodes[i].GetVAF_WFlow_Node_ID() == VAF_WFlow_Node_ID)
                 {
                     MWFNodeNext[] nexts = nodes[i].GetTransitions(VAF_Client_ID);
                     if (nexts.Length > 0)
@@ -493,15 +493,15 @@ namespace VAdvantage.WF
         /// <summary>
         ///Get Transitions (NodeNext) of ID
         /// </summary>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="VAF_Client_ID">for client</param>
         /// <returns>array of next nodes</returns>
-        public MWFNodeNext[] GetNodeNexts(int AD_WF_Node_ID, int VAF_Client_ID)
+        public MWFNodeNext[] GetNodeNexts(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
             MWFNode[] nodes = GetNodesInOrder(VAF_Client_ID);
             for (int i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i].GetAD_WF_Node_ID() == AD_WF_Node_ID)
+                if (nodes[i].GetVAF_WFlow_Node_ID() == VAF_WFlow_Node_ID)
                 {
                     return nodes[i].GetTransitions(VAF_Client_ID);
                 }
@@ -512,18 +512,18 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get (first) Previous Node of ID
         /// </summary>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="VAF_Client_ID">for client</param>
-        /// <returns>next AD_WF_Node_ID or 0</returns>
-        public int GetPrevious(int AD_WF_Node_ID, int VAF_Client_ID)
+        /// <returns>next VAF_WFlow_Node_ID or 0</returns>
+        public int GetPrevious(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
             MWFNode[] nodes = GetNodesInOrder(VAF_Client_ID);
             for (int i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i].GetAD_WF_Node_ID() == AD_WF_Node_ID)
+                if (nodes[i].GetVAF_WFlow_Node_ID() == VAF_WFlow_Node_ID)
                 {
                     if (i > 0)
-                        return nodes[i - 1].GetAD_WF_Node_ID();
+                        return nodes[i - 1].GetVAF_WFlow_Node_ID();
                     return 0;
                 }
             }
@@ -533,38 +533,38 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get very Last Node
         /// </summary>
-        /// <param name="AD_WF_Node_ID">ignored</param>
+        /// <param name="VAF_WFlow_Node_ID">ignored</param>
         /// <param name="VAF_Client_ID">for client</param>
-        /// <returns>next AD_WF_Node_ID or 0</returns>
-        public int GetLast(int AD_WF_Node_ID, int VAF_Client_ID)
+        /// <returns>next VAF_WFlow_Node_ID or 0</returns>
+        public int GetLast(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
             MWFNode[] nodes = GetNodesInOrder(VAF_Client_ID);
             if (nodes.Length > 0)
-                return nodes[nodes.Length - 1].GetAD_WF_Node_ID();
+                return nodes[nodes.Length - 1].GetVAF_WFlow_Node_ID();
             return 0;
         }
 
         /// <summary>
         /// Is this the first Node
         /// </summary>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="VAF_Client_ID">for client</param>
         /// <returns>true if first node</returns>
-        public bool IsFirst(int AD_WF_Node_ID, int VAF_Client_ID)
+        public bool IsFirst(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
-            return AD_WF_Node_ID == GetAD_WF_Node_ID();
+            return VAF_WFlow_Node_ID == GetVAF_WFlow_Node_ID();
         }
 
         /// <summary>
         /// Is this the last Node
         /// </summary>
-        /// <param name="AD_WF_Node_ID">id</param>
+        /// <param name="VAF_WFlow_Node_ID">id</param>
         /// <param name="VAF_Client_ID">for client</param>
         /// <returns>true if last node</returns>
-        public bool IsLast(int AD_WF_Node_ID, int VAF_Client_ID)
+        public bool IsLast(int VAF_WFlow_Node_ID, int VAF_Client_ID)
         {
             MWFNode[] nodes = GetNodesInOrder(VAF_Client_ID);
-            return AD_WF_Node_ID == nodes[nodes.Length - 1].GetAD_WF_Node_ID();
+            return VAF_WFlow_Node_ID == nodes[nodes.Length - 1].GetVAF_WFlow_Node_ID();
         }	//	isLast
 
         /// <summary>
@@ -661,7 +661,7 @@ namespace VAdvantage.WF
                     menues[i].SetDescription(GetDescription());
                     menues[i].Save();
                 }
-                X_AD_WF_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "AD_Workflow_ID=" + GetAD_Workflow_ID());
+                X_VAF_WFlow_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "AD_Workflow_ID=" + GetAD_Workflow_ID());
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     bool changed = false;
@@ -772,8 +772,8 @@ namespace VAdvantage.WF
                 // in case of Suspend (User Approval) show the workflow node on which it is suspended for approval
                 if (state != null && state.GetState() == StateEngine.STATE_SUSPENDED)
                 {
-                    string node = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT n.Name FROM AD_WF_Activity ac INNER JOIN AD_WF_Node n ON ac.AD_WF_Node_ID = n.AD_WF_Node_ID WHERE
-                                  ac.AD_WF_Process_ID = " + process.Get_ID() + " AND ac.WFState = '" + StateEngine.STATE_SUSPENDED + "'"));
+                    string node = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT n.Name FROM VAF_WFlow_Task ac INNER JOIN VAF_WFlow_Node n ON ac.VAF_WFlow_Node_ID = n.VAF_WFlow_Node_ID WHERE
+                                  ac.VAF_WFlow_Handler_ID = " + process.Get_ID() + " AND ac.WFState = '" + StateEngine.STATE_SUSPENDED + "'"));
                     if (!String.IsNullOrEmpty(node))
                     {
                         summary = state.ToString() + " " + Msg.GetMsg(GetCtx(), "For") + " " + node;
@@ -799,7 +799,7 @@ namespace VAdvantage.WF
         {
             StringBuilder errors = new StringBuilder();
             //
-            if (GetAD_WF_Node_ID() == 0)
+            if (GetVAF_WFlow_Node_ID() == 0)
                 errors.Append(" - No Start Node");
             //
             if (WORKFLOWTYPE_DocumentValue.Equals(GetWorkflowType())

@@ -660,7 +660,7 @@
     }
 
     //form declaretion
-    function AcctViewer(VAF_Client_ID, VAF_TableView_ID, Record_ID, windowNum, AD_Window_ID) {
+    function AcctViewer(VAF_Client_ID, VAF_TableView_ID, Record_ID, windowNum, VAF_Screen_ID) {
 
         var $root = $("<div style='position:relative;'>");
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
@@ -670,7 +670,7 @@
         var _VAF_TableView_ID = VAF_TableView_ID;
         var _Record_ID = Record_ID;
         var windowNo = windowNum;
-        var _AD_Window_ID = AD_Window_ID;
+        var _VAF_Screen_ID = VAF_Screen_ID;
 
         this.arrListColumns = [];
         this.dGrid = null;
@@ -2057,7 +2057,7 @@
                                     'Record_ID': _data.Record_ID,
                                     'force': force,
                                     'OrgID': orgID,
-                                    'AD_Window_ID': _AD_Window_ID,
+                                    'VAF_Screen_ID': _VAF_Screen_ID,
                                     'DocTypeID': docTypeID
                                 },
                                 error: function (e) {

@@ -22,7 +22,7 @@ public X_VAF_AttachmentNote (Context ctx, int VAF_AttachmentNote_ID, Trx trxName
 {
 SetVAF_AttachmentNote_ID (0);
 SetVAF_Attachment_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetTextMsg (null);
 SetTitle (null);
 }
@@ -34,7 +34,7 @@ public X_VAF_AttachmentNote (Ctx ctx, int VAF_AttachmentNote_ID, Trx trxName) : 
 {
 SetVAF_AttachmentNote_ID (0);
 SetVAF_Attachment_ID (0);
-SetAD_User_ID (0);
+SetVAF_UserContact_ID (0);
 SetTextMsg (null);
 SetTitle (null);
 }
@@ -149,17 +149,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set User/Contact.
-@param AD_User_ID User within the system - Internal or Business Partner Contact */
-public void SetAD_User_ID (int AD_User_ID)
+@param VAF_UserContact_ID User within the system - Internal or Business Partner Contact */
+public void SetVAF_UserContact_ID (int VAF_UserContact_ID)
 {
-if (AD_User_ID < 1) throw new ArgumentException ("AD_User_ID is mandatory.");
-Set_Value ("AD_User_ID", AD_User_ID);
+if (VAF_UserContact_ID < 1) throw new ArgumentException ("VAF_UserContact_ID is mandatory.");
+Set_Value ("VAF_UserContact_ID", VAF_UserContact_ID);
 }
 /** Get User/Contact.
 @return User within the system - Internal or Business Partner Contact */
-public int GetAD_User_ID() 
+public int GetVAF_UserContact_ID() 
 {
-Object ii = Get_Value("AD_User_ID");
+Object ii = Get_Value("VAF_UserContact_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
