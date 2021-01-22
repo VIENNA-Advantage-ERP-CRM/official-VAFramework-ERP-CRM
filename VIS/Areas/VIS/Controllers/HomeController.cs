@@ -102,6 +102,7 @@ namespace VIS.Controllers
             }
 
             VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
+            Language.GetLanguages();
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {
