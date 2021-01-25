@@ -439,6 +439,7 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_MarginAmt", mOrderLine.Get_Value("VA077_MarginAmt"));
                     orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));
                     orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
+                    orderLine.Set_Value("VA077_IsContract", mOrderLine.Get_Value("VA077_IsContract"));
                     if (!orderLine.Save())
                     {
                         Get_Trx().Rollback();
