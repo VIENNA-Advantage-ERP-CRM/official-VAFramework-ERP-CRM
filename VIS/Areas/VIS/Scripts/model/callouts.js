@@ -654,7 +654,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = 0;
             var isvendor = 'N';
             var isCustomer = 'N';
@@ -702,7 +701,11 @@
                     //        mTab.setValue("M_PriceList_ID", i1);
                     //}
                 }
-
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(isSOTrx ? dr["C_IncoTerm_ID"] : dr["C_IncoTermPO_ID"]);
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                }
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
                 var bill_Location_ID = Util.getValueOfInt(dr["Bill_Location_ID"]);
@@ -12014,7 +12017,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = Util.getValueOfInt(value);//(int)value;
             if (C_BPartner_ID == null || C_BPartner_ID == 0) {
                 return "";
@@ -12036,7 +12038,7 @@
             //-----------------ANuj----Code----------
             var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
-                + " p.SO_Description,p.IsDiscountPrinted,";
+                + " p.SO_Description,p.IsDiscountPrinted, p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
 
             var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0) {
@@ -12078,6 +12080,12 @@
                     //}
 
                     //	PaymentRule
+                    //Inco Term
+                    var IncoTerm = Util.getValueOfInt(dr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                    if (IncoTerm > 0) {
+                        mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                    }
+
                     var s = Util.getValueOfString(dr.get(isSOTrx ? "paymentrule" : "paymentrulepo"));
                     if (s != null && s.length != 0) {
                         if (ctx.getContext("DocBaseType").toString().endsWith("C"))	//	Credits are Payment Term
@@ -12372,7 +12380,6 @@
             mTab.setValue("VA038_AmortizationTemplate_ID", 0);
             return "";
         }
-        debugger;
 
         var M_Product_ID = value;
         if (M_Product_ID == null || M_Product_ID == 0)
@@ -15903,6 +15910,23 @@
         return "";
     };
 
+    //CalloutRequisition.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    //    if (this.isCalloutActive() || value == null || value.toString() == "") {
+    //        return "";
+    //    }
+    //    this.setCalloutActive(true);
+    //    try {
+    //        var C_BPartner_ID = value;
+            
+    //    }
+    //    catch (err) {
+    //        this.log.severe(err.toString());
+    //    };
+    //    this.setCalloutActive(false);
+    //    ctx = windowNo = mTab = mField = value = oldvalue = null;
+    //    return "";
+    //};
+
     VIS.Model.CalloutRequisition = CalloutRequisition;
     //*********** CalloutRequisition End *******
 
@@ -17206,6 +17230,8 @@
             }
 
             var isReturnTrx = mTab.getValue("IsReturnTrx");
+            var isSOTrx = mTab.getValue("IsSOTrx");
+
 
             //	sraval: source forge bug # 1503219
             var order = mTab.getValue("C_Order_ID");
@@ -17219,7 +17245,7 @@
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
             sql = "SELECT p.AD_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus "
+                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus,p.C_IncoTerm_ID,p.C_IncoTermPO_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
                 + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
@@ -17248,6 +17274,12 @@
                 }
                 else {
                     mTab.setValue("AD_User_ID", ii);
+                }
+
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(idr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
                 }
 
                 // Skip credit check for returns
