@@ -661,10 +661,11 @@ namespace VAdvantage.Model
                 //	Prepayment: No charge and order or project (not as acct dimension)
                 // new change to set prepayment false when payment is for order schedules
                 // done by Vivek Kumar on 05/07/2017 as per discussion with Mandeep sir
-                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
-                if (hasVA009Module && (GetVA009_OrderPaySchedule_ID() > 0))
+                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
+                //JID_1469 prepayment should be true in case of order and independent business partner.
+                if ((GetC_BPartner_ID() != 0 && GetC_Invoice_ID() == 0 && GetC_Charge_ID() == 0 && GetC_Project_ID() == 0))
                 {
-                    SetIsPrepayment(false);
+                    SetIsPrepayment(true);
                 }
                 else
                 {
