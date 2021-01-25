@@ -221,7 +221,7 @@ namespace VIS.Models
             int C_BPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
             string sql = "SELECT p.AD_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
-                + "p.PaymentRule, p.POReference, p.SO_Description, p.SalesRep_ID, ";
+                + "p.PaymentRule, p.POReference, p.SO_Description, p.SalesRep_ID,p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
             if (countVA009)
             {
                 //VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
@@ -273,6 +273,9 @@ namespace VIS.Models
                 retDic["Bill_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_Location_ID"]);
                 retDic["SOCreditStatus"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SOCreditStatus"]);
                 retDic["IsShipTo"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsShipTo"]);
+                retDic["C_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTerm_ID"]);
+                retDic["C_IncoTermPO_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTermPO_ID"]);
+
             }
             return retDic;
         }
@@ -362,7 +365,7 @@ namespace VIS.Models
                 retDic = new Dictionary<string, object>();
                 retDic["IsVendor"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsVendor"]);
                 retDic["IsCustomer"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsCustomer"]);
-
+            
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
