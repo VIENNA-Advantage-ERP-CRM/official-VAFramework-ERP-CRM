@@ -64,7 +64,7 @@ namespace VIS.Models
         public bool isVendor = false;
         public bool isEmployee = false;
         public int tableID = 0;
-        int C_BPartner_ID = 0;
+        int VAB_BusinessPartner_ID = 0;
 
         //private string BPtype = null;
         /// <summary>
@@ -89,12 +89,12 @@ namespace VIS.Models
         private void InitBPartner(int WinNo, int bPartnerID, string bpType)
         {
 
-            C_BPartner_ID = bPartnerID;
+            VAB_BusinessPartner_ID = bPartnerID;
             bool ro = false;
             DataSet ds = null;
 
 
-            log.Config("C_BPartner_ID=" + bPartnerID);
+            log.Config("VAB_BusinessPartner_ID=" + bPartnerID);
             //  New bpartner
             if (bPartnerID == 0)
             {
@@ -112,7 +112,7 @@ namespace VIS.Models
             {
                 //	Contact - Load values
                 _pLocation = _partner.GetLocation(
-                    Env.GetCtx().GetContextAsInt(WinNo, "C_BPartner_Location_ID"));
+                    Env.GetCtx().GetContextAsInt(WinNo, "VAB_BPart_Location_ID"));
                 _user = _partner.GetContact(
                    Env.GetCtx().GetContextAsInt(WinNo, "VAF_UserContact_ID"));
             }
@@ -143,17 +143,17 @@ namespace VIS.Models
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MLocation.Table_ID, 0, false);
 
-            ds = DB.ExecuteDataset("Select C_BPartnerRelation_ID, c_bpartnerrelation_location_id from C_BP_Relation where c_bpartner_id=" + _partner.GetC_BPartner_ID());
+            ds = DB.ExecuteDataset("Select VAB_BusinessPartnerRelation_ID, VAB_BusinessPartnerrelation_location_id from VAB_BPart_Relation where VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID());
 
-            LoadBPartner(C_BPartner_ID, ds);
+            LoadBPartner(VAB_BusinessPartner_ID, ds);
 
         }
 
-        public bool LoadBPartner(int C_BPartner_ID, DataSet ds)
+        public bool LoadBPartner(int VAB_BusinessPartner_ID, DataSet ds)
         {
-            log.Config("C_BPartner_ID=" + C_BPartner_ID);
+            log.Config("VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID);
             ////  New bpartner
-            if (C_BPartner_ID == 0)
+            if (VAB_BusinessPartner_ID == 0)
             {
                 _partner = null;
                 _pLocation = null;
@@ -164,7 +164,7 @@ namespace VIS.Models
                 return true;
             }
 
-            //_partner = new MBPartner(Env.GetCtx(), C_BPartner_ID, null);
+            //_partner = new MBPartner(Env.GetCtx(), VAB_BusinessPartner_ID, null);
             if (_partner.Get_ID() == 0)
             {
                 //Classes.ShowMessage.Error("BPartnerNotFound", null);
@@ -173,7 +173,7 @@ namespace VIS.Models
 
             //	BPartner - Load values
             searchKey = _partner.GetValue() ?? "";
-            greeting = GetGreeting(_partner.GetC_Greeting_ID());
+            greeting = GetGreeting(_partner.GetVAB_Greeting_ID());
             name = _partner.GetName() ?? "";
             name2 = _partner.GetName2() ?? "";
             WebUrl = _partner.GetURL();
@@ -191,7 +191,7 @@ namespace VIS.Models
 
             if (_user != null)
             {
-                greeting1 = GetGreeting(_user.GetC_Greeting_ID());
+                greeting1 = GetGreeting(_user.GetVAB_Greeting_ID());
                 contact = _user.GetName() ?? "";
                 title = _user.GetTitle() ?? "";
                 email = _user.GetEMail() ?? "";
@@ -203,14 +203,14 @@ namespace VIS.Models
                 userImage = GetUserImage(_user.GetVAF_Image_ID());
 
             }
-            bpGroupID = _partner.GetC_BP_Group_ID();
+            bpGroupID = _partner.GetVAB_BPart_Category_ID();
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    bpRelationID = Convert.ToString(ds.Tables[0].Rows[i]["C_BPartnerRelation_ID"]);
-                    bpLocationID = Convert.ToString(ds.Tables[0].Rows[i]["c_bpartnerrelation_location_id"]);
+                    bpRelationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BusinessPartnerRelation_ID"]);
+                    bpLocationID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BusinessPartnerrelation_location_id"]);
                 }
             }
 
@@ -258,10 +258,10 @@ namespace VIS.Models
         /// <returns></returns>
         public int GetBPartnerID(int userID)
         {
-            int c_BPartner_ID = 0;
-            string sqlQuery = "select c_bpartner_id from VAF_UserContact where VAF_UserContact_id =" + userID;
-            c_BPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
-            return c_BPartner_ID;
+            int VAB_BusinessPartner_ID = 0;
+            string sqlQuery = "select VAB_BusinessPartner_id from VAF_UserContact where VAF_UserContact_id =" + userID;
+            VAB_BusinessPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
+            return VAB_BusinessPartner_ID;
         }
         /// <summary>
         /// Get C_order_id
@@ -285,8 +285,8 @@ namespace VIS.Models
                 Name = ""
             });
             DataSet ds = new DataSet();
-            String sql = "select c_bp_group_id, Name  from c_bp_group WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "c_bp_group", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            String sql = "select VAB_BPart_Category_id, Name  from VAB_BPart_Category WHERE IsActive='Y' ";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Category", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -295,7 +295,7 @@ namespace VIS.Models
                 {
                     lstBPGroup.Add(new BPInfo()
                     {
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BP_GROUP_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_BPART_CATEGORY_ID"]),
                         Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                     });
                 }
@@ -320,8 +320,8 @@ namespace VIS.Models
                 Name = ""
             });
             DataSet ds = new DataSet();
-            String sql = "select c_bpartner_id, Name  from c_bpartner WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "c_bpartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            String sql = "select VAB_BusinessPartner_id, Name  from VAB_BusinessPartner WHERE IsActive='Y' ";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BusinessPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -330,7 +330,7 @@ namespace VIS.Models
                 {
                     lstBPRelation.Add(new BPInfo()
                     {
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BPartner_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_BusinessPartner_ID"]),
                         Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                     });
                 }
@@ -342,7 +342,7 @@ namespace VIS.Models
         /// Fill BPLocation
         /// </summary>
         public List<BPInfo> lstBPLocation = null;
-        public List<BPInfo> FillBPLocation(int c_bpartner_id, Ctx ctx)
+        public List<BPInfo> FillBPLocation(int VAB_BusinessPartner_id, Ctx ctx)
         {
             lstBPLocation = new List<BPInfo>();
             lstBPLocation.Add(new BPInfo()
@@ -351,8 +351,8 @@ namespace VIS.Models
                 Name = ""
             });
             DataSet ds = new DataSet();
-            String sql = "select c_bpartner_location_id, Name  from c_bpartner_location WHERE IsActive='Y' and c_bpartner_id=" + c_bpartner_id;
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "c_bpartner_location", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            String sql = "select VAB_BPart_Location_id, Name  from VAB_BPart_Location WHERE IsActive='Y' and VAB_BusinessPartner_id=" + VAB_BusinessPartner_id;
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Location", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -361,7 +361,7 @@ namespace VIS.Models
                 {
                     lstBPLocation.Add(new BPInfo()
                     {
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_BPart_Location_ID"]),
                         Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                     });
                 }
@@ -382,8 +382,8 @@ namespace VIS.Models
                 Name = ""
             });
             DataSet ds = new DataSet();
-            String sql = "SELECT C_Greeting_ID, Name FROM C_Greeting WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_Greeting", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            String sql = "SELECT VAB_Greeting_ID, Name FROM VAB_Greeting WHERE IsActive='Y' ";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Greeting", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -392,7 +392,7 @@ namespace VIS.Models
                 {
                     lstGreeting.Add(new BPInfo()
                     {
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_GREETING_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_GREETING_ID"]),
                         Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                     });
                 }
@@ -406,7 +406,7 @@ namespace VIS.Models
         private MBPartner _partner = null;
 
         private MUser _user = null;
-        X_C_BP_Relation _bprelation = null;
+        X_VAB_BPart_Relation _bprelation = null;
         private static VLogger log = VLogger.GetVLogger(typeof(BPartnerModel).FullName);
         /// <summary>
         /// Add Or Update Business Partner
@@ -429,16 +429,16 @@ namespace VIS.Models
         /// <param name="ctx"></param>
         /// <param name="_windowNo"></param>
         /// <param name="BPtype"></param>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <returns></returns>
 
-        public string AddBPartner(string searchKey, string name, string name2, string greeting, string bpGroup, string bpRelation, string bpLocation, string contact, string greeting1, string title, string email, string address, string phoneNo, string phoneNo2, string fax, Ctx ctx, int _windowNo, string BPtype, int C_BPartner_ID, bool isCustomer, bool isVendor, bool isProspect, string fileUrl, string umobile, string webUrl, bool isEmployee)
+        public string AddBPartner(string searchKey, string name, string name2, string greeting, string bpGroup, string bpRelation, string bpLocation, string contact, string greeting1, string title, string email, string address, string phoneNo, string phoneNo2, string fax, Ctx ctx, int _windowNo, string BPtype, int VAB_BusinessPartner_ID, bool isCustomer, bool isVendor, bool isProspect, string fileUrl, string umobile, string webUrl, bool isEmployee)
         {
             StringBuilder strError = new StringBuilder();
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            if (C_BPartner_ID > 0)
+            if (VAB_BusinessPartner_ID > 0)
             {
-                _partner = new MBPartner(ctx, C_BPartner_ID, null);
+                _partner = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
             }
             else
             {
@@ -525,7 +525,7 @@ namespace VIS.Models
             if (searchKey == null || searchKey.Length == 0)
             {
                 //	get Table Documet No
-                searchKey = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "C_BPartner", null, ctx);
+                searchKey = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "VAB_BusinessPartner", null, ctx);
                 //Dispatcher.BeginInvoke(() => { txtValue.Text = value; });
             }
             _partner.SetValue(searchKey);
@@ -536,27 +536,27 @@ namespace VIS.Models
             //KeyNamePair p = (KeyNamePair)cmbGreetingBP.SelectedItem;
             //if (greeting >0)
             //{
-            //    _partner.SetC_Greeting_ID(greeting);
+            //    _partner.SetVAB_Greeting_ID(greeting);
             //}
             //else
             //{
-            //    _partner.SetC_Greeting_ID(0);
+            //    _partner.SetVAB_Greeting_ID(0);
             //}
             if (greeting != string.Empty)
             {
-                _partner.SetC_Greeting_ID(Convert.ToInt32(greeting));
+                _partner.SetVAB_Greeting_ID(Convert.ToInt32(greeting));
             }
             else
             {
-                _partner.SetC_Greeting_ID(0);
+                _partner.SetVAB_Greeting_ID(0);
             }
             /***************************************************/
-            _partner.SetC_BP_Group_ID(Util.GetValueOfInt(bpGroup));
+            _partner.SetVAB_BPart_Category_ID(Util.GetValueOfInt(bpGroup));
             /***************************************************/
 
             if (_partner.Save())
             {
-                log.Fine("C_BPartner_ID=" + _partner.GetC_BPartner_ID());
+                log.Fine("VAB_BusinessPartner_ID=" + _partner.GetVAB_BusinessPartner_ID());
             }
             else
             {
@@ -568,7 +568,7 @@ namespace VIS.Models
 
             //	***** Business Partner - Location *****
             if (_pLocation == null)
-                if (C_BPartner_ID > 0)
+                if (VAB_BusinessPartner_ID > 0)
                 {
                     _pLocation = new MBPartnerLocation(ctx, GetBPartnerLocationID(_partner.Get_ID()), null);
                     if (_pLocation.Get_ID() <= 0)
@@ -591,11 +591,11 @@ namespace VIS.Models
             _pLocation.SetFax(fax);
             if (_pLocation.Save())
             {
-                log.Fine("C_BPartner_Location_ID=" + _pLocation.GetC_BPartner_Location_ID());
+                log.Fine("VAB_BPart_Location_ID=" + _pLocation.GetVAB_BPart_Location_ID());
             }
             else
             {
-                //   ADialog.error(m_WindowNo, this, "BPartnerNotSaved", Msg.translate(Env.getCtx(), "C_BPartner_Location_ID"));
+                //   ADialog.error(m_WindowNo, this, "BPartnerNotSaved", Msg.translate(Env.getCtx(), "VAB_BPart_Location_ID"));
                 // Classes.ShowMessage.Error("BPartnerNotSaved", null);
                 //this.Cursor = Cursors.Arrow;
                 strError.Append("BPartnerNotSaved");
@@ -606,7 +606,7 @@ namespace VIS.Models
             //String contact = txtContact.Text;
             //String email = txtEMail.Text;
             if (_user == null && (contact.Length > 0 || email.Length > 0))
-                if (C_BPartner_ID > 0)
+                if (VAB_BusinessPartner_ID > 0)
                 {
                     _user = new MUser(ctx, GetUserID(_partner.Get_ID()), null);
                 }
@@ -626,17 +626,17 @@ namespace VIS.Models
                 // = (KeyNamePair)cmbGreetingC.SelectedItem;
 
                 //if (greeting1 >0)
-                //    _user.SetC_Greeting_ID(greeting1);
+                //    _user.SetVAB_Greeting_ID(greeting1);
                 if (greeting1 != string.Empty)
-                    _user.SetC_Greeting_ID(Convert.ToInt32(greeting1));
+                    _user.SetVAB_Greeting_ID(Convert.ToInt32(greeting1));
                 else
-                    _user.SetC_Greeting_ID(0);
+                    _user.SetVAB_Greeting_ID(0);
                 //
                 _user.SetPhone(phoneNo);
                 // _user.SetPhone2(phoneNo2);
                 _user.SetMobile(umobile);
                 _user.SetFax(fax);
-                _user.SetC_BPartner_Location_ID(_pLocation.GetC_BPartner_Location_ID());
+                _user.SetVAB_BPart_Location_ID(_pLocation.GetVAB_BPart_Location_ID());
                 if (_user.Save())
                 {
                     if (fileUrl != null && fileUrl != string.Empty)
@@ -662,36 +662,36 @@ namespace VIS.Models
                 {
                     if (bpRelation.ToString().Trim() == "" || bpLocation.ToString().Trim() == "")
                     {
-                        int dele = DB.ExecuteQuery("DELETE from C_BP_Relation where c_bpartner_id=" + _partner.GetC_BPartner_ID(), null, null);
+                        int dele = DB.ExecuteQuery("DELETE from VAB_BPart_Relation where VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID(), null, null);
                         if (dele == -1)
                         {
-                            log.SaveError("C_BP_RelationNotDeleted", "c_bpartner_id=" + _partner.GetC_BPartner_ID());
+                            log.SaveError("VAB_BPart_RelationNotDeleted", "VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID());
                         }
                     }
                     else
                     {
                         //Business Partner Relation 
-                        if (C_BPartner_ID > 0)
+                        if (VAB_BusinessPartner_ID > 0)
                         {
-                            _bprelation = new X_C_BP_Relation(ctx, GetBPRelationID(_partner.Get_ID()), null);
+                            _bprelation = new X_VAB_BPart_Relation(ctx, GetBPRelationID(_partner.Get_ID()), null);
                         }
                         else
                         {
-                            _bprelation = new X_C_BP_Relation(ctx, 0, null);
+                            _bprelation = new X_VAB_BPart_Relation(ctx, 0, null);
                         }
                         _bprelation.SetVAF_Client_ID(_partner.GetVAF_Client_ID());
                         _bprelation.SetVAF_Org_ID(_partner.GetVAF_Org_ID());
                         _bprelation.SetName(_partner.GetName());
                         _bprelation.SetDescription(_partner.GetDescription());
-                        _bprelation.SetC_BPartner_ID(_partner.GetC_BPartner_ID());
-                        _bprelation.SetC_BPartner_Location_ID(_pLocation.GetC_BPartner_Location_ID());
-                        _bprelation.SetC_BP_Relation_ID(Util.GetValueOfInt(bpRelation));
-                        _bprelation.SetC_BPartnerRelation_ID(Util.GetValueOfInt(bpRelation));
-                        _bprelation.SetC_BPartnerRelation_Location_ID(Util.GetValueOfInt(bpLocation));
+                        _bprelation.SetVAB_BusinessPartner_ID(_partner.GetVAB_BusinessPartner_ID());
+                        _bprelation.SetVAB_BPart_Location_ID(_pLocation.GetVAB_BPart_Location_ID());
+                        _bprelation.SetVAB_BPart_Relation_ID(Util.GetValueOfInt(bpRelation));
+                        _bprelation.SetVAB_BusinessPartnerRelation_ID(Util.GetValueOfInt(bpRelation));
+                        _bprelation.SetVAB_BusinessPartnerRelation_Location_ID(Util.GetValueOfInt(bpLocation));
                         _bprelation.SetIsBillTo(true);
                         if (_bprelation.Save())
                         {
-                            log.Fine("C_BP_Relation_ID=" + _bprelation.GetC_BP_Relation_ID());
+                            log.Fine("VAB_BPart_Relation_ID=" + _bprelation.GetVAB_BPart_Relation_ID());
                         }
                         else
                         {
@@ -737,32 +737,32 @@ namespace VIS.Models
         /// <summary>
         /// Get user ID
         /// </summary>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <returns></returns>
-        public int GetUserID(int C_BPartner_ID)
+        public int GetUserID(int VAB_BusinessPartner_ID)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE C_BPARTNER_ID='" + C_BPartner_ID + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE VAB_BUSINESSPARTNER_ID='" + VAB_BusinessPartner_ID + "' AND ISACTIVE='Y'", null, null));
 
         }
 
         /// <summary>
         /// Get BPartnerLocation Id
         /// </summary>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <returns></returns>
-        public int GetBPartnerLocationID(int C_BPartner_ID)
+        public int GetBPartnerLocationID(int VAB_BusinessPartner_ID)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT c_bpartner_location_ID FROM c_bpartner_location WHERE C_BPARTNER_ID='" + C_BPartner_ID + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE VAB_BUSINESSPARTNER_ID='" + VAB_BusinessPartner_ID + "' AND ISACTIVE='Y'", null, null));
 
         }
         /// <summary>
         /// Get BPRelation ID
         /// </summary>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <returns></returns>
-        public int GetBPRelationID(int C_BPartner_ID)
+        public int GetBPRelationID(int VAB_BusinessPartner_ID)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT c_bp_relation_ID FROM c_bp_relation WHERE C_BPARTNER_ID='" + C_BPartner_ID + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_BPart_Relation_ID FROM VAB_BPart_Relation WHERE VAB_BUSINESSPARTNER_ID='" + VAB_BusinessPartner_ID + "' AND ISACTIVE='Y'", null, null));
 
         }
 

@@ -30,7 +30,7 @@ namespace ViennaAdvantageServer.Process
         private int _m_Product_ID = 0;
         private int _vaf_org_ID = 0;
         private int _m_Attributesetinstance_ID = 0;
-        private int _c_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
         List<int> costElement = new List<int>();
         MCostElement ce = null;
 
@@ -59,10 +59,10 @@ namespace ViennaAdvantageServer.Process
                 //var costElementRecord = dsCostCombination.Tables[0].AsEnumerable().Select(r => r.Field<int>("m_ref_costelement")).ToList();
 
                 // Get All Product
-                sql = @"SELECT vaf_client_id ,  vaf_org_id ,  m_product_id ,  m_attributesetinstance_id ,  c_acctschema_id ,
+                sql = @"SELECT vaf_client_id ,  vaf_org_id ,  m_product_id ,  m_attributesetinstance_id ,  VAB_AccountBook_id ,
                            m_costtype_id ,   m_costelement_id ,  cumulatedamt ,  cumulatedqty ,  currentcostprice ,  currentqty
                       FROM m_cost WHERE vaf_client_id = " + GetVAF_Client_ID() +
-                          " ORDER BY m_product_id ,   vaf_org_id ,  m_attributesetinstance_id ,  c_acctschema_id";
+                          " ORDER BY m_product_id ,   vaf_org_id ,  m_attributesetinstance_id ,  VAB_AccountBook_id";
                 dsProductCost = DB.ExecuteDataset(sql, null, null);
 
                 if (dsProductCost != null && dsProductCost.Tables.Count > 0 && dsProductCost.Tables[0].Rows.Count > 0)
@@ -79,14 +79,14 @@ namespace ViennaAdvantageServer.Process
                         if (_m_Product_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_product_id"]) ||
                              _vaf_org_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["vaf_org_id"]) ||
                              _m_Attributesetinstance_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_attributesetinstance_id"]) ||
-                            _c_AcctSchema_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["c_acctschema_id"]))
+                            _VAB_AccountBook_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]))
                         {
                             _m_Product_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_product_id"]);
                             _vaf_org_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["vaf_org_id"]);
                             _m_Attributesetinstance_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_attributesetinstance_id"]);
-                            _c_AcctSchema_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["c_acctschema_id"]);
+                            _VAB_AccountBook_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]);
                             MProduct product = new MProduct(GetCtx(), _m_Product_ID, Get_TrxName());
-                            MAcctSchema acctSchema = new MAcctSchema(GetCtx(), _c_AcctSchema_ID, Get_TrxName());
+                            MAcctSchema acctSchema = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, Get_TrxName());
                             costcombination = MCost.Get(product, _m_Attributesetinstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["M_CostElement_ID"]));
                         }
 

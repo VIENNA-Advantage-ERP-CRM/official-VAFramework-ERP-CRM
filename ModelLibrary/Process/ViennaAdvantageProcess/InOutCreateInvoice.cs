@@ -36,7 +36,7 @@ namespace ViennaAdvantage.Process
         //Document No					
         private String _InvoiceDocumentNo = null;
         //Document Type
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         //Checkbox for Generating charges proportional to line quantities on Invoice line. By Sukhwnder on 14 Dec, 2017
         private bool _GenerateCharges = false;
 
@@ -66,9 +66,9 @@ namespace ViennaAdvantage.Process
                 {
                     _GenerateCharges = "Y".Equals(para[i].GetParameter());
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt(); ;
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt(); ;
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
 
             // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
             // JID_0976 - For conversion Type
-            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) + count(distinct COALESCE( c_order.C_ConversionType_ID , " + MConversionType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
+            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) + count(distinct COALESCE( c_order.VAB_CurrencyType_ID , " + MConversionType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
                             FROM m_inoutline INNER JOIN c_orderline ON m_inoutline.c_orderline_id = c_orderline.c_orderline_id
                             INNER JOIN c_order ON c_order.c_order_id = c_orderline.c_order_id
                             WHERE m_inoutline.m_inout_id = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 3)
@@ -174,7 +174,7 @@ namespace ViennaAdvantage.Process
                 // during consolidation, payment method need to set that is defined on selected business partner. 
                 // If not defined on BP then it will set from order
                 int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (ship.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
-                    @" FROM C_BPartner WHERE C_BPartner_ID = " + ship.GetC_BPartner_ID(), null, Get_Trx()));
+                    @" FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID = " + ship.GetVAB_BusinessPartner_ID(), null, Get_Trx()));
 
                 if (bpPamentMethod_ID != 0)
                 {
@@ -207,22 +207,22 @@ namespace ViennaAdvantage.Process
 
                     // JID_0779: Create AP Credit memo if we run the Generate TO process from Returm to Vendor window.
 
-                    //if (invoice.GetC_DocTypeTarget_ID() == 0)
+                    //if (invoice.GetVAB_DocTypesTarget_ID() == 0)
                     //{ 
-                    if (_C_DocType_ID > 0)
+                    if (_VAB_DocTypes_ID > 0)
                     {
-                        invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                        invoice.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
                     }
                     else
                     {
-                        int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
-                        if (C_DocTypeTarget_ID > 0)
+                        int VAB_DocTypesTarget_ID = DB.GetSQLValue(null, "SELECT VAB_DocTypesInvoice_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=@param1", ship.GetVAB_DocTypes_ID());
+                        if (VAB_DocTypesTarget_ID > 0)
                         {
-                            invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
+                            invoice.SetVAB_DocTypesTarget_ID(VAB_DocTypesTarget_ID);
                         }
                         else
                         {
-                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
                         }
                     }
                     invoice.SetIsReturnTrx(ship.IsReturnTrx());
@@ -231,24 +231,24 @@ namespace ViennaAdvantage.Process
                 else
                 {
                     // Sales Return
-                    if (_C_DocType_ID > 0)
+                    if (_VAB_DocTypes_ID > 0)
                     {
-                        invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                        invoice.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
                     }
                     else
                     {
                         if (ship.GetC_Order_ID() >= 0)
                         {
-                            int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
-                            MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
-                            if (dt.GetC_DocTypeInvoice_ID() != 0)
-                                invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
+                            int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAB_DocTypes_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                            MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
+                            if (dt.GetVAB_DocTypesInvoice_ID() != 0)
+                                invoice.SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), true);
                             else
-                                invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                                invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
                         }
                         else
                         {
-                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
                         }
                     }
                 }
@@ -263,9 +263,9 @@ namespace ViennaAdvantage.Process
                 invoice.Set_Value("InvoiceReference", _InvoiceDocumentNo);
             }
             //Set TargetDoctype  
-            if (_C_DocType_ID > 0 && !ship.IsReturnTrx())
+            if (_VAB_DocTypes_ID > 0 && !ship.IsReturnTrx())
             {
-                invoice.Set_Value("C_DocTypeTarget_ID", _C_DocType_ID);
+                invoice.Set_Value("VAB_DocTypesTarget_ID", _VAB_DocTypes_ID);
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
@@ -378,11 +378,11 @@ namespace ViennaAdvantage.Process
                                     }
                                 }
                             }
-                            if (line.GetC_Charge_ID() > 0)
+                            if (line.GetVAB_Charge_ID() > 0)
                             {
-                                //MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
+                                //MCharge charge = new MCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
                                 int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
-                                     FROM C_Charge WHERE C_Charge_ID = " + sLine.GetC_Charge_ID(), null, Get_Trx()));
+                                     FROM VAB_Charge WHERE VAB_Charge_ID = " + sLine.GetVAB_Charge_ID(), null, Get_Trx()));
                                 if (VA038_AmortizationTemplate_ID > 0)
                                 {
                                     line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
@@ -432,7 +432,7 @@ namespace ViennaAdvantage.Process
                 {
                     MInvoiceLine line = new MInvoiceLine(invoice);
                     // JID_1850 Avoid the duplicate charge line 
-                    if (sLine.GetC_Charge_ID() > 0 && (!isAllownonItem || _GenerateCharges))
+                    if (sLine.GetVAB_Charge_ID() > 0 && (!isAllownonItem || _GenerateCharges))
                     {
                         continue;
                     }
@@ -480,11 +480,11 @@ namespace ViennaAdvantage.Process
                                 }
                             }
                         }
-                        if (line.GetC_Charge_ID() > 0)
+                        if (line.GetVAB_Charge_ID() > 0)
                         {
-                            //MCharge charge = new MCharge(GetCtx(), sLine.GetC_Charge_ID(), Get_TrxName());
+                            //MCharge charge = new MCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
                             int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
-                                     FROM C_Charge WHERE C_Charge_ID = " + sLine.GetC_Charge_ID(), null, Get_Trx()));
+                                     FROM VAB_Charge WHERE VAB_Charge_ID = " + sLine.GetVAB_Charge_ID(), null, Get_Trx()));
                             if (VA038_AmortizationTemplate_ID > 0)
                             {
                                 line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
@@ -545,8 +545,8 @@ namespace ViennaAdvantage.Process
                                + " INNER JOIN C_ORDER CO                     "
                                + " ON CO.C_ORDER_ID     = OL.C_ORDER_ID      "
                                + " WHERE ML.M_INOUT_ID  = " + _M_InOut_ID
-                               + " AND (OL.C_CHARGE_ID IS NULL               "
-                               + " OR OL.C_CHARGE_ID    = 0)                 "
+                               + " AND (OL.VAB_CHARGE_ID IS NULL               "
+                               + " OR OL.VAB_CHARGE_ID    = 0)                 "
                                + " GROUP BY CO.C_ORDER_ID                    ");
 
                 DataSet OrderDS = DB.ExecuteDataset(OrderSql.ToString(), null, Get_Trx());
@@ -558,10 +558,10 @@ namespace ViennaAdvantage.Process
                     {
                         ds = null;
                         ChargesSql.Clear();
-                        ChargesSql.Append(" SELECT C_CHARGE_ID,                                             "
+                        ChargesSql.Append(" SELECT VAB_CHARGE_ID,                                             "
                                  + "   C_ORDERLINE_ID,                                                      "
                                  + "   C_ORDER_ID,                                                          "
-                                 + "   C_CURRENCY_ID,                                                       "
+                                 + "   VAB_CURRENCY_ID,                                                       "
                                  + "   PRICEENTERED,                                                        "
                                  + "   PRICEACTUAL,                                                         "
                                  + "   LINENETAMT,                                                          "
@@ -573,8 +573,8 @@ namespace ViennaAdvantage.Process
                                  + " WHERE C_ORDER_ID IN                                                    "
                                  + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
                                  + "   )                                                                    "
-                                 + " AND C_CHARGE_ID IS NOT NULL                                            "
-                                 + " AND C_CHARGE_ID  > 0                                                   ");
+                                 + " AND VAB_CHARGE_ID IS NOT NULL                                            "
+                                 + " AND VAB_CHARGE_ID  > 0                                                   ");
 
 
                         ds = DB.ExecuteDataset(ChargesSql.ToString(), null, Get_Trx());
@@ -588,7 +588,7 @@ namespace ViennaAdvantage.Process
                                 line.SetQtyEntered(1);
                                 line.SetQtyInvoiced(1);
                                 line.SetOrderLine(new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ORDERLINE_ID"]), Get_Trx()));
-                                line.SetC_Charge_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_CHARGE_ID"]));
+                                line.SetVAB_Charge_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CHARGE_ID"]));
                                 line.SetC_UOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]));
                                 line.SetC_Tax_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_TAX_ID"]));
 
@@ -612,9 +612,9 @@ namespace ViennaAdvantage.Process
 
                                 if (_CountVA038 > 0)
                                 {
-                                    if (line.GetC_Charge_ID() > 0)
+                                    if (line.GetVAB_Charge_ID() > 0)
                                     {
-                                        MCharge charge = new MCharge(GetCtx(), line.GetC_Charge_ID(), Get_TrxName());
+                                        MCharge charge = new MCharge(GetCtx(), line.GetVAB_Charge_ID(), Get_TrxName());
                                         if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                                         {
                                             line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));

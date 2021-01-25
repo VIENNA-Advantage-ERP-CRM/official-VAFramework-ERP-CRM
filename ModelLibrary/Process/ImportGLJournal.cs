@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Organization to be imported to	*/
         private int _VAF_Org_ID = 0;
         /**	Acct Schema to be imported to	*/
-        private int _C_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
         /** Default Date					*/
         private DateTime? _DateAcct = null;
         /**	Delete old Imported				*/
@@ -57,8 +57,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("VAF_Org_ID"))
                     _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                else if (name.Equals("C_AcctSchema_ID"))
-                    _C_AcctSchema_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAB_AccountBook_ID"))
+                    _VAB_AccountBook_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DateAcct"))
                     _DateAcct = (DateTime?)para[i].GetParameter();
                 else if (name.Equals("IsValidateOnly"))
@@ -120,8 +120,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_GLJournal "
                   + "SET VAF_Client_ID = COALESCE (VAF_Client_ID,").Append(_VAF_Client_ID).Append("),"
                   + " VAF_OrgDoc_ID = COALESCE (VAF_OrgDoc_ID,").Append(_VAF_Org_ID).Append("),");
-            if (_C_AcctSchema_ID != 0)
-                sql.Append(" C_AcctSchema_ID = COALESCE (C_AcctSchema_ID,").Append(_C_AcctSchema_ID).Append("),");
+            if (_VAB_AccountBook_ID != 0)
+                sql.Append(" VAB_AccountBook_ID = COALESCE (VAB_AccountBook_ID,").Append(_VAB_AccountBook_ID).Append("),");
             if (_DateAcct != null)
                 sql.Append(" DateAcct = COALESCE (DateAcct,").Append(DataBase.DB.TO_DATE(_DateAcct)).Append("),");
             sql.Append(" Updated = COALESCE (Updated, SysDate) "
@@ -142,23 +142,23 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set AcctSchema
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_AcctSchema_ID=(SELECT a.C_AcctSchema_ID FROM C_AcctSchema a"
+                + "SET VAB_AccountBook_ID=(SELECT a.VAB_AccountBook_ID FROM VAB_AccountBook a"
                 + " WHERE i.AcctSchemaName=a.Name AND i.VAF_Client_ID=a.VAF_Client_ID) "
-                + "WHERE C_AcctSchema_ID IS NULL AND AcctSchemaName IS NOT NULL"
+                + "WHERE VAB_AccountBook_ID IS NULL AND AcctSchemaName IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set AcctSchema from Name=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_AcctSchema_ID=(SELECT c.C_AcctSchema1_ID FROM VAF_ClientDetail c WHERE c.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_AcctSchema_ID IS NULL AND AcctSchemaName IS NULL"
+                + "SET VAB_AccountBook_ID=(SELECT c.VAB_AccountBook1_ID FROM VAF_ClientDetail c WHERE c.VAF_Client_ID=i.VAF_Client_ID) "
+                + "WHERE VAB_AccountBook_ID IS NULL AND AcctSchemaName IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set AcctSchema from Client=" + no);
             //	Error AcctSchema
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid AcctSchema, '"
-                + "WHERE (C_AcctSchema_ID IS NULL OR C_AcctSchema_ID=0"
-                + " OR NOT EXISTS (SELECT * FROM C_AcctSchema a WHERE i.VAF_Client_ID=a.VAF_Client_ID))"
+                + "WHERE (VAB_AccountBook_ID IS NULL OR VAB_AccountBook_ID=0"
+                + " OR NOT EXISTS (SELECT * FROM VAB_AccountBook a WHERE i.VAF_Client_ID=a.VAF_Client_ID))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -174,16 +174,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Document Type
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_DocType_ID=(SELECT d.C_DocType_ID FROM C_DocType d"
+                + "SET VAB_DocTypes_ID=(SELECT d.VAB_DocTypes_ID FROM VAB_DocTypes d"
                 + " WHERE d.Name=i.DocTypeName AND d.DocBaseType='GLJ' AND i.VAF_Client_ID=d.VAF_Client_ID) "
-                + "WHERE C_DocType_ID IS NULL AND DocTypeName IS NOT NULL"
+                + "WHERE VAB_DocTypes_ID IS NULL AND DocTypeName IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set DocType=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid DocType, '"
-                + "WHERE (C_DocType_ID IS NULL OR C_DocType_ID=0"
-                + " OR NOT EXISTS (SELECT * FROM C_DocType d WHERE i.VAF_Client_ID=d.VAF_Client_ID AND d.DocBaseType='GLJ'))"
+                + "WHERE (VAB_DocTypes_ID IS NULL OR VAB_DocTypes_ID=0"
+                + " OR NOT EXISTS (SELECT * FROM VAB_DocTypes d WHERE i.VAF_Client_ID=d.VAF_Client_ID AND d.DocBaseType='GLJ'))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -207,22 +207,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Currency
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_Currency_ID=(SELECT c.C_Currency_ID FROM C_Currency c"
+                + "SET VAB_Currency_ID=(SELECT c.VAB_Currency_ID FROM VAB_Currency c"
                 + " WHERE c.ISO_Code=i.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE C_Currency_ID IS NULL AND ISO_Code IS NOT NULL"
+                + "WHERE VAB_Currency_ID IS NULL AND ISO_Code IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Currency from ISO=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_Currency_ID=(SELECT a.C_Currency_ID FROM C_AcctSchema a"
-                + " WHERE a.C_AcctSchema_ID=i.C_AcctSchema_ID AND a.VAF_Client_ID=i.VAF_Client_ID)"
-                + "WHERE C_Currency_ID IS NULL AND ISO_Code IS NULL"
+                + "SET VAB_Currency_ID=(SELECT a.VAB_Currency_ID FROM VAB_AccountBook a"
+                + " WHERE a.VAB_AccountBook_ID=i.VAB_AccountBook_ID AND a.VAF_Client_ID=i.VAF_Client_ID)"
+                + "WHERE VAB_Currency_ID IS NULL AND ISO_Code IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default Currency=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Currency, '"
-                + "WHERE (C_Currency_ID IS NULL OR C_Currency_ID=0)"
+                + "WHERE (VAB_Currency_ID IS NULL OR VAB_Currency_ID=0)"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -231,20 +231,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Conversion Type
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET ConversionTypeValue='S' "
-                + "WHERE C_ConversionType_ID IS NULL AND ConversionTypeValue IS NULL"
+                + "WHERE VAB_CurrencyType_ID IS NULL AND ConversionTypeValue IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set CurrencyType Value to Spot =" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_ConversionType_ID=(SELECT c.C_ConversionType_ID FROM C_ConversionType c"
+                + "SET VAB_CurrencyType_ID=(SELECT c.VAB_CurrencyType_ID FROM VAB_CurrencyType c"
                 + " WHERE c.Value=i.ConversionTypeValue AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE C_ConversionType_ID IS NULL AND ConversionTypeValue IS NOT NULL"
+                + "WHERE VAB_CurrencyType_ID IS NULL AND ConversionTypeValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set CurrencyType from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid CurrencyType, '"
-                + "WHERE (C_ConversionType_ID IS NULL OR C_ConversionType_ID=0) AND ConversionTypeValue IS NOT NULL"
+                + "WHERE (VAB_CurrencyType_ID IS NULL OR VAB_CurrencyType_ID=0) AND ConversionTypeValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -253,7 +253,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No ConversionType, '"
-                + "WHERE (C_ConversionType_ID IS NULL OR C_ConversionType_ID=0)"
+                + "WHERE (VAB_CurrencyType_ID IS NULL OR VAB_CurrencyType_ID=0)"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -262,33 +262,33 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set/Overwrite Home Currency Rate
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET CurrencyRate=1"
-                + "WHERE EXISTS (SELECT * FROM C_AcctSchema a"
-                + " WHERE a.C_AcctSchema_ID=i.C_AcctSchema_ID AND a.C_Currency_ID=i.C_Currency_ID)"
-                + " AND C_Currency_ID IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                + "WHERE EXISTS (SELECT * FROM VAB_AccountBook a"
+                + " WHERE a.VAB_AccountBook_ID=i.VAB_AccountBook_ID AND a.VAB_Currency_ID=i.VAB_Currency_ID)"
+                + " AND VAB_Currency_ID IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Home CurrencyRate=" + no);
             //	Set Currency Rate
             sql = new StringBuilder("UPDATE I_GLJournal i "
-               + "SET CurrencyRate=(SELECT MAX(r.MultiplyRate) FROM C_Conversion_Rate r, C_AcctSchema s"
-               + " WHERE s.C_AcctSchema_ID=i.C_AcctSchema_ID AND s.VAF_Client_ID=i.VAF_Client_ID"
-               + " AND r.C_Currency_ID=i.C_Currency_ID AND r.C_Currency_ID_TO=s.C_Currency_ID"
+               + "SET CurrencyRate=(SELECT MAX(r.MultiplyRate) FROM VAB_ExchangeRate r, VAB_AccountBook s"
+               + " WHERE s.VAB_AccountBook_ID=i.VAB_AccountBook_ID AND s.VAF_Client_ID=i.VAF_Client_ID"
+               + " AND r.VAB_Currency_ID=i.VAB_Currency_ID AND r.VAB_Currency_ID_TO=s.VAB_Currency_ID"
                + " AND r.VAF_Client_ID=i.VAF_Client_ID AND r.VAF_Org_ID=i.VAF_OrgDoc_ID"
-               + " AND r.C_ConversionType_ID=i.C_ConversionType_ID"
+               + " AND r.VAB_CurrencyType_ID=i.VAB_CurrencyType_ID"
                + " AND i.DateAcct BETWEEN r.ValidFrom AND r.ValidTo "
                 //	ORDER BY ValidFrom DESC
-               + ") WHERE CurrencyRate IS NULL OR CurrencyRate=0 AND C_Currency_ID>0"
+               + ") WHERE CurrencyRate IS NULL OR CurrencyRate=0 AND VAB_Currency_ID>0"
                + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Org Rate=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET CurrencyRate=(SELECT MAX(r.MultiplyRate) FROM C_Conversion_Rate r, C_AcctSchema s"
-                + " WHERE s.C_AcctSchema_ID=i.C_AcctSchema_ID AND s.VAF_Client_ID=i.VAF_Client_ID"
-                + " AND r.C_Currency_ID=i.C_Currency_ID AND r.C_Currency_ID_TO=s.C_Currency_ID"
+                + "SET CurrencyRate=(SELECT MAX(r.MultiplyRate) FROM VAB_ExchangeRate r, VAB_AccountBook s"
+                + " WHERE s.VAB_AccountBook_ID=i.VAB_AccountBook_ID AND s.VAF_Client_ID=i.VAF_Client_ID"
+                + " AND r.VAB_Currency_ID=i.VAB_Currency_ID AND r.VAB_Currency_ID_TO=s.VAB_Currency_ID"
                 + " AND r.VAF_Client_ID=i.VAF_Client_ID"
-                + " AND r.C_ConversionType_ID=i.C_ConversionType_ID"
+                + " AND r.VAB_CurrencyType_ID=i.VAB_CurrencyType_ID"
                 + " AND i.DateAcct BETWEEN r.ValidFrom AND r.ValidTo "
                 //	ORDER BY ValidFrom DESC
-                + ") WHERE CurrencyRate IS NULL OR CurrencyRate=0 AND C_Currency_ID>0"
+                + ") WHERE CurrencyRate IS NULL OR CurrencyRate=0 AND VAB_Currency_ID>0"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Client Rate=" + no);
@@ -304,7 +304,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET C_Period_ID=(SELECT MAX(p.C_Period_ID) FROM C_Period p"
                 + " INNER JOIN C_Year y ON (y.C_Year_ID=p.C_Year_ID)"
-                + " INNER JOIN VAF_ClientDetail c ON (c.C_Calendar_ID=y.C_Calendar_ID)"
+                + " INNER JOIN VAF_ClientDetail c ON (c.VAB_Calender_ID=y.VAB_Calender_ID)"
                 + " WHERE c.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND i.DateAcct BETWEEN p.StartDate AND p.EndDate AND p.PeriodType='S') "
                 + "WHERE C_Period_ID IS NULL"
@@ -316,7 +316,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE C_Period_ID IS NULL OR C_Period_ID NOt IN "
                 + "(SELECT C_Period_ID FROM C_Period p"
                 + " INNER JOIN C_Year y ON (y.C_Year_ID=p.C_Year_ID)"
-                + " INNER JOIN VAF_ClientDetail c ON (c.C_Calendar_ID=y.C_Calendar_ID) "
+                + " INNER JOIN VAF_ClientDetail c ON (c.VAB_Calender_ID=y.VAB_Calender_ID) "
                 + " WHERE c.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND i.DateAcct BETWEEN p.StartDate AND p.EndDate AND p.PeriodType='S')"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -377,11 +377,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Account
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET Account_ID=(SELECT MAX(ev.C_ElementValue_ID) FROM C_ElementValue ev"
-                + " INNER JOIN C_Element e ON (e.C_Element_ID=ev.C_Element_ID)"
-                + " INNER JOIN C_AcctSchema_Element ase ON (e.C_Element_ID=ase.C_Element_ID AND ase.ElementType='AC')"
+                + "SET Account_ID=(SELECT MAX(ev.VAB_Acct_Element_ID) FROM VAB_Acct_Element ev"
+                + " INNER JOIN VAB_Element e ON (e.VAB_Element_ID=ev.VAB_Element_ID)"
+                + " INNER JOIN VAB_AccountBook_Element ase ON (e.VAB_Element_ID=ase.VAB_Element_ID AND ase.ElementType='AC')"
                 + " WHERE ev.Value=i.AccountValue AND ev.IsSummary='N'"
-                + " AND i.C_AcctSchema_ID=ase.C_AcctSchema_ID AND i.VAF_Client_ID=ev.VAF_Client_ID) "
+                + " AND i.VAB_AccountBook_ID=ase.VAB_AccountBook_ID AND i.VAF_Client_ID=ev.VAF_Client_ID) "
                 + "WHERE Account_ID IS NULL AND AccountValue IS NOT NULL"
                 + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -396,15 +396,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set BPartner
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_BPartner_ID=(SELECT bp.C_BPartner_ID FROM C_BPartner bp"
+                + "SET VAB_BusinessPartner_ID=(SELECT bp.VAB_BusinessPartner_ID FROM VAB_BusinessPartner bp"
                 + " WHERE bp.Value=i.BPartnerValue AND bp.IsSummary='N' AND i.VAF_Client_ID=bp.VAF_Client_ID) "
-                + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                 + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartner from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid BPartner, '"
-                + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                 + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -574,7 +574,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Go through Journal Records
             sql = new StringBuilder("SELECT * FROM I_GLJournal "
                 + "WHERE I_IsImported='N'").Append(clientCheck)
-                .Append(" ORDER BY COALESCE(BatchDocumentNo, TO_NCHAR(I_GLJournal_ID)),	COALESCE(JournalDocumentNo, TO_NCHAR(I_GLJournal_ID)), C_AcctSchema_ID, PostingType, C_DocType_ID, GL_Category_ID, C_Currency_ID, TRUNC(DateAcct,'DD'), Line, I_GLJournal_ID");
+                .Append(" ORDER BY COALESCE(BatchDocumentNo, TO_NCHAR(I_GLJournal_ID)),	COALESCE(JournalDocumentNo, TO_NCHAR(I_GLJournal_ID)), VAB_AccountBook_ID, PostingType, VAB_DocTypes_ID, GL_Category_ID, VAB_Currency_ID, TRUNC(DateAcct,'DD'), Line, I_GLJournal_ID");
             try
             {
                 //pstmt = DataBase.prepareStatement (sql.ToString (), get_TrxName());
@@ -590,7 +590,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         impBatchDocumentNo = "";
                     if (batch == null
                         || imp.IsCreateNewBatch()
-                        || journal.GetC_AcctSchema_ID() != imp.GetC_AcctSchema_ID()
+                        || journal.GetVAB_AccountBook_ID() != imp.GetVAB_AccountBook_ID()
                         || !BatchDocumentNo.Equals(impBatchDocumentNo))
                     {
                         BatchDocumentNo = impBatchDocumentNo;	//	cannot compare real DocumentNo
@@ -599,7 +599,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (imp.GetBatchDocumentNo() != null
                             && imp.GetBatchDocumentNo().Length > 0)
                             batch.SetDocumentNo(imp.GetBatchDocumentNo());
-                        batch.SetC_DocType_ID(imp.GetC_DocType_ID());
+                        batch.SetVAB_DocTypes_ID(imp.GetVAB_DocTypes_ID());
                         batch.SetPostingType(imp.GetPostingType());
                         String description = imp.GetBatchDescription();
                         if (description == null || description.Length == 0)
@@ -634,10 +634,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (journal == null
                         || imp.IsCreateNewJournal()
                         || !JournalDocumentNo.Equals(impJournalDocumentNo)
-                        || journal.GetC_DocType_ID() != imp.GetC_DocType_ID()
+                        || journal.GetVAB_DocTypes_ID() != imp.GetVAB_DocTypes_ID()
                         || journal.GetGL_Category_ID() != imp.GetGL_Category_ID()
                         || !journal.GetPostingType().Equals(imp.GetPostingType())
-                        || journal.GetC_Currency_ID() != imp.GetC_Currency_ID()
+                        || journal.GetVAB_Currency_ID() != imp.GetVAB_Currency_ID()
                         || !impDateAcct.Equals(DateAcct)
                     )
                     {
@@ -654,13 +654,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (imp.GetJournalDocumentNo() != null && imp.GetJournalDocumentNo().Length > 0)
                             journal.SetDocumentNo(imp.GetJournalDocumentNo());
                         //
-                        journal.SetC_AcctSchema_ID(imp.GetC_AcctSchema_ID());
-                        journal.SetC_DocType_ID(imp.GetC_DocType_ID());
+                        journal.SetVAB_AccountBook_ID(imp.GetVAB_AccountBook_ID());
+                        journal.SetVAB_DocTypes_ID(imp.GetVAB_DocTypes_ID());
                         journal.SetGL_Category_ID(imp.GetGL_Category_ID());
                         journal.SetPostingType(imp.GetPostingType());
                         journal.SetGL_Budget_ID(imp.GetGL_Budget_ID());
                         //
-                        journal.SetCurrency(imp.GetC_Currency_ID(), imp.GetC_ConversionType_ID(), imp.GetCurrencyRate());
+                        journal.SetCurrency(imp.GetVAB_Currency_ID(), imp.GetVAB_CurrencyType_ID(), imp.GetCurrencyRate());
                         //
                         journal.SetC_Period_ID(imp.GetC_Period_ID());
                         journal.SetDateAcct(imp.GetDateAcct());		//	sets Period if not defined
@@ -688,15 +688,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     MJournalLine line = new MJournalLine(journal);
                     //
                     line.SetDescription(imp.GetDescription());
-                    line.SetCurrency(imp.GetC_Currency_ID(), imp.GetC_ConversionType_ID(), imp.GetCurrencyRate());
+                    line.SetCurrency(imp.GetVAB_Currency_ID(), imp.GetVAB_CurrencyType_ID(), imp.GetCurrencyRate());
                     //	Set/Get Account Combination
                     if (imp.GetC_ValidCombination_ID() == 0)
                     {
                         MAccount acct = MAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
-                            imp.GetC_AcctSchema_ID(), imp.GetAccount_ID(), 0,
-                            imp.GetM_Product_ID(), imp.GetC_BPartner_ID(), imp.GetVAF_OrgTrx_ID(),
+                            imp.GetVAB_AccountBook_ID(), imp.GetAccount_ID(), 0,
+                            imp.GetM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
                             imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetC_SalesRegion_ID(),
-                            imp.GetC_Project_ID(), imp.GetC_Campaign_ID(), imp.GetC_Activity_ID(),
+                            imp.GetC_Project_ID(), imp.GetVAB_Promotion_ID(), imp.GetVAB_BillingCode_ID(),
                             imp.GetUser1_ID(), imp.GetUser2_ID(), 0, 0);
                         if (acct != null && acct.Get_ID() == 0)
                             acct.Save();

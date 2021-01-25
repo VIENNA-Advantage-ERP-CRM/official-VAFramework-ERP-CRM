@@ -21,9 +21,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class CommissionCopy : ProcessEngine.SvrProcess
     {
         /**	From Commission			*/
-        private int _C_Commission_ID = 0;
+        private int _VAB_WorkCommission_ID = 0;
         /** To Commission			*/
-        private int _C_CommissionTo_ID = 0;
+        private int _VAB_WorkCommissionTo_ID = 0;
 
         /// <summary>
         /// Prapare - e.g., get Parameters.
@@ -38,12 +38,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Commission_ID"))
-                    _C_Commission_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAB_WorkCommission_ID"))
+                    _VAB_WorkCommission_ID = para[i].GetParameterAsInt();
                 else
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
             }
-            _C_CommissionTo_ID = GetRecord_ID();
+            _VAB_WorkCommissionTo_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -52,11 +52,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
 	    {
-		    log.Info("doIt - C_Commission_ID=" + _C_Commission_ID + " - copy to " + _C_CommissionTo_ID);
-		    MCommission comFrom = new MCommission (GetCtx(), _C_Commission_ID, Get_Trx());
+		    log.Info("doIt - VAB_WorkCommission_ID=" + _VAB_WorkCommission_ID + " - copy to " + _VAB_WorkCommissionTo_ID);
+		    MCommission comFrom = new MCommission (GetCtx(), _VAB_WorkCommission_ID, Get_Trx());
 		    if (comFrom.Get_ID() == 0)
 			    throw new Exception ("No From Commission");
-		    MCommission comTo = new MCommission (GetCtx(), _C_CommissionTo_ID, Get_Trx());
+		    MCommission comTo = new MCommission (GetCtx(), _VAB_WorkCommissionTo_ID, Get_Trx());
 		    if (comTo.Get_ID() == 0)
 			    throw new Exception ("No To Commission");
     		

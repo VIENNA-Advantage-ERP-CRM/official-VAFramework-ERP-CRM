@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Element
+/** Generated Model for VAB_Element
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Element : PO
+public class X_VAB_Element : PO
 {
-public X_C_Element (Context ctx, int C_Element_ID, Trx trxName) : base (ctx, C_Element_ID, trxName)
+public X_VAB_Element (Context ctx, int VAB_Element_ID, Trx trxName) : base (ctx, VAB_Element_ID, trxName)
 {
-/** if (C_Element_ID == 0)
+/** if (VAB_Element_ID == 0)
 {
 SetVAF_TreeInfo_ID (0);
-SetC_Element_ID (0);
+SetVAB_Element_ID (0);
 SetElementType (null);	// A
 SetIsBalancing (false);
 SetIsNaturalAccount (false);
@@ -29,12 +29,12 @@ SetName (null);
 }
  */
 }
-public X_C_Element (Ctx ctx, int C_Element_ID, Trx trxName) : base (ctx, C_Element_ID, trxName)
+public X_VAB_Element (Ctx ctx, int VAB_Element_ID, Trx trxName) : base (ctx, VAB_Element_ID, trxName)
 {
-/** if (C_Element_ID == 0)
+/** if (VAB_Element_ID == 0)
 {
 SetVAF_TreeInfo_ID (0);
-SetC_Element_ID (0);
+SetVAB_Element_ID (0);
 SetElementType (null);	// A
 SetIsBalancing (false);
 SetIsNaturalAccount (false);
@@ -47,7 +47,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Element (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Element (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Element()
+static X_VAB_Element()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389055320L;
 public static int Table_ID;
  // =142;
 
-/** TableName=C_Element */
-public static String Table_Name="C_Element";
+/** TableName=VAB_Element */
+public static String Table_Name="VAB_Element";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Element[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Element[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tree.
@@ -136,17 +136,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Element.
-@param C_Element_ID Accounting Element */
-public void SetC_Element_ID (int C_Element_ID)
+@param VAB_Element_ID Accounting Element */
+public void SetVAB_Element_ID (int VAB_Element_ID)
 {
-if (C_Element_ID < 1) throw new ArgumentException ("C_Element_ID is mandatory.");
-Set_ValueNoCheck ("C_Element_ID", C_Element_ID);
+if (VAB_Element_ID < 1) throw new ArgumentException ("VAB_Element_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Element_ID", VAB_Element_ID);
 }
 /** Get Element.
 @return Accounting Element */
-public int GetC_Element_ID() 
+public int GetVAB_Element_ID() 
 {
-Object ii = Get_Value("C_Element_ID");
+Object ii = Get_Value("VAB_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -14,6 +14,6 @@ namespace VAdvantage.Print
         int GetVAF_Job_ID();
         int GetVAF_TableView_ID();
         int GetRecord_ID();
-        int GetC_BPartner_ID();
+        int GetVAB_BusinessPartner_ID();
     }
 }

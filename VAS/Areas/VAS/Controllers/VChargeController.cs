@@ -17,25 +17,25 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult CreateElementValue(int m_VAF_Org_ID, String value, String name, bool expense, int m_C_Element_ID)
+        public JsonResult CreateElementValue(int m_VAF_Org_ID, String value, String name, bool expense, int m_VAB_Element_ID)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 VChargeModel obj = new VChargeModel();
-                obj.CreateElementValue(ctx, m_VAF_Org_ID, value, name, expense, m_C_Element_ID);
+                obj.CreateElementValue(ctx, m_VAF_Org_ID, value, name, expense, m_VAB_Element_ID);
                 return Json(new { obj.ID, obj.Msg }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CreateCharge(int m_C_AcctSchema_ID, int m_C_TaxCategory_ID, String name, int C_ElementValue_ID, bool expense)
+        public JsonResult CreateCharge(int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, String name, int VAB_Acct_Element_ID, bool expense)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 VChargeModel obj = new VChargeModel();
-                obj.CreateCharge(ctx, m_C_AcctSchema_ID, m_C_TaxCategory_ID, name, C_ElementValue_ID, expense);
+                obj.CreateCharge(ctx, m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, VAB_Acct_Element_ID, expense);
                 return Json(new { obj.ID, obj.Msg }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -54,7 +54,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// get data from c_elementvalue for load grid
+        /// get data from VAB_Acct_Element for load grid
         /// </summary>
         /// <param name="mcAcctSchemaID"></param>
         /// <param name="mADClientId"></param>

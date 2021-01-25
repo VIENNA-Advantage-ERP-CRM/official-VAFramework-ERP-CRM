@@ -292,18 +292,18 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Cash Journal Line.
-        @param C_CashLine_ID Cash Journal Line */
-        public void SetC_CashLine_ID(int C_CashLine_ID)
+        @param VAB_CashJRNLLine_ID Cash Journal Line */
+        public void SetVAB_CashJRNLLine_ID(int VAB_CashJRNLLine_ID)
         {
-            if (C_CashLine_ID <= 0) Set_Value("C_CashLine_ID", null);
+            if (VAB_CashJRNLLine_ID <= 0) Set_Value("VAB_CashJRNLLine_ID", null);
             else
-                Set_Value("C_CashLine_ID", C_CashLine_ID);
+                Set_Value("VAB_CashJRNLLine_ID", VAB_CashJRNLLine_ID);
         }
         /** Get Cash Journal Line.
         @return Cash Journal Line */
-        public int GetC_CashLine_ID()
+        public int GetVAB_CashJRNLLine_ID()
         {
-            Object ii = Get_Value("C_CashLine_ID");
+            Object ii = Get_Value("VAB_CashJRNLLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -327,18 +327,18 @@ namespace VAdvantage.Model
 
         //------------------COLUMN ADDED BY ANUJ-----------------------
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID <= 0) Set_Value("C_DocType_ID", null);
+            if (VAB_DocTypes_ID <= 0) Set_Value("VAB_DocTypes_ID", null);
             else
-                Set_Value("C_DocType_ID", C_DocType_ID);
+                Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -467,40 +467,40 @@ namespace VAdvantage.Model
         //..............Added by Amit for VA009.................
 
         /** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
         /** Set Currency.
-@param C_Currency_ID The Currency for this record */
+@param VAB_Currency_ID The Currency for this record */
         public void SetVA009_TransCurrency(int VA009_TransCurrency)
         {
             if (VA009_TransCurrency <= 0) Set_Value("VA009_TransCurrency", null);

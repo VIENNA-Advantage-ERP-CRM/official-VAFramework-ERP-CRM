@@ -35,14 +35,14 @@ namespace VIS.Models
 
             //	Get Model
             var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
-            _masi.SetC_GenAttributeSet_ID(vadms_AttributeSet_ID);
+            _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
             if (_masi == null)
             {
                 //  log.Severe("No Model for M_AttributeSetInstance_ID=" + _M_AttributeSetInstance_ID + ", M_Product_ID=" + _M_Product_ID);
                 return null;
             }
             /* set context to client side */
-            ctx.SetContext(windowNo, "C_GenAttributeSet_ID", _masi.GetC_GenAttributeSet_ID());
+            ctx.SetContext(windowNo, "VAB_GenFeatureSet_ID", _masi.GetVAB_GenFeatureSet_ID());
             //	Get Attribute Set
             aset = _masi.GetMGenAttributeSet();
             //	Product has no Attribute Set
@@ -155,13 +155,13 @@ namespace VIS.Models
                         }
                         else if (values[i] != null)
                         {
-                            if (values[i].GetC_GenAttributeValue_ID() == instance.GetC_GenAttributeValue_ID())
+                            if (values[i].GetVAB_GenFeatureValue_ID() == instance.GetVAB_GenFeatureValue_ID())
                             {
-                                obj.tableStucture += " <option selected value='" + values[i].GetC_GenAttributeValue_ID() + "' >" + values[i].GetName() + "</option>";
+                                obj.tableStucture += " <option selected value='" + values[i].GetVAB_GenFeatureValue_ID() + "' >" + values[i].GetName() + "</option>";
                             }
                             else
                             {
-                                obj.tableStucture += " <option value='" + values[i].GetC_GenAttributeValue_ID() + "' >" + values[i].GetName() + "</option>";
+                                obj.tableStucture += " <option value='" + values[i].GetVAB_GenFeatureValue_ID() + "' >" + values[i].GetName() + "</option>";
                             }
                         }
                     }
@@ -187,7 +187,7 @@ namespace VIS.Models
                         }
                         else if (values[i] != null)
                         {
-                            obj.tableStucture += " <option value='" + values[i].GetC_GenAttributeValue_ID() + "' >" + values[i].GetName() + "</option>";
+                            obj.tableStucture += " <option value='" + values[i].GetVAB_GenFeatureValue_ID() + "' >" + values[i].GetName() + "</option>";
                         }
                     }
                     log.Fine("Attribute=" + attribute.GetName() + " #" + values.Length + " no instance");
@@ -269,12 +269,12 @@ namespace VIS.Models
             var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
 
             //if there is different attribute set then delete old instance
-            if (mAttributeSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetC_GenAttributeSet_ID()))
+            if (mAttributeSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetVAB_GenFeatureSet_ID()))
             {
-                DB.ExecuteQuery("DELETE FROM C_GenAttributeInstance WHERE C_GenAttributeSetInstance_ID=" + mAttributeSetInstanceId);
+                DB.ExecuteQuery("DELETE FROM VAB_GenFeatureInstance WHERE VAB_GenFeatureSetInstance_ID=" + mAttributeSetInstanceId);
             }
 
-            _masi.SetC_GenAttributeSet_ID(vadms_AttributeSet_ID);
+            _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
             aset = _masi.GetMGenAttributeSet();
             if (aset == null)
             {
@@ -283,17 +283,17 @@ namespace VIS.Models
 
             //	***	Save Attributes ***
             //	New Instance
-            if (_changed || _masi.GetC_GenAttributeSetInstance_ID() == 0)
+            if (_changed || _masi.GetVAB_GenFeatureSetInstance_ID() == 0)
             {
                 _masi.Save();
-                obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
-                mAttributeSetInstanceId = _masi.GetC_GenAttributeSetInstance_ID();
+                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.M_AttributeSetInstanceName = _masi.GetDescription();
             }
             else
             {
-                obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
-                mAttributeSetInstanceId = _masi.GetC_GenAttributeSetInstance_ID();
+                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.M_AttributeSetInstanceName = _masi.GetDescription();
             }
             //	Save Instance Attributes
@@ -377,12 +377,12 @@ namespace VIS.Models
                 _masi.SetDescription();
                 _masi.Save();
 
-                obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
+                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.M_AttributeSetInstanceName = _masi.GetDescription();
             }
             else
             {
-                obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
+                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.M_AttributeSetInstanceName = _masi.GetDescription();
             }
             return obj;
@@ -399,17 +399,17 @@ namespace VIS.Models
                 String mandatory = "";
 
                 var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
-                _masi.SetC_GenAttributeSet_ID(vadms_AttributeSet_ID);
+                _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
                 aset = _masi.GetMGenAttributeSet();
                 if (aset == null)
                 {
                     return obj;
                 }
 
-                if (_masi.GetC_GenAttributeSetInstance_ID() == 0)
+                if (_masi.GetVAB_GenFeatureSetInstance_ID() == 0)
                 {
                     // _masi.Save();
-                    obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
+                    obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                     obj.M_AttributeSetInstanceName = _masi.GetDescription();
                 }
                 else
@@ -421,7 +421,7 @@ namespace VIS.Models
                     _masi = null;
                     _masi = _masi1;
 
-                    obj.M_AttributeSetInstance_ID = _masi.GetC_GenAttributeSetInstance_ID();
+                    obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                     obj.M_AttributeSetInstanceName = _masi.GetDescription();
                 }
 
@@ -457,28 +457,28 @@ namespace VIS.Models
 
                             if (i == 0)
                             {
-                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
+                                sql.Append("SELECT DISTINCT cg.VAB_GenFeatureSetInstance_ID FROM VAB_GenFeatureInstance cg");
                                 where.Append(" WHERE cg.IsActive='Y'");
                                 if (value != null)
                                 {
-                                    where.Append(" AND (cg.C_GenattributeValue_ID=").Append(value.GetC_GenAttributeValue_ID()).Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                    where.Append(" AND (cg.VAB_GenFeatureValue_ID=").Append(value.GetVAB_GenFeatureValue_ID()).Append(" AND cg.VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                                 }
                                 else
                                 {
-                                    where.Append(" AND (cg.C_GenattributeValue_ID IS NULL ").Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                    where.Append(" AND (cg.VAB_GenFeatureValue_ID IS NULL ").Append(" AND cg.VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                                 }
                             }
 
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                sql.Append(" JOIN VAB_GenFeatureInstance cg" + i + " ON cg" + i + ".VAB_GenFeatureSetInstance_ID = cg.VAB_GenFeatureSetInstance_ID AND cg" + i + ".IsActive='Y'");
                                 if (value != null)
                                 {
-                                    sql.Append(" AND (cg" + i + ".C_GenattributeValue_ID=").Append(value.GetC_GenAttributeValue_ID()).Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                    sql.Append(" AND (cg" + i + ".VAB_GenFeatureValue_ID=").Append(value.GetVAB_GenFeatureValue_ID()).Append(" AND cg" + i + ".VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                                 }
                                 else
                                 {
-                                    sql.Append(" AND (cg" + i + ".C_GenattributeValue_ID IS NULL ").Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                    sql.Append(" AND (cg" + i + ".VAB_GenFeatureValue_ID IS NULL ").Append(" AND cg" + i + ".VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                                 }
                             }
                         }
@@ -500,14 +500,14 @@ namespace VIS.Models
 
                             if (i == 0)
                             {
-                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
-                                where.Append(" WHERE cg.IsActive='Y' AND (cg.VALUENUMBER=").Append(value).Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                sql.Append("SELECT DISTINCT cg.VAB_GenFeatureSetInstance_ID FROM VAB_GenFeatureInstance cg");
+                                where.Append(" WHERE cg.IsActive='Y' AND (cg.VALUENUMBER=").Append(value).Append(" AND cg.VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                             }
 
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
-                                sql.Append(" AND (cg" + i + ".VALUENUMBER=").Append(value).Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                sql.Append(" JOIN VAB_GenFeatureInstance cg" + i + " ON cg" + i + ".VAB_GenFeatureSetInstance_ID = cg.VAB_GenFeatureSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                sql.Append(" AND (cg" + i + ".VALUENUMBER=").Append(value).Append(" AND cg" + i + ".VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                             }
 
                             description.Append(value + "_");
@@ -528,14 +528,14 @@ namespace VIS.Models
 
                             if (i == 0)
                             {
-                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
-                                where.Append(" WHERE cg.IsActive='Y' AND (upper(cg.VALUE)=upper('").Append(value).Append("') AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                sql.Append("SELECT DISTINCT cg.VAB_GenFeatureSetInstance_ID FROM VAB_GenFeatureInstance cg");
+                                where.Append(" WHERE cg.IsActive='Y' AND (upper(cg.VALUE)=upper('").Append(value).Append("') AND cg.VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                             }
 
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
-                                sql.Append(" AND (upper(cg" + i + ".VALUE)=upper('").Append(value).Append("') AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                sql.Append(" JOIN VAB_GenFeatureInstance cg" + i + " ON cg" + i + ".VAB_GenFeatureSetInstance_ID = cg.VAB_GenFeatureSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                sql.Append(" AND (upper(cg" + i + ".VALUE)=upper('").Append(value).Append("') AND cg" + i + ".VAB_GenFeature_ID=").Append(attributes[i].GetVAB_GenFeature_ID() + ")");
                             }
 
                             description.Append(value + "_");

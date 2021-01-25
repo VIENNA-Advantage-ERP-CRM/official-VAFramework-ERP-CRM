@@ -33,7 +33,7 @@ namespace VAdvantage.Report
         //Logger						
         protected static VLogger _log = VLogger.GetVLogger(typeof(FinBalance).FullName);
         //Acct Schema					
-        private int p_C_AcctSchema_ID = 0;
+        private int p_VAB_AccountBook_ID = 0;
         //Date From				
         private DateTime? p_DateFrom = null;
         //Balance Aggregation         
@@ -52,9 +52,9 @@ namespace VAdvantage.Report
                 {
                     ;
                 }
-                else if (name.Equals("C_AcctSchema_ID", StringComparison.OrdinalIgnoreCase))
+                else if (name.Equals("VAB_AccountBook_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    p_C_AcctSchema_ID = Util.GetValueOfInt(element.GetParameter());
+                    p_VAB_AccountBook_ID = Util.GetValueOfInt(element.GetParameter());
                 }
                 else if (name.Equals("DateFrom", StringComparison.OrdinalIgnoreCase))
                 {
@@ -78,13 +78,13 @@ namespace VAdvantage.Report
         /// <returns></returns>
         protected override String DoIt()
         {
-            log.Fine("C_AcctSchema_ID=" + p_C_AcctSchema_ID
+            log.Fine("VAB_AccountBook_ID=" + p_VAB_AccountBook_ID
                 + ",DateFrom=" + p_DateFrom);
 
             String msg = "";
-            if (p_C_AcctSchema_ID != 0)
+            if (p_VAB_AccountBook_ID != 0)
             {
-                msg = UpdateBalance(GetCtx(), p_C_AcctSchema_ID,
+                msg = UpdateBalance(GetCtx(), p_VAB_AccountBook_ID,
                      p_DateFrom, Get_TrxName(), p_Fact_Accumulation_ID, this);
             }
             else
@@ -98,23 +98,23 @@ namespace VAdvantage.Report
         /**
          * 	Delete Balances
          * 	@param VAF_Client_ID client
-         * 	@param C_AcctSchema_ID	accounting schema 0 for all
+         * 	@param VAB_AccountBook_ID	accounting schema 0 for all
          * 	@param dateFrom null for all or first date to delete
          * 	@param trx transaction
          * 	@param svrPrc optional server process
          *  @return Message to be translated
          */
-        public static String DeleteBalance(int VAF_Client_ID, int C_AcctSchema_ID,
+        public static String DeleteBalance(int VAF_Client_ID, int VAB_AccountBook_ID,
             DateTime? dateFrom, Trx trxp, int Fact_Accumulation_ID, SvrProcess svrPrc)
         {
             Trx trx = trxp;
             //List<Object> param = new List<Object>();
             StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct_Balance WHERE VAF_Client_ID=" + VAF_Client_ID);
             //param.add(new Integer(VAF_Client_ID));
-            if (C_AcctSchema_ID != 0)
+            if (VAB_AccountBook_ID != 0)
             {
-                sql.Append(" AND C_AcctSchema_ID=" + C_AcctSchema_ID);
-                // param.add(new Integer(C_AcctSchema_ID));
+                sql.Append(" AND VAB_AccountBook_ID=" + VAB_AccountBook_ID);
+                // param.add(new Integer(VAB_AccountBook_ID));
             }
             if (dateFrom != null)
             {
@@ -131,7 +131,7 @@ namespace VAdvantage.Report
             //
             int no = DB.ExecuteQuery(sql.ToString(), null, trx);
             String msg = "@Deleted@=" + no;
-            _log.Info("C_AcctSchema_ID=" + C_AcctSchema_ID
+            _log.Info("VAB_AccountBook_ID=" + VAB_AccountBook_ID
                 + ",DateAcct=" + dateFrom
                 + " #=" + no);
             if (svrPrc != null)
@@ -147,19 +147,19 @@ namespace VAdvantage.Report
          * 	Update / Create Balances.
          * 	Called from FinReport, FactAcctReset (indirect)
          * 	@param VAF_Client_ID client
-         * 	@param C_AcctSchema_ID	accounting schema 0 for all
+         * 	@param VAB_AccountBook_ID	accounting schema 0 for all
          * 	@param deleteFirst delete balances first
          * 	@param dateFrom null for all or first date to delete/calculate
          * 	@param trx transaction
          * 	@param svrPrc optional server process
          *  @return Message to be translated
          */
-        public static String UpdateBalance(Ctx ctx, int C_AcctSchema_ID,
+        public static String UpdateBalance(Ctx ctx, int VAB_AccountBook_ID,
             DateTime? dateFrom, Trx trxp, int Fact_Accumulation_ID,
             SvrProcess svrPrc)
         {
             Trx trx = trxp;
-            _log.Info("C_AcctSchema_ID=" + C_AcctSchema_ID
+            _log.Info("VAB_AccountBook_ID=" + VAB_AccountBook_ID
                 + "DateFrom=" + dateFrom);
             long start = CommonFunctions.CurrentTimeMillis();
 
@@ -169,7 +169,7 @@ namespace VAdvantage.Report
 
             if (Fact_Accumulation_ID == 0)
             {
-                accums = MFactAccumulation.GetAll(ctx, C_AcctSchema_ID);
+                accums = MFactAccumulation.GetAll(ctx, VAB_AccountBook_ID);
                 if (accums.Count == 0)
                 {
                     // Create a Balance aggregation of type Daily.
@@ -177,7 +177,7 @@ namespace VAdvantage.Report
                     MFactAccumulation defaultAccum = new MFactAccumulation(ctx, 0, trx);
                     defaultAccum.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                     defaultAccum.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
-                    defaultAccum.SetC_AcctSchema_ID(C_AcctSchema_ID);
+                    defaultAccum.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
                     defaultAccum.SetBALANCEACCUMULATION(X_Fact_Accumulation.BALANCEACCUMULATION_CalendarMonth);
                     defaultAccum.SetIsActive(true);
                     defaultAccum.SetIsDefault(true);
@@ -271,21 +271,21 @@ namespace VAdvantage.Report
                 //}
 
                 // Delete the balances
-                DeleteBalance(ctx.GetVAF_Client_ID(), C_AcctSchema_ID,
+                DeleteBalance(ctx.GetVAF_Client_ID(), VAB_AccountBook_ID,
                             dateFrom, trx, accum.GetFACT_ACCUMULATION_ID(), svrPrc);
 
                 /** Insert		**/
                 //param = new List<Object>();
                 String insert = "INSERT INTO Fact_Acct_Balance "
-                    + "(VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, C_AcctSchema_ID, DateAcct,"
-                    + " Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, C_BPartner_ID,"
-                    + "	C_Project_ID,	C_SalesRegion_ID,C_Activity_ID,"
-                    + " C_Campaign_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID,"
+                    + "(VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, VAB_AccountBook_ID, DateAcct,"
+                    + " Account_ID, PostingType, Fact_Accumulation_ID, M_Product_ID, VAB_BusinessPartner_ID,"
+                    + "	C_Project_ID,	C_SalesRegion_ID,VAB_BillingCode_ID,"
+                    + " VAB_Promotion_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, GL_Budget_ID,"
                     + " UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID,"
                     + " UserElement7_ID, UserElement8_ID,UserElement9_ID, "
                     + " AmtAcctDr, AmtAcctCr, Qty) ";
 
-                String select = " SELECT VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, C_AcctSchema_ID ";
+                String select = " SELECT VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, VAB_AccountBook_ID ";
 
                 if (!String.IsNullOrEmpty(type))
                 {
@@ -303,7 +303,7 @@ namespace VAdvantage.Report
                     select = select + " , NULL ";
 
                 if (accum.IsBUSINESSPARTNER())
-                    select = select + " , C_BPartner_ID ";
+                    select = select + " , VAB_BusinessPartner_ID ";
                 else
                     select = select + " ,NULL ";
 
@@ -318,12 +318,12 @@ namespace VAdvantage.Report
                     select = select + " ,NULL ";
 
                 if (accum.IsACTIVITY())
-                    select = select + " ,C_Activity_ID ";
+                    select = select + " ,VAB_BillingCode_ID ";
                 else
                     select = select + " ,NULL ";
 
                 if (accum.IsCAMPAIGN())
-                    select = select + " ,C_Campaign_ID ";
+                    select = select + " ,VAB_Promotion_ID ";
                 else
                     select = select + " ,NULL ";
 
@@ -405,16 +405,16 @@ namespace VAdvantage.Report
                 {
                     from += " ,(SELECT StartDate,EndDate FROM C_Period "
                         + " WHERE C_Year_ID IN (SELECT C_Year_ID "
-                        + " FROM C_Year WHERE C_Calendar_ID= " + accum.GetC_Calendar_ID() + " ) "
+                        + " FROM C_Year WHERE VAB_Calender_ID= " + accum.GetVAB_Calender_ID() + " ) "
                         + " AND IsActive='Y' AND PeriodType='S')  Period";
-                    //param.add(new Integer(accum.GetC_Calendar_ID()));
+                    //param.add(new Integer(accum.GetVAB_Calender_ID()));
                 }
-                String where = " WHERE C_AcctSchema_ID= " + C_AcctSchema_ID;
+                String where = " WHERE VAB_AccountBook_ID= " + VAB_AccountBook_ID;
                 if (X_Fact_Accumulation.BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(type))
                 {
                     where += " AND a.DateAcct BETWEEN TRUNC(Period.StartDate,'DD') AND TRUNC(Period.EndDate,'DD') ";
                 }
-                //param.add(new Integer(C_AcctSchema_ID));
+                //param.add(new Integer(VAB_AccountBook_ID));
                 if (dateFrom != null)
                 {
                     //SimpleDateFormat df = new SimpleDateFormat();//"dd-MM-yyyy"
@@ -423,7 +423,7 @@ namespace VAdvantage.Report
                     where += " AND DateAcct >= " + DB.TO_DATE(dateFrom);
                 }
 
-                String groupBy = " GROUP BY VAF_Client_ID,C_AcctSchema_ID, VAF_Org_ID, "
+                String groupBy = " GROUP BY VAF_Client_ID,VAB_AccountBook_ID, VAF_Org_ID, "
                     + " VAF_OrgTrx_ID,Account_ID, PostingType ";
 
                 if (!String.IsNullOrEmpty(type))
@@ -434,15 +434,15 @@ namespace VAdvantage.Report
                 if (accum.IsPRODUCT())
                     groupBy = groupBy + " ,M_Product_ID ";
                 if (accum.IsBUSINESSPARTNER())
-                    groupBy = groupBy + " ,C_BPartner_ID ";
+                    groupBy = groupBy + " ,VAB_BusinessPartner_ID ";
                 if (accum.IsPROJECT())
                     groupBy = groupBy + " ,C_Project_ID ";
                 if (accum.IsSALESREGION())
                     groupBy = groupBy + " ,C_SalesRegion_ID ";
                 if (accum.IsACTIVITY())
-                    groupBy = groupBy + ", C_Activity_ID ";
+                    groupBy = groupBy + ", VAB_BillingCode_ID ";
                 if (accum.IsCAMPAIGN())
-                    groupBy = groupBy + " ,C_Campaign_ID ";
+                    groupBy = groupBy + " ,VAB_Promotion_ID ";
                 if (accum.IsLOCATIONTO())
                     groupBy = groupBy + ", C_LocTo_ID ";
                 if (accum.IsLOCATIONFROM())
@@ -504,7 +504,7 @@ namespace VAdvantage.Report
             {
                 if (Info.Length > 0)
                     Info.Append(" - ");
-                String msg = UpdateBalance(ctx, as1.GetC_AcctSchema_ID(),
+                String msg = UpdateBalance(ctx, as1.GetVAB_AccountBook_ID(),
                      dateFrom, trx, Fact_Accumulation_ID, svrPrc);
                 Info.Append(as1.GetName()).Append(":").Append(msg);
             }
@@ -519,7 +519,7 @@ namespace VAdvantage.Report
                                             " FROM C_Period " +
                                             " WHERE C_Year_ID IN (SELECT C_Year_ID " +
                                                                 " FROM C_Year " +
-                                                                " WHERE C_Calendar_ID= " + accum.GetC_Calendar_ID() + ") " +
+                                                                " WHERE VAB_Calender_ID= " + accum.GetVAB_Calender_ID() + ") " +
                                             " AND a.dateacct BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')+ 0.999988 " +
                                             " AND c_period.IsActive='Y' AND PeriodType='S') ";
             if (dateFrom != null)

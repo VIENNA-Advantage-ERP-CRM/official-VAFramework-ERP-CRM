@@ -38,7 +38,7 @@ namespace VIS.Models
             MPriceListVersion ver = new MPriceListVersion(ctx, M_PriceListVersion_ID, null);
             retDic["M_PriceList_ID"] = ver.GetM_PriceList_ID();
             MPriceList list = new MPriceList(ctx, ver.GetM_PriceList_ID(), null);
-            retDic["C_Currency_ID"] = list.GetC_Currency_ID();
+            retDic["VAB_Currency_ID"] = list.GetVAB_Currency_ID();
             return retDic;
         }
     }

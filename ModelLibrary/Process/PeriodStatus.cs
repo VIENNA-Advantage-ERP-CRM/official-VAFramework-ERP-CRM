@@ -109,7 +109,7 @@ namespace VAdvantage.Process
             // if Document BaseType is selected then update period control for selected Document BaseType
             if (!String.IsNullOrEmpty(_docBaseType))
             {
-                sql.Append(" AND DocBaseType IN (SELECT DocBaseType FROM C_DocBaseType WHERE C_DocBaseType_ID IN (" + _docBaseType + "))");
+                sql.Append(" AND DocBaseType IN (SELECT DocBaseType FROM VAB_MasterDocType WHERE VAB_MasterDocType_ID IN (" + _docBaseType + "))");
             }
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -123,19 +123,19 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        string sqlSchID = "SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
+                        string sqlSchID = "SELECT VAB_AccountBook_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
                         DataSet ds = DB.ExecuteDataset(sqlSchID);
 
                         if (ds != null)
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
-                                int C_AcctSchema_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]);
+                                int VAB_AccountBook_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]);
                                 string sqlUpd = "UPDATE Fact_Accumulation SET DateFrom = " + DB.TO_DATE(period.GetStartDate().Value.AddDays(-1)) + " WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
                                 no = DB.ExecuteQuery(sqlUpd, null, Get_TrxName());
                                 if (Get_Trx().Commit())
                                 {
-                                    VAdvantage.Report.FinBalance.UpdateBalance(GetCtx(), C_AcctSchema_ID, period.GetStartDate().Value.AddDays(-1), Get_TrxName(), 0, this);
+                                    VAdvantage.Report.FinBalance.UpdateBalance(GetCtx(), VAB_AccountBook_ID, period.GetStartDate().Value.AddDays(-1), Get_TrxName(), 0, this);
                                 }
                             }
                         }

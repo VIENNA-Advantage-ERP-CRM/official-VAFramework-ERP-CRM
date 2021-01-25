@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Commission Run
- * Class Used     : X_C_CommissionRun
+ * Class Used     : X_VAB_WorkCommission_Calc
  * Chronological    Development
  * Veena        07-Nov-2009
 **********************************************************/
@@ -23,20 +23,20 @@ namespace VAdvantage.Model
     /// <summary>
     /// Commission Run
     /// </summary>
-    public class MCommissionRun : X_C_CommissionRun
+    public class MCommissionRun : X_VAB_WorkCommission_Calc
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_CommissionRun_ID">id</param>
+        /// <param name="VAB_WorkCommission_Calc_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCommissionRun(Ctx ctx, int C_CommissionRun_ID, Trx trxName)
-            : base(ctx, C_CommissionRun_ID, trxName)
+        public MCommissionRun(Ctx ctx, int VAB_WorkCommission_Calc_ID, Trx trxName)
+            : base(ctx, VAB_WorkCommission_Calc_ID, trxName)
         {
-            if (C_CommissionRun_ID == 0)
+            if (VAB_WorkCommission_Calc_ID == 0)
             {
-                //	SetC_Commission_ID (0);
+                //	SetVAB_WorkCommission_ID (0);
                 //	SetDocumentNo (null);
                 //	SetStartDate (new Timestamp(System.currentTimeMillis()));
                 SetGrandTotal(Env.ZERO);
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
             : this(commission.GetCtx(), 0, commission.Get_TrxName())
 	    {
             SetClientOrg(commission);
-            SetC_Commission_ID(commission.GetC_Commission_ID());
+            SetVAB_WorkCommission_ID(commission.GetVAB_WorkCommission_ID());
 	    }
 
         /// <summary>
@@ -72,12 +72,12 @@ namespace VAdvantage.Model
         /// <returns>array of amounts</returns>
         public MCommissionAmt[] GetAmts()
         {
-            String sql = "SELECT * FROM C_CommissionAmt WHERE C_CommissionRun_ID=@crunid";
+            String sql = "SELECT * FROM VAB_WorkCommission_Amt WHERE VAB_WorkCommission_Calc_ID=@crunid";
             List<MCommissionAmt> list = new List<MCommissionAmt>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@crunid", GetC_CommissionRun_ID());
+                param[0] = new SqlParameter("@crunid", GetVAB_WorkCommission_Calc_ID());
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 if (ds.Tables.Count > 0)

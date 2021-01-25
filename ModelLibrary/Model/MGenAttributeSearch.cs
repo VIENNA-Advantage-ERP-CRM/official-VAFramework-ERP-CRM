@@ -7,10 +7,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeSearch : X_C_GenAttributeSearch
+    public class MGenAttributeSearch : X_VAB_GenFeatureSearch
     {
-        public MGenAttributeSearch(Ctx ctx, int C_GenAttributeSearch_ID, Trx trxName)
-            : base(ctx, C_GenAttributeSearch_ID, trxName)
+        public MGenAttributeSearch(Ctx ctx, int VAB_GenFeatureSearch_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureSearch_ID, trxName)
         {
 
 

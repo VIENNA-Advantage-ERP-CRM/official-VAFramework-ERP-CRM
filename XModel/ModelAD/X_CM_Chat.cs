@@ -11,14 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_Chat
+/** Generated Model for VACM_Chat
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_CM_Chat : PO
 {
-public X_CM_Chat (Context ctx, int CM_Chat_ID, Trx trxName) : base (ctx, CM_Chat_ID, trxName)
+public X_CM_Chat (Context ctx, int VACM_Chat_ID, Trx trxName) : base (ctx, VACM_Chat_ID, trxName)
 {
-/** if (CM_Chat_ID == 0)
+/** if (VACM_Chat_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetCM_Chat_ID (0);
@@ -28,9 +28,9 @@ SetRecord_ID (0);
 }
  */
 }
-public X_CM_Chat (Ctx ctx, int CM_Chat_ID, Trx trxName) : base (ctx, CM_Chat_ID, trxName)
+public X_CM_Chat (Ctx ctx, int VACM_Chat_ID, Trx trxName) : base (ctx, VACM_Chat_ID, trxName)
 {
-/** if (CM_Chat_ID == 0)
+/** if (VACM_Chat_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetCM_Chat_ID (0);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389051684L;
 public static int Table_ID;
  // =876;
 
-/** TableName=CM_Chat */
-public static String Table_Name="CM_Chat";
+/** TableName=VACM_Chat */
+public static String Table_Name="VACM_Chat";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -134,33 +134,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Chat Type.
-@param CM_ChatType_ID Type of discussion / chat */
-public void SetCM_ChatType_ID (int CM_ChatType_ID)
+@param VACM_ChatType_ID Type of discussion / chat */
+public void SetCM_ChatType_ID (int VACM_ChatType_ID)
 {
-if (CM_ChatType_ID <= 0) Set_Value ("CM_ChatType_ID", null);
+if (VACM_ChatType_ID <= 0) Set_Value ("VACM_ChatType_ID", null);
 else
-Set_Value ("CM_ChatType_ID", CM_ChatType_ID);
+Set_Value ("VACM_ChatType_ID", VACM_ChatType_ID);
 }
 /** Get Chat Type.
 @return Type of discussion / chat */
 public int GetCM_ChatType_ID() 
 {
-Object ii = Get_Value("CM_ChatType_ID");
+Object ii = Get_Value("VACM_ChatType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Chat.
-@param CM_Chat_ID Chat or discussion thread */
-public void SetCM_Chat_ID (int CM_Chat_ID)
+@param VACM_Chat_ID Chat or discussion thread */
+public void SetCM_Chat_ID (int VACM_Chat_ID)
 {
-if (CM_Chat_ID < 1) throw new ArgumentException ("CM_Chat_ID is mandatory.");
-Set_ValueNoCheck ("CM_Chat_ID", CM_Chat_ID);
+if (VACM_Chat_ID < 1) throw new ArgumentException ("VACM_Chat_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Chat_ID", VACM_Chat_ID);
 }
 /** Get Chat.
 @return Chat or discussion thread */
 public int GetCM_Chat_ID() 
 {
-Object ii = Get_Value("CM_Chat_ID");
+Object ii = Get_Value("VACM_Chat_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -83,7 +83,7 @@ namespace VAdvantage.WF
 		    _wf = wf;
 		    _pi = pi;
             SetVAF_Client_ID(wf.GetVAF_Client_ID());
-		    SetAD_Workflow_ID (wf.GetAD_Workflow_ID());
+		    SetVAF_Workflow_ID (wf.GetVAF_Workflow_ID());
 		    SetPriority(wf.GetPriority());
 		    base.SetWFState (WFSTATE_NotStarted);
     		
@@ -428,11 +428,11 @@ namespace VAdvantage.WF
         private MWorkflow GetWorkflow()
         {
             if (_wf == null)
-                _wf = MWorkflow.Get(GetCtx(), GetAD_Workflow_ID());
+                _wf = MWorkflow.Get(GetCtx(), GetVAF_Workflow_ID());
             if (_wf.Get_ID() == 0)
             {
-                //throw new IllegalStateException("Not found - AD_Workflow_ID=" + getAD_Workflow_ID());
-                throw new Exception("Not found - AD_Workflow_ID=" + GetAD_Workflow_ID());
+                //throw new IllegalStateException("Not found - VAF_Workflow_ID=" + getVAF_Workflow_ID());
+                throw new Exception("Not found - VAF_Workflow_ID=" + GetVAF_Workflow_ID());
             }
             return _wf;
         }
@@ -569,7 +569,7 @@ namespace VAdvantage.WF
         {
             StringBuilder sb = new StringBuilder("MWFProcess[")
                 .Append(Get_ID())
-                .Append(", AD_Workflow_ID=").Append(GetAD_Workflow_ID())
+                .Append(", VAF_Workflow_ID=").Append(GetVAF_Workflow_ID())
                 .Append(", WFState=").Append(GetWFState())
                 .Append("]");
             return sb.ToString();

@@ -42,7 +42,7 @@ namespace VIS.Helpers
                                     WHEN o.Action = 'X'
                                     THEN o.VAF_Page_ID
                                     WHEN o.Action ='F'
-                                    THEN o.AD_Workflow_ID
+                                    THEN o.VAF_Workflow_ID
                                     ELSE 0
                                   END ) AS ActionID,
                                 
@@ -294,7 +294,7 @@ namespace VIS.Helpers
                                     WHEN o.action = 'X'
                                     THEN o.ad_form_id
                                     WHEN o.action ='F'
-                                    THEN o.ad_workflow_id
+                                    THEN o.VAF_Workflow_id
                                     ELSE 0
                                   END ) AS ActionID, o.VAF_Shortcut_id as ID,  o.Url as Url, 
                                 (SELECT COUNT(*) FROM VAF_ShortcutParameter WHERE VAF_Shortcut_ID=o.VAF_Shortcut_ID) as hasPara,";

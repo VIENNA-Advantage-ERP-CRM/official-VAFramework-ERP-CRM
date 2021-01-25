@@ -158,8 +158,8 @@ namespace VAdvantage.Login
         /// <para>
         /// Sets Org info in context and loads relevant field from
         /// - VAF_Client/Info,
-        /// - C_AcctSchema,
-        /// - C_AcctSchema_Elements
+        /// - VAB_AccountBook,
+        /// - VAB_AccountBook_Elements
         /// - VAF_ValuePreference
         /// </para>
         /// Assumes that the context is set for #VAF_Client_ID, ##VAF_UserContact_ID, #VAF_Role_ID
@@ -236,16 +236,16 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#YYYY", "Y");
 
             //	AccountSchema Info (first)
-            String sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "    // Get AutoArchive from Tenant header
-                + "FROM C_AcctSchema a"
-                + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+            String sql = "SELECT a.VAB_AccountBook_ID, a.VAB_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "    // Get AutoArchive from Tenant header
+                + "FROM VAB_AccountBook a"
+                + " INNER JOIN VAF_ClientDetail ci ON (a.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID)"
                 + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
-                + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
+                + " INNER JOIN VAB_Currency c ON (a.VAB_Currency_ID=c.VAB_Currency_ID) "
                 + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
             IDataReader dr = null;
             try
             {
-                int C_AcctSchema_ID = 0;
+                int VAB_AccountBook_ID = 0;
                 dr = DataBase.DB.ExecuteReader(sql);
 
                 if (!dr.Read())
@@ -257,9 +257,9 @@ namespace VAdvantage.Login
                 else
                 {
                     //	Accounting Info
-                    C_AcctSchema_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
-                    m_ctx.SetContext("$C_AcctSchema_ID", C_AcctSchema_ID);
-                    m_ctx.SetContext("$C_Currency_ID", Utility.Util.GetValueOfInt(dr[1].ToString()));
+                    VAB_AccountBook_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    m_ctx.SetContext("$VAB_AccountBook_ID", VAB_AccountBook_ID);
+                    m_ctx.SetContext("$VAB_Currency_ID", Utility.Util.GetValueOfInt(dr[1].ToString()));
                     m_ctx.SetContext("$HasAlias", dr[2].ToString());
                     m_ctx.SetContext("$CurrencyISO", dr[3].ToString());
                     m_ctx.SetStdPrecision(Utility.Util.GetValueOfInt(dr[4].ToString()));
@@ -269,8 +269,8 @@ namespace VAdvantage.Login
 
                 //	Accounting Elements
                 sql = "SELECT ElementType "
-                    + "FROM C_AcctSchema_Element "
-                    + "WHERE C_AcctSchema_ID='" + C_AcctSchema_ID + "'"
+                    + "FROM VAB_AccountBook_Element "
+                    + "WHERE VAB_AccountBook_ID='" + VAB_AccountBook_ID + "'"
                     + " AND IsActive='Y'";
 
                 dr = DataBase.DB.ExecuteReader(sql);
@@ -332,7 +332,7 @@ namespace VAdvantage.Login
 
             Ini.SaveProperties(Ini.IsClient());
             //	Country
-            m_ctx.SetContext("#C_Country_ID", MCountry.GetDefault(m_ctx).GetC_Country_ID());
+            m_ctx.SetContext("#VAB_Country_ID", MCountry.GetDefault(m_ctx).GetVAB_Country_ID());
 
             m_ctx.SetShowClientOrg(Ini.IsShowClientOrg() ? "Y" : "N");
             m_ctx.SetShowMiniGrid(Ini.GetProperty(Ini.P_Show_Mini_Grid));
@@ -344,7 +344,7 @@ namespace VAdvantage.Login
         {
             if (TableName.StartsWith("VAF_Screen")
                 || TableName.StartsWith("VAF_Print_Rpt_Layout")
-                || TableName.StartsWith("AD_Workflow"))
+                || TableName.StartsWith("VAF_Workflow"))
                 return;
             String value = null;
             //
@@ -374,8 +374,8 @@ namespace VAdvantage.Login
             //	Set Context Value
             if (value != null && value.Length != 0)
             {
-                if (TableName.Equals("C_DocType"))
-                    m_ctx.SetContext("#C_DocTypeTarget_ID", value);
+                if (TableName.Equals("VAB_DocTypes"))
+                    m_ctx.SetContext("#VAB_DocTypesTarget_ID", value);
                 else
                     m_ctx.SetContext("#" + ColumnName, value);
             }
@@ -853,8 +853,8 @@ namespace VAdvantage.Login
         /// <para>
         /// Sets Org info in context and loads relevant field from
         /// - VAF_Client/Info,
-        /// - C_AcctSchema,
-        /// - C_AcctSchema_Elements
+        /// - VAB_AccountBook,
+        /// - VAB_AccountBook_Elements
         /// - VAF_ValuePreference
         /// </para>
         /// Assumes that the context is set for #VAF_Client_ID, ##VAF_UserContact_ID, #VAF_Role_ID
@@ -927,11 +927,11 @@ namespace VAdvantage.Login
             //	AccountSchema Info (first)
             try
             {
-                sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive, t.IsAllowNonItem "  // 6. Get "Alloe Non Item on Ship/Receipt" from Tenant header
-                    + "FROM C_AcctSchema a"
-                    + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                sql = "SELECT a.VAB_AccountBook_ID, a.VAB_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive, t.IsAllowNonItem "  // 6. Get "Alloe Non Item on Ship/Receipt" from Tenant header
+                    + "FROM VAB_AccountBook a"
+                    + " INNER JOIN VAF_ClientDetail ci ON (a.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID)"
                     + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
-                    + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
+                    + " INNER JOIN VAB_Currency c ON (a.VAB_Currency_ID=c.VAB_Currency_ID) "
                     + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
 
                 dr = DataBase.DB.ExecuteReader(sql);
@@ -939,17 +939,17 @@ namespace VAdvantage.Login
             catch
             {
                 checkNonItem = false;
-                sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // 5. Get AutoArchive from Tenant header
-                    + "FROM C_AcctSchema a"
-                    + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                sql = "SELECT a.VAB_AccountBook_ID, a.VAB_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // 5. Get AutoArchive from Tenant header
+                    + "FROM VAB_AccountBook a"
+                    + " INNER JOIN VAF_ClientDetail ci ON (a.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID)"
                     + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
-                    + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
+                    + " INNER JOIN VAB_Currency c ON (a.VAB_Currency_ID=c.VAB_Currency_ID) "
                     + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
             }
 
             try
             {
-                int C_AcctSchema_ID = 0;
+                int VAB_AccountBook_ID = 0;
                 if (!checkNonItem)
                 {
                     dr = DataBase.DB.ExecuteReader(sql);
@@ -964,9 +964,9 @@ namespace VAdvantage.Login
                 else
                 {
                     //	Accounting Info
-                    C_AcctSchema_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
-                    m_ctx.SetContext("$C_AcctSchema_ID", C_AcctSchema_ID);
-                    m_ctx.SetContext("$C_Currency_ID", Utility.Util.GetValueOfInt(dr[1].ToString()));
+                    VAB_AccountBook_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    m_ctx.SetContext("$VAB_AccountBook_ID", VAB_AccountBook_ID);
+                    m_ctx.SetContext("$VAB_Currency_ID", Utility.Util.GetValueOfInt(dr[1].ToString()));
                     m_ctx.SetContext("$HasAlias", dr[2].ToString());
                     m_ctx.SetContext("$CurrencyISO", dr[3].ToString());
                     m_ctx.SetStdPrecision(Utility.Util.GetValueOfInt(dr[4].ToString()));
@@ -982,8 +982,8 @@ namespace VAdvantage.Login
 
                 //	Accounting Elements
                 sql = "SELECT ElementType "
-                    + "FROM C_AcctSchema_Element "
-                    + "WHERE C_AcctSchema_ID='" + C_AcctSchema_ID + "'"
+                    + "FROM VAB_AccountBook_Element "
+                    + "WHERE VAB_AccountBook_ID='" + VAB_AccountBook_ID + "'"
                     + " AND IsActive='Y'";
 
                 dr = DataBase.DB.ExecuteReader(sql);
@@ -1047,7 +1047,7 @@ namespace VAdvantage.Login
 
             //Ini.SaveProperties(Ini.IsClient());
             //	Country
-            m_ctx.SetContext("#C_Country_ID", MCountry.GetDefault(m_ctx).GetC_Country_ID());
+            m_ctx.SetContext("#VAB_Country_ID", MCountry.GetDefault(m_ctx).GetVAB_Country_ID());
 
             m_ctx.SetShowClientOrg(Ini.IsShowClientOrg() ? "Y" : "N");
             m_ctx.SetShowMiniGrid(Ini.GetProperty(Ini.P_Show_Mini_Grid));

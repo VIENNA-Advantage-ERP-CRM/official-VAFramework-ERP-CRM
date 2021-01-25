@@ -2,7 +2,7 @@
     * Project Name   : VAdvantage
     * Class Name     : MBankStatementMatcher
     * Purpose        : Bank Statement Matcher Algorithm
-    * Class Used     : X_C_BankStatementMatcher
+    * Class Used     : X_VAB_BankingJRNLMatcher
     * Chronological    Development
     * Raghunandan     26-Nov-2009
 ******************************************************/
@@ -29,7 +29,7 @@ using VAdvantage.Interface;
 //using VAdvantage.ImpExp;
 namespace VAdvantage.Model
 {
-    public class MBankStatementMatcher : X_C_BankStatementMatcher
+    public class MBankStatementMatcher : X_VAB_BankingJRNLMatcher
     {
         private BankStatementMatcherInterface _matcher = null;
         private Boolean _matcherValid = false;
@@ -46,8 +46,8 @@ namespace VAdvantage.Model
         {
             List<MBankStatementMatcher> list = new List<MBankStatementMatcher>();
             String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
-                "SELECT * FROM C_BankStatementMatcher ORDER BY SeqNo",
-                "C_BankStatementMatcher", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "SELECT * FROM VAB_BankingJRNLMatcher ORDER BY SeqNo",
+                "VAB_BankingJRNLMatcher", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             DataTable dt = null;
             IDataReader idr = null;
@@ -84,10 +84,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_BankStatementMatcher_ID"></param>
+        /// <param name="VAB_BankingJRNLMatcher_ID"></param>
         /// <param name="trxName"></param>
-        public MBankStatementMatcher(Ctx ctx, int C_BankStatementMatcher_ID, Trx trxName)
-            : base(ctx, C_BankStatementMatcher_ID, trxName)
+        public MBankStatementMatcher(Ctx ctx, int VAB_BankingJRNLMatcher_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNLMatcher_ID, trxName)
         {
 
         }

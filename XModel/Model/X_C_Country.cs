@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Country
+/** Generated Model for VAB_Country
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Country : PO
+public class X_VAB_Country : PO
 {
-public X_C_Country (Context ctx, int C_Country_ID, Trx trxName) : base (ctx, C_Country_ID, trxName)
+public X_VAB_Country (Context ctx, int VAB_Country_ID, Trx trxName) : base (ctx, VAB_Country_ID, trxName)
 {
-/** if (C_Country_ID == 0)
+/** if (VAB_Country_ID == 0)
 {
-SetC_Country_ID (0);
+SetVAB_Country_ID (0);
 SetCountryCode (null);
 SetIsSummary (false);	// N
 SetName (null);
 }
  */
 }
-public X_C_Country (Ctx ctx, int C_Country_ID, Trx trxName) : base (ctx, C_Country_ID, trxName)
+public X_VAB_Country (Ctx ctx, int VAB_Country_ID, Trx trxName) : base (ctx, VAB_Country_ID, trxName)
 {
-/** if (C_Country_ID == 0)
+/** if (VAB_Country_ID == 0)
 {
-SetC_Country_ID (0);
+SetVAB_Country_ID (0);
 SetCountryCode (null);
 SetIsSummary (false);	// N
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Country (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Country (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_Country (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Country (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Country (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_Country (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Country (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Country (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Country()
+static X_VAB_Country()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389054709L;
 public static int Table_ID;
  // =170;
 
-/** TableName=C_Country */
-public static String Table_Name="C_Country";
+/** TableName=VAB_Country */
+public static String Table_Name="VAB_Country";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Country[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Country[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -137,33 +137,33 @@ public String GetVAF_Language()
 return (String)Get_Value("VAF_Language");
 }
 /** Set Country.
-@param C_Country_ID Country */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID < 1) throw new ArgumentException ("C_Country_ID is mandatory.");
-Set_ValueNoCheck ("C_Country_ID", C_Country_ID);
+if (VAB_Country_ID < 1) throw new ArgumentException ("VAB_Country_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);
+if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);
 else
-Set_Value ("C_Currency_ID", C_Currency_ID);
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

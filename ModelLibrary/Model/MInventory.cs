@@ -208,7 +208,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -271,14 +271,14 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetC_DocType_ID() == 0)
+            if (GetVAB_DocTypes_ID() == 0)
             {
                 MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
                 if (types.Length > 0)	//	get first
-                    SetC_DocType_ID(types[0].GetC_DocType_ID());
+                    SetVAB_DocTypes_ID(types[0].GetVAB_DocTypes_ID());
                 else
                 {
-                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @C_DocType_ID@"));
+                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @VAB_DocTypes_ID@"));
                     return false;
                 }
             }
@@ -724,7 +724,7 @@ namespace VAdvantage.Model
             Tuple<String, String, String> moduleInfo = null;
             if (Env.HasModulePrefix("VA019_", out moduleInfo))
             {
-                string qry = "select va019_iswastage from c_Doctype where isinternaluse='Y' and c_doctype_id=" + GetC_DocType_ID();
+                string qry = "select va019_iswastage from VAB_DocTypes where isinternaluse='Y' and VAB_DocTypes_id=" + GetVAB_DocTypes_ID();
                 val = Util.GetValueOfString(DB.ExecuteScalar(qry));
             }
             else
@@ -862,7 +862,7 @@ namespace VAdvantage.Model
 
             MInventoryLine[] lines = GetLines(false);
             log.Info("total Lines=" + lines.Count());
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //
             log.Info("Lines Loop Started");
@@ -1871,7 +1871,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -1895,7 +1895,7 @@ namespace VAdvantage.Model
                 }
 
                 //  Get current next from Completed document sequence defined on Document Type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -2884,7 +2884,7 @@ namespace VAdvantage.Model
         public bool ReverseCorrectIt()
         {
             log.Info(ToString());
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -3087,12 +3087,12 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Currency
-         *	@return C_Currency_ID
+         *	@return VAB_Currency_ID
          */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             //	MPriceList pl = MPriceList.get(GetCtx(), getM_PriceList_ID());
-            //	return pl.getC_Currency_ID();
+            //	return pl.getVAB_Currency_ID();
             return 0;
         }
 

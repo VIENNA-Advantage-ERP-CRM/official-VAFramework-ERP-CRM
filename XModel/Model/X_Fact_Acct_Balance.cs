@@ -3,8 +3,8 @@ namespace VAdvantage.Model{
 using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for Fact_Acct_Balance
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_Fact_Acct_Balance : PO{public X_Fact_Acct_Balance (Context ctx, int Fact_Acct_Balance_ID, Trx trxName) : base (ctx, Fact_Acct_Balance_ID, trxName){/** if (Fact_Acct_Balance_ID == 0){SetAccount_ID (0);SetAmtAcctCr (0.0);SetAmtAcctDr (0.0);SetC_AcctSchema_ID (0);SetDateAcct (DateTime.Now);SetPostingType (null);SetQty (0.0);} */
-}public X_Fact_Acct_Balance (Ctx ctx, int Fact_Acct_Balance_ID, Trx trxName) : base (ctx, Fact_Acct_Balance_ID, trxName){/** if (Fact_Acct_Balance_ID == 0){SetAccount_ID (0);SetAmtAcctCr (0.0);SetAmtAcctDr (0.0);SetC_AcctSchema_ID (0);SetDateAcct (DateTime.Now);SetPostingType (null);SetQty (0.0);} */
+public class X_Fact_Acct_Balance : PO{public X_Fact_Acct_Balance (Context ctx, int Fact_Acct_Balance_ID, Trx trxName) : base (ctx, Fact_Acct_Balance_ID, trxName){/** if (Fact_Acct_Balance_ID == 0){SetAccount_ID (0);SetAmtAcctCr (0.0);SetAmtAcctDr (0.0);SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);SetPostingType (null);SetQty (0.0);} */
+}public X_Fact_Acct_Balance (Ctx ctx, int Fact_Acct_Balance_ID, Trx trxName) : base (ctx, Fact_Acct_Balance_ID, trxName){/** if (Fact_Acct_Balance_ID == 0){SetAccount_ID (0);SetAmtAcctCr (0.0);SetAmtAcctDr (0.0);SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);SetPostingType (null);SetQty (0.0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
@@ -65,27 +65,27 @@ public Decimal GetAmtAcctCr() {Object bd =Get_Value("AmtAcctCr");if (bd == null)
 public void SetAmtAcctDr (Decimal? AmtAcctDr){if (AmtAcctDr == null) throw new ArgumentException ("AmtAcctDr is mandatory.");Set_Value ("AmtAcctDr", (Decimal?)AmtAcctDr);}/** Get Accounted Debit.
 @return Accounted Debit Amount */
 public Decimal GetAmtAcctDr() {Object bd =Get_Value("AmtAcctDr");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID){if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);}/** Get Accounting Schema.
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID){if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);}/** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() {Object ii = Get_Value("C_AcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
+public int GetVAB_AccountBook_ID() {Object ii = Get_Value("VAB_AccountBook_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());}/** Set Activity.
-@param C_Activity_ID Business Activity */
-public void SetC_Activity_ID (int C_Activity_ID){if (C_Activity_ID <= 0) Set_Value ("C_Activity_ID", null);else
-Set_Value ("C_Activity_ID", C_Activity_ID);}/** Get Activity.
+public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());}/** Set Activity.
+@param VAB_BillingCode_ID Business Activity */
+public void SetVAB_BillingCode_ID (int VAB_BillingCode_ID){if (VAB_BillingCode_ID <= 0) Set_Value ("VAB_BillingCode_ID", null);else
+Set_Value ("VAB_BillingCode_ID", VAB_BillingCode_ID);}/** Get Activity.
 @return Business Activity */
-public int GetC_Activity_ID() {Object ii = Get_Value("C_Activity_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-public void SetC_BPartner_ID (int C_BPartner_ID){if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);}/** Get Business Partner.
+public int GetVAB_BillingCode_ID() {Object ii = Get_Value("VAB_BillingCode_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID){if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);else
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);}/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-public int GetC_BPartner_ID() {Object ii = Get_Value("C_BPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID){if (C_Campaign_ID <= 0) Set_Value ("C_Campaign_ID", null);else
-Set_Value ("C_Campaign_ID", C_Campaign_ID);}/** Get Campaign.
+public int GetVAB_BusinessPartner_ID() {Object ii = Get_Value("VAB_BusinessPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Campaign.
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID){if (VAB_Promotion_ID <= 0) Set_Value ("VAB_Promotion_ID", null);else
+Set_Value ("VAB_Promotion_ID", VAB_Promotion_ID);}/** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() {Object ii = Get_Value("C_Campaign_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+public int GetVAB_Promotion_ID() {Object ii = Get_Value("VAB_Promotion_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 /** C_LocFrom_ID VAF_Control_Ref_ID=133 */
 public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;/** Set Location From.
 @param C_LocFrom_ID Location that inventory was moved from */

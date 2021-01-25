@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BP_Withholding
+/** Generated Model for VAB_BPart_Withholding
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BP_Withholding : PO
+public class X_VAB_BPart_Withholding : PO
 {
-public X_C_BP_Withholding (Context ctx, int C_BP_Withholding_ID, Trx trxName) : base (ctx, C_BP_Withholding_ID, trxName)
+public X_VAB_BPart_Withholding (Context ctx, int VAB_BPart_Withholding_ID, Trx trxName) : base (ctx, VAB_BPart_Withholding_ID, trxName)
 {
-/** if (C_BP_Withholding_ID == 0)
+/** if (VAB_BPart_Withholding_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetC_Withholding_ID (0);
 SetIsMandatoryWithholding (false);
 SetIsTemporaryExempt (false);
 }
  */
 }
-public X_C_BP_Withholding (Ctx ctx, int C_BP_Withholding_ID, Trx trxName) : base (ctx, C_BP_Withholding_ID, trxName)
+public X_VAB_BPart_Withholding (Ctx ctx, int VAB_BPart_Withholding_ID, Trx trxName) : base (ctx, VAB_BPart_Withholding_ID, trxName)
 {
-/** if (C_BP_Withholding_ID == 0)
+/** if (VAB_BPart_Withholding_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetC_Withholding_ID (0);
 SetIsMandatoryWithholding (false);
 SetIsTemporaryExempt (false);
@@ -43,7 +43,7 @@ SetIsTemporaryExempt (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Withholding (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Withholding (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_BP_Withholding (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Withholding (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Withholding (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_BP_Withholding (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Withholding (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_Withholding (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BP_Withholding()
+static X_VAB_BPart_Withholding()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389053612L;
 public static int Table_ID;
  // =299;
 
-/** TableName=C_BP_Withholding */
-public static String Table_Name="C_BP_Withholding";
+/** TableName=VAB_BPart_Withholding */
+public static String Table_Name="VAB_BPart_Withholding";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BP_Withholding[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_Withholding[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_ValueNoCheck ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,7 +135,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_BPartner_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_BusinessPartner_ID().ToString());
 }
 /** Set Withholding.
 @param C_Withholding_ID Withholding type defined */

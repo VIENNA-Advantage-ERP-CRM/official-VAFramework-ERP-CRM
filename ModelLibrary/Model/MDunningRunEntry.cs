@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDunningRunEntry
  * Purpose        : Dunning Run Entry Model
- * Class Used     : X_C_DunningRunEntry
+ * Class Used     : X_VAB_DunningExeEntry
  * Chronological    Development
  * Raghunandan     10-Nov-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDunningRunEntry : X_C_DunningRunEntry
+    public class MDunningRunEntry : X_VAB_DunningExeEntry
     {
         //Logger							
         private static VLogger _log = VLogger.GetVLogger(typeof(MPayment).FullName);
@@ -36,13 +36,13 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_DunningRunEntry_ID">id</param>
+        /// <param name="VAB_DunningExeEntry_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDunningRunEntry(Ctx ctx, int C_DunningRunEntry_ID, Trx trxName)
-            : base(ctx, C_DunningRunEntry_ID, trxName)
+        public MDunningRunEntry(Ctx ctx, int VAB_DunningExeEntry_ID, Trx trxName)
+            : base(ctx, VAB_DunningExeEntry_ID, trxName)
         {
 
-            if (C_DunningRunEntry_ID == 0)
+            if (VAB_DunningExeEntry_ID == 0)
             {
                 SetAmt(Env.ZERO);
                 SetQty(Env.ZERO);
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetC_DunningRun_ID(parent.GetC_DunningRun_ID());
+            SetVAB_DunningExe_ID(parent.GetVAB_DunningExe_ID());
             m_parent = parent;
         }
 
@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         /// <param name="isSOTrx">SO</param>
         public void SetBPartner(MBPartner bp, bool isSOTrx)
         {
-            SetC_BPartner_ID(bp.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
             MBPartnerLocation[] locations = GetLocations();
             //	Location
 
@@ -95,14 +95,14 @@ namespace VAdvantage.Model
                 if ((location.IsPayFrom() && isSOTrx)
                     || (location.IsRemitTo() && !isSOTrx))
                 {
-                    SetC_BPartner_Location_ID(location.GetC_BPartner_Location_ID());
+                    SetVAB_BPart_Location_ID(location.GetVAB_BPart_Location_ID());
                     break;
                 }
             }
             //}
-            if (GetC_BPartner_Location_ID() == 0)
+            if (GetVAB_BPart_Location_ID() == 0)
             {
-                String msg = "@C_BPartner_ID@ " + bp.GetName();
+                String msg = "@VAB_BusinessPartner_ID@ " + bp.GetName();
                 if (isSOTrx)
                 {
                     msg += " @No@ @IsPayFrom@";
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
 
             //	User with location
             // Change done by mohit to pick users sorted by date updated. 7 May 2019.
-            MUser[] users = GetOfBPartner(GetCtx(), bp.GetC_BPartner_ID());
+            MUser[] users = GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID());
             if (users.Length == 1)
             {
                 if (users[0].IsEmail() || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < users.Length; i++)
                 {
                     MUser user = users[i];
-                    if (user.GetC_BPartner_Location_ID() == GetC_BPartner_Location_ID() && (user.IsEmail() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
+                    if (user.GetVAB_BPart_Location_ID() == GetVAB_BPart_Location_ID() && (user.IsEmail() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
                         || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail))
                     {
                         SetVAF_UserContact_ID(users[i].GetVAF_UserContact_ID());
@@ -154,13 +154,13 @@ namespace VAdvantage.Model
         /// Get active Users of BPartner sorted by date updated desc.
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BPartner_ID">id</param>
+        /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <returns>array of users</returns>
         /// Writer - Mohit , Date - 7 may 2019
-        public static MUser[] GetOfBPartner(Ctx ctx, int C_BPartner_ID)
+        public static MUser[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID)
         {
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY Updated DESC ";
+            String sql = "SELECT * FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND IsActive='Y' ORDER BY Updated DESC ";
 
             try
             {
@@ -194,7 +194,7 @@ namespace VAdvantage.Model
             MBPartnerLocation[] _locations = null;
 
             List<MBPartnerLocation> list = new List<MBPartnerLocation>();
-            String sql = "SELECT * FROM C_BPartner_Location WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND IsActive='Y' ORDER BY Updated DESC ";
+            String sql = "SELECT * FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID() + " AND IsActive='Y' ORDER BY Updated DESC ";
             DataSet ds = null;
             try
             {
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
         public MDunningRunLine[] GetLines(bool onlyInvoices)
         {
             List<MDunningRunLine> list = new List<MDunningRunLine>();
-            String sql = "SELECT * FROM C_DunningRunLine WHERE C_DunningRunEntry_ID=" + Get_ID();
+            String sql = "SELECT * FROM VAB_DunningExeLine WHERE VAB_DunningExeEntry_ID=" + Get_ID();
             if (onlyInvoices)
             {
                 sql += " AND C_Invoice_ID IS NOT NULL";
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
         public bool HasInvoices()
         {
             bool retValue = false;
-            String sql = "SELECT COUNT(*) FROM C_DunningRunLine WHERE C_DunningRunEntry_ID=" + Get_ID() + " AND C_Invoice_ID IS NOT NULL";
+            String sql = "SELECT COUNT(*) FROM VAB_DunningExeLine WHERE VAB_DunningExeEntry_ID=" + Get_ID() + " AND C_Invoice_ID IS NOT NULL";
             IDataReader idr = null;
             try
             {
@@ -315,7 +315,7 @@ namespace VAdvantage.Model
         {
             if (m_parent == null)
             {
-                m_parent = new MDunningRun(GetCtx(), GetC_DunningRun_ID(), Get_TrxName());
+                m_parent = new MDunningRun(GetCtx(), GetVAB_DunningExe_ID(), Get_TrxName());
             }
             return m_parent;
         }

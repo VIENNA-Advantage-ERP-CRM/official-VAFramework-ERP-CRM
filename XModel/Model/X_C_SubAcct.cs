@@ -20,7 +20,7 @@ public X_C_SubAcct (Context ctx, int C_SubAcct_ID, Trx trxName) : base (ctx, C_S
 {
 /** if (C_SubAcct_ID == 0)
 {
-SetC_ElementValue_ID (0);
+SetVAB_Acct_Element_ID (0);
 SetC_SubAcct_ID (0);
 SetName (null);
 SetValue (null);
@@ -31,7 +31,7 @@ public X_C_SubAcct (Ctx ctx, int C_SubAcct_ID, Trx trxName) : base (ctx, C_SubAc
 {
 /** if (C_SubAcct_ID == 0)
 {
-SetC_ElementValue_ID (0);
+SetVAB_Acct_Element_ID (0);
 SetC_SubAcct_ID (0);
 SetName (null);
 SetValue (null);
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_C_SubAcct[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 /** Set Account Element.
-@param C_ElementValue_ID Account Element */
-public void SetC_ElementValue_ID (int C_ElementValue_ID)
+@param VAB_Acct_Element_ID Account Element */
+public void SetVAB_Acct_Element_ID (int VAB_Acct_Element_ID)
 {
-if (C_ElementValue_ID < 1) throw new ArgumentException ("C_ElementValue_ID is mandatory.");
-Set_ValueNoCheck ("C_ElementValue_ID", C_ElementValue_ID);
+if (VAB_Acct_Element_ID < 1) throw new ArgumentException ("VAB_Acct_Element_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Acct_Element_ID", VAB_Acct_Element_ID);
 }
 /** Get Account Element.
 @return Account Element */
-public int GetC_ElementValue_ID() 
+public int GetVAB_Acct_Element_ID() 
 {
-Object ii = Get_Value("C_ElementValue_ID");
+Object ii = Get_Value("VAB_Acct_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

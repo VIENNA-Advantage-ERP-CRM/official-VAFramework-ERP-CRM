@@ -313,10 +313,10 @@ namespace VAdvantage.Model
                 for (int i = 0; i < restrictions.Length; i++)
                 {
                     if (MGoalRestriction.GOALRESTRICTIONTYPE_BusinessPartner.Equals(restrictions[i].GetGoalRestrictionType()))
-                        listBP.Add(restrictions[i].GetC_BPartner_ID());
+                        listBP.Add(restrictions[i].GetVAB_BusinessPartner_ID());
                     //	Hierarchy comes here
                     if (MGoalRestriction.GOALRESTRICTIONTYPE_BusPartnerGroup.Equals(restrictions[i].GetGoalRestrictionType()))
-                        listBPG.Add(restrictions[i].GetC_BP_Group_ID());
+                        listBPG.Add(restrictions[i].GetVAB_BPart_Category_ID());
                 }
                 //	BP
                 if (listBP.Count == 1)
@@ -337,15 +337,15 @@ namespace VAdvantage.Model
                 if (bpColumn.IndexOf(".") == -1)
                     bpColumn = tableName + "." + bpColumn;
                 if (listBPG.Count == 1)
-                    sb.Append(" AND EXISTS (SELECT * FROM C_BPartner bpx WHERE ")
+                    sb.Append(" AND EXISTS (SELECT * FROM VAB_BusinessPartner bpx WHERE ")
                         .Append(bpColumn)
-                        .Append("=bpx.C_BPartner_ID AND bpx.C_BP_GROUP_ID=")
+                        .Append("=bpx.VAB_BusinessPartner_ID AND bpx.VAB_BPART_CATEGORY_ID=")
                         .Append(listBPG[0]).Append(")");
                 else if (listBPG.Count > 1)
                 {
-                    sb.Append(" AND EXISTS (SELECT * FROM C_BPartner bpx WHERE ")
+                    sb.Append(" AND EXISTS (SELECT * FROM VAB_BusinessPartner bpx WHERE ")
                         .Append(bpColumn)
-                        .Append("=bpx.C_BPartner_ID AND bpx.C_BP_GROUP_ID IN (");
+                        .Append("=bpx.VAB_BusinessPartner_ID AND bpx.VAB_BPART_CATEGORY_ID IN (");
                     for (int i = 0; i < listBPG.Count; i++)
                     {
                         if (i > 0)

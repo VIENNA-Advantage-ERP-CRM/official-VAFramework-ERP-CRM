@@ -18,14 +18,14 @@ namespace VIS.Models
         public Dictionary<String, String> GetAcctSchema(Ctx ctx, string fields)
         {            
             string[] paramValue = fields.Split(',');
-            int C_AcctSchema_ID;
+            int VAB_AccountBook_ID;
             Dictionary<String, String> retDic = new Dictionary<string, string>();
             //Assign parameter value
-            C_AcctSchema_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_AccountBook_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MAcctSchema aas = MAcctSchema.Get(ctx, C_AcctSchema_ID);
+            MAcctSchema aas = MAcctSchema.Get(ctx, VAB_AccountBook_ID);
             retDic["StdPrecision"] = aas.GetStdPrecision().ToString();
-            retDic["C_Currency_ID"] = aas.GetC_Currency_ID().ToString();
+            retDic["VAB_Currency_ID"] = aas.GetVAB_Currency_ID().ToString();
             return retDic;
               
         }

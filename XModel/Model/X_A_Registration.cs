@@ -135,18 +135,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-public void SetA_Asset_ID (int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+public void SetA_Asset_ID (int VAA_Asset_ID)
 {
-if (A_Asset_ID <= 0) Set_Value ("A_Asset_ID", null);
+if (VAA_Asset_ID <= 0) Set_Value ("VAA_Asset_ID", null);
 else
-Set_Value ("A_Asset_ID", A_Asset_ID);
+Set_Value ("VAA_Asset_ID", VAA_Asset_ID);
 }
 /** Get Asset.
 @return Asset used internally or by customers */
 public int GetA_Asset_ID() 
 {
-Object ii = Get_Value("A_Asset_ID");
+Object ii = Get_Value("VAA_Asset_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -178,18 +178,18 @@ public DateTime? GetAssetServiceDate()
 return (DateTime?)Get_Value("AssetServiceDate");
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);
+if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);
 else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

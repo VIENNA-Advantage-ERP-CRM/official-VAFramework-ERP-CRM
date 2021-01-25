@@ -48,13 +48,13 @@ namespace VAdvantage.Model
             if (GL_Journal_ID == 0)
             {
                 //	setGL_Journal_ID (0);		//	PK
-                //	setC_AcctSchema_ID (0);
-                //	setC_Currency_ID (0);
-                //	setC_DocType_ID (0);
+                //	setVAB_AccountBook_ID (0);
+                //	setVAB_Currency_ID (0);
+                //	setVAB_DocTypes_ID (0);
                 //	setC_Period_ID (0);
                 //
                 SetCurrencyRate(Env.ONE);
-                //	setC_ConversionType_ID(0);
+                //	setVAB_CurrencyType_ID(0);
                 SetDateAcct(DateTime.Now.Date);// Timestamp(Comm.currentTimeMillis()));
                 SetDateDoc((DateTime.Now.Date));//new Timestamp(System.currentTimeMillis()));
                 //	setDescription (null);
@@ -101,13 +101,13 @@ namespace VAdvantage.Model
             //this (parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
             SetGL_JournalBatch_ID(parent.GetGL_JournalBatch_ID());
-            SetC_DocType_ID(parent.GetC_DocType_ID());
+            SetVAB_DocTypes_ID(parent.GetVAB_DocTypes_ID());
             SetPostingType(parent.GetPostingType());
             //
             SetDateDoc(parent.GetDateDoc());
             SetC_Period_ID(parent.GetC_Period_ID());
             SetDateAcct(parent.GetDateAcct());
-            SetC_Currency_ID(parent.GetC_Currency_ID());
+            SetVAB_Currency_ID(parent.GetVAB_Currency_ID());
         }	//	MJournal
 
         /// <summary>
@@ -121,16 +121,16 @@ namespace VAdvantage.Model
             SetClientOrg(original);
             SetGL_JournalBatch_ID(original.GetGL_JournalBatch_ID());
             //
-            SetC_AcctSchema_ID(original.GetC_AcctSchema_ID());
+            SetVAB_AccountBook_ID(original.GetVAB_AccountBook_ID());
             SetGL_Budget_ID(original.GetGL_Budget_ID());
             SetGL_Category_ID(original.GetGL_Category_ID());
             SetPostingType(original.GetPostingType());
             SetDescription(original.GetDescription());
-            SetC_DocType_ID(original.GetC_DocType_ID());
+            SetVAB_DocTypes_ID(original.GetVAB_DocTypes_ID());
             SetControlAmt(original.GetControlAmt());
             //
-            SetC_Currency_ID(original.GetC_Currency_ID());
-            SetC_ConversionType_ID(original.GetC_ConversionType_ID());
+            SetVAB_Currency_ID(original.GetVAB_Currency_ID());
+            SetVAB_CurrencyType_ID(original.GetVAB_CurrencyType_ID());
             SetCurrencyRate(original.GetCurrencyRate());
 
             //	setDateDoc(original.getDateDoc());
@@ -280,18 +280,18 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Currency Info
         /// </summary>
-        /// <param name="C_Currency_ID">currenct</param>
-        /// <param name="C_ConversionType_ID">type</param>
+        /// <param name="VAB_Currency_ID">currenct</param>
+        /// <param name="VAB_CurrencyType_ID">type</param>
         /// <param name="CurrencyRate">rate</param>
-        public void SetCurrency(int C_Currency_ID, int C_ConversionType_ID, Decimal CurrencyRate)
+        public void SetCurrency(int VAB_Currency_ID, int VAB_CurrencyType_ID, Decimal CurrencyRate)
         {
-            if (C_Currency_ID != 0)
+            if (VAB_Currency_ID != 0)
             {
-                SetC_Currency_ID(C_Currency_ID);
+                SetVAB_Currency_ID(VAB_Currency_ID);
             }
-            if (C_ConversionType_ID != 0)
+            if (VAB_CurrencyType_ID != 0)
             {
-                SetC_ConversionType_ID(C_ConversionType_ID);
+                SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
             }
             if (CurrencyRate.CompareTo(Env.ZERO) == 0)
             {
@@ -303,46 +303,46 @@ namespace VAdvantage.Model
         /// <summary>
         /// set callout
         /// </summary>
-        /// <param name="oldC_ConversionType_ID">old</param>
-        /// <param name="newC_ConversionType_ID">new</param>
+        /// <param name="oldVAB_CurrencyType_ID">old</param>
+        /// <param name="newVAB_CurrencyType_ID">new</param>
         /// <param name="windowNo">window no</param>
-        public void SetC_ConversionType_ID(String oldC_ConversionType_ID,
-               String newC_ConversionType_ID, int windowNo)
+        public void SetVAB_CurrencyType_ID(String oldVAB_CurrencyType_ID,
+               String newVAB_CurrencyType_ID, int windowNo)
         {
-            if (newC_ConversionType_ID == null || newC_ConversionType_ID.Length == 0)
+            if (newVAB_CurrencyType_ID == null || newVAB_CurrencyType_ID.Length == 0)
             {
                 return;
             }
-            int C_ConversionType_ID = Utility.Util.GetValueOfInt(newC_ConversionType_ID);
-            if (C_ConversionType_ID == 0)
+            int VAB_CurrencyType_ID = Utility.Util.GetValueOfInt(newVAB_CurrencyType_ID);
+            if (VAB_CurrencyType_ID == 0)
             {
                 return;
             }
-            SetC_ConversionType_ID(C_ConversionType_ID);
+            SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
             SetRate();
-        }	//	setC_ConversionType_ID
+        }	//	setVAB_CurrencyType_ID
 
         /// <summary>
         /// set currency callout
         /// /// </summary>
-        /// <param name="oldC_Currency_ID">old</param>
-        /// <param name="newC_Currency_ID">new</param>
+        /// <param name="oldVAB_Currency_ID">old</param>
+        /// <param name="newVAB_Currency_ID">new</param>
         /// <param name="windowNo">window no</param>
-        public void SetC_Currency_ID(String oldC_Currency_ID,
-               String newC_Currency_ID, int windowNo)
+        public void SetVAB_Currency_ID(String oldVAB_Currency_ID,
+               String newVAB_Currency_ID, int windowNo)
         {
-            if (newC_Currency_ID == null || newC_Currency_ID.Length == 0)
+            if (newVAB_Currency_ID == null || newVAB_Currency_ID.Length == 0)
             {
                 return;
             }
-            int C_Currency_ID = Utility.Util.GetValueOfInt(newC_Currency_ID);
-            if (C_Currency_ID == 0)
+            int VAB_Currency_ID = Utility.Util.GetValueOfInt(newVAB_Currency_ID);
+            if (VAB_Currency_ID == 0)
             {
                 return;
             }
-            SetC_Currency_ID(C_Currency_ID);
+            SetVAB_Currency_ID(VAB_Currency_ID);
             SetRate();
-        }	//	setC_Currency_ID
+        }	//	setVAB_Currency_ID
 
         /// <summary>
         ///	Set Rate
@@ -350,9 +350,9 @@ namespace VAdvantage.Model
         private void SetRate()
         {
             //  Source info
-            int C_Currency_ID = GetC_Currency_ID();
-            int C_ConversionType_ID = GetC_ConversionType_ID();
-            if (C_Currency_ID == 0 || C_ConversionType_ID == 0)
+            int VAB_Currency_ID = GetVAB_Currency_ID();
+            int VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+            if (VAB_Currency_ID == 0 || VAB_CurrencyType_ID == 0)
             {
                 return;
             }
@@ -362,13 +362,13 @@ namespace VAdvantage.Model
                 DateAcct = DateTime.Now;// new Timestamp(System.currentTimeMillis());
             }
             //
-            int C_AcctSchema_ID = GetC_AcctSchema_ID();
-            MAcctSchema a = MAcctSchema.Get(GetCtx(), C_AcctSchema_ID);
+            int VAB_AccountBook_ID = GetVAB_AccountBook_ID();
+            MAcctSchema a = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID);
             int VAF_Client_ID = GetVAF_Client_ID();
             int VAF_Org_ID = GetVAF_Org_ID();
 
-            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(C_Currency_ID, a.GetC_Currency_ID(),
-                DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(VAB_Currency_ID, a.GetVAB_Currency_ID(),
+                DateAcct, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
             log.Fine("rate = " + CurrencyRate);
             //if (CurrencyRate.Value == null)
             //{
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
                 // }
 
                 toLine.SetDescription(fromLines[i].GetDescription());
-                toLine.SetC_Currency_ID(fromLines[i].GetC_Currency_ID());
+                toLine.SetVAB_Currency_ID(fromLines[i].GetVAB_Currency_ID());
                 toLine.SetIsGenerated(true);
                 toLine.SetProcessed(false);
                 toLine.SetQty(fromLines[i].GetQty());
@@ -579,7 +579,7 @@ namespace VAdvantage.Model
                 toLine.SetAmtSourceDr(fromLines[i].GetAmtSourceDr());
                 toLine.SetAmtSourceCr(fromLines[i].GetAmtSourceCr());
                 toLine.SetDescription(fromLines[i].GetDescription());
-                toLine.SetC_Currency_ID(fromLines[i].GetC_Currency_ID());
+                toLine.SetVAB_Currency_ID(fromLines[i].GetVAB_Currency_ID());
                 toLine.SetIsGenerated(true);
                 toLine.SetProcessed(false);
                 toLine.SetQty(fromLines[i].GetQty());
@@ -647,9 +647,9 @@ namespace VAdvantage.Model
 
 
             // set currency of selected accounting schema
-            MAcctSchema acctSchema = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID());
-            int c_Currency_ID = acctSchema.GetC_Currency_ID();
-            SetC_Currency_ID(c_Currency_ID);
+            MAcctSchema acctSchema = MAcctSchema.Get(GetCtx(), GetVAB_AccountBook_ID());
+            int VAB_Currency_ID = acctSchema.GetVAB_Currency_ID();
+            SetVAB_Currency_ID(VAB_Currency_ID);
             SetCurrencyRate(1);
 
             // rounding control amount based on standard precision defined on currency
@@ -689,18 +689,18 @@ namespace VAdvantage.Model
             int C_DefaultCurrencyType_ID = MConversionType.GetDefault(GetVAF_Client_ID());
 
             // selected accounting schema currency
-            int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetC_AcctSchema_ID()).GetC_Currency_ID();
+            int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetVAB_AccountBook_ID()).GetVAB_Currency_ID();
 
             // this query return a record of assigned org accounting schema having same chart of account
-            String sql = @"SELECT DISTINCT CA.C_ACCTSCHEMA_ID , Ca.C_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS C_ConversionType_ID , 
-  CURRENCYRATE(" + selectedAcctSchemaCurrency + @" , Ca.C_Currency_ID , " + GlobalVariable.TO_DATE(GetDateAcct(), true) +
+            String sql = @"SELECT DISTINCT CA.VAB_ACCOUNTBOOK_ID , Ca.VAB_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS VAB_CurrencyType_ID , 
+  CURRENCYRATE(" + selectedAcctSchemaCurrency + @" , Ca.VAB_Currency_ID , " + GlobalVariable.TO_DATE(GetDateAcct(), true) +
   @" , " + C_DefaultCurrencyType_ID + @" , " + GetVAF_Client_ID() + " , " + GetVAF_Org_ID() + @") AS Rate
-FROM C_AcctSchema CA INNER JOIN FRPT_AssignedOrg AO ON CA.C_AcctSchema_ID = AO.C_AcctSchema_ID
-INNER JOIN C_AcctSchema_Element ASE ON (CA.C_AcctSchema_ID = ASE.C_AcctSchema_ID AND ElementType = 'AC')
+FROM VAB_AccountBook CA INNER JOIN FRPT_AssignedOrg AO ON CA.VAB_AccountBook_ID = AO.VAB_AccountBook_ID
+INNER JOIN VAB_AccountBook_Element ASE ON (CA.VAB_AccountBook_ID = ASE.VAB_AccountBook_ID AND ElementType = 'AC')
 WHERE CA.ISACTIVE = 'Y' AND ASE.IsActive = 'Y' AND AO.IsActive = 'Y' AND AO.VAF_Org_ID IN(0," + GetVAF_Org_ID() + @")
-AND ASE.C_Element_ID = (SELECT C_Element_ID FROM C_AcctSchema_Element WHERE ElementType = 'AC' AND IsActive = 'Y' AND C_AcctSchema_ID = " + GetC_AcctSchema_ID() + @" )
-AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
-            sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_AcctSchema", true, true);
+AND ASE.VAB_Element_ID = (SELECT VAB_Element_ID FROM VAB_AccountBook_Element WHERE ElementType = 'AC' AND IsActive = 'Y' AND VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() + @" )
+AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
+            sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_AccountBook", true, true);
 
             DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
             MAssignAcctSchema assignAcctSchema = null;
@@ -713,9 +713,9 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                     assignAcctSchema.SetVAF_Client_ID(GetVAF_Client_ID());
                     assignAcctSchema.SetVAF_Org_ID(GetVAF_Org_ID());
                     assignAcctSchema.SetGL_Journal_ID(GetGL_Journal_ID());
-                    assignAcctSchema.SetC_AcctSchema_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
-                    assignAcctSchema.SetC_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]));
-                    assignAcctSchema.SetC_ConversionType_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ConversionType_ID"]));
+                    assignAcctSchema.SetVAB_AccountBook_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ACCOUNTBOOK_ID"]));
+                    assignAcctSchema.SetVAB_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Currency_ID"]));
+                    assignAcctSchema.SetVAB_CurrencyType_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CurrencyType_ID"]));
                     assignAcctSchema.SetCurrencyRate(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Rate"]));
                     if (!assignAcctSchema.Save())
                     {
@@ -837,7 +837,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
@@ -939,7 +939,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             //	Unbalanced Jornal & Not Suspense
             if (AmtSourceDr.CompareTo(AmtSourceCr) != 0)
             {
-                MAcctSchemaGL gl = MAcctSchemaGL.Get(GetCtx(), GetC_AcctSchema_ID());
+                MAcctSchemaGL gl = MAcctSchemaGL.Get(GetCtx(), GetVAB_AccountBook_ID());
                 if (gl == null || !gl.IsUseSuspenseBalancing())
                 {
                     m_processMsg = "@UnbalancedJornal@";
@@ -1024,7 +1024,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -1052,7 +1052,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -1374,7 +1374,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }	//	getDocumentInfo
 

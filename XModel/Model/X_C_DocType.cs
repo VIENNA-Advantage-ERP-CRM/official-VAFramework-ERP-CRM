@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_DocType
+    /** Generated Model for VAB_DocTypes
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_DocType : PO
+    public class X_VAB_DocTypes : PO
     {
-        public X_C_DocType(Context ctx, int C_DocType_ID, Trx trxName)
-            : base(ctx, C_DocType_ID, trxName)
+        public X_VAB_DocTypes(Context ctx, int VAB_DocTypes_ID, Trx trxName)
+            : base(ctx, VAB_DocTypes_ID, trxName)
         {
-            /** if (C_DocType_ID == 0)
+            /** if (VAB_DocTypes_ID == 0)
             {
-            SetC_DocType_ID (0);
+            SetVAB_DocTypes_ID (0);
             SetDocBaseType (null);
             SetDocumentCopies (0);	// 1
             SetGL_Category_ID (0);
@@ -42,12 +42,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_DocType(Ctx ctx, int C_DocType_ID, Trx trxName)
-            : base(ctx, C_DocType_ID, trxName)
+        public X_VAB_DocTypes(Ctx ctx, int VAB_DocTypes_ID, Trx trxName)
+            : base(ctx, VAB_DocTypes_ID, trxName)
         {
-            /** if (C_DocType_ID == 0)
+            /** if (VAB_DocTypes_ID == 0)
             {
-            SetC_DocType_ID (0);
+            SetVAB_DocTypes_ID (0);
             SetDocBaseType (null);
             SetDocumentCopies (0);	// 1
             SetGL_Category_ID (0);
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_DocType(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_DocTypes(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_DocType(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_DocTypes(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -91,14 +91,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_DocType(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_DocTypes(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_DocType()
+        static X_VAB_DocTypes()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -111,8 +111,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =217;
 
-        /** TableName=C_DocType */
-        public static String Table_Name = "C_DocType";
+        /** TableName=VAB_DocTypes */
+        public static String Table_Name = "VAB_DocTypes";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_DocType[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_DocTypes[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Print Format.
@@ -166,93 +166,93 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeDifference_ID VAF_Control_Ref_ID=170 */
-        public static int C_DOCTYPEDIFFERENCE_ID_VAF_Control_Ref_ID = 170;
+        /** VAB_DocTypesDifference_ID VAF_Control_Ref_ID=170 */
+        public static int VAB_DocTypesDIFFERENCE_ID_VAF_Control_Ref_ID = 170;
         /** Set Difference Document.
-        @param C_DocTypeDifference_ID Document type for generating in dispute Shipments */
-        public void SetC_DocTypeDifference_ID(int C_DocTypeDifference_ID)
+        @param VAB_DocTypesDifference_ID Document type for generating in dispute Shipments */
+        public void SetVAB_DocTypesDifference_ID(int VAB_DocTypesDifference_ID)
         {
-            if (C_DocTypeDifference_ID <= 0) Set_Value("C_DocTypeDifference_ID", null);
+            if (VAB_DocTypesDifference_ID <= 0) Set_Value("VAB_DocTypesDifference_ID", null);
             else
-                Set_Value("C_DocTypeDifference_ID", C_DocTypeDifference_ID);
+                Set_Value("VAB_DocTypesDifference_ID", VAB_DocTypesDifference_ID);
         }
         /** Get Difference Document.
         @return Document type for generating in dispute Shipments */
-        public int GetC_DocTypeDifference_ID()
+        public int GetVAB_DocTypesDifference_ID()
         {
-            Object ii = Get_Value("C_DocTypeDifference_ID");
+            Object ii = Get_Value("VAB_DocTypesDifference_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeInvoice_ID VAF_Control_Ref_ID=170 */
-        public static int C_DOCTYPEINVOICE_ID_VAF_Control_Ref_ID = 170;
+        /** VAB_DocTypesInvoice_ID VAF_Control_Ref_ID=170 */
+        public static int VAB_DocTypesINVOICE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for Invoice.
-        @param C_DocTypeInvoice_ID Document type used for invoices generated from this sales document */
-        public void SetC_DocTypeInvoice_ID(int C_DocTypeInvoice_ID)
+        @param VAB_DocTypesInvoice_ID Document type used for invoices generated from this sales document */
+        public void SetVAB_DocTypesInvoice_ID(int VAB_DocTypesInvoice_ID)
         {
-            if (C_DocTypeInvoice_ID <= 0) Set_Value("C_DocTypeInvoice_ID", null);
+            if (VAB_DocTypesInvoice_ID <= 0) Set_Value("VAB_DocTypesInvoice_ID", null);
             else
-                Set_Value("C_DocTypeInvoice_ID", C_DocTypeInvoice_ID);
+                Set_Value("VAB_DocTypesInvoice_ID", VAB_DocTypesInvoice_ID);
         }
         /** Get Document Type for Invoice.
         @return Document type used for invoices generated from this sales document */
-        public int GetC_DocTypeInvoice_ID()
+        public int GetVAB_DocTypesInvoice_ID()
         {
-            Object ii = Get_Value("C_DocTypeInvoice_ID");
+            Object ii = Get_Value("VAB_DocTypesInvoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeProforma_ID VAF_Control_Ref_ID=170 */
-        public static int C_DOCTYPEPROFORMA_ID_VAF_Control_Ref_ID = 170;
+        /** VAB_DocTypesProforma_ID VAF_Control_Ref_ID=170 */
+        public static int VAB_DocTypesPROFORMA_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for ProForma.
-        @param C_DocTypeProforma_ID Document type used for pro forma invoices generated from this sales document */
-        public void SetC_DocTypeProforma_ID(int C_DocTypeProforma_ID)
+        @param VAB_DocTypesProforma_ID Document type used for pro forma invoices generated from this sales document */
+        public void SetVAB_DocTypesProforma_ID(int VAB_DocTypesProforma_ID)
         {
-            if (C_DocTypeProforma_ID <= 0) Set_Value("C_DocTypeProforma_ID", null);
+            if (VAB_DocTypesProforma_ID <= 0) Set_Value("VAB_DocTypesProforma_ID", null);
             else
-                Set_Value("C_DocTypeProforma_ID", C_DocTypeProforma_ID);
+                Set_Value("VAB_DocTypesProforma_ID", VAB_DocTypesProforma_ID);
         }
         /** Get Document Type for ProForma.
         @return Document type used for pro forma invoices generated from this sales document */
-        public int GetC_DocTypeProforma_ID()
+        public int GetVAB_DocTypesProforma_ID()
         {
-            Object ii = Get_Value("C_DocTypeProforma_ID");
+            Object ii = Get_Value("VAB_DocTypesProforma_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeShipment_ID VAF_Control_Ref_ID=170 */
-        public static int C_DOCTYPESHIPMENT_ID_VAF_Control_Ref_ID = 170;
+        /** VAB_DocTypesShipment_ID VAF_Control_Ref_ID=170 */
+        public static int VAB_DocTypesSHIPMENT_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for Shipment.
-        @param C_DocTypeShipment_ID Document type used for shipments generated from this sales document */
-        public void SetC_DocTypeShipment_ID(int C_DocTypeShipment_ID)
+        @param VAB_DocTypesShipment_ID Document type used for shipments generated from this sales document */
+        public void SetVAB_DocTypesShipment_ID(int VAB_DocTypesShipment_ID)
         {
-            if (C_DocTypeShipment_ID <= 0) Set_Value("C_DocTypeShipment_ID", null);
+            if (VAB_DocTypesShipment_ID <= 0) Set_Value("VAB_DocTypesShipment_ID", null);
             else
-                Set_Value("C_DocTypeShipment_ID", C_DocTypeShipment_ID);
+                Set_Value("VAB_DocTypesShipment_ID", VAB_DocTypesShipment_ID);
         }
         /** Get Document Type for Shipment.
         @return Document type used for shipments generated from this sales document */
-        public int GetC_DocTypeShipment_ID()
+        public int GetVAB_DocTypesShipment_ID()
         {
-            Object ii = Get_Value("C_DocTypeShipment_ID");
+            Object ii = Get_Value("VAB_DocTypesShipment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID < 0) throw new ArgumentException("C_DocType_ID is mandatory.");
-            Set_ValueNoCheck("C_DocType_ID", C_DocType_ID);
+            if (VAB_DocTypes_ID < 0) throw new ArgumentException("VAB_DocTypes_ID is mandatory.");
+            Set_ValueNoCheck("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -20,7 +20,7 @@ public X_C_TaxDeclarationAcct (Context ctx, int C_TaxDeclarationAcct_ID, Trx trx
 {
 /** if (C_TaxDeclarationAcct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetC_TaxDeclarationAcct_ID (0);
 SetC_TaxDeclaration_ID (0);
 SetFact_Acct_ID (0);
@@ -31,7 +31,7 @@ public X_C_TaxDeclarationAcct (Ctx ctx, int C_TaxDeclarationAcct_ID, Trx trxName
 {
 /** if (C_TaxDeclarationAcct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetC_TaxDeclarationAcct_ID (0);
 SetC_TaxDeclaration_ID (0);
 SetFact_Acct_ID (0);
@@ -190,45 +190,45 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-throw new ArgumentException ("C_BPartner_ID Is virtual column");
+throw new ArgumentException ("VAB_BusinessPartner_ID Is virtual column");
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-throw new ArgumentException ("C_Currency_ID Is virtual column");
+throw new ArgumentException ("VAB_Currency_ID Is virtual column");
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

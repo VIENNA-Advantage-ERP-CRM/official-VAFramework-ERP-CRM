@@ -322,82 +322,82 @@ namespace VAdvantage.Model
             return (String)Get_Value("BankAccountNo");
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank Account.
-        @param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        @param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            if (C_BankAccount_ID <= 0) Set_Value("C_BankAccount_ID", null);
+            if (VAB_Bank_Acct_ID <= 0) Set_Value("VAB_Bank_Acct_ID", null);
             else
-                Set_Value("C_BankAccount_ID", C_BankAccount_ID);
+                Set_Value("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
         }
         /** Get Bank Account.
         @return Account at the Bank */
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BankAccount_ID");
+            Object ii = Get_Value("VAB_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Charge.
-        @param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        @param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }
         /** Get Charge.
         @return Additional document charges */
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            Object ii = Get_Value("C_Charge_ID");
+            Object ii = Get_Value("VAB_Charge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID <= 0) Set_Value("C_DocType_ID", null);
+            if (VAB_DocTypes_ID <= 0) Set_Value("VAB_DocTypes_ID", null);
             else
-                Set_Value("C_DocType_ID", C_DocType_ID);
+                Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

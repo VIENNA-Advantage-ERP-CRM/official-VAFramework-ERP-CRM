@@ -7,10 +7,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeInstance: X_C_GenAttributeInstance
+    public class MGenAttributeInstance: X_VAB_GenFeatureInstance
     {
-        public MGenAttributeInstance(Ctx ctx, int C_GenAttributeInstance_ID, Trx trxName)
-            : base(ctx, C_GenAttributeInstance_ID, trxName)
+        public MGenAttributeInstance(Ctx ctx, int VAB_GenFeatureInstance_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureInstance_ID, trxName)
         {
 
 
@@ -36,13 +36,13 @@ namespace VAdvantage.Model
         /// <param name="M_AttributeValue_ID">selection</param>
         /// <param name="Value">String representation for fast display</param>
         /// <param name="trxName">transaction</param>
-        public MGenAttributeInstance(Ctx ctx, int C_GenAttribute_ID,
-            int C_GenAttributeSetInstance_ID, int C_GenAttributeValue_ID, String Value, Trx trxName)
+        public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,
+            int VAB_GenFeatureSetInstance_ID, int VAB_GenFeatureValue_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetC_GenAttribute_ID(C_GenAttribute_ID);
-            SetC_GenAttributeSetInstance_ID(C_GenAttributeSetInstance_ID);
-            SetC_GenAttributeValue_ID(C_GenAttributeValue_ID);
+            SetVAB_GenFeature_ID(VAB_GenFeature_ID);
+            SetVAB_GenFeatureSetInstance_ID(VAB_GenFeatureSetInstance_ID);
+            SetVAB_GenFeatureValue_ID(VAB_GenFeatureValue_ID);
             SetValue(Value);
         }
          /// <summary>
@@ -53,12 +53,12 @@ namespace VAdvantage.Model
         /// <param name="M_AttributeSetInstance_ID">instance</param>
         /// <param name="BDValue"> number value</param>
         /// <param name="trxName">transaction</param>
-        public MGenAttributeInstance(Ctx ctx, int C_GenAttribute_ID,
-            int C_GenAttributeSetInstance_ID, Decimal? BDValue, Trx trxName)
+        public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,
+            int VAB_GenFeatureSetInstance_ID, Decimal? BDValue, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetC_GenAttribute_ID(C_GenAttribute_ID);
-            SetC_GenAttributeSetInstance_ID(C_GenAttributeSetInstance_ID);
+            SetVAB_GenFeature_ID(VAB_GenFeature_ID);
+            SetVAB_GenFeatureSetInstance_ID(VAB_GenFeatureSetInstance_ID);
             SetValueNumber(BDValue);
         }
 
@@ -70,12 +70,12 @@ namespace VAdvantage.Model
         /// <param name="M_AttributeSetInstance_ID">instance</param>
         /// <param name="Value">string value</param>
         /// <param name="trxName">transaction</param>
-        public MGenAttributeInstance(Ctx ctx, int C_GenAttribute_ID,
-            int C_GenAttributeSetInstance_ID, String Value, Trx trxName)
+        public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,
+            int VAB_GenFeatureSetInstance_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetC_GenAttribute_ID(C_GenAttribute_ID);
-            SetC_GenAttributeSetInstance_ID(C_GenAttributeSetInstance_ID);
+            SetVAB_GenFeature_ID(VAB_GenFeature_ID);
+            SetVAB_GenFeatureSetInstance_ID(VAB_GenFeatureSetInstance_ID);
             SetValue(Value);
         }
     }

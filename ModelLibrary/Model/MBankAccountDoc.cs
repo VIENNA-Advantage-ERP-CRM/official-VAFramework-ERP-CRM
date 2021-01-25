@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_BankAccountDoc
+ * Class Used     : X_VAB_Bank_AcctDoc
  * Chronological Development
  * Mohit          4-March-2020
  ******************************************************/
@@ -19,10 +19,10 @@ using VAdvantage.Common;
 
 namespace VAdvantage.Model
 {
-    class MBankAccountDoc : X_C_BankAccountDoc
+    class MBankAccountDoc : X_VAB_Bank_AcctDoc
     {
-        public MBankAccountDoc(Ctx ctx, int C_BankAccount_ID, Trx trxName)
-            : base(ctx, C_BankAccount_ID, trxName)
+        public MBankAccountDoc(Ctx ctx, int VAB_Bank_Acct_ID, Trx trxName)
+            : base(ctx, VAB_Bank_Acct_ID, trxName)
         {
         }
 
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
             // Validation : no duplicate record for priortiy on bank account and payment method combination.
             if (newRecord)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_BankAccountDoc_ID) FROM C_BankAccountDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND Priority = " + GetPriority())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAB_Bank_AcctDoc_ID) FROM VAB_Bank_AcctDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID() + " AND Priority = " + GetPriority())) > 0)
                 {
                     log.SaveError("Error:", Msg.GetMsg(GetCtx(), "RecSamePriority"));
                     return false;
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_BankAccountDoc_ID) FROM C_BankAccountDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND Priority = " + GetPriority() + " AND C_BankAccountDoc_ID !=" + GetC_BankAccountDoc_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAB_Bank_AcctDoc_ID) FROM VAB_Bank_AcctDoc WHERE IsActive = 'Y' AND VA009_PaymentMethod_ID=" + Util.GetValueOfInt(Get_Value("VA009_PaymentMethod_ID")) + " AND VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID() + " AND Priority = " + GetPriority() + " AND VAB_Bank_AcctDoc_ID !=" + GetVAB_Bank_AcctDoc_ID())) > 0)
                 {
                     log.SaveError("Error:", Msg.GetMsg(GetCtx(), "RecSamePriority"));
                     return false;

@@ -30,9 +30,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
    public class InvoiceWriteOff:ProcessEngine.SvrProcess
     {
 	//	BPartner				
-	private int			_C_BPartner_ID = 0;
+	private int			_VAB_BusinessPartner_ID = 0;
 	// BPartner Group			
-	private int			_C_BP_Group_ID = 0;
+	private int			_VAB_BPart_Category_ID = 0;
 	//	Invoice					
 	private int			_C_Invoice_ID = 0;
 	
@@ -52,7 +52,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	// Create Payment			
 	private Boolean		_CreatePayment = false;
 	// Bank Account			
-	private int			_C_BankAccount_ID = 0;
+	private int			_VAB_Bank_Acct_ID = 0;
 	// Simulation				
 	private Boolean		_IsSimulation = true;
 
@@ -74,13 +74,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 ;
             }
-            else if (name.Equals("C_BPartner_ID"))
+            else if (name.Equals("VAB_BusinessPartner_ID"))
             {
-                _C_BPartner_ID = para[i].GetParameterAsInt();
+                _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
             }
-            else if (name.Equals("C_BP_Group_ID"))
+            else if (name.Equals("VAB_BPart_Category_ID"))
             {
-                _C_BP_Group_ID = para[i].GetParameterAsInt();
+                _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
             }
             else if (name.Equals("C_Invoice_ID"))
             {
@@ -110,9 +110,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 _CreatePayment = "Y".Equals(para[i].GetParameter());
             }
-            else if (name.Equals("C_BankAccount_ID"))
+            else if (name.Equals("VAB_Bank_Acct_ID"))
             {
-                _C_BankAccount_ID = para[i].GetParameterAsInt();
+                _VAB_Bank_Acct_ID = para[i].GetParameterAsInt();
             }
             //
             else if (name.Equals("IsSimulation"))
@@ -132,27 +132,27 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>message</returns>
 	protected override String DoIt () 
 	{
-		log.Info("C_BPartner_ID=" + _C_BPartner_ID 
-			+ ", C_BP_Group_ID=" + _C_BP_Group_ID
+		log.Info("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID 
+			+ ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID
 			+ ", C_Invoice_ID=" + _C_Invoice_ID
 			+ "; APAR=" + _APAR
 			+ ", " + _DateInvoiced_From + " - " + _DateInvoiced_To
 			+ "; CreatePayment=" + _CreatePayment
-			+ ", C_BankAccount_ID=" + _C_BankAccount_ID);
+			+ ", VAB_Bank_Acct_ID=" + _VAB_Bank_Acct_ID);
 		//
-        if (_C_BPartner_ID == 0 && _C_Invoice_ID == 0 && _C_BP_Group_ID == 0)
+        if (_VAB_BusinessPartner_ID == 0 && _C_Invoice_ID == 0 && _VAB_BPart_Category_ID == 0)
         {
-            throw new Exception("@FillMandatory@ @C_Invoice_ID@ / @C_BPartner_ID@ / ");
+            throw new Exception("@FillMandatory@ @C_Invoice_ID@ / @VAB_BusinessPartner_ID@ / ");
         }
 		//
-        if (_CreatePayment && _C_BankAccount_ID == 0)
+        if (_CreatePayment && _VAB_Bank_Acct_ID == 0)
         {
-            throw new Exception("@FillMandatory@  @C_BankAccount_ID@");
+            throw new Exception("@FillMandatory@  @VAB_Bank_Acct_ID@");
         }
 		//
 		StringBuilder sql = new StringBuilder(
 			"SELECT C_Invoice_ID,DocumentNo,DateInvoiced,"
-			+ "C_Currency_ID,GrandTotal,invoiceOpen(C_Invoice_ID, 0) AS OpenAmt"
+			+ "VAB_Currency_ID,GrandTotal,invoiceOpen(C_Invoice_ID, 0) AS OpenAmt"
 			+ " FROM C_Invoice WHERE ");
         if (_C_Invoice_ID != 0)
         {
@@ -160,14 +160,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
         else
         {
-            if (_C_BPartner_ID != 0)
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql.Append("C_BPartner_ID= ").Append(_C_BPartner_ID);
+                sql.Append("VAB_BusinessPartner_ID= ").Append(_VAB_BusinessPartner_ID);
             }
             else
             {
-                sql.Append("EXISTS (SELECT * FROM C_BPartner bp WHERE C_Invoice.C_BPartner_ID=bp.C_BPartner_ID AND bp.C_BP_Group_ID=")
-                               .Append(_C_BP_Group_ID).Append(")");
+                sql.Append("EXISTS (SELECT * FROM VAB_BusinessPartner bp WHERE C_Invoice.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND bp.VAB_BPart_Category_ID=")
+                               .Append(_VAB_BPart_Category_ID).Append(")");
             }
             //
             if (_ONLY_AR.Equals(_APAR))
@@ -197,7 +197,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     .Append(DataBase.DB.TO_DATE(_DateInvoiced_To, true));
             }
         }
-		sql.Append(" AND IsPaid='N' ORDER BY C_Currency_ID, C_BPartner_ID,DateInvoiced");
+		sql.Append(" AND IsPaid='N' ORDER BY VAB_Currency_ID, VAB_BusinessPartner_ID,DateInvoiced");
 		log.Finer(sql.ToString());
        // DataTable dt = null;
         IDataReader idr = null;
@@ -239,11 +239,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <param name="C_Invoice_ID"></param>
 	/// <param name="DocumentNo"></param>
 	/// <param name="DateInvoiced"></param>
-	/// <param name="C_Currency_ID"></param>
+	/// <param name="VAB_Currency_ID"></param>
 	/// <param name="OpenAmt"></param>
     /// <returns>true if written off</returns>
 	private Boolean writeOff (int C_Invoice_ID, String DocumentNo, DateTime? DateInvoiced, 
-		int C_Currency_ID, Decimal OpenAmt)
+		int VAB_Currency_ID, Decimal OpenAmt)
 	{
 		//	Nothing to do
         if ( Env.Signum(OpenAmt) == 0)
@@ -268,11 +268,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             OpenAmt =Decimal.Negate( OpenAmt);
         }
 		//	Allocation
-		if (_m_alloc == null || C_Currency_ID != _m_alloc.GetC_Currency_ID())
+		if (_m_alloc == null || VAB_Currency_ID != _m_alloc.GetVAB_Currency_ID())
 		{
 			ProcessAllocation();
 			_m_alloc = new MAllocationHdr (GetCtx(), true, 
-				_DateAcct, C_Currency_ID,
+				_DateAcct, VAB_Currency_ID,
 				GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID(), Get_TrxName());
 			_m_alloc.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
 			if (!_m_alloc.Save())
@@ -284,20 +284,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Payment
 		if (_CreatePayment 
 			&& (_m_payment == null 
-				|| invoice.GetC_BPartner_ID() != _m_payment.GetC_BPartner_ID()
-				|| C_Currency_ID != _m_payment.GetC_Currency_ID()))
+				|| invoice.GetVAB_BusinessPartner_ID() != _m_payment.GetVAB_BusinessPartner_ID()
+				|| VAB_Currency_ID != _m_payment.GetVAB_Currency_ID()))
 		{
 			ProcessPayment();
 			_m_payment = new MPayment(GetCtx(), 0, Get_TrxName());
 			_m_payment.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
-			_m_payment.SetC_BankAccount_ID(_C_BankAccount_ID);
+			_m_payment.SetVAB_Bank_Acct_ID(_VAB_Bank_Acct_ID);
 			_m_payment.SetTenderType(MPayment.TENDERTYPE_Check);
 			_m_payment.SetDateTrx(_DateAcct);
 			_m_payment.SetDateAcct(_DateAcct);
 			_m_payment.SetDescription(GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID());
-			_m_payment.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+			_m_payment.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
 			_m_payment.SetIsReceipt(true);	//	payments are negative
-			_m_payment.SetC_Currency_ID(C_Currency_ID);
+			_m_payment.SetVAB_Currency_ID(VAB_Currency_ID);
 			if (!_m_payment.Save())
 			{
 				log.Log(Level.SEVERE, "Cannot create payment");

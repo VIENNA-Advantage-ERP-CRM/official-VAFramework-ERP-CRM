@@ -73,7 +73,7 @@ namespace VAdvantage.Model
             SetVAF_Job_ID(info.GetVAF_Job_ID());
             SetVAF_TableView_ID(info.GetVAF_TableView_ID());
             SetRecord_ID(info.GetRecord_ID());
-            SetC_BPartner_ID(info.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(info.GetVAB_BusinessPartner_ID());
         }	//	MArchive
 
         public override string ToString()

@@ -29,7 +29,7 @@ namespace ViennaAdvantage.Process
 
         #region Variables
         List<CurrencyProp> _lstCurr = null;
-        int C_CurrencySource_ID = 0;
+        int VAB_CurrencySource_ID = 0;
         string myCurrency = "";
         int myCurrencyID = 0;
         StringBuilder sql = new StringBuilder();
@@ -47,9 +47,9 @@ namespace ViennaAdvantage.Process
             //    {
             //        ;
             //    }
-            //    else if (name.Equals("C_CurrencySource_ID"))
+            //    else if (name.Equals("VAB_CurrencySource_ID"))
             //    {
-            //        C_CurrencySource_ID = para[i].GetParameterAsInt();
+            //        VAB_CurrencySource_ID = para[i].GetParameterAsInt();
             //    }
             //    else
             //    {
@@ -74,12 +74,12 @@ namespace ViennaAdvantage.Process
                 ds = DB.ExecuteDataset(@"SELECT DISTINCT cl.VAF_Client_ID,
                                           cl.VAF_Org_ID,
                                           cl.CurrencyRateUpdateFrequency,
-                                          acct.C_Currency_ID
-                                          ,cr.ISO_Code,cl.C_CurrencySource_ID
+                                          acct.VAB_Currency_ID
+                                          ,cr.ISO_Code,cl.VAB_CurrencySource_ID
                                         FROM VAF_Client cl
-                                        INNER JOIN C_AcctSchema acct
+                                        INNER JOIN VAB_AccountBook acct
                                         ON acct.VAF_Client_ID =cl.VAF_Client_ID
-                                        INNER JOIN C_Currency cr on cr.C_Currency_ID=acct.C_Currency_ID
+                                        INNER JOIN VAB_Currency cr on cr.VAB_Currency_ID=acct.VAB_Currency_ID
                                         WHERE cl.IsActive='Y' AND cl.VAF_Client_ID!=0 AND cl.UpdateCurrencyRate='A' AND cl.IsMultiCurrency='Y'
                                         AND acct.IsActive='Y' AND cl.currencyrateupdatefrequency IS NOT NULL", null, Get_Trx());
 
@@ -99,15 +99,15 @@ namespace ViennaAdvantage.Process
                 {
                     CurrencyProp _curr = new CurrencyProp();
                     _curr.baseCurrency = Convert.ToString(ds.Tables[0].Rows[j]["ISO_Code"]);
-                    _curr.baseCurrencyID = Convert.ToInt32(ds.Tables[0].Rows[j]["C_Currency_ID"]);
+                    _curr.baseCurrencyID = Convert.ToInt32(ds.Tables[0].Rows[j]["VAB_Currency_ID"]);
                     _curr.frequency = Convert.ToString(ds.Tables[0].Rows[j]["CurrencyRateUpdateFrequency"]);
                     _curr.VAF_Client_ID = Convert.ToInt32(ds.Tables[0].Rows[j]["VAF_Client_ID"]);
                     _curr.VAF_Org_ID = Convert.ToInt32(ds.Tables[0].Rows[j]["VAF_Org_ID"]);
-                    _curr.CurrencySource = Convert.ToInt32(ds.Tables[0].Rows[j]["C_CurrencySource_ID"]);
+                    _curr.CurrencySource = Convert.ToInt32(ds.Tables[0].Rows[j]["VAB_CurrencySource_ID"]);
                     _lstCurr.Add(_curr);
                 }
                 ds.Clear();
-                sql.Append(@"Select Cur.ISO_Code, Cur.C_Currency_ID From C_Currency Cur  Where Cur.IsMyCurrency='Y' And Cur.IsActive='Y' ");
+                sql.Append(@"Select Cur.ISO_Code, Cur.VAB_Currency_ID From VAB_Currency Cur  Where Cur.IsMyCurrency='Y' And Cur.IsActive='Y' ");
                 ds = DB.ExecuteDataset(sql.ToString(), null, Get_Trx()); // Here we get all currencies in which our Client is in dealing with 
 
                 if (ds != null)
@@ -115,7 +115,7 @@ namespace ViennaAdvantage.Process
                     for (Int32 k = 0; k < _lstCurr.Count; k++)
                     {
                         sql.Clear();        // Get UTRL and Api Key From Currency Source
-                        sql.Append("SELECT URL, ApiKey FROM C_CurrencySource WHERE C_CurrencySource_ID=" + _lstCurr[k].CurrencySource);
+                        sql.Append("SELECT URL, ApiKey FROM VAB_CurrencySource WHERE VAB_CurrencySource_ID=" + _lstCurr[k].CurrencySource);
                         DataSet dsSource = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                         if (dsSource != null && dsSource.Tables.Count > 0 && dsSource.Tables[0].Rows.Count > 0)
@@ -132,14 +132,14 @@ namespace ViennaAdvantage.Process
                                 content = GetConvertedCurrencyValue("", "", currencySourceName, apiKey);
                             }
 
-                            DataSet dsConversion = DB.ExecuteDataset(@"SELECT C_ConversionType_id, Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency 
-                                                    FROM c_conversiontype WHERE isautocalculate='Y' AND isactive   ='Y'", null, Get_Trx());
+                            DataSet dsConversion = DB.ExecuteDataset(@"SELECT VAB_CurrencyType_id, Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency 
+                                                    FROM VAB_CurrencyType WHERE isautocalculate='Y' AND isactive   ='Y'", null, Get_Trx());
                             if (dsConversion != null && dsConversion.Tables[0].Rows.Count > 0)
                             {
                                 for (int x = 0; x < dsConversion.Tables[0].Rows.Count; x++)
                                 {
                                     int defaultconversionType = 0;
-                                    defaultconversionType = Convert.ToInt32(dsConversion.Tables[0].Rows[x]["C_ConversionType_id"]);
+                                    defaultconversionType = Convert.ToInt32(dsConversion.Tables[0].Rows[x]["VAB_CurrencyType_id"]);
 
                                     MConversionRate conversion = null;
                                     Decimal rate1 = 0;
@@ -158,7 +158,7 @@ namespace ViennaAdvantage.Process
                                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                                     {
                                         myCurrency = ds.Tables[0].Rows[i]["ISO_Code"].ToString();
-                                        myCurrencyID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
+                                        myCurrencyID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Currency_ID"]);
 
                                         if (!String.IsNullOrEmpty(currencySourceName) && currencySourceName.ToLower().Contains("pwebapps.ezv.admin.ch"))
                                         {
@@ -215,9 +215,9 @@ namespace ViennaAdvantage.Process
                                                     conversion.SetValidTo(DateTime.Now.AddMonths(1));
                                                 }
 
-                                                conversion.SetC_ConversionType_ID(defaultconversionType);
-                                                conversion.SetC_Currency_ID(myCurrencyID);
-                                                conversion.SetC_Currency_To_ID(318);
+                                                conversion.SetVAB_CurrencyType_ID(defaultconversionType);
+                                                conversion.SetVAB_Currency_ID(myCurrencyID);
+                                                conversion.SetVAB_Currency_To_ID(318);
 
                                                 rate1 = Convert.ToDecimal(exchangeRate);
                                                 conversion.SetMultiplyRate(rate1);
@@ -271,9 +271,9 @@ namespace ViennaAdvantage.Process
                                                         conversion.SetValidTo(DateTime.Now.AddMonths(1));
                                                     }
 
-                                                    conversion.SetC_ConversionType_ID(defaultconversionType);
-                                                    conversion.SetC_Currency_ID(myCurrencyID);
-                                                    conversion.SetC_Currency_To_ID(301);
+                                                    conversion.SetVAB_CurrencyType_ID(defaultconversionType);
+                                                    conversion.SetVAB_Currency_ID(myCurrencyID);
+                                                    conversion.SetVAB_Currency_To_ID(301);
 
                                                     rate1 = Convert.ToDecimal(exchangeRate);
                                                     conversion.SetMultiplyRate(rate1);
@@ -287,9 +287,9 @@ namespace ViennaAdvantage.Process
                                         else
                                         {
                                             sql.Clear();
-                                            sql.Append(@"Select ValidTo from C_Conversion_Rate  where IsActive='Y' AND C_ConversionType_id=" + defaultconversionType + " AND  C_Currency_ID=" + _lstCurr[k].baseCurrencyID + " AND C_Currency_To_ID=" + myCurrencyID
-                                                 + "  AND Created=(SELECT Max(Created) FROM C_Conversion_Rate  WHERE isactive ='Y' AND C_ConversionType_id=" + defaultconversionType + " AND "
-                                                 + "  C_Currency_ID   =" + _lstCurr[k].baseCurrencyID + "  AND C_Currency_To_ID=" + myCurrencyID + ") AND VAF_Client_ID = " + _lstCurr[k].VAF_Client_ID + "AND VAF_Org_ID= " + _lstCurr[k].VAF_Org_ID);
+                                            sql.Append(@"Select ValidTo from VAB_ExchangeRate  where IsActive='Y' AND VAB_CurrencyType_id=" + defaultconversionType + " AND  VAB_Currency_ID=" + _lstCurr[k].baseCurrencyID + " AND VAB_Currency_To_ID=" + myCurrencyID
+                                                 + "  AND Created=(SELECT Max(Created) FROM VAB_ExchangeRate  WHERE isactive ='Y' AND VAB_CurrencyType_id=" + defaultconversionType + " AND "
+                                                 + "  VAB_Currency_ID   =" + _lstCurr[k].baseCurrencyID + "  AND VAB_Currency_To_ID=" + myCurrencyID + ") AND VAF_Client_ID = " + _lstCurr[k].VAF_Client_ID + "AND VAF_Org_ID= " + _lstCurr[k].VAF_Org_ID);
                                             //the Maximum date from Converted rate of every currency
                                             object validDate = DB.ExecuteScalar(sql.ToString(), null, Get_Trx());
                                             //Check if valid date available.. and less than current date..
@@ -320,9 +320,9 @@ namespace ViennaAdvantage.Process
                                                             conversion.SetValidTo(DateTime.Now.AddMonths(1));
                                                         }
 
-                                                        conversion.SetC_ConversionType_ID(defaultconversionType);
-                                                        conversion.SetC_Currency_ID(_lstCurr[k].baseCurrencyID);
-                                                        conversion.SetC_Currency_To_ID(myCurrencyID);
+                                                        conversion.SetVAB_CurrencyType_ID(defaultconversionType);
+                                                        conversion.SetVAB_Currency_ID(_lstCurr[k].baseCurrencyID);
+                                                        conversion.SetVAB_Currency_To_ID(myCurrencyID);
 
                                                         rate2 = VAdvantage.Utility.Env.ZERO;
                                                         one = new Decimal(1.0);

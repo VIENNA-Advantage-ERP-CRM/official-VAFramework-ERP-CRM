@@ -57,7 +57,7 @@ namespace VAdvantage.Acct
             _TrxAmt = line.GetTrxAmt();
             //
             SetDateDoc(line.GetValutaDate());
-            SetC_BPartner_ID(line.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
         }
 
 

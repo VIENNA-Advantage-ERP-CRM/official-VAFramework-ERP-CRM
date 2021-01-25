@@ -50,19 +50,19 @@ namespace VAdvantage.Model
         }
 
         public MCostForeignCurrency(int VAF_Org_ID, MProduct product, int M_AttributeSetInstance_ID,
-              int M_CostElement_ID, int C_BPartner_ID, int C_Currency_ID)
+              int M_CostElement_ID, int VAB_BusinessPartner_ID, int VAB_Currency_ID)
             : this(product.GetCtx(), 0, product.Get_TrxName())
         {
             SetClientOrg(product.GetVAF_Client_ID(), VAF_Org_ID);
             SetM_Product_ID(product.GetM_Product_ID());
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetM_CostElement_ID(M_CostElement_ID);
-            SetC_BPartner_ID(C_BPartner_ID);
-            SetC_Currency_ID(C_Currency_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
+            SetVAB_Currency_ID(VAB_Currency_ID);
         }
 
         public static MCostForeignCurrency Get(MProduct product, int M_AttributeSetInstance_ID, int VAF_Org_ID, int M_CostElement_ID,
-            int C_BPartner_ID, int C_Currency_ID)
+            int VAB_BusinessPartner_ID, int VAB_Currency_ID)
         {
             MCostForeignCurrency foreignCurrency = null;
             String sql = "SELECT * "
@@ -71,8 +71,8 @@ namespace VAdvantage.Model
                 + " AND M_Product_ID=" + product.GetM_Product_ID()
                 + " AND NVL(M_AttributeSetInstance_ID , 0) =" + M_AttributeSetInstance_ID
                 + " AND M_CostElement_ID=" + M_CostElement_ID
-                + " AND C_BPartner_ID = " + C_BPartner_ID
-                + " AND C_Currency_ID = " + C_Currency_ID;
+                + " AND VAB_BusinessPartner_ID = " + VAB_BusinessPartner_ID
+                + " AND VAB_Currency_ID = " + VAB_Currency_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
             //	New
             if (foreignCurrency == null)
                 foreignCurrency = new MCostForeignCurrency(VAF_Org_ID, product, M_AttributeSetInstance_ID,
-                     M_CostElement_ID, C_BPartner_ID, C_Currency_ID);
+                     M_CostElement_ID, VAB_BusinessPartner_ID, VAB_Currency_ID);
             return foreignCurrency;
         }
 
@@ -120,11 +120,11 @@ namespace VAdvantage.Model
                 if (invoiceLine.IsFutureCostCalculated())
                     return true;
 
-                acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.c_acctschema_id FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci
-                                    ON ci.c_acctschema1_id = asch.c_acctschema_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
+                acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
+                                    ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
                 acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
 
-                if (acctSchema.GetC_Currency_ID() != invoice.GetC_Currency_ID())
+                if (acctSchema.GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
                 {
                     // Get Costing Element of Av. Invoice
                     M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_CostElement_ID FROM M_CostElement WHERE VAF_Client_ID = "
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                             M_ASI_ID = invoiceLine.GetM_AttributeSetInstance_ID();
                         }
 
-                        foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetC_BPartner_ID(), invoice.GetC_Currency_ID());
+                        foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
                         foreignCost.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), invoiceLine.GetQtyInvoiced()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), invoiceLine.GetLineNetAmt()));
@@ -221,11 +221,11 @@ namespace VAdvantage.Model
                 if (inoutLine.IsFutureCostCalculated())
                     return true;
 
-                acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.c_acctschema_id FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci
-                                    ON ci.c_acctschema1_id = asch.c_acctschema_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
+                acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
+                                    ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
                 acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
 
-                if (acctSchema.GetC_Currency_ID() != order.GetC_Currency_ID())
+                if (acctSchema.GetVAB_Currency_ID() != order.GetVAB_Currency_ID())
                 {
                     // Get Costing Element of Average PO
                     M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_CostElement_ID FROM M_CostElement WHERE VAF_Client_ID = "
@@ -262,7 +262,7 @@ namespace VAdvantage.Model
                             M_ASI_ID = orderLine.GetM_AttributeSetInstance_ID();
                         }
 
-                        foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetC_BPartner_ID(), order.GetC_Currency_ID());
+                        foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
                         foreignCost.SetC_Order_ID(order.GetC_Order_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), inoutLine.GetMovementQty()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(),
@@ -328,11 +328,11 @@ namespace VAdvantage.Model
 
                 if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
                 {
-                    acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.c_acctschema_id FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci
-                                    ON ci.c_acctschema1_id = asch.c_acctschema_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
+                    acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
+                                    ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
                     acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
 
-                    if (acctSchema.GetC_Currency_ID() != invoice.GetC_Currency_ID())
+                    if (acctSchema.GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
                     {
                         // Get Costing Element of Av. Invoice
                         M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_CostElement_ID FROM M_CostElement WHERE VAF_Client_ID = "
@@ -369,7 +369,7 @@ namespace VAdvantage.Model
                                 M_ASI_ID = ASI;
                             }
 
-                            foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetC_BPartner_ID(), invoice.GetC_Currency_ID());
+                            foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
                             foreignCost.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(invoiceLine.GetPriceActual(), matchQty)));
@@ -419,11 +419,11 @@ namespace VAdvantage.Model
 
                 if (!order.IsSOTrx() && !order.IsReturnTrx())
                 {
-                    acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.c_acctschema_id FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci
-                                    ON ci.c_acctschema1_id = asch.c_acctschema_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
+                    acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
+                                    ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
                     acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
 
-                    if (acctSchema.GetC_Currency_ID() != order.GetC_Currency_ID())
+                    if (acctSchema.GetVAB_Currency_ID() != order.GetVAB_Currency_ID())
                     {
                         // Get Costing Element of Av. PO
                         M_CostElement_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT M_CostElement_ID FROM M_CostElement WHERE VAF_Client_ID = "
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
                                 M_ASI_ID = ASI;
                             }
 
-                            foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetC_BPartner_ID(), order.GetC_Currency_ID());
+                            foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
                             foreignCost.SetC_Order_ID(order.GetC_Order_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(orderLine.GetPriceActual(), matchQty)));

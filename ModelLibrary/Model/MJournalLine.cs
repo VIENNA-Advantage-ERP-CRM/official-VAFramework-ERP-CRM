@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             {
                 //	setGL_JournalLine_ID (0);		//	PK
                 //	setGL_Journal_ID (0);			//	Parent
-                //	setC_Currency_ID (0);
+                //	setVAB_Currency_ID (0);
                 //	setC_ValidCombination_ID (0);
                 SetLine(0);
                 SetAmtAcctCr(Env.ZERO);
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
                 SetAmtSourceCr(Env.ZERO);
                 SetAmtSourceDr(Env.ZERO);
                 SetCurrencyRate(Env.ONE);
-                //	setC_ConversionType_ID (0);
+                //	setVAB_CurrencyType_ID (0);
                 //SetDateAcct (new Timestamp(System.currentTimeMillis()));
                 SetDateAcct(DateTime.Now);
                 SetIsGenerated(true);
@@ -78,8 +78,8 @@ namespace VAdvantage.Model
             //this (parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
             SetGL_Journal_ID(parent.GetGL_Journal_ID());
-            SetC_Currency_ID(parent.GetC_Currency_ID());
-            SetC_ConversionType_ID(parent.GetC_ConversionType_ID());
+            SetVAB_Currency_ID(parent.GetVAB_Currency_ID());
+            SetVAB_CurrencyType_ID(parent.GetVAB_CurrencyType_ID());
             SetDateAcct(parent.GetDateAcct());
 
         }	//	MJournalLine
@@ -94,15 +94,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Currency Info
         /// </summary>
-        /// <param name="C_Currency_ID">currency</param>
-        /// <param name="C_ConversionType_ID">type</param>
+        /// <param name="VAB_Currency_ID">currency</param>
+        /// <param name="VAB_CurrencyType_ID">type</param>
         /// <param name="CurrencyRate">rate</param>
-        public void SetCurrency(int C_Currency_ID, int C_ConversionType_ID, Decimal? CurrencyRate)
+        public void SetCurrency(int VAB_Currency_ID, int VAB_CurrencyType_ID, Decimal? CurrencyRate)
         {
-            SetC_Currency_ID(C_Currency_ID);
-            if (C_ConversionType_ID != 0)
+            SetVAB_Currency_ID(VAB_Currency_ID);
+            if (VAB_CurrencyType_ID != 0)
             {
-                SetC_ConversionType_ID(C_ConversionType_ID);
+                SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
             }
             //if (CurrencyRate != null && CurrencyRate.signum() == 0)
             if (CurrencyRate != null && Env.Signum(CurrencyRate.Value) == 0)
@@ -112,18 +112,18 @@ namespace VAdvantage.Model
         }	//	setCurrency
 
         /// <summary>
-        /// Set C_Currency_ID and precision
+        /// Set VAB_Currency_ID and precision
         /// </summary>
-        /// <param name="C_Currency_ID">currency</param>
-        public new void SetC_Currency_ID(int C_Currency_ID)
+        /// <param name="VAB_Currency_ID">currency</param>
+        public new void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID == 0)
+            if (VAB_Currency_ID == 0)
             {
                 return;
             }
-            base.SetC_Currency_ID(C_Currency_ID);
-            m_precision = MCurrency.GetStdPrecision(GetCtx(), C_Currency_ID);
-        }	//	setC_Currency_ID
+            base.SetVAB_Currency_ID(VAB_Currency_ID);
+            m_precision = MCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
+        }	//	setVAB_Currency_ID
 
         /// <summary>
         ///	Get Currency Precision
@@ -161,46 +161,46 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Rate - Callout.
         /// </summary>
-        /// <param name="oldC_ConversionType_ID">old</param>
-        /// <param name="newC_ConversionType_ID">new</param>
+        /// <param name="oldVAB_CurrencyType_ID">old</param>
+        /// <param name="newVAB_CurrencyType_ID">new</param>
         /// <param name="windowNo">window no</param>
-        public void SetC_ConversionType_ID(String oldC_ConversionType_ID,
-               String newC_ConversionType_ID, int windowNo)
+        public void SetVAB_CurrencyType_ID(String oldVAB_CurrencyType_ID,
+               String newVAB_CurrencyType_ID, int windowNo)
         {
-            if (newC_ConversionType_ID == null || newC_ConversionType_ID.Length == 0)
+            if (newVAB_CurrencyType_ID == null || newVAB_CurrencyType_ID.Length == 0)
             {
                 return;
             }
-            int? C_ConversionType_ID = Utility.Util.GetValueOfInt(newC_ConversionType_ID);
-            if (C_ConversionType_ID == 0)
+            int? VAB_CurrencyType_ID = Utility.Util.GetValueOfInt(newVAB_CurrencyType_ID);
+            if (VAB_CurrencyType_ID == 0)
             {
                 return;
             }
-            SetC_ConversionType_ID(C_ConversionType_ID.Value);
+            SetVAB_CurrencyType_ID(VAB_CurrencyType_ID.Value);
             SetRate(windowNo);
-        }	//	setC_ConversionType_ID
+        }	//	setVAB_CurrencyType_ID
 
         /// <summary>
         /// Set Currency - Callout.
         /// </summary>
-        /// <param name="oldC_Currency_ID">old</param>
-        /// <param name="newC_Currency_ID">new</param>
+        /// <param name="oldVAB_Currency_ID">old</param>
+        /// <param name="newVAB_Currency_ID">new</param>
         /// <param name="windowNo">window no</param>
-        public void SetC_Currency_ID(String oldC_Currency_ID,
-               String newC_Currency_ID, int windowNo)
+        public void SetVAB_Currency_ID(String oldVAB_Currency_ID,
+               String newVAB_Currency_ID, int windowNo)
         {
-            if (newC_Currency_ID == null || newC_Currency_ID.Length == 0)
+            if (newVAB_Currency_ID == null || newVAB_Currency_ID.Length == 0)
             {
                 return;
             }
-            int? C_Currency_ID = Utility.Util.GetValueOfInt(newC_Currency_ID);
-            if (C_Currency_ID == 0)
+            int? VAB_Currency_ID = Utility.Util.GetValueOfInt(newVAB_Currency_ID);
+            if (VAB_Currency_ID == 0)
             {
                 return;
             }
-            SetC_Currency_ID(C_Currency_ID.Value);
+            SetVAB_Currency_ID(VAB_Currency_ID.Value);
             SetRate(windowNo);
-        }	//	setC_Currency_ID
+        }	//	setVAB_Currency_ID
 
         /// <summary>
         /// set rate
@@ -209,9 +209,9 @@ namespace VAdvantage.Model
         private void SetRate(int windowNo)
         {
             //  Source info
-            int? C_Currency_ID = GetC_Currency_ID();
-            int? C_ConversionType_ID = GetC_ConversionType_ID();
-            if (C_Currency_ID == 0 || C_ConversionType_ID == 0)
+            int? VAB_Currency_ID = GetVAB_Currency_ID();
+            int? VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+            if (VAB_Currency_ID == 0 || VAB_CurrencyType_ID == 0)
             {
                 return;
             }
@@ -221,13 +221,13 @@ namespace VAdvantage.Model
                 DateAcct = DateTime.Now;// new Timestamp(System.currentTimeMillis());
             }
             //
-            int? C_AcctSchema_ID = GetCtx().GetContextAsInt(windowNo, "C_AcctSchema_ID");
-            MAcctSchema ass = MAcctSchema.Get(GetCtx(), C_AcctSchema_ID.Value);
+            int? VAB_AccountBook_ID = GetCtx().GetContextAsInt(windowNo, "VAB_AccountBook_ID");
+            MAcctSchema ass = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID.Value);
             int? VAF_Client_ID = GetVAF_Client_ID();
             int? VAF_Org_ID = GetVAF_Org_ID();
 
-            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(C_Currency_ID.Value, ass.GetC_Currency_ID(),
-                DateAcct, C_ConversionType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
+            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(VAB_Currency_ID.Value, ass.GetVAB_Currency_ID(),
+                DateAcct, VAB_CurrencyType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
             log.Fine("rate = " + CurrencyRate);
             if (CurrencyRate == null)
             {
@@ -346,9 +346,9 @@ namespace VAdvantage.Model
         /// <param name="windowNo">window no</param>
         private void SetAmt(int windowNo)
         {
-            //  Get Target Currency & Precision from C_AcctSchema.C_Currency_ID
-            int? C_AcctSchema_ID = GetCtx().GetContextAsInt(windowNo, "C_AcctSchema_ID");
-            MAcctSchema ass = MAcctSchema.Get(GetCtx(), C_AcctSchema_ID.Value);
+            //  Get Target Currency & Precision from VAB_AccountBook.VAB_Currency_ID
+            int? VAB_AccountBook_ID = GetCtx().GetContextAsInt(windowNo, "VAB_AccountBook_ID");
+            MAcctSchema ass = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID.Value);
             int? Precision = ass.GetStdPrecision();
 
             Decimal? CurrencyRate = GetCurrencyRate();
@@ -461,8 +461,8 @@ namespace VAdvantage.Model
             Decimal? rate = GetCurrencyRate();
 
             // set precision value based on cuurenncy define on GL Journal
-            m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM c_currency WHERE c_currency_id = 
-                            ( SELECT c_currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+            m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM VAB_Currency WHERE VAB_Currency_id = 
+                            ( SELECT VAB_Currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
 
             Decimal valuesRate = 0;
             Decimal valuesRateCredit = 0;
@@ -593,23 +593,23 @@ namespace VAdvantage.Model
         /** Update combination and optionally **/
         private bool GetOrCreateCombination(Boolean newRecord)
         {
-            int Account_ID = 0, C_SubAcct_ID = 0, M_Product_ID = 0, C_BPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
-                C_LocFrom_ID = 0, C_LocTo_ID = 0, C_SalesRegion_ID = 0, C_Project_ID = 0, C_Campaign_ID = 0,
-                C_Activity_ID = 0, User1_ID = 0, User2_ID = 0;
+            int Account_ID = 0, C_SubAcct_ID = 0, M_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
+                C_LocFrom_ID = 0, C_LocTo_ID = 0, C_SalesRegion_ID = 0, C_Project_ID = 0, VAB_Promotion_ID = 0,
+                VAB_BillingCode_ID = 0, User1_ID = 0, User2_ID = 0;
 
             if (GetC_ValidCombination_ID() == 0
                     || (!newRecord && (Is_ValueChanged("Account_ID")
                             || Is_ValueChanged("M_Product_ID")
-                            || Is_ValueChanged("C_BPartner_ID")
+                            || Is_ValueChanged("VAB_BusinessPartner_ID")
                             || Is_ValueChanged("VAF_Org_ID")
                             || Is_ValueChanged("C_Project_ID")
-                            || Is_ValueChanged("C_Campaign_ID")
-                            || Is_ValueChanged("C_Activity_ID"))))
+                            || Is_ValueChanged("VAB_Promotion_ID")
+                            || Is_ValueChanged("VAB_BillingCode_ID"))))
             {
                 MJournal gl = new MJournal(GetCtx(), GetGL_Journal_ID(), Get_TrxName());
 
                 // Validate all mandatory combinations are set
-                MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetC_AcctSchema_ID());
+                MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetVAB_AccountBook_ID());
                 MAcctSchemaElement[] elements = MAcctSchemaElement.GetAcctSchemaElements(asc);
                 for (int i = 0; i < elements.Length; i++)
                 {
@@ -619,12 +619,12 @@ namespace VAdvantage.Model
                         Account_ID = Util.GetValueOfInt(Get_Value("Account_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("C_SubAcct_ID") > 0)
                         C_SubAcct_ID = Util.GetValueOfInt(Get_Value("C_SubAcct_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et) && Get_ColumnIndex("C_Activity_ID") > 0)
-                        C_Activity_ID = Util.GetValueOfInt(Get_Value("C_Activity_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et) && Get_ColumnIndex("C_BPartner_ID") > 0)
-                        C_BPartner_ID = Util.GetValueOfInt(Get_Value("C_BPartner_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et) && Get_ColumnIndex("C_BPartner_ID") > 0)
-                        C_BPartner_ID = Util.GetValueOfInt(Get_Value("C_BPartner_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et) && Get_ColumnIndex("VAB_BillingCode_ID") > 0)
+                        VAB_BillingCode_ID = Util.GetValueOfInt(Get_Value("VAB_BillingCode_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
+                        VAB_BusinessPartner_ID = Util.GetValueOfInt(Get_Value("VAB_BusinessPartner_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
+                        VAB_BusinessPartner_ID = Util.GetValueOfInt(Get_Value("VAB_BusinessPartner_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(et))
                         VAF_Org_ID = GetVAF_Org_ID();
                     if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
@@ -637,8 +637,8 @@ namespace VAdvantage.Model
                         M_Product_ID = Util.GetValueOfInt(Get_Value("M_Product_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("C_Project_ID") > 0)
                         C_Project_ID = Util.GetValueOfInt(Get_Value("C_Project_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("C_Campaign_ID") > 0)
-                        C_Campaign_ID = Util.GetValueOfInt(Get_Value("C_Campaign_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Promotion_ID") > 0)
+                        VAB_Promotion_ID = Util.GetValueOfInt(Get_Value("VAB_Promotion_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et) && Get_ColumnIndex("C_SalesRegion_ID") > 0)
                         C_SalesRegion_ID = Util.GetValueOfInt(Get_Value("C_SalesRegion_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(et) && Get_ColumnIndex("User1_ID") > 0)
@@ -647,9 +647,9 @@ namespace VAdvantage.Model
                         User2_ID = Util.GetValueOfInt(Get_Value("User2_ID"));
                 }
 
-                MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetC_AcctSchema_ID(), Account_ID,
-                        C_SubAcct_ID, M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
-                        C_Project_ID, C_Campaign_ID, C_Activity_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
+                        C_SubAcct_ID, M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
+                        C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
                 if (acct != null)
                 {
@@ -686,10 +686,10 @@ namespace VAdvantage.Model
                     if (combi.GetM_Product_ID() > 0)
                         Set_Value("M_Product_ID", combi.GetM_Product_ID());
                 }
-                if (Get_ColumnIndex("C_BPartner_ID") > 0)
+                if (Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
                 {
-                    if (combi.GetC_BPartner_ID() > 0)
-                        Set_Value("C_BPartner_ID", combi.GetC_BPartner_ID());
+                    if (combi.GetVAB_BusinessPartner_ID() > 0)
+                        Set_Value("VAB_BusinessPartner_ID", combi.GetVAB_BusinessPartner_ID());
                 }
                 if (Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
                     Set_Value("VAF_OrgTrx_ID", combi.GetVAF_OrgTrx_ID() > 0 ? combi.GetVAF_OrgTrx_ID() : 0);
@@ -703,10 +703,10 @@ namespace VAdvantage.Model
                     Set_Value("C_SalesRegion_ID", combi.GetC_SalesRegion_ID() > 0 ? combi.GetC_SalesRegion_ID() : 0);
                 if (Get_ColumnIndex("C_Project_ID") > 0)
                     Set_Value("C_Project_ID", combi.GetC_Project_ID() > 0 ? combi.GetC_Project_ID() : 0);
-                if (Get_ColumnIndex("C_Campaign_ID") > 0)
-                    Set_Value("C_Campaign_ID", combi.GetC_Campaign_ID() > 0 ? combi.GetC_Campaign_ID() : 0);
-                if (Get_ColumnIndex("C_Activity_ID") > 0)
-                    Set_Value("C_Activity_ID", combi.GetC_Activity_ID() > 0 ? combi.GetC_Activity_ID() : 0);
+                if (Get_ColumnIndex("VAB_Promotion_ID") > 0)
+                    Set_Value("VAB_Promotion_ID", combi.GetVAB_Promotion_ID() > 0 ? combi.GetVAB_Promotion_ID() : 0);
+                if (Get_ColumnIndex("VAB_BillingCode_ID") > 0)
+                    Set_Value("VAB_BillingCode_ID", combi.GetVAB_BillingCode_ID() > 0 ? combi.GetVAB_BillingCode_ID() : 0);
                 if (Get_ColumnIndex("User1_ID") > 0)
                     Set_Value("User1_ID", combi.GetUser1_ID() > 0 ? combi.GetUser1_ID() : 0);
                 if (Get_ColumnIndex("User2_ID") > 0)
@@ -779,10 +779,10 @@ namespace VAdvantage.Model
                 MLineDimension toLine = new MLineDimension(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                toLine.SetC_BPartner_ID(fromLines[i].GetC_BPartner_ID());
-                toLine.SetC_Campaign_ID(fromLines[i].GetC_Campaign_ID());
-                toLine.SetC_ElementValue_ID(fromLines[i].GetC_ElementValue_ID());
-                toLine.SetC_Element_ID(fromLines[i].GetC_Element_ID());
+                toLine.SetVAB_BusinessPartner_ID(fromLines[i].GetVAB_BusinessPartner_ID());
+                toLine.SetVAB_Promotion_ID(fromLines[i].GetVAB_Promotion_ID());
+                toLine.SetVAB_Acct_Element_ID(fromLines[i].GetVAB_Acct_Element_ID());
+                toLine.SetVAB_Element_ID(fromLines[i].GetVAB_Element_ID());
                 toLine.SetC_Location_ID(fromLines[i].GetC_Location_ID());
                 toLine.SetC_Project_ID(fromLines[i].GetC_Project_ID());
                 toLine.SetC_SalesRegion_ID(fromLines[i].GetC_SalesRegion_ID());

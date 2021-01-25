@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_AllocationHdr
+ * Class Used     : X_VAB_DocAllocation
  * Chronological Development
  * Veena Pandey     23-June-2009
  ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAllocationHdr : X_C_AllocationHdr, DocAction
+    public class MAllocationHdr : X_VAB_DocAllocation, DocAction
     {
         /**	Logger						*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MAllocationHdr).FullName);
@@ -42,19 +42,19 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AllocationHdr_ID">id</param>
+        /// <param name="VAB_DocAllocation_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAllocationHdr(Ctx ctx, int C_AllocationHdr_ID, Trx trxName)
-            : base(ctx, C_AllocationHdr_ID, trxName)
+        public MAllocationHdr(Ctx ctx, int VAB_DocAllocation_ID, Trx trxName)
+            : base(ctx, VAB_DocAllocation_ID, trxName)
         {
-            if (C_AllocationHdr_ID == 0)
+            if (VAB_DocAllocation_ID == 0)
             {
                 //	setDocumentNo (null);
                 SetDateTrx(DateTime.Now);
                 SetDateAcct(GetDateTrx());
                 SetDocAction(DOCACTION_Complete);	// CO
                 SetDocStatus(DOCSTATUS_Drafted);	// DR
-                //	setC_Currency_ID (0);
+                //	setVAB_Currency_ID (0);
                 SetApprovalAmt(Env.ZERO);
                 SetIsApproved(false);
                 SetIsManual(false);
@@ -82,10 +82,10 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="IsManual">manual trx</param>
         /// <param name="dateTrx">date (if null today)</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="description">description</param>
         /// <param name="trxName">transaction</param>
-        public MAllocationHdr(Ctx ctx, bool IsManual, DateTime? dateTrx, int C_Currency_ID,
+        public MAllocationHdr(Ctx ctx, bool IsManual, DateTime? dateTrx, int VAB_Currency_ID,
             String description, Trx trxName)
             : this(ctx, 0, trxName)
         {
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
                 SetDateTrx(dateTrx);
                 SetDateAcct(dateTrx);
             }
-            SetC_Currency_ID(C_Currency_ID);
+            SetVAB_Currency_ID(VAB_Currency_ID);
             if (description != null)
                 SetDescription(description);
         }
@@ -109,10 +109,10 @@ namespace VAdvantage.Model
         /// <returns>allocations of payment</returns>
         public static MAllocationHdr[] GetOfPayment(Ctx ctx, int C_Payment_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM C_AllocationHdr h "
+            String sql = "SELECT * FROM VAB_DocAllocation h "
                 + "WHERE IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM C_AllocationLine l "
-                    + "WHERE h.C_AllocationHdr_ID=l.C_AllocationHdr_ID AND l.C_Payment_ID=" + C_Payment_ID + ")";
+                + " AND EXISTS (SELECT * FROM VAB_DocAllocationLine l "
+                    + "WHERE h.VAB_DocAllocation_ID=l.VAB_DocAllocation_ID AND l.C_Payment_ID=" + C_Payment_ID + ")";
             List<MAllocationHdr> list = new List<MAllocationHdr>();
             try
             {
@@ -144,10 +144,10 @@ namespace VAdvantage.Model
         /// <returns>allocations of invoice</returns>
         public static MAllocationHdr[] GetOfInvoice(Ctx ctx, int C_Invoice_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM C_AllocationHdr h "
+            String sql = "SELECT * FROM VAB_DocAllocation h "
                 + "WHERE IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM C_AllocationLine l "
-                    + "WHERE h.C_AllocationHdr_ID=l.C_AllocationHdr_ID AND l.C_Invoice_ID=" + C_Invoice_ID + ")";
+                + " AND EXISTS (SELECT * FROM VAB_DocAllocationLine l "
+                    + "WHERE h.VAB_DocAllocation_ID=l.VAB_DocAllocation_ID AND l.C_Invoice_ID=" + C_Invoice_ID + ")";
             List<MAllocationHdr> list = new List<MAllocationHdr>();
             try
             {
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
             if (_lines != null && _lines.Length != 0 && !requery)
                 return _lines;
             //
-            String sql = "SELECT * FROM C_AllocationLine WHERE C_AllocationHdr_ID=" + GetC_AllocationHdr_ID();
+            String sql = "SELECT * FROM VAB_DocAllocationLine WHERE VAB_DocAllocation_ID=" + GetVAB_DocAllocation_ID();
             List<MAllocationLine> list = new List<MAllocationLine>();
             try
             {
@@ -214,9 +214,9 @@ namespace VAdvantage.Model
             base.SetProcessed(processed);
             if (Get_ID() == 0)
                 return;
-            String sql = "UPDATE C_AllocationHdr SET Processed='"
+            String sql = "UPDATE VAB_DocAllocation SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE C_AllocationHdr_ID=" + GetC_AllocationHdr_ID();
+                + "' WHERE VAB_DocAllocation_ID=" + GetVAB_DocAllocation_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             _lines = null;
             log.Fine(processed + " - #" + no);
@@ -270,7 +270,7 @@ namespace VAdvantage.Model
             }
             //	Mark as Inactive
             SetIsActive(false);		//	updated DB for line delete/process
-            String sql = "UPDATE C_AllocationHdr SET IsActive='N' WHERE C_AllocationHdr_ID=" + GetC_AllocationHdr_ID();
+            String sql = "UPDATE VAB_DocAllocation SET IsActive='N' WHERE VAB_DocAllocation_ID=" + GetVAB_DocAllocation_ID();
             DataBase.DB.ExecuteQuery(sql, null, trxName);
 
             //	Unlink
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < _lines.Length; i++)
             {
                 MAllocationLine line = _lines[i];
-                bps.Add(line.GetC_BPartner_ID());
+                bps.Add(line.GetVAB_BusinessPartner_ID());
                 if (!line.Delete(true, trxName))
                     return false;
             }
@@ -371,7 +371,7 @@ namespace VAdvantage.Model
                 MAllocationLine line = _lines[i];
                 approval = Decimal.Add(Decimal.Add(approval, line.GetWriteOffAmt()), line.GetDiscountAmt());
                 //	Make sure there is BP
-                if (line.GetC_BPartner_ID() == 0)
+                if (line.GetVAB_BusinessPartner_ID() == 0)
                 {
                     _processMsg = "No Business Partner";
                     return DocActionVariables.STATUS_INVALID;
@@ -459,8 +459,8 @@ namespace VAdvantage.Model
                         //    return DocActionVariables.STATUS_INVALID;
                         //}
                         MInvoice invoice = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
-                        MCurrency currency = MCurrency.Get(GetCtx(), invoice.GetC_Currency_ID());
-                        MDocType doctype = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
+                        MCurrency currency = MCurrency.Get(GetCtx(), invoice.GetVAB_Currency_ID());
+                        MDocType doctype = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
                         StringBuilder _sql = new StringBuilder();
                         varianceAmount = 0;
 
@@ -472,7 +472,7 @@ namespace VAdvantage.Model
                         ShiftVarianceOnOther = 0;
 
                         _sql.Clear();
-                        _sql.Append(@"SELECT DISTINCT asch.C_Currency_ID FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+                        _sql.Append(@"SELECT DISTINCT asch.VAB_Currency_ID FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id
                                  INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN c_invoice i ON c.vaf_client_id    = i.vaf_client_id
                                  WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
                         int BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
@@ -486,8 +486,8 @@ namespace VAdvantage.Model
                             payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_Trx());
 
                         MCashLine cashline = null;
-                        if (line.GetC_CashLine_ID() > 0)
-                            cashline = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_Trx());
+                        if (line.GetVAB_CashJRNLLine_ID() > 0)
+                            cashline = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), Get_Trx());
 
                         // in case of GL Allocation if GL_JournalLine_ID is available on Allocation Line
                         MJournalLine journalline = null;
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
                             // to get Multiply Rate 
                             currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
                         }
-                        else if (cashline != null && cashline.GetC_CashLine_ID() != 0)
+                        else if (cashline != null && cashline.GetVAB_CashJRNLLine_ID() != 0)
                         {
                             // to get Multiply Rate 
                             currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
@@ -549,10 +549,10 @@ namespace VAdvantage.Model
 
                         #region set Base Paid Amount
                         decimal multiplyRate = 0;
-                        if (BaseCurrency != invoice.GetC_Currency_ID())
+                        if (BaseCurrency != invoice.GetVAB_Currency_ID())
                         {
                             // get Conversion on the basis of Allocation Date Account because Paid Amount need to be convert on DateAcct of Allocation
-                            multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                            multiplyRate = MConversionRate.GetRate(invoice.GetVAB_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                             paySch.SetVA009_PaidAmnt(Decimal.Round(paySch.GetVA009_PaidAmntInvce() * multiplyRate, currency.GetStdPrecision()));
                         }
                         else
@@ -589,7 +589,7 @@ namespace VAdvantage.Model
                         paySch.SetC_Payment_ID(line.GetC_Payment_ID());
 
                         // work done to set cashline ID on payschedule tab of invoice if allocation done by cash
-                        paySch.SetC_CashLine_ID(line.GetC_CashLine_ID());
+                        paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
 
                         // when schedule is paid from cash journal then Payment Execution status = Received
                         // when schedule is paid from Payment then Payment Execution status = In-Progress
@@ -618,7 +618,7 @@ namespace VAdvantage.Model
                         }
 
                         // update open amount in base / invoice currency when we splitted record
-                        paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
+                        paySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetVAB_Currency_ID() ? (paySch.GetDueAmt() * multiplyRate) : paySch.GetDueAmt());
                         paySch.SetVA009_OpnAmntInvce(paySch.GetDueAmt());
 
                         if (!paySch.Save(Get_Trx()))
@@ -631,7 +631,7 @@ namespace VAdvantage.Model
                         {
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round((decimal.Add(varianceAmount, ShiftVarianceOnOther)), currency.GetStdPrecision()) +
-                                     @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + (BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Round((decimal.Add(varianceAmount, ShiftVarianceOnOther)) * multiplyRate, currency.GetStdPrecision()) : Decimal.Round((decimal.Add(varianceAmount, ShiftVarianceOnOther)), currency.GetStdPrecision())) +
+                                     @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + (BaseCurrency != invoice.GetVAB_Currency_ID() ? Decimal.Round((decimal.Add(varianceAmount, ShiftVarianceOnOther)) * multiplyRate, currency.GetStdPrecision()) : Decimal.Round((decimal.Add(varianceAmount, ShiftVarianceOnOther)), currency.GetStdPrecision())) +
                                      @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
                                                                  AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + line.GetC_Invoice_ID() +
                                      @" AND C_InvoicePaySchedule_ID <> " + line.GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
@@ -666,11 +666,11 @@ namespace VAdvantage.Model
                             /*************************************************************************************/
 
                             // update previous schedule variance amount here 
-                            newPaySch.SetVA009_PaidAmnt((BaseCurrency != invoice.GetC_Currency_ID() ? ShiftVarianceOnOther * multiplyRate : ShiftVarianceOnOther));
+                            newPaySch.SetVA009_PaidAmnt((BaseCurrency != invoice.GetVAB_Currency_ID() ? ShiftVarianceOnOther * multiplyRate : ShiftVarianceOnOther));
                             newPaySch.SetVA009_PaidAmntInvce(ShiftVarianceOnOther);
                             newPaySch.SetVA009_Variance(0);
                             newPaySch.SetC_Payment_ID(0);
-                            newPaySch.SetC_CashLine_ID(0);
+                            newPaySch.SetVAB_CashJRNLLine_ID(0);
                             newPaySch.SetVA009_ExecutionStatus("A");
                             newPaySch.SetIsValid(true);
                             newPaySch.SetVA009_IsPaid(false);
@@ -702,7 +702,7 @@ namespace VAdvantage.Model
                             }
 
                             // convert due amount into Base Currency
-                            newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetC_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
+                            newPaySch.SetVA009_OpenAmnt(BaseCurrency != invoice.GetVAB_Currency_ID() ? Decimal.Multiply(newPaySch.GetDueAmt(), multiplyRate) : newPaySch.GetDueAmt());
                             newPaySch.SetVA009_OpnAmntInvce(newPaySch.GetDueAmt());
 
                             if (!newPaySch.Save(Get_Trx()))
@@ -848,7 +848,7 @@ namespace VAdvantage.Model
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            return Msg.GetElement(GetCtx(), "C_AllocationHdr_ID") + " " + GetDocumentNo();
+            return Msg.GetElement(GetCtx(), "VAB_DocAllocation_ID") + " " + GetDocumentNo();
         }
 
         /// <summary>
@@ -954,7 +954,7 @@ namespace VAdvantage.Model
 
             //	Delete Posting
             String sql = "DELETE FROM Fact_Acct WHERE VAF_TableView_ID=" + MAllocationHdr.Table_ID
-                + " AND Record_ID=" + GetC_AllocationHdr_ID();
+                + " AND Record_ID=" + GetVAB_DocAllocation_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Fine("Fact_Acct deleted #" + no);
 
@@ -989,7 +989,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //update Payment Batch line Details set payment = null during reverse of this payment
-                sql = "UPDATE va009_batchlinedetails SET  C_AllocationHdr_ID = null WHERE C_AllocationHdr_ID = " + GetC_AllocationHdr_ID();
+                sql = "UPDATE va009_batchlinedetails SET  VAB_DocAllocation_ID = null WHERE VAB_DocAllocation_ID = " + GetVAB_DocAllocation_ID();
                 DB.ExecuteQuery(sql, null, null);
             }
 
@@ -1007,8 +1007,8 @@ namespace VAdvantage.Model
             it.Reset();
             while (it.MoveNext())
             {
-                int C_BPartner_ID = it.Current;
-                MBPartner bp = new MBPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
+                int VAB_BusinessPartner_ID = it.Current;
+                MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     bp.SetTotalOpenBalance();		//	recalculates from scratch
@@ -1067,15 +1067,15 @@ namespace VAdvantage.Model
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();
             MCash cash = null; MJournal journal = null;
-            int currencyTo_ID = 0, C_ConversionType_ID = 0, VAF_Client_ID = 0, VAF_Org_ID = 0;
+            int currencyTo_ID = 0, VAB_CurrencyType_ID = 0, VAF_Client_ID = 0, VAF_Org_ID = 0;
             DateTime? DateAcct = null;
             DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
-            if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
+            if (GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
             {
                 // when we allocate invoice with invoice 
                 if (payment == null && cashline == null && journalline == null) // Invoice to Invoice
                 {
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), conversionDate, GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                    currencymultiplyRate = MConversionRate.GetRate(GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), conversionDate, GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 }
                 else
                 {
@@ -1086,29 +1086,29 @@ namespace VAdvantage.Model
                         if (journalline != null && invoice != null) // journal to invoice
                         {
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = invoice.GetVAB_Currency_ID();
                             VAF_Client_ID = invoice.GetVAF_Client_ID();
                             VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
                         else if (journalline != null && payment != null) //Journal to payment
                         {
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = payment.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = payment.GetVAB_Currency_ID();
                             VAF_Client_ID = payment.GetVAF_Client_ID();
                             VAF_Org_ID = payment.GetVAF_Org_ID();
                         }
                         else if (journalline != null && cashline != null) // journal to cash
                         {
-                            //cash = new MCash(cashline.GetCtx(), cashline.GetC_Cash_ID(), cashline.Get_Trx());
+                            //cash = new MCash(cashline.GetCtx(), cashline.GetVAB_CashJRNL_ID(), cashline.Get_Trx());
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = cash.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = cash.GetVAB_Currency_ID();
                             VAF_Client_ID = cash.GetVAF_Client_ID();
                             VAF_Org_ID = cash.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetVAB_Currency_ID(), currencyTo_ID, DateAcct, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
 
                     // in case of cash journal
@@ -1117,12 +1117,12 @@ namespace VAdvantage.Model
                         if (cashline != null && invoice != null) // Cash to invoice
                         {
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = invoice.GetVAB_Currency_ID();
                             VAF_Client_ID = invoice.GetVAF_Client_ID();
                             VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetVAB_Currency_ID(), currencyTo_ID, DateAcct, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
 
                     // in case of Payment
@@ -1131,20 +1131,20 @@ namespace VAdvantage.Model
                         if (payment != null && invoice != null) // payment to invoice
                         {
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = invoice.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = invoice.GetVAB_Currency_ID();
                             VAF_Client_ID = invoice.GetVAF_Client_ID();
                             VAF_Org_ID = invoice.GetVAF_Org_ID();
                         }
                         else if (payment != null && payment != null) //payment to payment
                         {
                             DateAcct = conversionDate;
-                            C_ConversionType_ID = GetC_ConversionType_ID();
-                            currencyTo_ID = payment.GetC_Currency_ID();
+                            VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
+                            currencyTo_ID = payment.GetVAB_Currency_ID();
                             VAF_Client_ID = payment.GetVAF_Client_ID();
                             VAF_Org_ID = payment.GetVAF_Org_ID();
                         }
-                        return currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), currencyTo_ID, DateAcct, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+                        return currencymultiplyRate = MConversionRate.GetRate(GetVAB_Currency_ID(), currencyTo_ID, DateAcct, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
                     }
                 }
             }

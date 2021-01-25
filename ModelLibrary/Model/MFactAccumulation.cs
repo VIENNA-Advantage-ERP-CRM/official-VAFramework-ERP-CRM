@@ -29,18 +29,18 @@ namespace VAdvantage.Model
         /**
      * 	Get All for Tenant
      *	@param ctx context
-     *	@param C_AcctSchema_ID optional acct schema
+     *	@param VAB_AccountBook_ID optional acct schema
      *	@return list of Accumulation Rules ordered by AcctSchema and DateTo
      */
-        public static List<MFactAccumulation> GetAll(Ctx ctx, int C_AcctSchema_ID)
+        public static List<MFactAccumulation> GetAll(Ctx ctx, int VAB_AccountBook_ID)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM Fact_Accumulation "
                 + "WHERE IsActive='Y' AND VAF_Client_ID=" + ctx.GetVAF_Client_ID());
-            if (C_AcctSchema_ID > 0)
+            if (VAB_AccountBook_ID > 0)
             {
-                sql.Append("AND C_AcctSchema_ID= " + C_AcctSchema_ID);
+                sql.Append("AND VAB_AccountBook_ID= " + VAB_AccountBook_ID);
             }
-            sql.Append("ORDER BY C_AcctSchema_ID ");
+            sql.Append("ORDER BY VAB_AccountBook_ID ");
 
             List<MFactAccumulation> list = new List<MFactAccumulation>();
             IDataReader idr = null;
@@ -136,9 +136,9 @@ namespace VAdvantage.Model
                 return TimeUtil.Trunc(from, TimeUtil.TRUNC_WEEK);
             }
             else if (BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(GetBALANCEACCUMULATION())
-                && GetC_Calendar_ID() != 0)
+                && GetVAB_Calender_ID() != 0)
             {
-                MPeriod period = MPeriod.GetOfCalendar(GetCtx(), GetC_Calendar_ID(), from);
+                MPeriod period = MPeriod.GetOfCalendar(GetCtx(), GetVAB_Calender_ID(), from);
                 if (period != null)
                 {
                     return period.GetStartDate();
@@ -171,7 +171,7 @@ namespace VAdvantage.Model
                 retValue = TimeUtil.Trunc(retValue, TimeUtil.TRUNC_WEEK);
             }
             else if (BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(GetBALANCEACCUMULATION())
-                && GetC_Calendar_ID() != 0)
+                && GetVAB_Calender_ID() != 0)
             {
 
             }
@@ -188,14 +188,14 @@ namespace VAdvantage.Model
             //	Calendar
             if (BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(GetBALANCEACCUMULATION()))
             {
-                if (GetC_Calendar_ID() == 0)
+                if (GetVAB_Calender_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Calendar_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Calender_ID"));
                     return false;
                 }
             }
-            else if (GetC_Calendar_ID() != 0)
-                SetC_Calendar_ID(0);
+            else if (GetVAB_Calender_ID() != 0)
+                SetVAB_Calender_ID(0);
 
             if (IsDefault())
             {
@@ -235,9 +235,9 @@ namespace VAdvantage.Model
             }
             if (!newRecord)
             {
-                if (Is_ValueChanged("C_AcctSchema_ID") ||
+                if (Is_ValueChanged("VAB_AccountBook_ID") ||
                         Is_ValueChanged("BalanceAccumulation") ||
-                        Is_ValueChanged("C_Calendar_ID") ||
+                        Is_ValueChanged("VAB_Calender_ID") ||
                         Is_ValueChanged("IsActivity") ||
                         Is_ValueChanged("IsBudget") ||
                         Is_ValueChanged("IsBusinessPartner") ||
@@ -295,8 +295,8 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MFactAccumulation[")
                 .Append(Get_ID())
                 .Append(",BalanceAccumulation=").Append(GetBALANCEACCUMULATION());
-            if (GetC_Calendar_ID() != 0)
-                sb.Append(",C_Calendar_ID=").Append(GetC_Calendar_ID());
+            if (GetVAB_Calender_ID() != 0)
+                sb.Append(",VAB_Calender_ID=").Append(GetVAB_Calender_ID());
             sb.Append("]");
             return sb.ToString();
         }

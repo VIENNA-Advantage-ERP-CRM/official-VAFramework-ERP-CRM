@@ -882,7 +882,7 @@ namespace VAdvantage.Process
 
             /////////WF Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_workflow_id,
+            sql.Append(@" SELECT VAF_Workflow_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
@@ -899,9 +899,9 @@ namespace VAdvantage.Process
                     wf.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     wf.SetVAF_Client_ID(0);
                     wf.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_workflow_id"] != null && dsTab.Tables[0].Rows[j]["ad_workflow_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_Workflow_id"] != null && dsTab.Tables[0].Rows[j]["VAF_Workflow_id"] != DBNull.Value)
                     {
-                        wf.SetAD_Workflow_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_workflow_id"]));
+                        wf.SetVAF_Workflow_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_Workflow_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
@@ -1950,7 +1950,7 @@ namespace VAdvantage.Process
 
             /////////WF Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_workflow_id,
+            sql.Append(@" SELECT VAF_Workflow_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
@@ -1964,7 +1964,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsTab.Tables[0].Rows.Count; j++)
                 {
                     sql.Clear();
-                    sql.Append("SELECT Count(*) FROM I_TLWORKFLOW_Trl WHERE AD_WORKFLOW_ID=" + dsTab.Tables[0].Rows[j]["AD_Workflow_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
+                    sql.Append("SELECT Count(*) FROM I_TLWORKFLOW_Trl WHERE VAF_WORKFLOW_ID=" + dsTab.Tables[0].Rows[j]["VAF_Workflow_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
                     count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
                     if (count > 0)
                     {
@@ -1974,9 +1974,9 @@ namespace VAdvantage.Process
                     wf.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     wf.SetVAF_Client_ID(0);
                     wf.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_workflow_id"] != null && dsTab.Tables[0].Rows[j]["ad_workflow_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_Workflow_id"] != null && dsTab.Tables[0].Rows[j]["VAF_Workflow_id"] != DBNull.Value)
                     {
-                        wf.SetAD_Workflow_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_workflow_id"]));
+                        wf.SetVAF_Workflow_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_Workflow_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {

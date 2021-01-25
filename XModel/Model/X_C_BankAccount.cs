@@ -11,21 +11,21 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_BankAccount
+    /** Generated Model for VAB_Bank_Acct
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_BankAccount : PO
+    public class X_VAB_Bank_Acct : PO
     {
-        public X_C_BankAccount(Context ctx, int C_BankAccount_ID, Trx trxName)
-            : base(ctx, C_BankAccount_ID, trxName)
+        public X_VAB_Bank_Acct(Context ctx, int VAB_Bank_Acct_ID, Trx trxName)
+            : base(ctx, VAB_Bank_Acct_ID, trxName)
         {
-            /** if (C_BankAccount_ID == 0)
+            /** if (VAB_Bank_Acct_ID == 0)
             {
             SetAccountNo (null);
             SetBankAccountType (null);
-            SetC_BankAccount_ID (0);
+            SetVAB_Bank_Acct_ID (0);
             SetC_Bank_ID (0);
-            SetC_Currency_ID (0);	// @$C_Currency_ID@
+            SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
             SetCreditLimit (0.0);
             SetCurrentBalance (0.0);
             SetIsDefault (false);
@@ -33,16 +33,16 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_BankAccount(Ctx ctx, int C_BankAccount_ID, Trx trxName)
-            : base(ctx, C_BankAccount_ID, trxName)
+        public X_VAB_Bank_Acct(Ctx ctx, int VAB_Bank_Acct_ID, Trx trxName)
+            : base(ctx, VAB_Bank_Acct_ID, trxName)
         {
-            /** if (C_BankAccount_ID == 0)
+            /** if (VAB_Bank_Acct_ID == 0)
             {
             SetAccountNo (null);
             SetBankAccountType (null);
-            SetC_BankAccount_ID (0);
+            SetVAB_Bank_Acct_ID (0);
             SetC_Bank_ID (0);
-            SetC_Currency_ID (0);	// @$C_Currency_ID@
+            SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
             SetCreditLimit (0.0);
             SetCurrentBalance (0.0);
             SetIsDefault (false);
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccount(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Bank_Acct(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccount(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Bank_Acct(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -73,14 +73,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccount(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Bank_Acct(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_BankAccount()
+        static X_VAB_Bank_Acct()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -93,8 +93,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =297;
 
-        /** TableName=C_BankAccount */
-        public static String Table_Name = "C_BankAccount";
+        /** TableName=VAB_Bank_Acct */
+        public static String Table_Name = "VAB_Bank_Acct";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_BankAccount[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Bank_Acct[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Account No.
@@ -201,17 +201,17 @@ namespace VAdvantage.Model
             return (String)Get_Value("BankAccountType");
         }
         /** Set Bank Account.
-        @param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        @param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            if (C_BankAccount_ID < 1) throw new ArgumentException("C_BankAccount_ID is mandatory.");
-            Set_ValueNoCheck("C_BankAccount_ID", C_BankAccount_ID);
+            if (VAB_Bank_Acct_ID < 1) throw new ArgumentException("VAB_Bank_Acct_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
         }
         /** Get Bank Account.
         @return Account at the Bank */
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BankAccount_ID");
+            Object ii = Get_Value("VAB_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -237,17 +237,17 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetC_Bank_ID().ToString());
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory.");
-            Set_Value("C_Currency_ID", C_Currency_ID);
+            if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory.");
+            Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

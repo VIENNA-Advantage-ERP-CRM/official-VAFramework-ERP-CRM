@@ -22,11 +22,11 @@ namespace VAdvantage.Process
         /**	Project         		*/
         private int _C_Project_ID = 0;
         /**BPartner Customer        */
-        private int C_Bpartner_id = 0;
+        private int VAB_BusinessPartner_id = 0;
         /**BPartner Location        */
-        private int C_Bpartner_Location_id = 0;
+        private int VAB_BPart_Location_id = 0;
         /**BPartner Prospect        */
-        private int C_BPartnerSR_ID = 0;
+        private int VAB_BusinessPartnerSR_ID = 0;
         /*Order                   	*/
         //private int C_Order_ID = 0;
         /**ProjectLine       */
@@ -51,11 +51,11 @@ namespace VAdvantage.Process
 
             VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _C_Project_ID, null);
             VAdvantage.Model.MOrder order = new VAdvantage.Model.MOrder(GetCtx(), 0, null);
-            C_Bpartner_id = fromProject.GetC_BPartner_ID();
-            C_Bpartner_Location_id = fromProject.GetC_BPartner_Location_ID();
-            C_BPartnerSR_ID = fromProject.GetC_BPartnerSR_ID();
-            //MBPartner bp = new MBPartner(GetCtx(), C_Bpartner_id, null);
-            VAdvantage.Model.MBPartnerLocation bpartnerloc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), C_Bpartner_Location_id, null);
+            VAB_BusinessPartner_id = fromProject.GetVAB_BusinessPartner_ID();
+            VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
+            VAB_BusinessPartnerSR_ID = fromProject.GetVAB_BusinessPartnerSR_ID();
+            //MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartner_id, null);
+            VAdvantage.Model.MBPartnerLocation bpartnerloc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), VAB_BPart_Location_id, null);
             String currentdate = DateTime.Now.ToString();
             String sqlprjln = " select c_projectline_id from c_projectline where c_project_id=" + _C_Project_ID + "";
             C_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln));
@@ -63,23 +63,23 @@ namespace VAdvantage.Process
             {
                 order.SetDateOrdered(Convert.ToDateTime(currentdate));
                 order.SetDatePromised(Convert.ToDateTime(currentdate));
-                if (C_Bpartner_id != 0)
+                if (VAB_BusinessPartner_id != 0)
                 {
-                    order.SetC_BPartner_ID(fromProject.GetC_BPartner_ID());
+                    order.SetVAB_BusinessPartner_ID(fromProject.GetVAB_BusinessPartner_ID());
                     if (bpartnerloc.IsShipTo() == true)
                     {
-                        order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
+                        order.SetVAB_BPart_Location_ID(fromProject.GetVAB_BPart_Location_ID());
                         order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
-                        order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
+                        order.SetBill_Location_ID(fromProject.GetVAB_BPart_Location_ID());
                         order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
-                if (C_BPartnerSR_ID != 0)
+                if (VAB_BusinessPartnerSR_ID != 0)
                 {
-                    //String sqlcust = "update c_bpartner set iscustomer='Y', isprospect='N' where c_bpartner_id=" + C_BPartnerSR_ID + "";
+                    //String sqlcust = "update VAB_BusinessPartner set iscustomer='Y', isprospect='N' where VAB_BusinessPartner_id=" + VAB_BusinessPartnerSR_ID + "";
                     //value = DB.ExecuteQuery(sqlcust, null, null);
                     //if (value == -1)
                     //{
@@ -88,20 +88,20 @@ namespace VAdvantage.Process
                     //bp.SetIsCustomer(true);
                     //bp.SetIsProspect(false);
 
-                    order.SetC_BPartner_ID(fromProject.GetC_BPartnerSR_ID());
+                    order.SetVAB_BusinessPartner_ID(fromProject.GetVAB_BusinessPartnerSR_ID());
                     if (bpartnerloc.IsShipTo() == true)
                     {
-                        order.SetC_BPartner_Location_ID(fromProject.GetC_BPartner_Location_ID());
+                        order.SetVAB_BPart_Location_ID(fromProject.GetVAB_BPart_Location_ID());
                         order.SetVAF_UserContact_ID(fromProject.GetVAF_UserContact_ID());
                     }
                     if (bpartnerloc.IsBillTo() == true)
                     {
-                        order.SetBill_Location_ID(fromProject.GetC_BPartner_Location_ID());
+                        order.SetBill_Location_ID(fromProject.GetVAB_BPart_Location_ID());
                         order.SetBill_User_ID(fromProject.GetVAF_UserContact_ID());
                     }
                 }
-               // String sql = "select c_doctype_id from c_doctype where docbasetype= 'SOO' and  = 'Sales Quotation'";
-                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'ON' and isreturntrx = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+               // String sql = "select VAB_DocTypes_id from VAB_DocTypes where docbasetype= 'SOO' and  = 'Sales Quotation'";
+                String sql = "select VAB_DocTypes_id from VAB_DocTypes where docbasetype = 'SOO' and docsubtypeso = 'ON' and isreturntrx = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 int Doctype_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 int MPriceList_id = Util.GetValueOfInt(fromProject.GetM_PriceList_ID());
                 order.SetM_PriceList_ID(MPriceList_id);
@@ -109,17 +109,17 @@ namespace VAdvantage.Process
                 ////int MPriceList_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlmpricelist));
                 //if (MPriceList_id == order.GetM_PriceList_ID())
                 //{
-                //    String sqlconversiontype = "select c_conversiontype_id from c_conversiontype where value = 'C'";
-                //    int C_ConversionType_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlconversiontype));
-                //    order.SetC_ConversionType_ID(C_ConversionType_id);
+                //    String sqlconversiontype = "select VAB_CurrencyType_id from VAB_CurrencyType where value = 'C'";
+                //    int VAB_CurrencyType_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlconversiontype));
+                //    order.SetVAB_CurrencyType_ID(VAB_CurrencyType_id);
                 //}
                 order.SetC_Project_ID(GetRecord_ID());
                 order.SetSalesRep_ID(fromProject.GetSalesRep_ID());
-                order.SetC_Currency_ID(fromProject.GetC_Currency_ID());
-                if (C_Bpartner_id != 0)
+                order.SetVAB_Currency_ID(fromProject.GetVAB_Currency_ID());
+                if (VAB_BusinessPartner_id != 0)
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_id, null);
-                    bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
+                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_id, null);
+                    bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
@@ -137,8 +137,8 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_BPartnerSR_ID, null);
-                    bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
+                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartnerSR_ID, null);
+                    bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
@@ -161,10 +161,10 @@ namespace VAdvantage.Process
 
                 //}
                 order.SetFreightCostRule("I");
-                order.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
+                order.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                 order.SetDocStatus("IP");
-                order.SetC_DocType_ID(Doctype_id);
-                order.SetC_DocTypeTarget_ID(Doctype_id);
+                order.SetVAB_DocTypes_ID(Doctype_id);
+                order.SetVAB_DocTypesTarget_ID(Doctype_id);
                 order.SetIsSOTrx(true);
                 if (!order.Save())
                 {

@@ -162,18 +162,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Asset Group.
-        @param A_Asset_Group_ID Group of Assets */
-        public void SetA_Asset_Group_ID(int A_Asset_Group_ID)
+        @param VAA_AssetGroup_ID Group of Assets */
+        public void SetVAA_AssetGroup_ID(int VAA_AssetGroup_ID)
         {
-            if (A_Asset_Group_ID <= 0) Set_Value("A_Asset_Group_ID", null);
+            if (VAA_AssetGroup_ID <= 0) Set_Value("VAA_AssetGroup_ID", null);
             else
-                Set_Value("A_Asset_Group_ID", A_Asset_Group_ID);
+                Set_Value("VAA_AssetGroup_ID", VAA_AssetGroup_ID);
         }
         /** Get Asset Group.
         @return Group of Assets */
-        public int GetA_Asset_Group_ID()
+        public int GetVAA_AssetGroup_ID()
         {
-            Object ii = Get_Value("A_Asset_Group_ID");
+            Object ii = Get_Value("VAA_AssetGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

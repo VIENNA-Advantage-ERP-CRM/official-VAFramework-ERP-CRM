@@ -52,15 +52,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="M_Product_Category_ID">category</param>
-        /// <param name="C_AcctSchema_ID">acct schema</param>
+        /// <param name="VAB_AccountBook_ID">acct schema</param>
         /// <param name="trxName">transaction</param>
         /// <returns>category acct</returns>
         public static MProductCategoryAcct Get(Ctx ctx, int M_Product_Category_ID, 
-            int C_AcctSchema_ID, Trx trxName)
+            int VAB_AccountBook_ID, Trx trxName)
         {
             MProductCategoryAcct retValue = null;
             String sql = "SELECT * FROM  M_Product_Category_Acct "
-                + "WHERE M_Product_Category_ID=" + M_Product_Category_ID + " AND C_AcctSchema_ID=" + C_AcctSchema_ID;
+                + "WHERE M_Product_Category_ID=" + M_Product_Category_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MProductCategoryAcct[");
             sb.Append(Get_ID())
                 .Append(",M_Product_Category_ID=").Append(GetM_Product_Category_ID())
-                .Append(",C_AcctSchema_ID=").Append(GetC_AcctSchema_ID())
+                .Append(",VAB_AccountBook_ID=").Append(GetVAB_AccountBook_ID())
                 .Append(",CostingLevel=").Append(GetCostingLevel())
                 .Append(",CostingMethod=").Append(GetCostingMethod())
                 .Append("]");

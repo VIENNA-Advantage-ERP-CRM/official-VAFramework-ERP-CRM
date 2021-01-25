@@ -136,7 +136,7 @@ namespace VAdvantage.Model
 	{
 		StringBuilder sb = new StringBuilder("MTreeNodeBP[");
 		sb.Append("VAF_TreeInfo_ID=").Append(GetVAF_TreeInfo_ID())
-			.Append(",C_BPartner_ID=").Append(GetNode_ID())
+			.Append(",VAB_BusinessPartner_ID=").Append(GetNode_ID())
 			.Append(",Parent_ID=").Append(GetParent_ID())
 			.Append("]");
 		return sb.ToString();

@@ -696,20 +696,20 @@ namespace VAdvantage.DataBase
         ///// <summary>
         ///// Get Document No based on Document Type get doc numbr from application server
         ///// </summary>
-        ///// <param name="C_DocType_ID">document type</param>
+        ///// <param name="VAB_DocTypes_ID">document type</param>
         ///// <param name="trx">optional Transaction Name</param>
         ///// <returns>document no or null</returns>
         ///// <date>08-March-2011</date>
 
 
-        //public static String GetDocumentNo(int C_DocType_ID, Trx trx, Ctx ctx)
+        //public static String GetDocumentNo(int VAB_DocTypes_ID, Trx trx, Ctx ctx)
         //{
 
 
-        //    String dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
+        //    String dn = MSequence.GetDocumentNo(VAB_DocTypes_ID, trx, ctx);
         //    if (dn == null)		//	try again
         //    {
-        //        dn = MSequence.GetDocumentNo(C_DocType_ID, trx, ctx);
+        //        dn = MSequence.GetDocumentNo(VAB_DocTypes_ID, trx, ctx);
         //    }
         //    return dn;
         //}

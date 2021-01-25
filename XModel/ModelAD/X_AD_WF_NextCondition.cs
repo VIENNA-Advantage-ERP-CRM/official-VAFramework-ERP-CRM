@@ -333,31 +333,31 @@ return (String)Get_Value("Value2");
 
 
 
-/** Set C_GenAttributeSetInstance_ID.
-@param C_GenAttributeSetInstance_ID C_GenAttributeSetInstance_ID */
-public void SetC_GenAttributeSetInstance_ID(Object C_GenAttributeSetInstance_ID)
+/** Set VAB_GenFeatureSetInstance_ID.
+@param VAB_GenFeatureSetInstance_ID VAB_GenFeatureSetInstance_ID */
+public void SetVAB_GenFeatureSetInstance_ID(Object VAB_GenFeatureSetInstance_ID)
 {
-    Set_Value("C_GenAttributeSetInstance_ID", C_GenAttributeSetInstance_ID);
+    Set_Value("VAB_GenFeatureSetInstance_ID", VAB_GenFeatureSetInstance_ID);
 }
-/** Get C_GenAttributeSetInstance_ID.
-@return C_GenAttributeSetInstance_ID */
-public Object GetC_GenAttributeSetInstance_ID()
+/** Get VAB_GenFeatureSetInstance_ID.
+@return VAB_GenFeatureSetInstance_ID */
+public Object GetVAB_GenFeatureSetInstance_ID()
 {
-    return Get_Value("C_GenAttributeSetInstance_ID");
+    return Get_Value("VAB_GenFeatureSetInstance_ID");
 }
-/** Set C_GenAttributeSet_ID.
-@param C_GenAttributeSet_ID C_GenAttributeSet_ID */
-public void SetC_GenAttributeSet_ID(int C_GenAttributeSet_ID)
+/** Set VAB_GenFeatureSet_ID.
+@param VAB_GenFeatureSet_ID VAB_GenFeatureSet_ID */
+public void SetVAB_GenFeatureSet_ID(int VAB_GenFeatureSet_ID)
 {
-    if (C_GenAttributeSet_ID <= 0) Set_Value("C_GenAttributeSet_ID", null);
+    if (VAB_GenFeatureSet_ID <= 0) Set_Value("VAB_GenFeatureSet_ID", null);
     else
-        Set_Value("C_GenAttributeSet_ID", C_GenAttributeSet_ID);
+        Set_Value("VAB_GenFeatureSet_ID", VAB_GenFeatureSet_ID);
 }
-/** Get C_GenAttributeSet_ID.
-@return C_GenAttributeSet_ID */
-public int GetC_GenAttributeSet_ID()
+/** Get VAB_GenFeatureSet_ID.
+@return VAB_GenFeatureSet_ID */
+public int GetVAB_GenFeatureSet_ID()
 {
-    Object ii = Get_Value("C_GenAttributeSet_ID");
+    Object ii = Get_Value("VAB_GenFeatureSet_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

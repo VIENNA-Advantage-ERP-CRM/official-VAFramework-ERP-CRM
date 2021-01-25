@@ -15,7 +15,7 @@ namespace VIS.Models
             Dictionary<string, decimal> retDic = new Dictionary<string, decimal>();
             try
             {
-                string sql = "Select ChargeAmt FROM C_Charge WHERE IsActive='Y' AND C_Charge_ID=" + Util.GetValueOfInt(charge_ID);
+                string sql = "Select ChargeAmt FROM VAB_Charge WHERE IsActive='Y' AND VAB_Charge_ID=" + Util.GetValueOfInt(charge_ID);
                 decimal amount = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
                 retDic["ChargeAmt"] = amount;
             }

@@ -92,8 +92,8 @@ namespace VAdvantage.Model
             //	GetChangeHTML(sb, "VAF_Org_ID");		//	always stored
             GetChangeHTML(sb, "VAF_Role_ID");
             GetChangeHTML(sb, "VAF_UserContact_ID");
-            GetChangeHTML(sb, "C_Activity_ID");
-            GetChangeHTML(sb, "C_BPartner_ID");
+            GetChangeHTML(sb, "VAB_BillingCode_ID");
+            GetChangeHTML(sb, "VAB_BusinessPartner_ID");
             GetChangeHTML(sb, "C_Invoice_ID");
             GetChangeHTML(sb, "C_Order_ID");
             GetChangeHTML(sb, "C_Payment_ID");
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "M_InOut_ID");
             GetChangeHTML(sb, "M_Product_ID");
             GetChangeHTML(sb, "M_RMA_ID");
-            GetChangeHTML(sb, "A_Asset_ID");
+            GetChangeHTML(sb, "VAA_Asset_ID");
 
             if (sb.Length == 0)
                 sb.Append("./.");

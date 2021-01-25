@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_BP_Group
+    /** Generated Model for VAB_BPart_Category
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_BP_Group : PO
+    public class X_VAB_BPart_Category : PO
     {
-        public X_C_BP_Group(Context ctx, int C_BP_Group_ID, Trx trxName)
-            : base(ctx, C_BP_Group_ID, trxName)
+        public X_VAB_BPart_Category(Context ctx, int VAB_BPart_Category_ID, Trx trxName)
+            : base(ctx, VAB_BPart_Category_ID, trxName)
         {
-            /** if (C_BP_Group_ID == 0)
+            /** if (VAB_BPart_Category_ID == 0)
             {
-            SetC_BP_Group_ID (0);
+            SetVAB_BPart_Category_ID (0);
             SetIsConfidentialInfo (false);	// N
             SetIsDefault (false);
             SetName (null);
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_BP_Group(Ctx ctx, int C_BP_Group_ID, Trx trxName)
-            : base(ctx, C_BP_Group_ID, trxName)
+        public X_VAB_BPart_Category(Ctx ctx, int VAB_BPart_Category_ID, Trx trxName)
+            : base(ctx, VAB_BPart_Category_ID, trxName)
         {
-            /** if (C_BP_Group_ID == 0)
+            /** if (VAB_BPart_Category_ID == 0)
             {
-            SetC_BP_Group_ID (0);
+            SetVAB_BPart_Category_ID (0);
             SetIsConfidentialInfo (false);	// N
             SetIsDefault (false);
             SetName (null);
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BP_Group(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_BPart_Category(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BP_Group(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_BPart_Category(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BP_Group(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_BPart_Category(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_BP_Group()
+        static X_VAB_BPart_Category()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =394;
 
-        /** TableName=C_BP_Group */
-        public static String Table_Name = "C_BP_Group";
+        /** TableName=VAB_BPart_Category */
+        public static String Table_Name = "VAB_BPart_Category";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_BP_Group[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_BPart_Category[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Print Color.
@@ -140,49 +140,49 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Customer/Prospect Group.
-        @param C_BP_Group_ID Customer/Prospect Group */
-        public void SetC_BP_Group_ID(int C_BP_Group_ID)
+        @param VAB_BPart_Category_ID Customer/Prospect Group */
+        public void SetVAB_BPart_Category_ID(int VAB_BPart_Category_ID)
         {
-            if (C_BP_Group_ID < 1) throw new ArgumentException("C_BP_Group_ID is mandatory.");
-            Set_ValueNoCheck("C_BP_Group_ID", C_BP_Group_ID);
+            if (VAB_BPart_Category_ID < 1) throw new ArgumentException("VAB_BPart_Category_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
         }
         /** Get Customer/Prospect Group.
         @return Customer/Prospect Group */
-        public int GetC_BP_Group_ID()
+        public int GetVAB_BPart_Category_ID()
         {
-            Object ii = Get_Value("C_BP_Group_ID");
+            Object ii = Get_Value("VAB_BPart_Category_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Consolidation Reference.
-        @param C_CONSOLIDATIONREFERENCE_ID Consolidation Reference */
-        public void SetC_CONSOLIDATIONREFERENCE_ID(int C_CONSOLIDATIONREFERENCE_ID)
+        @param VAB_ConsolidationRef_ID Consolidation Reference */
+        public void SetVAB_ConsolidationRef_ID(int VAB_ConsolidationRef_ID)
         {
-            if (C_CONSOLIDATIONREFERENCE_ID <= 0) Set_Value("C_CONSOLIDATIONREFERENCE_ID", null);
+            if (VAB_ConsolidationRef_ID <= 0) Set_Value("VAB_ConsolidationRef_ID", null);
             else
-                Set_Value("C_CONSOLIDATIONREFERENCE_ID", C_CONSOLIDATIONREFERENCE_ID);
+                Set_Value("VAB_ConsolidationRef_ID", VAB_ConsolidationRef_ID);
         }
         /** Get Consolidation Reference.
         @return Consolidation Reference */
-        public int GetC_CONSOLIDATIONREFERENCE_ID()
+        public int GetVAB_ConsolidationRef_ID()
         {
-            Object ii = Get_Value("C_CONSOLIDATIONREFERENCE_ID");
+            Object ii = Get_Value("VAB_ConsolidationRef_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Dunning.
-        @param C_Dunning_ID Dunning Rules for overdue invoices */
-        public void SetC_Dunning_ID(int C_Dunning_ID)
+        @param VAB_Dunning_ID Dunning Rules for overdue invoices */
+        public void SetVAB_Dunning_ID(int VAB_Dunning_ID)
         {
-            if (C_Dunning_ID <= 0) Set_Value("C_Dunning_ID", null);
+            if (VAB_Dunning_ID <= 0) Set_Value("VAB_Dunning_ID", null);
             else
-                Set_Value("C_Dunning_ID", C_Dunning_ID);
+                Set_Value("VAB_Dunning_ID", VAB_Dunning_ID);
         }
         /** Get Dunning.
         @return Dunning Rules for overdue invoices */
-        public int GetC_Dunning_ID()
+        public int GetVAB_Dunning_ID()
         {
-            Object ii = Get_Value("C_Dunning_ID");
+            Object ii = Get_Value("VAB_Dunning_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -579,18 +579,18 @@ namespace VAdvantage.Model
             return (String)Get_Value("Value");
         }
         /** Set General Attribute Set.
-@param C_GenAttributeSet_ID General Attribute Set */
-        public void SetC_GenAttributeSet_ID(int C_GenAttributeSet_ID)
+@param VAB_GenFeatureSet_ID General Attribute Set */
+        public void SetVAB_GenFeatureSet_ID(int VAB_GenFeatureSet_ID)
         {
-            if (C_GenAttributeSet_ID <= 0) Set_Value("C_GenAttributeSet_ID", null);
+            if (VAB_GenFeatureSet_ID <= 0) Set_Value("VAB_GenFeatureSet_ID", null);
             else
-                Set_Value("C_GenAttributeSet_ID", C_GenAttributeSet_ID);
+                Set_Value("VAB_GenFeatureSet_ID", VAB_GenFeatureSet_ID);
         }
         /** Get General Attribute Set.
         @return General Attribute Set */
-        public int GetC_GenAttributeSet_ID()
+        public int GetVAB_GenFeatureSet_ID()
         {
-            Object ii = Get_Value("C_GenAttributeSet_ID");
+            Object ii = Get_Value("VAB_GenFeatureSet_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

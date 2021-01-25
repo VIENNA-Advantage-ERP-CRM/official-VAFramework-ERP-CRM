@@ -40,7 +40,7 @@ namespace VAdvantage.Model
             //super(ctx, S_TimeExpense_ID, trxName);
             if (S_TimeExpense_ID == 0)
             {
-                //	setC_BPartner_ID (0);
+                //	setVAB_BusinessPartner_ID (0);
                 //setDateReport(new Timestamp(System.currentTimeMillis()));
                 SetDateReport(DateTime.Now);
                 //	setDocumentNo (null);
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 return _lines;
             }
             //
-            int C_Currency_ID = GetC_Currency_ID();
+            int VAB_Currency_ID = GetVAB_Currency_ID();
             List<MTimeExpenseLine> list = new List<MTimeExpenseLine>();
             //
             String sql = "SELECT * FROM S_TimeExpenseLine WHERE S_TimeExpense_ID=@param ORDER BY Line";
@@ -139,7 +139,7 @@ namespace VAdvantage.Model
                 foreach (DataRow dr in dt.Rows)
                 {
                     MTimeExpenseLine te = new MTimeExpenseLine(GetCtx(), dr, Get_TrxName());
-                    te.SetC_Currency_Report_ID(C_Currency_ID);
+                    te.SetVAB_Currency_Report_ID(VAB_Currency_ID);
                     list.Add(te);
                 }
                 dt = null;
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < lines.Length; i++)
             {
                 MTimeExpenseLine line = lines[i];
-                if (line.IsInvoiced() && line.GetC_BPartner_ID() == 0)
+                if (line.IsInvoiced() && line.GetVAB_BusinessPartner_ID() == 0)
                 {
                     m_processMsg = "@Line@ " + line.GetLine() + ": Invoiced, but no Business Partner";
                     return DocActionVariables.STATUS_INVALID;
@@ -548,9 +548,9 @@ namespace VAdvantage.Model
             {
                 return _VAF_UserContact_ID;
             }
-            if (GetC_BPartner_ID() != 0)
+            if (GetVAB_BusinessPartner_ID() != 0)
             {
-                VAdvantage.Model.MUser[] users = VAdvantage.Model.MUser.GetOfBPartner(GetCtx(), GetC_BPartner_ID());
+                VAdvantage.Model.MUser[] users = VAdvantage.Model.MUser.GetOfBPartner(GetCtx(), GetVAB_BusinessPartner_ID());
                 if (users.Length > 0)
                 {
                     _VAF_UserContact_ID = users[0].GetVAF_UserContact_ID();
@@ -564,12 +564,12 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Currency
         /// </summary>
-        /// <returns>C_Currency_ID</returns>
-        public int GetC_Currency_ID()
+        /// <returns>VAB_Currency_ID</returns>
+        public int GetVAB_Currency_ID()
         {
             MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), Get_TrxName());
-            return pl.GetC_Currency_ID();
-        }	//	getC_Currency_ID
+            return pl.GetVAB_Currency_ID();
+        }	//	getVAB_Currency_ID
 
 
 

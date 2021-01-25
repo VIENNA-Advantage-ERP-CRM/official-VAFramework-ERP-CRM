@@ -49,20 +49,20 @@ namespace ViennaAdvantage.Process
                
             }
             
-            if (lead.GetC_BPartner_ID() != 0)
+            if (lead.GetVAB_BusinessPartner_ID() != 0)
             {
                 
                 VAdvantage.Model.X_R_ContactInterest customer = new VAdvantage.Model.X_R_ContactInterest(GetCtx(), 0, Get_Trx());
                 customer.SetR_InterestArea_ID(R_InterestArea_ID);
-                customer.SetC_BPartner_ID(lead.GetC_BPartner_ID());
-                String query = "Select VAF_UserContact_id from VAF_UserContact where c_bpartner_id= " + lead.GetC_BPartner_ID();
+                customer.SetVAB_BusinessPartner_ID(lead.GetVAB_BusinessPartner_ID());
+                String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + lead.GetVAB_BusinessPartner_ID();
                 int UserId=Util.GetValueOfInt( DB.ExecuteScalar(query));
                 customer.SetVAF_UserContact_ID(UserId);
-                query = "Select C_BPartner_Location_id from C_BPartner_Location where c_bpartner_id= " + lead.GetC_BPartner_ID();
+                query = "Select VAB_BPart_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id= " + lead.GetVAB_BusinessPartner_ID();
 
                 int Id = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                VAdvantage.Model.X_C_BPartner_Location loc = new VAdvantage.Model.X_C_BPartner_Location(GetCtx(), Id, Get_Trx());
-                customer.SetC_BPartner_Location_ID(Id);
+                VAdvantage.Model.X_VAB_BPart_Location loc = new VAdvantage.Model.X_VAB_BPart_Location(GetCtx(), Id, Get_Trx());
+                customer.SetVAB_BPart_Location_ID(Id);
                 customer.SetPhone(loc.GetPhone());
                 customer.SetFax(loc.GetFax());
 
@@ -91,15 +91,15 @@ namespace ViennaAdvantage.Process
             {
                 VAdvantage.Model.X_R_ContactInterest Prospect = new VAdvantage.Model.X_R_ContactInterest(GetCtx(), 0, Get_Trx());
                 Prospect.SetR_InterestArea_ID(R_InterestArea_ID);
-                Prospect.SetC_BPartner_ID(lead.GetRef_BPartner_ID());
-                String query = "Select VAF_UserContact_id from VAF_UserContact where c_bpartner_id= " + lead.GetRef_BPartner_ID();
+                Prospect.SetVAB_BusinessPartner_ID(lead.GetRef_BPartner_ID());
+                String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + lead.GetRef_BPartner_ID();
                 int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query));
                 Prospect.SetVAF_UserContact_ID(UserId);
-                query = "Select C_BPartner_Location_id from C_BPartner_Location where c_bpartner_id= " + lead.GetRef_BPartner_ID();
+                query = "Select VAB_BPart_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id= " + lead.GetRef_BPartner_ID();
 
                 int Id = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                VAdvantage.Model.X_C_BPartner_Location loc = new VAdvantage.Model.X_C_BPartner_Location(GetCtx(), Id, Get_Trx());
-                Prospect.SetC_BPartner_Location_ID(Id);
+                VAdvantage.Model.X_VAB_BPart_Location loc = new VAdvantage.Model.X_VAB_BPart_Location(GetCtx(), Id, Get_Trx());
+                Prospect.SetVAB_BPart_Location_ID(Id);
                 Prospect.SetPhone(loc.GetPhone());
                 Prospect.SetFax(loc.GetFax());
 
@@ -134,11 +134,11 @@ namespace ViennaAdvantage.Process
                 Ilead.SetFax(lead.GetFax());
                 Ilead.SetAddress1(lead.GetAddress1());
                 Ilead.SetAddress2(lead.GetAddress2());
-                Ilead.SetC_City_ID(lead.GetC_City_ID());
+                Ilead.SetVAB_City_ID(lead.GetVAB_City_ID());
                 Ilead.SetCity(lead.GetCity());
                 Ilead.SetC_Region_ID(lead.GetC_Region_ID());
                 Ilead.SetRegionName(lead.GetRegionName());
-                Ilead.SetC_Country_ID(lead.GetC_Country_ID());
+                Ilead.SetVAB_Country_ID(lead.GetVAB_Country_ID());
                 Ilead.SetPostal(lead.GetPostal());
                 Ilead.SetSubscribeDate(DateTime.Today);
                 if (!Ilead.Save())

@@ -84,18 +84,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return "--";
             }
             log.Fine(ibs.ToString());
-            if (ibs.GetC_Invoice_ID() == 0 && ibs.GetC_BPartner_ID() == 0)
+            if (ibs.GetC_Invoice_ID() == 0 && ibs.GetVAB_BusinessPartner_ID() == 0)
             {
-                throw new Exception("@NotFound@ @C_Invoice_ID@ / @C_BPartner_ID@");
+                throw new Exception("@NotFound@ @C_Invoice_ID@ / @VAB_BusinessPartner_ID@");
             }
-            if (ibs.GetC_BankAccount_ID() == 0)
+            if (ibs.GetVAB_Bank_Acct_ID() == 0)
             {
-                throw new Exception("@NotFound@ @C_BankAccount_ID@");
+                throw new Exception("@NotFound@ @VAB_Bank_Acct_ID@");
             }
             //
-            MPayment payment = CreatePayment(ibs.GetC_Invoice_ID(), ibs.GetC_BPartner_ID(),
-                ibs.GetC_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
-                ibs.GetC_BankAccount_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
+            MPayment payment = CreatePayment(ibs.GetC_Invoice_ID(), ibs.GetVAB_BusinessPartner_ID(),
+                ibs.GetVAB_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
+                ibs.GetVAB_Bank_Acct_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
                 Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetVAF_Org_ID());
             if (payment == null)
             {
@@ -103,7 +103,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             ibs.SetC_Payment_ID(payment.GetC_Payment_ID());
-            ibs.SetC_Currency_ID(payment.GetC_Currency_ID());
+            ibs.SetVAB_Currency_ID(payment.GetVAB_Currency_ID());
             ibs.SetTrxAmt(payment.GetPayAmt());
             ibs.Save();
             //
@@ -127,16 +127,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return "--";
             }
             log.Fine(bsl.ToString());
-            if (bsl.GetC_Invoice_ID() == 0 && bsl.GetC_BPartner_ID() == 0)
+            if (bsl.GetC_Invoice_ID() == 0 && bsl.GetVAB_BusinessPartner_ID() == 0)
             {
-                throw new Exception("@NotFound@ @C_Invoice_ID@ / @C_BPartner_ID@");
+                throw new Exception("@NotFound@ @C_Invoice_ID@ / @VAB_BusinessPartner_ID@");
             }
             //
-            MBankStatement bs = new MBankStatement(GetCtx(), bsl.GetC_BankStatement_ID(), Get_Trx());
+            MBankStatement bs = new MBankStatement(GetCtx(), bsl.GetVAB_BankingJRNL_ID(), Get_Trx());
             //
-            MPayment payment = CreatePayment(bsl.GetC_Invoice_ID(), bsl.GetC_BPartner_ID(),
-                bsl.GetC_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
-                bs.GetC_BankAccount_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
+            MPayment payment = CreatePayment(bsl.GetC_Invoice_ID(), bsl.GetVAB_BusinessPartner_ID(),
+                bsl.GetVAB_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
+                bs.GetVAB_Bank_Acct_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
                 bsl.GetDescription(), bsl.GetVAF_Org_ID());
             if (payment == null)
             {
@@ -159,19 +159,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Create actual Payment
         /// </summary>
         /// <param name="C_Invoice_ID">invoice</param>
-        /// <param name="C_BPartner_ID">partner ignored when invoice exists</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_BusinessPartner_ID">partner ignored when invoice exists</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="StmtAmt">statement amount</param>
         /// <param name="TrxAmt">transaction amt</param>
-        /// <param name="C_BankAccount_ID">bank account</param>
+        /// <param name="VAB_Bank_Acct_ID">bank account</param>
         /// <param name="DateTrx">transaction date</param>
         /// <param name="DateAcct">accounting date</param>
         /// <param name="Description">description</param>
         /// <param name="VAF_Org_ID"></param>
         /// <returns>payment</returns>
-        private MPayment CreatePayment(int C_Invoice_ID, int C_BPartner_ID,
-            int C_Currency_ID, Decimal stmtAmt, Decimal trxAmt,
-            int C_BankAccount_ID, DateTime? dateTrx, DateTime? dateAcct,
+        private MPayment CreatePayment(int C_Invoice_ID, int VAB_BusinessPartner_ID,
+            int VAB_Currency_ID, Decimal stmtAmt, Decimal trxAmt,
+            int VAB_Bank_Acct_ID, DateTime? dateTrx, DateTime? dateAcct,
             String description, int VAF_Org_ID)
         {
             //	Trx Amount = Payment overwrites Statement Amount if defined
@@ -191,7 +191,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             MPayment payment = new MPayment(GetCtx(), 0, Get_Trx());
             payment.SetVAF_Org_ID(VAF_Org_ID);
-            payment.SetC_BankAccount_ID(C_BankAccount_ID);
+            payment.SetVAB_Bank_Acct_ID(VAB_Bank_Acct_ID);
             payment.SetTenderType(MPayment.TENDERTYPE_Check);
             if (dateTrx != null)
             {
@@ -214,12 +214,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (C_Invoice_ID != 0)
             {
                 MInvoice invoice = new MInvoice(GetCtx(), C_Invoice_ID, null);
-                payment.SetC_DocType_ID(invoice.IsSOTrx());		//	Receipt
+                payment.SetVAB_DocTypes_ID(invoice.IsSOTrx());		//	Receipt
                 payment.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-                payment.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                payment.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
                 if (Env.Signum(payAmt) != 0)	//	explicit Amount
                 {
-                    payment.SetC_Currency_ID(C_Currency_ID);
+                    payment.SetVAB_Currency_ID(VAB_Currency_ID);
                     if (invoice.IsSOTrx())
                     {
                         payment.SetPayAmt(payAmt);
@@ -232,23 +232,23 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 else	// set Pay Amout from Invoice
                 {
-                    payment.SetC_Currency_ID(invoice.GetC_Currency_ID());
+                    payment.SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
                     payment.SetPayAmt(invoice.GetGrandTotal(true));
                 }
             }
-            else if (C_BPartner_ID != 0)
+            else if (VAB_BusinessPartner_ID != 0)
             {
-                payment.SetC_BPartner_ID(C_BPartner_ID);
-                payment.SetC_Currency_ID(C_Currency_ID);
+                payment.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
+                payment.SetVAB_Currency_ID(VAB_Currency_ID);
                 if (Env.Signum(payAmt) < 0)	//	Payment
                 {
                     payment.SetPayAmt(Math.Abs(payAmt));
-                    payment.SetC_DocType_ID(false);
+                    payment.SetVAB_DocTypes_ID(false);
                 }
                 else	//	Receipt
                 {
                     payment.SetPayAmt(payAmt);
-                    payment.SetC_DocType_ID(true);
+                    payment.SetVAB_DocTypes_ID(true);
                 }
             }
             else

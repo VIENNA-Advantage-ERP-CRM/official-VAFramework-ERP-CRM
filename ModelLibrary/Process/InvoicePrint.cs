@@ -40,7 +40,7 @@ namespace VAdvantage.Process
 	
 	private DateTime?	_dateInvoiced_From = null;
 	private DateTime?	_dateInvoiced_To = null;
-	private int			_C_BPartner_ID = 0;
+	private int			_VAB_BusinessPartner_ID = 0;
 	private int			_C_Invoice_ID = 0;
 	private String		_DocumentNo_From = null;
 	private String		_DocumentNo_To = null;
@@ -73,9 +73,9 @@ namespace VAdvantage.Process
             {
                 _R_MailText_ID = para[i].GetParameterAsInt();
             }
-            else if (name.Equals("C_BPartner_ID"))
+            else if (name.Equals("VAB_BusinessPartner_ID"))
             {
-                _C_BPartner_ID = para[i].GetParameterAsInt();
+                _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
             }
             else if (name.Equals("C_Invoice_ID"))
             {
@@ -120,7 +120,7 @@ namespace VAdvantage.Process
         {
             throw new Exception("@NotFound@: @R_MailText_ID@");
         }
-		log.Info ("C_BPartner_ID=" + _C_BPartner_ID
+		log.Info ("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
 			+ ", C_Invoice_ID=" + _C_Invoice_ID
 			+ ", IsSOTrx=" + _IsSOTrx
 			+ ", EmailPDF=" + _EMailPDF + ",R_MailText_ID=" + _R_MailText_ID
@@ -139,7 +139,7 @@ namespace VAdvantage.Process
 		}
 
 		//	Too broad selection
-        if (_C_BPartner_ID == 0 && _C_Invoice_ID == 0 && _dateInvoiced_From == null && _dateInvoiced_To == null
+        if (_VAB_BusinessPartner_ID == 0 && _C_Invoice_ID == 0 && _dateInvoiced_From == null && _dateInvoiced_To == null
             && _DocumentNo_From == null && _DocumentNo_To == null)
         {
             throw new Exception("@RestrictSelection@");
@@ -154,13 +154,13 @@ namespace VAdvantage.Process
 			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.VAF_Print_Rpt_Layout_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
 			+ " bpc.VAF_UserContact_ID, i.DocumentNo,"										//	6..7
-			+ " bp.C_BPartner_ID "													//	8
+			+ " bp.VAB_BusinessPartner_ID "													//	8
 			+ "FROM C_Invoice i"
-			+ " INNER JOIN C_BPartner bp ON (i.C_BPartner_ID=bp.C_BPartner_ID)"
+			+ " INNER JOIN VAB_BusinessPartner bp ON (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
 			+ " LEFT OUTER JOIN VAF_UserContact bpc ON (i.VAF_UserContact_ID=bpc.VAF_UserContact_ID)"
 			+ " INNER JOIN VAF_Client c ON (i.VAF_Client_ID=c.VAF_Client_ID)"
 			+ " INNER JOIN VAF_Print_Rpt_Page pf ON (i.VAF_Client_ID=pf.VAF_Client_ID)"
-			+ " INNER JOIN C_DocType dt ON (i.C_DocType_ID=dt.C_DocType_ID)")
+			+ " INNER JOIN VAB_DocTypes dt ON (i.VAB_DocTypes_ID=dt.VAB_DocTypes_ID)")
 			.Append(" WHERE pf.VAF_Org_ID IN (0,i.VAF_Org_ID) AND ");	//	more them 1 PF
         if (_C_Invoice_ID != 0)
         {
@@ -181,9 +181,9 @@ namespace VAdvantage.Process
             {
                 sql.Append("AND i.DocStatus NOT IN ('DR')");
             }
-            if (_C_BPartner_ID != 0)
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql.Append(" AND i.C_BPartner_ID=").Append(_C_BPartner_ID);
+                sql.Append(" AND i.VAB_BusinessPartner_ID=").Append(_VAB_BusinessPartner_ID);
             }
             //	Date Invoiced 
             if (_dateInvoiced_From != null && _dateInvoiced_To != null)
@@ -230,7 +230,7 @@ namespace VAdvantage.Process
 		MPrintFormat format = null;
 		int old_VAF_Print_Rpt_Layout_ID = -1;
 		int old_C_Invoice_ID = -1;
-		int C_BPartner_ID = 0;
+		int VAB_BusinessPartner_ID = 0;
 		int count = 0;
 		int errors = 0;
 
@@ -278,8 +278,8 @@ namespace VAdvantage.Process
                 MUser to = new MUser(GetCtx(), VAF_UserContact_ID, Get_TrxName());
                 //    String DocumentNo = rs.getString(7);
                 String DocumentNo = Utility.Util.GetValueOfString(idr[6]);
-                //    C_BPartner_ID = rs.getInt(8);
-                C_BPartner_ID = Utility.Util.GetValueOfInt(idr[7]);
+                //    VAB_BusinessPartner_ID = rs.getInt(8);
+                VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(idr[7]);
                 //    //
                 //    String documentDir = client.getDocumentDir();
                 String documentDir = client.GetDocumentDir();
@@ -319,7 +319,7 @@ namespace VAdvantage.Process
                 //    DocumentNo,
                 //    X_C_Invoice.Table_ID,
                 //    C_Invoice_ID,
-                //    C_BPartner_ID);
+                //    VAB_BusinessPartner_ID);
                 //info.SetCopies(copies);   
                 //ReportEngine re = new ReportEngine(GetCtx(), format, query, info);
               
@@ -336,7 +336,7 @@ namespace VAdvantage.Process
                         continue;
                     }
                     mText.SetUser(to);					//	Context
-                    mText.SetBPartner(C_BPartner_ID);	//	Context
+                    mText.SetBPartner(VAB_BusinessPartner_ID);	//	Context
                     mText.SetPO(new MInvoice(GetCtx(), C_Invoice_ID, Get_TrxName()));
                     String message = mText.GetMailText(true);
                     if (mText.IsHtml())

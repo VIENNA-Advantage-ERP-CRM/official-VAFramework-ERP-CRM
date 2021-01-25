@@ -67,7 +67,7 @@ namespace VAdvantage.Model
             {
                 //	setC_RfQ_Topic_ID (0);
                 //	setName (null);
-                //	setC_Currency_ID (0);	// @$C_Currency_ID @
+                //	setVAB_Currency_ID (0);	// @$VAB_Currency_ID @
                 //	setSalesRep_ID (0);
                 //
                 SetDateResponse(DateTime.Now);// Commented by Bharat on 15 Jan 2019 for point given by Puneet

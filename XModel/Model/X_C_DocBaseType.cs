@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_DocBaseType
+/** Generated Model for VAB_MasterDocType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DocBaseType : PO
+public class X_VAB_MasterDocType : PO
 {
-public X_C_DocBaseType (Context ctx, int C_DocBaseType_ID, Trx trxName) : base (ctx, C_DocBaseType_ID, trxName)
+public X_VAB_MasterDocType (Context ctx, int VAB_MasterDocType_ID, Trx trxName) : base (ctx, VAB_MasterDocType_ID, trxName)
 {
-/** if (C_DocBaseType_ID == 0)
+/** if (VAB_MasterDocType_ID == 0)
 {
-SetC_DocBaseType_ID (0);
+SetVAB_MasterDocType_ID (0);
 SetDocBaseType (null);	// XXX
 SetEntityType (null);	// U
 SetName (null);
 }
  */
 }
-public X_C_DocBaseType (Ctx ctx, int C_DocBaseType_ID, Trx trxName) : base (ctx, C_DocBaseType_ID, trxName)
+public X_VAB_MasterDocType (Ctx ctx, int VAB_MasterDocType_ID, Trx trxName) : base (ctx, VAB_MasterDocType_ID, trxName)
 {
-/** if (C_DocBaseType_ID == 0)
+/** if (VAB_MasterDocType_ID == 0)
 {
-SetC_DocBaseType_ID (0);
+SetVAB_MasterDocType_ID (0);
 SetDocBaseType (null);	// XXX
 SetEntityType (null);	// U
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocBaseType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MasterDocType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_DocBaseType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocBaseType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MasterDocType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_DocBaseType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocBaseType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_MasterDocType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DocBaseType()
+static X_VAB_MasterDocType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389055053L;
 public static int Table_ID;
  // =988;
 
-/** TableName=C_DocBaseType */
-public static String Table_Name="C_DocBaseType";
+/** TableName=VAB_MasterDocType */
+public static String Table_Name="VAB_MasterDocType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_DocBaseType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_MasterDocType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -150,17 +150,17 @@ public String GetAccountingClassname()
 return (String)Get_Value("AccountingClassname");
 }
 /** Set Document Base Type.
-@param C_DocBaseType_ID Accounting Document base type */
-public void SetC_DocBaseType_ID (int C_DocBaseType_ID)
+@param VAB_MasterDocType_ID Accounting Document base type */
+public void SetVAB_MasterDocType_ID (int VAB_MasterDocType_ID)
 {
-if (C_DocBaseType_ID < 1) throw new ArgumentException ("C_DocBaseType_ID is mandatory.");
-Set_ValueNoCheck ("C_DocBaseType_ID", C_DocBaseType_ID);
+if (VAB_MasterDocType_ID < 1) throw new ArgumentException ("VAB_MasterDocType_ID is mandatory.");
+Set_ValueNoCheck ("VAB_MasterDocType_ID", VAB_MasterDocType_ID);
 }
 /** Get Document Base Type.
 @return Accounting Document base type */
-public int GetC_DocBaseType_ID() 
+public int GetVAB_MasterDocType_ID() 
 {
-Object ii = Get_Value("C_DocBaseType_ID");
+Object ii = Get_Value("VAB_MasterDocType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -32,16 +32,16 @@ namespace VAdvantage.Model
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSequence).FullName);
 
-        private static CCache<int, X_C_DocType> s_doctypecache = new CCache<int, X_C_DocType>("AD_seq_doctype", 10);
+        private static CCache<int, X_VAB_DocTypes> s_doctypecache = new CCache<int, X_VAB_DocTypes>("AD_seq_doctype", 10);
 
 
-        private static X_C_DocType GetDocType(Ctx ctx, int C_DocType_ID)
+        private static X_VAB_DocTypes GetDocType(Ctx ctx, int VAB_DocTypes_ID)
         {
-            int key = (int)C_DocType_ID;
-            X_C_DocType retValue = (X_C_DocType)s_doctypecache[key];
+            int key = (int)VAB_DocTypes_ID;
+            X_VAB_DocTypes retValue = (X_VAB_DocTypes)s_doctypecache[key];
             if (retValue == null)
             {
-                retValue = new X_C_DocType(ctx, C_DocType_ID, null);
+                retValue = new X_VAB_DocTypes(ctx, VAB_DocTypes_ID, null);
                 s_doctypecache.Add(key, retValue);
             }
             return retValue;
@@ -461,7 +461,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document No based on Document Type
         /// </summary>
-        /// <param name="C_DocType_ID">document type</param>
+        /// <param name="VAB_DocTypes_ID">document type</param>
         /// <param name="trxName">optional Transaction Name</param>
         /// <param name="ctx">ctx</param>
         /// <param name="definite">asking for a definitive or temporary sequence</param>
@@ -469,19 +469,19 @@ namespace VAdvantage.Model
         /// <returns>document no or null</returns>
         /// 
 
-        public static String GetDocumentNo(int C_DocType_ID, Trx trxName, Ctx ctx, Boolean definite, PO po)
+        public static String GetDocumentNo(int VAB_DocTypes_ID, Trx trxName, Ctx ctx, Boolean definite, PO po)
         {
-            if (C_DocType_ID == 0)
+            if (VAB_DocTypes_ID == 0)
             {
-                s_log.Severe("C_DocType_ID=0");
+                s_log.Severe("VAB_DocTypes_ID=0");
                 return null;
             }
 
-            // MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
-            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);
+            // MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
+            X_VAB_DocTypes dt = GetDocType(ctx, VAB_DocTypes_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
-                s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");
+                s_log.Finer("DocType_ID=" + VAB_DocTypes_ID + " Not DocNo controlled");
                 return null;
             }
 
@@ -494,7 +494,7 @@ namespace VAdvantage.Model
             // if "Overwrite Sequence on complete" is not upto mark.
             if (definite && !dt.IsOverwriteSeqOnComplete())
             {
-                s_log.Warning("DocType_ID=" + C_DocType_ID + " Not Sequence Overwrite on Complete");
+                s_log.Warning("DocType_ID=" + VAB_DocTypes_ID + " Not Sequence Overwrite on Complete");
                 return null;
             }
 
@@ -505,7 +505,7 @@ namespace VAdvantage.Model
                 MSequence seq = new MSequence(ctx, seqID, trxName);
 
                 if (VLogMgt.IsLevelAll())
-                    s_log.Finest("DocType_ID=" + C_DocType_ID + " [" + trxName + "]");
+                    s_log.Finest("DocType_ID=" + VAB_DocTypes_ID + " [" + trxName + "]");
                 return GetDocumentNoFromSeq(seq, trxName, po);
             }
             return null;
@@ -1238,24 +1238,24 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document No based on Document Type
         /// </summary>
-        /// <param name="C_DocType_ID">document type</param>
+        /// <param name="VAB_DocTypes_ID">document type</param>
         /// <param name="trxName">optional Transaction Name</param>
         /// <returns>document no or null</returns>
         /// 
         //[MethodImpl(MethodImplOptions.Synchronized)]
-        public static String GetDocumentNo(int C_DocType_ID, Trx trxIn, Ctx ctx)
+        public static String GetDocumentNo(int VAB_DocTypes_ID, Trx trxIn, Ctx ctx)
         {
 
-            if (C_DocType_ID == 0)
+            if (VAB_DocTypes_ID == 0)
             {
-                s_log.Severe("C_DocType_ID=0");
+                s_log.Severe("VAB_DocTypes_ID=0");
                 return null;
             }
-            //MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
-            X_C_DocType dt = GetDocType(ctx, C_DocType_ID);
+            //MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
+            X_VAB_DocTypes dt = GetDocType(ctx, VAB_DocTypes_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
-                s_log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");
+                s_log.Finer("DocType_ID=" + VAB_DocTypes_ID + " Not DocNo controlled");
                 return null;
             }
             if (dt == null || dt.GetDocNoSequence_ID() == 0)
@@ -1384,7 +1384,7 @@ namespace VAdvantage.Model
                 if (suffix != null && suffix.Length > 0)
                     doc.Append(suffix);
                 String documentNo = doc.ToString();
-                //_log.Finer(documentNo + " (" + incrementNo + ")" + " - C_DocType_ID=" + C_DocType_ID + " [" + trxName + "]");
+                //_log.Finer(documentNo + " (" + incrementNo + ")" + " - VAB_DocTypes_ID=" + VAB_DocTypes_ID + " [" + trxName + "]");
                 return documentNo;
             }
             return null;
@@ -1426,17 +1426,17 @@ namespace VAdvantage.Model
         }
 
         //[MethodImpl(MethodImplOptions.Synchronized)]
-        //public static String GetDocumentNo(int C_DocType_ID, Trx trxName,Ctx ctx)
+        //public static String GetDocumentNo(int VAB_DocTypes_ID, Trx trxName,Ctx ctx)
         //{
-        //    if (C_DocType_ID == 0)
+        //    if (VAB_DocTypes_ID == 0)
         //    {
-        //        _log.Severe("C_DocType_ID=0");
+        //        _log.Severe("VAB_DocTypes_ID=0");
         //        return null;
         //    }
-        //    MDocType dt = MDocType.Get(ctx, C_DocType_ID);	//	wrong for SERVER, but r/o
+        //    MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
         //    if (dt != null && !dt.IsDocNoControlled())
         //    {
-        //        _log.Finer("DocType_ID=" + C_DocType_ID + " Not DocNo controlled");
+        //        _log.Finer("DocType_ID=" + VAB_DocTypes_ID + " Not DocNo controlled");
         //        return null;
         //    }
         //    if (dt == null || dt.GetDocNoSequence_ID() == 0)
@@ -1448,7 +1448,7 @@ namespace VAdvantage.Model
         //    //	Check ViennaSys
         //    Boolean viennaSys = false; // Ini.IsPropertyBool(Ini._ViennaSYS);
         //    //if (CLogMgt.isLevel(LOGLEVEL))
-        //    //_log.Log(LOGLEVEL, "DocType_ID=" + C_DocType_ID + " [" + trxName + "]");
+        //    //_log.Log(LOGLEVEL, "DocType_ID=" + VAB_DocTypes_ID + " [" + trxName + "]");
         //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Client_ID, VAF_Record_Seq_ID "
         //        + "FROM VAF_Record_Seq "
         //        + "WHERE VAF_Record_Seq_ID=" + dt.GetDocNoSequence_ID()
@@ -1541,7 +1541,7 @@ namespace VAdvantage.Model
         //    if (suffix != null && suffix.Length > 0)
         //        doc.Append(suffix);
         //    String documentNo = doc.ToString();
-        //    _log.Finer(documentNo + " (" + incrementNo + ")" + " - C_DocType_ID=" + C_DocType_ID + " [" + trxName + "]");
+        //    _log.Finer(documentNo + " (" + incrementNo + ")" + " - VAB_DocTypes_ID=" + VAB_DocTypes_ID + " [" + trxName + "]");
         //    return documentNo;
         //}
 

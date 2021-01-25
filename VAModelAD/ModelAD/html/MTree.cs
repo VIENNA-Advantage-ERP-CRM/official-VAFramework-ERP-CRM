@@ -91,15 +91,15 @@ namespace VAdvantage.Model
 	    };
         /** Table ID Array				*/
         private static int[] TABLEIDS = new int[] {
-		    X_C_Activity.Table_ID,
+		    X_VAB_BillingCode.Table_ID,
 		    X_M_BOM.Table_ID,
-		    X_C_BPartner.Table_ID,
+		    X_VAB_BusinessPartner.Table_ID,
 		    X_CM_Container.Table_ID,
 		    X_CM_Media.Table_ID,
 		    X_CM_CStage.Table_ID,
-		    X_CM_Template.Table_ID,
-		    X_C_ElementValue.Table_ID,
-		    X_C_Campaign.Table_ID,
+		    X_VACM_Layout.Table_ID,
+		    X_VAB_Acct_Element.Table_ID,
+		    X_VAB_Promotion.Table_ID,
 		    X_VAF_MenuConfig.Table_ID,
 		    X_VAF_Org.Table_ID,
 		    X_M_Product_Category.Table_ID,
@@ -430,7 +430,7 @@ namespace VAdvantage.Model
             String nodeTableName = "VAF_TreeInfoChild";
             if (X_VAF_MenuConfig.Table_ID == VAF_TableView_ID)
                 nodeTableName += "MM";
-            else if (X_C_BPartner.Table_ID == VAF_TableView_ID)
+            else if (X_VAB_BusinessPartner.Table_ID == VAF_TableView_ID)
                 nodeTableName += "BP";
             else if (X_M_Product.Table_ID == VAF_TableView_ID)
                 nodeTableName += "PR";
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
                 nodeTableName += "CMS";
             else if (X_CM_Media.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMM";
-            else if (X_CM_Template.Table_ID == VAF_TableView_ID)
+            else if (X_VACM_Layout.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMT";
             else
             {
@@ -775,11 +775,11 @@ namespace VAdvantage.Model
                 sourceTable = "VAF_MenuConfig";
                 if (baseLang)
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
@@ -1279,7 +1279,7 @@ namespace VAdvantage.Model
             int VAF_Screen_ID = 0;
             int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
-            int AD_Workflow_ID = 0;
+            int VAF_Workflow_ID = 0;
             int AD_Task_ID = 0;
             int AD_Workbench_ID = 0;
 
@@ -1315,7 +1315,7 @@ namespace VAdvantage.Model
                         index++;
                         VAF_Page_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
-                        AD_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
                         AD_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
@@ -1334,7 +1334,7 @@ namespace VAdvantage.Model
                         else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
                             blnAccess = role.GetFormAccess(VAF_Page_ID);
                         else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
-                            blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
+                            blnAccess = role.GetWorkflowAccess(VAF_Workflow_ID);
                         else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
                             blnAccess = role.GetTaskAccess(AD_Task_ID);
 
@@ -1372,7 +1372,7 @@ namespace VAdvantage.Model
                 retValue.VAF_Screen_ID = VAF_Screen_ID;
                 retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
-                retValue.AD_Workflow_ID = AD_Workflow_ID;
+                retValue.VAF_Workflow_ID = VAF_Workflow_ID;
                 retValue.AD_Task_ID = AD_Task_ID;
                 retValue.AD_Workbench_ID = AD_Workbench_ID;
             }
@@ -1447,13 +1447,13 @@ namespace VAdvantage.Model
                 return tableName;
             if ("M_Product".Equals(tableName))
                 return "M_Product M_Product INNER JOIN M_Product_Category x ON (M_Product.M_Product_Category_ID=x.M_Product_Category_ID)";
-            if ("C_BPartner".Equals(tableName))
-                return "C_BPartner C_BPartner INNER JOIN C_BP_Group x ON (C_BPartner.C_BP_Group_ID=x.C_BP_Group_ID)";
+            if ("VAB_BusinessPartner".Equals(tableName))
+                return "VAB_BusinessPartner VAB_BusinessPartner INNER JOIN VAB_BPart_Category x ON (VAB_BusinessPartner.VAB_BPart_Category_ID=x.VAB_BPart_Category_ID)";
             if ("VAF_Org".Equals(tableName))
                 return "VAF_Org VAF_Org INNER JOIN VAF_OrgDetail i ON (VAF_Org.VAF_Org_ID=i.VAF_Org_ID) "
                     + "LEFT OUTER JOIN VAF_OrgCategory x ON (i.VAF_OrgCategory_ID=x.VAF_OrgCategory_ID)";
-            if ("C_Campaign".Equals(tableName))
-                return "C_Campaign C_Campaign LEFT OUTER JOIN C_Channel x ON (C_Campaign.C_Channel_ID=x.C_Channel_ID)";
+            if ("VAB_Promotion".Equals(tableName))
+                return "VAB_Promotion VAB_Promotion LEFT OUTER JOIN VAB_MarketingChannel x ON (VAB_Promotion.VAB_MarketingChannel_ID=x.VAB_MarketingChannel_ID)";
             if (tableName != null)
                 tableName += (" " + tableName);
             return tableName;
@@ -1528,8 +1528,8 @@ namespace VAdvantage.Model
             //
             if ("VAF_MenuConfig".Equals(tableName))
                 return "t.Action";
-            if ("M_Product".Equals(tableName) || "C_BPartner".Equals(tableName)
-                || "VAF_Org".Equals(tableName) || "C_Campaign".Equals(tableName))
+            if ("M_Product".Equals(tableName) || "VAB_BusinessPartner".Equals(tableName)
+                || "VAF_Org".Equals(tableName) || "VAB_Promotion".Equals(tableName))
                 return "x.VAF_Print_Rpt_Colour_ID";
             return "NULL";
         }
@@ -1815,7 +1815,7 @@ namespace VAdvantage.Model
         //    int VAF_Screen_ID = 0;
         //    int VAF_Job_ID = 0;
         //    int VAF_Page_ID = 0;
-        //    int AD_Workflow_ID = 0;
+        //    int VAF_Workflow_ID = 0;
         //    int AD_Task_ID = 0;
         //    int AD_Workbench_ID = 0;
 
@@ -1851,7 +1851,7 @@ namespace VAdvantage.Model
         //                index++;
         //                VAF_Page_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
-        //                AD_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
         //                AD_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
@@ -1870,7 +1870,7 @@ namespace VAdvantage.Model
         //                else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
         //                    blnAccess = role.GetFormAccess(VAF_Page_ID);
         //                else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
-        //                    blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
+        //                    blnAccess = role.GetWorkflowAccess(VAF_Workflow_ID);
         //                else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
         //                    blnAccess = role.GetTaskAccess(AD_Task_ID);
 
@@ -1908,7 +1908,7 @@ namespace VAdvantage.Model
         //        retValue.VAF_Screen_ID = VAF_Screen_ID;
         //        retValue.VAF_Job_ID = VAF_Job_ID;
         //        retValue.VAF_Page_ID = VAF_Page_ID;
-        //        retValue.AD_Workflow_ID = AD_Workflow_ID;
+        //        retValue.VAF_Workflow_ID = VAF_Workflow_ID;
         //        retValue.AD_Task_ID = AD_Task_ID;
         //        retValue.AD_Workbench_ID = AD_Workbench_ID;
         //    }

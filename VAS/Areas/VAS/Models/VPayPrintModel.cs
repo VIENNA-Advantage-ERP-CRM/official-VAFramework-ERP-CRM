@@ -30,7 +30,7 @@ namespace VIS.Models
         private bool _printCheck = false;
         private int _C_PaySelection_ID = 0;
         //Used Bank Account	
-        private int _C_BankAccount_ID = 0;
+        private int _VAB_Bank_Acct_ID = 0;
         //Logger
         private static VLogger log = VLogger.GetVLogger(typeof(VPayPrintModel));
         //Payment Information
@@ -94,7 +94,7 @@ namespace VIS.Models
             VPaySelectModel objPSelectModel = new VPaySelectModel();
             objPPrintDetail.PaymentSelection = GetPaymentSelection(ctx, isFirstTime);
             objPPrintDetail.PSelectInfo = GetPSelectInfo(ctx);
-            objPPrintDetail.PaymentMethod = objPSelectModel.GetPaymentMethod(ctx, _C_BankAccount_ID);
+            objPPrintDetail.PaymentMethod = objPSelectModel.GetPaymentMethod(ctx, _VAB_Bank_Acct_ID);
             return objPPrintDetail;
         }
         /// <summary>
@@ -145,12 +145,12 @@ namespace VIS.Models
         private List<PSelectInfo> GetPSelectInfo(Ctx ctx)
         {
             List<PSelectInfo> objPSelectInfo = new List<PSelectInfo>();
-            String sql = "SELECT ps.C_BankAccount_ID, b.Name || ' ' || ba.AccountNo AS NAME,"	//	1..2
+            String sql = "SELECT ps.VAB_Bank_Acct_ID, b.Name || ' ' || ba.AccountNo AS NAME,"	//	1..2
                + " c.ISO_Code, CurrentBalance "										//	3..4
                + "FROM C_PaySelection ps"
-               + " INNER JOIN C_BankAccount ba ON (ps.C_BankAccount_ID=ba.C_BankAccount_ID)"
+               + " INNER JOIN VAB_Bank_Acct ba ON (ps.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
                + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID)"
-               + " INNER JOIN C_Currency c ON (ba.C_Currency_ID=c.C_Currency_ID) "
+               + " INNER JOIN VAB_Currency c ON (ba.VAB_Currency_ID=c.VAB_Currency_ID) "
                + "WHERE ps.C_PaySelection_ID=" + _C_PaySelection_ID + " AND ps.Processed='Y' AND ba.IsActive='Y'";
             DataSet ds = new DataSet();
             ds = DB.ExecuteDataset(sql.ToString(), null, null);
@@ -158,12 +158,12 @@ namespace VIS.Models
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    _C_BankAccount_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["C_BankAccount_ID"]);
+                    _VAB_Bank_Acct_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["VAB_Bank_Acct_ID"]);
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         objPSelectInfo.Add(new PSelectInfo()
                         {
-                            BankAccount_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BankAccount_ID"]),
+                            BankAccount_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Bank_Acct_ID"]),
                             BankAccount = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
                             Currency = Convert.ToString(ds.Tables[0].Rows[i]["ISO_Code"]),
                             CurrentBalance = Convert.ToString(ds.Tables[0].Rows[i]["CurrentBalance"])
@@ -178,7 +178,7 @@ namespace VIS.Models
         /// PaymentRule changed - load DocumentNo, NoPayments,
         ///  enable/disable EFT, Print
         /// </summary>
-        public PInfo LoadPaymentRuleInfo(Ctx ctx, string paymentMethod_ID, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule)
+        public PInfo LoadPaymentRuleInfo(Ctx ctx, string paymentMethod_ID, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule)
         {
 
             PInfo objPInfo = new PInfo();
@@ -190,8 +190,8 @@ namespace VIS.Models
 
             //  DocumentNo
             String sql1 = "SELECT CurrentNext "
-                + "FROM C_BankAccountDoc "
-                + "WHERE C_BankAccount_ID=" + m_C_BankAccount_ID + " AND PaymentRule  = '" + paymentMethod_ID + "' AND IsActive='Y'";
+                + "FROM VAB_Bank_AcctDoc "
+                + "WHERE VAB_Bank_Acct_ID=" + m_VAB_Bank_Acct_ID + " AND PaymentRule  = '" + paymentMethod_ID + "' AND IsActive='Y'";
 
 
             int count = DB.GetSQLValue(null, sql);
@@ -216,7 +216,7 @@ namespace VIS.Models
         /// <summary>
         /// Print Checks and/or Remittance
         /// </summary>
-        public Cmd_Print Cmd_Print(Ctx ctx, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule, int startDocumentNo)
+        public Cmd_Print Cmd_Print(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
         {
 
             Cmd_Print objCmdPrint = new Cmd_Print();
@@ -282,7 +282,7 @@ namespace VIS.Models
                 table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 //sql = "select VAF_Job_id from VAF_Job where value = 'CheckPrint'";
-                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
+                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from VAB_Bank_Acctdoc where VAB_Bank_Acct_id = (select VAB_Bank_Acct_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and VAB_Bank_Acctdoc.isactive = 'Y' and rownum =1)";
                 VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
@@ -320,14 +320,14 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="C_PaySelection_ID"></param>
-        /// <param name="m_C_BankAccount_ID"></param>
+        /// <param name="m_VAB_Bank_Acct_ID"></param>
         /// <param name="PaymentRule"></param>
         /// <param name="startDocumentNo"></param>
         /// <param name="check_ID"></param>
         /// <param name="m_checks"></param>
         /// <param name="m_batch"></param>
         /// <returns></returns>
-        public List<int> ContinueCheckPrint(Ctx ctx, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule, string startDocumentNo, List<int> check_ID,
+        public List<int> ContinueCheckPrint(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, string startDocumentNo, List<int> check_ID,
                                        VAdvantage.Model.MPaySelectionCheck[] m_checks, VAdvantage.Model.MPaymentBatch m_batch)
         {
             int c_payment_ID = 0;
@@ -337,8 +337,8 @@ namespace VIS.Models
             if (lastDocumentNo != 0)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("UPDATE C_BankAccountDoc SET CurrentNext= " + (++lastDocumentNo))
-                    .Append(" WHERE C_BankAccount_ID= " + m_C_BankAccount_ID)
+                sb.Append("UPDATE VAB_Bank_AcctDoc SET CurrentNext= " + (++lastDocumentNo))
+                    .Append(" WHERE VAB_Bank_Acct_ID= " + m_VAB_Bank_Acct_ID)
                     .Append(" AND PaymentRule=  '" + PaymentRule + "'");
 
                 int result = DB.ExecuteQuery(sb.ToString());
@@ -398,7 +398,7 @@ namespace VIS.Models
         }
 
 
-        public Cmd_Export Cmd_Export(Ctx ctx, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule, int startDocumentNo)
+        public Cmd_Export Cmd_Export(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
         {
             Cmd_Export objCmdExport = new Cmd_Export();
             bool res = false;
@@ -455,10 +455,10 @@ namespace VIS.Models
                 if (mpp == null)
                     continue;
                 //  BPartner Info
-                bp = GetBPartnerInfo(mpp.GetC_BPartner_ID());
+                bp = GetBPartnerInfo(mpp.GetVAB_BusinessPartner_ID());
                 busPart.Add(bp);
                 //  TarGet BankAccount Info
-                bpba = GetBPBankAccountInfo(mpp.GetC_BP_BankAccount_ID());
+                bpba = GetBPBankAccountInfo(mpp.GetVAB_BPart_Bank_Acct_ID());
                 bankAcc.Add(bpba);
                 //  Comment - list of invoice document no
                 StringBuilder comment = new StringBuilder();
@@ -472,7 +472,7 @@ namespace VIS.Models
                 comm.Add(comment.ToString());
                 DocumentNo.Add(mpp.GetDocumentNo());
                 PayDate.Add(mpp.GetParent().GetPayDate().ToString());
-                ISOCode.Add(VAdvantage.Model.MCurrency.GetISO_Code(ctx, mpp.GetParent().GetC_Currency_ID()));
+                ISOCode.Add(VAdvantage.Model.MCurrency.GetISO_Code(ctx, mpp.GetParent().GetVAB_Currency_ID()));
                 PayAmt.Add(mpp.GetPayAmt().ToString());
             }
 
@@ -621,10 +621,10 @@ namespace VIS.Models
         /**
      *  Get Customer/Vendor Info.
      *  Based on BP_ static variables
-     *  @param C_BPartner_ID BPartner
+     *  @param VAB_BusinessPartner_ID BPartner
      *  @return info array
      */
-        private static String[] GetBPartnerInfo(int C_BPartner_ID)
+        private static String[] GetBPartnerInfo(int VAB_BusinessPartner_ID)
         {
             String[] bp = new String[10];
 
@@ -632,21 +632,21 @@ namespace VIS.Models
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
-                + "WHERE bp.C_BPartner_ID=?"        // #1
-                + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
-                + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
+                + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
+                + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
                 + " AND l.C_Location_ID=a.C_Location_ID"
                 + " AND a.C_Region_ID=r.C_Region_ID(+)"
-                + " AND a.C_Country_ID=cc.C_Country_ID "
+                + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
-                + "FROM C_BPartner bp "
-                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
-                + "INNER JOIN C_BPartner_Location l ON (bp.C_BPartner_ID=l.C_BPartner_ID) "
+                + "FROM VAB_BusinessPartner bp "
+                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "INNER JOIN VAB_BPart_Location l ON (bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID) "
                 + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
                 + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
-                + "INNER JOIN C_Country cc ON (a.C_Country_ID=cc.C_Country_ID) "
-                + "WHERE bp.C_BPartner_ID= " + C_BPartner_ID          // #1
+                + "INNER JOIN VAB_Country cc ON (a.VAB_Country_ID=cc.VAB_Country_ID) "
+                + "WHERE bp.VAB_BusinessPartner_ID= " + VAB_BusinessPartner_ID          // #1
                 + " ORDER BY l.IsBillTo DESC";
 
             IDataReader idr = null;
@@ -705,27 +705,27 @@ namespace VIS.Models
         /**
          *  Get Bank Account Info for tarGet Accpimt.
          *  Based on BP_ static variables
-         *  @param C_BPartner_ID BPartner
+         *  @param VAB_BusinessPartner_ID BPartner
          *  @return info array
          */
-        private static String[] GetBPBankAccountInfo(int C_BP_BankAccount_ID)
+        private static String[] GetBPBankAccountInfo(int VAB_BPart_Bank_Acct_ID)
         {
             String[] bp = new String[10];
 
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
-                + "WHERE bp.C_BPartner_ID=?"        // #1
-                + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
-                + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
+                + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
+                + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
                 + " AND l.C_Location_ID=a.C_Location_ID"
                 + " AND a.C_Region_ID=r.C_Region_ID(+)"
-                + " AND a.C_Country_ID=cc.C_Country_ID "
+                + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
-                + "FROM C_BP_BankAccount bpba "
+                + "FROM VAB_BPart_Bank_Acct bpba "
                 + "LEFT OUTER JOIN C_Bank ba ON (bpba.C_Bank_ID = ba.C_Bank_ID) "
-                + "WHERE bpba.C_BP_BankAccount_ID=" + C_BP_BankAccount_ID;        // #1
+                + "WHERE bpba.VAB_BPart_Bank_Acct_ID=" + VAB_BPart_Bank_Acct_ID;        // #1
 
             IDataReader idr = null;
             try

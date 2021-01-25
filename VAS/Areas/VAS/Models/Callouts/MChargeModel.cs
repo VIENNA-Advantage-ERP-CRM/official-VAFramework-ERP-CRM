@@ -22,7 +22,7 @@ namespace VIS.Models
             //Assign parameter value
             Cid = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter
-            X_C_Charge charge = new X_C_Charge(ctx, Cid, null);
+            X_VAB_Charge charge = new X_VAB_Charge(ctx, Cid, null);
             return charge.GetChargeAmt();                  
         }
     

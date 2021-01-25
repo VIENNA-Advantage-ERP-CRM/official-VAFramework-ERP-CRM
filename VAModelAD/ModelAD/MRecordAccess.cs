@@ -152,7 +152,7 @@ namespace VAdvantage.Model
             {
                 return "SalesRep_ID";
             }
-            else if ("C_ElementValue_ID".Equals(GetKeyColumnName()))
+            else if ("VAB_Acct_Element_ID".Equals(GetKeyColumnName()))
             {
                 return "Account_ID";
             }

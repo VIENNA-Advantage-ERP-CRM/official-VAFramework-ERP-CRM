@@ -132,18 +132,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Charge.
-        @param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        @param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }
         /** Get Charge.
         @return Additional document charges */
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            Object ii = Get_Value("C_Charge_ID");
+            Object ii = Get_Value("VAB_Charge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -509,18 +509,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Employee.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Employee.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

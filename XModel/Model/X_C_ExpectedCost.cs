@@ -9,42 +9,42 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_ExpectedCost
+    using System.Data;/** Generated Model for VAB_ExpectedCost
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_ExpectedCost : PO
+    public class X_VAB_ExpectedCost : PO
     {
-        public X_C_ExpectedCost(Context ctx, int C_ExpectedCost_ID, Trx trxName) : base(ctx, C_ExpectedCost_ID, trxName)
-        {/** if (C_ExpectedCost_ID == 0){SetAmt (0.0);SetC_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
+        public X_VAB_ExpectedCost(Context ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
+        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
 SetM_CostElement_ID (0);} */
         }
-        public X_C_ExpectedCost(Ctx ctx, int C_ExpectedCost_ID, Trx trxName) : base(ctx, C_ExpectedCost_ID, trxName)
-        {/** if (C_ExpectedCost_ID == 0){SetAmt (0.0);SetC_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
+        public X_VAB_ExpectedCost(Ctx ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
+        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
 SetM_CostElement_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_ExpectedCost(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_ExpectedCost(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_ExpectedCost(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_ExpectedCost(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_ExpectedCost(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_ExpectedCost(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_ExpectedCost() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_ExpectedCost() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27857572235483L;/** Last Updated Timestamp 12/4/2019 1:38:38 PM */
         public static long updatedMS = 1575446918694L;/** VAF_TableView_ID=1000535 */
         public static int Table_ID; // =1000535;
-                                    /** TableName=C_ExpectedCost */
-        public static String Table_Name = "C_ExpectedCost";
+                                    /** TableName=VAB_ExpectedCost */
+        public static String Table_Name = "VAB_ExpectedCost";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(7);/** AccessLevel
 @return 7 - System - Client - Org 
 */
@@ -59,15 +59,15 @@ SetM_CostElement_ID (0);} */
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_ExpectedCost[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Amount.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_ExpectedCost[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Amount.
 @param Amt Amount */
         public void SetAmt(Decimal? Amt) { if (Amt == null) throw new ArgumentException("Amt is mandatory."); Set_Value("Amt", (Decimal?)Amt); }/** Get Amount.
 @return Amount */
         public Decimal GetAmt() { Object bd = Get_Value("Amt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Expected Landed Cost.
-@param C_ExpectedCost_ID Expected Landed Cost */
-        public void SetC_ExpectedCost_ID(int C_ExpectedCost_ID) { if (C_ExpectedCost_ID < 1) throw new ArgumentException("C_ExpectedCost_ID is mandatory."); Set_ValueNoCheck("C_ExpectedCost_ID", C_ExpectedCost_ID); }/** Get Expected Landed Cost.
+@param VAB_ExpectedCost_ID Expected Landed Cost */
+        public void SetVAB_ExpectedCost_ID(int VAB_ExpectedCost_ID) { if (VAB_ExpectedCost_ID < 1) throw new ArgumentException("VAB_ExpectedCost_ID is mandatory."); Set_ValueNoCheck("VAB_ExpectedCost_ID", VAB_ExpectedCost_ID); }/** Get Expected Landed Cost.
 @return Expected Landed Cost */
-        public int GetC_ExpectedCost_ID() { Object ii = Get_Value("C_ExpectedCost_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
+        public int GetVAB_ExpectedCost_ID() { Object ii = Get_Value("VAB_ExpectedCost_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
 @param C_Order_ID Sales Order */
         public void SetC_Order_ID(int C_Order_ID) { if (C_Order_ID < 1) throw new ArgumentException("C_Order_ID is mandatory."); Set_ValueNoCheck("C_Order_ID", C_Order_ID); }/** Get Order.
 @return Sales Order */

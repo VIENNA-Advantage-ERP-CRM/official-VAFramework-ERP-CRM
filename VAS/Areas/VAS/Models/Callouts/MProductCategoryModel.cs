@@ -49,10 +49,10 @@ namespace VIS.Models
             {
                 retDic["C_TaxCategory_ID"] = Util.GetValueOfString(pc.GetC_TaxCategory_ID());
             }
-            retDic["A_Asset_Group_ID"] = Util.GetValueOfString(pc.GetA_Asset_Group_ID());
-            if (pc.GetA_Asset_Group_ID() > 0)
+            retDic["VAA_AssetGroup_ID"] = Util.GetValueOfString(pc.GetVAA_AssetGroup_ID());
+            if (pc.GetVAA_AssetGroup_ID() > 0)
             {
-                MAssetGroup astGrp = new MAssetGroup(ctx, pc.GetA_Asset_Group_ID(), null);
+                MAssetGroup astGrp = new MAssetGroup(ctx, pc.GetVAA_AssetGroup_ID(), null);
                 if (astGrp.Get_ColumnIndex("VA038_AmortizationTemplate_ID") > 0)
                 {
                     retDic["VA038_AmortizationTemplate_ID"] = Util.GetValueOfString(astGrp.Get_Value("VA038_AmortizationTemplate_ID"));

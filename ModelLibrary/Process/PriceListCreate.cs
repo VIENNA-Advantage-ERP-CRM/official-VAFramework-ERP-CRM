@@ -220,7 +220,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " AND p.IsActive='Y' AND po.IsActive='Y' AND po.IsCurrentVendor='Y'"
                         //	Optional Restrictions
                         + " AND (dl.M_Product_Category_ID IS NULL OR p.M_Product_Category_ID=dl.M_Product_Category_ID)"
-                        + " AND (dl.C_BPartner_ID IS NULL OR po.C_BPartner_ID=dl.C_BPartner_ID)"
+                        + " AND (dl.VAB_BusinessPartner_ID IS NULL OR po.VAB_BusinessPartner_ID=dl.VAB_BusinessPartner_ID)"
                         + " AND (dl.M_Product_ID IS NULL OR p.M_Product_ID=dl.M_Product_ID)";
                 }
                 else			//	Create from Price List **
@@ -234,9 +234,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " AND p.IsActive='Y' AND pp.IsActive='Y'"
                         //	Optional Restrictions
                         + " AND (dl.M_Product_Category_ID IS NULL OR p.M_Product_Category_ID=dl.M_Product_Category_ID)"
-                        + " AND (dl.C_BPartner_ID IS NULL OR EXISTS "
+                        + " AND (dl.VAB_BusinessPartner_ID IS NULL OR EXISTS "
                             + "(SELECT * FROM M_Product_PO po "
-                            + "WHERE po.M_Product_ID=p.M_Product_ID AND po.C_BPartner_ID=dl.C_BPartner_ID))"
+                            + "WHERE po.M_Product_ID=p.M_Product_ID AND po.VAB_BusinessPartner_ID=dl.VAB_BusinessPartner_ID))"
                         + " AND (dl.M_Product_ID IS NULL OR p.M_Product_ID=dl.M_Product_ID)";
                 }
                 //idr = DataBase.prepareStatement(sql, get_TrxName());
@@ -270,13 +270,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(po.PriceList,"
-                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
+                        + " po.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
                         //	Price Std
                         + " COALESCE(currencyConvert(po.PriceList,"
-                        + "	po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
+                        + "	po.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PriceList),"
                         //	Price Limit
                         + " COALESCE(currencyConvert(po.PricePO,"
-                        + " po.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PricePO) "
+                        + " po.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PricePO) "
                         //
                         + "FROM M_Product_PO po"
                         + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1
@@ -293,13 +293,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(pp.PriceList,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceList),"
+                        + " bpl.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceList),"
                         //	Price Std
                         + " COALESCE(currencyConvert(pp.PriceStd,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceStd),"
+                        + " bpl.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceStd),"
                         //	Price Limit
                         + " COALESCE(currencyConvert(pp.PriceLimit,"
-                        + " bpl.C_Currency_ID, pl.C_Currency_ID, dl.ConversionDate, dl.C_ConversionType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceLimit) "
+                        + " bpl.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceLimit) "
                         //
                         + "FROM M_ProductPrice pp"
                         + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1

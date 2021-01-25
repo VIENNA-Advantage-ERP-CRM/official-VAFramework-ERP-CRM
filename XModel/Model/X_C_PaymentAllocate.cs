@@ -138,18 +138,18 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Allocation Line.
-@param C_AllocationLine_ID Allocation Line */
-public void SetC_AllocationLine_ID (int C_AllocationLine_ID)
+@param VAB_DocAllocationLine_ID Allocation Line */
+public void SetVAB_DocAllocationLine_ID (int VAB_DocAllocationLine_ID)
 {
-if (C_AllocationLine_ID <= 0) Set_Value ("C_AllocationLine_ID", null);
+if (VAB_DocAllocationLine_ID <= 0) Set_Value ("VAB_DocAllocationLine_ID", null);
 else
-Set_Value ("C_AllocationLine_ID", C_AllocationLine_ID);
+Set_Value ("VAB_DocAllocationLine_ID", VAB_DocAllocationLine_ID);
 }
 /** Get Allocation Line.
 @return Allocation Line */
-public int GetC_AllocationLine_ID() 
+public int GetVAB_DocAllocationLine_ID() 
 {
-Object ii = Get_Value("C_AllocationLine_ID");
+Object ii = Get_Value("VAB_DocAllocationLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

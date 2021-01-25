@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             SetC_PaySchedule_ID(paySchedule.GetC_PaySchedule_ID());
 
             //	Amounts
-            int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID());
+            int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
             Decimal due = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                             && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // get invoice currency for rounding
-                MCurrency currency = MCurrency.Get(GetCtx(), GetC_Currency_ID());
+                MCurrency currency = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 SetDueAmt(Decimal.Round(GetDueAmt(), currency.GetStdPrecision()));
                 SetVA009_PaidAmntInvce(Decimal.Round(GetVA009_PaidAmntInvce(), currency.GetStdPrecision()));
 
@@ -245,14 +245,14 @@ namespace VAdvantage.Model
                     }
                     #endregion
                 }
-                else if (GetC_CashLine_ID() > 0)
+                else if (GetVAB_CashJRNLLine_ID() > 0)
                 {
                     #region For Cash
                     // when invoice schedule have cashline reference then need to check 
                     // payment mode of "Cash" type having currency is null on "Payment Method" window & update here
                     DataSet dsPaymentMethod = (DB.ExecuteDataset(@"SELECT VA009_PaymentMethod_ID, VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger 
                                        FROM VA009_PaymentMethod WHERE IsActive = 'Y' 
-                                       AND VAF_Client_ID = " + GetVAF_Client_ID() + @" AND VA009_PaymentBaseType = 'B' AND NVL(C_Currency_ID , 0) = 0", null, Get_Trx()));
+                                       AND VAF_Client_ID = " + GetVAF_Client_ID() + @" AND VA009_PaymentBaseType = 'B' AND NVL(VAB_Currency_ID , 0) = 0", null, Get_Trx()));
                     if (dsPaymentMethod != null && dsPaymentMethod.Tables.Count > 0 && dsPaymentMethod.Tables[0].Rows.Count > 0)
                     {
                         SetVA009_PaymentMethod_ID(Util.GetValueOfInt(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
                         po.Set_Value("VA009_PaymentMode", "C");
                         po.Set_Value("VA009_PaymentType", "S");
                         po.Set_Value("VA009_PaymentTrigger", "S");
-                        po.Set_Value("C_Currency_ID", null);
+                        po.Set_Value("VAB_Currency_ID", null);
                         po.Set_Value("VA009_InitiatePay", false);
                         if (!po.Save(Get_Trx()))
                         {
@@ -304,7 +304,7 @@ namespace VAdvantage.Model
                 SetProcessing(false);
 
                 // when schedile is not paid and invoice hedaer having "Hold Payment", then set "Hold payment" on schedule also
-                if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0))
+                if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0))
                 {
                     String sql = "SELECT IsHoldPayment FROM C_Invoice WHERE C_Invoice_ID = " + GetC_Invoice_ID();
                     String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));

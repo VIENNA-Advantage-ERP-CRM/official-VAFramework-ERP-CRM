@@ -27,9 +27,9 @@ namespace VAdvantage.Process
     {
      	private VAdvantage.Model.MClient		_client = null;
 
-	private int			_A_Asset_Group_ID = 0;
+	private int			_VAA_AssetGroup_ID = 0;
 	private int			_M_Product_ID = 0;
-	private int			_C_BPartner_ID = 0;
+	private int			_VAB_BusinessPartner_ID = 0;
 	private int			_A_Asset_ID = 0;
 	private DateTime?	_GuaranteeDate = null;
 	private int			_NoGuarantee_MailText_ID = 0;
@@ -51,13 +51,13 @@ namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("A_Asset_Group_ID"))
-				_A_Asset_Group_ID = element.GetParameterAsInt();
+			else if (name.Equals("VAA_AssetGroup_ID"))
+				_VAA_AssetGroup_ID = element.GetParameterAsInt();
 			else if (name.Equals("M_Product_ID"))
 				_M_Product_ID = element.GetParameterAsInt();
-			else if (name.Equals("C_BPartner_ID"))
-				_C_BPartner_ID = element.GetParameterAsInt();
-			else if (name.Equals("A_Asset_ID"))
+			else if (name.Equals("VAB_BusinessPartner_ID"))
+				_VAB_BusinessPartner_ID = element.GetParameterAsInt();
+			else if (name.Equals("VAA_Asset_ID"))
 				_A_Asset_ID = element.GetParameterAsInt();
 			else if (name.Equals("GuaranteeDate"))
 				_GuaranteeDate = (DateTime?)element.GetParameter();
@@ -97,16 +97,16 @@ namespace VAdvantage.Process
 			return msg;
 		}
 		//
-		StringBuilder sql = new StringBuilder ("SELECT A_Asset_ID, GuaranteeDate "
-			+ "FROM A_Asset a"
+		StringBuilder sql = new StringBuilder ("SELECT VAA_Asset_ID, GuaranteeDate "
+			+ "FROM VAA_Asset a"
 			+ " INNER JOIN M_Product p ON (a.M_Product_ID=p.M_Product_ID) "
 			+ "WHERE ");
-		if (_A_Asset_Group_ID != 0 && _A_Asset_Group_ID!=-1)
-			sql.Append("a.A_Asset_Group_ID=").Append(_A_Asset_Group_ID).Append(" AND ");
+		if (_VAA_AssetGroup_ID != 0 && _VAA_AssetGroup_ID!=-1)
+			sql.Append("a.VAA_AssetGroup_ID=").Append(_VAA_AssetGroup_ID).Append(" AND ");
 		if (_M_Product_ID != 0)
 			sql.Append("p.M_Product_ID=").Append(_M_Product_ID).Append(" AND ");
-		if (_C_BPartner_ID != 0)
-			sql.Append("a.C_BPartner_ID=").Append(_C_BPartner_ID).Append(" AND ");
+		if (_VAB_BusinessPartner_ID != 0)
+			sql.Append("a.VAB_BusinessPartner_ID=").Append(_VAB_BusinessPartner_ID).Append(" AND ");
 		String s = sql.ToString();
 		if (s.EndsWith(" WHERE "))
 			throw new Exception ("@RestrictSelection@");
@@ -129,7 +129,7 @@ namespace VAdvantage.Process
             idr = DB.ExecuteReader(s);
             while (idr.Read())
             {
-                int A_Asset_ID = Util.GetValueOfInt(idr[0]);// rs.getInt(1);
+                int VAA_Asset_ID = Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                 DateTime? GuaranteeDate = Util.GetValueOfDateTime(idr[1]);// rs.getTimestamp(2);
 
                 //	Guarantee Expired
@@ -138,14 +138,14 @@ namespace VAdvantage.Process
                 {
                     if (_NoGuarantee_MailText_ID != 0)
                     {
-                        SendNoGuaranteeMail(A_Asset_ID, _NoGuarantee_MailText_ID, Get_Trx());
+                        SendNoGuaranteeMail(VAA_Asset_ID, _NoGuarantee_MailText_ID, Get_Trx());
                         reminders++;
                     }
                 }
                 else	//	Guarantee valid
                 {
-                    String msg = DeliverIt(A_Asset_ID);
-                    AddLog(A_Asset_ID, null, null, msg);
+                    String msg = DeliverIt(VAA_Asset_ID);
+                    AddLog(VAA_Asset_ID, null, null, msg);
                     if (msg.StartsWith("** "))
                         errors++;
                     else
@@ -172,13 +172,13 @@ namespace VAdvantage.Process
 	/// <summary>
 	/// Send No Guarantee EMail	 
 	/// </summary>
-	/// <param name="A_Asset_ID">asset</param>
+	/// <param name="VAA_Asset_ID">asset</param>
 	/// <param name="R_MailText_ID">mail to send</param>
 	/// <param name="trxName">trx</param>
 	/// <returns>message - delivery errors start with **</returns>
-	private String SendNoGuaranteeMail (int A_Asset_ID, int R_MailText_ID, Trx trxName)
+	private String SendNoGuaranteeMail (int VAA_Asset_ID, int R_MailText_ID, Trx trxName)
 	{
-		MAsset asset = new MAsset (GetCtx(), A_Asset_ID, trxName);
+		MAsset asset = new MAsset (GetCtx(), VAA_Asset_ID, trxName);
 		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
 		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
@@ -215,14 +215,14 @@ namespace VAdvantage.Process
 	/// <summary>
 	/// Deliver Asset	
 	/// </summary>
-	/// <param name="A_Asset_ID">asset</param>
+	/// <param name="VAA_Asset_ID">asset</param>
 	/// <returns>message - delivery errors start with **</returns>
-	private String DeliverIt (int A_Asset_ID)
+	private String DeliverIt (int VAA_Asset_ID)
 	{
-		log.Fine("A_Asset_ID=" + A_Asset_ID);
+		log.Fine("VAA_Asset_ID=" + VAA_Asset_ID);
 		long start =CommonFunctions.CurrentTimeMillis();
 		//
-		MAsset asset = new MAsset (GetCtx(), A_Asset_ID, Get_Trx());
+		MAsset asset = new MAsset (GetCtx(), VAA_Asset_ID, Get_Trx());
 		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
 		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
@@ -269,7 +269,7 @@ namespace VAdvantage.Process
 				}
 			}
 			else
-				log.Warning("No DowloadURL for A_Asset_ID=" + A_Asset_ID);
+				log.Warning("No DowloadURL for VAA_Asset_ID=" + VAA_Asset_ID);
 		}
 		String msg = email.Send();
 		new MUserMail(_MailText, asset.GetVAF_UserContact_ID(), email).Save();

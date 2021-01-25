@@ -369,7 +369,7 @@
                 }
                 else {
                     if (window_ID == 184) {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on M_inout and internal use move line respectively
-                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
+                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
                     }
                     else if (window_ID == 319 || window_ID == 170) {
                         query += " AND VAICNT_TransactionType = 'IM' ";
@@ -384,7 +384,7 @@
                         M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
                     }
                     else if (window_ID == 169) {
-                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  C_BPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "C_BPartner_ID")) + " AND DocStatus IN ('CO'))";
+                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO'))";
                     }
                     else if (window_ID == 341) {
                         query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";

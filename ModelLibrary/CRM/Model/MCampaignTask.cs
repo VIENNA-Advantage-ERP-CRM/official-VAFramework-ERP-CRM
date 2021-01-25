@@ -11,10 +11,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCampaignTask : X_C_CampaignTask
+    public class MCampaignTask : X_VAB_PromotionTask
     {
-         public MCampaignTask(Ctx ctx, int C_CampaignTask_ID, Trx trxName)
-            : base(ctx, C_CampaignTask_ID, trxName)
+         public MCampaignTask(Ctx ctx, int VAB_PromotionTask_ID, Trx trxName)
+            : base(ctx, VAB_PromotionTask_ID, trxName)
         {
             
         }

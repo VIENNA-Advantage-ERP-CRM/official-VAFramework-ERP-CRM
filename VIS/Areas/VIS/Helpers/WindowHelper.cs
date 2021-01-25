@@ -1330,7 +1330,7 @@ namespace VIS.Helpers
         /// <returns>true/false</returns>
         public bool GetDocValueWF(Ctx ctx, int VAF_Client_ID, int VAF_TableView_ID, Trx _trx)
         {
-            String sql = "SELECT COUNT(AD_Workflow_ID) FROM AD_Workflow "
+            String sql = "SELECT COUNT(VAF_Workflow_ID) FROM VAF_Workflow "
                 + " WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' AND VAF_TableView_ID = " + VAF_TableView_ID + " AND VAF_Client_ID = " + VAF_Client_ID
                 + " ORDER BY VAF_Client_ID, VAF_TableView_ID";
 

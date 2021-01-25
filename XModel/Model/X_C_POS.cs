@@ -20,7 +20,7 @@ public X_C_POS (Context ctx, int C_POS_ID, Trx trxName) : base (ctx, C_POS_ID, t
 {
 /** if (C_POS_ID == 0)
 {
-SetC_CashBook_ID (0);
+SetVAB_CashBook_ID (0);
 SetC_POS_ID (0);
 SetIsModifyPrice (false);	// N
 SetM_PriceList_ID (0);
@@ -34,7 +34,7 @@ public X_C_POS (Ctx ctx, int C_POS_ID, Trx trxName) : base (ctx, C_POS_ID, trxNa
 {
 /** if (C_POS_ID == 0)
 {
-SetC_CashBook_ID (0);
+SetVAB_CashBook_ID (0);
 SetC_POS_ID (0);
 SetIsModifyPrice (false);	// N
 SetM_PriceList_ID (0);
@@ -123,52 +123,52 @@ StringBuilder sb = new StringBuilder ("X_C_POS[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** C_BPartnerCashTrx_ID VAF_Control_Ref_ID=173 */
-public static int C_BPARTNERCASHTRX_ID_VAF_Control_Ref_ID=173;
+/** VAB_BusinessPartnerCashTrx_ID VAF_Control_Ref_ID=173 */
+public static int VAB_BUSINESSPARTNERCASHTRX_ID_VAF_Control_Ref_ID=173;
 /** Set Template B.Partner.
-@param C_BPartnerCashTrx_ID Business Partner used for creating new Business Partners on the fly */
-public void SetC_BPartnerCashTrx_ID (int C_BPartnerCashTrx_ID)
+@param VAB_BusinessPartnerCashTrx_ID Business Partner used for creating new Business Partners on the fly */
+public void SetVAB_BusinessPartnerCashTrx_ID (int VAB_BusinessPartnerCashTrx_ID)
 {
-if (C_BPartnerCashTrx_ID <= 0) Set_Value ("C_BPartnerCashTrx_ID", null);
+if (VAB_BusinessPartnerCashTrx_ID <= 0) Set_Value ("VAB_BusinessPartnerCashTrx_ID", null);
 else
-Set_Value ("C_BPartnerCashTrx_ID", C_BPartnerCashTrx_ID);
+Set_Value ("VAB_BusinessPartnerCashTrx_ID", VAB_BusinessPartnerCashTrx_ID);
 }
 /** Get Template B.Partner.
 @return Business Partner used for creating new Business Partners on the fly */
-public int GetC_BPartnerCashTrx_ID() 
+public int GetVAB_BusinessPartnerCashTrx_ID() 
 {
-Object ii = Get_Value("C_BPartnerCashTrx_ID");
+Object ii = Get_Value("VAB_BusinessPartnerCashTrx_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cash Book.
-@param C_CashBook_ID Cash Book for recording petty cash transactions */
-public void SetC_CashBook_ID (int C_CashBook_ID)
+@param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+public void SetVAB_CashBook_ID (int VAB_CashBook_ID)
 {
-if (C_CashBook_ID < 1) throw new ArgumentException ("C_CashBook_ID is mandatory.");
-Set_Value ("C_CashBook_ID", C_CashBook_ID);
+if (VAB_CashBook_ID < 1) throw new ArgumentException ("VAB_CashBook_ID is mandatory.");
+Set_Value ("VAB_CashBook_ID", VAB_CashBook_ID);
 }
 /** Get Cash Book.
 @return Cash Book for recording petty cash transactions */
-public int GetC_CashBook_ID() 
+public int GetVAB_CashBook_ID() 
 {
-Object ii = Get_Value("C_CashBook_ID");
+Object ii = Get_Value("VAB_CashBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Document Type.
-@param C_DocType_ID Document type or rules */
-public void SetC_DocType_ID (int C_DocType_ID)
+@param VAB_DocTypes_ID Document type or rules */
+public void SetVAB_DocTypes_ID (int VAB_DocTypes_ID)
 {
-if (C_DocType_ID <= 0) Set_Value ("C_DocType_ID", null);
+if (VAB_DocTypes_ID <= 0) Set_Value ("VAB_DocTypes_ID", null);
 else
-Set_Value ("C_DocType_ID", C_DocType_ID);
+Set_Value ("VAB_DocTypes_ID", VAB_DocTypes_ID);
 }
 /** Get Document Type.
 @return Document type or rules */
-public int GetC_DocType_ID() 
+public int GetVAB_DocTypes_ID() 
 {
-Object ii = Get_Value("C_DocType_ID");
+Object ii = Get_Value("VAB_DocTypes_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

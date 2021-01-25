@@ -192,82 +192,82 @@ public DateTime? GetBirthday()
 return (DateTime?)Get_Value("Birthday");
 }
 /** Set Business Partner Group.
-@param C_BP_Group_ID Business Partner Group */
-public void SetC_BP_Group_ID (int C_BP_Group_ID)
+@param VAB_BPart_Category_ID Business Partner Group */
+public void SetVAB_BPart_Category_ID (int VAB_BPart_Category_ID)
 {
-if (C_BP_Group_ID <= 0) Set_Value ("C_BP_Group_ID", null);
+if (VAB_BPart_Category_ID <= 0) Set_Value ("VAB_BPart_Category_ID", null);
 else
-Set_Value ("C_BP_Group_ID", C_BP_Group_ID);
+Set_Value ("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
 }
 /** Get Business Partner Group.
 @return Business Partner Group */
-public int GetC_BP_Group_ID() 
+public int GetVAB_BPart_Category_ID() 
 {
-Object ii = Get_Value("C_BP_Group_ID");
+Object ii = Get_Value("VAB_BPart_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);
+if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);
 else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Partner Location.
-@param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-public void SetC_BPartner_Location_ID (int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+public void SetVAB_BPart_Location_ID (int VAB_BPart_Location_ID)
 {
-if (C_BPartner_Location_ID <= 0) Set_Value ("C_BPartner_Location_ID", null);
+if (VAB_BPart_Location_ID <= 0) Set_Value ("VAB_BPart_Location_ID", null);
 else
-Set_Value ("C_BPartner_Location_ID", C_BPartner_Location_ID);
+Set_Value ("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
 }
 /** Get Partner Location.
 @return Identifies the (ship to) address for this Business Partner */
-public int GetC_BPartner_Location_ID() 
+public int GetVAB_BPart_Location_ID() 
 {
-Object ii = Get_Value("C_BPartner_Location_ID");
+Object ii = Get_Value("VAB_BPart_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Country.
-@param C_Country_ID Country */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID <= 0) Set_Value ("C_Country_ID", null);
+if (VAB_Country_ID <= 0) Set_Value ("VAB_Country_ID", null);
 else
-Set_Value ("C_Country_ID", C_Country_ID);
+Set_Value ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Greeting.
-@param C_Greeting_ID Greeting to print on correspondence */
-public void SetC_Greeting_ID (int C_Greeting_ID)
+@param VAB_Greeting_ID Greeting to print on correspondence */
+public void SetVAB_Greeting_ID (int VAB_Greeting_ID)
 {
-if (C_Greeting_ID <= 0) Set_Value ("C_Greeting_ID", null);
+if (VAB_Greeting_ID <= 0) Set_Value ("VAB_Greeting_ID", null);
 else
-Set_Value ("C_Greeting_ID", C_Greeting_ID);
+Set_Value ("VAB_Greeting_ID", VAB_Greeting_ID);
 }
 /** Get Greeting.
 @return Greeting to print on correspondence */
-public int GetC_Greeting_ID() 
+public int GetVAB_Greeting_ID() 
 {
-Object ii = Get_Value("C_Greeting_ID");
+Object ii = Get_Value("VAB_Greeting_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -856,18 +856,18 @@ public String GetBANKACCOUNT()
     return (String)Get_Value("BANKACCOUNT");
 }
 /** Set Partner Bank Account.
-@param C_BP_BankAccount_ID Bank Account of the Business Partner */
-public void SetC_BP_BankAccount_ID(int C_BP_BankAccount_ID)
+@param VAB_BPart_Bank_Acct_ID Bank Account of the Business Partner */
+public void SetVAB_BPart_Bank_Acct_ID(int VAB_BPart_Bank_Acct_ID)
 {
-    if (C_BP_BankAccount_ID <= 0) Set_Value("C_BP_BankAccount_ID", null);
+    if (VAB_BPart_Bank_Acct_ID <= 0) Set_Value("VAB_BPart_Bank_Acct_ID", null);
     else
-        Set_Value("C_BP_BankAccount_ID", C_BP_BankAccount_ID);
+        Set_Value("VAB_BPart_Bank_Acct_ID", VAB_BPart_Bank_Acct_ID);
 }
 /** Get Partner Bank Account.
 @return Bank Account of the Business Partner */
-public int GetC_BP_BankAccount_ID()
+public int GetVAB_BPart_Bank_Acct_ID()
 {
-    Object ii = Get_Value("C_BP_BankAccount_ID");
+    Object ii = Get_Value("VAB_BPart_Bank_Acct_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

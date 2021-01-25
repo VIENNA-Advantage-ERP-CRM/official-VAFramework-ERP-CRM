@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /**	Parse User			*/
         private MUser _user = null;
         /** Parse BPartner		*/
-        private X_C_BPartner _bpartner = null;
+        private X_VAB_BusinessPartner _bpartner = null;
         /** Parse PO			*/
         /**parse  Lookup column **/
         private POInfo _poInfo = null;
@@ -236,7 +236,7 @@ namespace VAdvantage.Model
                 }
                 else if (token == "BPName")
                 {
-                    if (po.Get_TableName() == "C_BPartner")
+                    if (po.Get_TableName() == "VAB_BusinessPartner")
                     {
                         outStr.Append(ParseVariable("Name", po));
                     }
@@ -284,13 +284,13 @@ namespace VAdvantage.Model
                                                           l.address4,
                                                           l.city,
                                                           CASE
-                                                            WHEN l.C_City_ID IS NOT NULL
+                                                            WHEN l.VAB_City_ID IS NOT NULL
                                                             THEN
-                                                              ( SELECT NAME FROM C_City ct WHERE ct.C_City_ID=l.C_City_ID
+                                                              ( SELECT NAME FROM VAB_City ct WHERE ct.VAB_City_ID=l.VAB_City_ID
                                                               )
                                                             ELSE NULL
                                                           END CityName,
-                                                          (SELECT NAME FROM C_Country c WHERE c.C_Country_ID=l.C_Country_ID
+                                                          (SELECT NAME FROM VAB_Country c WHERE c.VAB_Country_ID=l.VAB_Country_ID
                                                           ) AS CountryName
                                                         FROM C_Location l WHERE l.C_Location_ID="+value);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -354,26 +354,26 @@ namespace VAdvantage.Model
             return value.ToString();
         }
 
-        public void SetBPartner(int C_BPartner_ID)
+        public void SetBPartner(int VAB_BusinessPartner_ID)
         {
-            _bpartner = new X_C_BPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
+            _bpartner = new X_VAB_BusinessPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
         }
 
-        public void SetBPartner(X_C_BPartner bpartner)
+        public void SetBPartner(X_VAB_BusinessPartner bpartner)
         {
             _bpartner = bpartner;
         }
 
         public void SetBPartner(PO bpartner)
         {
-            int index = bpartner.Get_ColumnIndex("C_BPartner_ID");
+            int index = bpartner.Get_ColumnIndex("VAB_BusinessPartner_ID");
             if (index > 0)
             {
                 Object oo = bpartner.Get_Value(index);
                 if (oo != null && oo.GetType() == typeof(int))
                 {
-                    int C_BPartner_ID = int.Parse(oo.ToString());
-                    SetBPartner(C_BPartner_ID);
+                    int VAB_BusinessPartner_ID = int.Parse(oo.ToString());
+                    SetBPartner(VAB_BusinessPartner_ID);
                 }
             }
         }
@@ -397,14 +397,14 @@ namespace VAdvantage.Model
             _po = po;
             if (analyse)
             {
-                int index = po.Get_ColumnIndex("C_BPartner_ID");
+                int index = po.Get_ColumnIndex("VAB_BusinessPartner_ID");
                 if (index > 0)
                 {
                     Object oo = po.Get_Value(index);
                     if (oo != null && oo.GetType() == typeof(int))
                     {
-                        int C_BPartner_ID = int.Parse(oo.ToString());
-                        SetBPartner(C_BPartner_ID);
+                        int VAB_BusinessPartner_ID = int.Parse(oo.ToString());
+                        SetBPartner(VAB_BusinessPartner_ID);
                     }
                 }
                 index = po.Get_ColumnIndex("VAF_UserContact_ID");

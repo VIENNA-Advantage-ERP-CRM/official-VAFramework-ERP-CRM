@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BP_Group_Acct
+/** Generated Model for VAB_BPart_Category_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BP_Group_Acct : PO
+public class X_VAB_BPart_Category_Acct : PO
 {
-public X_C_BP_Group_Acct (Context ctx, int C_BP_Group_Acct_ID, Trx trxName) : base (ctx, C_BP_Group_Acct_ID, trxName)
+public X_VAB_BPart_Category_Acct (Context ctx, int VAB_BPart_Category_Acct_ID, Trx trxName) : base (ctx, VAB_BPart_Category_Acct_ID, trxName)
 {
-/** if (C_BP_Group_Acct_ID == 0)
+/** if (VAB_BPart_Category_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_BP_Group_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_BPart_Category_ID (0);
 SetC_Prepayment_Acct (0);
 SetC_Receivable_Acct (0);
 SetC_Receivable_Services_Acct (0);
@@ -38,12 +38,12 @@ SetWriteOff_Acct (0);
 }
  */
 }
-public X_C_BP_Group_Acct (Ctx ctx, int C_BP_Group_Acct_ID, Trx trxName) : base (ctx, C_BP_Group_Acct_ID, trxName)
+public X_VAB_BPart_Category_Acct (Ctx ctx, int VAB_BPart_Category_Acct_ID, Trx trxName) : base (ctx, VAB_BPart_Category_Acct_ID, trxName)
 {
-/** if (C_BP_Group_Acct_ID == 0)
+/** if (VAB_BPart_Category_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_BP_Group_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_BPart_Category_ID (0);
 SetC_Prepayment_Acct (0);
 SetC_Receivable_Acct (0);
 SetC_Receivable_Services_Acct (0);
@@ -65,7 +65,7 @@ SetWriteOff_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Group_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Category_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -73,7 +73,7 @@ public X_C_BP_Group_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Group_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Category_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -81,13 +81,13 @@ public X_C_BP_Group_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Group_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_Category_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BP_Group_Acct()
+static X_VAB_BPart_Category_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -100,8 +100,8 @@ public static long updatedMS = 1280389053408L;
 public static int Table_ID;
  // =395;
 
-/** TableName=C_BP_Group_Acct */
-public static String Table_Name="C_BP_Group_Acct";
+/** TableName=VAB_BPart_Category_Acct */
+public static String Table_Name="VAB_BPart_Category_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -135,21 +135,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BP_Group_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_Category_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -157,20 +157,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Business Partner Group.
-@param C_BP_Group_ID Business Partner Group */
-public void SetC_BP_Group_ID (int C_BP_Group_ID)
+@param VAB_BPart_Category_ID Business Partner Group */
+public void SetVAB_BPart_Category_ID (int VAB_BPart_Category_ID)
 {
-if (C_BP_Group_ID < 1) throw new ArgumentException ("C_BP_Group_ID is mandatory.");
-Set_ValueNoCheck ("C_BP_Group_ID", C_BP_Group_ID);
+if (VAB_BPart_Category_ID < 1) throw new ArgumentException ("VAB_BPart_Category_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
 }
 /** Get Business Partner Group.
 @return Business Partner Group */
-public int GetC_BP_Group_ID() 
+public int GetVAB_BPart_Category_ID() 
 {
-Object ii = Get_Value("C_BP_Group_ID");
+Object ii = Get_Value("VAB_BPart_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

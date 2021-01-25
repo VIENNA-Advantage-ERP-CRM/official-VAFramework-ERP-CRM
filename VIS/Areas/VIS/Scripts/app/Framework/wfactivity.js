@@ -1347,7 +1347,7 @@
                 ctrl = new VIS.Controls.VComboBox(info.ColName, false, false, true, lookup, 50);
                 return ctrl;
             }
-            else if (info.ColName.toUpperCase() == "C_GENATTRIBUTESETINSTANCE_ID") {
+            else if (info.ColName.toUpperCase() == "VAB_GENFEATURESETINSTANCE_ID") {
                 // alert('Gen Attribute Not Implement Yet');
                 var vAttSetInstance = null;
                 var lookupCur = new VIS.MGAttributeLookup(VIS.context, 0);
@@ -1358,8 +1358,8 @@
                     dataType: "json",
                     success: function (dyndata) {
                         if (dyndata.result) {
-                            vAttSetInstance = new VIS.Controls.VPAttribute('C_GenAttributeSetInstance', true, false, true, VIS.DisplayType.PAttribute, lookupCur, 0, true, false, false, false);
-                            vAttSetInstance.SetC_GenAttributeSet_ID(dyndata.result.GenAttributeSetID);
+                            vAttSetInstance = new VIS.Controls.VPAttribute('VAB_GenFeatureSetInstance', true, false, true, VIS.DisplayType.PAttribute, lookupCur, 0, true, false, false, false);
+                            vAttSetInstance.SetVAB_GenFeatureSet_ID(dyndata.result.GenAttributeSetID);
                         }
                     }
                 });

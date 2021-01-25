@@ -59,7 +59,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             MOrder from = new MOrder(GetCtx(), Recurring.GetC_Order_ID(), Get_TrxName());
                             MOrder order = MOrder.CopyFrom(from, dateDoc,
-                                from.GetC_DocType_ID(), false, false, Get_TrxName());
+                                from.GetVAB_DocTypes_ID(), false, false, Get_TrxName());
                             run.SetC_Order_ID(order.GetC_Order_ID());
                             msg += order.GetDocumentNo();
                         }
@@ -67,7 +67,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             MInvoice from = new MInvoice(GetCtx(), Recurring.GetC_Invoice_ID(), Get_TrxName());
                             MInvoice invoice = MInvoice.CopyFrom(from, dateDoc,
-                                from.GetC_DocType_ID(), false, Get_TrxName(), false);
+                                from.GetVAB_DocTypes_ID(), false, Get_TrxName(), false);
                             run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                             msg += invoice.GetDocumentNo();
                         }
@@ -93,7 +93,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             MPayment from = new MPayment(GetCtx(), Recurring.GetC_Payment_ID(), Get_TrxName());
                             MPayment payment = MPayment.CopyFrom(from, dateDoc,
-                                from.GetC_DocType_ID(), Get_TrxName());
+                                from.GetVAB_DocTypes_ID(), Get_TrxName());
                             run.SetC_Payment_ID(payment.GetC_Payment_ID());
                             msg += payment.GetDocumentNo();
                         }

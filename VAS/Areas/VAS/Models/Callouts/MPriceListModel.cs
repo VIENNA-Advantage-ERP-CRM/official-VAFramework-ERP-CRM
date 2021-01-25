@@ -32,7 +32,7 @@ namespace VIS.Models
                 MPriceList prcLst = new MPriceList(ctx, M_PriceList_ID, null);
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
                 // Reset Orig Shipment
-                MCurrency crncy = new MCurrency(ctx, prcLst.GetC_Currency_ID(), null);
+                MCurrency crncy = new MCurrency(ctx, prcLst.GetVAB_Currency_ID(), null);
                 //retDic["StdPrecision"] = prcLst.GetPricePrecision().ToString();
                 //JID_1744  Precision should be as per currency percision 
                 retDic["StdPrecision"] = crncy.GetStdPrecision().ToString();
@@ -55,10 +55,10 @@ namespace VIS.Models
                 int M_PriceList_ID;                
                 M_PriceList_ID = Util.GetValueOfInt(fields);
                 Dictionary<String, Object> retDic = null;
-                string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,c.StdPrecision,"
+                string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
                 + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
-                + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+                + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
                 + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
                 + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
                 + "ORDER BY plv.ValidFrom DESC";
@@ -69,7 +69,7 @@ namespace VIS.Models
                     retDic["IsTaxIncluded"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsTaxIncluded"]);
                     retDic["EnforcePriceLimit"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["EnforcePriceLimit"]);
                     retDic["StdPrecision"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["StdPrecision"]);
-                    retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                    retDic["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
                     retDic["M_PriceList_Version_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_Version_ID"]);                    
                     retDic["ValidFrom"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["ValidFrom"]);
                 }

@@ -132,17 +132,17 @@ namespace VAdvantage.Model
                 return;
             }
 
-            int C_BankAccount_ID = GetCtx().GetContextAsInt(windowNo, "C_BankAccount_ID");
+            int VAB_Bank_Acct_ID = GetCtx().GetContextAsInt(windowNo, "VAB_Bank_Acct_ID");
             DateTime PayDate = CommonFunctions.CovertMilliToDate(GetCtx().GetContextAsTime(windowNo, "PayDate"));
 
             Decimal OpenAmt = Env.ZERO;
             Decimal DiscountAmt = Env.ZERO;
             Boolean IsSOTrx = false;
-            String sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.C_Currency_ID,"
-                    + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.VAF_Client_ID, i.VAF_Org_ID),"
-                + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
-                + "FROM C_Invoice_v i, C_BankAccount ba "
-                + "WHERE i.C_Invoice_ID=@C_Invoice_ID AND ba.C_BankAccount_ID=@C_BankAccount_ID";	//	#1..2
+            String sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.VAB_Currency_ID,"
+                    + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID),"
+                + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
+                + "FROM C_Invoice_v i, VAB_Bank_Acct ba "
+                + "WHERE i.C_Invoice_ID=@C_Invoice_ID AND ba.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID";	//	#1..2
 
             IDataReader idr = null;
             try
@@ -150,7 +150,7 @@ namespace VAdvantage.Model
 
                 SqlParameter[] param = new SqlParameter[3];
                 param[0] = new SqlParameter("@C_Invoice_ID", C_Invoice_ID);
-                param[1] = new SqlParameter("@C_BankAccount_ID", C_BankAccount_ID);
+                param[1] = new SqlParameter("@VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
                 param[2] = new SqlParameter("@PayDate", PayDate);
 
                 idr = DataBase.DB.ExecuteReader(sql, param);
@@ -173,7 +173,7 @@ namespace VAdvantage.Model
                 }
                 log.Log(Level.SEVERE, sql, e);
             }
-            log.Fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + C_BankAccount_ID + ")");
+            log.Fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
             SetInvoice(C_Invoice_ID, IsSOTrx, OpenAmt, Decimal.Subtract(OpenAmt, DiscountAmt), DiscountAmt);
         }	//	SetC_Invoice_ID
 

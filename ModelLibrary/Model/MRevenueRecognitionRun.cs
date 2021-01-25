@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             {
                 sql += " AND pl.VAF_Org_ID=" + _orgId;
             }
-            sql += " And NVL(GL_Journal_ID,0) <= 0 ORDER BY rn.RecognitionDate, pl.c_currency_id, pl.c_acctschema_id";
+            sql += " And NVL(GL_Journal_ID,0) <= 0 ORDER BY rn.RecognitionDate, pl.VAB_Currency_id, pl.VAB_AccountBook_id";
 
             DataTable dt = null;
             IDataReader idr = null;

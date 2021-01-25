@@ -93,7 +93,7 @@ namespace VAdvantage.Report
             //	VAF_Client indirectly via AcctSchema
             StringBuilder sb = new StringBuilder();
             //	Mandatory 	AcctSchema
-            sb.Append("C_AcctSchema_ID=").Append(GetC_AcctSchema_ID());
+            sb.Append("VAB_AccountBook_ID=").Append(GetVAB_AccountBook_ID());
             //
             return sb.ToString();
         }	//	getWhereClause
@@ -110,8 +110,8 @@ namespace VAdvantage.Report
                 .Append(Get_ID()).Append(" - ").Append(GetName());
             if (GetDescription() != null)
              sb.Append("(").Append(GetDescription()).Append(")");
-            sb.Append(" - C_AcctSchema_ID=").Append(GetC_AcctSchema_ID())
-                .Append(", C_Calendar_ID=").Append(GetC_Calendar_ID());
+            sb.Append(" - VAB_AccountBook_ID=").Append(GetVAB_AccountBook_ID())
+                .Append(", VAB_Calender_ID=").Append(GetVAB_Calender_ID());
             sb.Append("]");
             return sb.ToString();
         }	//	toString

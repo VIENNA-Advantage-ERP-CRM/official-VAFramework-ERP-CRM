@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Workflow
+/** Generated Model for VAF_Workflow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Workflow : PO
+public class X_VAF_Workflow : PO
 {
-public X_AD_Workflow (Context ctx, int AD_Workflow_ID, Trx trxName) : base (ctx, AD_Workflow_ID, trxName)
+public X_VAF_Workflow (Context ctx, int VAF_Workflow_ID, Trx trxName) : base (ctx, VAF_Workflow_ID, trxName)
 {
-/** if (AD_Workflow_ID == 0)
+/** if (VAF_Workflow_ID == 0)
 {
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetAccessLevel (null);
 SetAuthor (null);
 SetDuration (0);
@@ -37,11 +37,11 @@ SetWorkingTime (0);
 }
  */
 }
-public X_AD_Workflow (Ctx ctx, int AD_Workflow_ID, Trx trxName) : base (ctx, AD_Workflow_ID, trxName)
+public X_VAF_Workflow (Ctx ctx, int VAF_Workflow_ID, Trx trxName) : base (ctx, VAF_Workflow_ID, trxName)
 {
-/** if (AD_Workflow_ID == 0)
+/** if (VAF_Workflow_ID == 0)
 {
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetAccessLevel (null);
 SetAuthor (null);
 SetDuration (0);
@@ -63,7 +63,7 @@ SetWorkingTime (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Workflow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Workflow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,7 +71,7 @@ public X_AD_Workflow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Workflow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Workflow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -79,13 +79,13 @@ public X_AD_Workflow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Workflow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Workflow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Workflow()
+static X_VAF_Workflow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -98,8 +98,8 @@ public static long updatedMS = 1280389050038L;
 public static int Table_ID;
  // =117;
 
-/** TableName=AD_Workflow */
-public static String Table_Name="AD_Workflow";
+/** TableName=VAF_Workflow */
+public static String Table_Name="VAF_Workflow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -133,7 +133,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Workflow[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Workflow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -185,33 +185,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Processor.
-@param AD_WorkflowProcessor_ID Workflow Processor Server */
-public void SetAD_WorkflowProcessor_ID (int AD_WorkflowProcessor_ID)
+@param VAF_WFlowHandler_ID Workflow Processor Server */
+public void SetVAF_WFlowHandler_ID (int VAF_WFlowHandler_ID)
 {
-if (AD_WorkflowProcessor_ID <= 0) Set_Value ("AD_WorkflowProcessor_ID", null);
+if (VAF_WFlowHandler_ID <= 0) Set_Value ("VAF_WFlowHandler_ID", null);
 else
-Set_Value ("AD_WorkflowProcessor_ID", AD_WorkflowProcessor_ID);
+Set_Value ("VAF_WFlowHandler_ID", VAF_WFlowHandler_ID);
 }
 /** Get Workflow Processor.
 @return Workflow Processor Server */
-public int GetAD_WorkflowProcessor_ID() 
+public int GetVAF_WFlowHandler_ID() 
 {
-Object ii = Get_Value("AD_WorkflowProcessor_ID");
+Object ii = Get_Value("VAF_WFlowHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow.
-@param AD_Workflow_ID Workflow or combination of tasks */
-public void SetAD_Workflow_ID (int AD_Workflow_ID)
+@param VAF_Workflow_ID Workflow or combination of tasks */
+public void SetVAF_Workflow_ID (int VAF_Workflow_ID)
 {
-if (AD_Workflow_ID < 1) throw new ArgumentException ("AD_Workflow_ID is mandatory.");
-Set_ValueNoCheck ("AD_Workflow_ID", AD_Workflow_ID);
+if (VAF_Workflow_ID < 1) throw new ArgumentException ("VAF_Workflow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Workflow_ID", VAF_Workflow_ID);
 }
 /** Get Workflow.
 @return Workflow or combination of tasks */
-public int GetAD_Workflow_ID() 
+public int GetVAF_Workflow_ID() 
 {
-Object ii = Get_Value("AD_Workflow_ID");
+Object ii = Get_Value("VAF_Workflow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

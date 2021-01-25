@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_ContractSchedule
+    /** Generated Model for VAB_ContractSchedule
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_ContractSchedule : PO
+    public class X_VAB_ContractSchedule : PO
     {
-        public X_C_ContractSchedule(Context ctx, int C_ContractSchedule_ID, Trx trxName)
-            : base(ctx, C_ContractSchedule_ID, trxName)
+        public X_VAB_ContractSchedule(Context ctx, int VAB_ContractSchedule_ID, Trx trxName)
+            : base(ctx, VAB_ContractSchedule_ID, trxName)
         {
-            /** if (C_ContractSchedule_ID == 0)
+            /** if (VAB_ContractSchedule_ID == 0)
             {
-            SetC_ContractSchedule_ID (0);
+            SetVAB_ContractSchedule_ID (0);
             SetPriceEntered (0.0);
             }
              */
         }
-        public X_C_ContractSchedule(Ctx ctx, int C_ContractSchedule_ID, Trx trxName)
-            : base(ctx, C_ContractSchedule_ID, trxName)
+        public X_VAB_ContractSchedule(Ctx ctx, int VAB_ContractSchedule_ID, Trx trxName)
+            : base(ctx, VAB_ContractSchedule_ID, trxName)
         {
-            /** if (C_ContractSchedule_ID == 0)
+            /** if (VAB_ContractSchedule_ID == 0)
             {
-            SetC_ContractSchedule_ID (0);
+            SetVAB_ContractSchedule_ID (0);
             SetPriceEntered (0.0);
             }
              */
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ContractSchedule(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_ContractSchedule(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ContractSchedule(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_ContractSchedule(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ContractSchedule(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_ContractSchedule(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_ContractSchedule()
+        static X_VAB_ContractSchedule()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000257;
 
-        /** TableName=C_ContractSchedule */
-        public static String Table_Name = "C_ContractSchedule";
+        /** TableName=VAB_ContractSchedule */
+        public static String Table_Name = "VAB_ContractSchedule";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -114,53 +114,53 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_ContractSchedule[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_ContractSchedule[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set C_ContractSchedule_ID.
-        @param C_ContractSchedule_ID C_ContractSchedule_ID */
-        public void SetC_ContractSchedule_ID(int C_ContractSchedule_ID)
+        /** Set VAB_ContractSchedule_ID.
+        @param VAB_ContractSchedule_ID VAB_ContractSchedule_ID */
+        public void SetVAB_ContractSchedule_ID(int VAB_ContractSchedule_ID)
         {
-            if (C_ContractSchedule_ID < 1) throw new ArgumentException("C_ContractSchedule_ID is mandatory.");
-            Set_ValueNoCheck("C_ContractSchedule_ID", C_ContractSchedule_ID);
+            if (VAB_ContractSchedule_ID < 1) throw new ArgumentException("VAB_ContractSchedule_ID is mandatory.");
+            Set_ValueNoCheck("VAB_ContractSchedule_ID", VAB_ContractSchedule_ID);
         }
-        /** Get C_ContractSchedule_ID.
-        @return C_ContractSchedule_ID */
-        public int GetC_ContractSchedule_ID()
+        /** Get VAB_ContractSchedule_ID.
+        @return VAB_ContractSchedule_ID */
+        public int GetVAB_ContractSchedule_ID()
         {
-            Object ii = Get_Value("C_ContractSchedule_ID");
+            Object ii = Get_Value("VAB_ContractSchedule_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set C_Contract_ID.
-        @param C_Contract_ID C_Contract_ID */
-        public void SetC_Contract_ID(int C_Contract_ID)
+        /** Set VAB_Contract_ID.
+        @param VAB_Contract_ID VAB_Contract_ID */
+        public void SetVAB_Contract_ID(int VAB_Contract_ID)
         {
-            if (C_Contract_ID <= 0) Set_Value("C_Contract_ID", null);
+            if (VAB_Contract_ID <= 0) Set_Value("VAB_Contract_ID", null);
             else
-                Set_Value("C_Contract_ID", C_Contract_ID);
+                Set_Value("VAB_Contract_ID", VAB_Contract_ID);
         }
-        /** Get C_Contract_ID.
-        @return C_Contract_ID */
-        public int GetC_Contract_ID()
+        /** Get VAB_Contract_ID.
+        @return VAB_Contract_ID */
+        public int GetVAB_Contract_ID()
         {
-            Object ii = Get_Value("C_Contract_ID");
+            Object ii = Get_Value("VAB_Contract_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

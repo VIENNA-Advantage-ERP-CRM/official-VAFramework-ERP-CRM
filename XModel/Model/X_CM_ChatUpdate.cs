@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_ChatUpdate
+/** Generated Model for VACM_ChatUpdateAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_ChatUpdate : PO
+public class X_VACM_ChatUpdateAlert : PO
 {
-public X_CM_ChatUpdate (Context ctx, int CM_ChatUpdate_ID, Trx trxName) : base (ctx, CM_ChatUpdate_ID, trxName)
+public X_VACM_ChatUpdateAlert (Context ctx, int VACM_ChatUpdateAlert_ID, Trx trxName) : base (ctx, VACM_ChatUpdateAlert_ID, trxName)
 {
-/** if (CM_ChatUpdate_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetCM_Chat_ID (0);
-SetIsSelfService (false);
-}
- */
-}
-public X_CM_ChatUpdate (Ctx ctx, int CM_ChatUpdate_ID, Trx trxName) : base (ctx, CM_ChatUpdate_ID, trxName)
-{
-/** if (CM_ChatUpdate_ID == 0)
+/** if (VACM_ChatUpdateAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetCM_Chat_ID (0);
@@ -36,12 +26,22 @@ SetIsSelfService (false);
 }
  */
 }
+public X_VACM_ChatUpdateAlert (Ctx ctx, int VACM_ChatUpdateAlert_ID, Trx trxName) : base (ctx, VACM_ChatUpdateAlert_ID, trxName)
+{
+/** if (VACM_ChatUpdateAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetCM_Chat_ID (0);
+SetIsSelfService (false);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_ChatUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_CM_ChatUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_ChatUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_CM_ChatUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatUpdate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_ChatUpdateAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_ChatUpdate()
+static X_VACM_ChatUpdateAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389052076L;
 public static int Table_ID;
  // =878;
 
-/** TableName=CM_ChatUpdate */
-public static String Table_Name="CM_ChatUpdate";
+/** TableName=VACM_ChatUpdateAlert */
+public static String Table_Name="VACM_ChatUpdateAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_ChatUpdate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_ChatUpdateAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Chat.
-@param CM_Chat_ID Chat or discussion thread */
-public void SetCM_Chat_ID (int CM_Chat_ID)
+@param VACM_Chat_ID Chat or discussion thread */
+public void SetCM_Chat_ID (int VACM_Chat_ID)
 {
-if (CM_Chat_ID < 1) throw new ArgumentException ("CM_Chat_ID is mandatory.");
-Set_ValueNoCheck ("CM_Chat_ID", CM_Chat_ID);
+if (VACM_Chat_ID < 1) throw new ArgumentException ("VACM_Chat_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Chat_ID", VACM_Chat_ID);
 }
 /** Get Chat.
 @return Chat or discussion thread */
 public int GetCM_Chat_ID() 
 {
-Object ii = Get_Value("CM_Chat_ID");
+Object ii = Get_Value("VACM_Chat_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

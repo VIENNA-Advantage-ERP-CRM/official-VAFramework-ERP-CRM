@@ -11,14 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_ChatType
+/** Generated Model for VACM_ChatType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_CM_ChatType : PO
 {
-public X_CM_ChatType (Context ctx, int CM_ChatType_ID, Trx trxName) : base (ctx, CM_ChatType_ID, trxName)
+public X_CM_ChatType (Context ctx, int VACM_ChatType_ID, Trx trxName) : base (ctx, VACM_ChatType_ID, trxName)
 {
-/** if (CM_ChatType_ID == 0)
+/** if (VACM_ChatType_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetCM_ChatType_ID (0);
@@ -26,9 +26,9 @@ SetName (null);
 }
  */
 }
-public X_CM_ChatType (Ctx ctx, int CM_ChatType_ID, Trx trxName) : base (ctx, CM_ChatType_ID, trxName)
+public X_CM_ChatType (Ctx ctx, int VACM_ChatType_ID, Trx trxName) : base (ctx, VACM_ChatType_ID, trxName)
 {
-/** if (CM_ChatType_ID == 0)
+/** if (VACM_ChatType_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetCM_ChatType_ID (0);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389051746L;
 public static int Table_ID;
  // =874;
 
-/** TableName=CM_ChatType */
-public static String Table_Name="CM_ChatType";
+/** TableName=VACM_ChatType */
+public static String Table_Name="VACM_ChatType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Chat Type.
-@param CM_ChatType_ID Type of discussion / chat */
-public void SetCM_ChatType_ID (int CM_ChatType_ID)
+@param VACM_ChatType_ID Type of discussion / chat */
+public void SetCM_ChatType_ID (int VACM_ChatType_ID)
 {
-if (CM_ChatType_ID < 1) throw new ArgumentException ("CM_ChatType_ID is mandatory.");
-Set_ValueNoCheck ("CM_ChatType_ID", CM_ChatType_ID);
+if (VACM_ChatType_ID < 1) throw new ArgumentException ("VACM_ChatType_ID is mandatory.");
+Set_ValueNoCheck ("VACM_ChatType_ID", VACM_ChatType_ID);
 }
 /** Get Chat Type.
 @return Type of discussion / chat */
 public int GetCM_ChatType_ID() 
 {
-Object ii = Get_Value("CM_ChatType_ID");
+Object ii = Get_Value("VACM_ChatType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

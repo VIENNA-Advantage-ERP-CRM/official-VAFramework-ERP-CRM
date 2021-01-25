@@ -28,7 +28,7 @@ namespace VIS.Models
         private MChatEntry[] _chatEntries = null;//chat entries
         //private SimpleDateFormat _createdDate = null;
         private DateTime _createdDate;//get date from database according to chat entry
-        private DataSet _ds = null;//data set for CM_ChatEntry table
+        private DataSet _ds = null;//data set for VACM_ChatLine table
         private DateTime _format;
         private ChatInfo subsribedChat = null;
         //change text
@@ -70,12 +70,12 @@ namespace VIS.Models
         /// loads Chat, if ID <> 0
         /// </summary>
         /// <param name="windowNo">window no</param>
-        /// <param name="CM_Chat_ID">chat</param>
+        /// <param name="VACM_Chat_ID">chat</param>
         /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record key</param>
         /// <param name="description">description</param>
         /// <param name="trxName">transaction</param>
-        public ChatModel(Ctx ct, int windowNo, int CM_Chat_ID, int VAF_TableView_ID, int Record_ID, String description, Trx trxName, int page, int pageSize)
+        public ChatModel(Ctx ct, int windowNo, int VACM_Chat_ID, int VAF_TableView_ID, int Record_ID, String description, Trx trxName, int page, int pageSize)
         // : base(false, false, false, false, "Chat")
         {
             //set current window
@@ -87,14 +87,14 @@ namespace VIS.Models
             // LayoutRootChat.Background = new SolidColorBrush(DataBase.GlobalVariable.WINDOW_BACK_COLOR);
             // EventHander();
             //	when chatId is zero
-            if (CM_Chat_ID == 0)
+            if (VACM_Chat_ID == 0)
             {
                 //set chat from MChat class first time
                 _chat = new MChat(ct, VAF_TableView_ID, Record_ID, description, trxName);
             }
             else
             {
-                _chat = new MChat(ct, CM_Chat_ID, trxName);
+                _chat = new MChat(ct, VACM_Chat_ID, trxName);
             }
             subsribedChat = new ChatInfo();
             subsribedChat = GetHistory(MChat.CONFIDENTIALTYPE_Internal, _chat, page, pageSize,ct);
@@ -118,7 +118,7 @@ namespace VIS.Models
                 return _chatEntries;//return chat
             //list for chatEntry records
             List<MChatEntry> list = new List<MChatEntry>();
-            String sql = "SELECT * FROM CM_ChatEntry WHERE CM_Chat_ID=" + chatID + " ORDER BY Created";
+            String sql = "SELECT * FROM VACM_ChatLine WHERE VACM_Chat_ID=" + chatID + " ORDER BY Created";
 
 
             //SqlParamsIn objSP = new SqlParamsIn();
@@ -142,7 +142,7 @@ namespace VIS.Models
                 {
                     rs = _ds.Tables[0].Rows[i];
                     //list.Add(new MChatEntry(GetCtx, rs, Get_TrxName()));
-                    //add chatentries into list from CM_ChatEntry table
+                    //add chatentries into list from VACM_ChatLine table
                     list.Add(new MChatEntry(ctx, rs, null));
                 }
                 //_ds = null;

@@ -7,10 +7,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MFinRptConfig : X_C_FinRptConfig
+    public class MFinRptConfig : X_VAB_FinRptConfig
     {
-        public MFinRptConfig(Ctx ctx, int C_FinRptConfig_ID, Trx trxName)
-            : base(ctx, C_FinRptConfig_ID, trxName)
+        public MFinRptConfig(Ctx ctx, int VAB_FinRptConfig_ID, Trx trxName)
+            : base(ctx, VAB_FinRptConfig_ID, trxName)
         {
         }
 

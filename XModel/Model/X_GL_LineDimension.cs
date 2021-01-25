@@ -75,51 +75,51 @@ namespace VAdvantage.Model
         public void SetAmount(Decimal Amount) { Set_Value("Amount", Amount); }/** Get Amount.
 @return Amount in a defined currency */
         public Decimal GetAmount() { Object ii = Get_Value("Amount"); if (ii == null) return 0; return Convert.ToDecimal(ii); }/** Set Activity.
-@param C_Activity_ID Business Activity */
-        public void SetC_Activity_ID(int C_Activity_ID)
+@param VAB_BillingCode_ID Business Activity */
+        public void SetVAB_BillingCode_ID(int VAB_BillingCode_ID)
         {
-            if (C_Activity_ID <= 0) Set_Value("C_Activity_ID", null);
+            if (VAB_BillingCode_ID <= 0) Set_Value("VAB_BillingCode_ID", null);
             else
-                Set_Value("C_Activity_ID", C_Activity_ID);
+                Set_Value("VAB_BillingCode_ID", VAB_BillingCode_ID);
         }/** Get Activity.
 @return Business Activity */
-        public int GetC_Activity_ID() { Object ii = Get_Value("C_Activity_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        public int GetVAB_BillingCode_ID() { Object ii = Get_Value("VAB_BillingCode_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID() { Object ii = Get_Value("C_BPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-        public void SetC_Campaign_ID(int C_Campaign_ID)
+        public int GetVAB_BusinessPartner_ID() { Object ii = Get_Value("VAB_BusinessPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Campaign.
+@param VAB_Promotion_ID Marketing Campaign */
+        public void SetVAB_Promotion_ID(int VAB_Promotion_ID)
         {
-            if (C_Campaign_ID <= 0) Set_Value("C_Campaign_ID", null);
+            if (VAB_Promotion_ID <= 0) Set_Value("VAB_Promotion_ID", null);
             else
-                Set_Value("C_Campaign_ID", C_Campaign_ID);
+                Set_Value("VAB_Promotion_ID", VAB_Promotion_ID);
         }/** Get Campaign.
 @return Marketing Campaign */
-        public int GetC_Campaign_ID() { Object ii = Get_Value("C_Campaign_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Account Element.
-@param C_ElementValue_ID Account Element */
-        public void SetC_ElementValue_ID(int C_ElementValue_ID)
+        public int GetVAB_Promotion_ID() { Object ii = Get_Value("VAB_Promotion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Account Element.
+@param VAB_Acct_Element_ID Account Element */
+        public void SetVAB_Acct_Element_ID(int VAB_Acct_Element_ID)
         {
-            if (C_ElementValue_ID <= 0) Set_Value("C_ElementValue_ID", null);
+            if (VAB_Acct_Element_ID <= 0) Set_Value("VAB_Acct_Element_ID", null);
             else
-                Set_Value("C_ElementValue_ID", C_ElementValue_ID);
+                Set_Value("VAB_Acct_Element_ID", VAB_Acct_Element_ID);
         }/** Get Account Element.
 @return Account Element */
-        public int GetC_ElementValue_ID() { Object ii = Get_Value("C_ElementValue_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Element.
-@param C_Element_ID Accounting Element */
-        public void SetC_Element_ID(int C_Element_ID)
+        public int GetVAB_Acct_Element_ID() { Object ii = Get_Value("VAB_Acct_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Element.
+@param VAB_Element_ID Accounting Element */
+        public void SetVAB_Element_ID(int VAB_Element_ID)
         {
-            if (C_Element_ID <= 0) Set_Value("C_Element_ID", null);
+            if (VAB_Element_ID <= 0) Set_Value("VAB_Element_ID", null);
             else
-                Set_Value("C_Element_ID", C_Element_ID);
+                Set_Value("VAB_Element_ID", VAB_Element_ID);
         }/** Get Element.
 @return Accounting Element */
-        public int GetC_Element_ID() { Object ii = Get_Value("C_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Address.
+        public int GetVAB_Element_ID() { Object ii = Get_Value("VAB_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Address.
 @param C_Location_ID Location or Address */
         public void SetC_Location_ID(int C_Location_ID)
         {

@@ -29,7 +29,7 @@ namespace VAdvantage.Process
         {
             VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), _C_Lead_ID, Get_TrxName());
             //  lead.GetRef_BPartner_ID()))
-            int ExCustomer = lead.GetC_BPartner_ID();
+            int ExCustomer = lead.GetVAB_BusinessPartner_ID();
             int Pospect = lead.GetRef_BPartner_ID();
             
 
@@ -38,18 +38,18 @@ namespace VAdvantage.Process
             {
                 VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
                 opp.SetC_Lead_ID(lead.GetC_Lead_ID());
-                opp.SetC_BPartner_ID (lead.GetC_BPartner_ID());
+                opp.SetVAB_BusinessPartner_ID (lead.GetVAB_BusinessPartner_ID());
                 opp.SetSalesRep_ID (lead.GetSalesRep_ID());
                 opp.SetDateContract(DateTime.Today);
-                opp.SetC_Campaign_ID (lead.GetC_Campaign_ID());
+                opp.SetVAB_Promotion_ID (lead.GetVAB_Promotion_ID());
                 //opp.SetR_Source_ID (lead.GetR_Source_ID());
                // opp.SetOpportunityStatus("N");
                 opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
-                VAdvantage.Model.X_C_BPartner bp=new VAdvantage.Model.X_C_BPartner(GetCtx(),ExCustomer,Get_TrxName());
-                VAdvantage.Model.X_C_BPartner_Location loc=new VAdvantage.Model.X_C_BPartner_Location (GetCtx(),ExCustomer,Get_TrxName());
+                VAdvantage.Model.X_VAB_BusinessPartner bp=new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(),ExCustomer,Get_TrxName());
+                VAdvantage.Model.X_VAB_BPart_Location loc=new VAdvantage.Model.X_VAB_BPart_Location (GetCtx(),ExCustomer,Get_TrxName());
 
                 opp.SetName(bp.GetName());;
-                opp.SetC_BPartner_Location_ID (loc.GetC_BPartner_Location_ID());
+                opp.SetVAB_BPart_Location_ID (loc.GetVAB_BPart_Location_ID());
                 opp.SetIsOpportunity(true);
 
                 if (opp.Save())
@@ -69,19 +69,19 @@ namespace VAdvantage.Process
             {
                 VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
                 opp.SetC_Lead_ID(lead.GetC_Lead_ID());
-                opp.SetC_BPartnerSR_ID(lead.GetRef_BPartner_ID());
+                opp.SetVAB_BusinessPartnerSR_ID(lead.GetRef_BPartner_ID());
                 opp.SetSalesRep_ID (lead.GetSalesRep_ID());
                 opp.SetDateContract(DateTime.Today);
-                opp.SetC_Campaign_ID ( lead.GetC_Campaign_ID());
+                opp.SetVAB_Promotion_ID ( lead.GetVAB_Promotion_ID());
                // opp.SetR_Source_ID (lead.GetR_Source_ID());
                 //opp.SetOpportunityStatus ("N");
                // opp.SetVAF_Client_ID(GetVAF_Client_ID());
                 opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
-                VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), Pospect, Get_TrxName());
-                //X_C_BPartner_Location loc = new X_C_BPartner_Location(GetCtx(), Pospect, Get_TrxName());
+                VAdvantage.Model.X_VAB_BusinessPartner bp = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), Pospect, Get_TrxName());
+                //X_VAB_BPart_Location loc = new X_VAB_BPart_Location(GetCtx(), Pospect, Get_TrxName());
 
                 opp.SetName ( bp.GetName()); 
-                opp.SetC_BPartner_Location_ID (lead.GetC_BPartner_Location_ID());
+                opp.SetVAB_BPart_Location_ID (lead.GetVAB_BPart_Location_ID());
                 opp.SetIsOpportunity(true);
 
                 if (opp.Save())
@@ -165,7 +165,7 @@ namespace VAdvantage.Process
             VAdvantage.Model.MBPartner bp = lead.GetBPartner();
             if (bp != null)
             {
-                return "@C_BPartner_ID@: " + bp.GetName();
+                return "@VAB_BusinessPartner_ID@: " + bp.GetName();
             }
             VAdvantage.Model.MUser user = lead.GetUser();
             if (user != null)

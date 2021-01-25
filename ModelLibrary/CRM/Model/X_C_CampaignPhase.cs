@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CampaignPhase
+/** Generated Model for VAB_PromotionPhase
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CampaignPhase : PO
+public class X_VAB_PromotionPhase : PO
 {
-public X_C_CampaignPhase (Context ctx, int C_CampaignPhase_ID, Trx trxName) : base (ctx, C_CampaignPhase_ID, trxName)
+public X_VAB_PromotionPhase (Context ctx, int VAB_PromotionPhase_ID, Trx trxName) : base (ctx, VAB_PromotionPhase_ID, trxName)
 {
-/** if (C_CampaignPhase_ID == 0)
+/** if (VAB_PromotionPhase_ID == 0)
 {
-SetC_CampaignPhase_ID (0);
-SetC_CampaignType_ID (0);
+SetVAB_PromotionPhase_ID (0);
+SetVAB_PromotionType_ID (0);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM C_CampaignPhase WHERE C_CampaignType_ID=@C_CampaignType_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_PromotionPhase WHERE VAB_PromotionType_ID=@VAB_PromotionType_ID@
 }
  */
 }
-public X_C_CampaignPhase (Ctx ctx, int C_CampaignPhase_ID, Trx trxName) : base (ctx, C_CampaignPhase_ID, trxName)
+public X_VAB_PromotionPhase (Ctx ctx, int VAB_PromotionPhase_ID, Trx trxName) : base (ctx, VAB_PromotionPhase_ID, trxName)
 {
-/** if (C_CampaignPhase_ID == 0)
+/** if (VAB_PromotionPhase_ID == 0)
 {
-SetC_CampaignPhase_ID (0);
-SetC_CampaignType_ID (0);
+SetVAB_PromotionPhase_ID (0);
+SetVAB_PromotionType_ID (0);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM C_CampaignPhase WHERE C_CampaignType_ID=@C_CampaignType_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_PromotionPhase WHERE VAB_PromotionType_ID=@VAB_PromotionType_ID@
 }
  */
 }
@@ -43,7 +43,7 @@ SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM C_Campaig
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CampaignPhase (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PromotionPhase (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_CampaignPhase (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CampaignPhase (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PromotionPhase (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_CampaignPhase (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CampaignPhase (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PromotionPhase (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CampaignPhase()
+static X_VAB_PromotionPhase()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1328350288982L;
 public static int Table_ID;
  // =1000259;
 
-/** TableName=C_CampaignPhase */
-public static String Table_Name="C_CampaignPhase";
+/** TableName=VAB_PromotionPhase */
+public static String Table_Name="VAB_PromotionPhase";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CampaignPhase[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PromotionPhase[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_CampaignPhase_ID.
-@param C_CampaignPhase_ID C_CampaignPhase_ID */
-public void SetC_CampaignPhase_ID (int C_CampaignPhase_ID)
+/** Set VAB_PromotionPhase_ID.
+@param VAB_PromotionPhase_ID VAB_PromotionPhase_ID */
+public void SetVAB_PromotionPhase_ID (int VAB_PromotionPhase_ID)
 {
-if (C_CampaignPhase_ID < 1) throw new ArgumentException ("C_CampaignPhase_ID is mandatory.");
-Set_ValueNoCheck ("C_CampaignPhase_ID", C_CampaignPhase_ID);
+if (VAB_PromotionPhase_ID < 1) throw new ArgumentException ("VAB_PromotionPhase_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PromotionPhase_ID", VAB_PromotionPhase_ID);
 }
-/** Get C_CampaignPhase_ID.
-@return C_CampaignPhase_ID */
-public int GetC_CampaignPhase_ID() 
+/** Get VAB_PromotionPhase_ID.
+@return VAB_PromotionPhase_ID */
+public int GetVAB_PromotionPhase_ID() 
 {
-Object ii = Get_Value("C_CampaignPhase_ID");
+Object ii = Get_Value("VAB_PromotionPhase_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_CampaignType_ID.
-@param C_CampaignType_ID C_CampaignType_ID */
-public void SetC_CampaignType_ID (int C_CampaignType_ID)
+/** Set VAB_PromotionType_ID.
+@param VAB_PromotionType_ID VAB_PromotionType_ID */
+public void SetVAB_PromotionType_ID (int VAB_PromotionType_ID)
 {
-if (C_CampaignType_ID < 1) throw new ArgumentException ("C_CampaignType_ID is mandatory.");
-Set_ValueNoCheck ("C_CampaignType_ID", C_CampaignType_ID);
+if (VAB_PromotionType_ID < 1) throw new ArgumentException ("VAB_PromotionType_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PromotionType_ID", VAB_PromotionType_ID);
 }
-/** Get C_CampaignType_ID.
-@return C_CampaignType_ID */
-public int GetC_CampaignType_ID() 
+/** Get VAB_PromotionType_ID.
+@return VAB_PromotionType_ID */
+public int GetVAB_PromotionType_ID() 
 {
-Object ii = Get_Value("C_CampaignType_ID");
+Object ii = Get_Value("VAB_PromotionType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

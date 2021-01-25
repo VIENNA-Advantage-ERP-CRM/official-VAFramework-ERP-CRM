@@ -43,26 +43,26 @@ namespace VIS.Models
         public int Get(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Charge_ID;
+            int VAB_Charge_ID;
             DateTime? billDate;
             DateTime? shipDate;
             int VAF_Org_ID;
             int M_Warehouse_ID;
-            int C_BPartner_Location_ID;
+            int VAB_BPart_Location_ID;
             bool isSOTrx;
 
             //Assign parameter value
-            C_Charge_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_Charge_ID = Util.GetValueOfInt(paramValue[0].ToString());
             billDate = Util.GetValueOfDateTime(paramValue[1]);
             shipDate = Util.GetValueOfDateTime(paramValue[2]);
             VAF_Org_ID = Util.GetValueOfInt(paramValue[3].ToString());
             M_Warehouse_ID = Util.GetValueOfInt(paramValue[4].ToString());
-            C_BPartner_Location_ID = Util.GetValueOfInt(paramValue[5].ToString());
+            VAB_BPart_Location_ID = Util.GetValueOfInt(paramValue[5].ToString());
             isSOTrx = Convert.ToBoolean(paramValue[6]);
             //End Assign parameter value
 
-            int Tax_ID = Tax.Get(ctx, 0, C_Charge_ID, billDate, shipDate,
-                                VAF_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
+            int Tax_ID = Tax.Get(ctx, 0, VAB_Charge_ID, billDate, shipDate,
+                                VAF_Org_ID, M_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
                                 isSOTrx);
 
             return Tax_ID;
@@ -73,16 +73,16 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             //int C_Tax_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int C_Charge_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAB_Charge_ID = Util.GetValueOfInt(paramValue[1].ToString());
             DateTime? billDate = Util.GetValueOfDateTime(paramValue[2].ToString());
             DateTime? shipDate = Util.GetValueOfDateTime(paramValue[3].ToString());
             int VAF_Org_ID = Util.GetValueOfInt(paramValue[4].ToString());
             int M_Warehouse_ID = Util.GetValueOfInt(paramValue[5].ToString());
-            int billC_BPartner_Location_ID = Util.GetValueOfInt(paramValue[6].ToString());
-            int shipC_BPartner_Location_ID = Util.GetValueOfInt(paramValue[7].ToString());
+            int billVAB_BPart_Location_ID = Util.GetValueOfInt(paramValue[6].ToString());
+            int shipVAB_BPart_Location_ID = Util.GetValueOfInt(paramValue[7].ToString());
             bool isSOTrx = Util.GetValueOfBool(paramValue[8]);
-            int C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, C_Charge_ID, billDate, shipDate,
-               VAF_Org_ID, M_Warehouse_ID, billC_BPartner_Location_ID, shipC_BPartner_Location_ID,
+            int C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, VAB_Charge_ID, billDate, shipDate,
+               VAF_Org_ID, M_Warehouse_ID, billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID,
                isSOTrx);
             return C_Tax_ID;
         }

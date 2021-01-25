@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     :  MTemplate
  * Purpose        :  MTemplate Model
- * Class Used     : X_CM_Template
+ * Class Used     : X_VACM_Layout
  * Chronological    Development
  * Deepak           05-Feb-2010
   ******************************************************/
@@ -23,21 +23,21 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTemplate :X_CM_Template
+    public class MTemplate :X_VACM_Layout
 {
 	/// <summary>
 	///Get MTemplate from Cache
    	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="CM_Template_ID">id</param>
+	/// <param name="VACM_Layout_ID">id</param>
 	/// <param name="trxName">trx</param>
 	/// <returns>MWEbproject</returns>
-	public static MTemplate Get(Ctx ctx, int CM_Template_ID, Trx trxName)
+	public static MTemplate Get(Ctx ctx, int VACM_Layout_ID, Trx trxName)
 	{
-		MTemplate retValue = new MTemplate (ctx, CM_Template_ID, trxName);
+		MTemplate retValue = new MTemplate (ctx, VACM_Layout_ID, trxName);
 		if (retValue != null)
 			return retValue;
-		retValue = new MTemplate (ctx, CM_Template_ID, null);
+		retValue = new MTemplate (ctx, VACM_Layout_ID, null);
 		return retValue;
 	}	// get
 
@@ -45,9 +45,9 @@ namespace VAdvantage.Model
 	///  Standard Constructor
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="CM_Template_ID">id</param>
+	/// <param name="VACM_Layout_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MTemplate (Ctx ctx, int CM_Template_ID, Trx trxName):base(ctx, CM_Template_ID, trxName)
+	public MTemplate (Ctx ctx, int VACM_Layout_ID, Trx trxName):base(ctx, VACM_Layout_ID, trxName)
 	{
 		
 	} // MTemplate
@@ -86,7 +86,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	/// <returns>Template</returns>
 	public static MTemplate GetByName (Ctx ctx, String name, int projectID, Trx trxName)
 	{
-		String sql = "SELECT * FROM CM_Template WHERE Value LIKE @param1 AND CM_WebProject_ID=@param2";
+		String sql = "SELECT * FROM VACM_Layout WHERE Value LIKE @param1 AND CM_WebProject_ID=@param2";
 		MTemplate thisElement = null;
         SqlParameter[] param = new SqlParameter[2];
         IDataReader idr = null;
@@ -449,7 +449,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	public MAd[] GetAds()
 	{
 		int[] AdCats = null;
-		String sql = "SELECT count(*) FROM CM_Template_AD_Cat WHERE CM_Template_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
+		String sql = "SELECT count(*) FROM VACM_Layout_Ad_Group WHERE VACM_Layout_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
         IDataReader idr = null;
 		try
 		{
@@ -463,7 +463,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
             idr.Close();
 			AdCats = new int[numberAdCats];
 			int i = 0;
-			sql = "SELECT CM_Ad_Cat_ID FROM CM_Template_AD_Cat WHERE CM_Template_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
+			sql = "SELECT CM_Ad_Cat_ID FROM VACM_Layout_Ad_Group WHERE VACM_Layout_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
 			//pstmt = DataBase.prepareStatement (sql, get_TrxName ());
             idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
 			while (idr.Read())

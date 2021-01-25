@@ -2417,9 +2417,9 @@ namespace VAdvantage.Model
                 if (value == null || value.Length == 0)
                 {
                     int docTypeId = -1;
-                    int dt = p_info.GetColumnIndex("C_DocTypeTarget_ID");
+                    int dt = p_info.GetColumnIndex("VAB_DocTypesTarget_ID");
                     if (dt == -1)
-                        dt = p_info.GetColumnIndex("C_DocType_ID");
+                        dt = p_info.GetColumnIndex("VAB_DocTypes_ID");
                     if (dt != -1)       //	get based on Doc Type (might return null)
                     {
                         docTypeId = get_ValueAsInt(dt);
@@ -2543,9 +2543,9 @@ namespace VAdvantage.Model
                         value = null;
                         int VAF_Client_ID = GetVAF_Client_ID();
                         int docId = -1;
-                        int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
+                        int index = p_info.GetColumnIndex("VAB_DocTypesTarget_ID");
                         if (index == -1)
-                            index = p_info.GetColumnIndex("C_DocType_ID");
+                            index = p_info.GetColumnIndex("VAB_DocTypes_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
                             docId = Get_ValueAsInt(index);
                         //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
@@ -3468,7 +3468,7 @@ namespace VAdvantage.Model
         protected virtual bool BeforeSave(bool newRecord)
         {
             /** Prevents saving
-            log.saveError("Error", Msg.parseTranslation(getCtx(), "@C_Currency_ID@ = @C_Currency_ID@"));
+            log.saveError("Error", Msg.parseTranslation(getCtx(), "@VAB_Currency_ID@ = @VAB_Currency_ID@"));
             log.saveError("FillMandatory", Msg.getElement(getCtx(), "PriceEntered"));
             /** Issues message
             log.saveWarning(VAF_Msg_Lable, message);
@@ -3565,12 +3565,12 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .Append(acctTable)
                 .Append(" (").Append(Get_TableName())
-                .Append("_ID, C_AcctSchema_ID, VAF_Client_ID,VAF_Org_ID,IsActive, Created,CreatedBy,Updated,UpdatedBy ");
+                .Append("_ID, VAB_AccountBook_ID, VAF_Client_ID,VAF_Org_ID,IsActive, Created,CreatedBy,Updated,UpdatedBy ");
             for (int i = 0; i < acctColumns.Count; i++)
                 sb.Append(",").Append(acctColumns[i]);
             //	..	SELECT
             sb.Append(") SELECT ").Append(Get_ID())
-                .Append(", p.C_AcctSchema_ID, p.VAF_Client_ID,0,'Y', SysDate,")
+                .Append(", p.VAB_AccountBook_ID, p.VAF_Client_ID,0,'Y', SysDate,")
                 .Append(GetUpdatedBy()).Append(",SysDate,").Append(GetUpdatedBy());
             for (int i = 0; i < acctColumns.Count; i++)
                 sb.Append(",p.").Append(acctColumns[i]);
@@ -3580,7 +3580,7 @@ namespace VAdvantage.Model
             if (whereClause != null && whereClause.Length > 0)
                 sb.Append(" AND ").Append(whereClause);
             sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(acctTable)
-                .Append(" e WHERE e.C_AcctSchema_ID=p.C_AcctSchema_ID AND e.")
+                .Append(" e WHERE e.VAB_AccountBook_ID=p.VAB_AccountBook_ID AND e.")
                 .Append(Get_TableName()).Append("_ID=").Append(Get_ID()).Append(")");
             //
             int no = DB.ExecuteQuery(sb.ToString(), null, _trx);
@@ -4374,9 +4374,9 @@ namespace VAdvantage.Model
                     value = null;
                 if (value == null || value.Length == 0)
                 {
-                    int dtIndex = p_info.GetColumnIndex("C_DocTypeTarget_ID");
+                    int dtIndex = p_info.GetColumnIndex("VAB_DocTypesTarget_ID");
                     if (dtIndex == -1)
-                        dtIndex = p_info.GetColumnIndex("C_DocType_ID");
+                        dtIndex = p_info.GetColumnIndex("VAB_DocTypes_ID");
                     // if (dtIndex != -1)		//	get based on Doc Type (might return null)
                     //   value = DB.GetDocumentNo(Get_ValueAsInt(dtIndex), Get_Trx(), GetCtx());
                     //  if (value == null)	//	not overwritten by DocType and not manually entered
@@ -4702,9 +4702,9 @@ namespace VAdvantage.Model
                         value = null;
                         int VAF_Client_ID = GetVAF_Client_ID();
                         int docId = -1;
-                        int index = p_info.GetColumnIndex("C_DocTypeTarget_ID");
+                        int index = p_info.GetColumnIndex("VAB_DocTypesTarget_ID");
                         if (index == -1)
-                            index = p_info.GetColumnIndex("C_DocType_ID");
+                            index = p_info.GetColumnIndex("VAB_DocTypes_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
                             docId = Get_ValueAsInt(index);
                         //    value = DB.GetDocumentNo(Get_ValueAsInt(index), _trx, GetCtx());

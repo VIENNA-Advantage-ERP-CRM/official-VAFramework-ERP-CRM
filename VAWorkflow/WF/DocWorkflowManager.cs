@@ -166,7 +166,7 @@ namespace VAdvantage.WF
                 .Append(" AND NOT EXISTS (SELECT * FROM VAF_WFlow_Handler wfp ")
                     .Append("WHERE wfp.VAF_TableView_ID=" + document.Get_Table_ID() + " AND wfp.Record_ID=")	//	#3
                     .Append(tableName).Append(".").Append(keyColumn)
-                    .Append(" AND wfp.AD_Workflow_ID=" + wf.GetAD_Workflow_ID())	//	#4
+                    .Append(" AND wfp.VAF_Workflow_ID=" + wf.GetVAF_Workflow_ID())	//	#4
                     .Append(" AND SUBSTR(wfp.WFState,1,1)='O')");
             DataSet ds = null;
             try

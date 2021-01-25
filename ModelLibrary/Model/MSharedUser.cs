@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         public MSharedUser(Ctx ctx, int WSP_SharedUser_ID, Trx trxName)
             : base(ctx, WSP_SharedUser_ID, trxName)
         {
-            //super(ctx, C_Activity_ID, trxName);
+            //super(ctx, VAB_BillingCode_ID, trxName);
         }	//	MSharedUser
 
 

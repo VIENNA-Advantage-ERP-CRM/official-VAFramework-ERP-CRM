@@ -20,7 +20,7 @@ public X_PA_SLA_Goal (Context ctx, int PA_SLA_Goal_ID, Trx trxName) : base (ctx,
 {
 /** if (PA_SLA_Goal_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetMeasureActual (0.0);
 SetMeasureTarget (0.0);
 SetName (null);
@@ -34,7 +34,7 @@ public X_PA_SLA_Goal (Ctx ctx, int PA_SLA_Goal_ID, Trx trxName) : base (ctx, PA_
 {
 /** if (PA_SLA_Goal_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetMeasureActual (0.0);
 SetMeasureTarget (0.0);
 SetName (null);
@@ -123,17 +123,17 @@ StringBuilder sb = new StringBuilder ("X_PA_SLA_Goal[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_ValueNoCheck ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

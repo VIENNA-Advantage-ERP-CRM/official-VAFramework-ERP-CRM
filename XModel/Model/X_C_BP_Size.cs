@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BP_Size
+/** Generated Model for VAB_BPart_Strength
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BP_Size : PO
+public class X_VAB_BPart_Strength : PO
 {
-public X_C_BP_Size (Context ctx, int C_BP_Size_ID, Trx trxName) : base (ctx, C_BP_Size_ID, trxName)
+public X_VAB_BPart_Strength (Context ctx, int VAB_BPart_Strength_ID, Trx trxName) : base (ctx, VAB_BPart_Strength_ID, trxName)
 {
-/** if (C_BP_Size_ID == 0)
+/** if (VAB_BPart_Strength_ID == 0)
 {
-SetC_BP_Size_ID (0);
+SetVAB_BPart_Strength_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_BP_Size (Ctx ctx, int C_BP_Size_ID, Trx trxName) : base (ctx, C_BP_Size_ID, trxName)
+public X_VAB_BPart_Strength (Ctx ctx, int VAB_BPart_Strength_ID, Trx trxName) : base (ctx, VAB_BPart_Strength_ID, trxName)
 {
-/** if (C_BP_Size_ID == 0)
+/** if (VAB_BPart_Strength_ID == 0)
 {
-SetC_BP_Size_ID (0);
+SetVAB_BPart_Strength_ID (0);
 SetName (null);
 SetValue (null);
 }
@@ -41,7 +41,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Size (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Strength (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_BP_Size (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Size (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Strength (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_BP_Size (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Size (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_Strength (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BP_Size()
+static X_VAB_BPart_Strength()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389053517L;
 public static int Table_ID;
  // =912;
 
-/** TableName=C_BP_Size */
-public static String Table_Name="C_BP_Size";
+/** TableName=VAB_BPart_Strength */
+public static String Table_Name="VAB_BPart_Strength";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BP_Size[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_Strength[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set BP Size.
-@param C_BP_Size_ID Business Partner Size */
-public void SetC_BP_Size_ID (int C_BP_Size_ID)
+@param VAB_BPart_Strength_ID Business Partner Size */
+public void SetVAB_BPart_Strength_ID (int VAB_BPart_Strength_ID)
 {
-if (C_BP_Size_ID < 1) throw new ArgumentException ("C_BP_Size_ID is mandatory.");
-Set_ValueNoCheck ("C_BP_Size_ID", C_BP_Size_ID);
+if (VAB_BPart_Strength_ID < 1) throw new ArgumentException ("VAB_BPart_Strength_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BPart_Strength_ID", VAB_BPart_Strength_ID);
 }
 /** Get BP Size.
 @return Business Partner Size */
-public int GetC_BP_Size_ID() 
+public int GetVAB_BPart_Strength_ID() 
 {
-Object ii = Get_Value("C_BP_Size_ID");
+Object ii = Get_Value("VAB_BPart_Strength_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -25,9 +25,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class InvoiceNGL : ProcessEngine.SvrProcess
     {
         /**	Mandatory Acct Schema			*/
-        private int _C_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
         /** Mandatory Conversion Type		*/
-        private int _C_ConversionTypeReval_ID = 0;
+        private int _VAB_CurrencyTypeReval_ID = 0;
         /** Revaluation Date				*/
         private DateTime? _DateReval = null;
         /** Only AP/AR Transactions			*/
@@ -37,9 +37,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** Report all Currencies			*/
         private Boolean _IsAllCurrencies = false;
         /** Optional Invoice Currency		*/
-        private int _C_Currency_ID = 0;
+        private int _VAB_Currency_ID = 0;
         /** GL Document Type				*/
-        private int _C_DocTypeReval_ID = 0;
+        private int _VAB_DocTypesReval_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -54,13 +54,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_AcctSchema_ID"))
+                else if (name.Equals("VAB_AccountBook_ID"))
                 {
-                    _C_AcctSchema_ID = para[i].GetParameterAsInt();
+                    _VAB_AccountBook_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_ConversionTypeReval_ID"))
+                else if (name.Equals("VAB_CurrencyTypeReval_ID"))
                 {
-                    _C_ConversionTypeReval_ID = para[i].GetParameterAsInt();
+                    _VAB_CurrencyTypeReval_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateReval"))
                 {
@@ -74,13 +74,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _IsAllCurrencies = "Y".Equals((String)para[i].GetParameter());
                 }
-                else if (name.Equals("C_Currency_ID"))
+                else if (name.Equals("VAB_Currency_ID"))
                 {
-                    _C_Currency_ID = para[i].GetParameterAsInt();
+                    _VAB_Currency_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_DocTypeReval_ID"))
+                else if (name.Equals("VAB_DocTypesReval_ID"))
                 {
-                    _C_DocTypeReval_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypesReval_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -97,15 +97,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             if (_IsAllCurrencies)
             {
-                _C_Currency_ID = 0;
+                _VAB_Currency_ID = 0;
             }
-            log.Info("C_AcctSchema_ID=" + _C_AcctSchema_ID
-                + ",C_ConversionTypeReval_ID=" + _C_ConversionTypeReval_ID
+            log.Info("VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+                + ",VAB_CurrencyTypeReval_ID=" + _VAB_CurrencyTypeReval_ID
                 + ",DateReval=" + _DateReval
                 + ", APAR=" + _APAR
                 + ", IsAllCurrencies=" + _IsAllCurrencies
-                + ",C_Currency_ID=" + _C_Currency_ID
-                + ", C_DocType_ID=" + _C_DocTypeReval_ID);
+                + ",VAB_Currency_ID=" + _VAB_Currency_ID
+                + ", VAB_DocTypes_ID=" + _VAB_DocTypesReval_ID);
 
             //	Parameter
             if (_DateReval == null)
@@ -125,30 +125,30 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
              + " VAF_JInstance_ID, C_Invoice_ID, GrandTotal, OpenAmt, "
              + " Fact_Acct_ID, AmtSourceBalance, AmtAcctBalance, "
-             + " AmtRevalDr, AmtRevalCr, C_DocTypeReval_ID, IsAllCurrencies, "
-             + " DateReval, C_ConversionTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
+             + " AmtRevalDr, AmtRevalCr, VAB_DocTypesReval_ID, IsAllCurrencies, "
+             + " DateReval, VAB_CurrencyTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
                 //	--
              + "SELECT i.VAF_Client_ID, i.VAF_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
              + GetVAF_JInstance_ID() + ", i.C_Invoice_ID, i.GrandTotal, invoiceOpen(i.C_Invoice_ID, 0), "
              + " fa.Fact_Acct_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
                 //	AmtRevalDr, AmtRevalCr,
-             + " currencyConvert(fa.AmtSourceDr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
-             + " currencyConvert(fa.AmtSourceCr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
-             + (_C_DocTypeReval_ID == 0 || _C_DocTypeReval_ID==-1 ? "NULL" : Utility.Util.GetValueOfString(_C_DocTypeReval_ID)) + ", "
+             + " currencyConvert(fa.AmtSourceDr, i.VAB_Currency_ID, a.VAB_Currency_ID, " + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
+             + " currencyConvert(fa.AmtSourceCr, i.VAB_Currency_ID, a.VAB_Currency_ID, " + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
+             + (_VAB_DocTypesReval_ID == 0 || _VAB_DocTypesReval_ID==-1 ? "NULL" : Utility.Util.GetValueOfString(_VAB_DocTypesReval_ID)) + ", "
              + (_IsAllCurrencies ? "'Y'," : "'N',")
-             + dateStr + ", " + _C_ConversionTypeReval_ID + ", 0, 0, '" + _APAR + "' "
+             + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", 0, 0, '" + _APAR + "' "
                 //
              + "FROM C_Invoice_v i"
              + " INNER JOIN Fact_Acct fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.C_Invoice_ID"
                  + " AND (i.GrandTotal=fa.AmtSourceDr OR i.GrandTotal=fa.AmtSourceCr))"
-             + " INNER JOIN C_AcctSchema a ON (fa.C_AcctSchema_ID=a.C_AcctSchema_ID) "
+             + " INNER JOIN VAB_AccountBook a ON (fa.VAB_AccountBook_ID=a.VAB_AccountBook_ID) "
              + "WHERE i.IsPaid='N'"
-             + " AND EXISTS (SELECT * FROM C_ElementValue ev "
-                 + "WHERE ev.C_ElementValue_ID=fa.Account_ID AND (ev.AccountType='A' OR ev.AccountType='L'))"
-             + " AND fa.C_AcctSchema_ID=" + _C_AcctSchema_ID;
+             + " AND EXISTS (SELECT * FROM VAB_Acct_Element ev "
+                 + "WHERE ev.VAB_Acct_Element_ID=fa.Account_ID AND (ev.AccountType='A' OR ev.AccountType='L'))"
+             + " AND fa.VAB_AccountBook_ID=" + _VAB_AccountBook_ID;
             if (!_IsAllCurrencies)
             {
-                sql += " AND i.C_Currency_ID<>a.C_Currency_ID";
+                sql += " AND i.VAB_Currency_ID<>a.VAB_Currency_ID";
             }
             if (ONLY_AR.Equals(_APAR))
             {
@@ -158,9 +158,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 sql += " AND i.IsSOTrx='N'";
             }
-            if (!_IsAllCurrencies && _C_Currency_ID != 0 && _C_Currency_ID!=-1)
+            if (!_IsAllCurrencies && _VAB_Currency_ID != 0 && _VAB_Currency_ID!=-1)
             {
-                sql += " AND i.C_Currency_ID=" + _C_Currency_ID;
+                sql += " AND i.VAB_Currency_ID=" + _VAB_Currency_ID;
             }
 
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -220,9 +220,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Create Document
             String info = "";
-            if (_C_DocTypeReval_ID != 0 && _C_DocTypeReval_ID!=-1)
+            if (_VAB_DocTypesReval_ID != 0 && _VAB_DocTypesReval_ID!=-1)
             {
-                if (_C_Currency_ID != 0)
+                if (_VAB_Currency_ID != 0)
                 {
                     log.Warning("Can create Journal only for all currencies");
                 }
@@ -268,21 +268,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //
-            MAcctSchema aas = MAcctSchema.Get(GetCtx(), _C_AcctSchema_ID);
-            MAcctSchemaDefault asDefaultAccts = MAcctSchemaDefault.Get(GetCtx(), _C_AcctSchema_ID);
+            MAcctSchema aas = MAcctSchema.Get(GetCtx(), _VAB_AccountBook_ID);
+            MAcctSchemaDefault asDefaultAccts = MAcctSchemaDefault.Get(GetCtx(), _VAB_AccountBook_ID);
             MGLCategory cat = MGLCategory.GetDefaultSystem(GetCtx());
             if (cat == null)
             {
-                MDocType docType = MDocType.Get(GetCtx(), _C_DocTypeReval_ID);
+                MDocType docType = MDocType.Get(GetCtx(), _VAB_DocTypesReval_ID);
                 cat = MGLCategory.Get(GetCtx(), docType.GetGL_Category_ID());
             }
             //
             MJournalBatch batch = new MJournalBatch(GetCtx(), 0, Get_TrxName());
             batch.SetDescription(GetName());
-            batch.SetC_DocType_ID(_C_DocTypeReval_ID);
+            batch.SetVAB_DocTypes_ID(_VAB_DocTypesReval_ID);
             batch.SetDateDoc(DateTime.Now);// new Timestamp(System.currentTimeMillis()));
             batch.SetDateAcct(_DateReval);
-            batch.SetC_Currency_ID(aas.GetC_Currency_ID());
+            batch.SetVAB_Currency_ID(aas.GetVAB_Currency_ID());
             if (!batch.Save())
             {
                 return GetRetrievedError(batch, "Could not create Batch");
@@ -301,7 +301,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     continue;
                 }
                 MInvoice invoice = new MInvoice(GetCtx(), gl.GetC_Invoice_ID(), null);
-                if (invoice.GetC_Currency_ID() == aas.GetC_Currency_ID())
+                if (invoice.GetVAB_Currency_ID() == aas.GetVAB_Currency_ID())
                 {
                     continue;
                 }
@@ -309,9 +309,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (journal == null)
                 {
                     journal = new MJournal(batch);
-                    journal.SetC_AcctSchema_ID(aas.GetC_AcctSchema_ID());
-                    journal.SetC_Currency_ID(aas.GetC_Currency_ID());
-                    journal.SetC_ConversionType_ID(_C_ConversionTypeReval_ID);
+                    journal.SetVAB_AccountBook_ID(aas.GetVAB_AccountBook_ID());
+                    journal.SetVAB_Currency_ID(aas.GetVAB_Currency_ID());
+                    journal.SetVAB_CurrencyType_ID(_VAB_CurrencyTypeReval_ID);
                     MOrg org = MOrg.Get(GetCtx(), gl.GetVAF_Org_ID());
                     journal.SetDescription(GetName() + " - " + org.GetName());
                     journal.SetGL_Category_ID(cat.GetGL_Category_ID());
@@ -381,10 +381,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine(lineNo + 1);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
-                    asDefaultAccts.GetC_AcctSchema_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetVAF_OrgTrx_ID(),
+                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
+                    bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
-                    bas.GetC_Project_ID(), bas.GetC_Campaign_ID(), bas.GetC_Activity_ID(),
+                    bas.GetC_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
                 line.SetDescription(Msg.GetElement(GetCtx(), "UnrealizedGain_Acct"));
                 line.SetC_ValidCombination_ID(acct.GetC_ValidCombination_ID());
@@ -399,10 +399,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine(lineNo + 2);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
-                    asDefaultAccts.GetC_AcctSchema_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetVAF_OrgTrx_ID(),
+                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
+                    bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
-                    bas.GetC_Project_ID(), bas.GetC_Campaign_ID(), bas.GetC_Activity_ID(),
+                    bas.GetC_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
                 line.SetDescription(Msg.GetElement(GetCtx(), "UnrealizedLoss_Acct"));
                 line.SetC_ValidCombination_ID(acct.GetC_ValidCombination_ID());

@@ -3282,7 +3282,7 @@
                             if (window.FRPT && postingByNewLogic) {
                                 var orgID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "VAF_Org_ID"));
                                 var winID = selfLocal.curTab.getVAF_Screen_ID();
-                                var docTypeID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "C_DocType_ID"));
+                                var docTypeID = Number(VIS.context.getWindowTabContext(selfLocal.curWindowNo, 0, "VAB_DocTypes_ID"));
                                 var postObj = FRPT.PostingLogic(selfLocal.curWindowNo, selfLocal.curTab.getVAF_TableView_ID(), selfLocal.curTab.getRecord_ID(), force, orgID, winID, docTypeID);
                                 selfLocal.curGC.dataRefresh();
                                 selfLocal.setBusy(false, true);
@@ -4765,7 +4765,7 @@
             self.curTab.loadSubscribe();
             self.aSubscribe.setPressed(self.curTab.HasSubscribed());
         };
-        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getVAF_Screen_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
+        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getVACM_SubscribedID(), this.curTab.getVAF_Screen_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
     };
 
     APanel.prototype.cmd_ImportMap = function () {
@@ -4817,18 +4817,18 @@
 
     APanel.prototype.cmd_history = function () {
         var atHistory = null;
-        var c_Bpartner_ID = 0;
+        var VAB_BusinessPartner_ID = 0;
         var VAF_UserContact_ID = 0;
-        if (Object.keys(this.curGC.getColumnNames()).indexOf("C_BPartner_ID") > 0 || (this.curTab.getField("C_BPartner_ID") != null && this.curTab.getField("C_BPartner_ID").getValue() > 0)) {
-            c_Bpartner_ID = this.curTab.getField("C_BPartner_ID").getValue();
-            //atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curTab.getField("C_BPartner_ID").getValue());
+        if (Object.keys(this.curGC.getColumnNames()).indexOf("VAB_BusinessPartner_ID") > 0 || (this.curTab.getField("VAB_BusinessPartner_ID") != null && this.curTab.getField("VAB_BusinessPartner_ID").getValue() > 0)) {
+            VAB_BusinessPartner_ID = this.curTab.getField("VAB_BusinessPartner_ID").getValue();
+            //atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curTab.getField("VAB_BusinessPartner_ID").getValue());
         }
 
         if (Object.keys(this.curGC.getColumnNames()).indexOf("VAF_UserContact_ID") > 0 || (this.curTab.getField("VAF_UserContact_ID") != null && this.curTab.getField("VAF_UserContact_ID").getValue() > 0)) {
             VAF_UserContact_ID = this.curTab.getField("VAF_UserContact_ID").getValue();
         }
 
-        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, VAF_UserContact_ID, this.curTab.getKeyColumnName());
+        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), VAB_BusinessPartner_ID, VAF_UserContact_ID, this.curTab.getKeyColumnName());
 
         atHistory.show();
     };
@@ -4945,10 +4945,10 @@
         //log.Info("ID=" + record_ID);
         if (record_ID > 0) {
             var VAF_TableView_ID = this.curTab.getVAF_TableView_ID();
-            //var C_BPartner_ID = 0;
-            var BPartner_ID = this.curTab.getValue("C_BPartner_ID");
+            //var VAB_BusinessPartner_ID = 0;
+            var BPartner_ID = this.curTab.getValue("VAB_BusinessPartner_ID");
             //if (BPartner_ID != null)
-            //    C_BPartner_ID = parseInt(BPartner_ID);
+            //    VAB_BusinessPartner_ID = parseInt(BPartner_ID);
 
             var req = new VIS.ARequest(this.aRequest, VAF_TableView_ID, record_ID, BPartner_ID, null, this.aRequest.getListItmIT());
             req.getRequests();
@@ -6931,7 +6931,7 @@
                         treeName = "VAF_TreeInfoCMC_ID";
                     else if (keyColumnName.equals("CM_CStage_ID"))
                         treeName = "VAF_TreeInfoCMS_ID";
-                    else if (keyColumnName.equals("CM_Template_ID"))
+                    else if (keyColumnName.equals("VACM_Layout_ID"))
                         treeName = "VAF_TreeInfoCMT_ID";
                     else if (keyColumnName.equals("CM_Media_ID"))
                         treeName = "VAF_TreeInfoCMM_ID";
@@ -10338,7 +10338,7 @@
     /* Group Control */
     function VCardGroup(onlyOne, records, grpName, fields, conditions) {
 
-        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
+        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @VAB_DocTypesTarget_ID@=132' }];
 
         var root = null;
         var body;

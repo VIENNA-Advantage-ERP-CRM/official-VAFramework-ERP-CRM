@@ -276,7 +276,7 @@ namespace VAdvantage.Process
                             //    mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
                             //    record_ID = Convert.ToInt32(dt.Rows[j][0]);
                             //}
-                            //if (sender == "C_BPartner")
+                            //if (sender == "VAB_BusinessPartner")
                             //{
                             //    mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][1]));
                             //    record_ID = Convert.ToInt32(dt.Rows[j][1]);
@@ -300,7 +300,7 @@ namespace VAdvantage.Process
                         //  {
                         try
                         {
-                            string sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
+                            string sql = "SELECT " + tableName + "_ID " + " , VAB_BusinessPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
                             sql += " AND VAF_Client_ID=" + VAF_Client_ID;
                             //sql += " AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
                             //string finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sql, tableName.ToString(), MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
@@ -326,10 +326,10 @@ namespace VAdvantage.Process
                             {
                                 for (int j = 0; j < dt.Rows.Count; j++)
                                 {
-                                    string sqlQuery = "SELECT IsEmployee From C_BPartner WHERE C_BPartner_ID=" + Convert.ToInt32(dt.Rows[j][1]);
+                                    string sqlQuery = "SELECT IsEmployee From VAB_BusinessPartner WHERE VAB_BusinessPartner_ID=" + Convert.ToInt32(dt.Rows[j][1]);
                                     sql += " AND VAF_Client_ID=" + VAF_Client_ID;
                                     //sqlQuery += " AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
-                                    //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                                    //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "VAB_BusinessPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
                                     DataSet ds = DB.ExecuteDataset(sqlQuery);
 
                                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -346,9 +346,9 @@ namespace VAdvantage.Process
                                         userOrBp = Msg.GetMsg(GetCtx(), "User");
                                     }
                                     //if (sender == "businessPartner")
-                                    if (sender == "C_BPartner")
+                                    if (sender == "VAB_BusinessPartner")
                                     {
-                                        _tableID = PO.Get_Table_ID("C_BPartner");
+                                        _tableID = PO.Get_Table_ID("VAB_BusinessPartner");
                                         existRec = GetAttachedRecord(_tableID, Convert.ToInt32(dt.Rows[j][1]), Convert.ToInt32(uid), folderName);
                                         userOrBp = Msg.GetMsg(GetCtx(), "BusinessPartner");
                                     }
@@ -421,7 +421,7 @@ namespace VAdvantage.Process
                                         mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][0]));
                                         record_ID = Convert.ToInt32(dt.Rows[j][0]);
                                     }
-                                    if (sender == "C_BPartner")
+                                    if (sender == "VAB_BusinessPartner")
                                     {
                                         mAttachment.SetRecord_ID(Convert.ToInt32(dt.Rows[j][1]));
                                         record_ID = Convert.ToInt32(dt.Rows[j][1]);

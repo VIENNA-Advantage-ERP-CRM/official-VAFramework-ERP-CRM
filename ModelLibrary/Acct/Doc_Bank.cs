@@ -3,7 +3,7 @@
  * Class Name     : Doc_InOut
  * Purpose        : Post Invoice Documents.
                     <pre>
-                    Table: C_BankStatement (392)
+                    Table: VAB_BankingJRNL (392)
                     Document Types:     CMB
                     </pre>
  * Class Used     : Doc
@@ -36,7 +36,7 @@ namespace VAdvantage.Acct
     public class Doc_Bank : Doc
     {
         //Bank Account			
-        private int _C_BankAccount_ID = 0;
+        private int _VAB_Bank_Acct_ID = 0;
 
         /// <summary>
         ///  Constructor
@@ -65,13 +65,13 @@ namespace VAdvantage.Acct
             SetDateDoc(bs.GetStatementDate());
             SetDateAcct(bs.GetStatementDate());	//	Overwritten on Line Level
 
-            _C_BankAccount_ID = bs.GetC_BankAccount_ID();
+            _VAB_Bank_Acct_ID = bs.GetVAB_Bank_Acct_ID();
             //	Amounts
             SetAmount(AMTTYPE_Gross, bs.GetStatementDifference());
 
             //  Set Bank Account Info (Currency)
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _C_BankAccount_ID);
-            SetC_Currency_ID(ba.GetC_Currency_ID());
+            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
+            SetVAB_Currency_ID(ba.GetVAB_Currency_ID());
 
             //	Contained Objects
             _lines = LoadLines(bs);
@@ -179,19 +179,19 @@ namespace VAdvantage.Acct
                 for (int i = 0; i < _lines.Length; i++)
                 {
                     DocLine_Bank line = (DocLine_Bank)_lines[i];
-                    int C_BPartner_ID = line.GetC_BPartner_ID();
+                    int VAB_BusinessPartner_ID = line.GetVAB_BusinessPartner_ID();
                     int C_Payment_ID = line.GetC_Payment_ID();
                     //  BankAsset       DR      CR  (Statement)
                     fl = fact.CreateLine(line,
-                        GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetC_Currency_ID(), line.GetStmtAmt());
+                        GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetVAB_Currency_ID(), line.GetStmtAmt());
 
                     if (fl != null && VAF_Org_ID != 0)
                     {
                         fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
-                    if (fl != null && C_BPartner_ID != 0)
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
 
                     //  BankInTransit   DR      CR              (Payment)
@@ -201,7 +201,7 @@ namespace VAdvantage.Acct
                     // Tender Type RIBA
                     if ("R".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -209,14 +209,14 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type MAV
                     else if ("M".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -224,14 +224,14 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type RID
                     else if ("I".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -239,7 +239,7 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
@@ -248,12 +248,12 @@ namespace VAdvantage.Acct
                         acct = GetAccount(Doc.ACCTTYPE_BankInTransit, as1);
                     }
 
-                    fl = fact.CreateLine(line, acct, line.GetC_Currency_ID(), Decimal.Negate(line.GetTrxAmt()));
+                    fl = fact.CreateLine(line, acct, line.GetVAB_Currency_ID(), Decimal.Negate(line.GetTrxAmt()));
                     if (fl != null)
                     {
-                        if (C_BPartner_ID != 0)
+                        if (VAB_BusinessPartner_ID != 0)
                         {
-                            fl.SetC_BPartner_ID(C_BPartner_ID);
+                            fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                         }
                         if (VAF_Org_ID != 0)
                         {
@@ -265,26 +265,26 @@ namespace VAdvantage.Acct
                         }
                     }
                     //  Charge          DR          (Charge)
-                    fl = fact.CreateLine(line, line.GetChargeAccount(as1, Decimal.Negate(line.GetChargeAmt())), line.GetC_Currency_ID(), Decimal.Negate(line.GetChargeAmt()), null);
-                    if (fl != null && C_BPartner_ID != 0)
+                    fl = fact.CreateLine(line, line.GetChargeAccount(as1, Decimal.Negate(line.GetChargeAmt())), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetChargeAmt()), null);
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
 
                     //  Interest        DR      CR  (Interest)
                     if (Env.Signum(line.GetInterestAmt()) < 0)
                     {
                         fl = fact.CreateLine(line,
-                            GetAccount(Doc.ACCTTYPE_InterestExp, as1), GetAccount(Doc.ACCTTYPE_InterestExp, as1), line.GetC_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
+                            GetAccount(Doc.ACCTTYPE_InterestExp, as1), GetAccount(Doc.ACCTTYPE_InterestExp, as1), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
                     }
                     else
                     {
                         fl = fact.CreateLine(line,
-                            GetAccount(Doc.ACCTTYPE_InterestRev, as1), GetAccount(Doc.ACCTTYPE_InterestRev, as1), line.GetC_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
+                            GetAccount(Doc.ACCTTYPE_InterestRev, as1), GetAccount(Doc.ACCTTYPE_InterestRev, as1), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
                     }
-                    if (fl != null && C_BPartner_ID != 0)
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
                 }
             }
@@ -295,29 +295,29 @@ namespace VAdvantage.Acct
                 for (int i = 0; i < _lines.Length; i++)
                 {
                     DocLine_Bank line = (DocLine_Bank)_lines[i];
-                    int C_BPartner_ID = line.GetC_BPartner_ID();
+                    int VAB_BusinessPartner_ID = line.GetVAB_BusinessPartner_ID();
 
                     //  BankAsset       DR      CR  (Statement)
                     fl = fact.CreateLine(line,
-                        GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetC_Currency_ID(), line.GetStmtAmt());
+                        GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetVAB_Currency_ID(), line.GetStmtAmt());
 
                     if (fl != null && VAF_Org_ID != 0)
                     {
                         fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
-                    if (fl != null && C_BPartner_ID != 0)
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
 
                     //  BankInTransit   DR      CR              (Payment)
                     fl = fact.CreateLine(line,
-                        GetAccount(Doc.ACCTTYPE_BankInTransit, as1), line.GetC_Currency_ID(), Decimal.Negate(line.GetTrxAmt()));
+                        GetAccount(Doc.ACCTTYPE_BankInTransit, as1), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetTrxAmt()));
                     if (fl != null)
                     {
-                        if (C_BPartner_ID != 0)
+                        if (VAB_BusinessPartner_ID != 0)
                         {
-                            fl.SetC_BPartner_ID(C_BPartner_ID);
+                            fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                         }
                         if (VAF_Org_ID != 0)
                         {
@@ -329,26 +329,26 @@ namespace VAdvantage.Acct
                         }
                     }
                     //  Charge          DR          (Charge)
-                    fl = fact.CreateLine(line, line.GetChargeAccount(as1, Decimal.Negate(line.GetChargeAmt())), line.GetC_Currency_ID(), Decimal.Negate(line.GetChargeAmt()), null);
-                    if (fl != null && C_BPartner_ID != 0)
+                    fl = fact.CreateLine(line, line.GetChargeAccount(as1, Decimal.Negate(line.GetChargeAmt())), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetChargeAmt()), null);
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
 
                     //  Interest        DR      CR  (Interest)
                     if (Env.Signum(line.GetInterestAmt()) < 0)
                     {
                         fl = fact.CreateLine(line,
-                            GetAccount(Doc.ACCTTYPE_InterestExp, as1), GetAccount(Doc.ACCTTYPE_InterestExp, as1), line.GetC_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
+                            GetAccount(Doc.ACCTTYPE_InterestExp, as1), GetAccount(Doc.ACCTTYPE_InterestExp, as1), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
                     }
                     else
                     {
                         fl = fact.CreateLine(line,
-                            GetAccount(Doc.ACCTTYPE_InterestRev, as1), GetAccount(Doc.ACCTTYPE_InterestRev, as1), line.GetC_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
+                            GetAccount(Doc.ACCTTYPE_InterestRev, as1), GetAccount(Doc.ACCTTYPE_InterestRev, as1), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetInterestAmt()));
                     }
-                    if (fl != null && C_BPartner_ID != 0)
+                    if (fl != null && VAB_BusinessPartner_ID != 0)
                     {
-                        fl.SetC_BPartner_ID(C_BPartner_ID);
+                        fl.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     }
                     //
                     //	fact.createTaxCorrection();
@@ -366,12 +366,12 @@ namespace VAdvantage.Acct
         /// <returns>VAF_Org_ID or 0</returns>
         private int GetBank_Org_ID()
         {
-            if (_C_BankAccount_ID == 0)
+            if (_VAB_Bank_Acct_ID == 0)
             {
                 return 0;
             }
             //
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _C_BankAccount_ID);
+            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
             return ba.GetVAF_Org_ID();
         }
 

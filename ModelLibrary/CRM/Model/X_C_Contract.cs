@@ -11,20 +11,20 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Contract
+    /** Generated Model for VAB_Contract
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Contract : PO
+    public class X_VAB_Contract : PO
     {
-        public X_C_Contract(Context ctx, int C_Contract_ID, Trx trxName)
-            : base(ctx, C_Contract_ID, trxName)
+        public X_VAB_Contract(Context ctx, int VAB_Contract_ID, Trx trxName)
+            : base(ctx, VAB_Contract_ID, trxName)
         {
-            /** if (C_Contract_ID == 0)
+            /** if (VAB_Contract_ID == 0)
             {
-            SetC_BPartner_ID (0);
-            SetC_Contract_ID (0);
-            SetC_Currency_ID (0);	// @C_Currency_ID@
-            SetC_Frequency_ID (0);
+            SetVAB_BusinessPartner_ID (0);
+            SetVAB_Contract_ID (0);
+            SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
+            SetVAB_Frequency_ID (0);
             SetC_PaymentTerm_ID (0);
             SetC_Tax_ID (0);
             SetC_UOM_ID (0);	// @#C_UOM_ID@
@@ -43,15 +43,15 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Contract(Ctx ctx, int C_Contract_ID, Trx trxName)
-            : base(ctx, C_Contract_ID, trxName)
+        public X_VAB_Contract(Ctx ctx, int VAB_Contract_ID, Trx trxName)
+            : base(ctx, VAB_Contract_ID, trxName)
         {
-            /** if (C_Contract_ID == 0)
+            /** if (VAB_Contract_ID == 0)
             {
-            SetC_BPartner_ID (0);
-            SetC_Contract_ID (0);
-            SetC_Currency_ID (0);	// @C_Currency_ID@
-            SetC_Frequency_ID (0);
+            SetVAB_BusinessPartner_ID (0);
+            SetVAB_Contract_ID (0);
+            SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
+            SetVAB_Frequency_ID (0);
             SetC_PaymentTerm_ID (0);
             SetC_Tax_ID (0);
             SetC_UOM_ID (0);	// @#C_UOM_ID@
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Contract(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Contract(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Contract(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Contract(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -93,14 +93,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Contract(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Contract(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Contract()
+        static X_VAB_Contract()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000256;
 
-        /** TableName=C_Contract */
-        public static String Table_Name = "C_Contract";
+        /** TableName=VAB_Contract */
+        public static String Table_Name = "VAB_Contract";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Contract[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Contract[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -209,94 +209,94 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID < 1) throw new ArgumentException("C_BPartner_ID is mandatory.");
-            Set_Value("C_BPartner_ID", C_BPartner_ID);
+            if (VAB_BusinessPartner_ID < 1) throw new ArgumentException("VAB_BusinessPartner_ID is mandatory.");
+            Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Campaign.
-        @param C_Campaign_ID Marketing Campaign */
-        public void SetC_Campaign_ID(int C_Campaign_ID)
+        @param VAB_Promotion_ID Marketing Campaign */
+        public void SetVAB_Promotion_ID(int VAB_Promotion_ID)
         {
-            if (C_Campaign_ID <= 0) Set_Value("C_Campaign_ID", null);
+            if (VAB_Promotion_ID <= 0) Set_Value("VAB_Promotion_ID", null);
             else
-                Set_Value("C_Campaign_ID", C_Campaign_ID);
+                Set_Value("VAB_Promotion_ID", VAB_Promotion_ID);
         }
         /** Get Campaign.
         @return Marketing Campaign */
-        public int GetC_Campaign_ID()
+        public int GetVAB_Promotion_ID()
         {
-            Object ii = Get_Value("C_Campaign_ID");
+            Object ii = Get_Value("VAB_Promotion_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set C_Contract_ID.
-        @param C_Contract_ID C_Contract_ID */
-        public void SetC_Contract_ID(int C_Contract_ID)
+        /** Set VAB_Contract_ID.
+        @param VAB_Contract_ID VAB_Contract_ID */
+        public void SetVAB_Contract_ID(int VAB_Contract_ID)
         {
-            if (C_Contract_ID < 1) throw new ArgumentException("C_Contract_ID is mandatory.");
-            Set_ValueNoCheck("C_Contract_ID", C_Contract_ID);
+            if (VAB_Contract_ID < 1) throw new ArgumentException("VAB_Contract_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Contract_ID", VAB_Contract_ID);
         }
-        /** Get C_Contract_ID.
-        @return C_Contract_ID */
-        public int GetC_Contract_ID()
+        /** Get VAB_Contract_ID.
+        @return VAB_Contract_ID */
+        public int GetVAB_Contract_ID()
         {
-            Object ii = Get_Value("C_Contract_ID");
+            Object ii = Get_Value("VAB_Contract_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency Type.
-        @param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        @param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID <= 0) Set_Value("C_ConversionType_ID", null);
+            if (VAB_CurrencyType_ID <= 0) Set_Value("VAB_CurrencyType_ID", null);
             else
-                Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+                Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }
         /** Get Currency Type.
         @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID()
+        public int GetVAB_CurrencyType_ID()
         {
-            Object ii = Get_Value("C_ConversionType_ID");
+            Object ii = Get_Value("VAB_CurrencyType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory.");
-            Set_ValueNoCheck("C_Currency_ID", C_Currency_ID);
+            if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Billing Frequency.
-        @param C_Frequency_ID Billing Frequency */
-        public void SetC_Frequency_ID(int C_Frequency_ID)
+        @param VAB_Frequency_ID Billing Frequency */
+        public void SetVAB_Frequency_ID(int VAB_Frequency_ID)
         {
-            if (C_Frequency_ID < 1) throw new ArgumentException("C_Frequency_ID is mandatory.");
-            Set_Value("C_Frequency_ID", C_Frequency_ID);
+            if (VAB_Frequency_ID < 1) throw new ArgumentException("VAB_Frequency_ID is mandatory.");
+            Set_Value("VAB_Frequency_ID", VAB_Frequency_ID);
         }
         /** Get Billing Frequency.
         @return Billing Frequency */
-        public int GetC_Frequency_ID()
+        public int GetVAB_Frequency_ID()
         {
-            Object ii = Get_Value("C_Frequency_ID");
+            Object ii = Get_Value("VAB_Frequency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_WorkflowProcessorLog
+/** Generated Model for VAF_WFlowHandlerLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_WorkflowProcessorLog : PO
+public class X_VAF_WFlowHandlerLog : PO
 {
-public X_AD_WorkflowProcessorLog (Context ctx, int AD_WorkflowProcessorLog_ID, Trx trxName) : base (ctx, AD_WorkflowProcessorLog_ID, trxName)
+public X_VAF_WFlowHandlerLog (Context ctx, int VAF_WFlowHandlerLog_ID, Trx trxName) : base (ctx, VAF_WFlowHandlerLog_ID, trxName)
 {
-/** if (AD_WorkflowProcessorLog_ID == 0)
+/** if (VAF_WFlowHandlerLog_ID == 0)
 {
-SetAD_WorkflowProcessorLog_ID (0);
-SetAD_WorkflowProcessor_ID (0);
+SetVAF_WFlowHandlerLog_ID (0);
+SetVAF_WFlowHandler_ID (0);
 SetIsError (false);
 }
  */
 }
-public X_AD_WorkflowProcessorLog (Ctx ctx, int AD_WorkflowProcessorLog_ID, Trx trxName) : base (ctx, AD_WorkflowProcessorLog_ID, trxName)
+public X_VAF_WFlowHandlerLog (Ctx ctx, int VAF_WFlowHandlerLog_ID, Trx trxName) : base (ctx, VAF_WFlowHandlerLog_ID, trxName)
 {
-/** if (AD_WorkflowProcessorLog_ID == 0)
+/** if (VAF_WFlowHandlerLog_ID == 0)
 {
-SetAD_WorkflowProcessorLog_ID (0);
-SetAD_WorkflowProcessor_ID (0);
+SetVAF_WFlowHandlerLog_ID (0);
+SetVAF_WFlowHandler_ID (0);
 SetIsError (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsError (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WorkflowProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlowHandlerLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_WorkflowProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(c
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WorkflowProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_WFlowHandlerLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_WorkflowProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_WorkflowProcessorLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_WFlowHandlerLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_WorkflowProcessorLog()
+static X_VAF_WFlowHandlerLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389050132L;
 public static int Table_ID;
  // =696;
 
-/** TableName=AD_WorkflowProcessorLog */
-public static String Table_Name="AD_WorkflowProcessorLog";
+/** TableName=VAF_WFlowHandlerLog */
+public static String Table_Name="VAF_WFlowHandlerLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_WorkflowProcessorLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_WFlowHandlerLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Workflow Processorl Log.
-@param AD_WorkflowProcessorLog_ID Result of the execution of the Workflow Processor */
-public void SetAD_WorkflowProcessorLog_ID (int AD_WorkflowProcessorLog_ID)
+@param VAF_WFlowHandlerLog_ID Result of the execution of the Workflow Processor */
+public void SetVAF_WFlowHandlerLog_ID (int VAF_WFlowHandlerLog_ID)
 {
-if (AD_WorkflowProcessorLog_ID < 1) throw new ArgumentException ("AD_WorkflowProcessorLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_WorkflowProcessorLog_ID", AD_WorkflowProcessorLog_ID);
+if (VAF_WFlowHandlerLog_ID < 1) throw new ArgumentException ("VAF_WFlowHandlerLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlowHandlerLog_ID", VAF_WFlowHandlerLog_ID);
 }
 /** Get Workflow Processorl Log.
 @return Result of the execution of the Workflow Processor */
-public int GetAD_WorkflowProcessorLog_ID() 
+public int GetVAF_WFlowHandlerLog_ID() 
 {
-Object ii = Get_Value("AD_WorkflowProcessorLog_ID");
+Object ii = Get_Value("VAF_WFlowHandlerLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow Processor.
-@param AD_WorkflowProcessor_ID Workflow Processor Server */
-public void SetAD_WorkflowProcessor_ID (int AD_WorkflowProcessor_ID)
+@param VAF_WFlowHandler_ID Workflow Processor Server */
+public void SetVAF_WFlowHandler_ID (int VAF_WFlowHandler_ID)
 {
-if (AD_WorkflowProcessor_ID < 1) throw new ArgumentException ("AD_WorkflowProcessor_ID is mandatory.");
-Set_ValueNoCheck ("AD_WorkflowProcessor_ID", AD_WorkflowProcessor_ID);
+if (VAF_WFlowHandler_ID < 1) throw new ArgumentException ("VAF_WFlowHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_WFlowHandler_ID", VAF_WFlowHandler_ID);
 }
 /** Get Workflow Processor.
 @return Workflow Processor Server */
-public int GetAD_WorkflowProcessor_ID() 
+public int GetVAF_WFlowHandler_ID() 
 {
-Object ii = Get_Value("AD_WorkflowProcessor_ID");
+Object ii = Get_Value("VAF_WFlowHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -604,10 +604,10 @@ namespace VAdvantage.Process
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help                                           
-                                        WHERE AD_Workflow_ID=" + tlps.GetAD_Workflow_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Workflow_ID=" + tlps.GetVAF_Workflow_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_Workflow_ID() + " WorkflowNotTranslated.");
+                        res.Append(tlps.GetVAF_Workflow_ID() + " WorkflowNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);

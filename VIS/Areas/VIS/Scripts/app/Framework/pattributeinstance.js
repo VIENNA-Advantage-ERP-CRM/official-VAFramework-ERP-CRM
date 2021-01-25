@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
     //SerNo Parameter Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607 
-    function PAttributeInstance(title, M_Warehouse_ID, M_Locator_ID, M_Product_ID, C_BPartner_ID, SerNo, lotNo, garunteeDate, isSOTrx) {
+    function PAttributeInstance(title, M_Warehouse_ID, M_Locator_ID, M_Product_ID, VAB_BusinessPartner_ID, SerNo, lotNo, garunteeDate, isSOTrx) {
 
         var $self = this;
         this.onClose = null;
@@ -10,7 +10,7 @@
         var mWarehouseID = M_Warehouse_ID;
         var mLocatorID = M_Locator_ID;
         var mProductID = M_Product_ID;
-        var mCBPartnerID = C_BPartner_ID;
+        var mCBPartnerID = VAB_BusinessPartner_ID;
         var mtitle = title;
         var issotrx = isSOTrx;
         this.arrListColumns = [];
@@ -57,21 +57,21 @@
         }
 
 
-        function dynInit(C_BPartner_ID) {
-            $self.log.config("C_BPartner_ID=" + C_BPartner_ID);
-            if (C_BPartner_ID != 0) {
+        function dynInit(VAB_BusinessPartner_ID) {
+            $self.log.config("VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID);
+            if (VAB_BusinessPartner_ID != 0) {
                 var shelfLifeMinPct = 0;
                 var shelfLifeMinDays = 0;
 
                 //var sql = "SELECT bp.ShelfLifeMinPct, bpp.ShelfLifeMinPct, bpp.ShelfLifeMinDays "
-                //    + "FROM C_BPartner bp "
-                //    + " LEFT OUTER JOIN C_BPartner_Product bpp"
-                //    + " ON (bp.C_BPartner_ID=bpp.C_BPartner_ID AND bpp.M_Product_ID=" + mProductID + ") "
-                //    + "WHERE bp.C_BPartner_ID=" + C_BPartner_ID;
+                //    + "FROM VAB_BusinessPartner bp "
+                //    + " LEFT OUTER JOIN VAB_BPart_Product bpp"
+                //    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.M_Product_ID=" + mProductID + ") "
+                //    + "WHERE bp.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
 
                 var dr = null;
                 try {
-                    dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetBPData", { "Product_ID": mProductID, "BPartner_ID": C_BPartner_ID }, null);
+                    dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetBPData", { "Product_ID": mProductID, "BPartner_ID": VAB_BusinessPartner_ID }, null);
                     if (dr != null) {
                         shelfLifeMinPct = dr["ShelfLifeMinPct"];
                         var pct = dr["PCT"];

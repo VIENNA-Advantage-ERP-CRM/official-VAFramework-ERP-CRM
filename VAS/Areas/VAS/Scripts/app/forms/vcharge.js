@@ -56,9 +56,9 @@
 
 
         /** Account Element     */
-        var m_C_Element_ID = 0;
+        var m_VAB_Element_ID = 0;
         /** AccountSchema       */
-        var m_C_AcctSchema_ID = 0;
+        var m_VAB_AccountBook_ID = 0;
         /** Default Charge Tax Category */
         var m_C_TaxCategory_ID = 0;
         var m_VAF_Client_ID = 0;
@@ -163,7 +163,7 @@
             }
             if (arrListColumns.length == 0) {
                 arrListColumns.push({
-                    field: "C_ElementValue_ID", caption: VIS.Msg.getMsg("C_ELEMENTVALUE_ID"),
+                    field: "VAB_Acct_Element_ID", caption: VIS.Msg.getMsg("VAB_ACCT_ELEMENT_ID"),
                     sortable: true, size: '16%', min: 150, hidden: true
                 });
                 // arrListColumns.push({ field: "Select1", caption: VIS.Msg.getMsg("Select"), sortable: true, size: '25%', min: 150, hidden: false, editable: { type: 'checkbox' } });
@@ -183,10 +183,10 @@
             });
         }
 
-        // Get data from c_elementvalue table
+        // Get data from VAB_Acct_Element table
         function dynInit() {
             var data = [];
-            m_C_AcctSchema_ID = VIS.Env.getCtx().getContextAsInt("$C_AcctSchema_ID");
+            m_VAB_AccountBook_ID = VIS.Env.getCtx().getContextAsInt("$VAB_AccountBook_ID");
             m_VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
             m_VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
 
@@ -195,7 +195,7 @@
                 dataType: "json",
                 //async: false,
                 data: {
-                    mcAcctSchemaID: m_C_AcctSchema_ID,
+                    mcAcctSchemaID: m_VAB_AccountBook_ID,
                     mADClientId: m_VAF_Client_ID,
                     //valueSearch: searchValueText,
                     //nameSearch: searchNameText,
@@ -207,8 +207,8 @@
                     }
                     if (results.result && results.result.VchargeMCElemTaxCatID) {
                         var MCElemTaxCatID = results.result.VchargeMCElemTaxCatID;
-                        m_C_Element_ID = results.result.VchargeMCElemTaxCatID[0]["mCElementID"];
-                        if (m_C_Element_ID == 0) {
+                        m_VAB_Element_ID = results.result.VchargeMCElemTaxCatID[0]["mCElementID"];
+                        if (m_VAB_Element_ID == 0) {
                             return;
                         }
                         m_C_TaxCategory_ID = results.result.VchargeMCElemTaxCatID[0]["mCTaxCategoryID"];
@@ -219,7 +219,7 @@
                         var count = 1;
                         for (var i = 0; i < vals.length; i++) {
                             var line = {};
-                            line['C_ElementValue_ID'] = vals[i]["C_ElementValue_ID"];
+                            line['VAB_Acct_Element_ID'] = vals[i]["VAB_Acct_Element_ID"];
                             line['Value'] = vals[i]["Value"];
                             line['Name'] = vals[i]["Name"];
                             line['Expense'] = vals[i]["Expense"] == "false" ? false : true;
@@ -247,24 +247,24 @@
 
         //function dynInit() {
         //    var data = [];
-        //    m_C_AcctSchema_ID = VIS.Env.getCtx().getContextAsInt("$C_AcctSchema_ID");
+        //    m_VAB_AccountBook_ID = VIS.Env.getCtx().getContextAsInt("$VAB_AccountBook_ID");
         //    m_VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
         //    m_VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
 
-        //    var sql = "SELECT C_Element_ID FROM C_AcctSchema_Element "
-        //                   + "WHERE ElementType='AC' AND C_AcctSchema_ID= " + m_C_AcctSchema_ID;
-        //    m_C_Element_ID = VIS.DB.executeScalar(sql, null, null);
-        //    if (m_C_Element_ID == 0)
+        //    var sql = "SELECT VAB_Element_ID FROM VAB_AccountBook_Element "
+        //                   + "WHERE ElementType='AC' AND VAB_AccountBook_ID= " + m_VAB_AccountBook_ID;
+        //    m_VAB_Element_ID = VIS.DB.executeScalar(sql, null, null);
+        //    if (m_VAB_Element_ID == 0)
         //        return;
         //    sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + m_VAF_Client_ID;
         //    m_C_TaxCategory_ID = VIS.DB.executeScalar(sql, null, null);
 
         //    //  Create SQL
-        //    sql = "SELECT 'false' as Select1,C_ElementValue_ID,Value, Name, case when AccountType = 'E' THEN 'true' else 'false' end as Expense"
-        //           + " FROM C_ElementValue "
+        //    sql = "SELECT 'false' as Select1,VAB_Acct_Element_ID,Value, Name, case when AccountType = 'E' THEN 'true' else 'false' end as Expense"
+        //           + " FROM VAB_Acct_Element "
         //           + " WHERE AccountType IN ('R','E')"
         //           + " AND IsSummary='N'"
-        //           + " AND C_Element_ID= " + m_C_Element_ID
+        //           + " AND VAB_Element_ID= " + m_VAB_Element_ID
         //           + " ORDER BY 2 desc";
         //    try {
         //        var dr = VIS.DB.executeReader(sql.toString(), null, null);
@@ -272,7 +272,7 @@
         //        while (dr.read()) {
         //            var line = {};
         //            // line['Select1'] = false;
-        //            line['C_ElementValue_ID'] = dr.getString(1);
+        //            line['VAB_Acct_Element_ID'] = dr.getString(1);
         //            line['Value'] = dr.getString(2);
         //            line['Name'] = dr.getString(3);
         //            line['Expense'] = dr.getString(4) == "false" ? false : true;
@@ -292,16 +292,16 @@
             $busyDiv.css("display", isBusy ? 'block' : 'none');
         };
 
-        function createCharge(m_C_AcctSchema_ID, m_C_TaxCategory_ID, name, C_ElementValue_ID, expense) {
+        function createCharge(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, VAB_Acct_Element_ID, expense) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VCharge/CreateCharge",
                 dataType: "json",
                 //async: false,
                 data: {
-                    m_C_AcctSchema_ID: m_C_AcctSchema_ID,
+                    m_VAB_AccountBook_ID: m_VAB_AccountBook_ID,
                     m_C_TaxCategory_ID: m_C_TaxCategory_ID,
                     name: name,
-                    C_ElementValue_ID: C_ElementValue_ID,
+                    VAB_Acct_Element_ID: VAB_Acct_Element_ID,
                     expense: expense
                 },
                 success: function (data) {
@@ -314,7 +314,7 @@
                         // JID_0134:System should refresh the form once charge is created and clear the value in Value, Name and Expense if charge is created succussfully.
                         txtSearchKey.ctrl.val("");
                         txtName.ctrl.val("");
-                        var C_Charge_ID = data.ID;
+                        var VAB_Charge_ID = data.ID;
                         VIS.ADialog.info("ChargeCreated", true, null);
                         dynInit()
                     }
@@ -322,7 +322,7 @@
             });
         }
 
-        function createChargeByList(m_C_AcctSchema_ID, m_C_TaxCategory_ID, namelst, C_ElementValue_IDlst, expenselst) {
+        function createChargeByList(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, namelst, VAB_Acct_Element_IDlst, expenselst) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VCharge/CreateChargeByList",
                 type: "POST",
@@ -330,10 +330,10 @@
                 contentType: "application/json; charset=utf-8",
                 //async: false,
                 data: JSON.stringify({
-                    'AcctSchemaID': m_C_AcctSchema_ID,
+                    'AcctSchemaID': m_VAB_AccountBook_ID,
                     'TaxCategoryID': m_C_TaxCategory_ID,
                     'namepara': namelst,
-                    'ElementValuID': C_ElementValue_IDlst,
+                    'ElementValuID': VAB_Acct_Element_IDlst,
                     'expense': expenselst
                 }),
                 success: function (data) {
@@ -488,7 +488,7 @@
                     }
                     var splitValue = selectedItems.toString().split(',');
                     //for (var i = 0; i < splitValue.length; i++) {
-                    //    eleValue_ID += (dGrid.get(splitValue[i])).C_ElementValue_ID + ",";
+                    //    eleValue_ID += (dGrid.get(splitValue[i])).VAB_Acct_Element_ID + ",";
                     //    eleName += (dGrid.get(splitValue[i])).Name + ",";
                     //    expense += (dGrid.get(splitValue[i])).Expense + ",";
                     //}
@@ -501,7 +501,7 @@
                     //expense = expense.replace(/,\s*$/, "");
 
                     for (var i = 0; i < splitValue.length; i++) {
-                        eleValue_ID[i] = (dGrid.get(splitValue[i])).C_ElementValue_ID;
+                        eleValue_ID[i] = (dGrid.get(splitValue[i])).VAB_Acct_Element_ID;
                         eleName[i] = (dGrid.get(splitValue[i])).Name;
                         expense[i] = (dGrid.get(splitValue[i])).Expense;
                     }
@@ -510,7 +510,7 @@
                         setBusy(false);
                         return "";
                     }
-                    createChargeByList(m_C_AcctSchema_ID, m_C_TaxCategory_ID, eleName, eleValue_ID, expense);
+                    createChargeByList(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, eleName, eleValue_ID, expense);
                 });
 
             if (btnCreateCharge != null)
@@ -540,7 +540,7 @@
                             value: value,
                             name: name,
                             expense: expense,
-                            m_C_Element_ID: m_C_Element_ID
+                            m_VAB_Element_ID: m_VAB_Element_ID
                         },
                         success: function (data) {
                             if (data.ID == 0) {
@@ -550,7 +550,7 @@
                                 return;
                             }
                             else {
-                                createCharge(m_C_AcctSchema_ID, m_C_TaxCategory_ID, name, data.ID, expense);
+                                createCharge(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, data.ID, expense);
                             }
                         }
                     });
@@ -619,8 +619,8 @@
             selectDivToggelWidth = null;
             sideDivHeight = null;
 
-            m_C_Element_ID = null;
-            m_C_AcctSchema_ID = null;
+            m_VAB_Element_ID = null;
+            m_VAB_AccountBook_ID = null;
             m_C_TaxCategory_ID = null;
             m_VAF_Client_ID = null;
             m_VAF_Org_ID = null;

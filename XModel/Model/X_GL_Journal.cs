@@ -21,9 +21,9 @@ namespace VAdvantage.Model
         {
             /** if (GL_Journal_ID == 0)
             {
-            SetC_AcctSchema_ID (0);	// @$C_AcctSchema_ID@
-            SetC_ConversionType_ID (0);
-            SetC_DocType_ID (0);	// @C_DocType_ID@
+            SetVAB_AccountBook_ID (0);	// @$VAB_AccountBook_ID@
+            SetVAB_CurrencyType_ID (0);
+            SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
             SetC_Period_ID (0);	// @C_Period_ID@
             SetCurrencyRate (0.0);	// 1
             SetDateAcct (DateTime.Now);	// @DateAcct@
@@ -48,9 +48,9 @@ namespace VAdvantage.Model
         {
             /** if (GL_Journal_ID == 0)
             {
-            SetC_AcctSchema_ID (0);	// @$C_AcctSchema_ID@
-            SetC_ConversionType_ID (0);
-            SetC_DocType_ID (0);	// @C_DocType_ID@
+            SetVAB_AccountBook_ID (0);	// @$VAB_AccountBook_ID@
+            SetVAB_CurrencyType_ID (0);
+            SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
             SetC_Period_ID (0);	// @C_Period_ID@
             SetCurrencyRate (0.0);	// 1
             SetDateAcct (DateTime.Now);	// @DateAcct@
@@ -152,63 +152,63 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Accounting Schema.
-        @param C_AcctSchema_ID Rules for accounting */
-        public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+        @param VAB_AccountBook_ID Rules for accounting */
+        public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID)
         {
-            if (C_AcctSchema_ID < 1) throw new ArgumentException("C_AcctSchema_ID is mandatory.");
-            Set_ValueNoCheck("C_AcctSchema_ID", C_AcctSchema_ID);
+            if (VAB_AccountBook_ID < 1) throw new ArgumentException("VAB_AccountBook_ID is mandatory.");
+            Set_ValueNoCheck("VAB_AccountBook_ID", VAB_AccountBook_ID);
         }
         /** Get Accounting Schema.
         @return Rules for accounting */
-        public int GetC_AcctSchema_ID()
+        public int GetVAB_AccountBook_ID()
         {
-            Object ii = Get_Value("C_AcctSchema_ID");
+            Object ii = Get_Value("VAB_AccountBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency Type.
-        @param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        @param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID < 1) throw new ArgumentException("C_ConversionType_ID is mandatory.");
-            Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+            if (VAB_CurrencyType_ID < 1) throw new ArgumentException("VAB_CurrencyType_ID is mandatory.");
+            Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }
         /** Get Currency Type.
         @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID()
+        public int GetVAB_CurrencyType_ID()
         {
-            Object ii = Get_Value("C_ConversionType_ID");
+            Object ii = Get_Value("VAB_CurrencyType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID < 0) throw new ArgumentException("C_DocType_ID is mandatory.");
-            Set_Value("C_DocType_ID", C_DocType_ID);
+            if (VAB_DocTypes_ID < 0) throw new ArgumentException("VAB_DocTypes_ID is mandatory.");
+            Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

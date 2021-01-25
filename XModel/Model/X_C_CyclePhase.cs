@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CyclePhase
+/** Generated Model for VAB_ProjectCycleStage
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CyclePhase : PO
+public class X_VAB_ProjectCycleStage : PO
 {
-public X_C_CyclePhase (Context ctx, int C_CyclePhase_ID, Trx trxName) : base (ctx, C_CyclePhase_ID, trxName)
+public X_VAB_ProjectCycleStage (Context ctx, int VAB_ProjectCycleStage_ID, Trx trxName) : base (ctx, VAB_ProjectCycleStage_ID, trxName)
 {
-/** if (C_CyclePhase_ID == 0)
+/** if (VAB_ProjectCycleStage_ID == 0)
 {
-SetC_CycleStep_ID (0);
+SetVAB_ProjectCycleStep_ID (0);
 SetC_Phase_ID (0);
 }
  */
 }
-public X_C_CyclePhase (Ctx ctx, int C_CyclePhase_ID, Trx trxName) : base (ctx, C_CyclePhase_ID, trxName)
+public X_VAB_ProjectCycleStage (Ctx ctx, int VAB_ProjectCycleStage_ID, Trx trxName) : base (ctx, VAB_ProjectCycleStage_ID, trxName)
 {
-/** if (C_CyclePhase_ID == 0)
+/** if (VAB_ProjectCycleStage_ID == 0)
 {
-SetC_CycleStep_ID (0);
+SetVAB_ProjectCycleStep_ID (0);
 SetC_Phase_ID (0);
 }
  */
@@ -39,7 +39,7 @@ SetC_Phase_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CyclePhase (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectCycleStage (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_CyclePhase (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CyclePhase (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectCycleStage (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_CyclePhase (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CyclePhase (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ProjectCycleStage (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CyclePhase()
+static X_VAB_ProjectCycleStage()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389054818L;
 public static int Table_ID;
  // =433;
 
-/** TableName=C_CyclePhase */
-public static String Table_Name="C_CyclePhase";
+/** TableName=VAB_ProjectCycleStage */
+public static String Table_Name="VAB_ProjectCycleStage";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CyclePhase[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ProjectCycleStage[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Cycle Step.
-@param C_CycleStep_ID The step for this Cycle */
-public void SetC_CycleStep_ID (int C_CycleStep_ID)
+@param VAB_ProjectCycleStep_ID The step for this Cycle */
+public void SetVAB_ProjectCycleStep_ID (int VAB_ProjectCycleStep_ID)
 {
-if (C_CycleStep_ID < 1) throw new ArgumentException ("C_CycleStep_ID is mandatory.");
-Set_ValueNoCheck ("C_CycleStep_ID", C_CycleStep_ID);
+if (VAB_ProjectCycleStep_ID < 1) throw new ArgumentException ("VAB_ProjectCycleStep_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ProjectCycleStep_ID", VAB_ProjectCycleStep_ID);
 }
 /** Get Cycle Step.
 @return The step for this Cycle */
-public int GetC_CycleStep_ID() 
+public int GetVAB_ProjectCycleStep_ID() 
 {
-Object ii = Get_Value("C_CycleStep_ID");
+Object ii = Get_Value("VAB_ProjectCycleStep_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,7 +131,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_CycleStep_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_ProjectCycleStep_ID().ToString());
 }
 /** Set Standard Phase.
 @param C_Phase_ID Standard Phase of the Project Type */

@@ -90,13 +90,13 @@ namespace VAdvantage.Acct
         //BP Sales Region    		
         private int _BP_C_SalesRegion_ID = -1;
         // B Partner	    		
-        private int _C_BPartner_ID = -1;
+        private int _VAB_BusinessPartner_ID = -1;
         //Bank Account				
-        private int _C_BankAccount_ID = -1;
+        private int _VAB_Bank_Acct_ID = -1;
         //Cach Book					
-        private int _C_CashBook_ID = -1;
+        private int _VAB_CashBook_ID = -1;
         //Currency					
-        private int _C_Currency_ID = -1;
+        private int _VAB_Currency_ID = -1;
         /**********************/
         /** Work Order Class            */
         private int _workorder_id = -1;
@@ -589,7 +589,7 @@ namespace VAdvantage.Acct
                 {
                     if (Get_TableName() == "GL_Journal")
                     {
-                        DeleteAcct(_ass[i].GetC_AcctSchema_ID());
+                        DeleteAcct(_ass[i].GetVAB_AccountBook_ID());
                     }
                     //	if acct schema has "only" org, skip
                     bool skip = false;
@@ -696,7 +696,7 @@ namespace VAdvantage.Acct
                 .Append(" AND Record_ID=").Append(_po.Get_ID());
             if (accountingSchema_ID > 0)
             {
-                sql.Append(" AND C_ACCTSCHEMA_ID=").Append(accountingSchema_ID);
+                sql.Append(" AND VAB_ACCOUNTBOOK_ID=").Append(accountingSchema_ID);
             }
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
             if (no != 0)
@@ -772,10 +772,10 @@ namespace VAdvantage.Acct
 
                 //  balanceSegments
                 int columnExist = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM vaf_column WHERE vaf_tableview_id =  
-                                  (SELECT vaf_tableview_id   FROM vaf_tableview   WHERE UPPER(TableName) LIKE UPPER('C_AcctSchema'))
+                                  (SELECT vaf_tableview_id   FROM vaf_tableview   WHERE UPPER(TableName) LIKE UPPER('VAB_AccountBook'))
                                   AND UPPER(ColumnName) LIKE UPPER('FRPT_IsNotPostInterCompany') "));
-                string isPostInterCompany = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT FRPT_IsNotPostInterCompany FROM C_AcctSchema 
-                                            WHERE IsActive = 'Y' AND C_AcctSchema_ID =  " + fact.GetAcctSchema().GetC_AcctSchema_ID()));
+                string isPostInterCompany = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT FRPT_IsNotPostInterCompany FROM VAB_AccountBook 
+                                            WHERE IsActive = 'Y' AND VAB_AccountBook_ID =  " + fact.GetAcctSchema().GetVAB_AccountBook_ID()));
                 if (columnExist == 0 || (columnExist > 0 && isPostInterCompany == "N"))
                 {
                     if (!fact.IsSegmentBalanced())
@@ -941,9 +941,9 @@ namespace VAdvantage.Acct
                 _DocumentType = DocumentType;
             }
             //  Set Document Type & GL_Category	// TODO - Cache DocTypes
-            if (GetC_DocType_ID() != 0)		//	MatchInv,.. does not have C_DocType_ID
+            if (GetVAB_DocTypes_ID() != 0)		//	MatchInv,.. does not have VAB_DocTypes_ID
             {
-                String sql = "SELECT DocBaseType, GL_Category_ID FROM C_DocType WHERE C_DocType_ID=" + GetC_DocType_ID();
+                String sql = "SELECT DocBaseType, GL_Category_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + GetVAB_DocTypes_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -968,14 +968,14 @@ namespace VAdvantage.Acct
             }
             if (_DocumentType == null)
             {
-                log.Log(Level.SEVERE, "No DocBaseType for C_DocType_ID="
-                    + GetC_DocType_ID() + ", DocumentNo=" + GetDocumentNo());
+                log.Log(Level.SEVERE, "No DocBaseType for VAB_DocTypes_ID="
+                    + GetVAB_DocTypes_ID() + ", DocumentNo=" + GetDocumentNo());
             }
 
             //  We have a document Type, but no GL Info - search for DocType
             if (_GL_Category_ID == 0)
             {
-                String sql = "SELECT GL_Category_ID FROM C_DocType "
+                String sql = "SELECT GL_Category_ID FROM VAB_DocTypes "
                     + "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2";
 
                 IDataReader idr = null;
@@ -1067,27 +1067,27 @@ namespace VAdvantage.Acct
         public bool IsConvertible(MAcctSchema acctSchema)
         {
             //  No Currency in document
-            if (GetC_Currency_ID() == NO_CURRENCY)
+            if (GetVAB_Currency_ID() == NO_CURRENCY)
             {
                 log.Fine("(none) - " + ToString());
                 return true;
             }
             //  Get All Currencies
             HashSet<int> set = new HashSet<int>();
-            set.Add(Utility.Util.GetValueOfInt(GetC_Currency_ID()));
+            set.Add(Utility.Util.GetValueOfInt(GetVAB_Currency_ID()));
             for (int i = 0; _lines != null && i < _lines.Length; i++)
             {
-                int C_Currency_ID = _lines[i].GetC_Currency_ID();
-                if (C_Currency_ID != NO_CURRENCY)
+                int VAB_Currency_ID = _lines[i].GetVAB_Currency_ID();
+                if (VAB_Currency_ID != NO_CURRENCY)
                 {
-                    set.Add(Utility.Util.GetValueOfInt(C_Currency_ID));
+                    set.Add(Utility.Util.GetValueOfInt(VAB_Currency_ID));
                 }
             }
 
             //  just one and the same
-            if (set.Count == 1 && acctSchema.GetC_Currency_ID() == GetC_Currency_ID())
+            if (set.Count == 1 && acctSchema.GetVAB_Currency_ID() == GetVAB_Currency_ID())
             {
-                log.Fine("(same) Cur=" + GetC_Currency_ID() + " - " + ToString());
+                log.Fine("(same) Cur=" + GetVAB_Currency_ID() + " - " + ToString());
                 return true;
             }
 
@@ -1097,26 +1097,26 @@ namespace VAdvantage.Acct
             IEnumerator<int> it = set.GetEnumerator();
             while (it.MoveNext() && convertible)
             {
-                int C_Currency_ID = Utility.Util.GetValueOfInt((int)it.Current);//.intValue();
-                if (C_Currency_ID != acctSchema.GetC_Currency_ID())
+                int VAB_Currency_ID = Utility.Util.GetValueOfInt((int)it.Current);//.intValue();
+                if (VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                 {
-                    Decimal amt = MConversionRate.GetRate(C_Currency_ID, acctSchema.GetC_Currency_ID(),
-                        GetDateAcct(), GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                    Decimal amt = MConversionRate.GetRate(VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
+                        GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     //if (amt == null)
                     //{
                     //    convertible = false;
-                    //    log.Warning("NOT from C_Currency_ID=" + C_Currency_ID
-                    //        + " to " + acctSchema.GetC_Currency_ID()
+                    //    log.Warning("NOT from VAB_Currency_ID=" + VAB_Currency_ID
+                    //        + " to " + acctSchema.GetVAB_Currency_ID()
                     //        + " - " + ToString());
                     //}
                     //else
                     //{
-                    log.Fine("From C_Currency_ID=" + C_Currency_ID);
+                    log.Fine("From VAB_Currency_ID=" + VAB_Currency_ID);
                     //}
                 }
             }
 
-            log.Fine("Convertible=" + convertible + ", AcctSchema C_Currency_ID=" + acctSchema.GetC_Currency_ID() + " - " + ToString());
+            log.Fine("Convertible=" + convertible + ", AcctSchema VAB_Currency_ID=" + acctSchema.GetVAB_Currency_ID() + " - " + ToString());
             return convertible;
         }
 
@@ -1287,43 +1287,43 @@ namespace VAdvantage.Acct
                 }
                 else if (cmp < 0)
                 {
-                    sql = "SELECT CH_Expense_Acct FROM C_Charge_Acct WHERE C_Charge_ID=@param1 AND C_AcctSchema_ID=@param2";
+                    sql = "SELECT CH_Expense_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 }
                 else
                 {
-                    sql = "SELECT CH_Revenue_Acct FROM C_Charge_Acct WHERE C_Charge_ID=@param1 AND C_AcctSchema_ID=@param2";
+                    sql = "SELECT CH_Revenue_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 }
-                para_1 = GetC_Charge_ID();
+                para_1 = GetVAB_Charge_ID();
             }
             else if (AcctType == ACCTTYPE_V_Liability)
             {
-                sql = "SELECT V_Liability_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT V_Liability_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_V_Liability_Services)
             {
-                sql = "SELECT V_Liability_Services_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT V_Liability_Services_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_C_Receivable)
             {
-                sql = "SELECT C_Receivable_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT C_Receivable_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_C_Receivable_Services)
             {
-                sql = "SELECT C_Receivable_Services_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT C_Receivable_Services_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_V_Prepayment)
             {
-                sql = "SELECT V_Prepayment_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT V_Prepayment_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_C_Prepayment)
             {
-                sql = "SELECT C_Prepayment_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT C_Prepayment_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
 
             //*********** Change
@@ -1332,132 +1332,132 @@ namespace VAdvantage.Acct
                 // Case for Cash Journal
                 if (Get_Table_ID() == 407)
                 {
-                    sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                    para_1 = GetC_BPartner_ID();
+                    sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                    para_1 = GetVAB_BusinessPartner_ID();
                 }
                 else
                 {
-                    sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
-                    para_1 = GetC_BPartner_ID();
+                    sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                    para_1 = GetVAB_BusinessPartner_ID();
                 }
             }
 
             //Account Type - Payment  
             else if (AcctType == ACCTTYPE_UnallocatedCash)
             {
-                sql = "SELECT B_UnallocatedCash_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_UnallocatedCash_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_BankInTransit)
             {
-                sql = "SELECT B_InTransit_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InTransit_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_PaymentSelect)
             {
-                sql = "SELECT B_PaymentSelect_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_PaymentSelect_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
 
             //Account Type - Allocation   
             else if (AcctType == ACCTTYPE_DiscountExp)
             {
-                sql = "SELECT a.PayDiscount_Exp_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT a.PayDiscount_Exp_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_DiscountRev)
             {
-                sql = "SELECT PayDiscount_Rev_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT PayDiscount_Rev_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
             else if (AcctType == ACCTTYPE_WriteOff)
             {
-                sql = "SELECT WriteOff_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT WriteOff_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
 
             //Account Type - Bank Statement   
             else if (AcctType == ACCTTYPE_BankAsset)
             {
-                sql = "SELECT B_Asset_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_Asset_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_InterestRev)
             {
-                sql = "SELECT B_InterestRev_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InterestRev_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_InterestExp)
             {
-                sql = "SELECT B_InterestExp_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InterestExp_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
 
             // Account Type - Cash     
             else if (AcctType == ACCTTYPE_CashAsset)
             {
-                sql = "SELECT CB_Asset_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Asset_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashTransfer)
             {
-                sql = "SELECT CB_CashTransfer_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_CashTransfer_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashExpense)
             {
-                sql = "SELECT CB_Expense_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Expense_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashReceipt)
             {
-                sql = "SELECT CB_Receipt_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Receipt_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashDifference)
             {
-                sql = "SELECT CB_Differences_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Differences_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
 
             //Inventory Accounts         
             else if (AcctType == ACCTTYPE_InvDifferences)
             {
-                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND C_AcctSchema_ID=@param2";
-                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND C_AcctSchema_ID=?";
+                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND VAB_AccountBook_ID=?";
                 para_1 = GetM_Warehouse_ID();
             }
             else if (AcctType == ACCTTYPE_NotInvoicedReceipts)
             {
-                sql = "SELECT NotInvoicedReceipts_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
-                para_1 = GetC_BPartner_ID();
+                sql = "SELECT NotInvoicedReceipts_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_BusinessPartner_ID();
             }
 
             // Project Accounts          	
             else if (AcctType == ACCTTYPE_ProjectAsset)
             {
-                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = GetC_Project_ID();
             }
             else if (AcctType == ACCTTYPE_ProjectWIP)
             {
-                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = GetC_Project_ID();
             }
 
             //GL Accounts                 
             else if (AcctType == ACCTTYPE_PPVOffset)
             {
-                sql = "SELECT PPVOffset_Acct FROM C_AcctSchema_GL WHERE C_AcctSchema_ID=@param1";
+                sql = "SELECT PPVOffset_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=@param1";
                 para_1 = -1;
             }
             else if (AcctType == ACCTTYPE_CommitmentOffset)
             {
-                sql = "SELECT CommitmentOffset_Acct FROM C_AcctSchema_GL WHERE C_AcctSchema_ID=@param1";
+                sql = "SELECT CommitmentOffset_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=@param1";
                 para_1 = -1;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1465,80 +1465,80 @@ namespace VAdvantage.Acct
             {
                 sql = " SELECT COALESCE(woclass.WO_Material_Acct, b.WO_Material_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhd_Acct, b.WO_MaterialOverhd_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResourceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Resource_Acct, b.WO_Resource_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WCOverhdAcct)
             {
                 sql = " SELECT COALESCE(wc.WC_Overhead_Acct,b.WC_Overhead_Acct) "
                     + " FROM VAMFG_M_WorkCenter_Acct wc"
-                    + " INNER JOIN C_AcctSchema_Default b ON (wc.C_AcctSchema_ID = b.C_AcctSchema_ID)"
-                    + " WHERE wc.VAMFG_M_WorkCenter_ID = @param1 AND wc.C_AcctSchema_ID=@param2  AND wc.IsActive = 'Y' ";
+                    + " INNER JOIN VAB_AccountBook_Default b ON (wc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
+                    + " WHERE wc.VAMFG_M_WorkCenter_ID = @param1 AND wc.VAB_AccountBook_ID=@param2  AND wc.IsActive = 'Y' ";
                 para_1 = _workcenter_id;
             }
             else if (AcctType == ACCTTYPE_WOMaterialVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialVariance_Acct, b.WO_MaterialVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhdVariance_Acct, b.WO_MaterialOverhdVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResoureVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_ResourceVariance_Acct, b.WO_ResourceVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_OverhdVariance_Acct, b.WO_OverhdVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOScrapAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Scrap_Acct, b.WO_Scrap_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
 
@@ -1546,9 +1546,9 @@ namespace VAdvantage.Acct
             {
                 sql = " SELECT COALESCE(wcc.Overhead_Absorption_Acct, b.Overhead_Absorption_Acct) "
                     + " FROM VAMFG_M_WorkCenterCost wcc "
-                    + " INNER JOIN C_AcctSchema_Default b ON (wcc.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (wcc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
-                    + " AND wcc.C_AcctSchema_ID=@param2 "
+                    + " AND wcc.VAB_AccountBook_ID=@param2 "
                     + " AND wcc.M_CostElement_ID = @param3 "
                     + " AND wcc.M_CostType_ID = @param4 ";
                 para_1 = _workcenter_id;
@@ -1576,7 +1576,7 @@ namespace VAdvantage.Acct
                 if (para_1 == -1)   //  GL Accounts
                 {
                     param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@param1", as1.GetC_AcctSchema_ID());
+                    param[0] = new SqlParameter("@param1", as1.GetVAB_AccountBook_ID());
                 }
                 else
                 {
@@ -1585,7 +1585,7 @@ namespace VAdvantage.Acct
                     {
                         param = new SqlParameter[4];
                         param[0] = new SqlParameter("@param1", para_1);
-                        param[1] = new SqlParameter("@param2", as1.GetC_AcctSchema_ID());
+                        param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
                         param[3] = new SqlParameter("@param4", as1.GetM_CostType_ID());
                     }
@@ -1593,7 +1593,7 @@ namespace VAdvantage.Acct
                     {
                         param = new SqlParameter[2];
                         param[0] = new SqlParameter("@param1", para_1);
-                        param[1] = new SqlParameter("@param2", as1.GetC_AcctSchema_ID());
+                        param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
 
                     }
                     /**************Manfacturing****************/
@@ -1644,168 +1644,168 @@ namespace VAdvantage.Acct
                 }
                 else if (cmp < 0)
                 {
-                    sql = "SELECT CH_Expense_Acct FROM C_Charge_Acct WHERE C_Charge_ID=@param1 AND C_AcctSchema_ID=@param2";
+                    sql = "SELECT CH_Expense_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 }
                 else
                 {
-                    sql = "SELECT CH_Revenue_Acct FROM C_Charge_Acct WHERE C_Charge_ID=@param1 AND C_AcctSchema_ID=@param2";
+                    sql = "SELECT CH_Revenue_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 }
-                para_1 = GetC_Charge_ID();
+                para_1 = GetVAB_Charge_ID();
             }
             else if (AcctType == ACCTTYPE_V_Liability)
             {
-                sql = "SELECT V_Liability_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT V_Liability_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_V_Liability_Services)
             {
-                sql = "SELECT V_Liability_Services_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT V_Liability_Services_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_C_Receivable)
             {
-                sql = "SELECT C_Receivable_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT C_Receivable_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_C_Receivable_Services)
             {
-                sql = "SELECT C_Receivable_Services_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT C_Receivable_Services_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_V_Prepayment)
             {
-                sql = "SELECT V_Prepayment_Acct FROM C_BP_Vendor_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT V_Prepayment_Acct FROM C_BP_Vendor_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_C_Prepayment)
             {
-                sql = "SELECT C_Prepayment_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT C_Prepayment_Acct FROM C_BP_Customer_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
 
             //*********** Change
             else if (AcctType == ACCTTYPE_E_Prepayment)
             {
-                sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE C_BPartner_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT E_Prepayment_Acct FROM C_BP_Employee_Acct WHERE VAB_BusinessPartner_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
 
             //Account Type - Payment  
             else if (AcctType == ACCTTYPE_UnallocatedCash)
             {
-                sql = "SELECT B_UnallocatedCash_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_UnallocatedCash_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_BankInTransit)
             {
-                sql = "SELECT B_InTransit_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InTransit_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_PaymentSelect)
             {
-                sql = "SELECT B_PaymentSelect_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_PaymentSelect_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
 
             //Account Type - Allocation   
             else if (AcctType == ACCTTYPE_DiscountExp)
             {
-                sql = "SELECT a.PayDiscount_Exp_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
+                sql = "SELECT a.PayDiscount_Exp_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_DiscountRev)
             {
-                sql = "SELECT PayDiscount_Rev_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
+                sql = "SELECT PayDiscount_Rev_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
             else if (AcctType == ACCTTYPE_WriteOff)
             {
-                sql = "SELECT WriteOff_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
+                sql = "SELECT WriteOff_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
 
             //Account Type - Bank Statement   
             else if (AcctType == ACCTTYPE_BankAsset)
             {
-                sql = "SELECT B_Asset_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_Asset_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_InterestRev)
             {
-                sql = "SELECT B_InterestRev_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InterestRev_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
             else if (AcctType == ACCTTYPE_InterestExp)
             {
-                sql = "SELECT B_InterestExp_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_BankAccount_ID();
+                sql = "SELECT B_InterestExp_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Bank_Acct_ID();
             }
 
             // Account Type - Cash     
             else if (AcctType == ACCTTYPE_CashAsset)
             {
-                sql = "SELECT CB_Asset_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Asset_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashTransfer)
             {
-                sql = "SELECT CB_CashTransfer_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_CashTransfer_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashExpense)
             {
-                sql = "SELECT CB_Expense_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Expense_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashReceipt)
             {
-                sql = "SELECT CB_Receipt_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Receipt_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
             else if (AcctType == ACCTTYPE_CashDifference)
             {
-                sql = "SELECT CB_Differences_Acct FROM C_CashBook_Acct WHERE C_CashBook_ID=@param1 AND C_AcctSchema_ID=@param2";
-                para_1 = GetC_CashBook_ID();
+                sql = "SELECT CB_Differences_Acct FROM VAB_CashBook_Acct WHERE VAB_CashBook_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_CashBook_ID();
             }
 
             //Inventory Accounts         
             else if (AcctType == ACCTTYPE_InvDifferences)
             {
-                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND C_AcctSchema_ID=@param2";
-                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND C_AcctSchema_ID=?";
+                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND VAB_AccountBook_ID=?";
                 para_1 = GetM_Warehouse_ID();
             }
             else if (AcctType == ACCTTYPE_NotInvoicedReceipts)
             {
-                sql = "SELECT NotInvoicedReceipts_Acct FROM C_BP_Group_Acct a, C_BPartner bp "
-                    + "WHERE a.C_BP_Group_ID=bp.C_BP_Group_ID AND bp.C_BPartner_ID=@param1 AND a.C_AcctSchema_ID=@param2";
+                sql = "SELECT NotInvoicedReceipts_Acct FROM VAB_BPart_Category_Acct a, VAB_BusinessPartner bp "
+                    + "WHERE a.VAB_BPart_Category_ID=bp.VAB_BPart_Category_ID AND bp.VAB_BusinessPartner_ID=@param1 AND a.VAB_AccountBook_ID=@param2";
                 para_1 = BPartner_ID;
             }
 
             // Project Accounts          	
             else if (AcctType == ACCTTYPE_ProjectAsset)
             {
-                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = GetC_Project_ID();
             }
             else if (AcctType == ACCTTYPE_ProjectWIP)
             {
-                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND C_AcctSchema_ID=@param2";
+                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
                 para_1 = GetC_Project_ID();
             }
 
             //GL Accounts                 
             else if (AcctType == ACCTTYPE_PPVOffset)
             {
-                sql = "SELECT PPVOffset_Acct FROM C_AcctSchema_GL WHERE C_AcctSchema_ID=@param1";
+                sql = "SELECT PPVOffset_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=@param1";
                 para_1 = -1;
             }
             else if (AcctType == ACCTTYPE_CommitmentOffset)
             {
-                sql = "SELECT CommitmentOffset_Acct FROM C_AcctSchema_GL WHERE C_AcctSchema_ID=@param1";
+                sql = "SELECT CommitmentOffset_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=@param1";
                 para_1 = -1;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1813,80 +1813,80 @@ namespace VAdvantage.Acct
             {
                 sql = " SELECT COALESCE(woclass.WO_Material_Acct, b.WO_Material_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhd_Acct, b.WO_MaterialOverhd_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResourceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Resource_Acct, b.WO_Resource_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WCOverhdAcct)
             {
                 sql = " SELECT COALESCE(wc.WC_Overhead_Acct,b.WC_Overhead_Acct) "
                     + " FROM VAMFG_M_WorkCenter_Acct wc"
-                    + " INNER JOIN C_AcctSchema_Default b ON (wc.C_AcctSchema_ID = b.C_AcctSchema_ID)"
-                    + " WHERE wc.VAMFG_M_WorkCenter_ID = @param1 AND wc.C_AcctSchema_ID=@param2  AND wc.IsActive = 'Y' ";
+                    + " INNER JOIN VAB_AccountBook_Default b ON (wc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
+                    + " WHERE wc.VAMFG_M_WorkCenter_ID = @param1 AND wc.VAB_AccountBook_ID=@param2  AND wc.IsActive = 'Y' ";
                 para_1 = _workcenter_id;
             }
             else if (AcctType == ACCTTYPE_WOMaterialVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialVariance_Acct, b.WO_MaterialVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOMaterialOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_MaterialOverhdVariance_Acct, b.WO_MaterialOverhdVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOResoureVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_ResourceVariance_Acct, b.WO_ResourceVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOOverhdVarianceAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_OverhdVariance_Acct, b.WO_OverhdVariance_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
             else if (AcctType == ACCTTYPE_WOScrapAcct)
             {
                 sql = " SELECT COALESCE(woclass.WO_Scrap_Acct, b.WO_Scrap_Acct) "
                     + " FROM VAMFG_M_WorkOrderClass_Acct woclass "
-                    + " INNER JOIN C_AcctSchema_Default b ON (woclass.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (woclass.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + ", VAMFG_M_WorkOrder wo "
-                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.C_AcctSchema_ID=@param2  AND woclass.IsActive = 'Y' ";
+                    + "WHERE wo.VAMFG_M_WorkOrder_ID = @param1 AND woclass.VAMFG_M_WorkOrderClass_ID = wo.VAMFG_M_WorkOrderClass_ID AND woclass.VAB_AccountBook_ID=@param2  AND woclass.IsActive = 'Y' ";
                 para_1 = GetM_WorkOrder_ID();
             }
 
@@ -1894,9 +1894,9 @@ namespace VAdvantage.Acct
             {
                 sql = " SELECT COALESCE(wcc.Overhead_Absorption_Acct, b.Overhead_Absorption_Acct) "
                     + " FROM VAMFG_M_WorkCenterCost wcc "
-                    + " INNER JOIN C_AcctSchema_Default b ON (wcc.C_AcctSchema_ID = b.C_AcctSchema_ID)"
+                    + " INNER JOIN VAB_AccountBook_Default b ON (wcc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
-                    + " AND wcc.C_AcctSchema_ID=@param2 "
+                    + " AND wcc.VAB_AccountBook_ID=@param2 "
                     + " AND wcc.M_CostElement_ID = @param3 "
                     + " AND wcc.M_CostType_ID = @param4 ";
                 para_1 = _workcenter_id;
@@ -1924,7 +1924,7 @@ namespace VAdvantage.Acct
                 if (para_1 == -1)   //  GL Accounts
                 {
                     param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@param1", as1.GetC_AcctSchema_ID());
+                    param[0] = new SqlParameter("@param1", as1.GetVAB_AccountBook_ID());
                 }
                 else
                 {
@@ -1933,7 +1933,7 @@ namespace VAdvantage.Acct
                     {
                         param = new SqlParameter[4];
                         param[0] = new SqlParameter("@param1", para_1);
-                        param[1] = new SqlParameter("@param2", as1.GetC_AcctSchema_ID());
+                        param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
                         param[3] = new SqlParameter("@param4", as1.GetM_CostType_ID());
                     }
@@ -1941,7 +1941,7 @@ namespace VAdvantage.Acct
                     {
                         param = new SqlParameter[2];
                         param[0] = new SqlParameter("@param1", para_1);
-                        param[1] = new SqlParameter("@param2", as1.GetC_AcctSchema_ID());
+                        param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
 
                     }
                     /**************Manfacturing****************/
@@ -1956,17 +1956,17 @@ namespace VAdvantage.Acct
                 {
                     if (AcctType == ACCTTYPE_E_Prepayment)
                     {
-                        sql = "SELECT E_Prepayment_Acct FROM c_acctschema_default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                        sql = "SELECT E_Prepayment_Acct FROM VAB_AccountBook_default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
                         Account_ID = Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
                     else if (AcctType == ACCTTYPE_V_Prepayment)
                     {
-                        sql = "SELECT V_Prepayment_Acct FROM c_acctschema_default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                        sql = "SELECT V_Prepayment_Acct FROM VAB_AccountBook_default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
                         Account_ID = Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
                     else if (AcctType == ACCTTYPE_C_Prepayment)
                     {
-                        sql = "SELECT C_Prepayment_Acct FROM c_acctschema_default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                        sql = "SELECT C_Prepayment_Acct FROM VAB_AccountBook_default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
                         Account_ID = Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
                 }
@@ -2165,37 +2165,37 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_Currency_ID
+        /// Get VAB_Currency_ID
         /// </summary>
         /// <returns>currency</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            if (_C_Currency_ID == -1)
+            if (_VAB_Currency_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_Currency_ID");
+                int index = _po.Get_ColumnIndex("VAB_Currency_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_Currency_ID = Utility.Util.GetValueOfInt(ii);//.intValue();
+                        _VAB_Currency_ID = Utility.Util.GetValueOfInt(ii);//.intValue();
                     }
                 }
-                if (_C_Currency_ID == -1)
+                if (_VAB_Currency_ID == -1)
                 {
-                    _C_Currency_ID = NO_CURRENCY;
+                    _VAB_Currency_ID = NO_CURRENCY;
                 }
             }
-            return _C_Currency_ID;
+            return _VAB_Currency_ID;
         }
 
         /// <summary>
-        /// Set C_Currency_ID
+        /// Set VAB_Currency_ID
         /// </summary>
-        /// <param name="C_Currency_ID">id</param>
-        public void SetC_Currency_ID(int C_Currency_ID)
+        /// <param name="VAB_Currency_ID">id</param>
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            _C_Currency_ID = C_Currency_ID;
+            _VAB_Currency_ID = VAB_Currency_ID;
         }
 
         /// <summary>
@@ -2235,12 +2235,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        ///  	Get C_ConversionType_ID
+        ///  	Get VAB_CurrencyType_ID
         /// </summary>
         /// <returns>ConversionType</returns>
-        public int GetC_ConversionType_ID()
+        public int GetVAB_CurrencyType_ID()
         {
-            int index = _po.Get_ColumnIndex("C_ConversionType_ID");
+            int index = _po.Get_ColumnIndex("VAB_CurrencyType_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2420,19 +2420,19 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_DocType_ID
+        /// Get VAB_DocTypes_ID
         /// </summary>
         /// <returns>DocType</returns>
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            int index = _po.Get_ColumnIndex("C_DocType_ID");
+            int index = _po.Get_ColumnIndex("VAB_DocTypes_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
                 //	DocType does not exist - get DocTypeTarget
                 if (ii != null && Utility.Util.GetValueOfInt(ii) == 0)
                 {
-                    index = _po.Get_ColumnIndex("C_DocTypeTarget_ID");
+                    index = _po.Get_ColumnIndex("VAB_DocTypesTarget_ID");
                     if (index != -1)
                     {
                         ii = (int?)_po.Get_Value(index);
@@ -2448,12 +2448,12 @@ namespace VAdvantage.Acct
 
 
         /// <summary>
-        /// Get header level C_Charge_ID
+        /// Get header level VAB_Charge_ID
         /// </summary>
         /// <returns>Charge</returns>
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Charge_ID");
+            int index = _po.Get_ColumnIndex("VAB_Charge_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2484,71 +2484,71 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_BankAccount_ID
+        /// Get VAB_Bank_Acct_ID
         /// </summary>
         /// <returns>BankAccount</returns>
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            if (_C_BankAccount_ID == -1)
+            if (_VAB_Bank_Acct_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_BankAccount_ID");
+                int index = _po.Get_ColumnIndex("VAB_Bank_Acct_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_BankAccount_ID = Utility.Util.GetValueOfInt(ii);
+                        _VAB_Bank_Acct_ID = Utility.Util.GetValueOfInt(ii);
                     }
                 }
-                if (_C_BankAccount_ID == -1)
+                if (_VAB_Bank_Acct_ID == -1)
                 {
-                    _C_BankAccount_ID = 0;
+                    _VAB_Bank_Acct_ID = 0;
                 }
             }
-            return _C_BankAccount_ID;
+            return _VAB_Bank_Acct_ID;
         }
 
         /// <summary>
-        /// Set C_BankAccount_ID
+        /// Set VAB_Bank_Acct_ID
         /// </summary>
-        /// <param name="C_BankAccount_ID">bank acct</param>
-        protected void SetC_BankAccount_ID(int C_BankAccount_ID)
+        /// <param name="VAB_Bank_Acct_ID">bank acct</param>
+        protected void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            _C_BankAccount_ID = C_BankAccount_ID;
+            _VAB_Bank_Acct_ID = VAB_Bank_Acct_ID;
         }
 
         /// <summary>
-        /// Get C_CashBook_ID
+        /// Get VAB_CashBook_ID
         /// </summary>
         /// <returns>CashBook</returns>
-        public int GetC_CashBook_ID()
+        public int GetVAB_CashBook_ID()
         {
-            if (_C_CashBook_ID == -1)
+            if (_VAB_CashBook_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_CashBook_ID");
+                int index = _po.Get_ColumnIndex("VAB_CashBook_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_CashBook_ID = Utility.Util.GetValueOfInt(ii);
+                        _VAB_CashBook_ID = Utility.Util.GetValueOfInt(ii);
                     }
                 }
-                if (_C_CashBook_ID == -1)
+                if (_VAB_CashBook_ID == -1)
                 {
-                    _C_CashBook_ID = 0;
+                    _VAB_CashBook_ID = 0;
                 }
             }
-            return _C_CashBook_ID;
+            return _VAB_CashBook_ID;
         }
 
         /// <summary>
-        /// Set C_CashBook_ID
+        /// Set VAB_CashBook_ID
         /// </summary>
-        /// <param name="C_CashBook_ID">cash book</param>
-        protected void SetC_CashBook_ID(int C_CashBook_ID)
+        /// <param name="VAB_CashBook_ID">cash book</param>
+        protected void SetVAB_CashBook_ID(int VAB_CashBook_ID)
         {
-            _C_CashBook_ID = C_CashBook_ID;
+            _VAB_CashBook_ID = VAB_CashBook_ID;
         }
 
         /// <summary>
@@ -2571,46 +2571,46 @@ namespace VAdvantage.Acct
 
 
         /// <summary>
-        /// Get C_BPartner_ID
+        /// Get VAB_BusinessPartner_ID
         /// </summary>
         /// <returns>BPartner</returns>
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            if (_C_BPartner_ID == -1)
+            if (_VAB_BusinessPartner_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_BPartner_ID");
+                int index = _po.Get_ColumnIndex("VAB_BusinessPartner_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_BPartner_ID = Utility.Util.GetValueOfInt(ii);
+                        _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(ii);
                     }
                 }
-                if (_C_BPartner_ID == -1)
+                if (_VAB_BusinessPartner_ID == -1)
                 {
-                    _C_BPartner_ID = 0;
+                    _VAB_BusinessPartner_ID = 0;
                 }
             }
-            return _C_BPartner_ID;
+            return _VAB_BusinessPartner_ID;
         }
 
         /// <summary>
-        /// Set C_BPartner_ID
+        /// Set VAB_BusinessPartner_ID
         /// </summary>
-        /// <param name="C_BPartner_ID">bp</param>
-        protected void SetC_BPartner_ID(int C_BPartner_ID)
+        /// <param name="VAB_BusinessPartner_ID">bp</param>
+        protected void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            _C_BPartner_ID = C_BPartner_ID;
+            _VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
         }
 
         /// <summary>
-        /// Get C_BPartner_Location_ID
+        /// Get VAB_BPart_Location_ID
         /// </summary>
         /// <returns>BPartner Location</returns>
-        public int GetC_BPartner_Location_ID()
+        public int GetVAB_BPart_Location_ID()
         {
-            int index = _po.Get_ColumnIndex("C_BPartner_Location_ID");
+            int index = _po.Get_ColumnIndex("VAB_BPart_Location_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2693,12 +2693,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_Activity_ID
+        /// Get VAB_BillingCode_ID
         /// </summary>
         /// <returns>Activity</returns>
-        public int GetC_Activity_ID()
+        public int GetVAB_BillingCode_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Activity_ID");
+            int index = _po.Get_ColumnIndex("VAB_BillingCode_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2711,12 +2711,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_Campaign_ID
+        /// Get VAB_Promotion_ID
         /// </summary>
         /// <returns>Campaign</returns>
-        public int GetC_Campaign_ID()
+        public int GetVAB_Promotion_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Campaign_ID");
+            int index = _po.Get_ColumnIndex("VAB_Promotion_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);

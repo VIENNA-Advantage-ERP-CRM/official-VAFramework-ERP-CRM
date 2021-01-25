@@ -32,7 +32,7 @@ namespace VIS.Models
             }
             else if (VAF_TableView_ID == 291)
             {//MBPartner.Table_ID){
-                m_where += " OR C_BPartner_ID=" + Record_ID;
+                m_where += " OR VAB_BusinessPartner_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 259)
             {// MOrder.Table_ID){
@@ -56,7 +56,7 @@ namespace VIS.Models
             }
             else if (VAF_TableView_ID == 539)
             {// MAsset.Table_ID){
-                m_where += " OR A_Asset_ID=" + Record_ID;
+                m_where += " OR VAA_Asset_ID=" + Record_ID;
             }
             string sql = "SELECT Processed, COUNT(*) "
                   + "FROM R_Request WHERE " + m_where
@@ -528,9 +528,9 @@ namespace VIS.Models
                     " OR UPPER(p.Name) LIKE " + DB.TO_STRING(text) + " OR UPPER(mr.UPC) LIKE " + DB.TO_STRING(text) +
                     " OR UPPER(patr.UPC) LIKE " + DB.TO_STRING(text) + " OR UPPER(p.UPC) LIKE " + DB.TO_STRING(text) + ")";
             }
-            else if (_columnName.Equals("C_BPartner_ID"))
+            else if (_columnName.Equals("VAB_BusinessPartner_ID"))
             {
-                sql += "SELECT C_BPartner_ID FROM C_BPartner WHERE (UPPER(Value) LIKE ";
+                sql += "SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner WHERE (UPPER(Value) LIKE ";
                 sql += DB.TO_STRING(text) + " OR UPPER(Name) LIKE " + DB.TO_STRING(text) + ")";
             }
             else if (_columnName.Equals("C_Order_ID"))
@@ -629,10 +629,10 @@ namespace VIS.Models
             return help.ExecuteJDataSet(sqlP);
         }
 
-        public List<JTable> GenAttributeSetInstance(int C_GenAttributeSet_ID, bool onlyActive)
+        public List<JTable> GenAttributeSetInstance(int VAB_GenFeatureSet_ID, bool onlyActive)
         {
-            var sql = "SELECT ASI.C_GenAttributeSetInstance_ID, ASI.Description " +
-         " from C_GenAttributeSetInstance ASI, M_Product P WHERE ASI.C_GenAttributeSet_ID  = " + C_GenAttributeSet_ID;
+            var sql = "SELECT ASI.VAB_GenFeatureSetInstance_ID, ASI.Description " +
+         " from VAB_GenFeatureSetInstance ASI, M_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VAB_GenFeatureSet_ID;
             if (onlyActive)
                 sql += " AND IsActive='Y'";
             sql += " ORDER BY 2";
@@ -644,18 +644,18 @@ namespace VIS.Models
 
         public string GetDocWhere(int VAF_UserContact_ID, string TableName)
         {
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
-            + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
+            string docAccess = "(EXISTS (SELECT 1 FROM VAB_BusinessPartner bp INNER JOIN VAF_UserContact u "
+            + "ON (u.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
             + " WHERE u.VAF_UserContact_ID="
             + VAF_UserContact_ID
-            + " AND bp.C_BPartner_ID="
+            + " AND bp.VAB_BusinessPartner_ID="
             + TableName
-            + ".C_BPartner_ID)"
-            + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
-            + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
+            + ".VAB_BusinessPartner_ID)"
+            + " OR EXISTS (SELECT 1 FROM VAB_BPart_Relation bpr INNER JOIN VAF_UserContact u "
+            + "ON (u.VAB_BusinessPartner_ID=bpr.VAB_BusinessPartnerRelation_ID) "
             + " WHERE u.VAF_UserContact_ID="
             + VAF_UserContact_ID
-            + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
+            + " AND bpr.VAB_BusinessPartner_ID=" + TableName + ".VAB_BusinessPartner_ID)";
 
             var hasUserColumn = false;
             var sql1 = "SELECT count(*) FROM VAF_TableView t "
@@ -748,22 +748,22 @@ namespace VIS.Models
         public List<JTable> GetTrxInfo(int Record_ID, bool isOrder)
         {
             StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
-                        + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
+                        + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.VAB_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) AS ConvAmt ");
             if (isOrder)
             {
                 sql.Append("FROM C_Order o"
-                        + " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+                        + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
                         + " INNER JOIN C_OrderLine l ON (o.C_Order_ID=l.C_Order_ID) "
                         + "WHERE o.C_Order_ID=" + Record_ID + "");
             }
             else
             {
                 sql.Append("FROM C_Invoice o"
-                        + " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+                        + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
                         + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
                         + "WHERE o.C_Invoice_ID=" + Record_ID + "");
             }
-            sql.Append("GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.C_CONVERSIONTYPE_ID");
+            sql.Append("GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.VAB_CurrencyType_ID");
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql.ToString();
@@ -786,7 +786,7 @@ namespace VIS.Models
             }
             if (ServerValues.IsChat)
             {
-                sqlArray.Add("SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
+                sqlArray.Add("SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat WHERE VAF_TableView_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsPLock)
             {
@@ -794,7 +794,7 @@ namespace VIS.Models
             }
             if (ServerValues.IsSubscribeRecord)
             {
-                sqlArray.Add("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND vaf_tableview_ID=" + ServerValues.VAF_TableView_ID);
+                sqlArray.Add("Select VACM_Subscribe_ID,Record_ID from VACM_Subscribe where VAF_UserContact_ID=" + ServerValues.VAF_UserContact_ID + " AND vaf_tableview_ID=" + ServerValues.VAF_TableView_ID);
             }
             if (ServerValues.IsViewDocument)
             {
@@ -924,7 +924,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
                 {
-                    sql = sql.Append("C_BPartner_ID");
+                    sql = sql.Append("VAB_BusinessPartner_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else
@@ -932,7 +932,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
                 {
-                    sql = sql.Append("C_Campaign_ID");
+                    sql = sql.Append("VAB_Promotion_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else
@@ -980,7 +980,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Activity))
                 {
-                    sql = sql.Append("C_Activity_ID");
+                    sql = sql.Append("VAB_BillingCode_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else
@@ -1087,39 +1087,39 @@ namespace VIS.Models
 
         #region CreateFromStatement
 
-        public List<JTable> GetBankAccountData(int C_BankAccount_ID, DateTime ts)
+        public List<JTable> GetBankAccountData(int VAB_Bank_Acct_ID, DateTime ts)
         {
-            var sql = "SELECT p.DateTrx,p.C_Payment_ID,p.DocumentNo, ba.C_Currency_ID,c.ISO_Code,p.PayAmt,"
-               + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,@t,null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
+            var sql = "SELECT p.DateTrx,p.C_Payment_ID,p.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,p.PayAmt,"
+               + "currencyConvert(p.PayAmt,p.VAB_Currency_ID,ba.VAB_Currency_ID,@t,null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
                + " bp.Name,'P' AS Type "
-               + "FROM C_BankAccount ba"
-               + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
-               + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID)"
-               + " LEFT OUTER JOIN C_BPartner bp ON (p.C_BPartner_ID=bp.C_BPartner_ID) "
+               + "FROM VAB_Bank_Acct ba"
+               + " INNER JOIN C_Payment_v p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
+               + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID)"
+               + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                + "WHERE p.Processed='Y' AND p.IsReconciled='N'"
                + " AND p.DocStatus IN ('CO','CL','RE','VO') AND p.PayAmt<>0"
-               + " AND p.C_BankAccount_ID=@C_BankAccount_ID"                              	//  #2
-               + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
+               + " AND p.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID"                              	//  #2
+               + " AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l "
                    //	Voided Bank Statements have 0 StmtAmt
                    + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
             var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012 > 0)
             {
 
-                sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
-                + "currencyConvert(cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,@t,null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
-                + " Null AS Name,'C' AS Type FROM C_BankAccount ba"
-                + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
-                + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"
-                + " INNER JOIN C_Charge chrg ON chrg.C_Charge_ID=cl.C_Charge_ID"
-                + " INNER JOIN C_Currency c ON (cl.C_Currency_ID=c.C_Currency_ID)"
+                sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.VAB_CashJRNLLine_ID AS C_Payment_ID,cs.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
+                + "currencyConvert(cl.Amount,cl.VAB_Currency_ID,ba.VAB_Currency_ID,@t,null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
+                + " Null AS Name,'C' AS Type FROM VAB_Bank_Acct ba"
+                + " INNER JOIN VAB_CashJRNLLine cl ON (cl.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
+                + " INNER JOIN VAB_CashJRNL cs ON (cl.VAB_CashJRNL_ID=cs.VAB_CashJRNL_ID)"
+                + " INNER JOIN VAB_Charge chrg ON chrg.VAB_Charge_ID=cl.VAB_Charge_ID"
+                + " INNER JOIN VAB_Currency c ON (cl.VAB_Currency_ID=c.VAB_Currency_ID)"
                 + " WHERE cs.Processed='Y' AND cl.VA012_IsReconciled='N'"
                 + " AND cl.CashType ='C' AND chrg.DTD001_ChargeType ='CON'"
                 + " AND cs.DocStatus IN ('CO','CL','RE','VO') AND cl.Amount<>0"
-                + " AND cl.C_BankAccount_ID=@C_BankAccount_ID"                              	//  #2
-                + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
+                + " AND cl.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID"                              	//  #2
+                + " AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l "
                     //	Voided Bank Statements have 0 StmtAmt
-                    + "WHERE cl.C_CashLine_ID=l.C_CashLine_ID AND l.StmtAmt <> 0)";
+                    + "WHERE cl.VAB_CashJRNLLine_ID=l.VAB_CashJRNLLine_ID AND l.StmtAmt <> 0)";
             }
 
 
@@ -1127,7 +1127,7 @@ namespace VIS.Models
 
             List<SqlParams> param = new List<SqlParams>();
             param.Add(new SqlParams() { name = "@t", value = ts });
-            param.Add(new SqlParams() { name = "@C_BankAccount_ID", value = C_BankAccount_ID });
+            param.Add(new SqlParams() { name = "@VAB_Bank_Acct_ID", value = VAB_Bank_Acct_ID });
 
             sqlP.sql = sql;
             sqlP.param = param;

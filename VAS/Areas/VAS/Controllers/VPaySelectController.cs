@@ -36,11 +36,11 @@ namespace VIS.Controllers
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult GetPaymentMethod(int C_BankAccount_ID)
+        public JsonResult GetPaymentMethod(int VAB_Bank_Acct_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             VPaySelectModel objVPaySelect = new VPaySelectModel();
-            return Json(JsonConvert.SerializeObject(objVPaySelect.GetPaymentMethod(ctx,C_BankAccount_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(objVPaySelect.GetPaymentMethod(ctx,VAB_Bank_Acct_ID)), JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]

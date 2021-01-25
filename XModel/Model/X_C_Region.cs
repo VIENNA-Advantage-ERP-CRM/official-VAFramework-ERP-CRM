@@ -20,7 +20,7 @@ public X_C_Region (Context ctx, int C_Region_ID, Trx trxName) : base (ctx, C_Reg
 {
 /** if (C_Region_ID == 0)
 {
-SetC_Country_ID (0);
+SetVAB_Country_ID (0);
 SetC_Region_ID (0);
 SetName (null);
 }
@@ -30,7 +30,7 @@ public X_C_Region (Ctx ctx, int C_Region_ID, Trx trxName) : base (ctx, C_Region_
 {
 /** if (C_Region_ID == 0)
 {
-SetC_Country_ID (0);
+SetVAB_Country_ID (0);
 SetC_Region_ID (0);
 SetName (null);
 }
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_C_Region[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Country.
-@param C_Country_ID Country */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID < 1) throw new ArgumentException ("C_Country_ID is mandatory.");
-Set_ValueNoCheck ("C_Country_ID", C_Country_ID);
+if (VAB_Country_ID < 1) throw new ArgumentException ("VAB_Country_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

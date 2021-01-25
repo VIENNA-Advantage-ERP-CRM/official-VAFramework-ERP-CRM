@@ -20,7 +20,7 @@ public X_M_Demand (Context ctx, int M_Demand_ID, Trx trxName) : base (ctx, M_Dem
 {
 /** if (M_Demand_ID == 0)
 {
-SetC_Calendar_ID (0);
+SetVAB_Calender_ID (0);
 SetC_Year_ID (0);
 SetIsDefault (false);
 SetM_Demand_ID (0);
@@ -32,7 +32,7 @@ public X_M_Demand (Ctx ctx, int M_Demand_ID, Trx trxName) : base (ctx, M_Demand_
 {
 /** if (M_Demand_ID == 0)
 {
-SetC_Calendar_ID (0);
+SetVAB_Calender_ID (0);
 SetC_Year_ID (0);
 SetIsDefault (false);
 SetM_Demand_ID (0);
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_M_Demand[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Calendar.
-@param C_Calendar_ID Accounting Calendar Name */
-public void SetC_Calendar_ID (int C_Calendar_ID)
+@param VAB_Calender_ID Accounting Calendar Name */
+public void SetVAB_Calender_ID (int VAB_Calender_ID)
 {
-if (C_Calendar_ID < 1) throw new ArgumentException ("C_Calendar_ID is mandatory.");
-Set_ValueNoCheck ("C_Calendar_ID", C_Calendar_ID);
+if (VAB_Calender_ID < 1) throw new ArgumentException ("VAB_Calender_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Calender_ID", VAB_Calender_ID);
 }
 /** Get Calendar.
 @return Accounting Calendar Name */
-public int GetC_Calendar_ID() 
+public int GetVAB_Calender_ID() 
 {
-Object ii = Get_Value("C_Calendar_ID");
+Object ii = Get_Value("VAB_Calender_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

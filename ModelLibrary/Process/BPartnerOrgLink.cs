@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/** Info for New Org		*/
 	private int			_VAF_OrgCategory_ID;
 	/** Business Partner		*/
-	private int			_C_BPartner_ID;
+	private int			_VAB_BusinessPartner_ID;
 	/** Role					*/
 	private int			_VAF_Role_ID;
 	
@@ -65,7 +65,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
 		}
-		_C_BPartner_ID = GetRecord_ID();
+		_VAB_BusinessPartner_ID = GetRecord_ID();
 	}	//	prepare
 
 	/// <summary>
@@ -74,18 +74,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>Message (text with variables)</returns>
 	protected override String DoIt()
 	{
-		log.Info("C_BPartner_ID=" + _C_BPartner_ID 
+		log.Info("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID 
 			+ ", VAF_Org_ID=" + _VAF_Org_ID
 			+ ", VAF_OrgCategory_ID=" + _VAF_OrgCategory_ID
 			+ ", VAF_Role_ID=" + _VAF_Role_ID);
-        if (_C_BPartner_ID == 0)
+        if (_VAB_BusinessPartner_ID == 0)
         {
             throw new Exception("No Business Partner ID");
         }
-		MBPartner bp = new MBPartner (GetCtx(), _C_BPartner_ID, Get_Trx());
+		MBPartner bp = new MBPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
         if (bp.Get_ID() == 0)
         {
-            throw new Exception("Business Partner not found - C_BPartner_ID=" + _C_BPartner_ID);
+            throw new Exception("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
         }
 		//	BP Location
 		MBPartnerLocation[] locs = bp.GetLocations(false);
@@ -116,11 +116,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		else	//	check if linked to already
 		{
-			int C_BPartner_ID = org.GetLinkedC_BPartner_ID();
-            if (C_BPartner_ID > 0)
+			int VAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID();
+            if (VAB_BusinessPartner_ID > 0)
             {
                 throw new ArgumentException("Organization '" + org.GetName()
-                    + "' already linked (to C_BPartner_ID=" + C_BPartner_ID + ")");
+                    + "' already linked (to VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ")");
             }
 		}
 		_VAF_Org_ID = org.GetVAF_Org_ID();

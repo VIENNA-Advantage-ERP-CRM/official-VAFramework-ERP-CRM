@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CommissionDetail
+/** Generated Model for VAB_WorkCommissionDetail
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CommissionDetail : PO
+public class X_VAB_WorkCommissionDetail : PO
 {
-public X_C_CommissionDetail (Context ctx, int C_CommissionDetail_ID, Trx trxName) : base (ctx, C_CommissionDetail_ID, trxName)
+public X_VAB_WorkCommissionDetail (Context ctx, int VAB_WorkCommissionDetail_ID, Trx trxName) : base (ctx, VAB_WorkCommissionDetail_ID, trxName)
 {
-/** if (C_CommissionDetail_ID == 0)
+/** if (VAB_WorkCommissionDetail_ID == 0)
 {
 SetActualAmt (0.0);
 SetActualQty (0.0);
-SetC_CommissionAmt_ID (0);
-SetC_CommissionDetail_ID (0);
-SetC_Currency_ID (0);
+SetVAB_WorkCommission_Amt_ID (0);
+SetVAB_WorkCommissionDetail_ID (0);
+SetVAB_Currency_ID (0);
 SetConvertedAmt (0.0);
 }
  */
 }
-public X_C_CommissionDetail (Ctx ctx, int C_CommissionDetail_ID, Trx trxName) : base (ctx, C_CommissionDetail_ID, trxName)
+public X_VAB_WorkCommissionDetail (Ctx ctx, int VAB_WorkCommissionDetail_ID, Trx trxName) : base (ctx, VAB_WorkCommissionDetail_ID, trxName)
 {
-/** if (C_CommissionDetail_ID == 0)
+/** if (VAB_WorkCommissionDetail_ID == 0)
 {
 SetActualAmt (0.0);
 SetActualQty (0.0);
-SetC_CommissionAmt_ID (0);
-SetC_CommissionDetail_ID (0);
-SetC_Currency_ID (0);
+SetVAB_WorkCommission_Amt_ID (0);
+SetVAB_WorkCommissionDetail_ID (0);
+SetVAB_Currency_ID (0);
 SetConvertedAmt (0.0);
 }
  */
@@ -47,7 +47,7 @@ SetConvertedAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommissionDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_CommissionDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommissionDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_CommissionDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_WorkCommissionDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CommissionDetail()
+static X_VAB_WorkCommissionDetail()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389054521L;
 public static int Table_ID;
  // =437;
 
-/** TableName=C_CommissionDetail */
-public static String Table_Name="C_CommissionDetail";
+/** TableName=VAB_WorkCommissionDetail */
+public static String Table_Name="VAB_WorkCommissionDetail";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CommissionDetail[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_WorkCommissionDetail[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Actual Amount.
@@ -151,47 +151,47 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Commission Amount.
-@param C_CommissionAmt_ID Generated Commission Amount */
-public void SetC_CommissionAmt_ID (int C_CommissionAmt_ID)
+@param VAB_WorkCommission_Amt_ID Generated Commission Amount */
+public void SetVAB_WorkCommission_Amt_ID (int VAB_WorkCommission_Amt_ID)
 {
-if (C_CommissionAmt_ID < 1) throw new ArgumentException ("C_CommissionAmt_ID is mandatory.");
-Set_ValueNoCheck ("C_CommissionAmt_ID", C_CommissionAmt_ID);
+if (VAB_WorkCommission_Amt_ID < 1) throw new ArgumentException ("VAB_WorkCommission_Amt_ID is mandatory.");
+Set_ValueNoCheck ("VAB_WorkCommission_Amt_ID", VAB_WorkCommission_Amt_ID);
 }
 /** Get Commission Amount.
 @return Generated Commission Amount */
-public int GetC_CommissionAmt_ID() 
+public int GetVAB_WorkCommission_Amt_ID() 
 {
-Object ii = Get_Value("C_CommissionAmt_ID");
+Object ii = Get_Value("VAB_WorkCommission_Amt_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Commission Detail.
-@param C_CommissionDetail_ID Supporting information for Commission Amounts */
-public void SetC_CommissionDetail_ID (int C_CommissionDetail_ID)
+@param VAB_WorkCommissionDetail_ID Supporting information for Commission Amounts */
+public void SetVAB_WorkCommissionDetail_ID (int VAB_WorkCommissionDetail_ID)
 {
-if (C_CommissionDetail_ID < 1) throw new ArgumentException ("C_CommissionDetail_ID is mandatory.");
-Set_ValueNoCheck ("C_CommissionDetail_ID", C_CommissionDetail_ID);
+if (VAB_WorkCommissionDetail_ID < 1) throw new ArgumentException ("VAB_WorkCommissionDetail_ID is mandatory.");
+Set_ValueNoCheck ("VAB_WorkCommissionDetail_ID", VAB_WorkCommissionDetail_ID);
 }
 /** Get Commission Detail.
 @return Supporting information for Commission Amounts */
-public int GetC_CommissionDetail_ID() 
+public int GetVAB_WorkCommissionDetail_ID() 
 {
-Object ii = Get_Value("C_CommissionDetail_ID");
+Object ii = Get_Value("VAB_WorkCommissionDetail_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BPartner_Product
+/** Generated Model for VAB_BPart_Product
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BPartner_Product : PO
+public class X_VAB_BPart_Product : PO
 {
-public X_C_BPartner_Product (Context ctx, int C_BPartner_Product_ID, Trx trxName) : base (ctx, C_BPartner_Product_ID, trxName)
+public X_VAB_BPart_Product (Context ctx, int VAB_BPart_Product_ID, Trx trxName) : base (ctx, VAB_BPart_Product_ID, trxName)
 {
-/** if (C_BPartner_Product_ID == 0)
+/** if (VAB_BPart_Product_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetM_Product_ID (0);
 SetShelfLifeMinDays (0);
 SetShelfLifeMinPct (0);
 }
  */
 }
-public X_C_BPartner_Product (Ctx ctx, int C_BPartner_Product_ID, Trx trxName) : base (ctx, C_BPartner_Product_ID, trxName)
+public X_VAB_BPart_Product (Ctx ctx, int VAB_BPart_Product_ID, Trx trxName) : base (ctx, VAB_BPart_Product_ID, trxName)
 {
-/** if (C_BPartner_Product_ID == 0)
+/** if (VAB_BPart_Product_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetM_Product_ID (0);
 SetShelfLifeMinDays (0);
 SetShelfLifeMinPct (0);
@@ -43,7 +43,7 @@ SetShelfLifeMinPct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BPartner_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_BPartner_Product (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BPartner_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_BPartner_Product (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BPartner_Product (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_Product (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BPartner_Product()
+static X_VAB_BPart_Product()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389053800L;
 public static int Table_ID;
  // =632;
 
-/** TableName=C_BPartner_Product */
-public static String Table_Name="C_BPartner_Product";
+/** TableName=VAB_BPart_Product */
+public static String Table_Name="VAB_BPart_Product";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BPartner_Product[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_Product[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_ValueNoCheck ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -351,7 +351,7 @@ namespace VAdvantage.Model
             {
                 if (ass[i].GetCostingMethod().Equals(GetCostingMethod()))
                 {
-                    log.SaveError("CannotDeleteUsed", Msg.GetElement(GetCtx(), "C_AcctSchema_ID")
+                    log.SaveError("CannotDeleteUsed", Msg.GetElement(GetCtx(), "VAB_AccountBook_ID")
                        + " - " + ass[i].GetName());
                     return false;
                 }
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
                 {
                     // check costing method against primary accounting schema
                     MClientInfo clientInfo = MClientInfo.Get(ctx, VAF_Client_ID);
-                    MAcctSchema actSchema = MAcctSchema.Get(ctx, clientInfo.GetC_AcctSchema1_ID());
+                    MAcctSchema actSchema = MAcctSchema.Get(ctx, clientInfo.GetVAB_AccountBook1_ID());
                     if (actSchema != null)
                     {
                         costingMethod = actSchema.GetCostingMethod();

@@ -1796,7 +1796,7 @@
 
 
     MGAttributeLookup.prototype.getColumnName = function () {
-        return "C_GenAttributeSetInstance_ID";
+        return "VAB_GenFeatureSetInstance_ID";
     };	//	getColumnName
 
     MGAttributeLookup.prototype.dispose = function () {
@@ -1809,8 +1809,8 @@
         var list = [];
         if (!mandatory)
             list.push({ "Key": -1, "Name": "" });
-        //var sql = "SELECT ASI.C_GenAttributeSetInstance_ID, ASI.Description " +
-        //    " from C_GenAttributeSetInstance ASI, M_Product P WHERE ASI.C_GenAttributeSet_ID  = " + VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_GenAttributeSet_ID");
+        //var sql = "SELECT ASI.VAB_GenFeatureSetInstance_ID, ASI.Description " +
+        //    " from VAB_GenFeatureSetInstance ASI, M_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_GenFeatureSet_ID");
         //if (onlyActive)
         //    sql += " AND IsActive='Y'";
         //sql.append(" ORDER BY 2");
@@ -1825,7 +1825,7 @@
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GenAttributeSetInstance",
                 data: {
-                    C_GenAttributeSet_ID: VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_GenAttributeSet_ID"),
+                    VAB_GenFeatureSet_ID: VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_GenFeatureSet_ID"),
                     onlyActive: onlyActive
                 },
                 success: function (data) {
@@ -2223,53 +2223,53 @@
     MAmtDivLookup.prototype.get = function (value) {
         if (value == null)
             return null;
-        var C_DimAmt_ID = 0;
+        var VAB_DimAmt_ID = 0;
         if (value instanceof Number)
-            C_DimAmt_ID = value;
+            VAB_DimAmt_ID = value;
         else {
             try {
-                C_DimAmt_ID = parseInt(value.toString());
+                VAB_DimAmt_ID = parseInt(value.toString());
             }
             catch (e) {
                 this.log.log(Level.SEVERE, "Value=" + value, e);
             }
         }
-        if (C_DimAmt_ID in this.lookup) {
-            return this.lookup[C_DimAmt_ID];
+        if (VAB_DimAmt_ID in this.lookup) {
+            return this.lookup[VAB_DimAmt_ID];
         }
 
-        if (C_DimAmt_ID == 0)
+        if (VAB_DimAmt_ID == 0)
             return this.NO_INSTANCE;
 
         var description = null;
         try {
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@C_DimAmt_ID", C_DimAmt_ID);
+            param[0] = new VIS.DB.SqlParam("@VAB_DimAmt_ID", VAB_DimAmt_ID);
 
             var dr = executeReader("VIS_99", param);
             if (dr.read()) {
                 description = dr.getString(0);			//	Description
                 if (description == null || description.length == 0) {
                     if (VIS.Logging.VLogMgt.getIsLevelFine())
-                        description = "{" + C_DimAmt_ID + "}";
+                        description = "{" + VAB_DimAmt_ID + "}";
                     else
                         description = "";
                 }
             }
             dr.dispose();
             dr = null;
-            this.lookup[C_DimAmt_ID] = description;
+            this.lookup[VAB_DimAmt_ID] = description;
         }
         catch (e) {
             this.log.log(Level.SEVERE, "get", e);
         }
         if (description == null)
             return null;
-        //return { "Key": C_DimAmt_ID, "Name": description };
+        //return { "Key": VAB_DimAmt_ID, "Name": description };
         return description;
     };	//	get
     MAmtDivLookup.prototype.getColumnName = function () {
-        return "C_DimAmt_ID";
+        return "VAB_DimAmt_ID";
     };
 
     /**
@@ -2280,46 +2280,46 @@
     MAmtDivLookup.prototype.refreshAmountDivision = function (value) {
         if (value == null)
             return null;
-        var C_DimAmt_ID = 0;
+        var VAB_DimAmt_ID = 0;
         if (value instanceof Number)
-            C_DimAmt_ID = value;
+            VAB_DimAmt_ID = value;
         else {
             try {
-                C_DimAmt_ID = parseInt(value.toString());
+                VAB_DimAmt_ID = parseInt(value.toString());
             }
             catch (e) {
                 this.log.log(Level.SEVERE, "Value=" + value, e);
             }
         }
 
-        if (C_DimAmt_ID == 0)
+        if (VAB_DimAmt_ID == 0)
             return this.NO_INSTANCE;
 
         var description = null;
         try {
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@C_DimAmt_ID", C_DimAmt_ID);
+            param[0] = new VIS.DB.SqlParam("@VAB_DimAmt_ID", VAB_DimAmt_ID);
 
             var dr = executeReader("VIS_99", param);
             if (dr.read()) {
                 description = dr.getString(0);			//	Description
                 if (description == null || description.length == 0) {
                     if (VIS.Logging.VLogMgt.getIsLevelFine())
-                        description = "{" + C_DimAmt_ID + "}";
+                        description = "{" + VAB_DimAmt_ID + "}";
                     else
                         description = "";
                 }
             }
             dr.dispose();
             dr = null;
-            this.lookup[C_DimAmt_ID] = description;
+            this.lookup[VAB_DimAmt_ID] = description;
         }
         catch (e) {
             this.log.log(Level.SEVERE, "get", e);
         }
         if (description == null)
             return null;
-        //return { "Key": C_DimAmt_ID, "Name": description };
+        //return { "Key": VAB_DimAmt_ID, "Name": description };
         return description;
     };
 

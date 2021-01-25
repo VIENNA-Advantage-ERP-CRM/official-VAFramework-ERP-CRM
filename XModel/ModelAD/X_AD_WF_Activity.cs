@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             SetVAF_WFlow_Task_ID (0);
             SetVAF_WFlow_Node_ID (0);
             SetVAF_WFlow_Handler_ID (0);
-            SetAD_Workflow_ID (0);
+            SetVAF_Workflow_ID (0);
             SetProcessed (false);	// N
             SetRecord_ID (0);
             SetWFState (null);
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             SetVAF_WFlow_Task_ID (0);
             SetVAF_WFlow_Node_ID (0);
             SetVAF_WFlow_Handler_ID (0);
-            SetAD_Workflow_ID (0);
+            SetVAF_Workflow_ID (0);
             SetProcessed (false);	// N
             SetRecord_ID (0);
             SetWFState (null);
@@ -247,17 +247,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Workflow.
-        @param AD_Workflow_ID Workflow or combination of tasks */
-        public void SetAD_Workflow_ID(int AD_Workflow_ID)
+        @param VAF_Workflow_ID Workflow or combination of tasks */
+        public void SetVAF_Workflow_ID(int VAF_Workflow_ID)
         {
-            if (AD_Workflow_ID < 1) throw new ArgumentException("AD_Workflow_ID is mandatory.");
-            Set_Value("AD_Workflow_ID", AD_Workflow_ID);
+            if (VAF_Workflow_ID < 1) throw new ArgumentException("VAF_Workflow_ID is mandatory.");
+            Set_Value("VAF_Workflow_ID", VAF_Workflow_ID);
         }
         /** Get Workflow.
         @return Workflow or combination of tasks */
-        public int GetAD_Workflow_ID()
+        public int GetVAF_Workflow_ID()
         {
-            Object ii = Get_Value("AD_Workflow_ID");
+            Object ii = Get_Value("VAF_Workflow_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

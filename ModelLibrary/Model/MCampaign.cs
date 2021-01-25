@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Campaign model
- * Class Used     : X_C_Campaign
+ * Class Used     : X_VAB_Promotion
  * Chronological    Development
  * Veena        09-Nov-2009
 **********************************************************/
@@ -21,18 +21,18 @@ namespace VAdvantage.Model
     /// <summary>
     /// Campaign model
     /// </summary>
-    public class MCampaign : X_C_Campaign
+    public class MCampaign : X_VAB_Promotion
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Campaign_ID">id</param>
+        /// <param name="VAB_Promotion_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCampaign(Ctx ctx, int C_Campaign_ID, Trx trxName)
-            : base(ctx, C_Campaign_ID, trxName)
+        public MCampaign(Ctx ctx, int VAB_Promotion_ID, Trx trxName)
+            : base(ctx, VAB_Promotion_ID, trxName)
         {
-            if (C_Campaign_ID == 0)
+            if (VAB_Promotion_ID == 0)
             {
                 SetCosts(Env.ZERO);
                 SetIsSummary(false);
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
                 return success;
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                MAccount.UpdateValueDescription(GetCtx(), "C_Campaign_ID=" + GetC_Campaign_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "VAB_Promotion_ID=" + GetVAB_Promotion_ID(), Get_TrxName());
 
             return true;
         }

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MCharge
  * Purpose        : Charge Modle
- * Class Used     : X_C_Charge
+ * Class Used     : X_VAB_Charge
  * Chronological    Development
  * Raghunandan     23-Jun-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCharge : X_C_Charge
+    public class MCharge : X_VAB_Charge
     {
         /**
          * 
@@ -35,14 +35,14 @@ namespace VAdvantage.Model
 
         /**
          *  Get Charge Account
-         *  @param C_Charge_ID charge
+         *  @param VAB_Charge_ID charge
          *  @param as account schema
          *  @param amount amount for expense(+)/revenue(-)
          *  @return Charge Account or null
          */
-        public static MAccount GetAccount(int C_Charge_ID, MAcctSchema aSchema, Decimal amount)
+        public static MAccount GetAccount(int VAB_Charge_ID, MAcctSchema aSchema, Decimal amount)
         {
-            if (C_Charge_ID == 0 || aSchema == null)
+            if (VAB_Charge_ID == 0 || aSchema == null)
                 return null;
 
             int acct_index = 1;     //  Expense (positive amt)
@@ -51,15 +51,15 @@ namespace VAdvantage.Model
                 acct_index = 2;     //  Revenue (negative amt) 
             }
 
-            String sql = "SELECT CH_Expense_Acct, CH_Revenue_Acct FROM C_Charge_Acct WHERE C_Charge_ID=" + C_Charge_ID + " AND C_AcctSchema_ID=" + aSchema.GetC_AcctSchema_ID();
+            String sql = "SELECT CH_Expense_Acct, CH_Revenue_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=" + VAB_Charge_ID + " AND VAB_AccountBook_ID=" + aSchema.GetVAB_AccountBook_ID();
             int Account_ID = 0;
 
             IDataReader dr = null;
             try
             {
                 //	PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                //	pstmt.setInt (1, C_Charge_ID);
-                //	pstmt.setInt (2, aSchema.getC_AcctSchema_ID());
+                //	pstmt.setInt (1, VAB_Charge_ID);
+                //	pstmt.setInt (2, aSchema.getVAB_AccountBook_ID());
                 //	ResultSet dr = pstmt.executeQuery();
                 dr = DataBase.DB.ExecuteReader(sql, null, null);
 
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
             //	No account
             if (Account_ID == 0)
             {
-                _log.Severe("NO account for C_Charge_ID=" + C_Charge_ID);
+                _log.Severe("NO account for VAB_Charge_ID=" + VAB_Charge_ID);
                 return null;
             }
 
@@ -102,23 +102,23 @@ namespace VAdvantage.Model
         /**
          * 	Get MCharge from Cache
          *	@param ctx context
-         *	@param C_Charge_ID id
+         *	@param VAB_Charge_ID id
          *	@return MCharge
          */
-        public static MCharge Get(Ctx ctx, int C_Charge_ID)
+        public static MCharge Get(Ctx ctx, int VAB_Charge_ID)
         {
-            int key = C_Charge_ID;
+            int key = VAB_Charge_ID;
             MCharge retValue = _cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCharge(ctx, C_Charge_ID, null);
+            retValue = new MCharge(ctx, VAB_Charge_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         }	//	get
 
         /**	Cache						*/
-        private static CCache<int, MCharge> _cache = new CCache<int, MCharge>("C_Charge", 10);
+        private static CCache<int, MCharge> _cache = new CCache<int, MCharge>("VAB_Charge", 10);
 
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MCharge).FullName);
@@ -127,14 +127,14 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param C_Charge_ID id
+         *	@param VAB_Charge_ID id
          *	@param trxName transaction
          */
-        public MCharge(Ctx ctx, int C_Charge_ID, Trx trxName) :
-            base(ctx, C_Charge_ID, null)
+        public MCharge(Ctx ctx, int VAB_Charge_ID, Trx trxName) :
+            base(ctx, VAB_Charge_ID, null)
         {
-            //super (ctx, C_Charge_ID, null);
-            if (C_Charge_ID == 0)
+            //super (ctx, VAB_Charge_ID, null);
+            if (VAB_Charge_ID == 0)
             {
                 SetChargeAmt(Env.ZERO);
                 SetIsSameCurrency(false);
@@ -181,16 +181,16 @@ namespace VAdvantage.Model
                 PO chrgact = null;
                 _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
+                _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                     {
-                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoChrge)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From C_Charge Bp Left Join Frpt_Charge_Acct ca On Bp.C_Charge_ID=ca.C_Charge_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Charge_ID = " + GetC_Charge_ID());
+                                        _sql.Append("Select COUNT(*) From VAB_Charge Bp Left Join Frpt_Charge_Acct ca On Bp.VAB_Charge_ID=ca.VAB_Charge_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.VAB_Charge_ID = " + GetVAB_Charge_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -219,11 +219,11 @@ namespace VAdvantage.Model
                                         if (recordFound == 0)
                                         {
                                             chrgact = MTable.GetPO(GetCtx(), "FRPT_Charge_Acct", 0, null);
-                                            chrgact.Set_ValueNoCheck("C_Charge_ID", Util.GetValueOfInt(GetC_Charge_ID()));
+                                            chrgact.Set_ValueNoCheck("VAB_Charge_ID", Util.GetValueOfInt(GetVAB_Charge_ID()));
                                             chrgact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             chrgact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             chrgact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                            chrgact.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                            chrgact.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                             if (!chrgact.Save())
                                             {
 
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
             {
                 if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
                 {
-                    success = Insert_Accounting("C_Charge_Acct", "C_AcctSchema_Default", null);
+                    success = Insert_Accounting("VAB_Charge_Acct", "VAB_AccountBook_Default", null);
 
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
@@ -265,7 +265,7 @@ namespace VAdvantage.Model
         //	@Override
         protected override Boolean BeforeDelete()
         {
-            return Delete_Accounting("C_Charge_Acct");
+            return Delete_Accounting("VAB_Charge_Acct");
         }	//	beforeDelete
 
     }

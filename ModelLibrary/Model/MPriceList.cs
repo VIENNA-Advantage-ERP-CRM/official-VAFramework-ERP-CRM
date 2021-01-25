@@ -172,7 +172,7 @@ namespace VAdvantage.Model
                 SetIsTaxIncluded(false);
                 SetPricePrecision(2);	// 2
                 //	setName (null);
-                //	setC_Currency_ID (0);
+                //	setVAB_Currency_ID (0);
             }
         }
 
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
         {
             if (_precision == null)
             {
-                MCurrency c = MCurrency.Get(GetCtx(), GetC_Currency_ID());
+                MCurrency c = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 _precision = c.GetStdPrecision();
             }
             return (int)_precision;

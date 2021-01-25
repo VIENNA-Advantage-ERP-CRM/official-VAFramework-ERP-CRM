@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
 
-    VIS.AttachmentHistory = function (_VAF_TableView_ID, _Record_ID, c_BPartner_ID, VAF_UserContact_ID, keyColumnName) {
+    VIS.AttachmentHistory = function (_VAF_TableView_ID, _Record_ID, VAB_BusinessPartner_ID, VAF_UserContact_ID, keyColumnName) {
 
         var windowNo = VIS.Env.getWindowNo();
         var ctx = VIS.Env.getCtx();
@@ -11,7 +11,7 @@
         var $historycontentwrap, $historyleftwrap, $historysearch, $visattachhistorysearchwrap, $historytabletop, $visapaneltabcontrol, $visattachhistoryappsactionul, $historytablewrap, $visattachhistoryrightwrap, $visattachhistoryrightcontentFormail;
         var $visattachhistoryrightcontentForAppoint, $visattachhistorygriddataForAppoint, resltGrdforMail, resltGrdforAppoint, $visattachhistoryrightwrapNotFound, hisCommentforMail, hisCommentforAppoint;
         var $visattachhistorygriddata, $ulAttach;
-        var bpColumnName = "C_BPartnerID"; var userColumnName = "VAF_UserContact_ID";
+        var bpColumnName = "VAB_BusinessPartnerID"; var userColumnName = "VAF_UserContact_ID";
         var $title, $to, $from, $subject, $detail, $date, $txtArea, $bcc, $cc, $titleIcon, $btnSave, $btnSaveAppoint, $txtAreaAppoint, $zoomIcon, $bpzoomIcon, $emaildropdown;
         var $subjectApp, $location, $description, $category, $contacts, $label, $startDate, $endDate, $allDay, $bsyDiv;
         var PAGESIZE = 50, historyPageNo, BPhistoryPageNo, userPageNo, historyCount, BPhistoryCount, userHistoryCount, historyTotalpages, bphistoryTotalpages, userTotalPages, userhistoryPageNo;
@@ -90,7 +90,7 @@
             $visattachhistoryappsactionul = $('<ul class="vis-attachhistory-appsaction-ul vis-attachhistory-apanel-tabcontrol-ul">');
             $visattachhistoryappsactionul.append('<li data-type="History" class="vis-attachhistory-apanel-tab-selected" style="opacity: 1;">' + VIS.Msg.getMsg("History") + '</li><li  data-type="RelatedHistory"  style="opacity: 1;">' + VIS.Msg.getMsg("RelatedHistory") + '</li>');
 
-            if (c_BPartner_ID > 0) {
+            if (VAB_BusinessPartner_ID > 0) {
                 $visattachhistoryappsactionul.append('<li  data-type="UserHistory"  style="opacity: 1;">' + VIS.Msg.getMsg("UserHistory") + '</li>');
             }
 
@@ -320,7 +320,7 @@
                 datatype: "json",
                 type: "get",
                 cache: false,
-                data: { C_BPartner_ID: c_BPartner_ID, pageSize: PAGESIZE, pageNo: userhistoryPageNo, searchText: VIS.Utility.encodeText(searchText) },
+                data: { VAB_BusinessPartner_ID: VAB_BusinessPartner_ID, pageSize: PAGESIZE, pageNo: userhistoryPageNo, searchText: VIS.Utility.encodeText(searchText) },
                 success: function (data) {
                     var result = JSON.parse(data);
                     if (result.RHistory != null)
@@ -1272,7 +1272,7 @@
                 if (searchTextbox != "undefined" || searchTextbox != null) {
                     searchTextbox.val(bpSearch);
                 }
-                //if (c_BPartner_ID == null || c_BPartner_ID == 0) {
+                //if (VAB_BusinessPartner_ID == null || VAB_BusinessPartner_ID == 0) {
                 //    VIS.ADialog.info("BPartnerNotFound");
                 //    return;
                 //}
@@ -1330,7 +1330,7 @@
                     searchTextbox.val(UserSearch);
                 }
 
-                if (c_BPartner_ID == null || c_BPartner_ID == 0) {
+                if (VAB_BusinessPartner_ID == null || VAB_BusinessPartner_ID == 0) {
                     VIS.ADialog.info("BPartnerNotFound");
                     return;
                 }

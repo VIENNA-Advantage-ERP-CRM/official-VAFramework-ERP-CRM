@@ -55,12 +55,12 @@ namespace VAModelAD.Model
             int id = po.Get_ID();
             int VAF_Client_ID = po.GetVAF_Client_ID();
             String treeTableName = MTree.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
-            int C_Element_ID = 0;
-            if (VAF_TableView_ID == X_C_ElementValue.Table_ID)
+            int VAB_Element_ID = 0;
+            if (VAF_TableView_ID == X_VAB_Acct_Element.Table_ID)
             {
-                int? ii = (int?)po.Get_Value("C_Element_ID");
+                int? ii = (int?)po.Get_Value("VAB_Element_ID");
                 if (ii != null)
-                    C_Element_ID = ii.Value;
+                    VAB_Element_ID = ii.Value;
             }
             //
             StringBuilder sb = new StringBuilder("INSERT INTO ")
@@ -73,9 +73,9 @@ namespace VAModelAD.Model
                 .Append("FROM VAF_TreeInfo t ")
                 .Append("WHERE t.VAF_Client_ID=").Append(VAF_Client_ID).Append(" AND t.IsActive='Y'");
             //	Account Element Value handling
-            if (C_Element_ID != 0)
-                sb.Append(" AND EXISTS (SELECT * FROM C_Element ae WHERE ae.C_Element_ID=")
-                    .Append(C_Element_ID).Append(" AND t.VAF_TreeInfo_ID=ae.VAF_TreeInfo_ID)");
+            if (VAB_Element_ID != 0)
+                sb.Append(" AND EXISTS (SELECT * FROM VAB_Element ae WHERE ae.VAB_Element_ID=")
+                    .Append(VAB_Element_ID).Append(" AND t.VAF_TreeInfo_ID=ae.VAF_TreeInfo_ID)");
             else	//	std trees
                 sb.Append(" AND t.IsAllNodes='Y' AND t.VAF_TableView_ID=").Append(VAF_TableView_ID);
             //	Duplicate Check

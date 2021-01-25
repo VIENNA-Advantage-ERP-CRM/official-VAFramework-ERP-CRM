@@ -437,7 +437,7 @@ namespace VAdvantage.Model
         
         public bool isWorkflow()
         {
-            return GetAD_Workflow_ID() > 0;
+            return GetVAF_Workflow_ID() > 0;
         }	//	isWorkflow
 
 

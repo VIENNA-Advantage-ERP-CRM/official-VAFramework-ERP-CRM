@@ -96,9 +96,9 @@ namespace VAdvantage.Process
 
             //	Set Optional BPartner
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_BPartner p"
+                + "SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner p"
                 + " WHERE i.BPartner_Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE C_BPartner_ID IS NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("BPartner=" + no);
@@ -106,7 +106,7 @@ namespace VAdvantage.Process
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid BPartner,' "
-                + "WHERE C_BPartner_ID IS NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -135,7 +135,7 @@ namespace VAdvantage.Process
             //	BP ProdNo
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product_po p"
-                + " WHERE i.C_BPartner_ID=p.C_BPartner_ID"
+                + " WHERE i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID"
                 + " AND i.VendorProductNo=p.VendorProductNo AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE M_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
@@ -201,15 +201,15 @@ namespace VAdvantage.Process
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(strFieldsPO[i]).Append(" = (SELECT ").Append(strFieldsPO[i])
                     .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL AND C_BPartner_ID IS NOT NULL"
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE M_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
                     + " AND ").Append(strFieldsPO[i]).Append(" IS NULL"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 if (no != 0)
                     log.Fine(strFieldsPO[i] + " default from existing Product PO=" + no);
             }
-            String[] numFieldsPO = new String[] {"C_UOM_ID","C_Currency_ID",
+            String[] numFieldsPO = new String[] {"C_UOM_ID","VAB_Currency_ID",
 			"PriceList","PricePO","RoyaltyAmt",
 			"Order_Min","Order_Pack","CostPerOrder","DeliveryTime_Promised"};
             for (int i = 0; i < numFieldsPO.Length; i++)
@@ -217,8 +217,8 @@ namespace VAdvantage.Process
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(numFieldsPO[i]).Append(" = (SELECT ").Append(numFieldsPO[i])
                     .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.C_BPartner_ID=p.C_BPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL AND C_BPartner_ID IS NOT NULL"
+                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE M_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
                     + " AND (").Append(numFieldsPO[i]).Append(" IS NULL OR ").Append(numFieldsPO[i]).Append("=0)"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -263,26 +263,26 @@ namespace VAdvantage.Process
 
             //	Set Currency
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET ISO_Code=(SELECT ISO_Code FROM C_Currency c"
-                + " INNER JOIN C_AcctSchema a ON (a.C_Currency_ID=c.C_Currency_ID)"
-                + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                + "SET ISO_Code=(SELECT ISO_Code FROM VAB_Currency c"
+                + " INNER JOIN VAB_AccountBook a ON (a.VAB_Currency_ID=c.VAB_Currency_ID)"
+                + " INNER JOIN VAF_ClientDetail ci ON (a.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID)"
                 + " WHERE ci.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_Currency_ID IS NULL AND ISO_Code IS NULL"
+                + "WHERE VAB_Currency_ID IS NULL AND ISO_Code IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Currency Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET C_Currency_ID=(SELECT C_Currency_ID FROM C_Currency c"
+                + "SET VAB_Currency_ID=(SELECT VAB_Currency_ID FROM VAB_Currency c"
                 + " WHERE i.ISO_Code=c.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE C_Currency_ID IS NULL"
+                + "WHERE VAB_Currency_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("doIt- Set Currency=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Currency,' "
-                + "WHERE C_Currency_ID IS NULL"
+                + "WHERE VAB_Currency_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -327,12 +327,12 @@ namespace VAdvantage.Process
             //	sql = new StringBuilder ("UPDATE I_Product i "
             //		+ "SET I_IsImported='E', I_ErrorMsg="+ts +"||'ERR=No Mandatory VendorProductNo,' "
             //		+ "WHERE I_IsImported<>'Y'"
-            //		+ " AND VendorProductNo IS NULL AND (C_BPartner_ID IS NOT NULL OR BPartner_Value IS NOT NULL)").Append(clientCheck);
+            //		+ " AND VendorProductNo IS NULL AND (VAB_BusinessPartner_ID IS NOT NULL OR BPartner_Value IS NOT NULL)").Append(clientCheck);
             //	no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
             //	log.Info(log.l3_Util, "No Mandatory VendorProductNo=" + no);
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET VendorProductNo=Value "
-                + "WHERE C_BPartner_ID IS NOT NULL AND VendorProductNo IS NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VendorProductNo IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("VendorProductNo Set to Value=" + no);
@@ -340,9 +340,9 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=VendorProductNo not unique,' "
                 + "WHERE I_IsImported<>'Y'"
-                + " AND C_BPartner_ID IS NOT NULL"
-                + " AND (C_BPartner_ID, VendorProductNo) IN "
-                + " (SELECT C_BPartner_ID, VendorProductNo FROM I_Product ii WHERE i.VAF_Client_ID=ii.VAF_Client_ID GROUP BY C_BPartner_ID, VendorProductNo HAVING COUNT(*) > 1)")
+                + " AND VAB_BusinessPartner_ID IS NOT NULL"
+                + " AND (VAB_BusinessPartner_ID, VendorProductNo) IN "
+                + " (SELECT VAB_BusinessPartner_ID, VendorProductNo FROM I_Product ii WHERE i.VAF_Client_ID=ii.VAF_Client_ID GROUP BY VAB_BusinessPartner_ID, VendorProductNo HAVING COUNT(*) > 1)")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -421,34 +421,34 @@ namespace VAdvantage.Process
 
                 //	Update Product_PO from Import
                 sqlt = "UPDATE M_Product_PO "
-                    + "SET (IsCurrentVendor,C_UOM_ID,C_Currency_ID,UPC,"
+                    + "SET (IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised,Updated,UpdatedBy)= "
-                    + "(SELECT 'Y',C_UOM_ID,C_Currency_ID,UPC,"
+                    + "(SELECT 'Y',C_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised,SysDate,UpdatedBy"
                     + " FROM I_Product"
                     + " WHERE I_Product_ID=?) "
-                    + "WHERE M_Product_ID=? AND C_BPartner_ID=?";
+                    + "WHERE M_Product_ID=? AND VAB_BusinessPartner_ID=?";
                 PreparedStatement pstmt_updateProductPO = DataBase.prepareStatement
                     (sqlt, Get_TrxName());
     */
                 //	Insert Product from Import
                 //PreparedStatement pstmt_insertProductPO = DataBase.prepareStatement
-                String _insertProductPO = "INSERT INTO M_Product_PO (M_Product_ID,C_BPartner_ID, "
+                String _insertProductPO = "INSERT INTO M_Product_PO (M_Product_ID,VAB_BusinessPartner_ID, "
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
-                    + "IsCurrentVendor,C_UOM_ID,C_Currency_ID,UPC,"
+                    + "IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised) "
                     + "SELECT @param1,@param2, "
                     + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
-                    + "'Y',C_UOM_ID,C_Currency_ID,UPC,"
+                    + "'Y',C_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
@@ -469,10 +469,10 @@ namespace VAdvantage.Process
                     X_I_Product imp = new X_I_Product(GetCtx(), idr, Get_TrxName());
                     int I_Product_ID = imp.GetI_Product_ID();
                     int M_Product_ID = imp.GetM_Product_ID();
-                    int C_BPartner_ID = imp.GetC_BPartner_ID();
+                    int VAB_BusinessPartner_ID = imp.GetVAB_BusinessPartner_ID();
                     bool newProduct = M_Product_ID == 0;
                     log.Fine("I_Product_ID=" + I_Product_ID + ", M_Product_ID=" + M_Product_ID
-                        + ", C_BPartner_ID=" + C_BPartner_ID);
+                        + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID);
 
                     //	Product
                     if (newProduct)			//	Insert new Product
@@ -533,31 +533,31 @@ namespace VAdvantage.Process
                     }
 
                     //	Do we have PO Info
-                    if (C_BPartner_ID != 0)
+                    if (VAB_BusinessPartner_ID != 0)
                     {
                         no = 0;
                         //	If Product existed, Try to Update first
                         if (!newProduct)
                         {
                             String sqlt = "UPDATE M_Product_PO "
-                                + "SET (IsCurrentVendor,C_UOM_ID,C_Currency_ID,UPC,"
+                                + "SET (IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
                                 + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                                 + "VendorProductNo,VendorCategory,Manufacturer,"
                                 + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                                 + "CostPerOrder,DeliveryTime_Promised,Updated,UpdatedBy)= "
-                                + "(SELECT CAST('Y' AS CHAR),C_UOM_ID,C_Currency_ID,UPC,"    //jz fix EDB unknown datatype error
+                                + "(SELECT CAST('Y' AS CHAR),C_UOM_ID,VAB_Currency_ID,UPC,"    //jz fix EDB unknown datatype error
                                 + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                                 + "VendorProductNo,VendorCategory,Manufacturer,"
                                 + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                                 + "CostPerOrder,DeliveryTime_Promised,SysDate,UpdatedBy"
                                 + " FROM I_Product"
                                 + " WHERE I_Product_ID=" + I_Product_ID + ") "
-                                + "WHERE M_Product_ID=" + M_Product_ID + " AND C_BPartner_ID=" + C_BPartner_ID;
+                                + "WHERE M_Product_ID=" + M_Product_ID + " AND VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
                             //PreparedStatement pstmt_updateProductPO = DataBase.prepareStatement
                             //(sqlt, Get_TrxName());
                             //jz pstmt_updateProductPO.setInt(1, I_Product_ID);
                             // pstmt_updateProductPO.setInt(2, M_Product_ID);
-                            // pstmt_updateProductPO.setInt(3, C_BPartner_ID);
+                            // pstmt_updateProductPO.setInt(3, VAB_BusinessPartner_ID);
                             try
                             {
                                 //no = pstmt_updateProductPO.ExecuteQuery();
@@ -583,8 +583,8 @@ namespace VAdvantage.Process
                             SqlParameter[] param = new SqlParameter[3];
                             param[0] = new SqlParameter("@param1", M_Product_ID);
                             //pstmt_insertProductPO.setInt(1, M_Product_ID);
-                            param[1] = new SqlParameter("@param1", C_BPartner_ID);
-                            //pstmt_insertProductPO.setInt(2, C_BPartner_ID);
+                            param[1] = new SqlParameter("@param1", VAB_BusinessPartner_ID);
+                            //pstmt_insertProductPO.setInt(2, VAB_BusinessPartner_ID);
                             param[2] = new SqlParameter("@param1", I_Product_ID);
                             //pstmt_insertProductPO.setInt(3, I_Product_ID);
 
@@ -607,7 +607,7 @@ namespace VAdvantage.Process
                                 continue;
                             }
                         }
-                    }	//	C_BPartner_ID != 0
+                    }	//	VAB_BusinessPartner_ID != 0
 
                     //	Price List
                     if (_M_PriceList_Version_ID != 0)

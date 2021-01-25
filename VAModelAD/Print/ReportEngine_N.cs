@@ -635,7 +635,7 @@ namespace VAdvantage.Print
 		"C_Order_Header_v", "M_InOut_Header_v", "C_Invoice_Header_v", "C_Project_Header_v",
 		"C_RfQResponse_v",
 		"C_PaySelection_Check_v", "C_PaySelection_Check_v",  
-		"C_DunningRunEntry_v", "M_Movement", "M_Inventory" ,
+		"VAB_DunningExeEntry_v", "M_Movement", "M_Inventory" ,
         /******************Manufacturing**************/
         "M_WorkOrder_Header_v", "M_TaskList",
 		"M_WorkOrderTxn_Header_V", "M_StandardOperation_Header_v", "M_Routing_Header_v"
@@ -645,7 +645,7 @@ namespace VAdvantage.Print
 		"C_Order", "M_InOut", "C_Invoice", "C_Project",
 		"C_RfQResponse",
 		"C_PaySelectionCheck", "C_PaySelectionCheck", 
-		"C_DunningRunEntry", "M_Movement", "M_Inventory" ,
+		"VAB_DunningExeEntry", "M_Movement", "M_Inventory" ,
         /******************Manufacturing**************/
          "M_WorkOrder", "M_TaskList",
 		"M_WorkOrderTransaction", "M_StandardOperation", "M_Routing"
@@ -656,7 +656,7 @@ namespace VAdvantage.Print
 		"C_Order_ID", "M_InOut_ID", "C_Invoice_ID", "C_Project_ID",
 		"C_RfQResponse_ID",
 		"C_PaySelectionCheck_ID", "C_PaySelectionCheck_ID", 
-		"C_DunningRunEntry_ID", "M_Movement_ID",  "M_Inventory_ID" ,
+		"VAB_DunningExeEntry_ID", "M_Movement_ID",  "M_Inventory_ID" ,
          /******************Manufacturing**************/
           "M_WorkOrder_ID", "M_TaskList_ID",
 		"M_WorkOrderTransaction_ID", "M_StandardOperation_ID", "M_Routing_ID"
@@ -667,7 +667,7 @@ namespace VAdvantage.Print
 		X_C_Order.Table_ID, X_M_InOut.Table_ID, X_C_Invoice.Table_ID, X_C_Project.Table_ID,
 		X_C_RfQResponse.Table_ID,
 		X_C_PaySelectionCheck.Table_ID, X_C_PaySelectionCheck.Table_ID, 
-		X_C_DunningRunEntry.Table_ID, X_M_Movement.Table_ID, X_M_Inventory.Table_ID ,
+		X_VAB_DunningExeEntry.Table_ID, X_M_Movement.Table_ID, X_M_Inventory.Table_ID ,
         /******************Manufacturing**************/
          X_M_WorkOrder.Table_ID, X_M_TaskList.Table_ID,
 		X_M_WorkOrderTransaction.Table_ID, X_M_StandardOperation.Table_ID, X_M_Routing.Table_ID
@@ -842,8 +842,8 @@ namespace VAdvantage.Print
             what[1] = C_Order_ID;
             //
             String sql = "SELECT dt.DocSubTypeSO "
-                + "FROM C_DocType dt, C_Order o "
-                + "WHERE o.C_DocType_ID=dt.C_DocType_ID"
+                + "FROM VAB_DocTypes dt, C_Order o "
+                + "WHERE o.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
                 + " AND o.C_Order_ID='" + C_Order_ID + "'";
             String DocSubTypeSO = null;
             IDataReader dr = null;
@@ -946,7 +946,7 @@ namespace VAdvantage.Print
             //
             //	String JobName = DOC_BASETABLES[type] + "_Print";
             int VAF_Print_Rpt_Layout_ID = 0;
-            int C_BPartner_ID = 0;
+            int VAB_BusinessPartner_ID = 0;
             String DocumentNo = null;
             int copies = 1;
 
@@ -957,48 +957,48 @@ namespace VAdvantage.Print
             String sql = null;
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
-                    + "	c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
+                    + "	c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.DocumentNo "		//	2..5
                     + "FROM C_PaySelectionCheck d"
                     + " INNER JOIN C_PaySelection ps ON (d.C_PaySelection_ID=ps.C_PaySelection_ID)"
-                    + " INNER JOIN C_BankAccountDoc bad ON (ps.C_BankAccount_ID=bad.C_BankAccount_ID AND d.PaymentRule=bad.PaymentRule)"
+                    + " INNER JOIN VAB_Bank_AcctDoc bad ON (ps.VAB_Bank_Acct_ID=bad.VAB_Bank_Acct_ID AND d.PaymentRule=bad.PaymentRule)"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
-                    + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
+                    + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                     + "WHERE d.C_PaySelectionCheck_ID=@recordid";		//	info from BankAccount
             else if (type == DUNNING)
                 sql = "SELECT dl.Dunning_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,dr.DunningDate "
-                    + "FROM C_DunningRunEntry d"
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,dr.DunningDate "
+                    + "FROM VAB_DunningExeEntry d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
-                    + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID)"
-                    + " INNER JOIN C_DunningRun dr ON (d.C_DunningRun_ID=dr.C_DunningRun_ID)"
-                    + " INNER JOIN C_DunningLevel dl ON (dl.C_DunningLevel_ID=dr.C_DunningLevel_ID) "
-                    + "WHERE d.C_DunningRunEntry_ID=@recordid";			//	info from Dunning
+                    + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
+                    + " INNER JOIN VAB_DunningExe dr ON (d.VAB_DunningExe_ID=dr.VAB_DunningExe_ID)"
+                    + " INNER JOIN VAB_DunningStep dl ON (dl.VAB_DunningStep_ID=dr.VAB_DunningStep_ID) "
+                    + "WHERE d.VAB_DunningExeEntry_ID=@recordid";			//	info from Dunning
             else if (type == REMITTANCE)
                 sql = "SELECT pf.Remittance_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.DocumentNo "
                     + "FROM C_PaySelectionCheck d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
-                    + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
+                    + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                     + "WHERE d.C_PaySelectionCheck_ID=@recordid"		//	info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == PROJECT)
                 sql = "SELECT pf.Project_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.Value "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.Value "
                     + "FROM C_Project d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
-                    + " LEFT OUTER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID) "
+                    + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                     + "WHERE d.C_Project_ID=@recordid"					//	info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == RFQ)
                 sql = "SELECT COALESCE(t.VAF_Print_Rpt_Layout_ID, pf.VAF_Print_Rpt_Layout_ID),"
-                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,rr.Name "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,rr.Name "
                     + "FROM C_RfQResponse rr"
                     + " INNER JOIN C_RfQ r ON (rr.C_RfQ_ID=r.C_RfQ_ID)"
                     + " INNER JOIN C_RfQ_Topic t ON (r.C_RfQ_Topic_ID=t.C_RfQ_Topic_ID)"
                     + " INNER JOIN VAF_Client c ON (rr.VAF_Client_ID=c.VAF_Client_ID)"
-                    + " INNER JOIN C_BPartner bp ON (rr.C_BPartner_ID=bp.C_BPartner_ID),"
+                    + " INNER JOIN VAB_BusinessPartner bp ON (rr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID),"
                     + " VAF_Print_Rpt_Layout pf "
                     + "WHERE pf.VAF_Client_ID IN (0,rr.VAF_Client_ID)"
                     + " AND pf.VAF_TableView_ID=725 AND pf.IsTableBased='N'"	//	from RfQ PrintFormat
@@ -1010,7 +1010,7 @@ namespace VAdvantage.Print
                     + "FROM M_Movement d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + "WHERE d.M_Movement_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Movement_PrintFormat_ID IS NOT NULL "
                     + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
@@ -1020,7 +1020,7 @@ namespace VAdvantage.Print
                     + "FROM M_Inventory d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + "WHERE d.M_Inventory_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Inventory_PrintFormat_ID IS NOT NULL "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
@@ -1032,7 +1032,7 @@ namespace VAdvantage.Print
                     + "FROM M_WorkOrder d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + "WHERE d.M_WorkOrder_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
@@ -1043,7 +1043,7 @@ namespace VAdvantage.Print
                     + "FROM M_WorkOrderTransaction d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + "WHERE d.M_WorkOrderTransaction_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
@@ -1076,7 +1076,7 @@ namespace VAdvantage.Print
                     + " FROM M_TaskList M "
                     + " INNER JOIN VAF_Client c ON (M.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (M.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (M.C_DocType_ID=dt.C_DocType_ID) "
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (M.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + " WHERE M.M_TaskList_ID=@recordid"
                     + " AND pf.VAF_Org_ID IN (0,M.VAF_Org_ID) "
                     + " ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
@@ -1089,12 +1089,12 @@ namespace VAdvantage.Print
                     + " pf.Project_PrintFormat_ID, pf.Remittance_PrintFormat_ID,"		//	4..5
                     + " c.IsMultiLingualDocument, bp.VAF_Language,"						//	6..7
                     + " COALESCE(dt.DocumentCopies,0)+COALESCE(bp.DocumentCopies,1), " 	// 	8
-                    + " dt.VAF_Print_Rpt_Layout_ID,bp.C_BPartner_ID,d.DocumentNo "			//	9..11
+                    + " dt.VAF_Print_Rpt_Layout_ID,bp.VAB_BusinessPartner_ID,d.DocumentNo "			//	9..11
                     + "FROM " + DOC_BASETABLES[type] + " d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
-                    + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID)"
-                    + " LEFT OUTER JOIN C_DocType dt ON (d.C_DocType_ID=dt.C_DocType_ID) "
+                    + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
+                    + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
                     + "WHERE d." + DOC_IDS[type] + "=@recordid"			//	info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) "
                     + "ORDER BY pf.VAF_Org_ID DESC";
@@ -1117,7 +1117,7 @@ namespace VAdvantage.Print
                         String VAF_Language = Utility.Util.GetValueOfString(dr[2]);// rs.getString(3);
                         if (VAF_Language != null)// && "Y".equals(rs.getString(2)))	//	IsMultiLingualDocument
                             language = Language.GetLanguage(VAF_Language);
-                        C_BPartner_ID = Utility.Util.GetValueOfInt(dr[3]);// rs.getInt(4);
+                        VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(dr[3]);// rs.getInt(4);
                         if (type == DUNNING)
                         {
                             DateTime? ts = Utility.Util.GetValueOfDateTime(dr[4]);// rs.getTimestamp(5);
@@ -1197,14 +1197,14 @@ namespace VAdvantage.Print
                     {
                         //	Set PrintFormat
                         VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[type]);// rs.getInt(type + 1);
-                        if (Utility.Util.GetValueOfInt(dr[8].ToString()) != 0)		//	C_DocType.VAF_Print_Rpt_Layout_ID
+                        if (Utility.Util.GetValueOfInt(dr[8].ToString()) != 0)		//	VAB_DocTypes.VAF_Print_Rpt_Layout_ID
                             VAF_Print_Rpt_Layout_ID = Utility.Util.GetValueOfInt(dr[8].ToString());// rs.getInt(9);
                         copies = Utility.Util.GetValueOfInt(dr[7].ToString());// rs.getInt(8);
                         //	Set Language when enabled
                         String VAF_Language = Utility.Util.GetValueOfString(dr[6].ToString());// rs.getString(7);
                         if (VAF_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
                             language = Language.GetLanguage(VAF_Language);
-                        C_BPartner_ID = Utility.Util.GetValueOfInt(dr[9]);// rs.getInt(10);
+                        VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(dr[9]);// rs.getInt(10);
                         DocumentNo = Utility.Util.GetValueOfString(dr[10]);// rs.getString(11);
                     }
                 }
@@ -1255,7 +1255,7 @@ namespace VAdvantage.Print
                 DocumentNo,
                 DOC_TABLE_ID[type],
                 Record_ID,
-                C_BPartner_ID);
+                VAB_BusinessPartner_ID);
             info.SetCopies(copies);
             info.SetDocumentCopy(false);		//	true prints "Copy" on second
 

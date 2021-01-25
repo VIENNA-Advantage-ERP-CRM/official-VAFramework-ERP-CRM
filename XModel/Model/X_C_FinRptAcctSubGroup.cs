@@ -21,8 +21,8 @@ public class X_C_FinRptAcctSubGroup : PO
 {
 /** if (C_FinRptAcctSubGroup_ID == 0)
 {
-SetC_AccountSubGroup_ID (0);
-SetC_FinRptAcctGroup_ID (0);
+SetVAB_AccountSubGroup_ID (0);
+SetVAB_FinRptAcctGroup_ID (0);
 SetC_FinRptAcctSubGroup_ID (0);
 }
  */
@@ -32,8 +32,8 @@ SetC_FinRptAcctSubGroup_ID (0);
 {
 /** if (C_FinRptAcctSubGroup_ID == 0)
 {
-SetC_AccountSubGroup_ID (0);
-SetC_FinRptAcctGroup_ID (0);
+SetVAB_AccountSubGroup_ID (0);
+SetVAB_FinRptAcctGroup_ID (0);
 SetC_FinRptAcctSubGroup_ID (0);
 }
  */
@@ -120,32 +120,32 @@ StringBuilder sb = new StringBuilder ("X_C_FinRptAcctSubGroup[").Append(Get_ID()
 return sb.ToString();
 }
 /** Set Account Sub Group.
-@param C_AccountSubGroup_ID Account Sub Group */
-public void SetC_AccountSubGroup_ID (int C_AccountSubGroup_ID)
+@param VAB_AccountSubGroup_ID Account Sub Group */
+public void SetVAB_AccountSubGroup_ID (int VAB_AccountSubGroup_ID)
 {
-if (C_AccountSubGroup_ID < 1) throw new ArgumentException ("C_AccountSubGroup_ID is mandatory.");
-Set_Value ("C_AccountSubGroup_ID", C_AccountSubGroup_ID);
+if (VAB_AccountSubGroup_ID < 1) throw new ArgumentException ("VAB_AccountSubGroup_ID is mandatory.");
+Set_Value ("VAB_AccountSubGroup_ID", VAB_AccountSubGroup_ID);
 }
 /** Get Account Sub Group.
 @return Account Sub Group */
-public int GetC_AccountSubGroup_ID() 
+public int GetVAB_AccountSubGroup_ID() 
 {
-Object ii = Get_Value("C_AccountSubGroup_ID");
+Object ii = Get_Value("VAB_AccountSubGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Account Group.
-@param C_FinRptAcctGroup_ID Account Group */
-public void SetC_FinRptAcctGroup_ID (int C_FinRptAcctGroup_ID)
+@param VAB_FinRptAcctGroup_ID Account Group */
+public void SetVAB_FinRptAcctGroup_ID (int VAB_FinRptAcctGroup_ID)
 {
-if (C_FinRptAcctGroup_ID < 1) throw new ArgumentException ("C_FinRptAcctGroup_ID is mandatory.");
-Set_ValueNoCheck ("C_FinRptAcctGroup_ID", C_FinRptAcctGroup_ID);
+if (VAB_FinRptAcctGroup_ID < 1) throw new ArgumentException ("VAB_FinRptAcctGroup_ID is mandatory.");
+Set_ValueNoCheck ("VAB_FinRptAcctGroup_ID", VAB_FinRptAcctGroup_ID);
 }
 /** Get Account Group.
 @return Account Group */
-public int GetC_FinRptAcctGroup_ID() 
+public int GetVAB_FinRptAcctGroup_ID() 
 {
-Object ii = Get_Value("C_FinRptAcctGroup_ID");
+Object ii = Get_Value("VAB_FinRptAcctGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

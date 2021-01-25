@@ -659,14 +659,14 @@ namespace VAdvantage.Classes
                 return null;
             if (columnName.Equals("SalesRep_ID"))
                 return "VAF_UserContact_ID";
-            if (columnName.Equals("C_DocTypeTarget_ID"))
-                return "C_DocType_ID";
+            if (columnName.Equals("VAB_DocTypesTarget_ID"))
+                return "VAB_DocTypes_ID";
             if (columnName.Equals("Bill_BPartner_ID"))
-                return "C_BPartner_ID";
+                return "VAB_BusinessPartner_ID";
             if (columnName.Equals("Bill_Location_ID"))
-                return "C_BPartner_Location_ID";
+                return "VAB_BPart_Location_ID";
             if (columnName.Equals("Account_ID"))
-                return "C_ElementValue_ID";
+                return "VAB_Acct_Element_ID";
             //	See also MTab.validateQuery
             //
             return columnName;

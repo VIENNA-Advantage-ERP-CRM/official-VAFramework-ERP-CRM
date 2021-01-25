@@ -2,7 +2,7 @@
     * Project Name   : VAdvantage
     * Class Name     : MBankStatement
     * Purpose        : Bank Statement Model
-    * Class Used     : X_C_BankStatement and DocAction
+    * Class Used     : X_VAB_BankingJRNL and DocAction
     * Chronological    Development
     * Raghunandan     01-Aug-2009
 ******************************************************/
@@ -28,7 +28,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBankStatement : X_C_BankStatement, DocAction
+    public class MBankStatement : X_VAB_BankingJRNL, DocAction
     {
         //Lines							
         private MBankStatementLine[] m_lines = null;
@@ -41,14 +41,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_BankStatement_ID"></param>
+        /// <param name="VAB_BankingJRNL_ID"></param>
         /// <param name="trxName">Transaction</param>
-        public MBankStatement(Ctx ctx, int C_BankStatement_ID, Trx trxName)
-            : base(ctx, C_BankStatement_ID, trxName)
+        public MBankStatement(Ctx ctx, int VAB_BankingJRNL_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNL_ID, trxName)
         {
-            if (C_BankStatement_ID == 0)
+            if (VAB_BankingJRNL_ID == 0)
             {
-                //	setC_BankAccount_ID (0);	//	parent
+                //	setVAB_Bank_Acct_ID (0);	//	parent
                 SetStatementDate(DateTime.Today.Date);// new DateTime(System.currentTimeMillis()));	// @Date@
                 SetDocAction(DOCACTION_Complete);	// CO
                 SetDocStatus(DOCSTATUS_Drafted);	// DR
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             : this(account.GetCtx(), 0, account.Get_TrxName())
         {
             SetClientOrg(account);
-            SetC_BankAccount_ID(account.GetC_BankAccount_ID());
+            SetVAB_Bank_Acct_ID(account.GetVAB_Bank_Acct_ID());
             SetStatementDate(DateTime.Today.Date);//new DateTime(System.currentTimeMillis()));
             SetBeginningBalance(account.GetCurrentBalance());
             SetName(GetStatementDate().ToString());
@@ -112,15 +112,15 @@ namespace VAdvantage.Model
                 return m_lines;
             }
             List<MBankStatementLine> list = new List<MBankStatementLine>();
-            String sql = "SELECT * FROM C_BankStatementLine"
-                + " WHERE C_BankStatement_ID=@C_BankStatement_ID"
+            String sql = "SELECT * FROM VAB_BankingJRNLLine"
+                + " WHERE VAB_BankingJRNL_ID=@VAB_BankingJRNL_ID"
                 + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@C_BankStatement_ID", GetC_BankStatement_ID());
+                param[0] = new SqlParameter("@VAB_BankingJRNL_ID", GetVAB_BankingJRNL_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -181,9 +181,9 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            String sql = "UPDATE C_BankStatementLine SET Processed='"
+            String sql = "UPDATE VAB_BankingJRNLLine SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE C_BankStatement_ID=" + GetC_BankStatement_ID();
+                + "' WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID();
 
             int noLine = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             m_lines = null;
@@ -196,37 +196,37 @@ namespace VAdvantage.Model
         /// <returns>Bank Account</returns>
         public MBankAccount GetBankAccount()
         {
-            return MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            return MBankAccount.Get(GetCtx(), GetVAB_Bank_Acct_ID());
         }
 
         /// <summary>
         /// Set Bank Account
         /// </summary>
-        /// <param name="C_BankAccount_ID">acc/id</param>
-        public new void SetC_BankAccount_ID(int C_BankAccount_ID)
+        /// <param name="VAB_Bank_Acct_ID">acc/id</param>
+        public new void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            base.SetC_BankAccount_ID(C_BankAccount_ID);
+            base.SetVAB_Bank_Acct_ID(VAB_Bank_Acct_ID);
         }
 
         /// <summary>
         /// Set Bank Account - Callout
         /// </summary>
-        /// <param name="oldC_BankAccount_ID">Oldbank</param>
-        /// <param name="newC_BankAccount_ID">new bank</param>
+        /// <param name="oldVAB_Bank_Acct_ID">Oldbank</param>
+        /// <param name="newVAB_Bank_Acct_ID">new bank</param>
         /// <param name="windowNo">window no</param>
         /// @UICallout
-        public void SetC_BankAccount_ID(String oldC_BankAccount_ID, String newC_BankAccount_ID, int windowNo)
+        public void SetVAB_Bank_Acct_ID(String oldVAB_Bank_Acct_ID, String newVAB_Bank_Acct_ID, int windowNo)
         {
-            if (newC_BankAccount_ID == null || newC_BankAccount_ID.Length == 0)
+            if (newVAB_Bank_Acct_ID == null || newVAB_Bank_Acct_ID.Length == 0)
             {
                 return;
             }
-            int C_BankAccount_ID = int.Parse(newC_BankAccount_ID);
-            if (C_BankAccount_ID == 0)
+            int VAB_Bank_Acct_ID = int.Parse(newVAB_Bank_Acct_ID);
+            if (VAB_Bank_Acct_ID == 0)
             {
                 return;
             }
-            SetC_BankAccount_ID(C_BankAccount_ID);
+            SetVAB_Bank_Acct_ID(VAB_Bank_Acct_ID);
             MBankAccount ba = GetBankAccount();
             SetBeginningBalance(ba.GetCurrentBalance());
         }
@@ -290,10 +290,10 @@ namespace VAdvantage.Model
         {
             //JID_1325: if Bank Statement is open against same Bank Account, then not to save new record fo same Bank Account
             int no = 0;
-            if (newRecord || Is_ValueChanged("C_BankAccount_ID"))
+            if (newRecord || Is_ValueChanged("VAB_Bank_Acct_ID"))
             {
-                no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO' , 'CL', 'VO')  
-                                                           AND C_BankAccount_ID = " + GetC_BankAccount_ID(), null, Get_Trx()));
+                no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VAB_BankingJRNL_ID) FROM VAB_BankingJRNL WHERE IsActive = 'Y' AND DocStatus NOT IN ('CO' , 'CL', 'VO')  
+                                                           AND VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID(), null, Get_Trx()));
                 if (no > 0)
                 {
                     log.SaveError("VIS_CantCreateNewStatement", "");
@@ -302,8 +302,8 @@ namespace VAdvantage.Model
             }
 
             //JID_1325: System should not allow to save bank statment with previous date, statement date should be equal or greater than previous created bank statment record with same bank account. 
-            no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BankStatement_ID) FROM C_BankStatement WHERE IsActive = 'Y' AND DocStatus != 'VO' AND StatementDate > "
-                + GlobalVariable.TO_DATE(GetStatementDate(), true) + " AND C_BankAccount_ID = " + GetC_BankAccount_ID() + " AND C_BankStatement_ID != " + Get_ID(), null, Get_Trx()));
+            no = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VAB_BankingJRNL_ID) FROM VAB_BankingJRNL WHERE IsActive = 'Y' AND DocStatus != 'VO' AND StatementDate > "
+                + GlobalVariable.TO_DATE(GetStatementDate(), true) + " AND VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID() + " AND VAB_BankingJRNL_ID != " + Get_ID(), null, Get_Trx()));
             if (no > 0)
             {
                 log.SaveError("VIS_BankStatementDate", "");
@@ -311,7 +311,7 @@ namespace VAdvantage.Model
             }
 
             // JID_0331: Once user add the lines system should not allow to change the bank account on header
-            if (!newRecord && Is_ValueChanged("C_BankAccount_ID"))
+            if (!newRecord && Is_ValueChanged("VAB_Bank_Acct_ID"))
             {
                 MBankStatementLine[] lines = GetLines(false);
                 if (lines.Length > 0)
@@ -466,7 +466,7 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
             //added by shubham (JID_1472) To check payment is complete or close
-            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankStatement_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
+            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from VAB_BankingJRNLline WHERE VAB_BankingJRNL_id =" + GetVAB_BankingJRNL_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
             if (docStatus != 0)
             {
                 m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
             foreach (MBankStatementLine line in lines)
             {
                 // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
-                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetVAB_Charge_ID() == 0))
                 {
                     m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
                     return DocActionVariables.STATUS_INVALID;
@@ -525,9 +525,9 @@ namespace VAdvantage.Model
                 int _CountVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA012_'  AND IsActive = 'Y'"));
                 if (_CountVA012 > 0)
                 {
-                    if (line.GetC_CashLine_ID() != 0)
+                    if (line.GetVAB_CashJRNLLine_ID() != 0)
                     {
-                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), Get_TrxName());
+                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), Get_TrxName());
                         cashLine.SetVA012_IsReconciled(true);
                         cashLine.Save(Get_TrxName());
                     }
@@ -535,7 +535,7 @@ namespace VAdvantage.Model
                 ////
             }
             //	Update Bank Account
-            MBankAccount ba = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            MBankAccount ba = MBankAccount.Get(GetCtx(), GetVAB_Bank_Acct_ID());
             ba.SetCurrentBalance(GetEndingBalance());
             ba.SetUnMatchedBalance(Decimal.Subtract(ba.GetUnMatchedBalance(), transactionAmt));//Arpit
             ba.Save(Get_TrxName());
@@ -628,7 +628,7 @@ namespace VAdvantage.Model
                 }
 
 
-                if (MFactAcct.Delete(Table_ID, GetC_BankStatement_ID(), Get_TrxName()) < 0)
+                if (MFactAcct.Delete(Table_ID, GetVAB_BankingJRNL_ID(), Get_TrxName()) < 0)
                 {
                     return false;	//	could not delete
                 }
@@ -714,7 +714,7 @@ namespace VAdvantage.Model
             //END----------------------------------Anuj----------------------
 
             //	Update Bank Account
-            MBankAccount ba = MBankAccount.Get(GetCtx(), GetC_BankAccount_ID());
+            MBankAccount ba = MBankAccount.Get(GetCtx(), GetVAB_Bank_Acct_ID());
             ba.SetCurrentBalance(Decimal.Subtract(ba.GetCurrentBalance(), voidedDifference));
             ba.SetUnMatchedBalance(Decimal.Add(ba.GetUnMatchedBalance(), transactionAmt));   //Arpit
             ba.Save(Get_TrxName());
@@ -816,11 +816,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Currency
         /// </summary>
-        /// <returns>c_currency_id</returns>
-        public int GetC_Currency_ID()
+        /// <returns>VAB_Currency_id</returns>
+        public int GetVAB_Currency_ID()
         {
             /*/	MPriceList pl = MPriceList.get(getCtx(), getM_PriceList_ID());
-            //	return pl.getC_Currency_ID();*/
+            //	return pl.getVAB_Currency_ID();*/
             return 0;
         }
 

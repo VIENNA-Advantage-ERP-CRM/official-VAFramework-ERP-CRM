@@ -7,10 +7,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    class MAccountSubGroup:X_C_AccountSubGroup
+    class MAccountSubGroup:X_VAB_AccountSubGroup
     {
-        public MAccountSubGroup(Ctx ctx, int C_AccountSubGroup_ID, Trx trxName)
-            : base(ctx, C_AccountSubGroup_ID, trxName)
+        public MAccountSubGroup(Ctx ctx, int VAB_AccountSubGroup_ID, Trx trxName)
+            : base(ctx, VAB_AccountSubGroup_ID, trxName)
         {
         }
     }

@@ -61,7 +61,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             MInOut inout = (MInOut)GetPO();
             SetDateDoc(inout.GetMovementDate());
             //
@@ -186,7 +186,7 @@ namespace VAdvantage.Acct
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             //  Line pointers
             FactLine dr = null;
@@ -204,10 +204,10 @@ namespace VAdvantage.Acct
                     {
                         costs = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT cost.CUrrentcostPrice
                                                                             FROM m_cost cost
-                                                                            INNER JOIN A_Asset ass
-                                                                            ON(ass.a_asset_ID=cost.a_asset_ID)
+                                                                            INNER JOIN VAA_Asset ass
+                                                                            ON(ass.VAA_Asset_ID=cost.VAA_Asset_ID)
                                                                             INNER JOIN M_InOutLine IOL
-                                                                            ON(IOL.A_Asset_ID       =ass.A_Asset_ID)
+                                                                            ON(IOL.VAA_Asset_ID       =ass.VAA_Asset_ID)
                                                                             WHERE IOL.M_InOutLine_ID=" + sLine.GetM_InOutLine_ID() + @"
                                                                               ORDER By cost.created desc"));
                         // Change if Cost not found against Asset then get Product Cost
@@ -241,7 +241,7 @@ namespace VAdvantage.Acct
                         //  CoGS            DR
                         dr = fact.CreateLine(line,
                                 line.GetAccount(ProductCost.ACCTTYPE_P_Cogs, as1),
-                                as1.GetC_Currency_ID(), costs, null);
+                                as1.GetVAB_Currency_ID(), costs, null);
                         if (dr == null)
                         {
                             _error = "FactLine DR not created: " + line;
@@ -250,13 +250,13 @@ namespace VAdvantage.Acct
                         }
                         dr.SetM_Locator_ID(line.GetM_Locator_ID());
                         dr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
-                        dr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                        dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         dr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                         //  Inventory               CR
                         cr = fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                            as1.GetC_Currency_ID(), null, costs);
+                            as1.GetVAB_Currency_ID(), null, costs);
                         if (cr == null)
                         {
                             _error = "FactLine CR not created: " + line;
@@ -265,14 +265,14 @@ namespace VAdvantage.Acct
                         }
                         cr.SetM_Locator_ID(line.GetM_Locator_ID());
                         cr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    // from Loc
-                        cr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  // to Loc
+                        cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     else // Reverse accounting entries for returns
                     {
                         //				  CoGS            CR
                         cr = fact.CreateLine(line,
                                 line.GetAccount(ProductCost.ACCTTYPE_P_Cogs, as1),
-                                as1.GetC_Currency_ID(), null, costs);
+                                as1.GetVAB_Currency_ID(), null, costs);
                         if (cr == null)
                         {
                             _error = "FactLine CR not created: " + line;
@@ -281,14 +281,14 @@ namespace VAdvantage.Acct
                         }
                         cr.SetM_Locator_ID(line.GetM_Locator_ID());
                         cr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
-                        cr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                        cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         cr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                         //  Inventory               DR
                         dr = fact.CreateLine(line,
                             line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                            as1.GetC_Currency_ID(), costs, null);
+                            as1.GetVAB_Currency_ID(), costs, null);
                         if (dr == null)
                         {
                             _error = "FactLine DR not created: " + line;
@@ -297,7 +297,7 @@ namespace VAdvantage.Acct
                         }
                         dr.SetM_Locator_ID(line.GetM_Locator_ID());
                         dr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    // from Loc
-                        dr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  // to Loc
+                        dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     //
                     if (line.GetM_Product_ID() != 0)
@@ -315,7 +315,7 @@ namespace VAdvantage.Acct
 
                 if (!IsPosted())
                 {
-                    UpdateProductInfo(as1.GetC_AcctSchema_ID());     //  only for SO!
+                    UpdateProductInfo(as1.GetVAB_AccountBook_ID());     //  only for SO!
                 }
             }	//	Shipment
 
@@ -332,7 +332,7 @@ namespace VAdvantage.Acct
                     //Special Check to restic Price varience posting in case of
                     //AvarageInvoice Selected on product Category.Then Neglact the AverageInvoice Cost
                     MProductCategoryAcct pca = MProductCategoryAcct.Get(product.GetCtx(),
-                product.GetM_Product_Category_ID(), as1.GetC_AcctSchema_ID(), null);
+                product.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), null);
                     try
                     {
                         if (as1.IsNotPostPOVariance() && line.GetC_OrderLine_ID() > 0)
@@ -340,8 +340,8 @@ namespace VAdvantage.Acct
                             MOrderLine oLine = new MOrderLine(product.GetCtx(), line.GetC_OrderLine_ID(), null);
                             MOrder order = new MOrder(product.GetCtx(), oLine.GetC_Order_ID(), null);
                             Decimal convertedCost = MConversionRate.Convert(product.GetCtx(),
-                                oLine.GetPriceEntered(), order.GetC_Currency_ID(), as1.GetC_Currency_ID(),
-                                line.GetDateAcct(), order.GetC_ConversionType_ID(),
+                                oLine.GetPriceEntered(), order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
+                                line.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                                 oLine.GetVAF_Client_ID(), line.GetVAF_Org_ID());
 
                             costs = Decimal.Multiply(convertedCost, oLine.GetQtyEntered());
@@ -376,7 +376,7 @@ namespace VAdvantage.Acct
                     {
                         //  Inventory/Asset			DR
                         dr = fact.CreateLine(line, assets,
-                            as1.GetC_Currency_ID(), costs, null);
+                            as1.GetVAB_Currency_ID(), costs, null);
                         if (dr == null)
                         {
                             _error = "DR not created: " + line;
@@ -384,12 +384,12 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         dr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        dr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);   // from Loc
+                        dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
                         dr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				CR
                         cr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
-                            as1.GetC_Currency_ID(), null, costs);
+                            as1.GetVAB_Currency_ID(), null, costs);
                         if (cr == null)
                         {
                             _error = "CR not created: " + line;
@@ -397,7 +397,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         cr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        cr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);   //  from Loc
+                        cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
                         cr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   //  to Loc
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
                     }
@@ -405,7 +405,7 @@ namespace VAdvantage.Acct
                     {
                         //  Inventory/Asset			CR
                         cr = fact.CreateLine(line, assets,
-                                as1.GetC_Currency_ID(), null, costs);
+                                as1.GetVAB_Currency_ID(), null, costs);
                         if (cr == null)
                         {
                             _error = "CR not created: " + line;
@@ -413,12 +413,12 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         cr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        cr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);   // from Loc
+                        cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
                         cr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				DR
                         dr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
-                            as1.GetC_Currency_ID(), costs, null);
+                            as1.GetVAB_Currency_ID(), costs, null);
                         if (dr == null)
                         {
                             _error = "DR not created: " + line;
@@ -426,7 +426,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         dr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        dr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);   //  from Loc
+                        dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
                         dr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   //  to Loc
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
 
@@ -453,8 +453,8 @@ namespace VAdvantage.Acct
         /// decrease average cumulatives
         /// @deprecated old costing
         /// </summary>
-        /// <param name="C_AcctSchema_ID">accounting schema</param>
-        private void UpdateProductInfo(int C_AcctSchema_ID)
+        /// <param name="VAB_AccountBook_ID">accounting schema</param>
+        private void UpdateProductInfo(int VAB_AccountBook_ID)
         {
             log.Fine("M_InOut_ID=" + Get_ID());
             //	Old Model

@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_GenAttributeSearch
+/** Generated Model for VAB_GenFeatureSearch
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_GenAttributeSearch : PO
+public class X_VAB_GenFeatureSearch : PO
 {
-public X_C_GenAttributeSearch (Context ctx, int C_GenAttributeSearch_ID, Trx trxName) : base (ctx, C_GenAttributeSearch_ID, trxName)
+public X_VAB_GenFeatureSearch (Context ctx, int VAB_GenFeatureSearch_ID, Trx trxName) : base (ctx, VAB_GenFeatureSearch_ID, trxName)
 {
-/** if (C_GenAttributeSearch_ID == 0)
+/** if (VAB_GenFeatureSearch_ID == 0)
 {
-SetC_GenAttributeSearch_ID (0);
+SetVAB_GenFeatureSearch_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_GenAttributeSearch (Ctx ctx, int C_GenAttributeSearch_ID, Trx trxName) : base (ctx, C_GenAttributeSearch_ID, trxName)
+public X_VAB_GenFeatureSearch (Ctx ctx, int VAB_GenFeatureSearch_ID, Trx trxName) : base (ctx, VAB_GenFeatureSearch_ID, trxName)
 {
-/** if (C_GenAttributeSearch_ID == 0)
+/** if (VAB_GenFeatureSearch_ID == 0)
 {
-SetC_GenAttributeSearch_ID (0);
+SetVAB_GenFeatureSearch_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSearch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureSearch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_GenAttributeSearch (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSearch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureSearch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_GenAttributeSearch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSearch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_GenFeatureSearch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_GenAttributeSearch()
+static X_VAB_GenFeatureSearch()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1385043776913L;
 public static int Table_ID;
  // =1000420;
 
-/** TableName=C_GenAttributeSearch */
-public static String Table_Name="C_GenAttributeSearch";
+/** TableName=VAB_GenFeatureSearch */
+public static String Table_Name="VAB_GenFeatureSearch";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_GenAttributeSearch[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_GenFeatureSearch[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_GenAttributeSearch_ID.
-@param C_GenAttributeSearch_ID C_GenAttributeSearch_ID */
-public void SetC_GenAttributeSearch_ID (int C_GenAttributeSearch_ID)
+/** Set VAB_GenFeatureSearch_ID.
+@param VAB_GenFeatureSearch_ID VAB_GenFeatureSearch_ID */
+public void SetVAB_GenFeatureSearch_ID (int VAB_GenFeatureSearch_ID)
 {
-if (C_GenAttributeSearch_ID < 1) throw new ArgumentException ("C_GenAttributeSearch_ID is mandatory.");
-Set_ValueNoCheck ("C_GenAttributeSearch_ID", C_GenAttributeSearch_ID);
+if (VAB_GenFeatureSearch_ID < 1) throw new ArgumentException ("VAB_GenFeatureSearch_ID is mandatory.");
+Set_ValueNoCheck ("VAB_GenFeatureSearch_ID", VAB_GenFeatureSearch_ID);
 }
-/** Get C_GenAttributeSearch_ID.
-@return C_GenAttributeSearch_ID */
-public int GetC_GenAttributeSearch_ID() 
+/** Get VAB_GenFeatureSearch_ID.
+@return VAB_GenFeatureSearch_ID */
+public int GetVAB_GenFeatureSearch_ID() 
 {
-Object ii = Get_Value("C_GenAttributeSearch_ID");
+Object ii = Get_Value("VAB_GenFeatureSearch_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

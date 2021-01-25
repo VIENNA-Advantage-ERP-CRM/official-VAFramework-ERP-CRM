@@ -49,13 +49,13 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// Start Workflow.
         /// </summary>
-        /// <param name="AD_Workflow_ID">AD_Workflow_ID </param>
+        /// <param name="VAF_Workflow_ID">VAF_Workflow_ID </param>
         /// <returns>true if started</returns>
-        private bool StartWorkflow(int AD_Workflow_ID)
+        private bool StartWorkflow(int VAF_Workflow_ID)
         {
             //Remote process not implemented
             //Only local process is implemented
-            //log.Fine(AD_Workflow_ID + " - " + _pi.ToString());
+            //log.Fine(VAF_Workflow_ID + " - " + _pi.ToString());
             bool started = false;
             //	Run locally
             if (!started)
@@ -68,7 +68,7 @@ namespace VAdvantage.ProcessEngine
                     type = asm.GetType("VAdvantage.WF.MWorkflow");
 
                     ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Ctx), typeof(int), typeof(Trx) });
-                    Object WF = constructor.Invoke(new object[] { _ctx, AD_Workflow_ID, null });
+                    Object WF = constructor.Invoke(new object[] { _ctx, VAF_Workflow_ID, null });
 
                     MethodInfo mInfo = type.GetMethod("StartWF", new Type[] { typeof(ProcessInfo) });
 
@@ -82,7 +82,7 @@ namespace VAdvantage.ProcessEngine
                     return started;
                 }
 
-                // MWorkflow WF = new MWorkflow(_ctx, AD_Workflow_ID, null);
+                // MWorkflow WF = new MWorkflow(_ctx, VAF_Workflow_ID, null);
                 return started;
                 //StartWF
             }
@@ -463,7 +463,7 @@ namespace VAdvantage.ProcessEngine
             String procedureName = "";
             int VAF_ReportViews_ID = 0;
             int VAF_ReportLayout_ID = 0;
-            int AD_Workflow_ID = 0;
+            int VAF_Workflow_ID = 0;
             bool IsReport = false;
 
             bool IsDirectPrint = false;
@@ -471,7 +471,7 @@ namespace VAdvantage.ProcessEngine
             bool IsCrystalReport = false;
 
             String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.VAF_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
                 + " p.IsServerProcess, " //10
                 + " p.IsCrystalReport, "         // crystal  11...12
@@ -506,7 +506,7 @@ namespace VAdvantage.ProcessEngine
                         //later
                     }
                     VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
-                    AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
+                    VAF_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     //_IsServerProcess = "Y".Equals(dr[9].ToString());
 
@@ -528,9 +528,9 @@ namespace VAdvantage.ProcessEngine
             if (procedureName == null)
                 procedureName = "";
 
-            if (AD_Workflow_ID > 0)
+            if (VAF_Workflow_ID > 0)
             {
-                StartWorkflow(AD_Workflow_ID);
+                StartWorkflow(VAF_Workflow_ID);
 
                 //Updated by raghu to open reports from work flow
 
@@ -691,7 +691,7 @@ namespace VAdvantage.ProcessEngine
             String procedureName = "";
             //int VAF_ReportView_ID = 0;
             int VAF_ReportLayout_ID = 0;
-            int AD_Workflow_ID = 0;
+            int VAF_Workflow_ID = 0;
             bool IsReport = false;
 
             bool IsDirectPrint = false;
@@ -703,7 +703,7 @@ namespace VAdvantage.ProcessEngine
             int VAF_ReportMaster_ID = 0;
 
             String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.VAF_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
                 + " p.IsServerProcess, " //10
                 + " p.IsCrystalReport, "         // crystal  11...12
@@ -748,7 +748,7 @@ namespace VAdvantage.ProcessEngine
                         VAF_ReportMaster_ID = Utility.Util.GetValueOfInt(dr[12].ToString());
                     }
                     VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
-                    AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
+                    VAF_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     //_IsServerProcess = "Y".Equals(dr[9].ToString());
 
@@ -772,9 +772,9 @@ namespace VAdvantage.ProcessEngine
             if (procedureName == null)
                 procedureName = "";
 
-            if (AD_Workflow_ID > 0)
+            if (VAF_Workflow_ID > 0)
             {
-                StartWorkflow(AD_Workflow_ID);
+                StartWorkflow(VAF_Workflow_ID);
 
                 //Updated by raghu to open reports from work flow
 
@@ -1078,7 +1078,7 @@ namespace VAdvantage.ProcessEngine
 
         //    String procedureName = "";
         //    int VAF_ReportView_ID = 0;
-        //    int AD_Workflow_ID = 0;
+        //    int VAF_Workflow_ID = 0;
         //    bool IsReport = false;
 
         //    bool IsDirectPrint = false;
@@ -1086,7 +1086,7 @@ namespace VAdvantage.ProcessEngine
         //    bool IsCrystalReport = false;
 
         //    String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
-        //        + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+        //        + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.VAF_Workflow_ID,"		//	5..8
         //        + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END," //9
         //        + " p.IsServerProcess, " //10
         //        + " p.IsCrystalReport "         // crystal  11...12
@@ -1120,7 +1120,7 @@ namespace VAdvantage.ProcessEngine
         //                //later
         //            }
         //            VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
-        //            AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
+        //            VAF_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
         //            //
         //            //_IsServerProcess = "Y".Equals(dr[9].ToString());
 
@@ -1140,9 +1140,9 @@ namespace VAdvantage.ProcessEngine
         //    if (procedureName == null)
         //        procedureName = "";
 
-        //    if (AD_Workflow_ID > 0)
+        //    if (VAF_Workflow_ID > 0)
         //    {
-        //        StartWorkflow(AD_Workflow_ID);
+        //        StartWorkflow(VAF_Workflow_ID);
 
         //        //Updated by raghu to open reports from work flow
 
@@ -1391,12 +1391,12 @@ namespace VAdvantage.ProcessEngine
             //	Get Process Information: Name, Procedure Name, ClassName, IsReport, IsDirectPrint
             String procedureName = "";
             int VAF_ReportView_ID = 0;
-            int AD_Workflow_ID = 0;
+            int VAF_Workflow_ID = 0;
             bool IsReport = false;
             bool IsDirectPrint = false;
             //
             String sql = "SELECT p.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
-                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"		//	5..8
+                + " p.IsReport,p.IsDirectPrint,p.VAF_ReportView_ID,p.VAF_Workflow_ID,"		//	5..8
                 + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END,"
                 + " p.IsServerProcess "
                 + "FROM VAF_Job p"
@@ -1406,7 +1406,7 @@ namespace VAdvantage.ProcessEngine
 
             if (!Utility.Env.IsBaseLanguage(_ctx, "VAF_Job"))//   GlobalVariable.IsBaseLanguage())
                 sql = "SELECT t.Name, p.procedureName,p.Classname, p.VAF_Job_ID,"		//	1..4  
-                    + " p.IsReport, p.IsDirectPrint,p.VAF_ReportView_ID,p.AD_Workflow_ID,"	//	5..8
+                    + " p.IsReport, p.IsDirectPrint,p.VAF_ReportView_ID,p.VAF_Workflow_ID,"	//	5..8
                     + " CASE WHEN COALESCE(p.Statistic_Count,0)=0 THEN 0 ELSE p.Statistic_Seconds/p.Statistic_Count END CASE,"
                     + " p.IsServerProcess "
                     + "FROM VAF_Job p"
@@ -1440,7 +1440,7 @@ namespace VAdvantage.ProcessEngine
                             IsDirectPrint = true;
                     }
                     VAF_ReportView_ID = dr[6].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[6].ToString());
-                    AD_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
+                    VAF_Workflow_ID = dr[7].ToString() == "" ? 0 : Utility.Util.GetValueOfInt(dr[7].ToString());
                     //
                     _IsServerProcess = "Y".Equals(dr[9].ToString());
                 }
@@ -1467,9 +1467,9 @@ namespace VAdvantage.ProcessEngine
             if (procedureName == null)
                 procedureName = "";
 
-            if (AD_Workflow_ID > 0)
+            if (VAF_Workflow_ID > 0)
             {
-                StartWorkflow(AD_Workflow_ID);
+                StartWorkflow(VAF_Workflow_ID);
                 re = ReportCtl.Report;
 
                 Unlock();

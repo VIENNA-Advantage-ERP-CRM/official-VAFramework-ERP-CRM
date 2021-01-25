@@ -108,7 +108,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		urlString.Append("&IsAllowPublish=").Append(reg.IsAllowPublish() ? "Y" : "N")
 			.Append("&NumberEmployees=").Append(HttpUtility.UrlEncode(Convert.ToString(reg.GetNumberEmployees()), UTF8Encoding.UTF8))
-			.Append("&C_Currency_ID=").Append(HttpUtility.UrlEncode(Convert.ToString(reg.GetC_Currency_ID()), UTF8Encoding.UTF8))
+			.Append("&VAB_Currency_ID=").Append(HttpUtility.UrlEncode(Convert.ToString(reg.GetVAB_Currency_ID()), UTF8Encoding.UTF8))
 			.Append("&SalesVolume=").Append(HttpUtility.UrlEncode(Convert.ToString(reg.GetSalesVolume()),UTF8Encoding.UTF8));
 		if (reg.GetIndustryInfo() != null && reg.GetIndustryInfo().Length > 0)
         {
@@ -122,7 +122,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			.Append("&Record_ID=").Append(HttpUtility.UrlEncode(Convert.ToString(reg.GetRecord_ID()),UTF8Encoding.UTF8));
 		//	Address
 		urlString.Append("&City=").Append(HttpUtility.UrlEncode(loc.GetCity(),UTF8Encoding.UTF8))
-			.Append("&C_Country_ID=").Append(HttpUtility.UrlEncode(Convert.ToString(loc.GetC_Country_ID()),UTF8Encoding.UTF8));
+			.Append("&VAB_Country_ID=").Append(HttpUtility.UrlEncode(Convert.ToString(loc.GetVAB_Country_ID()),UTF8Encoding.UTF8));
 		//	Statistics
 		if (reg.IsAllowStatistics())
 		{
@@ -131,7 +131,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				.Append("&NumOrg=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAF_Org")), UTF8Encoding.UTF8))
 				.Append("&NumBPartner=").Append(HttpUtility.UrlEncode(Convert.ToString(
-					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM C_BPartner")),UTF8Encoding.UTF8))
+					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAB_BusinessPartner")),UTF8Encoding.UTF8))
 				.Append("&NumUser=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAF_UserContact")), UTF8Encoding.UTF8))
 				.Append("&NumProduct=").Append(HttpUtility.UrlEncode(Convert.ToString(

@@ -307,34 +307,34 @@ namespace VAdvantage.Model
         }
 
         /** Set Accounting Schema.
-        @param C_AcctSchema_ID Accounting Schema */
-        public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+        @param VAB_AccountBook_ID Accounting Schema */
+        public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID)
         {
-            if (C_AcctSchema_ID <= 0) Set_Value("C_AcctSchema_ID", null);
+            if (VAB_AccountBook_ID <= 0) Set_Value("VAB_AccountBook_ID", null);
             else
-                Set_Value("C_AcctSchema_ID", C_AcctSchema_ID);
+                Set_Value("VAB_AccountBook_ID", VAB_AccountBook_ID);
         }
         /** Get Accounting Schema.
         @return Accounting Schema */
-        public int GetC_AcctSchema_ID()
+        public int GetVAB_AccountBook_ID()
         {
-            Object ii = Get_Value("C_AcctSchema_ID");
+            Object ii = Get_Value("VAB_AccountBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-       @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+       @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

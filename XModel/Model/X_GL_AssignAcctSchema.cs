@@ -44,21 +44,21 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_GL_AssignAcctSchema[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID){if (C_AcctSchema_ID <= 0) Set_Value ("C_AcctSchema_ID", null);else
-Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);}/** Get Accounting Schema.
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID){if (VAB_AccountBook_ID <= 0) Set_Value ("VAB_AccountBook_ID", null);else
+Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);}/** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() {Object ii = Get_Value("C_AcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-public void SetC_ConversionType_ID (int C_ConversionType_ID){if (C_ConversionType_ID <= 0) Set_Value ("C_ConversionType_ID", null);else
-Set_Value ("C_ConversionType_ID", C_ConversionType_ID);}/** Get Currency Type.
+public int GetVAB_AccountBook_ID() {Object ii = Get_Value("VAB_AccountBook_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency Type.
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+public void SetVAB_CurrencyType_ID (int VAB_CurrencyType_ID){if (VAB_CurrencyType_ID <= 0) Set_Value ("VAB_CurrencyType_ID", null);else
+Set_Value ("VAB_CurrencyType_ID", VAB_CurrencyType_ID);}/** Get Currency Type.
 @return Currency Conversion Rate Type */
-public int GetC_ConversionType_ID() {Object ii = Get_Value("C_ConversionType_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID){if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);else
-Set_Value ("C_Currency_ID", C_Currency_ID);}/** Get Currency.
+public int GetVAB_CurrencyType_ID() {Object ii = Get_Value("VAB_CurrencyType_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID){if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);else
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() {Object ii = Get_Value("C_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Rate.
+public int GetVAB_Currency_ID() {Object ii = Get_Value("VAB_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Rate.
 @param CurrencyRate Currency Conversion Rate */
 public void SetCurrencyRate (Decimal? CurrencyRate){Set_Value ("CurrencyRate", (Decimal?)CurrencyRate);}/** Get Rate.
 @return Currency Conversion Rate */

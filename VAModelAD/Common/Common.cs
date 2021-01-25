@@ -141,15 +141,15 @@ namespace VAdvantage.Common
         {
             #region To Override Default Process With Process Linked To Document Type
 
-            string colName = "C_DocTypeTarget_ID";
+            string colName = "VAB_DocTypesTarget_ID";
 
 
-            string sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
+            string sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='VAB_DocTypesTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             if (id < 1)
             {
-                colName = "C_DocType_ID";
-                sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
+                colName = "VAB_DocTypes_ID";
+                sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='VAB_DocTypes_ID'";
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             }
 
@@ -166,20 +166,20 @@ namespace VAdvantage.Common
                     // If Not, then try to get report from Document Type.
                     sql1 = @"SELECT VAF_Record_Seq_No.Report_ID
                                 From VAF_Record_Seq VAF_Record_Seq
-                                JOIN C_Doctype C_Doctype
-                                ON (C_Doctype.Docnosequence_Id =VAF_Record_Seq.VAF_Record_Seq_Id 
-                                AND C_DocType.ISDOCNOCONTROLLED='Y')  
+                                JOIN VAB_DocTypes VAB_DocTypes
+                                ON (VAB_DocTypes.Docnosequence_Id =VAF_Record_Seq.VAF_Record_Seq_Id 
+                                AND VAB_DocTypes.ISDOCNOCONTROLLED='Y')  
                                 JOIN VAF_Record_Seq_No VAF_Record_Seq_No
                                 On (VAF_Record_Seq_No.VAF_Record_Seq_Id=VAF_Record_Seq.VAF_Record_Seq_Id
                                 AND VAF_Record_Seq_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
                                 JOIN VAF_Job ON VAF_Job.VAF_Job_ID=VAF_Record_Seq_No.Report_ID
-                                Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
+                                Where VAB_DocTypes.VAB_DocTypes_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
                                 And VAF_Record_Seq.Isorglevelsequence='Y' AND VAF_Record_Seq.IsActive='Y' AND VAF_Job.IsActive='Y'";
 
                     object processID = DB.ExecuteScalar(sql1);
                     if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
                     {
-                        sql1 = "select Report_ID FRoM C_Doctype WHERE C_Doctype_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0][0]);
+                        sql1 = "select Report_ID FRoM VAB_DocTypes WHERE VAB_DocTypes_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0][0]);
                         processID = DB.ExecuteScalar(sql1);
                     }
                     if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
@@ -407,13 +407,13 @@ namespace VAdvantage.Common
         {
             try
             {
-                string colName = "C_DocTypeTarget_ID";
-                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
+                string colName = "VAB_DocTypesTarget_ID";
+                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='VAB_DocTypesTarget_ID'";
                 int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
                 {
-                    colName = "C_DocType_ID";
-                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
+                    colName = "VAB_DocTypes_ID";
+                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='VAB_DocTypes_ID'";
                     id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                     if (id < 1)
                     {
@@ -427,7 +427,7 @@ namespace VAdvantage.Common
                 {
                     return;
                 }
-                sql = "SELECT VAF_ReportLayout_ID FROM C_DocType WHERE C_DocType_ID=" + id;
+                sql = "SELECT VAF_ReportLayout_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + id;
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id > 0)
                 {
@@ -657,7 +657,7 @@ namespace VAdvantage.Common
                 }
                 else if (token == "BPName")
                 {
-                    if (po.Get_TableName() == "C_BPartner")
+                    if (po.Get_TableName() == "VAB_BusinessPartner")
                     {
                         outStr.Append(ParseVariable("Name", po));
                     }
@@ -707,13 +707,13 @@ namespace VAdvantage.Common
                                                           l.address4,
                                                           l.city,
                                                           CASE
-                                                            WHEN l.C_City_ID IS NOT NULL
+                                                            WHEN l.VAB_City_ID IS NOT NULL
                                                             THEN
-                                                              ( SELECT NAME FROM C_City ct WHERE ct.C_City_ID=l.C_City_ID
+                                                              ( SELECT NAME FROM VAB_City ct WHERE ct.VAB_City_ID=l.VAB_City_ID
                                                               )
                                                             ELSE NULL
                                                           END CityName,
-                                                          (SELECT NAME FROM C_Country c WHERE c.C_Country_ID=l.C_Country_ID
+                                                          (SELECT NAME FROM VAB_Country c WHERE c.VAB_Country_ID=l.VAB_Country_ID
                                                           ) AS CountryName
                                                         FROM C_Location l WHERE l.C_Location_ID=" + value);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)

@@ -35,7 +35,7 @@ namespace VAdvantage.Classes
         /** Form ID         */
         private int _VAF_Page_ID;
         /** Workflow ID     */
-        private int _AD_Workflow_ID;
+        private int _VAF_Workflow_ID;
         /** Task ID         */
         private int _AD_Task_ID;
         /** Workbench ID    */
@@ -163,11 +163,11 @@ namespace VAdvantage.Classes
 
             _VAF_Page_ID = node.VAF_Page_ID;
 
-            _AD_Workflow_ID = node.AD_Workflow_ID;
+            _VAF_Workflow_ID = node.VAF_Workflow_ID;
 
             _AD_Task_ID = node.AD_Task_ID;
 
-            _AD_Workbench_ID = node.AD_Workflow_ID;
+            _AD_Workbench_ID = node.VAF_Workflow_ID;
 
             _imageIndex = 0;
             /**	On Bar			*/
@@ -208,11 +208,11 @@ namespace VAdvantage.Classes
 
             _VAF_Page_ID = node.VAF_Page_ID;
 
-            _AD_Workflow_ID = node.AD_Workflow_ID;
+            _VAF_Workflow_ID = node.VAF_Workflow_ID;
 
             _AD_Task_ID = node.AD_Task_ID;
 
-            _AD_Workbench_ID = node.AD_Workflow_ID;
+            _AD_Workbench_ID = node.VAF_Workflow_ID;
 
             _imageIndex = 0;
             /**	On Bar			*/
@@ -320,15 +320,15 @@ namespace VAdvantage.Classes
         /// <summary>
         /// Get and set workflow id
         /// </summary>
-        public int AD_Workflow_ID
+        public int VAF_Workflow_ID
         {
             get
             {
-                return _AD_Workflow_ID;
+                return _VAF_Workflow_ID;
             }
             set
             {
-                this._AD_Workflow_ID = value;
+                this._VAF_Workflow_ID = value;
             }
         }
 
@@ -604,7 +604,7 @@ namespace VAdvantage.Classes
 
             else if (ACTION_WORKFLOW == _imageIndicator)
             {
-                id = AD_Workflow_ID;
+                id = VAF_Workflow_ID;
             }
             else if (ACTION_TASK == _imageIndicator)
             {

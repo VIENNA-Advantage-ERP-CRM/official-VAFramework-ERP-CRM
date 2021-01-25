@@ -46,7 +46,7 @@ namespace VAdvantage.Acct
                 mpc = MProductCategory.Get(GetCtx(), costupdate.GetM_Product_Category_ID());
 
             _lines = LoadLines(costupdate);
-            m_ce = MCostElement.GetMaterialCostElement(MClient.Get(GetCtx()), X_C_AcctSchema.COSTINGMETHOD_StandardCosting);
+            m_ce = MCostElement.GetMaterialCostElement(MClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
             SetDateAcct(costupdate.GetDateAcct());
             SetDateDoc(costupdate.GetDateAcct());
             return null;
@@ -83,7 +83,7 @@ namespace VAdvantage.Acct
             // Get the costing method and the costing level of the product Category for the current accounting schema.
             if (mpc != null)
             {
-                pca = MProductCategoryAcct.Get(GetCtx(), mpc.GetM_Product_Category_ID(), as1.GetC_AcctSchema_ID(), null);
+                pca = MProductCategoryAcct.Get(GetCtx(), mpc.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), null);
                 if (pca.GetCostingMethod() != null)
                     costingMethod = pca.GetCostingMethod();
                 else
@@ -95,7 +95,7 @@ namespace VAdvantage.Acct
                     costingLevel = costingLevelOfSchema;
 
                 // proceed only if the costing method is standard
-                if (!costingMethod.Equals(X_C_AcctSchema.COSTINGMETHOD_StandardCosting))
+                if (!costingMethod.Equals(X_VAB_AccountBook.COSTINGMETHOD_StandardCosting))
                     return facts;
             }
 
@@ -112,7 +112,7 @@ namespace VAdvantage.Acct
                 {
                     pca = MProductCategoryAcct.Get(GetCtx(), MProduct.Get(GetCtx(), line.GetM_Product_ID()).
                                                    GetM_Product_Category_ID(),
-                                                   as1.GetC_AcctSchema_ID(), null);
+                                                   as1.GetVAB_AccountBook_ID(), null);
                     if (pca.GetCostingMethod() != null)
                         costingMethod = pca.GetCostingMethod();
                     else
@@ -124,7 +124,7 @@ namespace VAdvantage.Acct
                         costingLevel = costingLevelOfSchema;
 
                     // proceed only if the costing method is standard
-                    if (!costingMethod.Equals(X_C_AcctSchema.COSTINGMETHOD_StandardCosting))
+                    if (!costingMethod.Equals(X_VAB_AccountBook.COSTINGMETHOD_StandardCosting))
                         return facts;
 
                 }
@@ -133,20 +133,20 @@ namespace VAdvantage.Acct
                 Decimal Qty = Env.ZERO;
                 String sql = " SELECT Sum(CurrentCostPrice), Sum(LastCostPrice), Sum(CurrentQty)"
                            + " FROM M_Cost WHERE M_Product_ID = " + line.GetM_Product_ID()
-                           + " AND C_AcctSchema_ID = " + as1.GetC_AcctSchema_ID()
+                           + " AND VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID()
                            + " AND M_CostElement_ID = " + m_ce.GetM_CostElement_ID()
                            + " AND M_CostType_ID = " + as1.GetM_CostType_ID()
                            + " AND VAF_Client_ID = " + GetVAF_Client_ID();
-                if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Client))
+                if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_Client))
                 {
                     sql += " AND VAF_Org_ID = 0"
                         + " AND M_AttributeSetInstance_ID  = 0";
                 }
-                else if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_Organization))
+                else if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_Organization))
                 {
                     sql += " AND M_AttributeSetInstance_ID  = 0";
                 }
-                else if (costingLevel.Equals(X_C_AcctSchema.COSTINGLEVEL_BatchLot))
+                else if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_BatchLot))
                 {
                     sql += " AND VAF_Org_ID = 0";
                 }
@@ -190,14 +190,14 @@ namespace VAdvantage.Acct
                         }
 
                         /* Create Credit and Debit lines*/
-                        dr = fact.CreateLine(line, db_acct, as1.GetC_Currency_ID(), Math.Abs(amt), null);
+                        dr = fact.CreateLine(line, db_acct, as1.GetVAB_Currency_ID(), Math.Abs(amt), null);
                         if (dr == null)
                         {
                             log.SaveError("NoProductCosts", "No Product Costs");
                             return null;
                         }
 
-                        cr = fact.CreateLine(line, cr_acct, as1.GetC_Currency_ID(), null, Math.Abs(amt));
+                        cr = fact.CreateLine(line, cr_acct, as1.GetVAB_Currency_ID(), null, Math.Abs(amt));
                         if (cr == null)
                         {
                             log.SaveError("NoProductCosts", "No Product Costs");

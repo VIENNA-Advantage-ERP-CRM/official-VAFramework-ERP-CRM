@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class DocTypeCounterValidate : ProcessEngine.SvrProcess
     {
    /**	Counter Document		*/
-	private int					_C_DocTypeCounter_ID = 0;
+	private int					_VAB_InterCompanyDoc_ID = 0;
 	/**	Document Relationship	*/
 	private MDocTypeCounter		_counter = null;
 	/// <summary>
@@ -37,7 +37,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// </summary>
 	protected override void Prepare ()
 	{
-		_C_DocTypeCounter_ID = GetRecord_ID();
+		_VAB_InterCompanyDoc_ID = GetRecord_ID();
 	}	//	prepare
     /// <summary>
     /// Do It
@@ -45,11 +45,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     /// <returns>message</returns>
 	protected override String DoIt()
 	{
-		log.Info("C_DocTypeCounter_ID=" + _C_DocTypeCounter_ID);
-		_counter = new MDocTypeCounter (GetCtx(), _C_DocTypeCounter_ID, Get_TrxName());
+		log.Info("VAB_InterCompanyDoc_ID=" + _VAB_InterCompanyDoc_ID);
+		_counter = new MDocTypeCounter (GetCtx(), _VAB_InterCompanyDoc_ID, Get_TrxName());
         if (_counter == null || _counter.Get_ID() == 0)
         {
-            throw new ArgumentException("Not found C_DocTypeCounter_ID=" + _C_DocTypeCounter_ID);
+            throw new ArgumentException("Not found VAB_InterCompanyDoc_ID=" + _VAB_InterCompanyDoc_ID);
         }
 		//
 		String error = _counter.Validate();

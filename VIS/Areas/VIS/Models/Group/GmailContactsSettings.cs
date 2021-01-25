@@ -610,10 +610,10 @@ namespace VIS.Models
 
 
 
-//            //sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
+//            //sql = "SELECT GMAIL_UID,VAB_BusinessPartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
 //            //    + " and  GMAIL_UID is not null and VAF_Org_ID in (" + strorg.ToString() + ") and createdby=" + ctx.GetVAF_UserContact_ID(); //by sarab
 
-//            sql = "SELECT GMAIL_UID,C_Bpartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
+//            sql = "SELECT GMAIL_UID,VAB_BusinessPartner_ID FROM VAF_UserContact WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID()
 //                           + " and  GMAIL_UID is not null and VAF_Org_ID in (" + strorg.ToString() + ")";
 //            DataSet ds = DB.ExecuteDataset(sql, null);
 //            if (ds != null && ds.Tables[0].Rows.Count != 0)
@@ -624,22 +624,22 @@ namespace VIS.Models
 //                }
 //            }
 
-//            sql = @" SELECT Distinct VAF_UserContact.email  ,bp.Name As BPName,bp.C_BP_Group_ID,
+//            sql = @" SELECT Distinct VAF_UserContact.email  ,bp.Name As BPName,bp.VAB_BPart_Category_ID,
 //                      VAF_UserContact.name         ,
 //                      VAF_UserContact.mobile       ,VAF_UserContact.phone,VAF_UserContact.phone2,VAF_UserContact.birthday,
 //                      VAF_UserContact.VAF_UserContact_ID   ,
-//                      VAF_UserContact.c_bpartner_id,
+//                      VAF_UserContact.VAB_BusinessPartner_id,
 //                      VAF_UserContact.GMAIL_UID,
-//                      bp.isemployee, bp.isvendor, bp.iscustomer, bp.c_bp_group_id,
+//                      bp.isemployee, bp.isvendor, bp.iscustomer, bp.VAB_BPart_Category_id,
 //                      cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
-//                                              cbl.C_Bpartner_Location_ID,CBL.c_location_ID 
+//                                              cbl.VAB_BPart_Location_ID,CBL.c_location_ID 
 //                     FROM VAF_UserContact VAF_UserContact
-//                     Left outer JOIN c_bpartner BP
-//                     ON VAF_UserContact.c_bpartner_id=bp.c_bpartner_id
-//                     Left Outer JOIn c_bpartner_location CBL on bp.c_bpartner_id= cbl.c_bpartner_id 
+//                     Left outer JOIN VAB_BusinessPartner BP
+//                     ON VAF_UserContact.VAB_BusinessPartner_id=bp.VAB_BusinessPartner_id
+//                     Left Outer JOIn VAB_BPart_Location CBL on bp.VAB_BusinessPartner_id= cbl.VAB_BusinessPartner_id 
 //                     Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
 //                     Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
-//                     Left outer JOIn c_city CCI on CCI.c_city_ID=cl.c_city_ID
+//                     Left outer JOIn VAB_City CCI on CCI.VAB_City_ID=cl.VAB_City_ID
 //                     Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id";
 
 
@@ -661,12 +661,12 @@ namespace VIS.Models
 
 ////            mc.IsContactExist = true;
 ////            mc.VAF_UserContact_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["VAF_USERCONTACT_ID"].ToString());
-////            mc.BPartner_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["C_BPARTNER_ID"].ToString());
+////            mc.BPartner_ID = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["VAB_BUSINESSPARTNER_ID"].ToString());
 ////            mc.UserUEmailID = dsCheckExist.Tables[0].Rows[j]["GMAIL_UID"].ToString();
 
 
-////            string sql = "SELECT c_bp_group_id, name FROM c_bp_group";
-////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_BP_Group", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+////            string sql = "SELECT VAB_BPart_Category_id, name FROM VAB_BPart_Category";
+////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Category", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 ////            DataSet dsBPGroup = DB.ExecuteDataset(sql, null);
 
 ////            //if (vdgvContacts.SortedColumns.Count() == 0)
@@ -699,14 +699,14 @@ namespace VIS.Models
 ////            {
 ////                mc.IsEmployee = false;
 ////            }
-////            if (dsCheckExist.Tables[0].Rows[j]["C_BP_GROUP_ID"] != null)
+////            if (dsCheckExist.Tables[0].Rows[j]["VAB_BPART_CATEGORY_ID"] != null)
 ////            {
 ////                for (int k = 0; k < dsBPGroup.Tables[0].Rows.Count; k++)
 ////                {
 
-////                    if (dsBPGroup.Tables[0].Rows[k]["C_BP_GROUP_ID"].ToString() == dsCheckExist.Tables[0].Rows[j]["C_BP_GROUP_ID"].ToString())
+////                    if (dsBPGroup.Tables[0].Rows[k]["VAB_BPART_CATEGORY_ID"].ToString() == dsCheckExist.Tables[0].Rows[j]["VAB_BPART_CATEGORY_ID"].ToString())
 ////                    {
-////                        mc.SelectedVal = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["C_BP_GROUP_ID"].ToString());
+////                        mc.SelectedVal = Util.GetValueOfInt(dsCheckExist.Tables[0].Rows[j]["VAB_BPART_CATEGORY_ID"].ToString());
 ////                        mc.SelectedItems = k;
 ////                        break;
 ////                    }
@@ -734,8 +734,8 @@ namespace VIS.Models
 ////        public List<BPInfo> GetBPGroup(Ctx ctx)
 ////        {
 ////            List<BPInfo> bpinfo = new List<BPInfo>();
-////            string sql = "SELECT c_bp_group_id, name FROM c_bp_group";
-////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_BP_Group", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+////            string sql = "SELECT VAB_BPart_Category_id, name FROM VAB_BPart_Category";
+////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Category", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 ////            DataSet dsBPGroup = DB.ExecuteDataset(sql, null);
 ////            if (dsBPGroup != null && dsBPGroup.Tables[0].Rows.Count > 0)
 ////            {
@@ -744,11 +744,11 @@ namespace VIS.Models
 
 ////                    bpinfo.Add(new BPInfo()
 ////                    {
-////                        ID = Convert.ToInt32(dsBPGroup.Tables[0].Rows[i]["c_bp_group_id"]),
+////                        ID = Convert.ToInt32(dsBPGroup.Tables[0].Rows[i]["VAB_BPart_Category_id"]),
 ////                        Name = Convert.ToString(dsBPGroup.Tables[0].Rows[i]["NAME"])
 ////                    });
 
-////                    //bpgroup.Add("C_BP_GROUP_ID", Convert.ToString(dsBPGroup.Tables[0].Rows[i]["c_bp_group_id"]));
+////                    //bpgroup.Add("VAB_BPART_CATEGORY_ID", Convert.ToString(dsBPGroup.Tables[0].Rows[i]["VAB_BPart_Category_id"]));
 ////                }
 ////            }
 ////            return bpinfo;
@@ -943,7 +943,7 @@ namespace VIS.Models
 ////                                        //}
 
 ////                                        //-------------------
-////                                        user.SetC_BPartner_ID(BP_ID);
+////                                        user.SetVAB_BusinessPartner_ID(BP_ID);
 ////                                        if (!user.Save(trx))
 ////                                        {
 ////                                            trx.Rollback();
@@ -1014,7 +1014,7 @@ namespace VIS.Models
 ////                            MUser user = null;
 ////                            if (BP_ID != null && BP_ID != 0)
 ////                            {
-////                                sql.Append("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE c_bpartner_id=" + BP_ID + " and name ='" + ((MyContacts)objMyContact[i]).ContactName + "'");
+////                                sql.Append("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE VAB_BusinessPartner_id=" + BP_ID + " and name ='" + ((MyContacts)objMyContact[i]).ContactName + "'");
 ////                                object userID = DB.ExecuteScalar(sql.ToString());
 ////                                if (userID != null && userID != DBNull.Value)
 ////                                {
@@ -1039,7 +1039,7 @@ namespace VIS.Models
 ////                            }
 
 
-////                            //----------------------------Create C_Bpartner-----------------------------//
+////                            //----------------------------Create VAB_BusinessPartner-----------------------------//
 ////                            if (BP_ID == 0)
 ////                            {
 ////                                string res = InsertBP(ctx, objMyContact, i, Org_ID, trx, ref count, ref bpCount, user);
@@ -1076,7 +1076,7 @@ namespace VIS.Models
 ////                                //}
 
 ////                                ////-------------------
-////                                user.SetC_BPartner_ID(BP_ID);
+////                                user.SetVAB_BusinessPartner_ID(BP_ID);
 ////                                if (!user.Save(trx))
 ////                                {
 ////                                    trx.Rollback();
@@ -1170,7 +1170,7 @@ namespace VIS.Models
 ////        /// <returns></returns>
 ////        private string IsUserAunthicated(Ctx ctx)
 ////        {
-////            string sql = " SELECT VAF_Screen_ID FROM vaf_tableview WHERE upper(tablename)='C_BPARTNER'";
+////            string sql = " SELECT VAF_Screen_ID FROM vaf_tableview WHERE upper(tablename)='VAB_BUSINESSPARTNER'";
 ////            DataSet ds = DB.ExecuteDataset(sql, null);
 ////            if (ds == null || ds.Tables[0].Rows.Count == 0)
 ////            {
@@ -1326,11 +1326,11 @@ namespace VIS.Models
 ////            {
 ////                BPName = BPName.Replace("'", "''");
 ////            }
-////            string sql = "SELECT C_Bpartner_ID FROM c_Bpartner WHERE UPPER(name)='" + BPName.ToUpper() + "' and isactive='Y' ";
+////            string sql = "SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner WHERE UPPER(name)='" + BPName.ToUpper() + "' and isactive='Y' ";
 ////            //and VAF_Client_ID="+ctx.GetVAF_Client_ID()
 ////            //+" And VAF_Org_ID=" + ctx.GetVAF_Org_ID();
 
-////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_BPartner", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+////            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BusinessPartner", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
 
 ////            DataSet ds = DB.ExecuteDataset(sql, null);
@@ -1338,9 +1338,9 @@ namespace VIS.Models
 ////            {
 ////                return 0;
 ////            }
-////            if (ds.Tables[0].Rows[0]["C_BPARTNER_ID"] != null)
+////            if (ds.Tables[0].Rows[0]["VAB_BUSINESSPARTNER_ID"] != null)
 ////            {
-////                return Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPARTNER_ID"].ToString());
+////                return Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BUSINESSPARTNER_ID"].ToString());
 ////            }
 ////            return 0;
 ////            //object ID = DB.ExecuteScalar(sql);
@@ -1463,12 +1463,12 @@ namespace VIS.Models
 ////            else
 ////            {
 ////                partner = new MBPartner(ctx, 0, trx);
-////                docno = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "C_BPartner", trx, ctx);
+////                docno = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "VAB_BusinessPartner", trx, ctx);
 ////            }
 ////            partner.SetVAF_Org_ID(Org_ID);
 ////            partner.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 ////            partner.SetName(((MyContacts)objMyContact[i]).BpartnerName.ToString());
-////            partner.SetC_BP_Group_ID(((MyContacts)objMyContact[i]).SelectedVal);
+////            partner.SetVAB_BPart_Category_ID(((MyContacts)objMyContact[i]).SelectedVal);
 ////            partner.SetIsCustomer(((MyContacts)objMyContact[i]).IsCustomer);
 ////            partner.SetIsEmployee(((MyContacts)objMyContact[i]).IsEmployee);
 ////            //if (((MyContacts)items[i]).Title != null)
@@ -1501,12 +1501,12 @@ namespace VIS.Models
 ////            }
 
 ////            sql.Clear();
-////            sql.Append("Update C_Bpartner set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    C_Bpartner_ID=" + partner.GetC_BPartner_ID());
+////            sql.Append("Update VAB_BusinessPartner set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    VAB_BusinessPartner_ID=" + partner.GetVAB_BusinessPartner_ID());
 ////            if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////            {
 ////                trx.Rollback();
 ////                trx.Close();
-////                result.Append("C_Bpartner " + partner.GetName() + " not Updated");
+////                result.Append("VAB_BusinessPartner " + partner.GetName() + " not Updated");
 ////                count--;
 ////                bpCount--;
 ////                // continue;
@@ -1514,13 +1514,13 @@ namespace VIS.Models
 ////            }
 
 ////            DateTime updatedTime = partner.GetUpdated();
-////            int ID = partner.GetC_BPartner_ID();
-////            string sql1 = "Update C_Bpartner set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ",LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where C_Bpartner_ID=" + ID;
+////            int ID = partner.GetVAB_BusinessPartner_ID();
+////            string sql1 = "Update VAB_BusinessPartner set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ",LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAB_BusinessPartner_ID=" + ID;
 ////            if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////            {
 ////                trx.Rollback();
 ////                trx.Close();
-////                result.Append("C_Bpartner " + partner.GetName() + " not Updated");
+////                result.Append("VAB_BusinessPartner " + partner.GetName() + " not Updated");
 ////                count--;
 ////                bpCount--;
 ////                // continue;
@@ -1529,7 +1529,7 @@ namespace VIS.Models
 
 
 ////            //----------------- Update VAF_UserContact----------------------------------------\\
-////            user.SetC_BPartner_ID(partner.GetC_BPartner_ID());
+////            user.SetVAB_BusinessPartner_ID(partner.GetVAB_BusinessPartner_ID());
 ////            if (!user.Save(trx))
 ////            {
 ////                trx.Rollback();
@@ -1555,7 +1555,7 @@ namespace VIS.Models
 ////                return result.ToString();
 ////            }
 
-////            //------------------ Create Location_ID from home Address for C_Bpartner.C_Location---------------------------//
+////            //------------------ Create Location_ID from home Address for VAB_BusinessPartner.C_Location---------------------------//
 
 ////            ObservableCollection<ContactAddress> cAddress = ((MyContacts)objMyContact[i]).CWorkAddress;
 ////            if (cAddress.Count > 0)
@@ -1563,7 +1563,7 @@ namespace VIS.Models
 ////                int BPLCount = 0;
 ////                sql.Clear();
 ////                //int workAddressCount = 0;
-////                sql.Append("SELECT c_location_id,c_bpartner_location_ID FROM c_bpartner_location WHERE c_bpartner_id=" + ((MyContacts)objMyContact[i]).BPartner_ID + " order by c_location_id");
+////                sql.Append("SELECT c_location_id,VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_id=" + ((MyContacts)objMyContact[i]).BPartner_ID + " order by c_location_id");
 ////                DataSet ds = DB.ExecuteDataset(sql.ToString(), null);
 ////                if (ds == null || ds.Tables[0].Rows.Count == 0)
 ////                {
@@ -1602,7 +1602,7 @@ namespace VIS.Models
 ////                    if (cAddress[k].WCity != null)               //Search CIty_ID using Name for work Address
 ////                    {
 ////                        sql.Clear();
-////                        sql.Append("SELECT C_city_ID FROM c_city WHERE upper(name)='" + cAddress[k].WCity.ToUpper() + "'");
+////                        sql.Append("SELECT VAB_City_ID FROM VAB_City WHERE upper(name)='" + cAddress[k].WCity.ToUpper() + "'");
 ////                        WCity_ID = DB.ExecuteScalar(sql.ToString());
 ////                    }
 ////                    if (cAddress[k].WRegion != null)             //Search Region_ID using Name for work Address
@@ -1613,20 +1613,20 @@ namespace VIS.Models
 ////                    }
 
 
-////                    //-----------Insset data into C_Location for C_BPartner-------------\\
+////                    //-----------Insset data into C_Location for VAB_BusinessPartner-------------\\
 
 
 ////                    sql.Clear();
 ////                    location.SetVAF_Org_ID(Org_ID);
 ////                    location.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-////                    location.SetC_Country_ID(Util.GetValueOfInt(WCountry_ID));
+////                    location.SetVAB_Country_ID(Util.GetValueOfInt(WCountry_ID));
 ////                    if (WRegion_ID != null && WRegion_ID != DBNull.Value)
 ////                    {
 ////                        location.SetC_Region_ID(Util.GetValueOfInt(WRegion_ID));
 ////                    }
 ////                    if (WCity_ID != null && WCity_ID != DBNull.Value)
 ////                    {
-////                        location.SetC_City_ID(Util.GetValueOfInt(WCity_ID));
+////                        location.SetVAB_City_ID(Util.GetValueOfInt(WCity_ID));
 ////                    }
 ////                    string address1 = string.Empty;
 ////                    if (cAddress[k].WHouseNo != null && cAddress[k].WHouseNo != "" && cAddress[k].WHouseNo != ",")
@@ -1686,11 +1686,11 @@ namespace VIS.Models
 ////                        continue;
 ////                    }
 
-////                    //------------------Create C_Bpartner_Location for business partner using C_Location.---------------------\\
+////                    //------------------Create VAB_BPart_Location for business partner using C_Location.---------------------\\
 ////                    MBPartnerLocation bpLocation = null;
 ////                    if (k < BPLCount)
 ////                    {
-////                        bpLocation = new MBPartnerLocation(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[k]["C_BPARTNER_LOCATION_ID"].ToString()), trx);
+////                        bpLocation = new MBPartnerLocation(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[k]["VAB_BPart_Location_ID"].ToString()), trx);
 ////                    }
 ////                    else
 ////                    {
@@ -1699,7 +1699,7 @@ namespace VIS.Models
 ////                    bpLocation.SetVAF_Org_ID(Org_ID);
 ////                    bpLocation.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 ////                    bpLocation.SetC_Location_ID(location.GetC_Location_ID());
-////                    bpLocation.SetC_BPartner_ID(partner.GetC_BPartner_ID());
+////                    bpLocation.SetVAB_BusinessPartner_ID(partner.GetVAB_BusinessPartner_ID());
 ////                    bpLocation.SetIsBillTo(true);
 ////                    bpLocation.SetIsPayFrom(true);
 ////                    bpLocation.SetIsRemitTo(true);
@@ -1716,25 +1716,25 @@ namespace VIS.Models
 ////                    }
 
 ////                    sql.Clear();
-////                    sql.Append("Update C_BPartner_Location set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    C_BPartner_Location_ID=" + bpLocation.GetC_BPartner_Location_ID());
+////                    sql.Append("Update VAB_BPart_Location set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    VAB_BPart_Location_ID=" + bpLocation.GetVAB_BPart_Location_ID());
 ////                    if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////                    {
 ////                        trx.Rollback();
 ////                        trx.Close();
-////                        result.Append("C_BPartner_Location for  " + bpLocation.GetName() + " not Updated");
+////                        result.Append("VAB_BPart_Location for  " + bpLocation.GetName() + " not Updated");
 ////                        count--;
 ////                        bpCount--;
 ////                        continue;
 ////                    }
 
 ////                    updatedTime = bpLocation.GetUpdated();
-////                    ID = bpLocation.GetC_BPartner_Location_ID();
-////                    sql1 = "Update C_BPartner_Location set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where C_BPartner_Location_ID=" + bpLocation.GetC_BPartner_Location_ID();
+////                    ID = bpLocation.GetVAB_BPart_Location_ID();
+////                    sql1 = "Update VAB_BPart_Location set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAB_BPart_Location_ID=" + bpLocation.GetVAB_BPart_Location_ID();
 ////                    if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////                    {
 ////                        trx.Rollback();
 ////                        trx.Close();
-////                        result.Append("C_BPartner_Location for " + bpLocation.GetName() + " not Updated");
+////                        result.Append("VAB_BPart_Location for " + bpLocation.GetName() + " not Updated");
 ////                        count--;
 ////                        bpCount--;
 ////                        continue;
@@ -1746,7 +1746,7 @@ namespace VIS.Models
 ////                    for (int k = cAddress.Count; k < BPLCount; k++)
 ////                    {
 ////                        sql.Clear();
-////                        sql.Append("delete from c_bpartner_location WHERE c_location_id=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
+////                        sql.Append("delete from VAB_BPart_Location WHERE c_location_id=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
 ////                        if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////                        {
 ////                            trx.Rollback();
@@ -2103,7 +2103,7 @@ namespace VIS.Models
 
 
 
-//            string sql = "SELECT c_bp_group_id, name FROM c_bp_group";
+//            string sql = "SELECT VAB_BPart_Category_id, name FROM VAB_BPart_Category";
 
 //            GetIDList(ctx);
 //            DataSet dsUserlst = null;
@@ -2172,7 +2172,7 @@ namespace VIS.Models
 //                                    mc.IsCustomer = cInfo[i].IsCustomer;
 //                                    mc.IsVendor = cInfo[i].IsVendor;
 //                                    mc.IsEmployee = cInfo[i].IsEmployee;
-//                                    mc.SelectedVal = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BP_GROUP_ID"]);
+//                                    mc.SelectedVal = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPART_CATEGORY_ID"]);
 //                                    mc.SelectedItems = 0;
 //                                }
 //                                else
@@ -2183,7 +2183,7 @@ namespace VIS.Models
 //                                        {
 //                                            if (dsempdtls.Tables[0].Rows[j]["GMAIL_UID"].ToString() == cInfo[i].ID)     //Check if user already exist
 //                                            {
-//                                                if (dsempdtls.Tables[0].Rows[j]["C_BPARTNER_ID"] != null && dsempdtls.Tables[0].Rows[j]["C_BPARTNER_ID"].ToString() != "")
+//                                                if (dsempdtls.Tables[0].Rows[j]["VAB_BUSINESSPARTNER_ID"] != null && dsempdtls.Tables[0].Rows[j]["VAB_BUSINESSPARTNER_ID"].ToString() != "")
 //                                                {
 //                                                    alreadyImported = true;
 
@@ -2193,7 +2193,7 @@ namespace VIS.Models
 //                                                    //-----------------------------------
 
 //                                                    mc.ImportedRecord = true;
-//                                                    mc.BPartner_ID = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["C_BPARTNER_ID"].ToString());
+//                                                    mc.BPartner_ID = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["VAB_BUSINESSPARTNER_ID"].ToString());
 //                                                    mc.BPDocNo = dsempdtls.Tables[0].Rows[j]["VALUE"].ToString();
 //                                                    mc.IsCustomer = dsempdtls.Tables[0].Rows[j]["ISCUSTOMER"].ToString().Equals("Y") ? true : false;
 //                                                    mc.IsEmployee = dsempdtls.Tables[0].Rows[j]["ISEMPLOYEE"].ToString().Equals("Y") ? true : false;
@@ -2207,9 +2207,9 @@ namespace VIS.Models
 
 //                                                    for (int k = 0; k < ds.Tables[0].Rows.Count; k++)
 //                                                    {
-//                                                        if (ds.Tables[0].Rows[k]["C_BP_GROUP_ID"].ToString() == dsempdtls.Tables[0].Rows[j]["C_BP_GROUP_ID"].ToString())
+//                                                        if (ds.Tables[0].Rows[k]["VAB_BPART_CATEGORY_ID"].ToString() == dsempdtls.Tables[0].Rows[j]["VAB_BPART_CATEGORY_ID"].ToString())
 //                                                        {
-//                                                            mc.SelectedVal = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["C_BP_GROUP_ID"].ToString());
+//                                                            mc.SelectedVal = Util.GetValueOfInt(dsempdtls.Tables[0].Rows[j]["VAB_BPART_CATEGORY_ID"].ToString());
 //                                                            mc.SelectedItems = k;
 //                                                            break;
 //                                                        }
@@ -2221,7 +2221,7 @@ namespace VIS.Models
 //                                    }
 //                                    else
 //                                    {
-//                                        mc.SelectedVal = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BP_GROUP_ID"]);
+//                                        mc.SelectedVal = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPART_CATEGORY_ID"]);
 //                                        mc.SelectedItems = 0;
 //                                    }
 //                                }
@@ -2340,18 +2340,18 @@ namespace VIS.Models
 //        /// <returns></returns>
 //        private DataSet SetEmployeeDetails()
 //        {
-//            //            string sql = @"select usr.GMAIL_UID, bp.isemployee, bp.isvendor, bp.iscustomer, bp.c_bp_group_id,bp.c_bpartner_ID, bp.name as BPName,
-//            //                            usr.value from c_bpartner bp join VAF_UserContact usr on bp.c_bpartner_id= usr.c_bpartner_id where usr.GMAIL_UID is not null";
+//            //            string sql = @"select usr.GMAIL_UID, bp.isemployee, bp.isvendor, bp.iscustomer, bp.VAB_BPart_Category_id,bp.VAB_BusinessPartner_ID, bp.name as BPName,
+//            //                            usr.value from VAB_BusinessPartner bp join VAF_UserContact usr on bp.VAB_BusinessPartner_id= usr.VAB_BusinessPartner_id where usr.GMAIL_UID is not null";
 
-//            string sql = @"SELECT VAF_UserContact.GMAIL_UID, C_BPartner.isemployee, C_BPartner.isvendor, C_BPartner.iscustomer, C_BPartner.c_bp_group_id,C_BPartner.c_bpartner_ID, C_BPartner.name as BPName,
+//            string sql = @"SELECT VAF_UserContact.GMAIL_UID, VAB_BusinessPartner.isemployee, VAB_BusinessPartner.isvendor, VAB_BusinessPartner.iscustomer, VAB_BusinessPartner.VAB_BPart_Category_id,VAB_BusinessPartner.VAB_BusinessPartner_ID, VAB_BusinessPartner.name as BPName,
 //                          VAF_UserContact.VAF_UserContact_ID,       VAF_UserContact.value ,VAF_UserContact.name,
 //                          cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
-//                          cbl.C_Bpartner_Location_ID,CBL.c_location_ID 
-//                          FROM c_bpartner C_BPartner right outer join VAF_UserContact VAF_UserContact on C_BPartner.c_bpartner_id= VAF_UserContact.c_bpartner_id 
-//                          Left Outer JOIn c_bpartner_location CBL on C_BPartner.c_bpartner_id= cbl.c_bpartner_id 
+//                          cbl.VAB_BPart_Location_ID,CBL.c_location_ID 
+//                          FROM VAB_BusinessPartner VAB_BusinessPartner right outer join VAF_UserContact VAF_UserContact on VAB_BusinessPartner.VAB_BusinessPartner_id= VAF_UserContact.VAB_BusinessPartner_id 
+//                          Left Outer JOIn VAB_BPart_Location CBL on VAB_BusinessPartner.VAB_BusinessPartner_id= cbl.VAB_BusinessPartner_id 
 //                          Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
 //                          Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
-//                          Left outer JOIn c_city CCI on CCI.c_city_ID=cl.c_city_ID
+//                          Left outer JOIn VAB_City CCI on CCI.VAB_City_ID=cl.VAB_City_ID
 //                          Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id
 //                          WHERE VAF_UserContact.GMAIL_UID is not null ";
 

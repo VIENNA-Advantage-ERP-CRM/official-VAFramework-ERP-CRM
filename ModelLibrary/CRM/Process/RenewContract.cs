@@ -33,26 +33,26 @@ namespace VAdvantage.Process
 
             String date = string.Format("{0:dd/MM/yy}", today);
             int Record_id = GetRecord_ID();
-            VAdvantage.Model.X_C_Contract con = new VAdvantage.Model.X_C_Contract(GetCtx(), Record_id, null);
+            VAdvantage.Model.X_VAB_Contract con = new VAdvantage.Model.X_VAB_Contract(GetCtx(), Record_id, null);
             if (Record_id != 0)
             {
-                // Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and C_Contract_id=" + Record_id + " and RenewContract = 'N'";
-                //Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and C_Contract_id=" + Record_id;
-                Sql = "select RenewalType from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and isactive = 'Y' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                // Sql = "Select VAB_Contract_id From VAB_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and VAB_Contract_id=" + Record_id + " and RenewContract = 'N'";
+                //Sql = "Select VAB_Contract_id From VAB_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and VAB_Contract_id=" + Record_id;
+                Sql = "select RenewalType from VAB_Contract where VAB_Contract_id=" + Record_id + " and RenewContract = 'N' and isactive = 'Y' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 string renewType = Util.GetValueOfString(DB.ExecuteScalar(Sql));
                 if (renewType == "M")
                 {
-                    Sql = "select C_Contract_id from c_contract where C_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                    Sql = "select VAB_Contract_id from VAB_Contract where VAB_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 }
                 else
                 {
-                    Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and C_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                    Sql = "select VAB_Contract_id from VAB_Contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and VAB_Contract_id=" + Record_id + " and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 }
             }
             else
             {
-                //Sql = "Select C_Contract_id From C_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and RenewContract = 'N'";
-                Sql = "select C_Contract_id from c_contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and RenewalType='A' and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                //Sql = "Select VAB_Contract_id From VAB_Contract where to_char(EndDate,'dd/mm/yy')='" + date + "' and RenewContract = 'N'";
+                Sql = "select VAB_Contract_id from VAB_Contract where (enddate- nvl(cancelbeforedays,0)) <= sysdate and RenewalType='A' and RenewContract = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
             }
 
             IDataReader dr = DB.ExecuteReader(Sql);
@@ -60,7 +60,7 @@ namespace VAdvantage.Process
 
             while (dr.Read())
             {
-                VAdvantage.Model.X_C_Contract contact = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                VAdvantage.Model.X_VAB_Contract contact = new VAdvantage.Model.X_VAB_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), null);
 
                 string type = Util.GetValueOfString(contact.GetRenewalType());
                 if (type == "M")
@@ -74,7 +74,7 @@ namespace VAdvantage.Process
                     {
                         continue;
                     }
-                    VAdvantage.Model.X_C_Contract New = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, null);
+                    VAdvantage.Model.X_VAB_Contract New = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, null);
                     New.SetRefContract(contact.GetDocumentNo());
                     New.SetC_Order_ID(contact.GetC_Order_ID());
                     New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
@@ -84,20 +84,20 @@ namespace VAdvantage.Process
                     DateTime End = Start.AddDays(duration);
                     New.SetStartDate(Start.AddDays(1));
                     //  New.SetEndDate(End.AddDays(1));
-                    New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
+                    New.SetVAB_BusinessPartner_ID(contact.GetVAB_BusinessPartner_ID());
                     New.SetBill_Location_ID(contact.GetBill_Location_ID());
                     New.SetBill_User_ID(contact.GetBill_User_ID());
                     New.SetSalesRep_ID(contact.GetSalesRep_ID());
-                    New.SetC_Currency_ID(contact.GetC_Currency_ID());
-                    New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
+                    New.SetVAB_Currency_ID(contact.GetVAB_Currency_ID());
+                    New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
                     New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
 
-                    New.SetC_Frequency_ID(contact.GetC_Frequency_ID());
+                    New.SetVAB_Frequency_ID(contact.GetVAB_Frequency_ID());
                     // invoice Count Start
                     //DateTime SDate = Start;
                     //DateTime Edate = End;
-                    int frequency = Util.GetValueOfInt(contact.GetC_Frequency_ID());
-                    string PSql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+                    int frequency = Util.GetValueOfInt(contact.GetVAB_Frequency_ID());
+                    string PSql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                     int months = Util.GetValueOfInt(DB.ExecuteScalar(PSql, null, null));
                     int dur = months * cycles;
                     DateTime endDate = Start.AddMonths(dur);
@@ -144,8 +144,8 @@ namespace VAdvantage.Process
                     New.SetQtyEntered(contact.GetQtyEntered());
                     // New.SetDiscount(contact.GetDiscount());
                     New.SetC_Tax_ID(contact.GetC_Tax_ID());
-                    New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
-                    New.SetRef_Contract_ID(contact.GetC_Contract_ID());
+                    New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
+                    New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
                     New.SetC_Project_ID(contact.GetC_Project_ID());
                     New.SetDescription(contact.GetDescription());
                     //  New.SetLineNetAmt(contact.GetLineNetAmt());
@@ -181,7 +181,7 @@ namespace VAdvantage.Process
                         ++COUNT;
                         if (Record_id != 0)
                         {
-                            contact.SetRef_Contract_ID(New.GetC_Contract_ID());
+                            contact.SetRef_Contract_ID(New.GetVAB_Contract_ID());
                             contact.SetRenewContract("Y");
                             if (contact.Save())
                             {
@@ -200,7 +200,7 @@ namespace VAdvantage.Process
                     {
                         continue;
                     }
-                    VAdvantage.Model.X_C_Contract New = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, null);
+                    VAdvantage.Model.X_VAB_Contract New = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, null);
                     New.SetRefContract(contact.GetDocumentNo());
                     New.SetC_Order_ID(contact.GetC_Order_ID());
                     New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
@@ -210,8 +210,8 @@ namespace VAdvantage.Process
                     DateTime End = Start.AddDays(duration);
                     New.SetStartDate(Start.AddDays(1));
 
-                    int frequency = Util.GetValueOfInt(contact.GetC_Frequency_ID());
-                    string PSql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+                    int frequency = Util.GetValueOfInt(contact.GetVAB_Frequency_ID());
+                    string PSql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                     int months = Util.GetValueOfInt(DB.ExecuteScalar(PSql, null, null));
                     int total = months * cycles;
 
@@ -221,21 +221,21 @@ namespace VAdvantage.Process
 
 
                     New.SetEndDate(endDate);
-                    New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
+                    New.SetVAB_BusinessPartner_ID(contact.GetVAB_BusinessPartner_ID());
                     New.SetBill_Location_ID(contact.GetBill_Location_ID());
                     New.SetBill_User_ID(contact.GetBill_User_ID());
                     New.SetSalesRep_ID(contact.GetSalesRep_ID());
-                    New.SetC_Currency_ID(contact.GetC_Currency_ID());
-                    New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
+                    New.SetVAB_Currency_ID(contact.GetVAB_Currency_ID());
+                    New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
                     New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
 
-                    New.SetC_Frequency_ID(contact.GetC_Frequency_ID());
+                    New.SetVAB_Frequency_ID(contact.GetVAB_Frequency_ID());
                     // invoice Count Start
 
                     DateTime SDate = Start;
                     DateTime Edate = End;
-                    //int frequency = Util.GetValueOfInt(contact.GetC_Frequency_ID());
-                    //string PSql = "Select NoOfDays from C_Frequency where C_Frequency_ID=" + frequency;
+                    //int frequency = Util.GetValueOfInt(contact.GetVAB_Frequency_ID());
+                    //string PSql = "Select NoOfDays from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                     //int days = Util.GetValueOfInt(DB.ExecuteScalar(PSql, null, null));
                     //int totaldays = (Edate - SDate).Days;
                     //int count = totaldays / days;
@@ -284,8 +284,8 @@ namespace VAdvantage.Process
                     New.SetQtyEntered(contact.GetQtyEntered());
                     New.SetDiscount(contact.GetDiscount());
                     New.SetC_Tax_ID(contact.GetC_Tax_ID());
-                    New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
-                    New.SetRef_Contract_ID(contact.GetC_Contract_ID());
+                    New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
+                    New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
                     New.SetC_Project_ID(contact.GetC_Project_ID());
                     New.SetDescription(contact.GetDescription());
                     New.SetLineNetAmt(contact.GetLineNetAmt());
@@ -312,20 +312,20 @@ namespace VAdvantage.Process
                         ++COUNT;
                         //if (Record_id != 0)
                         //{
-                        contact.SetRef_Contract_ID(New.GetC_Contract_ID());
+                        contact.SetRef_Contract_ID(New.GetVAB_Contract_ID());
                         contact.SetRenewContract("Y");
                         if (contact.Save())
                         {
                         }
                         //}
-                        EnterSchedules(New.GetC_Contract_ID(), cycles);
+                        EnterSchedules(New.GetVAB_Contract_ID(), cycles);
                         New.SetProcessed(true);
                         New.Save();
                     }
                 }
             }
             dr.Close();
-            // X_C_Contract contract = new X_C_Contract(GetCtx(),id, null);
+            // X_VAB_Contract contract = new X_VAB_Contract(GetCtx(),id, null);
             if (COUNT != 0 && Record_id != 0)
             {
                 return Msg.GetMsg(GetCtx(), "ContractReNewed :" + newcon);
@@ -337,15 +337,15 @@ namespace VAdvantage.Process
             return Msg.GetMsg(GetCtx(), "NoContractReNewed");
         }
 
-        private void EnterSchedules(int C_Contract_ID, int cycles)
+        private void EnterSchedules(int VAB_Contract_ID, int cycles)
         {
-            VAdvantage.Model.X_C_Contract contract = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, null);
+            VAdvantage.Model.X_VAB_Contract contract = new VAdvantage.Model.X_VAB_Contract(GetCtx(), VAB_Contract_ID, null);
             //DateTime start = (DateTime)contract.GetStartDate();
             DateTime start = (DateTime)contract.GetStartDate();
             //DateTime end = (DateTime)contract.GetEndDate();
-            int frequency = contract.GetC_Frequency_ID();
+            int frequency = contract.GetVAB_Frequency_ID();
 
-            string Sql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+            string Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
             int months = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
             int totalcount = months * cycles;
             DateTime end = start.AddMonths(totalcount);
@@ -359,9 +359,9 @@ namespace VAdvantage.Process
                 for (int i = 1; i <= cycles; i++)
                 {
 
-                    VAdvantage.Model.X_C_ContractSchedule CSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), 0, null);
-                    CSchedule.SetC_Contract_ID(C_Contract_ID);
-                    CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());
+                    VAdvantage.Model.X_VAB_ContractSchedule CSchedule = new VAdvantage.Model.X_VAB_ContractSchedule(GetCtx(), 0, null);
+                    CSchedule.SetVAB_Contract_ID(VAB_Contract_ID);
+                    CSchedule.SetVAB_BusinessPartner_ID(contract.GetVAB_BusinessPartner_ID());
 
                     CSchedule.SetFROMDATE(start);
 

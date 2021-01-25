@@ -9,14 +9,14 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeSetInstance: X_C_GenAttributeSetInstance
+    public class MGenAttributeSetInstance: X_VAB_GenFeatureSetInstance
     {
 
         private MGenAttributeSet _mas = null;
         /**	Date Format					*/
         private SimpleDateFormat _dateFormat = DisplayType.GetDateFormat(DisplayType.Date);
-        public MGenAttributeSetInstance(Ctx ctx, int C_GenAttributeSetInstance_ID, Trx trxName)
-            : base(ctx, C_GenAttributeSetInstance_ID, trxName)
+        public MGenAttributeSetInstance(Ctx ctx, int VAB_GenFeatureSetInstance_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureSetInstance_ID, trxName)
         {
 
 
@@ -39,8 +39,8 @@ namespace VAdvantage.Model
          */
         public MGenAttributeSet GetMGenAttributeSet()
         {
-            if (_mas == null && GetC_GenAttributeSet_ID() != 0)
-                _mas = new MGenAttributeSet(GetCtx(), GetC_GenAttributeSet_ID(), Get_TrxName());
+            if (_mas == null && GetVAB_GenFeatureSet_ID() != 0)
+                _mas = new MGenAttributeSet(GetCtx(), GetVAB_GenFeatureSet_ID(), Get_TrxName());
             return _mas;
         }
         public void SetDescription()
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
             MGenAttribute[] attributes = _mas.GetCGenAttributes(true);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MGenAttributeInstance mai = attributes[i].GetCGenAttributeInstance(GetC_GenAttributeSetInstance_ID());
+                MGenAttributeInstance mai = attributes[i].GetCGenAttributeInstance(GetVAB_GenFeatureSetInstance_ID());
                 if (mai != null && mai.GetValue() != null)
                 {
                     if (sb.Length > 0)
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
             attributes = _mas.GetCGenAttributes(false);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MGenAttributeInstance mai = attributes[i].GetCGenAttributeInstance(GetC_GenAttributeSetInstance_ID());
+                MGenAttributeInstance mai = attributes[i].GetCGenAttributeInstance(GetVAB_GenFeatureSetInstance_ID());
 
                 if (attributes[i].GetAttributeValueType().Equals("N"))
                 {
@@ -122,8 +122,8 @@ namespace VAdvantage.Model
        */
         public MGenAttributeSet GetCGenAttributeSet()
         {
-            if (_mas == null && GetC_GenAttributeSet_ID() != 0)
-                _mas = new MGenAttributeSet(GetCtx(), GetC_GenAttributeSet_ID(), Get_TrxName());
+            if (_mas == null && GetVAB_GenFeatureSet_ID() != 0)
+                _mas = new MGenAttributeSet(GetCtx(), GetVAB_GenFeatureSet_ID(), Get_TrxName());
             return _mas;
         }
     }

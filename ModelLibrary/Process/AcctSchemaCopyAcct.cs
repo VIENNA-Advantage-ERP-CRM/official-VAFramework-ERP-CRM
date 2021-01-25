@@ -41,7 +41,7 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_AcctSchema_ID"))
+                else if (name.Equals("VAB_AccountBook_ID"))
                 {
                     _SourceAcctSchema_ID = para[i].GetParameterAsInt();
                 }
@@ -74,12 +74,12 @@ namespace VAdvantage.Process
             MAcctSchema source = MAcctSchema.Get(GetCtx(), _SourceAcctSchema_ID, null);
             if (source.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ Source @C_AcctSchema_ID@=" + _SourceAcctSchema_ID);
+                throw new Exception("@NotFound@ Source @VAB_AccountBook_ID@=" + _SourceAcctSchema_ID);
             }
             MAcctSchema target = new MAcctSchema(GetCtx(), _TargetAcctSchema_ID, Get_Trx());
             if (target.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ Target @C_AcctSchema_ID@=" + _TargetAcctSchema_ID);
+                throw new Exception("@NotFound@ Target @VAB_AccountBook_ID@=" + _TargetAcctSchema_ID);
             }
             //
 
@@ -87,23 +87,23 @@ namespace VAdvantage.Process
             MAcctSchemaElement[] targetElements = target.GetAcctSchemaElements();
             if (targetElements.Length == 0)
             {
-                throw new Exception("@NotFound@ Target C_AcctSchema_Element");
+                throw new Exception("@NotFound@ Target VAB_AccountBook_Element");
             }
             //	Accounting Element must be the same
             MAcctSchemaElement sourceAcctElement = source.GetAcctSchemaElement(MAcctSchemaElement.ELEMENTTYPE_Account);
             if (sourceAcctElement == null)
             {
-                throw new Exception("NotFound Source AC C_AcctSchema_Element");
+                throw new Exception("NotFound Source AC VAB_AccountBook_Element");
             }
             MAcctSchemaElement targetAcctElement = target.GetAcctSchemaElement(MAcctSchemaElement.ELEMENTTYPE_Account);
 
             if (targetAcctElement == null)
             {
-                throw new Exception("NotFound Target AC C_AcctSchema_Element");
+                throw new Exception("NotFound Target AC VAB_AccountBook_Element");
             }
-            if (sourceAcctElement.GetC_Element_ID() != targetAcctElement.GetC_Element_ID())
+            if (sourceAcctElement.GetVAB_Element_ID() != targetAcctElement.GetVAB_Element_ID())
             {
-                throw new Exception("@C_Element_ID@ different");
+                throw new Exception("@VAB_Element_ID@ different");
             }
             if (MAcctSchemaGL.Get(GetCtx(), _TargetAcctSchema_ID) == null)
             {
@@ -124,7 +124,7 @@ namespace VAdvantage.Process
         {
             MAcctSchemaGL source = MAcctSchemaGL.Get(GetCtx(), _SourceAcctSchema_ID);
             MAcctSchemaGL target = new MAcctSchemaGL(GetCtx(), 0, Get_Trx());
-            target.SetC_AcctSchema_ID(_TargetAcctSchema_ID);
+            target.SetVAB_AccountBook_ID(_TargetAcctSchema_ID);
             //ArrayList<KeyNamePair> list = source.getAcctInfo();
             List<KeyNamePair> list = source.GetAcctInfo();
             for (int i = 0; i < list.Count; i++)
@@ -151,8 +151,8 @@ namespace VAdvantage.Process
         {
             MAcctSchemaDefault source = MAcctSchemaDefault.Get(GetCtx(), _SourceAcctSchema_ID);
             MAcctSchemaDefault target = new MAcctSchemaDefault(GetCtx(), 0, Get_Trx());
-            target.SetC_AcctSchema_ID(_TargetAcctSchema_ID);
-            target.SetC_AcctSchema_ID(_TargetAcctSchema_ID);
+            target.SetVAB_AccountBook_ID(_TargetAcctSchema_ID);
+            target.SetVAB_AccountBook_ID(_TargetAcctSchema_ID);
             //ArrayList<KeyNamePair> list = source.getAcctInfo();
             List<KeyNamePair> list = source.GetAcctInfo();
             for (int i = 0; i < list.Count; i++)
@@ -181,20 +181,20 @@ namespace VAdvantage.Process
         private MAccount CreateAccount(MAcctSchema targetAS, MAccount sourceAcct)
         {
             int VAF_Client_ID = targetAS.GetVAF_Client_ID();
-            int C_AcctSchema_ID = targetAS.GetC_AcctSchema_ID();
+            int VAB_AccountBook_ID = targetAS.GetVAB_AccountBook_ID();
             //
             int VAF_Org_ID = 0;
             int Account_ID = 0;
             int C_SubAcct_ID = 0;
             int M_Product_ID = 0;
-            int C_BPartner_ID = 0;
+            int VAB_BusinessPartner_ID = 0;
             int VAF_OrgTrx_ID = 0;
             int C_LocFrom_ID = 0;
             int C_LocTo_ID = 0;
             int C_SalesRegion_ID = 0;
             int C_Project_ID = 0;
-            int C_Campaign_ID = 0;
-            int C_Activity_ID = 0;
+            int VAB_Promotion_ID = 0;
+            int VAB_BillingCode_ID = 0;
             int User1_ID = 0;
             int User2_ID = 0;
             int UserElement1_ID = 0;
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
                 {
-                    C_BPartner_ID = sourceAcct.GetC_BPartner_ID();
+                    VAB_BusinessPartner_ID = sourceAcct.GetVAB_BusinessPartner_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Product))
                 {
@@ -229,7 +229,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Activity))
                 {
-                    C_Activity_ID = sourceAcct.GetC_Activity_ID();
+                    VAB_BillingCode_ID = sourceAcct.GetVAB_BillingCode_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_LocationFrom))
                 {
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
                 {
-                    C_Campaign_ID = sourceAcct.GetC_Campaign_ID();
+                    VAB_Promotion_ID = sourceAcct.GetVAB_Promotion_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
                 {
@@ -275,10 +275,10 @@ namespace VAdvantage.Process
             }
             //
             return MAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
-                C_AcctSchema_ID, Account_ID, C_SubAcct_ID,
-                M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID,
+                VAB_AccountBook_ID, Account_ID, C_SubAcct_ID,
+                M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
                 C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
-                C_Project_ID, C_Campaign_ID, C_Activity_ID,
+                C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
         }	//	createAccount
 

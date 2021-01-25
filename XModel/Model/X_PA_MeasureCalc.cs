@@ -140,7 +140,7 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set B.Partner Column.
-@param BPartnerColumn Fully qualified Business Partner key column (C_BPartner_ID) */
+@param BPartnerColumn Fully qualified Business Partner key column (VAB_BusinessPartner_ID) */
 public void SetBPartnerColumn (String BPartnerColumn)
 {
 if (BPartnerColumn != null && BPartnerColumn.Length > 60)
@@ -151,7 +151,7 @@ BPartnerColumn = BPartnerColumn.Substring(0,60);
 Set_Value ("BPartnerColumn", BPartnerColumn);
 }
 /** Get B.Partner Column.
-@return Fully qualified Business Partner key column (C_BPartner_ID) */
+@return Fully qualified Business Partner key column (VAB_BusinessPartner_ID) */
 public String GetBPartnerColumn() 
 {
 return (String)Get_Value("BPartnerColumn");

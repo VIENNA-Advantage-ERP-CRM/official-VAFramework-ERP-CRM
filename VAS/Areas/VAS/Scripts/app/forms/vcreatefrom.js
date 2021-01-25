@@ -131,7 +131,7 @@
                     $self.dGrid.destroy();
                     $self.dGrid = null;
                 }
-                //var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                //var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                 var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
@@ -157,22 +157,22 @@
                     $self.setBusy(false);
                 }
             }
-            else if (evt.propertyName == "C_BPartner_ID") {
+            else if (evt.propertyName == "VAB_BusinessPartner_ID") {
                 $self.setBusy(true);
                 $self.multiValues = [];
                 if ($self.dGrid != null) {
                     $self.dGrid.destroy();
                     $self.dGrid = null;
                 }
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                 var trxDate = $self.Date.getValue();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             }
             // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
             else if (evt.propertyName == "M_Locator_ID") {
@@ -217,9 +217,9 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                    var C_BankAccount_ID = null;
+                    var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
-                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                        VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                     }
                     var M_Product_ID = null, deliveryDate = null;
                     if ($self.vProduct != null) {
@@ -244,16 +244,16 @@
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
                     }
-                    else if (C_BankAccount_ID != null) {
+                    else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
-                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                         var DepositSlip = $self.DepositSlip.getValue();
                         var DocumentNo = $self.DocumentNo.getValue();
                         var AuthCode = $self.AuthCode.getValue();
                         var CheckNo = $self.CheckNo.getValue();
                         var Amount = $self.Amount.getValue();
-                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
-                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -265,9 +265,9 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                    var C_BankAccount_ID = null;
+                    var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
-                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                        VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                     }
                     var M_Product_ID = null, deliveryDate = null;
                     if ($self.vProduct != null) {
@@ -292,16 +292,16 @@
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
-                    else if (C_BankAccount_ID != null) {
+                    else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
-                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                         var DepositSlip = $self.DepositSlip.getValue();
                         var DocumentNo = $self.DocumentNo.getValue();
                         var AuthCode = $self.AuthCode.getValue();
                         var CheckNo = $self.CheckNo.getValue();
                         var Amount = $self.Amount.getValue();
-                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
-                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) - 1);
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) - 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -313,9 +313,9 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                    var C_BankAccount_ID = null;
+                    var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
-                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                        VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                     }
                     var M_Product_ID = null, deliveryDate = null;
                     if ($self.vProduct != null) {
@@ -340,16 +340,16 @@
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
-                    else if (C_BankAccount_ID != null) {
+                    else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
-                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                         var DepositSlip = $self.DepositSlip.getValue();
                         var DocumentNo = $self.DocumentNo.getValue();
                         var AuthCode = $self.AuthCode.getValue();
                         var CheckNo = $self.CheckNo.getValue();
                         var Amount = $self.Amount.getValue();
-                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
-                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.val()) + 1);
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.val()) + 1);
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     //$self.setBusy(false);
                 }
@@ -361,9 +361,9 @@
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                     var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                    var C_BankAccount_ID = null;
+                    var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
-                        C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                        VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                     }
                     var M_Product_ID = null, deliveryDate = null;
                     if ($self.vProduct != null) {
@@ -388,16 +388,16 @@
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
-                    else if (C_BankAccount_ID != null) {
+                    else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
-                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                         var DepositSlip = $self.DepositSlip.getValue();
                         var DocumentNo = $self.DocumentNo.getValue();
                         var AuthCode = $self.AuthCode.getValue();
                         var CheckNo = $self.CheckNo.getValue();
                         var Amount = $self.Amount.getValue();
-                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
-                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, parseInt($self.cmbPage.find("Option:last").val()));
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     //$self.setBusy(false);
                 }
@@ -408,9 +408,9 @@
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
                 var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
-                var C_BankAccount_ID = null;
+                var VAB_Bank_Acct_ID = null;
                 if ($self.cmbBankAccount != null) {
-                    C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                 }
                 var M_Product_ID = null, deliveryDate = null;
                 if ($self.vProduct != null) {
@@ -435,16 +435,16 @@
                 else if (M_InOut_ID != null) {
                     VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
                 }
-                else if (C_BankAccount_ID != null) {
+                else if (VAB_Bank_Acct_ID != null) {
                     var trxDate = $self.Date.getValue();
-                    var C_BPartner_ID = $self.vBPartner.getValue();
+                    var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                     var DepositSlip = $self.DepositSlip.getValue();
                     var DocumentNo = $self.DocumentNo.getValue();
                     var AuthCode = $self.AuthCode.getValue();
                     var CheckNo = $self.CheckNo.getValue();
                     var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
+                    VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
+                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, $self.cmbPage.val());
                 }
                 //$self.setBusy(false);
             });
@@ -588,7 +588,7 @@
         var VAF_TableView_ID = VIS.Env.getCtx().getContextAsInt(mTab.getWindowNo(), "BaseTable_ID");
 
         var retValue = null;// VCreateFrom form object
-        if (VAF_TableView_ID == 392)             //  C_BankStatement
+        if (VAF_TableView_ID == 392)             //  VAB_BankingJRNL
         {
             retValue = new VIS.VCreateFromStatement(mTab);
         }
@@ -611,23 +611,23 @@
         return retValue;
     }
 
-    VCreateFrom.prototype.initBPDetails = function (C_BPartner_ID) {
-        return C_BPartner_ID;
+    VCreateFrom.prototype.initBPDetails = function (VAB_BusinessPartner_ID) {
+        return VAB_BusinessPartner_ID;
     };
 
     VCreateFrom.prototype.initBPartner = function (forInvoice) {
         //  load BPartner
-        var VAF_Column_ID = 3499;        //  C_Invoice.C_BPartner_ID
+        var VAF_Column_ID = 3499;        //  C_Invoice.VAB_BusinessPartner_ID
         var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, VAF_Column_ID, VIS.DisplayType.Search);
 
-        this.vBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
-        var C_BPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_BPartner_ID");
-        this.vBPartner.setValue(C_BPartner_ID);
+        this.vBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
+        var VAB_BusinessPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_BusinessPartner_ID");
+        this.vBPartner.setValue(VAB_BusinessPartner_ID);
         //  initial loading
-        return this.initBPartnerOIS(C_BPartner_ID, forInvoice);
+        return this.initBPartnerOIS(VAB_BusinessPartner_ID, forInvoice);
     }
 
-    VCreateFrom.prototype.initBPartnerOIS = function (C_BPartner_ID, forInvoice) {
+    VCreateFrom.prototype.initBPartnerOIS = function (VAB_BusinessPartner_ID, forInvoice) {
         var orcmb = this.cmbOrder;
         //$(orcmb).empty()
         $(orcmb).html("");
@@ -636,7 +636,7 @@
 
         // Handled the case of Return, show only Return orders
         if (forInvoice) {
-            var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_DocTypeTarget_ID").toString());
+            var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_DocTypesTarget_ID").toString());
             isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
         }
         else {
@@ -645,7 +645,7 @@
         //var orders =
         // JID_0350: "When user create MR with refrence to order OR by invoice by using "Create Line From" charge should not shows on grid.
 
-        this.getOrders(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx, forInvoice);
+        this.getOrders(VIS.Env.getCtx(), VAB_BusinessPartner_ID, isReturnTrx, forInvoice);
 
         //for (var i = 0; i < orders.length; i++) {
         //    if (i == 0) {
@@ -655,10 +655,10 @@
         //};
 
         //this.cmbOrder.getControl().prop('selectedIndex', 0);
-        return this.initBPDetails(C_BPartner_ID);
+        return this.initBPDetails(VAB_BusinessPartner_ID);
     }
     // Get Orders
-    VCreateFrom.prototype.getOrders = function (ctx, C_BPartner_ID, isReturnTrx, forInvoice) {
+    VCreateFrom.prototype.getOrders = function (ctx, VAB_BusinessPartner_ID, isReturnTrx, forInvoice) {
 
         var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getVAF_Language(ctx))).concat("||' - '||").concat(
             VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
@@ -683,7 +683,7 @@
             data: {
                 displays: display,
                 columns: column,
-                C_BPartner_IDs: C_BPartner_ID,
+                VAB_BusinessPartner_IDs: VAB_BusinessPartner_ID,
                 isReturnTrxs: isReturnTrx,
                 OrgIds: OrgId,
                 IsDrop: _isdrop,
@@ -1671,17 +1671,17 @@
             this.btnRefresh.on("click", function () {
                 if ($self.cmbBankAccount != null) {
                     $self.setBusy(true);
-                    var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                    if (C_BankAccount_ID) {
+                    var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                    if (VAB_Bank_Acct_ID) {
                         var trxDate = $self.Date.getValue();
-                        var C_BPartner_ID = $self.vBPartner.getValue();
+                        var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                         var DepositSlip = $self.DepositSlip.getValue();
                         var DocumentNo = $self.DocumentNo.getValue();
                         var AuthCode = $self.AuthCode.getValue();
                         var CheckNo = $self.CheckNo.getValue();
                         var Amount = $self.Amount.getValue();
-                        VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
-                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, $self.cmbPage.val());
+                        VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, $self.cmbPage.val());
+                        //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, $self.cmbPage.val());
                     }
                     //$self.setBusy(false);
                 }
@@ -1732,23 +1732,23 @@
             this.cmbBankAccount.getControl().change(function () {
                 $self.editedItems = [];
                 $self.setBusy(true);
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                if (C_BankAccount_ID) {
-                    VIS.VCreateFromStatement.prototype.initBPartner(C_BankAccount_ID);
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                if (VAB_Bank_Acct_ID) {
+                    VIS.VCreateFromStatement.prototype.initBPartner(VAB_Bank_Acct_ID);
                     $self.Date.setValue("");
                     $self.DepositSlip.setValue("");
                     $self.DocumentNo.setValue("");
                     $self.AuthCode.setValue("");
-                    var C_BPartner_ID = $self.vBPartner.getValue();
+                    var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                     var trxDate = $self.Date.getValue();
                     var DepositSlip = $self.DepositSlip.getValue();
                     var DocumentNo = $self.DocumentNo.getValue();
                     var AuthCode = $self.AuthCode.getValue();
                     var CheckNo = $self.CheckNo.getValue();
                     var Amount = $self.Amount.getValue();
-                    VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                    VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
 
-                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, 1);
+                    //VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, 1);
                 }
                 //$self.setBusy(false);
             });
@@ -1764,14 +1764,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -1785,14 +1785,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -1806,14 +1806,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -1827,14 +1827,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -1849,14 +1849,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -1871,14 +1871,14 @@
                     $self.dGrid = null;
                 }
                 var trxDate = $self.Date.getValue();
-                var C_BankAccount_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
-                var C_BPartner_ID = $self.vBPartner.getValue();
+                var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
+                var VAB_BusinessPartner_ID = $self.vBPartner.getValue();
                 var DepositSlip = $self.DepositSlip.getValue();
                 var DocumentNo = $self.DocumentNo.getValue();
                 var AuthCode = $self.AuthCode.getValue();
                 var CheckNo = $self.CheckNo.getValue();
                 var Amount = $self.Amount.getValue();
-                VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
+                VIS.VCreateFromStatement.prototype.loadBankAccounts(VAB_Bank_Acct_ID, VAB_BusinessPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             });
         }
 
@@ -2203,7 +2203,7 @@
     //           + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
     //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
@@ -2243,7 +2243,7 @@
     //            + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
     //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-    //        //sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+    //        //sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
     //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
@@ -2282,7 +2282,7 @@
     //           + " LEFT OUTER JOIN C_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
 
     //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-    //        sql = sql.concat(" IS NOT NULL").concat(" LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+    //        sql = sql.concat(" IS NOT NULL").concat(" LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
@@ -2292,7 +2292,7 @@
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
-    //        sql = sql.concat(" WHERE l.C_Order_ID=" + C_Order_ID + " AND C.C_Charge_ID >0 ");
+    //        sql = sql.concat(" WHERE l.C_Order_ID=" + C_Order_ID + " AND C.VAB_Charge_ID >0 ");
     //        if (DeliveryDate != null) {
     //            var date = VIS.DB.to_date(DeliveryDate, true);
     //            sql = sql.concat(" AND l.DatePromised <= " + date);
@@ -2585,7 +2585,7 @@
     //           + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
     //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
@@ -2617,7 +2617,7 @@
     //            + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
     //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+    //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
@@ -3040,8 +3040,8 @@
             //var VAF_Column_ID = 0;
             //var productWindow = VAF_Column_ID == 8418;		//	HARDCODED
             //var M_Locator_ID = VIS.context.getContextAsInt($self.windowNo, "M_Locator_ID");
-            //var C_BPartner_ID = VIS.context.getContextAsInt($self.windowNo, "C_BPartner_ID");
-            //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, C_BPartner_ID, productWindow, VAF_Column_ID, $self.windowNo);
+            //var VAB_BusinessPartner_ID = VIS.context.getContextAsInt($self.windowNo, "VAB_BusinessPartner_ID");
+            //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, VAB_BusinessPartner_ID, productWindow, VAF_Column_ID, $self.windowNo);
             //if (obj.hasAttribute) {
             //    obj.showDialog();
             //}

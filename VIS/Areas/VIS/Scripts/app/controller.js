@@ -939,22 +939,22 @@
             var isOrder = tableName.startsWith("C_Order");
             //
             //var sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
-            //		+ "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
+            //		+ "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.VAB_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) AS ConvAmt ");
             //if (isOrder) {
             //    Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
             //    sql.append("FROM C_Order o"
-            //			+ " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+            //			+ " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
             //			+ " INNER JOIN C_OrderLine l ON (o.C_Order_ID=l.C_Order_ID) "
             //			+ "WHERE o.C_Order_ID=" + Record_ID + "");
             //}
             //else {
             //    Record_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
             //    sql.append("FROM C_Invoice o"
-            //			+ " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+            //			+ " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
             //			+ " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
             //			+ "WHERE o.C_Invoice_ID=" + Record_ID + "");
             //}
-            //sql.append("GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.C_CONVERSIONTYPE_ID");
+            //sql.append("GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.VAB_CurrencyType_ID");
 
             //log.fine(tableName + " - " + Record_ID);
             var mf = null;
@@ -1455,8 +1455,8 @@
         var refColName = null;
         if (colName.equals("R_RequestRelated_ID"))
             refColName = "R_Request_ID";
-        else if (colName.startsWith("C_DocType"))
-            refColName = "C_DocType_ID";
+        else if (colName.startsWith("VAB_DocTypes"))
+            refColName = "VAB_DocTypes_ID";
         else if (colName.equals("CreatedBy") || colName.equals("UpdatedBy"))
             refColName = "VAF_UserContact_ID";
         else if (colName.equals("Orig_Order_ID"))
@@ -1479,7 +1479,7 @@
             return query.getWhereClause();
         }
 
-        //	Find Refernce Column e.g. BillTo_ID -> C_BPartner_Location_ID
+        //	Find Refernce Column e.g. BillTo_ID -> VAB_BPart_Location_ID
         //var sql = "SELECT cc.ColumnName "
         //	+ "FROM VAF_Column c"
         //	+ " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
@@ -2128,10 +2128,10 @@
                 if (mLookup.getValidation().indexOf("@" + columnName + "@") != -1) {
 
 
-                    // If C_BPartner_ID and C_BPartner_LOcation_ID is used  in same window, 
-                    //then on change C_BPartner_ID system clears value of C_BPartner_LOcation_ID, bcoz C_BPartner_LOcation_ID is depednet on C_BPartner_ID.
+                    // If VAB_BusinessPartner_ID and VAB_BPart_Location_ID is used  in same window, 
+                    //then on change VAB_BusinessPartner_ID system clears value of VAB_BPart_Location_ID, bcoz VAB_BPart_Location_ID is depednet on VAB_BusinessPartner_ID.
                     // then in this case we will not refresh lookup of Location.
-                    if (columnName == "C_BPartner_ID" && (dependentField.getColumnName() == "C_BPartner_Location_ID")) {
+                    if (columnName == "VAB_BusinessPartner_ID" && (dependentField.getColumnName() == "VAB_BPart_Location_ID")) {
                         continue;
                     }
                     else {
@@ -2287,11 +2287,11 @@
     }
 
     /// <summary>
-    ///Get CM_SubScribedID for this record.
+    ///Get VACM_SubscribedID for this record.
     /// </summary>
     /// <returns>return ID or 0, if not found</returns>
     /// <author>Karan</author>
-    GridTab.prototype.getCM_SubScribedID = function () {
+    GridTab.prototype.getVACM_SubscribedID = function () {
         if (this._subscribe == null || this._subscribe.length == 0)
             this.loadSubscribe();//call subscribe function
         if (this._subscribe == null)
@@ -2441,7 +2441,7 @@
         if (!this.canHaveAttachment())
             return;//return nothing
         //set query
-        //var sql = "SELECT CM_Subscribe_ID, Record_ID FROM CM_Subscribe WHERE VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND VAF_TableView_ID=" + this.getVAF_TableView_ID();
+        //var sql = "SELECT VACM_Subscribe_ID, Record_ID FROM VACM_Subscribe WHERE VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND VAF_TableView_ID=" + this.getVAF_TableView_ID();
         var sql = "VIS_109";
         var param = [];
         param[0] = new VIS.DB.SqlParam("@VAF_UserContact_ID", VIS.context.getVAF_UserContact_ID());
@@ -2483,7 +2483,7 @@
             //while (dr.Read())
             //{
             //    key = Util.GetValueOfInt(dr["Record_ID"].ToString());
-            //    value = Util.GetValueOfInt(dr["CM_Subscribe_ID"].ToString());
+            //    value = Util.GetValueOfInt(dr["VACM_Subscribe_ID"].ToString());
             //    _subscribe[key] = value;
             //}
             //dr.Close();
@@ -2562,7 +2562,7 @@
         if (!this.canHaveAttachment())
             return;//return nothing
         //set query
-        //var sql = "SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID();
+        //var sql = "SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID();
         var sql = "VIS_111";
         var param = [];
         param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", this.getVAF_TableView_ID());
@@ -2809,9 +2809,9 @@
         //    }
         //    if (windowVo.IsChat) {
         //        ServerValues.IsChat = true;
-        //        tableIndex.CM_Chat = sb.length;
+        //        tableIndex.VACM_Chat = sb.length;
         //        sb.push("");
-        //        //sb.push("SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
+        //        //sb.push("SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat WHERE VAF_TableView_ID=" + this.getVAF_TableView_ID());
         //    }
         //    if (VIS.MRole.getIsPersonalLock()) {
         //        ServerValues.IsPLock = true;
@@ -2821,9 +2821,9 @@
         //    }
         //    if (windowVo.IsSubscribeRecord) {
         //        ServerValues.IsSubscribeRecord = true;
-        //        tableIndex.Cm_Subscribe = sb.length;
+        //        tableIndex.VACM_Subscribe = sb.length;
         //        sb.push("");
-        //        //sb.push("Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND vaf_tableview_ID=" + this.getVAF_TableView_ID());
+        //        //sb.push("Select VACM_Subscribe_ID,Record_ID from VACM_Subscribe where VAF_UserContact_ID=" + VIS.context.getVAF_UserContact_ID() + " AND vaf_tableview_ID=" + this.getVAF_TableView_ID());
         //    }
         //    if (windowVo.IsViewDocument && window.VADMS) {
         //        ServerValues.IsViewDocument = true;
@@ -2886,7 +2886,7 @@
         //        if (windowVo.IsChat) {
 
 
-        //            var _dtChat = ds.getTables()[tableIndex.CM_Chat];
+        //            var _dtChat = ds.getTables()[tableIndex.VACM_Chat];
         //            //Chat
         //            if (this.chats == null)
         //                //create new list for chat
@@ -2897,7 +2897,7 @@
         //            //execute query
         //            for (var i = 0; i < _dtChat.getRows().length; i++) {
         //                key = VIS.Utility.Util.getValueOfInt(_dtChat.getRows()[i].getCell("Record_ID"));
-        //                value = VIS.Utility.Util.getValueOfInt(_dtChat.getRows()[i].getCell("CM_Chat_ID"));
+        //                value = VIS.Utility.Util.getValueOfInt(_dtChat.getRows()[i].getCell("VACM_Chat_ID"));
         //                this.chats.push({ ID: key, value: value });
         //            }
         //        }
@@ -2920,7 +2920,7 @@
         //        }
         //        if (windowVo.IsSubscribeRecord) {
 
-        //            var _dtSubscribe = ds.getTables()[tableIndex.Cm_Subscribe];
+        //            var _dtSubscribe = ds.getTables()[tableIndex.VACM_Subscribe];
         //            //Subscricbe
         //            if (this._subscribe == null)
         //                this._subscribe = [];
@@ -2929,7 +2929,7 @@
 
         //            for (var i = 0; i < _dtSubscribe.getRows().length; i++) {
         //                key = VIS.Utility.Util.getValueOfInt(_dtSubscribe.getRows()[i].getCell("Record_ID"));
-        //                value = VIS.Utility.Util.getValueOfInt(_dtSubscribe.getRows()[i].getCell("CM_Subscribe_ID"));
+        //                value = VIS.Utility.Util.getValueOfInt(_dtSubscribe.getRows()[i].getCell("VACM_Subscribe_ID"));
         //                this._subscribe.push({ ID: key, value: value });
         //            }
         //        }
@@ -3302,7 +3302,7 @@
 
     //                    var fieldValue = field.getValue();
     //                    if (fieldValue && fieldValue > 0) {
-    //                        //var str = "SELECT amount FROM C_DimAmt where C_DimAmt_ID=" + fieldValue;
+    //                        //var str = "SELECT amount FROM VAB_DimAmt where VAB_DimAmt_ID=" + fieldValue;
     //                        //fieldValue = VIS.DB.executeScalar(str);
     //                        fieldValue = field.lookup.get(field.getValue());//.Name;
     //                        if (fieldValue) {
@@ -4610,7 +4610,7 @@
                     || columnName.equals("Posted")
                     //	Order/Invoice
                     || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
-                    || columnName.equals("C_CashLine_ID") || columnName.equals("C_Payment_ID")
+                    || columnName.equals("VAB_CashJRNLLine_ID") || columnName.equals("C_Payment_ID")
                     || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
                     || columnName.equalsIgnoreCase("C_Location_ID")
                     || columnName.equals("IsApproved") || columnName.equals("IsDelivered")

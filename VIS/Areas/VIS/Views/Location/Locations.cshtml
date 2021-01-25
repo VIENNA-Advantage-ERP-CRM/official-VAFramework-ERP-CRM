@@ -24,7 +24,7 @@
                 <div class="vis-control-wrap">
                     @Html.TextBoxFor(m => m.Country, new { autofocus = "autofocus", id = "txtCountry_" + ViewBag.WindowNumber, @maxlength = "60", @placeholder = @VAdvantage.Utility.Msg.GetMsg(lang, "Country"), })
                     <label id="lblCountry_@windowNo" class="VIS_Pref_Label_Font ">@VAdvantage.Utility.Msg.GetMsg(lang, "Country") <sup style="color: red;">*</sup></label>
-                    <input id="countryhdn_@windowNo" type="hidden" value="@Model.C_Country_ID" placeholder=" ">
+                    <input id="countryhdn_@windowNo" type="hidden" value="@Model.VAB_Country_ID" placeholder=" ">
                 </div>
             </div>
         </td>

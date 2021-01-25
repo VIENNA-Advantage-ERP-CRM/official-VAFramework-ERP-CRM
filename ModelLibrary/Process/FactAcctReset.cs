@@ -187,15 +187,15 @@ namespace VAdvantage.Process
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROJECTISSUE + "'";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_BankStatement"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_BankingJRNL"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_BANKSTATEMENT + "'";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Cash"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_CashJRNL"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_CASHJOURNAL + "'";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_AllocationHdr"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_DocAllocation"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION + "'";
             }

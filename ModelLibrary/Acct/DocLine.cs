@@ -57,7 +57,7 @@ namespace VAdvantage.Acct
         private Decimal? _AmtAcctDr = null;
         private Decimal? _AmtAcctCr = null;
         // Acct Schema				
-        private int _C_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
 
         //	Product Costs			
         private ProductCost _productCost = null;
@@ -73,7 +73,7 @@ namespace VAdvantage.Acct
         // Sales Region				
         private int _C_SalesRegion_ID = -1;
         // Sales Region				
-        private int _C_BPartner_ID = -1;
+        private int _VAB_BusinessPartner_ID = -1;
         // Location From				
         private int _C_LocFrom_ID = 0;
         // Location To					
@@ -81,9 +81,9 @@ namespace VAdvantage.Acct
         // Item						
         private Boolean? _isItem = null;
         // Currency					
-        private int _C_Currency_ID = -1;
+        private int _VAB_Currency_ID = -1;
         // Conversion Type				
-        private int _C_ConversionType_ID = -1;
+        private int _VAB_CurrencyType_ID = -1;
         // Period						
         private int _C_Period_ID = -1;
         // User Element 1
@@ -140,58 +140,58 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Currency
         /// </summary>
-        /// <returns>c_Currency_ID</returns>
-        public int GetC_Currency_ID()
+        /// <returns>VAB_Currency_ID</returns>
+        public int GetVAB_Currency_ID()
         {
-            if (_C_Currency_ID == -1)
+            if (_VAB_Currency_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_Currency_ID");
+                int index = _po.Get_ColumnIndex("VAB_Currency_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_Currency_ID = ii.Value;//.intValue();
+                        _VAB_Currency_ID = ii.Value;//.intValue();
                     }
                 }
-                if (_C_Currency_ID <= 0)
+                if (_VAB_Currency_ID <= 0)
                 {
-                    _C_Currency_ID = _doc.GetC_Currency_ID();
+                    _VAB_Currency_ID = _doc.GetVAB_Currency_ID();
                 }
             }
-            return _C_Currency_ID;
+            return _VAB_Currency_ID;
         }
 
         /// <summary>
         /// Get Conversion Type
         /// </summary>
-        /// <returns>C_ConversionType_ID</returns>
-        public int GetC_ConversionType_ID()
+        /// <returns>VAB_CurrencyType_ID</returns>
+        public int GetVAB_CurrencyType_ID()
         {
-            if (_C_ConversionType_ID == -1)
+            if (_VAB_CurrencyType_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_ConversionType_ID");
+                int index = _po.Get_ColumnIndex("VAB_CurrencyType_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
-                        _C_ConversionType_ID = ii.Value;//.intValue();
+                        _VAB_CurrencyType_ID = ii.Value;//.intValue();
                 }
-                if (_C_ConversionType_ID <= 0)
+                if (_VAB_CurrencyType_ID <= 0)
                 {
-                    _C_ConversionType_ID = _doc.GetC_ConversionType_ID();
+                    _VAB_CurrencyType_ID = _doc.GetVAB_CurrencyType_ID();
                 }
             }
-            return _C_ConversionType_ID;
+            return _VAB_CurrencyType_ID;
         }
 
         /// <summary>
-        /// Set C_ConversionType_ID
+        /// Set VAB_CurrencyType_ID
         /// </summary>
-        /// <param name="C_ConversionType_ID"></param>
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        /// <param name="VAB_CurrencyType_ID"></param>
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            _C_ConversionType_ID = C_ConversionType_ID;
+            _VAB_CurrencyType_ID = VAB_CurrencyType_ID;
         }
 
         /// <summary>
@@ -260,12 +260,12 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Set Converted Amounts
         /// </summary>
-        /// <param name="C_AcctSchema_ID">acct schema</param>
+        /// <param name="VAB_AccountBook_ID">acct schema</param>
         /// <param name="amtAcctDr">acct amount dr</param>
         /// <param name="amtAcctCr">acct amount cr</param>
-        public void SetConvertedAmt(int C_AcctSchema_ID, Decimal amtAcctDr, Decimal amtAcctCr)
+        public void SetConvertedAmt(int VAB_AccountBook_ID, Decimal amtAcctDr, Decimal amtAcctCr)
         {
-            _C_AcctSchema_ID = C_AcctSchema_ID;
+            _VAB_AccountBook_ID = VAB_AccountBook_ID;
             _AmtAcctDr = amtAcctDr;
             _AmtAcctCr = amtAcctCr;
         }
@@ -481,7 +481,7 @@ namespace VAdvantage.Acct
         public MAccount GetAccount(int AcctType, MAcctSchema as1)
         {
             //	Charge Account
-            if (GetM_Product_ID() == 0 && GetC_Charge_ID() != 0)
+            if (GetM_Product_ID() == 0 && GetVAB_Charge_ID() != 0)
             {
                 Decimal amt = new Decimal(-1);		//	Revenue (-)
                 if (!_doc.IsSOTrx())
@@ -501,10 +501,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Charge
         /// </summary>
-        /// <returns>C_Charge_ID</returns>
-        public int GetC_Charge_ID()
+        /// <returns>VAB_Charge_ID</returns>
+        public int GetVAB_Charge_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Charge_ID");
+            int index = _po.Get_ColumnIndex("VAB_Charge_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -524,12 +524,12 @@ namespace VAdvantage.Acct
         /// <returns>Charge Account or null</returns>
         public MAccount GetChargeAccount(MAcctSchema as1, Decimal? amount)
         {
-            int C_Charge_ID = GetC_Charge_ID();
-            if (C_Charge_ID == 0)
+            int VAB_Charge_ID = GetVAB_Charge_ID();
+            if (VAB_Charge_ID == 0)
             {
                 return null;
             }
-            return MCharge.GetAccount(C_Charge_ID, as1, amount.Value);
+            return MCharge.GetAccount(VAB_Charge_ID, as1, amount.Value);
         }
 
         /// <summary>
@@ -569,10 +569,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get (Journal) AcctSchema
         /// </summary>
-        /// <returns>C_AcctSchema_ID</returns>
-        public int GetC_AcctSchema_ID()
+        /// <returns>VAB_AccountBook_ID</returns>
+        public int GetVAB_AccountBook_ID()
         {
-            return _C_AcctSchema_ID;
+            return _VAB_AccountBook_ID;
         }
 
         /// <summary>
@@ -1008,44 +1008,44 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get BPartner
         /// </summary>
-        /// <returns>C_BPartner_ID</returns>
-        public int GetC_BPartner_ID()
+        /// <returns>VAB_BusinessPartner_ID</returns>
+        public int GetVAB_BusinessPartner_ID()
         {
-            if (_C_BPartner_ID == -1)
+            if (_VAB_BusinessPartner_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_BPartner_ID");
+                int index = _po.Get_ColumnIndex("VAB_BusinessPartner_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _C_BPartner_ID = Utility.Util.GetValueOfInt(ii);//.intValue();
+                        _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(ii);//.intValue();
                     }
                 }
-                if (_C_BPartner_ID <= 0)
+                if (_VAB_BusinessPartner_ID <= 0)
                 {
-                    _C_BPartner_ID = _doc.GetC_BPartner_ID();
+                    _VAB_BusinessPartner_ID = _doc.GetVAB_BusinessPartner_ID();
                 }
             }
-            return _C_BPartner_ID;
+            return _VAB_BusinessPartner_ID;
         }
 
         /// <summary>
-        /// Set C_BPartner_ID
+        /// Set VAB_BusinessPartner_ID
         /// </summary>
-        /// <param name="C_BPartner_ID">id</param>
-        protected void SetC_BPartner_ID(int C_BPartner_ID)
+        /// <param name="VAB_BusinessPartner_ID">id</param>
+        protected void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            _C_BPartner_ID = C_BPartner_ID;
+            _VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
         }
 
         /// <summary>
-        /// Get C_BPartner_Location_ID
+        /// Get VAB_BPart_Location_ID
         /// </summary>
         /// <returns>BPartner Location</returns>
-        public int GetC_BPartner_Location_ID()
+        public int GetVAB_BPart_Location_ID()
         {
-            int index = _po.Get_ColumnIndex("C_BPartner_Location_ID");
+            int index = _po.Get_ColumnIndex("VAB_BPart_Location_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -1054,7 +1054,7 @@ namespace VAdvantage.Acct
                     return Utility.Util.GetValueOfInt(ii);//.intValue();
                 }
             }
-            return _doc.GetC_BPartner_Location_ID();
+            return _doc.GetVAB_BPart_Location_ID();
         }
 
         /// <summary>
@@ -1097,12 +1097,12 @@ namespace VAdvantage.Acct
         {
             if (_C_SalesRegion_ID == -1)	//	never tried
             {
-                if (GetC_BPartner_Location_ID() != 0)
+                if (GetVAB_BPart_Location_ID() != 0)
                 //	&& m_acctSchema.isAcctSchemaElement(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
                 {
-                    String sql = "SELECT COALESCE(C_SalesRegion_ID,0) FROM C_BPartner_Location WHERE C_BPartner_Location_ID=@param1";
+                    String sql = "SELECT COALESCE(C_SalesRegion_ID,0) FROM VAB_BPart_Location WHERE VAB_BPart_Location_ID=@param1";
                     _C_SalesRegion_ID = DataBase.DB.GetSQLValue(null,
-                        sql, GetC_BPartner_Location_ID());
+                        sql, GetVAB_BPart_Location_ID());
                     log.Fine("C_SalesRegion_ID=" + _C_SalesRegion_ID + " (from BPL)");
                     if (_C_SalesRegion_ID == 0)
                     {
@@ -1142,10 +1142,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Campaign
         /// </summary>
-        /// <returns>C_Campaign_ID</returns>
-        public int GetC_Campaign_ID()
+        /// <returns>VAB_Promotion_ID</returns>
+        public int GetVAB_Promotion_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Campaign_ID");
+            int index = _po.Get_ColumnIndex("VAB_Promotion_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -1160,10 +1160,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Activity
         /// </summary>
-        /// <returns>C_Activity_ID</returns>
-        public int GetC_Activity_ID()
+        /// <returns>VAB_BillingCode_ID</returns>
+        public int GetVAB_BillingCode_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Activity_ID");
+            int index = _po.Get_ColumnIndex("VAB_BillingCode_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);

@@ -10,14 +10,14 @@
 
         var title = header;
         var mAccount = account;
-        var C_AcctSchema_ID = cAcctSchemaId;
+        var VAB_AccountBook_ID = cAcctSchemaId;
         var windowNo = VIS.Env.getWindowNo();
         var _comb = null;
         var f_Description = new VIS.Controls.VLabel();
         //  Editors for Query
         var f_Alias = null, f_Combination = null, f_VAF_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
-            f_M_Product_ID = null, f_C_BPartner_ID = null, f_C_Campaign_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
-            f_C_Project_ID = null, f_C_SalesRegion_ID = null, f_VAF_OrgTrx_ID = null, f_C_Activity_ID = null,
+            f_M_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
+            f_C_Project_ID = null, f_C_SalesRegion_ID = null, f_VAF_OrgTrx_ID = null, f_VAB_BillingCode_ID = null,
             f_User1_ID = null, f_User2_ID = null, f_UserElement1_ID = null, f_UserElement2_ID = null, f_UserElement3_ID = null,
             f_UserElement4_ID = null, f_UserElement5_ID = null, f_UserElement6_ID = null, f_UserElement7_ID = null, f_UserElement8_ID = null, f_UserElement9_ID = null;
 
@@ -172,7 +172,7 @@
         };
 
         this.log = VIS.Logging.VLogger.getVLogger("AccountForm");
-        this.log.config("C_AcctSchema_ID=" + C_AcctSchema_ID + ", C_ValidCombination_ID=" + mAccount.C_ValidCombination_ID);
+        this.log.config("VAB_AccountBook_ID=" + VAB_AccountBook_ID + ", C_ValidCombination_ID=" + mAccount.C_ValidCombination_ID);
         //control on form
 
 
@@ -339,14 +339,14 @@
             };
 
             function loadParameters() {
-                VIS.Env.getCtx().setContext(windowNo, "C_AcctSchema_ID", C_AcctSchema_ID);
+                VIS.Env.getCtx().setContext(windowNo, "VAB_AccountBook_ID", VAB_AccountBook_ID);
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "AccountForm/LoadControls",
                     dataType: "json",
                     data: {
                         windowNo: windowNo,
-                        C_AcctSchema_ID: C_AcctSchema_ID
+                        VAB_AccountBook_ID: VAB_AccountBook_ID
                     },
                     success: function (data) {
                         returnValue = data.result;
@@ -379,7 +379,7 @@
                     _mTab.getField("Combination").setDisplayLength(15);
                     //  Grid restrictions
                     _mTab.getField("VAF_Client_ID").setDisplayed(false);
-                    _mTab.getField("C_AcctSchema_ID").setDisplayed(false);
+                    _mTab.getField("VAB_AccountBook_ID").setDisplayed(false);
                     _mTab.getField("IsActive").setDisplayed(false);
                     _mTab.getField("IsFullyQualified").setDisplayed(false);
                     //  don't show fields not being displayed in this environment
@@ -401,7 +401,7 @@
                         //tr.concat(tdChild);
                     }
 
-                    var id = windowNo + "_" + C_AcctSchema_ID; //uniqueID
+                    var id = windowNo + "_" + VAB_AccountBook_ID; //uniqueID
                     gridController = new VIS.GridController(false, false, id);
                     gridController.initGrid(true, windowNo, $self, _mTab);
                     gridController.setVisible(true);
@@ -449,7 +449,7 @@
                         else if (type.equals(eLEMENTTYPE_Account)) {
                             var field = _mTab.getField("Account_ID");
                             f_Account_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            f_Account_ID.setValue(C_AcctSchema_ID);
+                            f_Account_ID.setValue(VAB_AccountBook_ID);
                             addLine(field, f_Account_ID, isMandatory, lblNames, eLEMENTTYPE_Account);
                             // f_Account_ID.VetoableChangeListener += new EventHandler(f_Account_ID_VetoableChangeListener);
                         }
@@ -465,14 +465,14 @@
                             addLine(field, f_M_Product_ID, isMandatory, lblNames, eLEMENTTYPE_Product);
                         }
                         else if (type.equals(eLEMENTTYPE_BPartner)) {
-                            var field = _mTab.getField("C_BPartner_ID");
-                            f_C_BPartner_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_BPartner_ID, isMandatory, lblNames, eLEMENTTYPE_BPartner);
+                            var field = _mTab.getField("VAB_BusinessPartner_ID");
+                            f_VAB_BusinessPartner_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_BusinessPartner_ID, isMandatory, lblNames, eLEMENTTYPE_BPartner);
                         }
                         else if (type.equals(eLEMENTTYPE_Campaign)) {
-                            var field = _mTab.getField("C_Campaign_ID");
-                            f_C_Campaign_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_Campaign_ID, isMandatory, lblNames, eLEMENTTYPE_Campaign);
+                            var field = _mTab.getField("VAB_Promotion_ID");
+                            f_VAB_Promotion_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_Promotion_ID, isMandatory, lblNames, eLEMENTTYPE_Campaign);
                         }
                         else if (type.equals(eLEMENTTYPE_LocationFrom)) {
                             var field = _mTab.getField("C_LocFrom_ID");
@@ -500,9 +500,9 @@
                             addLine(field, f_VAF_OrgTrx_ID, isMandatory, lblNames, eLEMENTTYPE_OrgTrx);
                         }
                         else if (type.equals(eLEMENTTYPE_Activity)) {
-                            var field = _mTab.getField("C_Activity_ID");
-                            f_C_Activity_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_Activity_ID, isMandatory, lblNames, eLEMENTTYPE_Activity);
+                            var field = _mTab.getField("VAB_BillingCode_ID");
+                            f_VAB_BillingCode_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_BillingCode_ID, isMandatory, lblNames, eLEMENTTYPE_Activity);
                         }
                             //	User1
                         else if (type.equals(eLEMENTTYPE_UserList1)) {
@@ -833,7 +833,7 @@
 
 
                     query = new VIS.Query();
-                    query.addRestriction("C_AcctSchema_ID", VIS.Query.prototype.EQUAL, C_AcctSchema_ID);
+                    query.addRestriction("VAB_AccountBook_ID", VIS.Query.prototype.EQUAL, VAB_AccountBook_ID);
 
                     // Manish 17/03/2017, Requested By Mukesh sir
                     //var sqlQry = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + tblID_s;
@@ -854,7 +854,7 @@
                         _mTab.setQuery(VIS.Query.prototype.getEqualQuery("1", "2"));
                     else {
                         var _query = new VIS.Query();
-                        _query.addRestriction("C_AcctSchema_ID", VIS.Query.prototype.EQUAL, C_AcctSchema_ID);
+                        _query.addRestriction("VAB_AccountBook_ID", VIS.Query.prototype.EQUAL, VAB_AccountBook_ID);
                         _query.addRestriction("C_ValidCombination_ID", VIS.Query.prototype.EQUAL, mAccount.C_ValidCombination_ID);
                         _mTab.setQuery(_query);
                     }
@@ -1005,11 +1005,11 @@
                 if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
                     localquery.addRestriction("M_Product_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_M_Product_ID.getValue()));
                 //	BPartner
-                if (f_C_BPartner_ID != null && !isNull(f_C_BPartner_ID.getValue()))
-                    localquery.addRestriction("C_BPartner_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_BPartner_ID.getValue()));
+                if (f_VAB_BusinessPartner_ID != null && !isNull(f_VAB_BusinessPartner_ID.getValue()))
+                    localquery.addRestriction("VAB_BusinessPartner_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_BusinessPartner_ID.getValue()));
                 //	Campaign
-                if (f_C_Campaign_ID != null && !isNull(f_C_Campaign_ID.getValue()))
-                    localquery.addRestriction("C_Campaign_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Campaign_ID.getValue()));
+                if (f_VAB_Promotion_ID != null && !isNull(f_VAB_Promotion_ID.getValue()))
+                    localquery.addRestriction("VAB_Promotion_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_Promotion_ID.getValue()));
                 //	Loc From
                 if (f_C_LocFrom_ID != null && !isNull(f_C_LocFrom_ID.getValue()))
                     localquery.addRestriction("C_LocFrom_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocFrom_ID.getValue()));
@@ -1026,8 +1026,8 @@
                 if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
                     localquery.addRestriction("VAF_OrgTrx_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAF_OrgTrx_ID.getValue()));
                 //	Activity
-                if (f_C_Activity_ID != null && !isNull(f_C_Activity_ID.getValue()))
-                    localquery.addRestriction("C_Activity_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Activity_ID.getValue()));
+                if (f_VAB_BillingCode_ID != null && !isNull(f_VAB_BillingCode_ID.getValue()))
+                    localquery.addRestriction("VAB_BillingCode_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_BillingCode_ID.getValue()));
                 //	User 1
                 if (f_User1_ID != null && !isNull(f_User1_ID.getValue()))
                     localquery.addRestriction("User1_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_User1_ID.getValue()));
@@ -1088,11 +1088,11 @@
                 if (f_M_Product_ID != null)
                     f_M_Product_ID.setValue(null);
                 //	BPartner
-                if (f_C_BPartner_ID != null)
-                    f_C_BPartner_ID.setValue(null);
+                if (f_VAB_BusinessPartner_ID != null)
+                    f_VAB_BusinessPartner_ID.setValue(null);
                 //	Campaign
-                if (f_C_Campaign_ID != null)
-                    f_C_Campaign_ID.setValue(null);
+                if (f_VAB_Promotion_ID != null)
+                    f_VAB_Promotion_ID.setValue(null);
                 //	Loc From
                 if (f_C_LocFrom_ID != null)
                     f_C_LocFrom_ID.setValue(null);
@@ -1109,8 +1109,8 @@
                 if (f_VAF_OrgTrx_ID != null)
                     f_VAF_OrgTrx_ID.setValue(null);
                 //	Activity
-                if (f_C_Activity_ID != null)
-                    f_C_Activity_ID.setValue(null);
+                if (f_VAB_BillingCode_ID != null)
+                    f_VAB_BillingCode_ID.setValue(null);
                 //	User 1
                 if (f_User1_ID != null)
                     f_User1_ID.setValue(null);
@@ -1203,16 +1203,16 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_BPartner)) {
-                //        value = f_C_BPartner_ID.getValue();
-                //        sql = sql.concat("C_BPartner_ID");
+                //        value = f_VAB_BusinessPartner_ID.getValue();
+                //        sql = sql.concat("VAB_BusinessPartner_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_Campaign)) {
-                //        value = f_C_Campaign_ID.getValue();
-                //        sql = sql.concat("C_Campaign_ID");
+                //        value = f_VAB_Promotion_ID.getValue();
+                //        sql = sql.concat("VAB_Promotion_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1259,8 +1259,8 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_Activity)) {
-                //        value = f_C_Activity_ID.getValue();
-                //        sql = sql.concat("C_Activity_ID");
+                //        value = f_VAB_BillingCode_ID.getValue();
+                //        sql = sql.concat("VAB_BillingCode_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1396,7 +1396,7 @@
                 }
 
                 //Check if already exists
-                sql = sql.concat("VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID() + " AND C_AcctSchema_ID=" + C_AcctSchema_ID);
+                sql = sql.concat("VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID() + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID);
                 $self.log.fine("Check = " + sql.toString());
 
                 //Check Alies Value
@@ -1462,7 +1462,7 @@
                 }
 
                 if (IDvalue != 0) {
-                    loadInfo(IDvalue, C_AcctSchema_ID);
+                    loadInfo(IDvalue, VAB_AccountBook_ID);
                     return;
                 }
 
@@ -1478,9 +1478,9 @@
                 var M_Product_ID = 0;
                 if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
                     M_Product_ID = f_M_Product_ID.getValue();
-                var C_BPartner_ID = 0;
-                if (f_C_BPartner_ID != null && !isNull(f_C_BPartner_ID.getValue()))
-                    C_BPartner_ID = f_C_BPartner_ID.getValue();
+                var VAB_BusinessPartner_ID = 0;
+                if (f_VAB_BusinessPartner_ID != null && !isNull(f_VAB_BusinessPartner_ID.getValue()))
+                    VAB_BusinessPartner_ID = f_VAB_BusinessPartner_ID.getValue();
                 var VAF_OrgTrx_ID = 0;
                 if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
                     VAF_OrgTrx_ID = f_VAF_OrgTrx_ID.getValue();
@@ -1496,12 +1496,12 @@
                 var C_Project_ID = 0;
                 if (f_C_Project_ID != null && !isNull(f_C_Project_ID.getValue()))
                     C_Project_ID = f_C_Project_ID.getValue();
-                var C_Campaign_ID = 0;
-                if (f_C_Campaign_ID != null && !isNull(f_C_Campaign_ID.getValue()))
-                    C_Campaign_ID = f_C_Campaign_ID.getValue();
-                var C_Activity_ID = 0;
-                if (f_C_Activity_ID != null && !isNull(f_C_Activity_ID.getValue()))
-                    C_Activity_ID = f_C_Activity_ID.getValue();
+                var VAB_Promotion_ID = 0;
+                if (f_VAB_Promotion_ID != null && !isNull(f_VAB_Promotion_ID.getValue()))
+                    VAB_Promotion_ID = f_VAB_Promotion_ID.getValue();
+                var VAB_BillingCode_ID = 0;
+                if (f_VAB_BillingCode_ID != null && !isNull(f_VAB_BillingCode_ID.getValue()))
+                    VAB_BillingCode_ID = f_VAB_BillingCode_ID.getValue();
                 var User1_ID = 0;
                 if (f_User1_ID != null && !isNull(f_User1_ID.getValue()))
                     User1_ID = f_User1_ID.getValue();
@@ -1576,18 +1576,18 @@
                     data: {
                         VAF_Client_ID: VIS.Env.getCtx().getVAF_Client_ID(),
                         VAF_Org_ID: VAF_Org_ID,
-                        C_AcctSchema_ID: C_AcctSchema_ID,
+                        VAB_AccountBook_ID: VAB_AccountBook_ID,
                         AD_Account_ID: AD_Account_ID,
                         C_SubAcct_ID: C_SubAcct_ID,
                         M_Product_ID: M_Product_ID,
-                        C_BPartner_ID: C_BPartner_ID,
+                        VAB_BusinessPartner_ID: VAB_BusinessPartner_ID,
                         VAF_OrgTrx_ID: VAF_OrgTrx_ID,
                         C_LocFrom_ID: C_LocFrom_ID,
                         C_LocTo_ID: C_LocTo_ID,
                         C_SRegion_ID: C_SRegion_ID,
                         C_Project_ID: C_Project_ID,
-                        C_Campaign_ID: C_Campaign_ID,
-                        C_Activity_ID: C_Activity_ID,
+                        VAB_Promotion_ID: VAB_Promotion_ID,
+                        VAB_BillingCode_ID: VAB_BillingCode_ID,
                         User1_ID: User1_ID,
                         User2_ID: User2_ID,
                         UserElement1_ID: UserElement1_ID,
@@ -1604,12 +1604,12 @@
                     success: function (data) {
                         returnValue = data.result;
                         //load control
-                        loadInfo(returnValue.C_ValidCombination_ID, returnValue.C_AcctSchema_ID);
+                        loadInfo(returnValue.C_ValidCombination_ID, returnValue.VAB_AccountBook_ID);
                     }
                 });
             };
 
-            function loadInfo(C_ValidCombination_ID, C_AcctSchema_ID) {
+            function loadInfo(C_ValidCombination_ID, VAB_AccountBook_ID) {
                 // this.log.fine("C_ValidCombination_ID=" + C_ValidCombination_ID);
                 var sql = "VIS_124";
                 var dr = null;
@@ -1618,7 +1618,7 @@
 
                     var param = [];
                     param[0] = new VIS.DB.SqlParam("@C_ValidCombination_ID", C_ValidCombination_ID);
-                    param[1] = new VIS.DB.SqlParam("@C_AcctSchema_ID", C_AcctSchema_ID);
+                    param[1] = new VIS.DB.SqlParam("@VAB_AccountBook_ID", VAB_AccountBook_ID);
 
                     dr = executeReader(sql, param);
 
@@ -1638,13 +1638,13 @@
                                 f_M_Product_ID.setValue(dr.getInt("M_Product_ID"));
                             }
                         }
-                        if (f_C_BPartner_ID != null) {
-                            if (dr.getInt("C_BPartner_ID") != 0) {
-                                f_C_BPartner_ID.setValue(dr.getInt("C_BPartner_ID"));
+                        if (f_VAB_BusinessPartner_ID != null) {
+                            if (dr.getInt("VAB_BusinessPartner_ID") != 0) {
+                                f_VAB_BusinessPartner_ID.setValue(dr.getInt("VAB_BusinessPartner_ID"));
                             }
                         }
-                        if (f_C_Campaign_ID != null)
-                            f_C_Campaign_ID.setValue(dr.getInt("C_Campaign_ID"));
+                        if (f_VAB_Promotion_ID != null)
+                            f_VAB_Promotion_ID.setValue(dr.getInt("VAB_Promotion_ID"));
                         if (f_C_LocFrom_ID != null)
                             f_C_LocFrom_ID.setValue(dr.getInt("C_LocFrom_ID"));
                         if (f_C_LocTo_ID != null)
@@ -1655,8 +1655,8 @@
                             f_C_SalesRegion_ID.setValue(dr.getInt("C_SalesRegion_ID"));
                         if (f_VAF_OrgTrx_ID != null)
                             f_VAF_OrgTrx_ID.setValue(dr.getInt("VAF_OrgTrx_ID"));
-                        if (f_C_Activity_ID != null)
-                            f_C_Activity_ID.setValue(dr.getInt("C_Activity_ID"));
+                        if (f_VAB_BillingCode_ID != null)
+                            f_VAB_BillingCode_ID.setValue(dr.getInt("VAB_BillingCode_ID"));
                         if (f_User1_ID != null)
                             f_User1_ID.setValue(dr.getInt("User1_ID"));
                         if (f_User2_ID != null)
@@ -1806,15 +1806,15 @@
 
             title = null;
             mAccount = null;
-            C_AcctSchema_ID = null;
+            VAB_AccountBook_ID = null;
             windowNo = null;
             _comb = null;
             f_Description = null;
             f_Alias = null;
             f_Combination = null;
             f_VAF_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
-            f_M_Product_ID = null; f_C_BPartner_ID = null; f_C_Campaign_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
-            f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_VAF_OrgTrx_ID = null; f_C_Activity_ID = null;
+            f_M_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
+            f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_VAF_OrgTrx_ID = null; f_VAB_BillingCode_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;
             eLEMENTTYPE_VAF_Control_Ref_ID = null;

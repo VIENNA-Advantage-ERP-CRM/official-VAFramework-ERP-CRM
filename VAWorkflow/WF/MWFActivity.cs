@@ -114,7 +114,7 @@ namespace VAdvantage.WF
             _state.SetCtx(GetCtx());
             SetProcessed(false);
             //	Set Workflow Node
-            SetAD_Workflow_ID(process.GetAD_Workflow_ID());
+            SetVAF_Workflow_ID(process.GetVAF_Workflow_ID());
             SetVAF_WFlow_Node_ID(VAF_WFlow_Node_ID);
 
             SetSummary(GetSummary());
@@ -637,12 +637,12 @@ namespace VAdvantage.WF
         /// If the returned user is the same, the document is approved.
         /// </summary>
         /// <param name="VAF_UserContact_ID">starting User</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="amount">amount</param>
         /// <param name="VAF_Org_ID">document organization</param>
         /// <param name="ownDocument">the document is owned by VAF_UserContact_ID</param>
         /// <returns>VAF_UserContact_ID - if -1 no Approver</returns>
-        public int GetApprovalUser(int VAF_UserContact_ID, int C_Currency_ID, Decimal amount,
+        public int GetApprovalUser(int VAF_UserContact_ID, int VAB_Currency_ID, Decimal amount,
             int VAF_Org_ID, bool ownDocument, bool FetchLastApprover)
         {
             //	Nothing to approve
@@ -680,12 +680,12 @@ namespace VAdvantage.WF
                     Decimal roleAmt = role.GetAmtApproval();
                     if (Math.Sign(roleAmt) == 0)
                         continue;
-                    if (C_Currency_ID != role.GetC_Currency_ID()
-                        && role.GetC_Currency_ID() != 0)			//	No currency = amt only
+                    if (VAB_Currency_ID != role.GetVAB_Currency_ID()
+                        && role.GetVAB_Currency_ID() != 0)			//	No currency = amt only
                     {
                         roleAmt = MConversionRate.Convert(GetCtx(),//	today & default rate 
-                            roleAmt, role.GetC_Currency_ID(),
-                            C_Currency_ID, GetVAF_Client_ID(), VAF_Org_ID);
+                            roleAmt, role.GetVAB_Currency_ID(),
+                            VAB_Currency_ID, GetVAF_Client_ID(), VAF_Org_ID);
                         if (Math.Sign(roleAmt) == 0)
                             continue;
                     }
@@ -1113,7 +1113,7 @@ namespace VAdvantage.WF
             /******	TODO Start WF Instance		******/
             else if (MWFNode.ACTION_SubWorkflow.Equals(action))
             {
-                log.Warning("Workflow:AD_Workflow_ID=" + _node.GetAD_Workflow_ID());
+                log.Warning("Workflow:VAF_Workflow_ID=" + _node.GetVAF_Workflow_ID());
             }
 
             /******	User Choice					******/
@@ -1133,7 +1133,7 @@ namespace VAdvantage.WF
                         if (startVAF_UserContact_ID == 0)
                             startVAF_UserContact_ID = doc.GetDoc_User_ID();
                         int nextVAF_UserContact_ID = GetApprovalUser(startVAF_UserContact_ID,
-                            doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
+                            doc.GetVAB_Currency_ID(), doc.GetApprovalAmt(),
                             doc.GetVAF_Org_ID(),
                             startVAF_UserContact_ID == doc.GetDoc_User_ID(), true);	//	own doc
                         //	same user = approved
@@ -1319,7 +1319,7 @@ namespace VAdvantage.WF
                     eve.Save();
                 }
                 //For Genral Attribute
-                //else if (new MColumn(GetCtx(),_node.GetVAF_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+                //else if (new MColumn(GetCtx(),_node.GetVAF_Column_ID(),Get_TrxName()).GetColumnName().ToUpper().Equals("VAB_GENFEATURESETINSTANCE_ID"))
                 //{
 
                 //}
@@ -2007,33 +2007,33 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             //Check For Genral Attribute 
             MColumn column = new MColumn(GetCtx(), GetNode().GetVAF_Column_ID(), Get_TrxName());
-            if (column.GetColumnName().ToString().ToLower().Equals("c_genattributesetinstance_id"))
+            if (column.GetColumnName().ToString().ToLower().Equals("VAB_GenFeaturesetinstance_id"))
             {
 
-                int attributeSetID = GetNode().GetC_GenAttributeSet_ID();
-                int attributeSetInstanceID = Util.GetValueOfInt(GetNode().GetC_GenAttributeSetInstance_ID());
+                int attributeSetID = GetNode().GetVAB_GenFeatureSet_ID();
+                int attributeSetInstanceID = Util.GetValueOfInt(GetNode().GetVAB_GenFeatureSetInstance_ID());
                 if (attributeSetID == 0 && attributeSetInstanceID == 0)//user Choice
                 {
-                    _po.Set_Value("C_GenAttributeSetInstance_ID", value);
+                    _po.Set_Value("VAB_GenFeatureSetInstance_ID", value);
                     _newValue = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT GS.Name || '->' || GSI.Description
-                                                FROM C_GenAttributeSetInstance GSI
-                                                INNER JOIN C_GenAttributeSet GS
-                                                ON (GS.C_GenAttributeSet_ID        =GSI.C_GenAttributeSet_ID)
+                                                FROM VAB_GenFeatureSetInstance GSI
+                                                INNER JOIN VAB_GenFeatureSet GS
+                                                ON (GS.VAB_GenFeatureSet_ID        =GSI.VAB_GenFeatureSet_ID)
                                                 WHERE GSI.IsActive                 ='Y'                                              
-                                                AND GSI.C_GenAttributeSetInstance_ID=" + value));
+                                                AND GSI.VAB_GenFeatureSetInstance_ID=" + value));
 
                 }
                 else  //SetVariable
                 {
-                    _po.Set_Value("C_GenAttributeSet_ID", GetNode().GetC_GenAttributeSet_ID());
-                    _po.Set_Value("C_GenAttributeSetInstance_ID", GetNode().GetC_GenAttributeSetInstance_ID());
+                    _po.Set_Value("VAB_GenFeatureSet_ID", GetNode().GetVAB_GenFeatureSet_ID());
+                    _po.Set_Value("VAB_GenFeatureSetInstance_ID", GetNode().GetVAB_GenFeatureSetInstance_ID());
                     _newValue = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT GS.Name || '->' || GSI.Description
-                                                FROM C_GenAttributeSetInstance GSI
-                                                INNER JOIN C_GenAttributeSet GS
-                                                ON (GS.C_GenAttributeSet_ID        =GSI.C_GenAttributeSet_ID)
+                                                FROM VAB_GenFeatureSetInstance GSI
+                                                INNER JOIN VAB_GenFeatureSet GS
+                                                ON (GS.VAB_GenFeatureSet_ID        =GSI.VAB_GenFeatureSet_ID)
                                                 WHERE GSI.IsActive                 ='Y'
-                                                AND GS.C_GenAttributeSet_ID       =" + _po.Get_Value("C_GenAttributeSet_ID") + @"
-                                                AND GSI.C_GenAttributeSetInstance_ID=" + _po.Get_Value("C_GenAttributeSetInstance_ID")));
+                                                AND GS.VAB_GenFeatureSet_ID       =" + _po.Get_Value("VAB_GenFeatureSet_ID") + @"
+                                                AND GSI.VAB_GenFeatureSetInstance_ID=" + _po.Get_Value("VAB_GenFeatureSetInstance_ID")));
                 }
                 SetTextMsg("New value assigned to Attribute " + _newValue);
 
@@ -2412,7 +2412,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                             if (startVAF_UserContact_ID == 0)
                                 startVAF_UserContact_ID = doc.GetDoc_User_ID();
                             int nextVAF_UserContact_ID = GetApprovalUser(startVAF_UserContact_ID,
-                                doc.GetC_Currency_ID(), doc.GetApprovalAmt(),
+                                doc.GetVAB_Currency_ID(), doc.GetApprovalAmt(),
                                 doc.GetVAF_Org_ID(),
                                 startVAF_UserContact_ID == doc.GetDoc_User_ID(), false);	//	own doc
                             //	No Approver
@@ -2873,13 +2873,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 if (bpID > 0) // if user binding Bpartner column id
                 {
                     //Check User is member of Bussiness partnet
-                    if (VAF_UserContact_ID > 0 && Convert.ToInt16(DB.ExecuteScalar("SELECT Count(VAF_UserContact_ID) FROM VAF_UserContact WHERE C_BPartner_ID = " + bpID + " AND VAF_UserContact_ID = " + VAF_UserContact_ID)) > 0)
+                    if (VAF_UserContact_ID > 0 && Convert.ToInt16(DB.ExecuteScalar("SELECT Count(VAF_UserContact_ID) FROM VAF_UserContact WHERE VAB_BusinessPartner_ID = " + bpID + " AND VAF_UserContact_ID = " + VAF_UserContact_ID)) > 0)
                     {
                         SendEMail(client, VAF_UserContact_ID, null, subject, message, pdf, isHTML, tableID, RecID, action);
                     }
                     else // send to all user against Bpartner
                     {
-                        DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID =" + bpID, null);
+                        DataSet ds = DB.ExecuteDataset("SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE VAB_BusinessPartner_ID =" + bpID, null);
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             SendEMail(client, Convert.ToInt32(dr[0]), null, subject, message, pdf, isHTML, tableID, RecID, action);
@@ -4091,7 +4091,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
                 else if (token == "BPName")
                 {
-                    if (po.Get_TableName() == "C_BPartner")
+                    if (po.Get_TableName() == "VAB_BusinessPartner")
                         outStr.Append(ParseVariable("Name", po));
                     else
                         outStr.Append("@" + token + "@");
@@ -4113,10 +4113,10 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                               CASE
                                 WHEN ( (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VADMS_MetaData')=
                                   (SELECT VAF_TableView_ID
-                                  FROM AD_WorkFlow
+                                  FROM VAF_Workflow
                                   WHERE IsActive    ='Y'
-                                  AND AD_WorkFlow_ID=
-                                    (SELECT AD_Workflow_ID FROM VAF_WFlow_Node WHERE VAF_WFlow_Node_ID =" + GetVAF_WFlow_Node_ID() + @"
+                                  AND VAF_Workflow_ID=
+                                    (SELECT VAF_Workflow_ID FROM VAF_WFlow_Node WHERE VAF_WFlow_Node_ID =" + GetVAF_WFlow_Node_ID() + @"
                                     )
                                   ) )
                                 THEN 'True'
@@ -4202,7 +4202,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         sb.Append(user.GetName()).Append(" ");
                 }
                 //
-                index = po.Get_ColumnIndex("C_BPartner_ID");
+                index = po.Get_ColumnIndex("VAB_BusinessPartner_ID");
                 if (index != -1)
                 {
                     int? bp = (int?)po.Get_Value(index);

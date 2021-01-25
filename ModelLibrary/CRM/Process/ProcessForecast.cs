@@ -43,13 +43,13 @@ namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            X_C_Forecast fore = new X_C_Forecast(GetCtx(), Util.GetValueOfInt(GetRecord_ID()), null);
+            X_VAB_Forecast fore = new X_VAB_Forecast(GetCtx(), Util.GetValueOfInt(GetRecord_ID()), null);
             
-            int[] allIds = X_C_ForecastLine.GetAllIDs("C_ForecastLine", "C_Forecast_ID = " + Util.GetValueOfInt(GetRecord_ID()), null);
+            int[] allIds = X_VAB_ForecastLine.GetAllIDs("VAB_ForecastLine", "VAB_Forecast_ID = " + Util.GetValueOfInt(GetRecord_ID()), null);
 
             for (int i = 0; i < allIds.Length; i++)
             {
-                X_C_ForecastLine foreLine = new X_C_ForecastLine(GetCtx(), Util.GetValueOfInt(allIds[i]), null);
+                X_VAB_ForecastLine foreLine = new X_VAB_ForecastLine(GetCtx(), Util.GetValueOfInt(allIds[i]), null);
                 foreLine.SetProcessed(true);
                 if (!foreLine.Save())
                 {
@@ -66,9 +66,9 @@ namespace VAdvantage.Process
                 return msg;
             }
 
-            //sql = "update c_forecastline set processed = 'Y' where c_forecast_id = " + Util.GetValueOfInt(GetRecord_ID());
+            //sql = "update VAB_Forecastline set processed = 'Y' where VAB_Forecast_id = " + Util.GetValueOfInt(GetRecord_ID());
             //int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
-            //sql = "update c_forecast set processed = 'Y' where c_forecast_id = " + Util.GetValueOfInt(GetRecord_ID());
+            //sql = "update VAB_Forecast set processed = 'Y' where VAB_Forecast_id = " + Util.GetValueOfInt(GetRecord_ID());
             //res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
             msg = Msg.GetMsg(GetCtx(), "Processed");
             return msg;

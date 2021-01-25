@@ -117,11 +117,11 @@ namespace VAdvantage.Process
 
             //	Create to Order
             MOrder order = null;
-            //	try to find PO to C_BPartner
+            //	try to find PO to VAB_BusinessPartner
             for (int i = 0; i < m_pos.Count; i++)
             {
                 MOrder test = m_pos[i];
-                if (test.GetC_BPartner_ID() == pos[0].GetC_BPartner_ID())
+                if (test.GetVAB_BusinessPartner_ID() == pos[0].GetVAB_BusinessPartner_ID())
                 {
                     order = test;
                     break;
@@ -130,7 +130,7 @@ namespace VAdvantage.Process
             if (order == null)	//	create new Order
             {
                 //	Vendor
-                MBPartner bp = new MBPartner(GetCtx(), pos[0].GetC_BPartner_ID(), Get_TrxName());
+                MBPartner bp = new MBPartner(GetCtx(), pos[0].GetVAB_BusinessPartner_ID(), Get_TrxName());
                 //	New Order
                 order = new MOrder(project, false, null);
                 int VAF_Org_ID = projectLine.GetVAF_Org_ID();
@@ -162,7 +162,7 @@ namespace VAdvantage.Process
             {
                 //	Try to find purchase price
                 Decimal poPrice = pos[0].GetPricePO();
-                int C_Currency_ID = pos[0].GetC_Currency_ID();
+                int VAB_Currency_ID = pos[0].GetVAB_Currency_ID();
                 // 
                 if ( Env.Signum(poPrice) == 0)
                     poPrice = pos[0].GetPriceLastPO();
@@ -171,10 +171,10 @@ namespace VAdvantage.Process
                 //	We have a price
                 if ( Env.Signum(poPrice) != 0)
                 {
-                    if (order.GetC_Currency_ID() != C_Currency_ID)
+                    if (order.GetVAB_Currency_ID() != VAB_Currency_ID)
                         poPrice = VAdvantage.Model.MConversionRate.Convert(GetCtx(), poPrice,
-                            C_Currency_ID, order.GetC_Currency_ID(),
-                            order.GetDateAcct(), order.GetC_ConversionType_ID(),
+                            VAB_Currency_ID, order.GetVAB_Currency_ID(),
+                            order.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                             order.GetVAF_Client_ID(), order.GetVAF_Org_ID());
                     orderLine.SetPrice(poPrice);
                 }

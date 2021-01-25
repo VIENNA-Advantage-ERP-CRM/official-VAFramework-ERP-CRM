@@ -1090,11 +1090,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Currency
         /// </summary>
-        /// <returns>C_Currency_ID</returns>
-        public int GetC_Currency_ID()
+        /// <returns>VAB_Currency_ID</returns>
+        public int GetVAB_Currency_ID()
         {
             //	MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID());
-            //	return pl.GetC_Currency_ID();
+            //	return pl.GetVAB_Currency_ID();
             return 0;
         }
 

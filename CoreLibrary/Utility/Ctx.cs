@@ -59,7 +59,7 @@ namespace VAdvantage.Utility
     /// <summary>
     ///	Load list from string representaion
     /// </summary>
-    /// <param name="stringRepresentation">stringRepresentation example {VAF_Org_ID=11, IsDefault=N, IsActive=Y, Greeting=Mr, Name=Mr, C_Greeting_ID=100, VAF_Client_ID=11, IsFirstNameOnly=N}</param>
+    /// <param name="stringRepresentation">stringRepresentation example {VAF_Org_ID=11, IsDefault=N, IsActive=Y, Greeting=Mr, Name=Mr, VAB_Greeting_ID=100, VAF_Client_ID=11, IsFirstNameOnly=N}</param>
        protected void Load(String stringRepresentation)
        {
            if (stringRepresentation == null
@@ -941,8 +941,8 @@ namespace VAdvantage.Utility
                     {
                         //String newKey = key.substring (infoPartIndex);
                         //only overwrite newMap when the key is not there. 
-                        //for example, user may have changed 1|C_BPartner_ID on base window to 118
-                        //and 1113|1113|C_BPartner_ID in info window ctx stays as 117. We
+                        //for example, user may have changed 1|VAB_BusinessPartner_ID on base window to 118
+                        //and 1113|1113|VAB_BusinessPartner_ID in info window ctx stays as 117. We
                         // don't want 117 to overwrite 118
                         //if(!newMap.containsKey(newKey))
                         newMap[key]  =  oo;

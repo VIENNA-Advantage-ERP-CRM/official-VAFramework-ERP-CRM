@@ -78,11 +78,11 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="partner">partner</param>
-        public MUser(X_C_BPartner partner)
+        public MUser(X_VAB_BusinessPartner partner)
             : this(partner.GetCtx(), 0, partner.Get_TrxName())
         {
             SetClientOrg(partner);
-            SetC_BPartner_ID(partner.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(partner.GetVAB_BusinessPartner_ID());
             SetName(partner.GetName());
         }
 
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             : this(partner.GetCtx(), 0, partner.Get_TrxName())
         {
             SetClientOrg(partner);
-            SetC_BPartner_ID((int)partner.Get_Value("C_BPartner_ID"));
+            SetVAB_BusinessPartner_ID((int)partner.Get_Value("VAB_BusinessPartner_ID"));
             SetName(partner.Get_Value("Name").ToString());
         }
 
@@ -248,12 +248,12 @@ namespace VAdvantage.Model
         /// Get active Users of BPartner
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BPartner_ID">id</param>
+        /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <returns>array of users</returns>
-        public static MUser[] GetOfBPartner(Ctx ctx, int C_BPartner_ID)
+        public static MUser[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID)
         {
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + C_BPartner_ID + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND IsActive='Y'";
 
             try
             {
@@ -469,7 +469,7 @@ namespace VAdvantage.Model
 
 
             String sql = "SELECT MAX(VAF_UserContact_ID) FROM VAF_UserContact u"
-                + " INNER JOIN C_BPartner bp ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
+                + " INNER JOIN VAB_BusinessPartner bp ON (u.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                 + "WHERE bp.IsSalesRep='Y' AND VAF_UserContact_ID=" + VAF_UserContact_ID;
             int no = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
             return no == VAF_UserContact_ID;
@@ -1102,7 +1102,7 @@ namespace VAdvantage.Model
         public static bool GetIsEmployee(Ctx ctx, int VAF_USERCONTACT_ID)
         {
             MUser user = MUser.Get(ctx, VAF_USERCONTACT_ID);
-            X_C_BPartner bp = new X_C_BPartner(ctx, user.GetC_BPartner_ID(), null);
+            X_VAB_BusinessPartner bp = new X_VAB_BusinessPartner(ctx, user.GetVAB_BusinessPartner_ID(), null);
             user = null;
             if (bp == null)
                 return false;

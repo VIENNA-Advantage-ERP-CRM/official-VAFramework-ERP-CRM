@@ -300,7 +300,7 @@
                     return;
                 }
                 _mTab = GridWindow.getTabs()[0];
-                // var id = windowNo + "_" + C_AcctSchema_ID; //uniqueID
+                // var id = windowNo + "_" + VAB_AccountBook_ID; //uniqueID
                 gridController = new VIS.GridController(false);
                 gridController.initGrid(true, $self.windowNo, $self, _mTab);
                 gridController.setVisible(true);

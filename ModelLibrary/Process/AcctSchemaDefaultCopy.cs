@@ -24,7 +24,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class AcctSchemaDefaultCopy : ProcessEngine.SvrProcess
     {
     /**	Acct Schema					*/
-	private int			_C_AcctSchema_ID = 0;
+	private int			_VAB_AccountBook_ID = 0;
 	/** Copy & Overwrite			*/
 	private Boolean 	_CopyOverwriteAcct = false;
 	
@@ -42,9 +42,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("C_AcctSchema_ID"))
+			else if (name.Equals("VAB_AccountBook_ID"))
             {
-				_C_AcctSchema_ID = para[i].GetParameterAsInt();
+				_VAB_AccountBook_ID = para[i].GetParameterAsInt();
             }
 			else if (name.Equals("CopyOverwriteAcct"))
             {
@@ -63,21 +63,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns></returns>
 	protected override String DoIt()
 	{
-		log.Info("C_AcctSchema_ID=" + _C_AcctSchema_ID
+		log.Info("VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ ", CopyOverwriteAcct=" + _CopyOverwriteAcct);
-		if (_C_AcctSchema_ID == 0)
+		if (_VAB_AccountBook_ID == 0)
         {
-			throw new Exception("C_AcctSchema_ID=0");
+			throw new Exception("VAB_AccountBook_ID=0");
         }
-		MAcctSchema a = MAcctSchema.Get(GetCtx(), _C_AcctSchema_ID);
+		MAcctSchema a = MAcctSchema.Get(GetCtx(), _VAB_AccountBook_ID);
         if (a.Get_ID() == 0)
         {
-            throw new Exception("Not Found - C_AcctSchema_ID=" + _C_AcctSchema_ID);
+            throw new Exception("Not Found - VAB_AccountBook_ID=" + _VAB_AccountBook_ID);
         }
-		MAcctSchemaDefault acct = MAcctSchemaDefault.Get (GetCtx(), _C_AcctSchema_ID);
+		MAcctSchemaDefault acct = MAcctSchemaDefault.Get (GetCtx(), _VAB_AccountBook_ID);
         if (acct == null || acct.Get_ID() == 0)
         {
-            throw new Exception("Default Not Found - C_AcctSchema_ID=" + _C_AcctSchema_ID);
+            throw new Exception("Default Not Found - VAB_AccountBook_ID=" + _VAB_AccountBook_ID);
         }
 		String sql = null;
 		int updated = 0;
@@ -104,7 +104,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ", P_MaterialOverhd_Acct = " + acct.GetP_MaterialOverhd_Acct()
                 // ****************
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE pa.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE pa.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND EXISTS (SELECT * FROM M_Product_Category p "
 					+ "WHERE p.M_Product_Category_ID=pa.M_Product_Category_ID)";
 			//updated = DataBase.executeUpdate(sql, Get_Trx());
@@ -114,7 +114,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		//	Insert new Product Category
 		sql = "INSERT INTO M_Product_Category_Acct "
-			+ "(M_Product_Category_ID, C_AcctSchema_ID,"
+			+ "(M_Product_Category_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " P_Revenue_Acct, P_Expense_Acct, P_CostAdjustment_Acct, P_InventoryClearing_Acct, P_Asset_Acct, P_CoGs_Acct,"
 			+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct,"
@@ -123,7 +123,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             + " ,P_Resource_Absorption_Acct, P_MaterialOverhd_Acct "
             // **************** 
             + " ) "
-			+ "SELECT p.M_Product_Category_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT p.M_Product_Category_ID, acct.VAB_AccountBook_ID,"
 			+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 			+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct,"
@@ -132,34 +132,34 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             + " ,acct.P_Resource_Absorption_Acct, acct.P_MaterialOverhd_Acct "
             // Added ****************  
 			+ " FROM M_Product_Category p"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (p.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (p.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM M_Product_Category_Acct pa "
 				+ "WHERE pa.M_Product_Category_ID=p.M_Product_Category_ID"
-				+ " AND pa.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ " AND pa.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Product_Category_ID@");
 		createdTotal += created;
 		if (!_CopyOverwriteAcct)	//	Insert new Products
 		{
 			sql = "INSERT INTO M_Product_Acct "
-				+ "(M_Product_ID, C_AcctSchema_ID,"
+				+ "(M_Product_ID, VAB_AccountBook_ID,"
 				+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 				+ " P_Revenue_Acct, P_Expense_Acct, P_CostAdjustment_Acct, P_InventoryClearing_Acct, P_Asset_Acct, P_CoGs_Acct,"
 				+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct,"
                 + " P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct,P_Resource_Absorption_Acct, P_MaterialOverhd_Acct) "
-				+ "SELECT p.M_Product_ID, acct.C_AcctSchema_ID,"
+				+ "SELECT p.M_Product_ID, acct.VAB_AccountBook_ID,"
 				+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 				+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 				+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct,"
                 + " acct.P_TradeDiscountRec_Acct, acct.P_TradeDiscountGrant_Acct, acct.P_Resource_Absorption_Acct, acct.P_MaterialOverhd_Acct "
 				+ "FROM M_Product p"
 				+ " INNER JOIN M_Product_Category_Acct acct ON (acct.M_Product_Category_ID=p.M_Product_Category_ID)"
-				+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND p.M_Product_Category_ID=acct.M_Product_Category_ID"
 				+ " AND NOT EXISTS (SELECT * FROM M_Product_Acct pa "
 					+ "WHERE pa.M_Product_ID=p.M_Product_ID"
-					+ " AND pa.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+					+ " AND pa.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 			created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 			AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Product_ID@");
 			createdTotal += created;
@@ -169,7 +169,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update Business Partner Group
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_BP_Group_Acct a "
+			sql = "UPDATE VAB_BPart_Category_Acct a "
 				+ "SET C_Receivable_Acct=" + acct.GetC_Receivable_Acct()
 				+ ", C_Receivable_Services_Acct=" + acct.GetC_Receivable_Services_Acct()
 				+ ", C_Prepayment_Acct=" + acct.GetC_Prepayment_Acct()
@@ -184,37 +184,37 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ ", NotInvoicedRevenue_Acct=" + acct.GetNotInvoicedRevenue_Acct()
 				+ ", NotInvoicedReceivables_Acct=" + acct.GetNotInvoicedReceivables_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
-				+ " AND EXISTS (SELECT * FROM C_BP_Group_Acct x "
-					+ "WHERE x.C_BP_Group_ID=a.C_BP_Group_ID)";
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+				+ " AND EXISTS (SELECT * FROM VAB_BPart_Category_Acct x "
+					+ "WHERE x.VAB_BPart_Category_ID=a.VAB_BPart_Category_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_BP_Group_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_BPart_Category_ID@");
 			updatedTotal += updated;
 		}
 		// Insert Business Partner Group
-		sql = "INSERT INTO C_BP_Group_Acct "
-			+ "(C_BP_Group_ID, C_AcctSchema_ID,"
+		sql = "INSERT INTO VAB_BPart_Category_Acct "
+			+ "(VAB_BPart_Category_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " C_Receivable_Acct, C_Receivable_Services_Acct, C_PrePayment_Acct,"
 			+ " V_Liability_Acct, V_Liability_Services_Acct, V_PrePayment_Acct,"
 			+ " PayDiscount_Exp_Acct, PayDiscount_Rev_Acct, WriteOff_Acct,"
 			+ " NotInvoicedReceipts_Acct, UnEarnedRevenue_Acct,"
 			+ " NotInvoicedRevenue_Acct, NotInvoicedReceivables_Acct) "
-			+ "SELECT x.C_BP_Group_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.VAB_BPart_Category_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.C_Receivable_Acct, acct.C_Receivable_Services_Acct, acct.C_PrePayment_Acct,"
 			+ " acct.V_Liability_Acct, acct.V_Liability_Services_Acct, acct.V_PrePayment_Acct,"
 			+ " acct.PayDiscount_Exp_Acct, acct.PayDiscount_Rev_Acct, acct.WriteOff_Acct,"
 			+ " acct.NotInvoicedReceipts_Acct, acct.UnEarnedRevenue_Acct,"
 			+ " acct.NotInvoicedRevenue_Acct, acct.NotInvoicedReceivables_Acct "
-			+ "FROM C_BP_Group x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_BP_Group_Acct a "
-				+ "WHERE a.C_BP_Group_ID=x.C_BP_Group_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+			+ "FROM VAB_BPart_Category x"
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+			+ " AND NOT EXISTS (SELECT * FROM VAB_BPart_Category_Acct a "
+				+ "WHERE a.VAB_BPart_Category_ID=x.VAB_BPart_Category_ID"
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @C_BP_Group_ID@");
+		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_BPart_Category_ID@");
 		createdTotal += created;
 
 		
@@ -225,66 +225,66 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ "SET E_Expense_Acct=" + acct.GetE_Expense_Acct()
 				+ ", E_Prepayment_Acct=" + acct.GetE_Prepayment_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND EXISTS (SELECT * FROM C_BP_Employee_Acct x "
-					+ "WHERE x.C_BPartner_ID=a.C_BPartner_ID)";
+					+ "WHERE x.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_BPartner_ID@ @IsEmployee@");
+			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_BusinessPartner_ID@ @IsEmployee@");
 			updatedTotal += updated;
 		}
 		//	Insert new Business Partner - Employee
 		sql = "INSERT INTO C_BP_Employee_Acct "
-			+ "(C_BPartner_ID, C_AcctSchema_ID,"
+			+ "(VAB_BusinessPartner_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " E_Expense_Acct, E_Prepayment_Acct) "
-			+ "SELECT x.C_BPartner_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.VAB_BusinessPartner_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.E_Expense_Acct, acct.E_Prepayment_Acct "
-			+ "FROM C_BPartner x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ "FROM VAB_BusinessPartner x"
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM C_BP_Employee_Acct a "
-				+ "WHERE a.C_BPartner_ID=x.C_BPartner_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ "WHERE a.VAB_BusinessPartner_ID=x.VAB_BusinessPartner_ID"
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_BPartner_ID@ @IsEmployee@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_BusinessPartner_ID@ @IsEmployee@");
 		createdTotal += created;
 		//
 		if (!_CopyOverwriteAcct)
 		{
 			sql = "INSERT INTO C_BP_Customer_Acct "
-				+ "(C_BPartner_ID, C_AcctSchema_ID,"
+				+ "(VAB_BusinessPartner_ID, VAB_AccountBook_ID,"
 				+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 				+ " C_Receivable_Acct, C_Receivable_Services_Acct, C_PrePayment_Acct) "
-				+ "SELECT p.C_BPartner_ID, acct.C_AcctSchema_ID,"
+				+ "SELECT p.VAB_BusinessPartner_ID, acct.VAB_AccountBook_ID,"
 				+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 				+ " acct.C_Receivable_Acct, acct.C_Receivable_Services_Acct, acct.C_PrePayment_Acct "
-				+ "FROM C_BPartner p"
-				+ " INNER JOIN C_BP_Group_Acct acct ON (acct.C_BP_Group_ID=p.C_BP_Group_ID)"
-				+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID			//	#
-				+ " AND p.C_BP_Group_ID=acct.C_BP_Group_ID"
+				+ "FROM VAB_BusinessPartner p"
+				+ " INNER JOIN VAB_BPart_Category_Acct acct ON (acct.VAB_BPart_Category_ID=p.VAB_BPart_Category_ID)"
+				+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID			//	#
+				+ " AND p.VAB_BPart_Category_ID=acct.VAB_BPart_Category_ID"
 				+ " AND NOT EXISTS (SELECT * FROM C_BP_Customer_Acct ca "
-					+ "WHERE ca.C_BPartner_ID=p.C_BPartner_ID"
-					+ " AND ca.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+					+ "WHERE ca.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID"
+					+ " AND ca.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 			created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_BPartner_ID@ @IsCustomer@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_BusinessPartner_ID@ @IsCustomer@");
 			createdTotal += created;
 			//
 			sql = "INSERT INTO C_BP_Vendor_Acct "
-				+ "(C_BPartner_ID, C_AcctSchema_ID,"
+				+ "(VAB_BusinessPartner_ID, VAB_AccountBook_ID,"
 				+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 				+ " V_Liability_Acct, V_Liability_Services_Acct, V_PrePayment_Acct) "
-				+ "SELECT p.C_BPartner_ID, acct.C_AcctSchema_ID,"
+				+ "SELECT p.VAB_BusinessPartner_ID, acct.VAB_AccountBook_ID,"
 				+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 				+ " acct.V_Liability_Acct, acct.V_Liability_Services_Acct, acct.V_PrePayment_Acct "
-				+ "FROM C_BPartner p"
-				+ " INNER JOIN C_BP_Group_Acct acct ON (acct.C_BP_Group_ID=p.C_BP_Group_ID)"
-				+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID			//	#
-				+ " AND p.C_BP_Group_ID=acct.C_BP_Group_ID"
+				+ "FROM VAB_BusinessPartner p"
+				+ " INNER JOIN VAB_BPart_Category_Acct acct ON (acct.VAB_BPart_Category_ID=p.VAB_BPart_Category_ID)"
+				+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID			//	#
+				+ " AND p.VAB_BPart_Category_ID=acct.VAB_BPart_Category_ID"
 				+ " AND NOT EXISTS (SELECT * FROM C_BP_Vendor_Acct va "
-					+ "WHERE va.C_BPartner_ID=p.C_BPartner_ID AND va.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+					+ "WHERE va.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND va.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 			created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_BPartner_ID@ @IsVendor@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_BusinessPartner_ID@ @IsVendor@");
 			createdTotal += created;
 		}
 
@@ -297,7 +297,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ ", W_Revaluation_Acct=" + acct.GetW_Revaluation_Acct()
 				+ ", W_InvActualAdjust_Acct=" + acct.GetW_InvActualAdjust_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND EXISTS (SELECT * FROM M_Warehouse_Acct x "
 					+ "WHERE x.M_Warehouse_ID=a.M_Warehouse_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
@@ -306,18 +306,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		//	Insert new Warehouse
 		sql = "INSERT INTO M_Warehouse_Acct "
-			+ "(M_Warehouse_ID, C_AcctSchema_ID,"
+			+ "(M_Warehouse_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " W_Inventory_Acct, W_Differences_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct) "
-			+ "SELECT x.M_Warehouse_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.M_Warehouse_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.W_Inventory_Acct, acct.W_Differences_Acct, acct.W_Revaluation_Acct, acct.W_InvActualAdjust_Acct "
 			+ "FROM M_Warehouse x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM M_Warehouse_Acct a "
 				+ "WHERE a.M_Warehouse_ID=x.M_Warehouse_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Warehouse_ID@");
 		createdTotal += created;
@@ -330,7 +330,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ "SET PJ_Asset_Acct=" + acct.GetPJ_Asset_Acct()
 				+ ", PJ_WIP_Acct=" + acct.GetPJ_Asset_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND EXISTS (SELECT * FROM C_Project_Acct x "
 					+ "WHERE x.C_Project_ID=a.C_Project_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
@@ -339,18 +339,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		//	Insert new Projects
 		sql = "INSERT INTO C_Project_Acct "
-			+ "(C_Project_ID, C_AcctSchema_ID,"
+			+ "(C_Project_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " PJ_Asset_Acct, PJ_WIP_Acct) "
-			+ "SELECT x.C_Project_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.C_Project_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.PJ_Asset_Acct, acct.PJ_WIP_Acct "
 			+ "FROM C_Project x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM C_Project_Acct a "
 				+ "WHERE a.C_Project_ID=x.C_Project_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Project_ID@");
 		createdTotal += created;
@@ -366,7 +366,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ ", T_Receivables_Acct=" + acct.GetT_Receivables_Acct()
 				+ ", T_Expense_Acct=" + acct.GetT_Expense_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 				+ " AND EXISTS (SELECT * FROM C_Tax_Acct x "
 					+ "WHERE x.C_Tax_ID=a.C_Tax_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
@@ -375,18 +375,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		//	Insert new Tax
 		sql = "INSERT INTO C_Tax_Acct "
-			+ "(C_Tax_ID, C_AcctSchema_ID,"
+			+ "(C_Tax_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " T_Due_Acct, T_Liability_Acct, T_Credit_Acct, T_Receivables_Acct, T_Expense_Acct) "
-			+ "SELECT x.C_Tax_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.C_Tax_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.T_Due_Acct, acct.T_Liability_Acct, acct.T_Credit_Acct, acct.T_Receivables_Acct, acct.T_Expense_Acct "
 			+ "FROM C_Tax x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM C_Tax_Acct a "
 				+ "WHERE a.C_Tax_ID=x.C_Tax_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Tax_ID@");
 		createdTotal += created;
@@ -395,7 +395,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update BankAccount
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_BankAccount_Acct a "
+			sql = "UPDATE VAB_Bank_Acct_Acct a "
 				+ "SET B_InTransit_Acct=" + acct.GetB_InTransit_Acct()
 				+ ", B_Asset_Acct=" + acct.GetB_Asset_Acct()
 				+ ", B_Expense_Acct=" + acct.GetB_Expense_Acct()
@@ -409,35 +409,35 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ ", B_RevaluationGain_Acct=" + acct.GetB_RevaluationGain_Acct()
 				+ ", B_RevaluationLoss_Acct=" + acct.GetB_RevaluationLoss_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
-				+ " AND EXISTS (SELECT * FROM C_BankAccount_Acct x "
-					+ "WHERE x.C_BankAccount_ID=a.C_BankAccount_ID)";
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+				+ " AND EXISTS (SELECT * FROM VAB_Bank_Acct_Acct x "
+					+ "WHERE x.VAB_Bank_Acct_ID=a.VAB_Bank_Acct_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_BankAccount_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_Bank_Acct_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new BankAccount
-		sql = "INSERT INTO C_BankAccount_Acct "
-			+ "(C_BankAccount_ID, C_AcctSchema_ID,"
+		sql = "INSERT INTO VAB_Bank_Acct_Acct "
+			+ "(VAB_Bank_Acct_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " B_InTransit_Acct, B_Asset_Acct, B_Expense_Acct, B_InterestRev_Acct, B_InterestExp_Acct,"
 			+ " B_Unidentified_Acct, B_UnallocatedCash_Acct, B_PaymentSelect_Acct,"
 			+ " B_SettlementGain_Acct, B_SettlementLoss_Acct,"
 			+ " B_RevaluationGain_Acct, B_RevaluationLoss_Acct) "
-			+ "SELECT x.C_BankAccount_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.VAB_Bank_Acct_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.B_InTransit_Acct, acct.B_Asset_Acct, acct.B_Expense_Acct, acct.B_InterestRev_Acct, acct.B_InterestExp_Acct,"
 			+ " acct.B_Unidentified_Acct, acct.B_UnallocatedCash_Acct, acct.B_PaymentSelect_Acct,"
 			+ " acct.B_SettlementGain_Acct, acct.B_SettlementLoss_Acct,"
 			+ " acct.B_RevaluationGain_Acct, acct.B_RevaluationLoss_Acct "
-			+ "FROM C_BankAccount x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_BankAccount_Acct a "
-				+ "WHERE a.C_BankAccount_ID=x.C_BankAccount_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+			+ "FROM VAB_Bank_Acct x"
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+			+ " AND NOT EXISTS (SELECT * FROM VAB_Bank_Acct_Acct a "
+				+ "WHERE a.VAB_Bank_Acct_ID=x.VAB_Bank_Acct_ID"
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_BankAccount_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_Bank_Acct_ID@");
 		createdTotal += created;
 
 
@@ -447,7 +447,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			sql = "UPDATE C_Withholding_Acct a "
 				+ "SET Withholding_Acct=" + acct.GetWithholding_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID 
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID 
 				+ " AND EXISTS (SELECT * FROM C_Withholding_Acct x "
 					+ "WHERE x.C_Withholding_ID=a.C_Withholding_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
@@ -456,18 +456,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		//	Insert new Withholding
 		sql = "INSERT INTO C_Withholding_Acct "
-			+ "(C_Withholding_ID, C_AcctSchema_ID,"
+			+ "(C_Withholding_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ "	Withholding_Acct) "
-			+ "SELECT x.C_Withholding_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.C_Withholding_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.Withholding_Acct "
 			+ "FROM C_Withholding x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
 			+ " AND NOT EXISTS (SELECT * FROM C_Withholding_Acct a "
 				+ "WHERE a.C_Withholding_ID=x.C_Withholding_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Withholding_ID@");
 		createdTotal += created;
@@ -476,71 +476,71 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update Charge
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_Charge_Acct a "
+			sql = "UPDATE VAB_Charge_Acct a "
 				+ "SET Ch_Expense_Acct=" + acct.GetCh_Expense_Acct()
 				+ ", Ch_Revenue_Acct=" + acct.GetCh_Revenue_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
-				+ " AND EXISTS (SELECT * FROM C_Charge_Acct x "
-					+ "WHERE x.C_Charge_ID=a.C_Charge_ID)";
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+				+ " AND EXISTS (SELECT * FROM VAB_Charge_Acct x "
+					+ "WHERE x.VAB_Charge_ID=a.VAB_Charge_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_Charge_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_Charge_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Charge
-		sql = "INSERT INTO C_Charge_Acct "
-			+ "(C_Charge_ID, C_AcctSchema_ID,"
+		sql = "INSERT INTO VAB_Charge_Acct "
+			+ "(VAB_Charge_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " Ch_Expense_Acct, Ch_Revenue_Acct) "
-			+ "SELECT x.C_Charge_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.VAB_Charge_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.Ch_Expense_Acct, acct.Ch_Revenue_Acct "
-			+ "FROM C_Charge x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_Charge_Acct a "
-				+ "WHERE a.C_Charge_ID=x.C_Charge_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+			+ "FROM VAB_Charge x"
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+			+ " AND NOT EXISTS (SELECT * FROM VAB_Charge_Acct a "
+				+ "WHERE a.VAB_Charge_ID=x.VAB_Charge_ID"
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Charge_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_Charge_ID@");
 		createdTotal += created;
 
 
 		//	Update Cashbook
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_Cashbook_Acct a "
+			sql = "UPDATE VAB_CashBook_Acct a "
 				+ "SET CB_Asset_Acct=" + acct.GetCB_Asset_Acct()
 				+ ", CB_Differences_Acct=" + acct.GetCB_Differences_Acct()
 				+ ", CB_CashTransfer_Acct=" + acct.GetCB_CashTransfer_Acct()
 				+ ", CB_Expense_Acct=" + acct.GetCB_Expense_Acct()
 				+ ", CB_Receipt_Acct=" + acct.GetCB_Receipt_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
-				+ "WHERE a.C_AcctSchema_ID=" + _C_AcctSchema_ID
-				+ " AND EXISTS (SELECT * FROM C_Cashbook_Acct x "
-					+ "WHERE x.C_Cashbook_ID=a.C_Cashbook_ID)";
+				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+				+ " AND EXISTS (SELECT * FROM VAB_CashBook_Acct x "
+					+ "WHERE x.VAB_CashBook_ID=a.VAB_CashBook_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_Cashbook_ID@");
+			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_CashBook_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Cashbook
-		sql = "INSERT INTO C_Cashbook_Acct "
-			+ "(C_Cashbook_ID, C_AcctSchema_ID,"
+		sql = "INSERT INTO VAB_CashBook_Acct "
+			+ "(VAB_CashBook_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " CB_Asset_Acct, CB_Differences_Acct, CB_CashTransfer_Acct,"
 			+ " CB_Expense_Acct, CB_Receipt_Acct) "
-			+ "SELECT x.C_Cashbook_ID, acct.C_AcctSchema_ID,"
+			+ "SELECT x.VAB_CashBook_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.CB_Asset_Acct, acct.CB_Differences_Acct, acct.CB_CashTransfer_Acct,"
 			+ " acct.CB_Expense_Acct, acct.CB_Receipt_Acct "
-			+ "FROM C_Cashbook x"
-			+ " INNER JOIN C_AcctSchema_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
-			+ "WHERE acct.C_AcctSchema_ID=" + _C_AcctSchema_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_Cashbook_Acct a "
-				+ "WHERE a.C_Cashbook_ID=x.C_Cashbook_ID"
-				+ " AND a.C_AcctSchema_ID=acct.C_AcctSchema_ID)";
+			+ "FROM VAB_CashBook x"
+			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
+			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
+			+ " AND NOT EXISTS (SELECT * FROM VAB_CashBook_Acct a "
+				+ "WHERE a.VAB_CashBook_ID=x.VAB_CashBook_ID"
+				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Cashbook_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_CashBook_ID@");
 		createdTotal += created;
 		
 		return "@Created@=" + createdTotal + ", @Updated@=" + updatedTotal;

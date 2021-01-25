@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = null;
             //
             Query query = new Query("C_Project");
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = null;
             //
             StringBuilder sb = new StringBuilder("SELECT COALESCE(SUM(PlannedAmt),COALESCE(SUM(PlannedQty),COUNT(*))), ");
@@ -229,7 +229,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = null;
             //	PlannedAmt -> PlannedQty -> Count
             StringBuilder sb = new StringBuilder("SELECT COALESCE(SUM(PlannedAmt),COALESCE(SUM(PlannedQty),COUNT(*))) "

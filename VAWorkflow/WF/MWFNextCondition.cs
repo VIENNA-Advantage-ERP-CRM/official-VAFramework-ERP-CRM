@@ -126,7 +126,7 @@ namespace VAdvantage.WF
             bool result = false;
 
             //Lakhwinder
-            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("VAB_GENFEATURESETINSTANCE_ID"))
             {
                 return EvaluateAttributeCondition(po);
             }
@@ -796,8 +796,8 @@ namespace VAdvantage.WF
         {
             //throw new NotImplementedException();
 
-            int wfcattSet = GetC_GenAttributeSet_ID();
-            int rcattSet = Util.GetValueOfInt(po.Get_Value("C_GenAttributeSet_ID"));
+            int wfcattSet = GetVAB_GenFeatureSet_ID();
+            int rcattSet = Util.GetValueOfInt(po.Get_Value("VAB_GenFeatureSet_ID"));
             if (rcattSet != wfcattSet)
             {
                 return false;
@@ -805,23 +805,23 @@ namespace VAdvantage.WF
 
             try
             {
-                int wfcattSetIns = Util.GetValueOfInt(GetC_GenAttributeSetInstance_ID());
-                int rcattSetIns = Util.GetValueOfInt(po.Get_Value("C_GenAttributeSetInstance_ID"));
+                int wfcattSetIns = Util.GetValueOfInt(GetVAB_GenFeatureSetInstance_ID());
+                int rcattSetIns = Util.GetValueOfInt(po.Get_Value("VAB_GenFeatureSetInstance_ID"));
 
-                DataSet wfcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + wfcattSetIns, null);
-                DataSet rcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + rcattSetIns, null);
+                DataSet wfcDs = DB.ExecuteDataset("select VAB_GenFeature_id,VAB_GenFeaturevalue_id from VAB_GenFeatureInstance where VAB_GenFeatureSetInstance_id=" + wfcattSetIns, null);
+                DataSet rcDs = DB.ExecuteDataset("select VAB_GenFeature_id,VAB_GenFeaturevalue_id from VAB_GenFeatureInstance where VAB_GenFeatureSetInstance_id=" + rcattSetIns, null);
                 bool retVal = true;
                 for (int i = 0; i < wfcDs.Tables[0].Rows.Count; i++)
                 {
-                    if (wfcDs.Tables[0].Rows[i]["c_genattributevalue_id"] == null || wfcDs.Tables[0].Rows[i]["c_genattributevalue_id"] == DBNull.Value)
+                    if (wfcDs.Tables[0].Rows[i]["VAB_GenFeaturevalue_id"] == null || wfcDs.Tables[0].Rows[i]["VAB_GenFeaturevalue_id"] == DBNull.Value)
                     {
                         continue;
                     }
                     for (int j = 0; j < rcDs.Tables[0].Rows.Count; j++)
                     {
-                        if (wfcDs.Tables[0].Rows[i]["c_genattribute_id"].Equals(rcDs.Tables[0].Rows[j]["c_genattribute_id"]))
+                        if (wfcDs.Tables[0].Rows[i]["VAB_GenFeature_id"].Equals(rcDs.Tables[0].Rows[j]["VAB_GenFeature_id"]))
                         {
-                            retVal = retVal && (wfcDs.Tables[0].Rows[i]["c_genattributevalue_id"].Equals(rcDs.Tables[0].Rows[j]["c_genattributevalue_id"]));
+                            retVal = retVal && (wfcDs.Tables[0].Rows[i]["VAB_GenFeaturevalue_id"].Equals(rcDs.Tables[0].Rows[j]["VAB_GenFeaturevalue_id"]));
                             break;
                         }
                     }

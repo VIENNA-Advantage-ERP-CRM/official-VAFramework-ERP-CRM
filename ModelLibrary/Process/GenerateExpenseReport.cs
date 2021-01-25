@@ -100,7 +100,7 @@ namespace ViennaAdvantage.Process
 
             tExp.SetM_PriceList_ID(M_Pricelist_ID);
             tExp.SetM_Warehouse_ID(1000030);
-            tExp.SetC_BPartner_ID(1001904);
+            tExp.SetVAB_BusinessPartner_ID(1001904);
             if (!tExp.Save(Get_TrxName()))
             {
                 log.SaveError("ExpenseReportHeaderNotSaved", "ExpenseReportHeaderNotSaved");

@@ -35,13 +35,13 @@ namespace VIS.Classes
 
     public class AcctViewerDataAcctSchElements
     {
-        public int C_AcctSchema_Element_ID { get; set; }
+        public int VAB_AccountBook_Element_ID { get; set; }
         public string ElementName { get; set; }
         public string ElementType { get; set; }
-        public int C_ElementValue_ID { get; set; }
+        public int VAB_Acct_Element_ID { get; set; }
         public int SeqNo { get; set; }
         public string Detail { get; set; }
-        public string C_Element_ID { get; set; }
+        public string VAB_Element_ID { get; set; }
     }
 
 }

@@ -1,34 +1,34 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_DimAmtLine
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_DimAmtLine
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DimAmtLine : PO{public X_C_DimAmtLine (Context ctx, int C_DimAmtLine_ID, Trx trxName) : base (ctx, C_DimAmtLine_ID, trxName){/** if (C_DimAmtLine_ID == 0){SetAmount (0.0);SetC_DimAmtAcctType_ID (0);SetC_DimAmtLine_ID (0);SetC_DimAmt_ID (0);} */
-}public X_C_DimAmtLine (Ctx ctx, int C_DimAmtLine_ID, Trx trxName) : base (ctx, C_DimAmtLine_ID, trxName){/** if (C_DimAmtLine_ID == 0){SetAmount (0.0);SetC_DimAmtAcctType_ID (0);SetC_DimAmtLine_ID (0);SetC_DimAmt_ID (0);} */
+public class X_VAB_DimAmtLine : PO{public X_VAB_DimAmtLine (Context ctx, int VAB_DimAmtLine_ID, Trx trxName) : base (ctx, VAB_DimAmtLine_ID, trxName){/** if (VAB_DimAmtLine_ID == 0){SetAmount (0.0);SetVAB_DimAmtAcctType_ID (0);SetVAB_DimAmtLine_ID (0);SetVAB_DimAmt_ID (0);} */
+}public X_VAB_DimAmtLine (Ctx ctx, int VAB_DimAmtLine_ID, Trx trxName) : base (ctx, VAB_DimAmtLine_ID, trxName){/** if (VAB_DimAmtLine_ID == 0){SetAmount (0.0);SetVAB_DimAmtAcctType_ID (0);SetVAB_DimAmtLine_ID (0);SetVAB_DimAmt_ID (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DimAmtLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_DimAmtLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DimAmtLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_DimAmtLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DimAmtLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_DimAmtLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DimAmtLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_DimAmtLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27753729039653L;/** Last Updated Timestamp 8/19/2016 4:18:42 PM */
 public static long updatedMS = 1471603722864L;/** VAF_TableView_ID=1000761 */
 public static int Table_ID; // =1000761;
-/** TableName=C_DimAmtLine */
-public static String Table_Name="C_DimAmtLine";
+/** TableName=VAB_DimAmtLine */
+public static String Table_Name="VAB_DimAmtLine";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -43,7 +43,7 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_DimAmtLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Column.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_DimAmtLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Column.
 @param VAF_Column_ID Column in the table */
 public void SetVAF_Column_ID (int VAF_Column_ID){if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);else
 Set_Value ("VAF_Column_ID", VAF_Column_ID);}/** Get Column.
@@ -53,43 +53,43 @@ public int GetVAF_Column_ID() {Object ii = Get_Value("VAF_Column_ID");if (ii == 
 public void SetAmount (Decimal? Amount){if (Amount == null) throw new ArgumentException ("Amount is mandatory.");Set_Value ("Amount", (Decimal?)Amount);}/** Get Amount.
 @return Amount in a defined currency */
 public Decimal GetAmount() {Object bd =Get_Value("Amount");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Activity.
-@param C_Activity_ID Business Activity */
-public void SetC_Activity_ID (int C_Activity_ID){if (C_Activity_ID <= 0) Set_Value ("C_Activity_ID", null);else
-Set_Value ("C_Activity_ID", C_Activity_ID);}/** Get Activity.
+@param VAB_BillingCode_ID Business Activity */
+public void SetVAB_BillingCode_ID (int VAB_BillingCode_ID){if (VAB_BillingCode_ID <= 0) Set_Value ("VAB_BillingCode_ID", null);else
+Set_Value ("VAB_BillingCode_ID", VAB_BillingCode_ID);}/** Get Activity.
 @return Business Activity */
-public int GetC_Activity_ID() {Object ii = Get_Value("C_Activity_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-public void SetC_BPartner_ID (int C_BPartner_ID){if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);}/** Get Business Partner.
+public int GetVAB_BillingCode_ID() {Object ii = Get_Value("VAB_BillingCode_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID){if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);else
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);}/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-public int GetC_BPartner_ID() {Object ii = Get_Value("C_BPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID){if (C_Campaign_ID <= 0) Set_Value ("C_Campaign_ID", null);else
-Set_Value ("C_Campaign_ID", C_Campaign_ID);}/** Get Campaign.
+public int GetVAB_BusinessPartner_ID() {Object ii = Get_Value("VAB_BusinessPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Campaign.
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID){if (VAB_Promotion_ID <= 0) Set_Value ("VAB_Promotion_ID", null);else
+Set_Value ("VAB_Promotion_ID", VAB_Promotion_ID);}/** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() {Object ii = Get_Value("C_Campaign_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set C_DimAmtAcctType_ID.
-@param C_DimAmtAcctType_ID C_DimAmtAcctType_ID */
-public void SetC_DimAmtAcctType_ID (int C_DimAmtAcctType_ID){if (C_DimAmtAcctType_ID < 1) throw new ArgumentException ("C_DimAmtAcctType_ID is mandatory.");Set_Value ("C_DimAmtAcctType_ID", C_DimAmtAcctType_ID);}/** Get C_DimAmtAcctType_ID.
-@return C_DimAmtAcctType_ID */
-public int GetC_DimAmtAcctType_ID() {Object ii = Get_Value("C_DimAmtAcctType_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set C_DimAmtLine_ID.
-@param C_DimAmtLine_ID C_DimAmtLine_ID */
-public void SetC_DimAmtLine_ID (int C_DimAmtLine_ID){if (C_DimAmtLine_ID < 1) throw new ArgumentException ("C_DimAmtLine_ID is mandatory.");Set_ValueNoCheck ("C_DimAmtLine_ID", C_DimAmtLine_ID);}/** Get C_DimAmtLine_ID.
-@return C_DimAmtLine_ID */
-public int GetC_DimAmtLine_ID() {Object ii = Get_Value("C_DimAmtLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set C_DimAmt_ID.
-@param C_DimAmt_ID C_DimAmt_ID */
-public void SetC_DimAmt_ID (int C_DimAmt_ID){if (C_DimAmt_ID < 1) throw new ArgumentException ("C_DimAmt_ID is mandatory.");Set_Value ("C_DimAmt_ID", C_DimAmt_ID);}/** Get C_DimAmt_ID.
-@return C_DimAmt_ID */
-public int GetC_DimAmt_ID() {Object ii = Get_Value("C_DimAmt_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Element.
-@param C_ElementValue_ID Account Element */
-public void SetC_ElementValue_ID (int C_ElementValue_ID){if (C_ElementValue_ID <= 0) Set_Value ("C_ElementValue_ID", null);else
-Set_Value ("C_ElementValue_ID", C_ElementValue_ID);}/** Get Account Element.
+public int GetVAB_Promotion_ID() {Object ii = Get_Value("VAB_Promotion_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set VAB_DimAmtAcctType_ID.
+@param VAB_DimAmtAcctType_ID VAB_DimAmtAcctType_ID */
+public void SetVAB_DimAmtAcctType_ID (int VAB_DimAmtAcctType_ID){if (VAB_DimAmtAcctType_ID < 1) throw new ArgumentException ("VAB_DimAmtAcctType_ID is mandatory.");Set_Value ("VAB_DimAmtAcctType_ID", VAB_DimAmtAcctType_ID);}/** Get VAB_DimAmtAcctType_ID.
+@return VAB_DimAmtAcctType_ID */
+public int GetVAB_DimAmtAcctType_ID() {Object ii = Get_Value("VAB_DimAmtAcctType_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set VAB_DimAmtLine_ID.
+@param VAB_DimAmtLine_ID VAB_DimAmtLine_ID */
+public void SetVAB_DimAmtLine_ID (int VAB_DimAmtLine_ID){if (VAB_DimAmtLine_ID < 1) throw new ArgumentException ("VAB_DimAmtLine_ID is mandatory.");Set_ValueNoCheck ("VAB_DimAmtLine_ID", VAB_DimAmtLine_ID);}/** Get VAB_DimAmtLine_ID.
+@return VAB_DimAmtLine_ID */
+public int GetVAB_DimAmtLine_ID() {Object ii = Get_Value("VAB_DimAmtLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set VAB_DimAmt_ID.
+@param VAB_DimAmt_ID VAB_DimAmt_ID */
+public void SetVAB_DimAmt_ID (int VAB_DimAmt_ID){if (VAB_DimAmt_ID < 1) throw new ArgumentException ("VAB_DimAmt_ID is mandatory.");Set_Value ("VAB_DimAmt_ID", VAB_DimAmt_ID);}/** Get VAB_DimAmt_ID.
+@return VAB_DimAmt_ID */
+public int GetVAB_DimAmt_ID() {Object ii = Get_Value("VAB_DimAmt_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Element.
+@param VAB_Acct_Element_ID Account Element */
+public void SetVAB_Acct_Element_ID (int VAB_Acct_Element_ID){if (VAB_Acct_Element_ID <= 0) Set_Value ("VAB_Acct_Element_ID", null);else
+Set_Value ("VAB_Acct_Element_ID", VAB_Acct_Element_ID);}/** Get Account Element.
 @return Account Element */
-public int GetC_ElementValue_ID() {Object ii = Get_Value("C_ElementValue_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Element.
-@param C_Element_ID Accounting Element */
-public void SetC_Element_ID (int C_Element_ID){if (C_Element_ID <= 0) Set_Value ("C_Element_ID", null);else
-Set_Value ("C_Element_ID", C_Element_ID);}/** Get Element.
+public int GetVAB_Acct_Element_ID() {Object ii = Get_Value("VAB_Acct_Element_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Element.
+@param VAB_Element_ID Accounting Element */
+public void SetVAB_Element_ID (int VAB_Element_ID){if (VAB_Element_ID <= 0) Set_Value ("VAB_Element_ID", null);else
+Set_Value ("VAB_Element_ID", VAB_Element_ID);}/** Get Element.
 @return Accounting Element */
-public int GetC_Element_ID() {Object ii = Get_Value("C_Element_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Address.
+public int GetVAB_Element_ID() {Object ii = Get_Value("VAB_Element_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Address.
 @param C_Location_ID Location or Address */
 public void SetC_Location_ID (int C_Location_ID){if (C_Location_ID <= 0) Set_Value ("C_Location_ID", null);else
 Set_Value ("C_Location_ID", C_Location_ID);}/** Get Address.

@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Interest Area		
         private MInterestArea _ia = null;
         // To Customer Type		
-        private int _C_BP_Group_ID = -1;
+        private int _VAB_BPart_Category_ID = -1;
         // To Purchaser of Product
         //	comes here
 
@@ -75,9 +75,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _R_MailText_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BP_Group_ID"))
+                else if (name.Equals("VAB_BPart_Category_ID"))
                 {
-                    _C_BP_Group_ID = para[i].GetParameterAsInt();
+                    _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAF_UserContact_ID"))
                 {
@@ -130,7 +130,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 SendInterestArea();
             }
-            if (_C_BP_Group_ID > 0)
+            if (_VAB_BPart_Category_ID > 0)
             {
                 SendBPGroup();
             }
@@ -218,20 +218,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
        /// </summary>
         private void SendBPGroup()
         {
-            log.Info("C_BP_Group_ID=" + _C_BP_Group_ID);
+            log.Info("VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID);
             String sql = "SELECT u.Name, u.EMail, u.VAF_UserContact_ID "
                 + "FROM VAF_UserContact u"
-                + " INNER JOIN C_BPartner bp ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
+                + " INNER JOIN VAB_BusinessPartner bp ON (u.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                 + "WHERE u.IsActive='Y' AND bp.IsActive='Y'"
                 + " AND u.EMail IS NOT NULL"
-                + " AND bp.C_BP_Group_ID=@Param1";
+                + " AND bp.VAB_BPart_Category_ID=@Param1";
 
             SqlParameter[] Param = new SqlParameter[1];
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
-                Param[0] = new SqlParameter("@Param1", _C_BP_Group_ID);
+                Param[0] = new SqlParameter("@Param1", _VAB_BPart_Category_ID);
                 idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);

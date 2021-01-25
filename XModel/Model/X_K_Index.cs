@@ -150,18 +150,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Document Type.
-@param C_DocType_ID Document type or rules */
-public void SetC_DocType_ID (int C_DocType_ID)
+@param VAB_DocTypes_ID Document type or rules */
+public void SetVAB_DocTypes_ID (int VAB_DocTypes_ID)
 {
-if (C_DocType_ID <= 0) Set_ValueNoCheck ("C_DocType_ID", null);
+if (VAB_DocTypes_ID <= 0) Set_ValueNoCheck ("VAB_DocTypes_ID", null);
 else
-Set_ValueNoCheck ("C_DocType_ID", C_DocType_ID);
+Set_ValueNoCheck ("VAB_DocTypes_ID", VAB_DocTypes_ID);
 }
 /** Get Document Type.
 @return Document type or rules */
-public int GetC_DocType_ID() 
+public int GetVAB_DocTypes_ID() 
 {
-Object ii = Get_Value("C_DocType_ID");
+Object ii = Get_Value("VAB_DocTypes_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

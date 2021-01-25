@@ -99,7 +99,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             //SetIsReturnTrx(dt.IsReturnTrx());
             //SetIsSOTrx(dt.IsSOTrx());
 
@@ -126,12 +126,12 @@ namespace VAdvantage.Model
             }
 
             ////	Convert DocType to Target
-            //if (GetC_DocType_ID() != GetC_DocTypeTarget_ID())
+            //if (GetVAB_DocTypes_ID() != GetVAB_DocTypesTarget_ID())
             //{
             //    //	Cannot change Std to anything else if different warehouses
-            //    if (GetC_DocType_ID() != 0)
+            //    if (GetVAB_DocTypes_ID() != 0)
             //    {
-            //        MDocType dtOld = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            //        MDocType dtOld = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             //        if (MDocType.DOCSUBTYPESO_StandardOrder.Equals(dtOld.GetDocSubTypeSO())		//	From SO
             //            && !MDocType.DOCSUBTYPESO_StandardOrder.Equals(dt.GetDocSubTypeSO()))	//	To !SO
             //        {
@@ -151,14 +151,14 @@ namespace VAdvantage.Model
             //    if (DOCSTATUS_Drafted.Equals(GetDocStatus())
             //        || DOCSTATUS_InProgress.Equals(GetDocStatus())
             //        || DOCSTATUS_Invalid.Equals(GetDocStatus())
-            //        || GetC_DocType_ID() == 0)
+            //        || GetVAB_DocTypes_ID() == 0)
             //    {
-            //        SetC_DocType_ID(GetC_DocTypeTarget_ID());
+            //        SetVAB_DocTypes_ID(GetVAB_DocTypesTarget_ID());
             //    }
             //    else	//	convert only if offer
             //    {
             //        if (dt.IsOffer())
-            //            SetC_DocType_ID(GetC_DocTypeTarget_ID());
+            //            SetVAB_DocTypes_ID(GetVAB_DocTypesTarget_ID());
             //        else
             //        {
             //            _processMsg = "@CannotChangeDocType@";
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
             //	Credit Check
             //if (IsSOTrx() && !IsReturnTrx())
             //{
-            //    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+            //    MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
             //    if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
             //    {
             //        _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
@@ -216,8 +216,8 @@ namespace VAdvantage.Model
             //        return DocActionVariables.STATUS_INVALID;
             //    }
             //    Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
-            //        GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-            //        GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+            //        GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
+            //        GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
             //    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
             //    {
             //        _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
@@ -305,7 +305,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+                MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
 
                 //	Just prepare
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
                 //    //	Waiting Payment - until we have a payment
                 //    if (!_forceCreation
                 //        && MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO)
-                //        && GetC_Payment_ID() == 0 && GetC_CashLine_ID() == 0)
+                //        && GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
                 //    {
                 //        SetProcessed(true);
                 //        return DocActionVariables.STATUS_WAITINGPAYMENT;
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
             {
                 log.Info(ToString());
 
-                MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+                MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
 
                 //	Replace Prepay with POS to revert all doc
@@ -538,7 +538,7 @@ namespace VAdvantage.Model
                         return false;
                     else
                     {
-                        SetC_DocType_ID(newDT.GetC_DocType_ID());
+                        SetVAB_DocTypes_ID(newDT.GetVAB_DocTypes_ID());
                        // SetIsReturnTrx(newDT.IsReturnTrx());
                     }
                 }
@@ -601,7 +601,7 @@ namespace VAdvantage.Model
             return 0;
         }
 
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             return 0;
         }

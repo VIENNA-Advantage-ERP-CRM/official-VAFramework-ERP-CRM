@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MConversionRate
  * Purpose        : Currency Conversion Rate Model
- * Class Used     : X_C_Conversion_Rate
+ * Class Used     : X_VAB_ExchangeRate
  * Chronological    Development
  * Raghunandan      28-04-2009
   ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MConversionRate : X_C_Conversion_Rate
+    public class MConversionRate : X_VAB_ExchangeRate
     {
         TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
         //Logger					
@@ -32,16 +32,16 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Conversion_Rate_ID">id</param>
+        /// <param name="VAB_ExchangeRate_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MConversionRate(Ctx ctx, int C_Conversion_Rate_ID, Trx trxName)
-            : base(ctx, C_Conversion_Rate_ID, trxName)
+        public MConversionRate(Ctx ctx, int VAB_ExchangeRate_ID, Trx trxName)
+            : base(ctx, VAB_ExchangeRate_ID, trxName)
         {
-            if (C_Conversion_Rate_ID == 0)
+            if (VAB_ExchangeRate_ID == 0)
             {
-                //	setC_Conversion_Rate_ID (0);
-                //	setC_Currency_ID (0);
-                //	setC_Currency_To_ID (0);
+                //	setVAB_ExchangeRate_ID (0);
+                //	setVAB_Currency_ID (0);
+                //	setVAB_Currency_To_ID (0);
                 base.SetDivideRate(Env.ZERO);
                 base.SetMultiplyRate(Env.ZERO);
                 //SetValidFrom(new DateTime(CommonFunctions.CurrentTimeMillis()));
@@ -66,20 +66,20 @@ namespace VAdvantage.Model
         ///New Constructor
         /// </summary>
         /// <param name="po">parent</param>
-        /// <param name="C_ConversionType_ID">conversion type</param>
-        /// <param name="C_Currency_ID">currency to</param>
-        /// <param name="C_Currency_To_ID"></param>
+        /// <param name="VAB_CurrencyType_ID">conversion type</param>
+        /// <param name="VAB_Currency_ID">currency to</param>
+        /// <param name="VAB_Currency_To_ID"></param>
         /// <param name="MultiplyRate">multiply rate</param>
         /// <param name="ValidFrom">valid from</param>
-        public MConversionRate(PO po, int C_ConversionType_ID, int C_Currency_ID, int C_Currency_To_ID,
+        public MConversionRate(PO po, int VAB_CurrencyType_ID, int VAB_Currency_ID, int VAB_Currency_To_ID,
             Decimal multiplyRate, DateTime? validFrom)
             : this(po.GetCtx(), 0, po.Get_TrxName())
         {
             //this(po.getCtx(), 0, po.get_TrxName());
             SetClientOrg(po);
-            SetC_ConversionType_ID(C_ConversionType_ID);
-            SetC_Currency_ID(C_Currency_ID);
-            SetC_Currency_To_ID(C_Currency_To_ID);
+            SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
+            SetVAB_Currency_ID(VAB_Currency_ID);
+            SetVAB_Currency_To_ID(VAB_Currency_To_ID);
             SetMultiplyRate(multiplyRate);
             SetValidFrom(validFrom);
             UpdateFromServer = true;
@@ -90,17 +90,17 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="Amt">amount to be converted</param>
-        /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
+        /// <param name="CurFrom_ID">The VAB_Currency_ID FROM</param>
         /// <param name="ConvDate">conversion date - if null - use current date</param>
-        /// <param name="C_ConversionType_ID">conversion rate type - if 0 - use Default</param>
+        /// <param name="VAB_CurrencyType_ID">conversion rate type - if 0 - use Default</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount</returns>
         public static Decimal ConvertBase(Ctx ctx, Decimal amt, int CurFrom_ID,
-            DateTime? convDate, int C_ConversionType_ID, int VAF_Client_ID, int VAF_Org_ID)
+            DateTime? convDate, int VAB_CurrencyType_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
-            return Convert(ctx, amt, CurFrom_ID, VAdvantage.Model.MClient.Get(ctx).GetC_Currency_ID(),
-                convDate, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+            return Convert(ctx, amt, CurFrom_ID, VAdvantage.Model.MClient.Get(ctx).GetVAB_Currency_ID(),
+                convDate, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="Amt">amount to be converted</param>
-        /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
-        /// <param name="CurTo_ID">The C_Currency_ID TO</param>
+        /// <param name="CurFrom_ID">The VAB_Currency_ID FROM</param>
+        /// <param name="CurTo_ID">The VAB_Currency_ID TO</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount</returns>
@@ -124,15 +124,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="Amt">amount to be converted</param>
-        /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
-        /// <param name="CurTo_ID">The C_Currency_ID TO</param>
+        /// <param name="CurFrom_ID">The VAB_Currency_ID FROM</param>
+        /// <param name="CurTo_ID">The VAB_Currency_ID TO</param>
         /// <param name="ConvDate">conversion date - if null - use current date</param>
-        /// <param name="C_ConversionType_ID">C_ConversionType_ID conversion rate type - if 0 - use Default</param>
+        /// <param name="VAB_CurrencyType_ID">VAB_CurrencyType_ID conversion rate type - if 0 - use Default</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount or null if no rate</returns>
         public static Decimal Convert(Ctx ctx, Decimal amt, int CurFrom_ID, int CurTo_ID,
-            DateTime? convDate, int C_ConversionType_ID,
+            DateTime? convDate, int VAB_CurrencyType_ID,
             int VAF_Client_ID, int VAF_Org_ID)
         {
             //if (amt == null)
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
                 return amt;
             }
             //	Get Rate
-            Decimal retValue = GetRate(CurFrom_ID, CurTo_ID, convDate, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+            Decimal retValue = GetRate(CurFrom_ID, CurTo_ID, convDate, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
             //if (retValue == null)
             //{
             //    //return null;
@@ -163,8 +163,8 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Currency Conversion Rate
         /// </summary>
-        /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
-        /// <param name="CurTo_ID">The C_Currency_ID TO</param>
+        /// <param name="CurFrom_ID">The VAB_Currency_ID FROM</param>
+        /// <param name="CurTo_ID">The VAB_Currency_ID TO</param>
         /// <param name="ConvDate">The Conversion date - if null - use current date</param>
         /// <param name="ConversionType_ID">Conversion rate type - if 0 - use Default</param>
         /// <param name="VAF_Client_ID">client</param>
@@ -179,9 +179,9 @@ namespace VAdvantage.Model
                 return Env.ONE;
             }
             //	Conversion Type
-            int C_ConversionType_ID = ConversionType_ID;
-            if (C_ConversionType_ID == 0)
-                C_ConversionType_ID = MConversionType.GetDefault(VAF_Client_ID);
+            int VAB_CurrencyType_ID = ConversionType_ID;
+            if (VAB_CurrencyType_ID == 0)
+                VAB_CurrencyType_ID = MConversionType.GetDefault(VAF_Client_ID);
             //	Conversion Date
             if (convDate == null)
             {
@@ -191,10 +191,10 @@ namespace VAdvantage.Model
 
             //	Get Rate
             String sql = "SELECT MultiplyRate "
-                + "FROM C_Conversion_Rate "
-                + "WHERE C_Currency_ID=" + CurFrom_ID					//	#1
-                + " AND C_Currency_To_ID=" + CurTo_ID					//	#2
-                + " AND	C_ConversionType_ID=" + C_ConversionType_ID				//	#3
+                + "FROM VAB_ExchangeRate "
+                + "WHERE VAB_Currency_ID=" + CurFrom_ID					//	#1
+                + " AND VAB_Currency_To_ID=" + CurTo_ID					//	#2
+                + " AND	VAB_CurrencyType_ID=" + VAB_CurrencyType_ID				//	#3
                 + " AND " + CoreLibrary.DataBase.DB.TO_DATE(convDate, true) + " BETWEEN ValidFrom AND ValidTo"	//	#4	TRUNC (?) ORA-00932: inconsistent datatypes: expected NUMBER got TIMESTAMP
                 + " AND VAF_Client_ID IN (0," + VAF_Client_ID + ")"				//	#5
                 + " AND VAF_Org_ID IN (0," + VAF_Org_ID + ") "				//	#6
@@ -226,17 +226,17 @@ namespace VAdvantage.Model
             {
                 try
                 {
-                    isFetchAllDateOrNot = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsFetchAllDateOrnot FROM C_ConversionType
-                                     WHERE C_ConversionType_ID = " + C_ConversionType_ID, null, null));
+                    isFetchAllDateOrNot = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsFetchAllDateOrnot FROM VAB_CurrencyType
+                                     WHERE VAB_CurrencyType_ID = " + VAB_CurrencyType_ID, null, null));
                     if (isFetchAllDateOrNot == "Y")
                     {
                         //System took currencies rate from last updated rate, 
                         //when current date rate not defined and consider previous record is true on Conversion type
-                        sql = @"SELECT MultiplyRate FROM C_Conversion_Rate WHERE C_Conversion_Rate_id = (
-                              SELECT MAX(C_Conversion_Rate_id) keep (dense_rank last ORDER BY ValidFrom, C_Conversion_Rate_id)
-                               FROM C_Conversion_Rate WHERE IsActive = 'Y' AND C_Currency_ID = " + CurFrom_ID + @"
-                              AND C_Currency_To_ID   = " + CurTo_ID + @" 
-                              AND C_ConversionType_ID= " + C_ConversionType_ID + @"
+                        sql = @"SELECT MultiplyRate FROM VAB_ExchangeRate WHERE VAB_ExchangeRate_id = (
+                              SELECT MAX(VAB_ExchangeRate_id) keep (dense_rank last ORDER BY ValidFrom, VAB_ExchangeRate_id)
+                               FROM VAB_ExchangeRate WHERE IsActive = 'Y' AND VAB_Currency_ID = " + CurFrom_ID + @"
+                              AND VAB_Currency_To_ID   = " + CurTo_ID + @" 
+                              AND VAB_CurrencyType_ID= " + VAB_CurrencyType_ID + @"
                               AND ValidFrom < " +CoreLibrary.DataBase.DB.TO_DATE(convDate, true) + @"
                               AND VAF_Client_ID      IN (0," + VAF_Client_ID + ")" + @"
                               AND VAF_Org_ID         IN (0," + VAF_Org_ID + "))";
@@ -271,7 +271,7 @@ namespace VAdvantage.Model
                 _log.Info("Not found - CurFrom=" + CurFrom_ID
           + ", CurTo=" + CurTo_ID
           + ", " + convDate
-          + ", Type=" + ConversionType_ID + (ConversionType_ID == C_ConversionType_ID ? "" : "->" + C_ConversionType_ID)
+          + ", Type=" + ConversionType_ID + (ConversionType_ID == VAB_CurrencyType_ID ? "" : "->" + VAB_CurrencyType_ID)
           + ", Client=" + VAF_Client_ID
           + ", Org=" + VAF_Org_ID);
                 retValue = 0;
@@ -312,11 +312,11 @@ namespace VAdvantage.Model
             }
             else
             {
-                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
+                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='VAB_CurrencyType') AND Lower(ColumnName)='isautocalculate'");
                 if (count != null || count != DBNull.Value && System.Convert.ToInt32(count) > 0)
                 {
-                    DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM c_conversiontype 
-                                                           WHERE isautocalculate='Y' AND isactive   ='Y' AND C_ConversionType_id=" + GetC_ConversionType_ID());
+                    DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM VAB_CurrencyType 
+                                                           WHERE isautocalculate='Y' AND isactive   ='Y' AND VAB_CurrencyType_id=" + GetVAB_CurrencyType_ID());
                     if (dsConversion != null && dsConversion.Tables[0].Rows.Count > 0)
                     {
                         Decimal rate1 = 0;
@@ -411,11 +411,11 @@ namespace VAdvantage.Model
             else
             {
 
-                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
+                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='VAB_CurrencyType') AND Lower(ColumnName)='isautocalculate'");
                 if (count != null || count != DBNull.Value && System.Convert.ToInt32(count) > 0)
                 {
-                    DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM c_conversiontype 
-                                                           WHERE isautocalculate='Y' AND isactive   ='Y' AND C_ConversionType_id=" + GetC_ConversionType_ID());
+                    DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM VAB_CurrencyType 
+                                                           WHERE isautocalculate='Y' AND isactive   ='Y' AND VAB_CurrencyType_id=" + GetVAB_CurrencyType_ID());
                     if (dsConversion != null && dsConversion.Tables[0].Rows.Count > 0)
                     {
                         Decimal rate1 = 0;
@@ -482,8 +482,8 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MConversionRate[");
             sb.Append(Get_ID())
-                .Append(",Currency=").Append(GetC_Currency_ID())
-                .Append(",To=").Append(GetC_Currency_To_ID())
+                .Append(",Currency=").Append(GetVAB_Currency_ID())
+                .Append(",To=").Append(GetVAB_Currency_To_ID())
                 .Append(", Multiply=").Append(GetMultiplyRate())
                 .Append(",Divide=").Append(GetDivideRate())
                 .Append(", ValidFrom=").Append(GetValidFrom());
@@ -513,15 +513,15 @@ namespace VAdvantage.Model
                     return true;
                 }
                 else if (IsActive() != Util.GetValueOfBool(Get_ValueOld("IsActive"))
-                    || GetC_ConversionType_ID() != Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) ||
-                     GetC_Currency_To_ID() != Util.GetValueOfInt(Get_ValueOld("C_Currency_To_ID"))
+                    || GetVAB_CurrencyType_ID() != Util.GetValueOfInt(Get_ValueOld("VAB_CurrencyType_ID")) ||
+                     GetVAB_Currency_To_ID() != Util.GetValueOfInt(Get_ValueOld("VAB_Currency_To_ID"))
                     )
                 {
-                    sql = @"SELECT COUNT(*) FROM C_Conversion_Rate WHERE IsActive = 'Y' " +
-                         " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
+                    sql = @"SELECT COUNT(*) FROM VAB_ExchangeRate WHERE IsActive = 'Y' " +
+                         " AND VAB_Currency_id = " + GetVAB_Currency_ID() + " AND VAB_Currency_To_ID = " + GetVAB_Currency_To_ID() +
                          " AND ( " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " BETWEEN ValidFrom AND ValidTo" +
                          " OR " + GlobalVariable.TO_DATE(GetValidTo(), true) + " BETWEEN ValidFrom AND ValidTo )" +
-                         " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                         " AND VAB_CurrencyType_id = " + GetVAB_CurrencyType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
                          " AND VAF_Org_ID = " + GetVAF_Org_ID();
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
@@ -530,13 +530,13 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        sql = @"SELECT COUNT(*) FROM C_Conversion_Rate WHERE IsActive = 'Y' " +
-                                " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
+                        sql = @"SELECT COUNT(*) FROM VAB_ExchangeRate WHERE IsActive = 'Y' " +
+                                " AND VAB_Currency_id = " + GetVAB_Currency_ID() + " AND VAB_Currency_To_ID = " + GetVAB_Currency_To_ID() +
                                 " AND ( ValidFrom BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) +
                                 " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " OR  ValidTo BETWEEN " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + "  AND " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                                " AND VAB_CurrencyType_id = " + GetVAB_CurrencyType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
                                 " AND VAF_Org_ID = " + GetVAF_Org_ID();
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                         {
@@ -550,42 +550,42 @@ namespace VAdvantage.Model
                     }
                 }
 
-                sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
-                              " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
-                              " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                              " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                              " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_Currency_ID")) +
+                              " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_CurrencyType_ID")) +
+                              " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                              " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantChange"));
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
-                               " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
-                               " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                               " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                               " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_Currency_ID")) +
+                               " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_CurrencyType_ID")) +
+                               " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                               " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantChange"));
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                                + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
-                               " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
-                               " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                               " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                               " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_Currency_ID")) +
+                               " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_ValueOld("VAB_CurrencyType_ID")) +
+                               " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                               " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantChange"));
@@ -595,11 +595,11 @@ namespace VAdvantage.Model
 
             if (newRecord)
             {
-                sql = @"SELECT COUNT(*) FROM C_Conversion_Rate WHERE IsActive = 'Y' " +
-                            " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
+                sql = @"SELECT COUNT(*) FROM VAB_ExchangeRate WHERE IsActive = 'Y' " +
+                            " AND VAB_Currency_id = " + GetVAB_Currency_ID() + " AND VAB_Currency_To_ID = " + GetVAB_Currency_To_ID() +
                             " AND ( " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " BETWEEN ValidFrom AND ValidTo" +
                             " OR " + GlobalVariable.TO_DATE(GetValidTo(), true) + " BETWEEN ValidFrom AND ValidTo )" +
-                            " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                            " AND VAB_CurrencyType_id = " + GetVAB_CurrencyType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
                             " AND VAF_Org_ID = " + GetVAF_Org_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
@@ -608,13 +608,13 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    sql = @"SELECT COUNT(*) FROM C_Conversion_Rate WHERE IsActive = 'Y' " +
-                                " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
+                    sql = @"SELECT COUNT(*) FROM VAB_ExchangeRate WHERE IsActive = 'Y' " +
+                                " AND VAB_Currency_id = " + GetVAB_Currency_ID() + " AND VAB_Currency_To_ID = " + GetVAB_Currency_To_ID() +
                                 " AND ( ValidFrom BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) +
                                 " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " OR  ValidTo BETWEEN " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + "  AND " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                                " AND VAB_CurrencyType_id = " + GetVAB_CurrencyType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
                                 " AND VAF_Org_ID = " + GetVAF_Org_ID();
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
@@ -626,9 +626,9 @@ namespace VAdvantage.Model
             //end
 
             //	From - To is the same
-            if (GetC_Currency_ID() == GetC_Currency_To_ID())
+            if (GetVAB_Currency_ID() == GetVAB_Currency_To_ID())
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@C_Currency_ID@ = @C_Currency_ID@"));
+                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@ = @VAB_Currency_ID@"));
                 return false;
             }
             //	Nothing to convert
@@ -661,8 +661,8 @@ namespace VAdvantage.Model
             //by Amit - 6-5-2016
             if (newRecord)
             {
-                string sql = @"SELECT COUNT(*) FROM C_Conversion_Rate WHERE ISActive = 'Y' AND c_currency_id = " + GetC_Currency_To_ID() +
-                              " AND C_Currency_To_ID = " + GetC_Currency_ID() + " AND c_conversiontype_id = " + GetC_ConversionType_ID() +
+                string sql = @"SELECT COUNT(*) FROM VAB_ExchangeRate WHERE ISActive = 'Y' AND VAB_Currency_id = " + GetVAB_Currency_To_ID() +
+                              " AND VAB_Currency_To_ID = " + GetVAB_Currency_ID() + " AND VAB_CurrencyType_id = " + GetVAB_CurrencyType_ID() +
                               " AND ( ValidFrom BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) +
                               " OR ValidTo BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
                               " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID =" + GetVAF_Org_ID();
@@ -672,9 +672,9 @@ namespace VAdvantage.Model
                     conRate.SetVAF_Client_ID(GetVAF_Client_ID());
                     conRate.UpdateFromServer = false;
                     conRate.SetVAF_Org_ID(GetVAF_Org_ID());
-                    conRate.SetC_Currency_ID(GetC_Currency_To_ID());
-                    conRate.SetC_Currency_To_ID(GetC_Currency_ID());
-                    conRate.SetC_ConversionType_ID(GetC_ConversionType_ID());
+                    conRate.SetVAB_Currency_ID(GetVAB_Currency_To_ID());
+                    conRate.SetVAB_Currency_To_ID(GetVAB_Currency_ID());
+                    conRate.SetVAB_CurrencyType_ID(GetVAB_CurrencyType_ID());
                     conRate.SetDivideRate(GetMultiplyRate());
                     conRate.SetMultiplyRate(GetDivideRate());
                     conRate.SetValidFrom(GetValidFrom());
@@ -694,42 +694,42 @@ namespace VAdvantage.Model
         {
             // Cannot delete record if transaction occured agianst this currency and currenct to
             string sql;
-            sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
-                              " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
-                              " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                              " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                              " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_Value("VAB_Currency_ID")) +
+                              " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_Value("VAB_CurrencyType_ID")) +
+                              " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                              " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantDelete"));
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                           + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
-                           " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
-                           " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                           " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                           " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_Value("VAB_Currency_ID")) +
+                           " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_Value("VAB_CurrencyType_ID")) +
+                           " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                           " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantDelete"));
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                            + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
-                           " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
-                           " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
-                           " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
+                           " AND i.VAB_Currency_id = " + Util.GetValueOfInt(Get_Value("VAB_Currency_ID")) +
+                           " AND i.VAB_CurrencyType_id = " + Util.GetValueOfInt(Get_Value("VAB_CurrencyType_ID")) +
+                           " AND cr.VAB_Currency_To_ID IN (SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
+                           " AND cr.VAB_ExchangeRate_ID = " + GetVAB_ExchangeRate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantDelete"));

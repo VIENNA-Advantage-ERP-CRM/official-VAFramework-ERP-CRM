@@ -529,7 +529,7 @@ namespace ModelLibrary.AcctService {
         private ModelLibrary.AcctService.ArrayOfString TaxIndicatorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ModelLibrary.AcctService.ArrayOfInt C_Country_IDField;
+        private ModelLibrary.AcctService.ArrayOfInt VAB_Country_IDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ModelLibrary.AcctService.ArrayOfInt To_Country_IDField;
@@ -746,14 +746,14 @@ namespace ModelLibrary.AcctService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=15)]
-        public ModelLibrary.AcctService.ArrayOfInt C_Country_ID {
+        public ModelLibrary.AcctService.ArrayOfInt VAB_Country_ID {
             get {
-                return this.C_Country_IDField;
+                return this.VAB_Country_IDField;
             }
             set {
-                if ((object.ReferenceEquals(this.C_Country_IDField, value) != true)) {
-                    this.C_Country_IDField = value;
-                    this.RaisePropertyChanged("C_Country_ID");
+                if ((object.ReferenceEquals(this.VAB_Country_IDField, value) != true)) {
+                    this.VAB_Country_IDField = value;
+                    this.RaisePropertyChanged("VAB_Country_ID");
                 }
             }
         }

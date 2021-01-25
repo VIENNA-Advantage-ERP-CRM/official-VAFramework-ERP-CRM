@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_AcctProcessor
+/** Generated Model for VAB_AccountHanlder
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_AcctProcessor : PO
+public class X_VAB_AccountHanlder : PO
 {
-public X_C_AcctProcessor (Context ctx, int C_AcctProcessor_ID, Trx trxName) : base (ctx, C_AcctProcessor_ID, trxName)
+public X_VAB_AccountHanlder (Context ctx, int VAB_AccountHanlder_ID, Trx trxName) : base (ctx, VAB_AccountHanlder_ID, trxName)
 {
-/** if (C_AcctProcessor_ID == 0)
+/** if (VAB_AccountHanlder_ID == 0)
 {
-SetC_AcctProcessor_ID (0);
+SetVAB_AccountHanlder_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
 }
  */
 }
-public X_C_AcctProcessor (Ctx ctx, int C_AcctProcessor_ID, Trx trxName) : base (ctx, C_AcctProcessor_ID, trxName)
+public X_VAB_AccountHanlder (Ctx ctx, int VAB_AccountHanlder_ID, Trx trxName) : base (ctx, VAB_AccountHanlder_ID, trxName)
 {
-/** if (C_AcctProcessor_ID == 0)
+/** if (VAB_AccountHanlder_ID == 0)
 {
-SetC_AcctProcessor_ID (0);
+SetVAB_AccountHanlder_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetSupervisor_ID (0);
@@ -43,7 +43,7 @@ SetSupervisor_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountHanlder (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_AcctProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountHanlder (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_AcctProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessor (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AccountHanlder (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_AcctProcessor()
+static X_VAB_AccountHanlder()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389052593L;
 public static int Table_ID;
  // =695;
 
-/** TableName=C_AcctProcessor */
-public static String Table_Name="C_AcctProcessor";
+/** TableName=VAB_AccountHanlder */
+public static String Table_Name="VAB_AccountHanlder";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_AcctProcessor[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AccountHanlder[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Schedule.
@@ -149,33 +149,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Processor.
-@param C_AcctProcessor_ID Accounting Processor/Server Parameters */
-public void SetC_AcctProcessor_ID (int C_AcctProcessor_ID)
+@param VAB_AccountHanlder_ID Accounting Processor/Server Parameters */
+public void SetVAB_AccountHanlder_ID (int VAB_AccountHanlder_ID)
 {
-if (C_AcctProcessor_ID < 1) throw new ArgumentException ("C_AcctProcessor_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctProcessor_ID", C_AcctProcessor_ID);
+if (VAB_AccountHanlder_ID < 1) throw new ArgumentException ("VAB_AccountHanlder_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountHanlder_ID", VAB_AccountHanlder_ID);
 }
 /** Get Accounting Processor.
 @return Accounting Processor/Server Parameters */
-public int GetC_AcctProcessor_ID() 
+public int GetVAB_AccountHanlder_ID() 
 {
-Object ii = Get_Value("C_AcctProcessor_ID");
+Object ii = Get_Value("VAB_AccountHanlder_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID <= 0) Set_Value ("C_AcctSchema_ID", null);
+if (VAB_AccountBook_ID <= 0) Set_Value ("VAB_AccountBook_ID", null);
 else
-Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);
+Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

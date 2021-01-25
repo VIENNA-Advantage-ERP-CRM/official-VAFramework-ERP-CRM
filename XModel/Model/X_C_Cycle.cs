@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Cycle
+/** Generated Model for VAB_ProjectCycle
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Cycle : PO
+public class X_VAB_ProjectCycle : PO
 {
-public X_C_Cycle (Context ctx, int C_Cycle_ID, Trx trxName) : base (ctx, C_Cycle_ID, trxName)
+public X_VAB_ProjectCycle (Context ctx, int VAB_ProjectCycle_ID, Trx trxName) : base (ctx, VAB_ProjectCycle_ID, trxName)
 {
-/** if (C_Cycle_ID == 0)
+/** if (VAB_ProjectCycle_ID == 0)
 {
-SetC_Currency_ID (0);
-SetC_Cycle_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_ProjectCycle_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_Cycle (Ctx ctx, int C_Cycle_ID, Trx trxName) : base (ctx, C_Cycle_ID, trxName)
+public X_VAB_ProjectCycle (Ctx ctx, int VAB_ProjectCycle_ID, Trx trxName) : base (ctx, VAB_ProjectCycle_ID, trxName)
 {
-/** if (C_Cycle_ID == 0)
+/** if (VAB_ProjectCycle_ID == 0)
 {
-SetC_Currency_ID (0);
-SetC_Cycle_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_ProjectCycle_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Cycle (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectCycle (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_Cycle (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Cycle (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectCycle (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_Cycle (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Cycle (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ProjectCycle (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Cycle()
+static X_VAB_ProjectCycle()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389054803L;
 public static int Table_ID;
  // =432;
 
-/** TableName=C_Cycle */
-public static String Table_Name="C_Cycle";
+/** TableName=VAB_ProjectCycle */
+public static String Table_Name="VAB_ProjectCycle";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Cycle[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ProjectCycle[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project Cycle.
-@param C_Cycle_ID Identifier for this Project Reporting Cycle */
-public void SetC_Cycle_ID (int C_Cycle_ID)
+@param VAB_ProjectCycle_ID Identifier for this Project Reporting Cycle */
+public void SetVAB_ProjectCycle_ID (int VAB_ProjectCycle_ID)
 {
-if (C_Cycle_ID < 1) throw new ArgumentException ("C_Cycle_ID is mandatory.");
-Set_ValueNoCheck ("C_Cycle_ID", C_Cycle_ID);
+if (VAB_ProjectCycle_ID < 1) throw new ArgumentException ("VAB_ProjectCycle_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ProjectCycle_ID", VAB_ProjectCycle_ID);
 }
 /** Get Project Cycle.
 @return Identifier for this Project Reporting Cycle */
-public int GetC_Cycle_ID() 
+public int GetVAB_ProjectCycle_ID() 
 {
-Object ii = Get_Value("C_Cycle_ID");
+Object ii = Get_Value("VAB_ProjectCycle_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

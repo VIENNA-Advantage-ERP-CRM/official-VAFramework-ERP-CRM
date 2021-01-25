@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Campaign
+/** Generated Model for VAB_Promotion
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Campaign : PO
+    public class X_VAB_Promotion : PO
 {
-public X_C_Campaign (Context ctx, int C_Campaign_ID, Trx trxName) : base (ctx, C_Campaign_ID, trxName)
+public X_VAB_Promotion (Context ctx, int VAB_Promotion_ID, Trx trxName) : base (ctx, VAB_Promotion_ID, trxName)
 {
-/** if (C_Campaign_ID == 0)
+/** if (VAB_Promotion_ID == 0)
 {
-SetC_Campaign_ID (0);
+SetVAB_Promotion_ID (0);
 SetCosts (0.0);
 SetIsSummary (false);
 SetName (null);
@@ -28,11 +28,11 @@ SetValue (null);
 }
  */
 }
-public X_C_Campaign (Ctx ctx, int C_Campaign_ID, Trx trxName) : base (ctx, C_Campaign_ID, trxName)
+public X_VAB_Promotion (Ctx ctx, int VAB_Promotion_ID, Trx trxName) : base (ctx, VAB_Promotion_ID, trxName)
 {
-/** if (C_Campaign_ID == 0)
+/** if (VAB_Promotion_ID == 0)
 {
-SetC_Campaign_ID (0);
+SetVAB_Promotion_ID (0);
 SetCosts (0.0);
 SetIsSummary (false);
 SetName (null);
@@ -45,7 +45,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Campaign (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Promotion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_Campaign (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Campaign (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Promotion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_Campaign (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Campaign (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Promotion (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Campaign()
+static X_VAB_Promotion()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389054176L;
 public static int Table_ID;
  // =274;
 
-/** TableName=C_Campaign */
-public static String Table_Name="C_Campaign";
+/** TableName=VAB_Promotion */
+public static String Table_Name="VAB_Promotion";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,37 +115,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Campaign[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Promotion[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID)
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID)
 {
-if (C_Campaign_ID < 1) throw new ArgumentException ("C_Campaign_ID is mandatory.");
-Set_ValueNoCheck ("C_Campaign_ID", C_Campaign_ID);
+if (VAB_Promotion_ID < 1) throw new ArgumentException ("VAB_Promotion_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Promotion_ID", VAB_Promotion_ID);
 }
 /** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() 
+public int GetVAB_Promotion_ID() 
 {
-Object ii = Get_Value("C_Campaign_ID");
+Object ii = Get_Value("VAB_Promotion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Channel.
-@param C_Channel_ID Sales Channel */
-public void SetC_Channel_ID (int C_Channel_ID)
+@param VAB_MarketingChannel_ID Sales Channel */
+public void SetVAB_MarketingChannel_ID (int VAB_MarketingChannel_ID)
 {
-if (C_Channel_ID <= 0) Set_Value ("C_Channel_ID", null);
+if (VAB_MarketingChannel_ID <= 0) Set_Value ("VAB_MarketingChannel_ID", null);
 else
-Set_Value ("C_Channel_ID", C_Channel_ID);
+Set_Value ("VAB_MarketingChannel_ID", VAB_MarketingChannel_ID);
 }
 /** Get Channel.
 @return Sales Channel */
-public int GetC_Channel_ID() 
+public int GetVAB_MarketingChannel_ID() 
 {
-Object ii = Get_Value("C_Channel_ID");
+Object ii = Get_Value("VAB_MarketingChannel_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -266,19 +266,19 @@ public String GetValue()
 return (String)Get_Value("Value");
 }
 
-/** Set C_CampaignType_ID.
-@param C_CampaignType_ID C_CampaignType_ID */
-public void SetC_CampaignType_ID(int C_CampaignType_ID)
+/** Set VAB_PromotionType_ID.
+@param VAB_PromotionType_ID VAB_PromotionType_ID */
+public void SetVAB_PromotionType_ID(int VAB_PromotionType_ID)
 {
-    if (C_CampaignType_ID <= 0) Set_Value("C_CampaignType_ID", null);
+    if (VAB_PromotionType_ID <= 0) Set_Value("VAB_PromotionType_ID", null);
     else
-        Set_Value("C_CampaignType_ID", C_CampaignType_ID);
+        Set_Value("VAB_PromotionType_ID", VAB_PromotionType_ID);
 }
-/** Get C_CampaignType_ID.
-@return C_CampaignType_ID */
-public int GetC_CampaignType_ID()
+/** Get VAB_PromotionType_ID.
+@return VAB_PromotionType_ID */
+public int GetVAB_PromotionType_ID()
 {
-    Object ii = Get_Value("C_CampaignType_ID");
+    Object ii = Get_Value("VAB_PromotionType_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }
@@ -509,19 +509,19 @@ public Decimal GetActualRevenue()
     if (bd == null) return Env.ZERO;
     return Convert.ToDecimal(bd);
 }
-/** Set C_CampaignTemplate_ID.
-@param C_CampaignTemplate_ID C_CampaignTemplate_ID */
-public void SetC_CampaignTemplate_ID(int C_CampaignTemplate_ID)
+/** Set VAB_PromotionTemplate_ID.
+@param VAB_PromotionTemplate_ID VAB_PromotionTemplate_ID */
+public void SetVAB_PromotionTemplate_ID(int VAB_PromotionTemplate_ID)
 {
-    if (C_CampaignTemplate_ID <= 0) Set_Value("C_CampaignTemplate_ID", null);
+    if (VAB_PromotionTemplate_ID <= 0) Set_Value("VAB_PromotionTemplate_ID", null);
     else
-        Set_Value("C_CampaignTemplate_ID", C_CampaignTemplate_ID);
+        Set_Value("VAB_PromotionTemplate_ID", VAB_PromotionTemplate_ID);
 }
-/** Get C_CampaignTemplate_ID.
-@return C_CampaignTemplate_ID */
-public int GetC_CampaignTemplate_ID()
+/** Get VAB_PromotionTemplate_ID.
+@return VAB_PromotionTemplate_ID */
+public int GetVAB_PromotionTemplate_ID()
 {
-    Object ii = Get_Value("C_CampaignTemplate_ID");
+    Object ii = Get_Value("VAB_PromotionTemplate_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

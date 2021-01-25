@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDocType
  * Purpose        : Document Type Model
- * Class Used     : X_C_DocType
+ * Class Used     : X_VAB_DocTypes
  * Chronological    Development
  * Raghunandan      7-May-2009 
   ******************************************************/
@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDocType : X_C_DocType
+    public class MDocType : X_VAB_DocTypes
     {
         #region Private Variables
         // AP CreditMemo
@@ -117,7 +117,7 @@ namespace VAdvantage.Model
         #endregion
 
         //	Cache					
-        static private CCache<int, MDocType> s_cache = new CCache<int, MDocType>("C_DocType", 20);
+        static private CCache<int, MDocType> s_cache = new CCache<int, MDocType>("VAB_DocTypes", 20);
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MDocType).FullName);
 
@@ -130,9 +130,9 @@ namespace VAdvantage.Model
         static public MDocType[] GetOfDocBaseType(Ctx ctx, string docBaseType)
         {
             List<MDocType> list = new List<MDocType>();
-            String sql = "SELECT * FROM C_DocType "
+            String sql = "SELECT * FROM VAB_DocTypes "
                 + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND DocBaseType='" + docBaseType + "' AND IsActive='Y'"
-                + "ORDER BY C_DocType_ID";
+                + "ORDER BY VAB_DocTypes_ID";
             DataSet pstmt = null;
             try
             {
@@ -162,7 +162,7 @@ namespace VAdvantage.Model
         public static MDocType[] GetOfClient(Ctx ctx)
         {
             List<MDocType> list = new List<MDocType>();
-            String sql = "SELECT * FROM C_DocType WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID();
+            String sql = "SELECT * FROM VAB_DocTypes WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet pstmt = null;
             try
             {
@@ -187,15 +187,15 @@ namespace VAdvantage.Model
         ///Get Document Type (cached)
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_DocType_ID">id</param>
+        /// <param name="VAB_DocTypes_ID">id</param>
         /// <returns>document type</returns>
-        static public MDocType Get(Ctx ctx, int C_DocType_ID)
+        static public MDocType Get(Ctx ctx, int VAB_DocTypes_ID)
         {
-            int key = (int)C_DocType_ID;
+            int key = (int)VAB_DocTypes_ID;
             MDocType retValue = (MDocType)s_cache[key];
             if (retValue == null)
             {
-                retValue = new MDocType(ctx, C_DocType_ID, null);
+                retValue = new MDocType(ctx, VAB_DocTypes_ID, null);
                 s_cache.Add(key, retValue);
             }
             return retValue;
@@ -205,12 +205,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_DocType_ID">id</param>
+        /// <param name="VAB_DocTypes_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDocType(Ctx ctx, int C_DocType_ID, Trx trxName)
-            : base(ctx, C_DocType_ID, trxName)
+        public MDocType(Ctx ctx, int VAB_DocTypes_ID, Trx trxName)
+            : base(ctx, VAB_DocTypes_ID, trxName)
         {
-            if (C_DocType_ID == 0)
+            if (VAB_DocTypes_ID == 0)
             {
                 //	setName (null);
                 //	setPrintName (null);

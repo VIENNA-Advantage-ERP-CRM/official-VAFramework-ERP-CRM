@@ -8,7 +8,7 @@
         var ctx = VIS.Env.getCtx();
         var ch = null;
         var callingFromOutsideofWindow = false;
-        var bpColumnName = "C_BPARTNER_ID";
+        var bpColumnName = "VAB_BUSINESSPARTNER_ID";
         var rowsSource = null;
         var rowsSingleView = null;
         var currentTable_ID = 0;
@@ -176,7 +176,7 @@
 
 
             for (var i = 0; i < _curtab.gridTable.getFields().length; i++) {
-                var iskeyColumn = (_curtab.gridTable.getFields(0)[i].getColumnName().toUpper() == _curtab.getKeyColumnName().toUpper());// in case of custmer Master , C_BPartner is not displayed but it is required to show its user's mobile which have isSms=Y
+                var iskeyColumn = (_curtab.gridTable.getFields(0)[i].getColumnName().toUpper() == _curtab.getKeyColumnName().toUpper());// in case of custmer Master , VAB_BusinessPartner is not displayed but it is required to show its user's mobile which have isSms=Y
                 if (!_curtab.gridTable.getFields(0)[i].getIsDisplayed() && !iskeyColumn) {
                     continue;
                 }
@@ -274,7 +274,7 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                //var sql = "Select VAF_UserContact_ID,issms,mobile from VAF_UserContact where c_bpartner_ID=" + bpID[i];
+                //var sql = "Select VAF_UserContact_ID,issms,mobile from VAF_UserContact where VAB_BusinessPartner_ID=" + bpID[i];
                 //var ds = VIS.DB.executeDataSet(sql);
                 //var isBroken = false;
                 //if (ds != null && ds.getTables()[0].getRows().length > 0) {

@@ -14,7 +14,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MCashbookLine : X_C_CashbookLine
+    public class MCashbookLine : X_VAB_CashbookLine
     {
         #region variables
         
@@ -25,13 +25,13 @@ namespace VAdvantage.Model
 
         /* Standard Constructor
          * @param ctx context
-	     *	@param C_CashbookLine_ID id
+	     *	@param VAB_CashbookLine_ID id
 	     *	@param trxName transaction
 	    */
-        public MCashbookLine(Ctx ctx, int C_CashbookLine_ID, Trx trxName)
-            : base(ctx, C_CashbookLine_ID, trxName)
+        public MCashbookLine(Ctx ctx, int VAB_CashbookLine_ID, Trx trxName)
+            : base(ctx, VAB_CashbookLine_ID, trxName)
         {
-            if (C_CashbookLine_ID == 0)
+            if (VAB_CashbookLine_ID == 0)
             {
                 SetStatementDifference(Env.ZERO);
             }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
             : this(cashbook.GetCtx(), 0, cashbook.Get_TrxName())
         {
             SetClientOrg(cashbook);
-            SetC_CashBook_ID(cashbook.GetC_CashBook_ID());
+            SetVAB_CashBook_ID(cashbook.GetVAB_CashBook_ID());
             _parent = cashbook;
         }
     }

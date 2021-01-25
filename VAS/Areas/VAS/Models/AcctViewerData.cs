@@ -12,7 +12,7 @@ namespace VIS.Models
 {
     public class AcctViewerData
     {
-        private List<int> c_acctschemas_ids = new List<int>();
+        private List<int> VAB_AccountBooks_ids = new List<int>();
 
         /// <summary>
         /// get value from proper accounting schema
@@ -40,10 +40,10 @@ namespace VIS.Models
         {
             List<AcctViewerDatakeysParam> obj = new List<AcctViewerDatakeysParam>();
             string sql =
-            sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_AcctSchema WHERE ISACTIVE='Y' AND C_ACCTSCHEMA_ID IN( " +
-        "SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + vaf_client_id + " AND VAF_ORG_ID=" + vaf_org_id + ")" +
+            sql = "SELECT VAB_ACCOUNTBOOK_ID,NAME FROM VAB_AccountBook WHERE ISACTIVE='Y' AND VAB_ACCOUNTBOOK_ID IN( " +
+        "SELECT VAB_ACCOUNTBOOK_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + vaf_client_id + " AND VAF_ORG_ID=" + vaf_org_id + ")" +
         //Get default Accounting schema selected on tenant
-        " OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + vaf_client_id + ")";
+        " OR VAB_ACCOUNTBOOK_ID IN (SELECT VAB_ACCOUNTBOOK1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + vaf_client_id + ")";
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
@@ -51,56 +51,56 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     AcctViewerDatakeysParam kp = new AcctViewerDatakeysParam();
-                    kp.Key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]);
+                    kp.Key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ACCOUNTBOOK_ID"]);
                     kp.Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["NAME"]);
                     obj.Add(kp);
-                    c_acctschemas_ids.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ACCTSCHEMA_ID"]));
+                    VAB_AccountBooks_ids.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ACCOUNTBOOK_ID"]));
                 }
             }
             return obj;
         }
 
         /// <summary>
-        /// get accounting schema according to C_AcctSchema_Gl
+        /// get accounting schema according to VAB_AccountBook_Gl
         /// </summary>
         /// <param name="vaf_client_id"></param>
         /// <returns></returns>
         private List<AcctViewerDatakeysParam> OtherAcctSchemas(int vaf_client_id)
         {
             List<AcctViewerDatakeysParam> obj = new List<AcctViewerDatakeysParam>();
-            string sql = "SELECT c_acctschema_id,name FROM C_AcctSchema acs "
+            string sql = "SELECT VAB_AccountBook_id,name FROM VAB_AccountBook acs "
                 + "WHERE IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM C_AcctSchema_GL gl WHERE acs.C_AcctSchema_ID=gl.C_AcctSchema_ID)";
+                + " AND EXISTS (SELECT * FROM VAB_AccountBook_GL gl WHERE acs.VAB_AccountBook_ID=gl.VAB_AccountBook_ID)";
             if (Env.IsModuleInstalled("FRPT_"))
             {
-                sql += " AND EXISTS (SELECT * FROM FRPT_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
+                sql += " AND EXISTS (SELECT * FROM FRPT_AcctSchema_Default d WHERE acs.VAB_AccountBook_ID=d.VAB_AccountBook_ID)";
             }
             else
             {
-                sql += " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
+                sql += " AND EXISTS (SELECT * FROM VAB_AccountBook_Default d WHERE acs.VAB_AccountBook_ID=d.VAB_AccountBook_ID)";
             }
             if (vaf_client_id != 0)
             {
                 sql += " AND VAF_Client_ID=" + vaf_client_id;
             }
 
-            sql += " ORDER BY C_AcctSchema_ID";
+            sql += " ORDER BY VAB_AccountBook_ID";
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                var id = Util.GetValueOfInt(ds.Tables[0].Rows[0]["c_acctschema_id"]);
+                var id = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_AccountBook_id"]);
 
-                if (!c_acctschemas_ids.Contains(id))	//	already in _elements
+                if (!VAB_AccountBooks_ids.Contains(id))	//	already in _elements
                 {
-                    sql = "SELECT c_acctschema_id,name from C_AcctSchema WHERE C_AcctSchema_ID=" + id;
+                    sql = "SELECT VAB_AccountBook_id,name from VAB_AccountBook WHERE VAB_AccountBook_ID=" + id;
                     var drSch = DB.ExecuteDataset(sql);
                     if (drSch != null)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             AcctViewerDatakeysParam kp = new AcctViewerDatakeysParam();
-                            kp.Key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_acctschema_id"]);
+                            kp.Key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_id"]);
                             kp.Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["name"]);
                             obj.Add(kp);
                         }
@@ -210,22 +210,22 @@ namespace VIS.Models
         public List<AcctViewerDataAcctSchElements> AcctViewerGetAcctSchElements(Ctx ctx, int key)
         {
             List<AcctViewerDataAcctSchElements> obj = new List<AcctViewerDataAcctSchElements>();
-            var sql = "SELECT c_acctschema_element_id,name,elementtype,c_elementvalue_id,seqno," +
-                         "'AcctSchemaElement['||c_acctschema_element_id||'-'||name||'('||elementtype||')='||c_elementvalue_id||',Pos='||seqno||']' as detail,c_element_id FROM C_AcctSchema_Element "
-            + "WHERE C_AcctSchema_ID=" + key + " AND IsActive='Y' ORDER BY SeqNo";
+            var sql = "SELECT VAB_AccountBook_element_id,name,elementtype,VAB_Acct_Element_id,seqno," +
+                         "'AcctSchemaElement['||VAB_AccountBook_element_id||'-'||name||'('||elementtype||')='||VAB_Acct_Element_id||',Pos='||seqno||']' as detail,VAB_Element_id FROM VAB_AccountBook_Element "
+            + "WHERE VAB_AccountBook_ID=" + key + " AND IsActive='Y' ORDER BY SeqNo";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     AcctViewerDataAcctSchElements objt = new AcctViewerDataAcctSchElements();
-                    objt.C_AcctSchema_Element_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_acctschema_element_id"]);
+                    objt.VAB_AccountBook_Element_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_element_id"]);
                     objt.ElementName = Util.GetValueOfString(ds.Tables[0].Rows[i]["name"]);
                     objt.ElementType = Util.GetValueOfString(ds.Tables[0].Rows[i]["elementtype"]);
-                    objt.C_ElementValue_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_elementvalue_id"]);
+                    objt.VAB_Acct_Element_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_Element_id"]);
                     objt.SeqNo = Util.GetValueOfInt(ds.Tables[0].Rows[i]["seqno"]);
                     objt.Detail = Util.GetValueOfString(ds.Tables[0].Rows[i]["detail"]);
-                    objt.C_Element_ID = Util.GetValueOfString(ds.Tables[0].Rows[i]["c_element_id"]);
+                    objt.VAB_Element_ID = Util.GetValueOfString(ds.Tables[0].Rows[i]["VAB_Element_id"]);
                     obj.Add(objt);
                 }
             }
@@ -242,13 +242,13 @@ namespace VIS.Models
         {
             bool repostval = true;
 
-            string invoiceID = "(SELECT ca.c_invoice_id FROM c_allocationline ca" +
+            string invoiceID = "(SELECT ca.c_invoice_id FROM VAB_DocAllocationLine ca" +
                    " inner join c_invoice ci on ci.c_invoice_id= ca.c_invoice_id" +
-                   " WHERE ci.issotrx='Y' and ca.c_allocationhdr_id=" + dataRecID;
+                   " WHERE ci.issotrx='Y' and ca.VAB_DocAllocation_id=" + dataRecID;
 
 
-            string postValue = "SELECT (SELECT SUM(al.amount) FROM c_allocationline al INNER JOIN" +
-                " c_allocationhdr alh ON al.c_allocationhdr_id=alh.c_allocationhdr_id  WHERE " +
+            string postValue = "SELECT (SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN" +
+                " VAB_DocAllocation alh ON al.VAB_DocAllocation_id=alh.VAB_DocAllocation_id  WHERE " +
                 " alh.posted   ='Y' and c_invoice_id=" + invoiceID + ")) as aloc  ," +
                 "(SELECT SUM(cl.linenetamt)  FROM c_invoiceline cl WHERE " +
                 " c_invoice_id     =" + invoiceID + ")) as adj  from dual";
@@ -263,7 +263,7 @@ namespace VIS.Models
                     if (dr.GetInt32(0) - dr.GetInt32(1) == 0)
                     {
                         //reposting
-                        var sql = "update c_allocationhdr alh set alh.posted ='N' where alh.c_allocationhdr_id in (select c_allocationhdr_id from c_allocationline where c_invoice_id=" + invoiceID + "))";
+                        var sql = "update VAB_DocAllocation alh set alh.posted ='N' where alh.VAB_DocAllocation_id in (select VAB_DocAllocation_id from VAB_DocAllocationLine where c_invoice_id=" + invoiceID + "))";
                         DB.ExecuteQuery(sql);
                     }
                 }

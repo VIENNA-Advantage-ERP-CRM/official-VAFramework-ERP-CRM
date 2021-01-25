@@ -19,7 +19,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 namespace VAdvantage.WF
 {
-    public class MWorkflowAccess : X_AD_Workflow_Access
+    public class MWorkflowAccess : X_VAF_WFlow_Rights
     {
         /// <summary>
         ///Standard Constructor
@@ -35,7 +35,7 @@ namespace VAdvantage.WF
             else
             {
                 //	setVAF_Role_ID (0);
-                //	setAD_Workflow_ID (0);
+                //	setVAF_Workflow_ID (0);
                 SetIsReadWrite(true);
             }
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.WF
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Workflow_ID(parent.GetAD_Workflow_ID());
+            SetVAF_Workflow_ID(parent.GetVAF_Workflow_ID());
             SetVAF_Role_ID(VAF_Role_ID);
         }
 

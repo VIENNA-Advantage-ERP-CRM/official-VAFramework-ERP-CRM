@@ -21,7 +21,7 @@ namespace VIS.Models
     public class VPaySelectModel
     {
         private int _C_PaySelection_ID = 0;
-        private int C_BankAccount_ID = 0;
+        private int VAB_Bank_Acct_ID = 0;
         /// <summary>
         /// Get Detail for Payment Selection Form
         /// </summary>
@@ -32,7 +32,7 @@ namespace VIS.Models
             PaymentSelectionDetail objPSelectDetail = new PaymentSelectionDetail();
             objPSelectDetail.BankAccount = GetBankAccount(ctx);
             objPSelectDetail.BusinessPartner = GetBusinesspartner(ctx);
-            objPSelectDetail.PaymentMethod = GetPaymentMethod(ctx, C_BankAccount_ID);
+            objPSelectDetail.PaymentMethod = GetPaymentMethod(ctx, VAB_Bank_Acct_ID);
             return objPSelectDetail;
         }
         /// <summary>
@@ -44,15 +44,15 @@ namespace VIS.Models
         {
             List<BankAccount> lstBankAccount = new List<BankAccount>();
             DataSet ds = new DataSet();
-            string sqlBankAccount = "SELECT ba.C_BankAccount_ID,"                       //  1
+            string sqlBankAccount = "SELECT ba.VAB_Bank_Acct_ID,"                       //  1
                  + "b.Name || ' ' || ba.AccountNo AS Name, "          //  2
-                   + "ba.C_Currency_ID, c.ISO_Code,"                   //  3..4
+                   + "ba.VAB_Currency_ID, c.ISO_Code,"                   //  3..4
                    + "ba.CurrentBalance "                              //  5
                  + "FROM C_Bank b "
-                 + "INNER JOIN C_BankAccount ba ON (b.C_Bank_ID=ba.C_Bank_ID) "
-                 + "INNER JOIN C_Currency c ON (ba.C_Currency_ID=c.C_Currency_ID) "
+                 + "INNER JOIN VAB_Bank_Acct ba ON (b.C_Bank_ID=ba.C_Bank_ID) "
+                 + "INNER JOIN VAB_Currency c ON (ba.VAB_Currency_ID=c.VAB_Currency_ID) "
                  + " AND ba.IsActive = 'Y'"
-                 + " AND EXISTS (SELECT * FROM C_BankAccountDoc d WHERE d.C_BankAccount_ID=ba.C_BankAccount_ID) "
+                 + " AND EXISTS (SELECT * FROM VAB_Bank_AcctDoc d WHERE d.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID) "
                  + " AND (ba.VAF_Org_ID IN (SELECT ro.VAF_Org_ID FROM VAF_Role_OrgRights ro"
                  + " WHERE ro.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND ro.IsActive = 'Y')"
                  + " OR (ba.VAF_Org_ID = 0 AND EXISTS (SELECT ro.VAF_Org_ID FROM VAF_Role_OrgRights ro"
@@ -65,16 +65,16 @@ namespace VIS.Models
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    C_BankAccount_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["C_BankAccount_ID"]);
+                    VAB_Bank_Acct_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["VAB_Bank_Acct_ID"]);
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         lstBankAccount.Add(new BankAccount()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BankAccount_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Bank_Acct_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
                             ISOCode = Convert.ToString(ds.Tables[0].Rows[i]["ISO_Code"]),
                             CurrentBalance = Convert.ToString(ds.Tables[0].Rows[i]["CurrentBalance"]),
-                            Currency_ID = Convert.ToString(ds.Tables[0].Rows[i]["C_Currency_ID"])
+                            Currency_ID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_Currency_ID"])
                         });
                     }
                 }
@@ -90,8 +90,8 @@ namespace VIS.Models
         {
             List<BusinessPartner> lstBusinessPartner = new List<BusinessPartner>();
             DataSet ds = new DataSet();
-            string sqlBPartner = "select bp.C_BPartner_ID, bp.Name from c_bpartner bp where exists (SELECT * FROM C_Invoice i WHERE "
-            + " bp.C_BPartner_ID=i.C_BPartner_ID AND (i.IsSOTrx='N' OR (i.IsSOTrx='Y' AND i.PaymentRule='D'))AND i.IsPaid <>'Y') and "
+            string sqlBPartner = "select bp.VAB_BusinessPartner_ID, bp.Name from VAB_BusinessPartner bp where exists (SELECT * FROM C_Invoice i WHERE "
+            + " bp.VAB_BusinessPartner_ID=i.VAB_BusinessPartner_ID AND (i.IsSOTrx='N' OR (i.IsSOTrx='Y' AND i.PaymentRule='D'))AND i.IsPaid <>'Y') and "
             + " bp.VAF_Client_ID IN (0, " + ctx.GetVAF_Client_ID() + ") AND (COALESCE(bp.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + ")) ORDER BY 2";
             ds = DB.ExecuteDataset(sqlBPartner, null, null);
             if (ds != null)
@@ -102,7 +102,7 @@ namespace VIS.Models
                     {
                         lstBusinessPartner.Add(new BusinessPartner()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_BPartner_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_BusinessPartner_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                         });
                     }
@@ -115,12 +115,12 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public List<PaymentMethod> GetPaymentMethod(Ctx ctx, int C_BankAccount_ID)
+        public List<PaymentMethod> GetPaymentMethod(Ctx ctx, int VAB_Bank_Acct_ID)
         {
             List<PaymentMethod> lstPaymentMethod = new List<PaymentMethod>();
             DataSet ds = new DataSet();
             string sqlPaymentRule = "select Name, Value from VAF_CtrlRef_List where VAF_Control_Ref_id = 195 "
-                  + " AND VAF_CtrlRef_List.Value IN (SELECT PaymentRule FROM C_BankAccountDoc WHERE C_BankAccount_ID=" + C_BankAccount_ID + ") ORDER BY 2";
+                  + " AND VAF_CtrlRef_List.Value IN (SELECT PaymentRule FROM VAB_Bank_AcctDoc WHERE VAB_Bank_Acct_ID=" + VAB_Bank_Acct_ID + ") ORDER BY 2";
             ds = DB.ExecuteDataset(sqlPaymentRule, null, null);
             if (ds != null)
             {
@@ -143,36 +143,36 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="bankAccountId"></param>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <param name="payDate"></param>
         /// <param name="paymentRule"></param>
         /// <param name="chkDue"></param>
-        /// <param name="C_Currency_ID"></param>
+        /// <param name="VAB_Currency_ID"></param>
         /// <returns></returns>
-        public List<GridRecords> GetGridData(Ctx ctx, int bankAccountId, int C_BPartner_ID, DateTime? payDate, string paymentRule, bool chkDue, int C_Currency_ID)
+        public List<GridRecords> GetGridData(Ctx ctx, int bankAccountId, int VAB_BusinessPartner_ID, DateTime? payDate, string paymentRule, bool chkDue, int VAB_Currency_ID)
         {
             List<GridRecords> lstGridRecords = new List<GridRecords>();
-            string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
-            + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
-            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, @param2, @param3,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
-            + " i.C_Currency_ID, @param5, @param6,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
-            + " (i.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) INNER JOIN C_PaymentTerm p ON "
+            string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
+            + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
+            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.VAB_Currency_ID, @param2, @param3,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
+            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
+            + " i.VAB_Currency_ID, @param5, @param6,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
+            + " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             + " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)"
             + "   WHERE i.IsSOTrx= @param7 AND IsPaid='N' AND "
             + " i.DocStatus IN ('CO','CL') AND i.VAF_Client_ID= @param8 AND i.VAF_Client_ID IN(0," + ctx.GetVAF_Client_ID() + ") AND (COALESCE(i.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + "))";
-            //   string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
-            //+ " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
-            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
-            //+ " i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
-            //+ " (i.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) INNER JOIN C_PaymentTerm p ON "
+            //   string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
+            //+ " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
+            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
+            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
+            //+ " i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
+            //+ " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             //+ " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)";
             String sql = m_sql;
             int countParam = 8;
             DateTime payDate1 = (DateTime)payDate;
             string paymentDate = payDate1.ToString("dd-MMM-yyyy");
-            int C_BankAccount_ID = Util.GetValueOfInt(bankAccountId);
+            int VAB_Bank_Acct_ID = Util.GetValueOfInt(bankAccountId);
             // log.Config("PayDate=" + payDate);
             String isSOTrx = "N";
             //   string paymentRule = Util.GetValueOfString(paymentRule);
@@ -186,24 +186,24 @@ namespace VIS.Models
                 sql += " AND i.DateInvoiced+p.NetDays <= @param9";
                 countParam++;
             }
-            //int C_BPartner_ID = Util.GetValueOfInt(cmbBPartner.SelectedValue);
-            if (C_BPartner_ID != 0)
+            //int VAB_BusinessPartner_ID = Util.GetValueOfInt(cmbBPartner.SelectedValue);
+            if (VAB_BusinessPartner_ID != 0)
             {
-                sql += " AND i.C_BPartner_ID=@param10";
+                sql += " AND i.VAB_BusinessPartner_ID=@param10";
                 countParam++;
             }
             sql += " ORDER BY 2,3";
-            //log.Finest(sql + " - C_Currecny_ID=" + C_Currency_ID + ", C_BPartner_ID=" + C_BPartner_ID);
+            //log.Finest(sql + " - C_Currecny_ID=" + VAB_Currency_ID + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID);
             ////  Get Open Invoices
             SqlParameter[] para = null;
 
             para = new SqlParameter[countParam];
             int index = 0;
             para[index++] = new SqlParameter("@param1", paymentDate);
-            para[index++] = new SqlParameter("@param2", C_Currency_ID);
+            para[index++] = new SqlParameter("@param2", VAB_Currency_ID);
             para[index++] = new SqlParameter("@param3", paymentDate);
             para[index++] = new SqlParameter("@param4", paymentDate);
-            para[index++] = new SqlParameter("@param5", C_Currency_ID);
+            para[index++] = new SqlParameter("@param5", VAB_Currency_ID);
             para[index++] = new SqlParameter("@param6", paymentDate);
             para[index++] = new SqlParameter("@param7", isSOTrx);
             para[index++] = new SqlParameter("@param8", ctx.GetVAF_Client_ID());
@@ -212,9 +212,9 @@ namespace VIS.Models
             {
                 para[index++] = new SqlParameter("@param9", paymentDate);
             }
-            if (C_BPartner_ID != 0)
+            if (VAB_BusinessPartner_ID != 0)
             {
-                para[index++] = new SqlParameter("@param10", C_BPartner_ID);
+                para[index++] = new SqlParameter("@param10", VAB_BusinessPartner_ID);
             }
 
             DataSet ds = DB.ExecuteDataset(sql, para, null);
@@ -238,8 +238,8 @@ namespace VIS.Models
                             DISCOUNTDATE = Convert.ToString(ds.Tables[0].Rows[i]["DISCOUNTDATE"]),
                             AMOUNTDUE = Convert.ToString(ds.Tables[0].Rows[i]["AMOUNTDUE"]),
                             PAYMENTAMOUNT = Convert.ToString(ds.Tables[0].Rows[i]["PAYMENTAMOUNT"]),
-                            C_BPARTNER_ID = Convert.ToString(ds.Tables[0].Rows[i]["C_BPARTNER_ID"]),
-                            C_CURRENCY_ID = Convert.ToString(ds.Tables[0].Rows[i]["C_CURRENCY_ID"])
+                            VAB_BUSINESSPARTNER_ID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_BUSINESSPARTNER_ID"]),
+                            VAB_CURRENCY_ID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_CURRENCY_ID"])
                         });
                     }
                 }
@@ -249,7 +249,7 @@ namespace VIS.Models
         /// <summary>
         ///  Generate PaySelection
         /// </summary>
-        public string GeneratePaySelect(Ctx ctx, List<GridRecords> selectedRecords, Decimal? paymentAmt, String paymentRule, int C_BankAccount_ID, DateTime? payDate)
+        public string GeneratePaySelect(Ctx ctx, List<GridRecords> selectedRecords, Decimal? paymentAmt, String paymentRule, int VAB_Bank_Acct_ID, DateTime? payDate)
         {
 
             Trx trx = null;
@@ -280,7 +280,7 @@ namespace VIS.Models
             }
 
             //String paymentRule = Util.GetValueOfString(cmbPaymentRule.SelectedValue);
-            //int C_BankAccount_ID = Util.GetValueOfInt(cmbBankAccount.SelectedValue);
+            //int VAB_Bank_Acct_ID = Util.GetValueOfInt(cmbBankAccount.SelectedValue);
             ////  Create Header
             //DateTime? payDate = Util.GetValueOfDateTime(vdtpPayDate.SelectedDate);
 
@@ -290,7 +290,7 @@ namespace VIS.Models
                 + " - " + paymentRule
                 + " - " + payDate.Value.Date);
             m_ps.SetPayDate(payDate);
-            m_ps.SetC_BankAccount_ID(C_BankAccount_ID);
+            m_ps.SetVAB_Bank_Acct_ID(VAB_Bank_Acct_ID);
             m_ps.SetIsApproved(true);
             if (!m_ps.Save())
             {
@@ -417,7 +417,7 @@ namespace VIS.Models
             {
                 MPaySelectionCheck check = (MPaySelectionCheck)_list[i];
                 //	Add to existing
-                if (check.GetC_BPartner_ID() == line.GetInvoice().GetC_BPartner_ID())
+                if (check.GetVAB_BusinessPartner_ID() == line.GetInvoice().GetVAB_BusinessPartner_ID())
                 {
                     check.AddLine(line);
                     if (!check.Save())
@@ -445,9 +445,9 @@ namespace VIS.Models
             MPaySelectionCheck check1 = new MPaySelectionCheck(line, PaymentRule);
             if (!check1.IsValid())
             {
-                int C_BPartner_ID = check1.GetC_BPartner_ID();
-                MBPartner bp = MBPartner.Get(ctx, C_BPartner_ID);
-                String msg = "@NotFound@ @C_BP_BankAccount@: " + bp.GetName();
+                int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();
+                MBPartner bp = MBPartner.Get(ctx, VAB_BusinessPartner_ID);
+                String msg = "@NotFound@ @VAB_BPart_Bank_Acct@: " + bp.GetName();
                 throw new Exception(msg);
             }
             if (!check1.Save())
@@ -505,8 +505,8 @@ namespace VIS.Models
         public string DISCOUNTDATE { get; set; }
         public string AMOUNTDUE { get; set; }
         public string PAYMENTAMOUNT { get; set; }
-        public string C_BPARTNER_ID { get; set; }
-        public string C_CURRENCY_ID { get; set; }
+        public string VAB_BUSINESSPARTNER_ID { get; set; }
+        public string VAB_CURRENCY_ID { get; set; }
 
     }
     public class PaymentSelection

@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CommissionRun
+/** Generated Model for VAB_WorkCommission_Calc
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CommissionRun : PO
+public class X_VAB_WorkCommission_Calc : PO
 {
-public X_C_CommissionRun (Context ctx, int C_CommissionRun_ID, Trx trxName) : base (ctx, C_CommissionRun_ID, trxName)
+public X_VAB_WorkCommission_Calc (Context ctx, int VAB_WorkCommission_Calc_ID, Trx trxName) : base (ctx, VAB_WorkCommission_Calc_ID, trxName)
 {
-/** if (C_CommissionRun_ID == 0)
+/** if (VAB_WorkCommission_Calc_ID == 0)
 {
-SetC_CommissionRun_ID (0);
-SetC_Commission_ID (0);
+SetVAB_WorkCommission_Calc_ID (0);
+SetVAB_WorkCommission_ID (0);
 SetDocumentNo (null);
 SetGrandTotal (0.0);
 SetProcessed (false);	// N
@@ -29,12 +29,12 @@ SetStartDate (DateTime.Now);
 }
  */
 }
-public X_C_CommissionRun (Ctx ctx, int C_CommissionRun_ID, Trx trxName) : base (ctx, C_CommissionRun_ID, trxName)
+public X_VAB_WorkCommission_Calc (Ctx ctx, int VAB_WorkCommission_Calc_ID, Trx trxName) : base (ctx, VAB_WorkCommission_Calc_ID, trxName)
 {
-/** if (C_CommissionRun_ID == 0)
+/** if (VAB_WorkCommission_Calc_ID == 0)
 {
-SetC_CommissionRun_ID (0);
-SetC_Commission_ID (0);
+SetVAB_WorkCommission_Calc_ID (0);
+SetVAB_WorkCommission_ID (0);
 SetDocumentNo (null);
 SetGrandTotal (0.0);
 SetProcessed (false);	// N
@@ -47,7 +47,7 @@ SetStartDate (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionRun (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommission_Calc (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_CommissionRun (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionRun (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommission_Calc (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_CommissionRun (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CommissionRun (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_WorkCommission_Calc (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CommissionRun()
+static X_VAB_WorkCommission_Calc()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389054615L;
 public static int Table_ID;
  // =436;
 
-/** TableName=C_CommissionRun */
-public static String Table_Name="C_CommissionRun";
+/** TableName=VAB_WorkCommission_Calc */
+public static String Table_Name="VAB_WorkCommission_Calc";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -117,36 +117,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CommissionRun[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_WorkCommission_Calc[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Commission Run.
-@param C_CommissionRun_ID Commission Run or Process */
-public void SetC_CommissionRun_ID (int C_CommissionRun_ID)
+@param VAB_WorkCommission_Calc_ID Commission Run or Process */
+public void SetVAB_WorkCommission_Calc_ID (int VAB_WorkCommission_Calc_ID)
 {
-if (C_CommissionRun_ID < 1) throw new ArgumentException ("C_CommissionRun_ID is mandatory.");
-Set_ValueNoCheck ("C_CommissionRun_ID", C_CommissionRun_ID);
+if (VAB_WorkCommission_Calc_ID < 1) throw new ArgumentException ("VAB_WorkCommission_Calc_ID is mandatory.");
+Set_ValueNoCheck ("VAB_WorkCommission_Calc_ID", VAB_WorkCommission_Calc_ID);
 }
 /** Get Commission Run.
 @return Commission Run or Process */
-public int GetC_CommissionRun_ID() 
+public int GetVAB_WorkCommission_Calc_ID() 
 {
-Object ii = Get_Value("C_CommissionRun_ID");
+Object ii = Get_Value("VAB_WorkCommission_Calc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Commission.
-@param C_Commission_ID Commission */
-public void SetC_Commission_ID (int C_Commission_ID)
+@param VAB_WorkCommission_ID Commission */
+public void SetVAB_WorkCommission_ID (int VAB_WorkCommission_ID)
 {
-if (C_Commission_ID < 1) throw new ArgumentException ("C_Commission_ID is mandatory.");
-Set_ValueNoCheck ("C_Commission_ID", C_Commission_ID);
+if (VAB_WorkCommission_ID < 1) throw new ArgumentException ("VAB_WorkCommission_ID is mandatory.");
+Set_ValueNoCheck ("VAB_WorkCommission_ID", VAB_WorkCommission_ID);
 }
 /** Get Commission.
 @return Commission */
-public int GetC_Commission_ID() 
+public int GetVAB_WorkCommission_ID() 
 {
-Object ii = Get_Value("C_Commission_ID");
+Object ii = Get_Value("VAB_WorkCommission_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

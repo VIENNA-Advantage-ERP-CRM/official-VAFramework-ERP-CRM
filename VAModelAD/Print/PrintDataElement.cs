@@ -166,7 +166,7 @@ namespace VAdvantage.Print
             String retValue = _value.ToString();
             if (_displayType == DisplayType.Location)
                 return GetValueDisplay_Location();
-            else if (_columnName.Equals("C_BPartner_Location_ID") || _columnName.Equals("Bill_Location_ID"))
+            else if (_columnName.Equals("VAB_BPart_Location_ID") || _columnName.Equals("Bill_Location_ID"))
                 return GetValueDisplay_BPLocation();
             else if (_displayType == 0 || _value.GetType() == typeof(String) || _value.GetType() == typeof(NamePair))
             { }
@@ -229,10 +229,10 @@ namespace VAdvantage.Print
         {
             try
             {
-                int C_BPartner_Location_ID = int.Parse(GetValueKey());
-                if (C_BPartner_Location_ID != 0)
+                int VAB_BPart_Location_ID = int.Parse(GetValueKey());
+                if (VAB_BPart_Location_ID != 0)
                 {
-                    dynamic loc = VAModelAD.Model.MLocation.GetBPLocation(Env.GetContext(), C_BPartner_Location_ID, null);
+                    dynamic loc = VAModelAD.Model.MLocation.GetBPLocation(Env.GetContext(), VAB_BPart_Location_ID, null);
                     if (loc != null)
                         return loc.ToStringCR();
                 }

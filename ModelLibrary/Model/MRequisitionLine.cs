@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         //	PriceList				
         private int _M_PriceList_ID = 0;
         // Temp BPartner			
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
 
         /**
          * 	Standard Constructor
@@ -107,18 +107,18 @@ namespace VAdvantage.Model
         }
 
         /**
-         * @return Returns the c_BPartner_ID.
+         * @return Returns the VAB_BusinessPartner_ID.
          */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            return _C_BPartner_ID;
+            return _VAB_BusinessPartner_ID;
         }
         /**
-         * @param partner_ID The c_BPartner_ID to set.
+         * @param partner_ID The VAB_BusinessPartner_ID to set.
          */
-        public void SetC_BPartner_ID(int partner_ID)
+        public void SetVAB_BusinessPartner_ID(int partner_ID)
         {
-            _C_BPartner_ID = partner_ID;
+            _VAB_BusinessPartner_ID = partner_ID;
         }
 
         /**
@@ -148,9 +148,9 @@ namespace VAdvantage.Model
         {
             try
             {
-                if (GetC_Charge_ID() != 0)
+                if (GetVAB_Charge_ID() != 0)
                 {
-                    MCharge charge = MCharge.Get(GetCtx(), GetC_Charge_ID());
+                    MCharge charge = MCharge.Get(GetCtx(), GetVAB_Charge_ID());
                     SetPriceActual(charge.GetChargeAmt());
                 }
                 if (GetM_Product_ID() == 0)
@@ -184,7 +184,7 @@ namespace VAdvantage.Model
                 log.Fine("M_PriceList_ID=" + M_PriceList_ID);
                 bool isSOTrx = false;
                 MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    GetM_Product_ID(), GetC_BPartner_ID(), GetQty(), isSOTrx);
+                    GetM_Product_ID(), GetVAB_BusinessPartner_ID(), GetQty(), isSOTrx);
                 pp.SetM_PriceList_ID(M_PriceList_ID);
 
                 // 
@@ -253,11 +253,11 @@ namespace VAdvantage.Model
                     SetM_AttributeSetInstance_ID(0);
                 }
 
-                int C_BPartner_ID = GetC_BPartner_ID();
+                int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
                 Decimal Qty = GetQty();
                 bool isSOTrx = false;
                 MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+                    M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
                 //
                 int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");
                 pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -336,10 +336,10 @@ namespace VAdvantage.Model
                     && "Y".Equals(GetCtx().GetContext(windowNo, "DiscountSchema")))
                 {
                     int M_Product_ID = GetM_Product_ID();
-                    int C_BPartner_ID = GetC_BPartner_ID();
+                    int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
                     bool isSOTrx = false;
                     MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                        M_Product_ID, C_BPartner_ID, qty, isSOTrx);
+                        M_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
                     //
                     int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");
                     pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
             try
             {
                 // Check Product_ID or charge_ID before save
-                if (GetM_Product_ID() == 0 && GetC_Charge_ID() == 0)
+                if (GetM_Product_ID() == 0 && GetVAB_Charge_ID() == 0)
                 {
                     log.SaveError("VIS_NOProductOrCharge", "");
                     return false;
@@ -423,11 +423,11 @@ namespace VAdvantage.Model
                 }
 
                 //	Product & ASI - Charge
-                if (GetM_Product_ID() != 0 && GetC_Charge_ID() != 0)
+                if (GetM_Product_ID() != 0 && GetVAB_Charge_ID() != 0)
                 {
-                    SetC_Charge_ID(0);
+                    SetVAB_Charge_ID(0);
                 }
-                if (GetM_AttributeSetInstance_ID() != 0 && GetC_Charge_ID() != 0)
+                if (GetM_AttributeSetInstance_ID() != 0 && GetVAB_Charge_ID() != 0)
                 {
                     SetM_AttributeSetInstance_ID(0);
                 }

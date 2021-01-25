@@ -8,10 +8,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    class MFinRptAcctGroup : X_C_FinRptAcctGroup
+    class MFinRptAcctGroup : X_VAB_FinRptAcctGroup
     {
-        public MFinRptAcctGroup(Ctx ctx, int C_FinRptAcctGroup_ID, Trx trxName)
-            : base(ctx, C_FinRptAcctGroup_ID, trxName)
+        public MFinRptAcctGroup(Ctx ctx, int VAB_FinRptAcctGroup_ID, Trx trxName)
+            : base(ctx, VAB_FinRptAcctGroup_ID, trxName)
         {
 
         }

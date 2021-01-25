@@ -20,7 +20,7 @@ public X_M_Freight (Context ctx, int M_Freight_ID, Trx trxName) : base (ctx, M_F
 {
 /** if (M_Freight_ID == 0)
 {
-SetC_Currency_ID (0);
+SetVAB_Currency_ID (0);
 SetFreightAmt (0.0);
 SetM_FreightCategory_ID (0);
 SetM_Freight_ID (0);
@@ -33,7 +33,7 @@ public X_M_Freight (Ctx ctx, int M_Freight_ID, Trx trxName) : base (ctx, M_Freig
 {
 /** if (M_Freight_ID == 0)
 {
-SetC_Currency_ID (0);
+SetVAB_Currency_ID (0);
 SetFreightAmt (0.0);
 SetM_FreightCategory_ID (0);
 SetM_Freight_ID (0);
@@ -121,33 +121,33 @@ StringBuilder sb = new StringBuilder ("X_M_Freight[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 /** Set Country.
-@param C_Country_ID Country */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID <= 0) Set_Value ("C_Country_ID", null);
+if (VAB_Country_ID <= 0) Set_Value ("VAB_Country_ID", null);
 else
-Set_Value ("C_Country_ID", C_Country_ID);
+Set_Value ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

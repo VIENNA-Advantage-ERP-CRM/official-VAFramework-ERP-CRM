@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Currency_Acct
+/** Generated Model for VAB_Currency_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Currency_Acct : PO
+public class X_VAB_Currency_Acct : PO
 {
-public X_C_Currency_Acct (Context ctx, int C_Currency_Acct_ID, Trx trxName) : base (ctx, C_Currency_Acct_ID, trxName)
+public X_VAB_Currency_Acct (Context ctx, int VAB_Currency_Acct_ID, Trx trxName) : base (ctx, VAB_Currency_Acct_ID, trxName)
 {
-/** if (C_Currency_Acct_ID == 0)
+/** if (VAB_Currency_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_Currency_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Currency_ID (0);
 SetRealizedGain_Acct (0);
 SetRealizedLoss_Acct (0);
 SetUnrealizedGain_Acct (0);
@@ -29,12 +29,12 @@ SetUnrealizedLoss_Acct (0);
 }
  */
 }
-public X_C_Currency_Acct (Ctx ctx, int C_Currency_Acct_ID, Trx trxName) : base (ctx, C_Currency_Acct_ID, trxName)
+public X_VAB_Currency_Acct (Ctx ctx, int VAB_Currency_Acct_ID, Trx trxName) : base (ctx, VAB_Currency_Acct_ID, trxName)
 {
-/** if (C_Currency_Acct_ID == 0)
+/** if (VAB_Currency_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_Currency_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Currency_ID (0);
 SetRealizedGain_Acct (0);
 SetRealizedLoss_Acct (0);
 SetUnrealizedGain_Acct (0);
@@ -47,7 +47,7 @@ SetUnrealizedLoss_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Currency_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_Currency_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Currency_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_Currency_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Currency_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Currency_Acct()
+static X_VAB_Currency_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389054756L;
 public static int Table_ID;
  // =638;
 
-/** TableName=C_Currency_Acct */
-public static String Table_Name="C_Currency_Acct";
+/** TableName=VAB_Currency_Acct */
+public static String Table_Name="VAB_Currency_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,21 +117,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Currency_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Currency_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -139,20 +139,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_ValueNoCheck ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

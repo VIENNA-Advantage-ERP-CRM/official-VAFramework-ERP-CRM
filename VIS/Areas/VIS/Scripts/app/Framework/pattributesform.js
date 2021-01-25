@@ -1,7 +1,7 @@
 ﻿; (function (VIS, $) {
 
     // PAttributesForm form declraion for constructor class
-    function PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, C_BPartner_ID, proWindow, VAF_Column_ID, pwindowNo) {
+    function PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, VAB_BusinessPartner_ID, proWindow, VAF_Column_ID, pwindowNo) {
         this.onClose = null;
         var $self = this;
         var $root = $("<div style='position:relative'>");
@@ -33,12 +33,12 @@
         var IsSOTrx = false;
         var IsInternalUse = false;
         this.log = VIS.Logging.VLogger.getVLogger("PAttributesForm");
-        this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", C_BPartner_ID=" + C_BPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
+        this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
 
         //constructor load
         mAttributeSetInstanceId = M_AttributeSetInstance_ID;
         mProductId = M_Product_ID;
-        cBPartnerId = C_BPartner_ID;
+        cBPartnerId = VAB_BusinessPartner_ID;
         productWindow = proWindow;
         adColumnId = VAF_Column_ID;
         windowNoParent = pwindowNo;

@@ -166,18 +166,18 @@ public String GetAmountType()
 return (String)Get_Value("AmountType");
 }
 /** Set Account Element.
-@param C_ElementValue_ID Account Element */
-public void SetC_ElementValue_ID (int C_ElementValue_ID)
+@param VAB_Acct_Element_ID Account Element */
+public void SetVAB_Acct_Element_ID (int VAB_Acct_Element_ID)
 {
-if (C_ElementValue_ID <= 0) Set_Value ("C_ElementValue_ID", null);
+if (VAB_Acct_Element_ID <= 0) Set_Value ("VAB_Acct_Element_ID", null);
 else
-Set_Value ("C_ElementValue_ID", C_ElementValue_ID);
+Set_Value ("VAB_Acct_Element_ID", VAB_Acct_Element_ID);
 }
 /** Get Account Element.
 @return Account Element */
-public int GetC_ElementValue_ID() 
+public int GetVAB_Acct_Element_ID() 
 {
-Object ii = Get_Value("C_ElementValue_ID");
+Object ii = Get_Value("VAB_Acct_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

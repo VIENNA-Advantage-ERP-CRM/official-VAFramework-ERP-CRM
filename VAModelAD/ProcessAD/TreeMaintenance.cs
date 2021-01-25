@@ -87,13 +87,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		String sourceTableName = tree.GetSourceTableName(true);
 		String sourceTableKey = sourceTableName + "_ID";
 		int VAF_Client_ID = tree.GetVAF_Client_ID();
-		int C_Element_ID = 0;
+		int VAB_Element_ID = 0;
 		if (MTree.TREETYPE_ElementValue.Equals(tree.GetTreeType()))
 		{
-			String sql = "SELECT C_Element_ID FROM C_Element "
+			String sql = "SELECT VAB_Element_ID FROM VAB_Element "
 				+ "WHERE VAF_TreeInfo_ID=" + tree.GetVAF_TreeInfo_ID();
-			C_Element_ID = DataBase.DB.GetSQLValue(null, sql);
-            if (C_Element_ID <= 0)
+			VAB_Element_ID = DataBase.DB.GetSQLValue(null, sql);
+            if (VAB_Element_ID <= 0)
             {
                 throw new Exception("No Account Element found");
             }
@@ -106,9 +106,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			.Append(" AND Node_ID NOT IN (SELECT ").Append(sourceTableKey)
 			.Append(" FROM ").Append(sourceTableName)
 			.Append(" WHERE VAF_Client_ID IN (0,").Append(VAF_Client_ID).Append(")");
-        if (C_Element_ID > 0)
+        if (VAB_Element_ID > 0)
         {
-            sql1.Append(" AND C_Element_ID=").Append(C_Element_ID);
+            sql1.Append(" AND VAB_Element_ID=").Append(VAB_Element_ID);
         }
 		sql1.Append(")");
 		log.Finer(sql1.ToString());
@@ -126,9 +126,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		sql2.Append("SELECT ").Append(sourceTableKey)
 			.Append(" FROM ").Append(sourceTableName)
 			.Append(" WHERE VAF_Client_ID IN (0,").Append(VAF_Client_ID).Append(")");
-        if (C_Element_ID > 0)
+        if (VAB_Element_ID > 0)
         {
-            sql2.Append(" AND C_Element_ID=").Append(C_Element_ID);
+            sql2.Append(" AND VAB_Element_ID=").Append(VAB_Element_ID);
         }
         sql2.Append(" AND ").Append(sourceTableKey)
             .Append("  NOT IN (SELECT Node_ID FROM ").Append(nodeTableName)

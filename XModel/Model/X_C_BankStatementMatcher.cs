@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BankStatementMatcher
+/** Generated Model for VAB_BankingJRNLMatcher
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BankStatementMatcher : PO
+public class X_VAB_BankingJRNLMatcher : PO
 {
-public X_C_BankStatementMatcher (Context ctx, int C_BankStatementMatcher_ID, Trx trxName) : base (ctx, C_BankStatementMatcher_ID, trxName)
+public X_VAB_BankingJRNLMatcher (Context ctx, int VAB_BankingJRNLMatcher_ID, Trx trxName) : base (ctx, VAB_BankingJRNLMatcher_ID, trxName)
 {
-/** if (C_BankStatementMatcher_ID == 0)
+/** if (VAB_BankingJRNLMatcher_ID == 0)
 {
-SetC_BankStatementMatcher_ID (0);
+SetVAB_BankingJRNLMatcher_ID (0);
 SetClassname (null);
 SetName (null);
 SetSeqNo (0);
 }
  */
 }
-public X_C_BankStatementMatcher (Ctx ctx, int C_BankStatementMatcher_ID, Trx trxName) : base (ctx, C_BankStatementMatcher_ID, trxName)
+public X_VAB_BankingJRNLMatcher (Ctx ctx, int VAB_BankingJRNLMatcher_ID, Trx trxName) : base (ctx, VAB_BankingJRNLMatcher_ID, trxName)
 {
-/** if (C_BankStatementMatcher_ID == 0)
+/** if (VAB_BankingJRNLMatcher_ID == 0)
 {
-SetC_BankStatementMatcher_ID (0);
+SetVAB_BankingJRNLMatcher_ID (0);
 SetClassname (null);
 SetName (null);
 SetSeqNo (0);
@@ -43,7 +43,7 @@ SetSeqNo (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatementMatcher (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BankingJRNLMatcher (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_BankStatementMatcher (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatementMatcher (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BankingJRNLMatcher (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_BankStatementMatcher (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatementMatcher (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BankingJRNLMatcher (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BankStatementMatcher()
+static X_VAB_BankingJRNLMatcher()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389054144L;
 public static int Table_ID;
  // =658;
 
-/** TableName=C_BankStatementMatcher */
-public static String Table_Name="C_BankStatementMatcher";
+/** TableName=VAB_BankingJRNLMatcher */
+public static String Table_Name="VAB_BankingJRNLMatcher";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BankStatementMatcher[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BankingJRNLMatcher[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Bank Statement Matcher.
-@param C_BankStatementMatcher_ID Algorithm to match Bank Statement Info to Business Partners, Invoices and Payments */
-public void SetC_BankStatementMatcher_ID (int C_BankStatementMatcher_ID)
+@param VAB_BankingJRNLMatcher_ID Algorithm to match Bank Statement Info to Business Partners, Invoices and Payments */
+public void SetVAB_BankingJRNLMatcher_ID (int VAB_BankingJRNLMatcher_ID)
 {
-if (C_BankStatementMatcher_ID < 1) throw new ArgumentException ("C_BankStatementMatcher_ID is mandatory.");
-Set_ValueNoCheck ("C_BankStatementMatcher_ID", C_BankStatementMatcher_ID);
+if (VAB_BankingJRNLMatcher_ID < 1) throw new ArgumentException ("VAB_BankingJRNLMatcher_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BankingJRNLMatcher_ID", VAB_BankingJRNLMatcher_ID);
 }
 /** Get Bank Statement Matcher.
 @return Algorithm to match Bank Statement Info to Business Partners, Invoices and Payments */
-public int GetC_BankStatementMatcher_ID() 
+public int GetVAB_BankingJRNLMatcher_ID() 
 {
-Object ii = Get_Value("C_BankStatementMatcher_ID");
+Object ii = Get_Value("VAB_BankingJRNLMatcher_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

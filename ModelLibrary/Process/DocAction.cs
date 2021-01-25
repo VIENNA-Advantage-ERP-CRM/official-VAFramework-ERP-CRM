@@ -258,8 +258,8 @@ namespace VAdvantage.Process
         /// <summary>
         /// Get Document Currency
         /// </summary>
-        /// <returns>C_Currency_ID</returns>
-        int GetC_Currency_ID();
+        /// <returns>VAB_Currency_ID</returns>
+        int GetVAB_Currency_ID();
 
         /// <summary>
         /// Get Document Approval Amount

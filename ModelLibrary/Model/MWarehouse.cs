@@ -242,16 +242,16 @@ namespace VAdvantage.Model
                 var relatedtoWarehouse = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
+                _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                     {
-                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
                                             wrhus.Set_ValueNoCheck("M_Warehouse_ID", Util.GetValueOfInt(GetM_Warehouse_ID()));
                                             wrhus.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             wrhus.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                            wrhus.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                            wrhus.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
 
                                             if (!wrhus.Save())
                                             {
@@ -305,7 +305,7 @@ namespace VAdvantage.Model
             {
                 if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
                 {
-                    bool sucs = Insert_Accounting("M_Warehouse_Acct", "C_AcctSchema_Default", null);
+                    bool sucs = Insert_Accounting("M_Warehouse_Acct", "VAB_AccountBook_Default", null);
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
                     if (!sucs)

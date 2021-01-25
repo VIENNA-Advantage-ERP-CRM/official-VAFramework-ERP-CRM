@@ -20,8 +20,8 @@ public X_C_BP_Vendor_Acct (Context ctx, int C_BP_Vendor_Acct_ID, Trx trxName) : 
 {
 /** if (C_BP_Vendor_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_BPartner_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetV_Liability_Acct (0);
 SetV_Prepayment_Acct (0);
 }
@@ -31,8 +31,8 @@ public X_C_BP_Vendor_Acct (Ctx ctx, int C_BP_Vendor_Acct_ID, Trx trxName) : base
 {
 /** if (C_BP_Vendor_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_BPartner_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetV_Liability_Acct (0);
 SetV_Prepayment_Acct (0);
 }
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_C_BP_Vendor_Acct[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,20 +135,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_ValueNoCheck ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

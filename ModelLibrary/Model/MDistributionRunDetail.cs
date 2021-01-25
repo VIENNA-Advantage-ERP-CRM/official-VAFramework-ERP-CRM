@@ -48,7 +48,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM T_DistributionRunDetail WHERE M_DistributionRun_ID=" + M_DistributionRun_ID;
             if (orderBP)
             {
-                sql += " ORDER BY C_BPartner_ID, C_BPartner_Location_ID";
+                sql += " ORDER BY VAB_BusinessPartner_ID, VAB_BPart_Location_ID";
             }
             else
             {

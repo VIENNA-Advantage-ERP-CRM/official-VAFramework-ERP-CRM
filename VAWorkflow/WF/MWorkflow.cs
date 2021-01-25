@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MWorkflow
  * Purpose        : 
- * Class Used     : MWorkflow inherits X_AD_Workflow
+ * Class Used     : MWorkflow inherits X_VAF_Workflow
  * Chronological    Development
  * Raghunandan      04-May-2009 
   ******************************************************/
@@ -28,7 +28,7 @@ namespace VAdvantage.WF
     /// <summary>
     /// Workflow Modal
     /// </summary>
-    public class MWorkflow : X_AD_Workflow
+    public class MWorkflow : X_VAF_Workflow
     {
 
         #region Private Variables
@@ -42,9 +42,9 @@ namespace VAdvantage.WF
         //	Translation Flag	
         private bool _translated = false;
         //	Single Cache		
-        private static CCache<int, MWorkflow> _cache = new CCache<int, MWorkflow>("AD_Workflow", 20);
+        private static CCache<int, MWorkflow> _cache = new CCache<int, MWorkflow>("VAF_Workflow", 20);
         /**	Document Value Cache			*/
-        private static CCache<string, MWorkflow[]> _cacheDocValue = new CCache<string, MWorkflow[]>("AD_Workflow", 5);
+        private static CCache<string, MWorkflow[]> _cacheDocValue = new CCache<string, MWorkflow[]>("VAF_Workflow", 5);
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MWorkflow).FullName);
 
@@ -54,14 +54,14 @@ namespace VAdvantage.WF
         /// Create/Load Workflow
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="AD_Workflow_ID">ID</param>
+        /// <param name="VAF_Workflow_ID">ID</param>
         /// <param name="trxName">transaction</param>
-        public MWorkflow(Ctx ctx, int AD_Workflow_ID, Trx trxName)
-            : base(ctx, AD_Workflow_ID, trxName)
+        public MWorkflow(Ctx ctx, int VAF_Workflow_ID, Trx trxName)
+            : base(ctx, VAF_Workflow_ID, trxName)
         {
-            if (AD_Workflow_ID == 0)
+            if (VAF_Workflow_ID == 0)
             {
-                //	setAD_Workflow_ID (0);
+                //	setVAF_Workflow_ID (0);
                 //	setValue (null);
                 //	setName (null);
                 SetAccessLevel(ACCESSLEVEL_Organization);
@@ -100,7 +100,7 @@ namespace VAdvantage.WF
         {
             if (Utility.Env.IsBaseLanguage(GetCtx(), "") || Get_ID() == 0)
                 return;
-            String sql = "SELECT Name, Description, Help FROM VAF_Workflow_TL WHERE AD_Workflow_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";// lang.GetVAF_Language();
+            String sql = "SELECT Name, Description, Help FROM VAF_Workflow_TL WHERE VAF_Workflow_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";// lang.GetVAF_Language();
             DataSet ds = null;
             try
             {
@@ -126,7 +126,7 @@ namespace VAdvantage.WF
         /// </summary>
         private void LoadNodes()
         {
-            String sql = "SELECT * FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + Get_ID() + " AND IsActive='Y'"; //jz AD_WorkFlow_ID: changed in AD?
+            String sql = "SELECT * FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + Get_ID() + " AND IsActive='Y'"; //jz VAF_Workflow_ID: changed in AD?
             DataSet ds = null;
             try
             {
@@ -214,15 +214,15 @@ namespace VAdvantage.WF
         /// Get Workflow from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Workflow_ID">id</param>
+        /// <param name="VAF_Workflow_ID">id</param>
         /// <returns>workflow</returns>
-        public static MWorkflow Get(Ctx ctx, int AD_Workflow_ID)
+        public static MWorkflow Get(Ctx ctx, int VAF_Workflow_ID)
         {
-            int key = AD_Workflow_ID;
+            int key = VAF_Workflow_ID;
             MWorkflow retValue = _cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MWorkflow(ctx, AD_Workflow_ID, null);
+            retValue = new MWorkflow(ctx, VAF_Workflow_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -278,7 +278,7 @@ namespace VAdvantage.WF
             //Reload
             if (_cacheDocValue.IsReset())
             {
-                String sql = "SELECT * FROM AD_Workflow "
+                String sql = "SELECT * FROM VAF_Workflow "
                     + "WHERE WorkflowType='V' AND IsActive='Y' AND IsValid='Y' "
                     + "ORDER BY VAF_Client_ID, VAF_TableView_ID";
                 List<MWorkflow> list = new List<MWorkflow>();
@@ -653,7 +653,7 @@ namespace VAdvantage.WF
             else if (Is_ValueChanged("IsActive") || Is_ValueChanged("Name")
                 || Is_ValueChanged("Description") || Is_ValueChanged("Help"))
             {
-                MMenu[] menues = MMenu.Get(GetCtx(), "AD_Workflow_ID=" + GetAD_Workflow_ID());
+                MMenu[] menues = MMenu.Get(GetCtx(), "VAF_Workflow_ID=" + GetVAF_Workflow_ID());
                 for (int i = 0; i < menues.Length; i++)
                 {
                     menues[i].SetIsActive(IsActive());
@@ -661,7 +661,7 @@ namespace VAdvantage.WF
                     menues[i].SetDescription(GetDescription());
                     menues[i].Save();
                 }
-                X_VAF_WFlow_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "AD_Workflow_ID=" + GetAD_Workflow_ID());
+                X_VAF_WFlow_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "VAF_Workflow_ID=" + GetVAF_Workflow_ID());
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     bool changed = false;

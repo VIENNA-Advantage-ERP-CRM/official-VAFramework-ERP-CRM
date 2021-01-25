@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Currency
+/** Generated Model for VAB_Currency
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Currency : PO
+public class X_VAB_Currency : PO
 {
-public X_C_Currency (Context ctx, int C_Currency_ID, Trx trxName) : base (ctx, C_Currency_ID, trxName)
+public X_VAB_Currency (Context ctx, int VAB_Currency_ID, Trx trxName) : base (ctx, VAB_Currency_ID, trxName)
 {
-/** if (C_Currency_ID == 0)
+/** if (VAB_Currency_ID == 0)
 {
-SetC_Currency_ID (0);
+SetVAB_Currency_ID (0);
 SetCostingPrecision (0);	// 4
 SetDescription (null);
 SetISO_Code (null);
@@ -30,11 +30,11 @@ SetStdPrecision (0);	// 2
 }
  */
 }
-public X_C_Currency (Ctx ctx, int C_Currency_ID, Trx trxName) : base (ctx, C_Currency_ID, trxName)
+public X_VAB_Currency (Ctx ctx, int VAB_Currency_ID, Trx trxName) : base (ctx, VAB_Currency_ID, trxName)
 {
-/** if (C_Currency_ID == 0)
+/** if (VAB_Currency_ID == 0)
 {
-SetC_Currency_ID (0);
+SetVAB_Currency_ID (0);
 SetCostingPrecision (0);	// 4
 SetDescription (null);
 SetISO_Code (null);
@@ -49,7 +49,7 @@ SetStdPrecision (0);	// 2
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Currency (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_Currency (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Currency (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_Currency (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Currency (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Currency (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Currency()
+static X_VAB_Currency()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389054740L;
 public static int Table_ID;
  // =141;
 
-/** TableName=C_Currency */
-public static String Table_Name="C_Currency";
+/** TableName=VAB_Currency */
+public static String Table_Name="VAB_Currency";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,21 +119,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Currency[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Currency[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_ValueNoCheck ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

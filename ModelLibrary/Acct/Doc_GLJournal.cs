@@ -34,7 +34,7 @@ namespace VAdvantage.Acct
     {
         //Posting Type				
         private String _PostingType = null;
-        private int _C_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
         private int record_Id = 0;
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace VAdvantage.Acct
         {
             MJournal journal = (MJournal)GetPO();
             _PostingType = journal.GetPostingType();
-            _C_AcctSchema_ID = journal.GetC_AcctSchema_ID();
+            _VAB_AccountBook_ID = journal.GetVAB_AccountBook_ID();
             SetDateAcct(journal.GetDateAcct());
 
             //	Contained Objects
@@ -77,7 +77,7 @@ namespace VAdvantage.Acct
         /// <returns>DocLine Array</returns>
         private DocLine[] LoadLines(MJournal journal)
         {
-            MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
+            MAcctSchema mSc = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
             record_Id = lines[0].GetGL_Journal_ID();
@@ -93,7 +93,7 @@ namespace VAdvantage.Acct
                     docLine.SetAmount(line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Converted Amounts
                     // no need to update converted amount here
-                    //docLine.SetConvertedAmt(_C_AcctSchema_ID, line.GetAmtAcctDr(), line.GetAmtAcctCr());
+                    //docLine.SetConvertedAmt(_VAB_AccountBook_ID, line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Account
                     MAccount account = line.GetAccount();
                     docLine.SetAccount(account);
@@ -135,7 +135,7 @@ namespace VAdvantage.Acct
                             decimal amtAcctCr = 0;
                             decimal amtAcctDr = 0;
 
-                            //MAcctSchema mSc = new MAcctSchema(GetCtx(), _C_AcctSchema_ID, null);
+                            //MAcctSchema mSc = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, null);
 
 
                             if (line.GetAmtSourceDr() != 0)
@@ -153,7 +153,7 @@ namespace VAdvantage.Acct
                             }
                             //  --  Converted Amounts
                             // no need to update converted amount here
-                            //docLine.SetConvertedAmt(_C_AcctSchema_ID, amtAcctDr, amtAcctCr);
+                            //docLine.SetConvertedAmt(_VAB_AccountBook_ID, amtAcctDr, amtAcctCr);
                             //  --  Account
                             MAccount account = line.GetAccount();
 
@@ -277,7 +277,7 @@ namespace VAdvantage.Acct
             List<Fact> facts = new List<Fact>();
             //	Other Acct Schema
             // need to Post GL Journal for Multiple Accounting Schema that's why commented this section
-            //if (as1.GetC_AcctSchema_ID() != _C_AcctSchema_ID)
+            //if (as1.GetVAB_AccountBook_ID() != _VAB_AccountBook_ID)
             //{
             //    return facts;
             //}
@@ -287,7 +287,7 @@ namespace VAdvantage.Acct
 
             // get conversion rate from Assigned accounting schema tab - 
             Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM GL_AssignAcctSchema WHERE 
-                                     C_AcctSchema_ID = " + as1.GetC_AcctSchema_ID() + " AND GL_Journal_ID = " + record_Id, null, null));
+                                     VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID() + " AND GL_Journal_ID = " + record_Id, null, null));
 
             //  GLJ
             if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_GLJOURNAL))
@@ -297,13 +297,13 @@ namespace VAdvantage.Acct
                 {
 
                     // need to Post GL Journal for Multiple Accounting Schema that's why commented this condition
-                    //if (_lines[i].GetC_AcctSchema_ID() == as1.GetC_AcctSchema_ID())
+                    //if (_lines[i].GetVAB_AccountBook_ID() == as1.GetVAB_AccountBook_ID())
                     //{
                     // set conversion rate on line, so that amount to be converted based on that multiply rate 
                     _lines[i].SetConversionRate(conversionRate);
                     fact.CreateLine(_lines[i],
                                     _lines[i].GetAccount(),
-                                    GetC_Currency_ID(),
+                                    GetVAB_Currency_ID(),
                                     _lines[i].GetAmtSourceDr(),
                                     _lines[i].GetAmtSourceCr());
                     //}

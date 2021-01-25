@@ -223,7 +223,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 sql.Append("M_Requisition_ID, ");
             }
-            sql.Append("M_Product_ID, C_Charge_ID, M_AttributeSetInstance_ID");
+            sql.Append("M_Product_ID, VAB_Charge_ID, M_AttributeSetInstance_ID");
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -266,7 +266,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="rLine">request line</param>
         private void Process(MRequisitionLine rLine)
         {
-            if (rLine.GetM_Product_ID() == 0 && rLine.GetC_Charge_ID() == 0)
+            if (rLine.GetM_Product_ID() == 0 && rLine.GetVAB_Charge_ID() == 0)
             {
                 log.Warning("Ignored Line" + rLine.GetLine()
                     + " " + rLine.GetDescription()
@@ -282,7 +282,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (_orderLine == null
                 || rLine.GetM_Product_ID() != _m_M_Product_ID
                 || rLine.GetM_AttributeSetInstance_ID() != _m_M_AttributeSetInstance_ID
-                || rLine.GetC_Charge_ID() != 0)		//	single line per charge
+                || rLine.GetVAB_Charge_ID() != 0)		//	single line per charge
             {
                 NewLine(rLine);
             }
@@ -302,21 +302,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Create new Order
         /// </summary>
         /// <param name="rLine">request line</param>
-        private void NewOrder(MRequisitionLine rLine, int C_BPartner_ID)
+        private void NewOrder(MRequisitionLine rLine, int VAB_BusinessPartner_ID)
         {
             if (_order != null)
             {
                 CloseOrder();
             }
             //	BPartner
-            if (_m_bpartner == null || C_BPartner_ID != _m_bpartner.GetC_BPartner_ID())
+            if (_m_bpartner == null || VAB_BusinessPartner_ID != _m_bpartner.GetVAB_BusinessPartner_ID())
             {
-                _m_bpartner = new MBPartner(GetCtx(), C_BPartner_ID, null);
+                _m_bpartner = new MBPartner(GetCtx(), VAB_BusinessPartner_ID, null);
             }
             //	Order
             _order = new MOrder(GetCtx(), 0, Get_TrxName());
             _order.SetIsSOTrx(false);
-            _order.SetC_DocTypeTarget_ID();
+            _order.SetVAB_DocTypesTarget_ID();
             _order.SetBPartner(_m_bpartner);
             //	default po document type
             if (!_ConsolidateDocument)
@@ -381,16 +381,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MProduct product = null;
 
             //	Get Business Partner
-            int C_BPartner_ID = rLine.GetC_BPartner_ID();
-            if (C_BPartner_ID != 0)
+            int VAB_BusinessPartner_ID = rLine.GetVAB_BusinessPartner_ID();
+            if (VAB_BusinessPartner_ID != 0)
             {
                 ;
             }
-            else if (rLine.GetC_Charge_ID() != 0)
+            else if (rLine.GetVAB_Charge_ID() != 0)
             {
-                MCharge charge = MCharge.Get(GetCtx(), rLine.GetC_Charge_ID());
-                C_BPartner_ID = charge.GetC_BPartner_ID();
-                if (C_BPartner_ID == 0)
+                MCharge charge = MCharge.Get(GetCtx(), rLine.GetVAB_Charge_ID());
+                VAB_BusinessPartner_ID = charge.GetVAB_BusinessPartner_ID();
+                if (VAB_BusinessPartner_ID == 0)
                 {
                     throw new Exception("No Vendor for Charge " + charge.GetName());
                 }
@@ -402,17 +402,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MProductPO[] ppos = MProductPO.GetOfProduct(GetCtx(), product.GetM_Product_ID(), null);
                 for (int i = 0; i < ppos.Length; i++)
                 {
-                    if (ppos[i].IsCurrentVendor() && ppos[i].GetC_BPartner_ID() != 0)
+                    if (ppos[i].IsCurrentVendor() && ppos[i].GetVAB_BusinessPartner_ID() != 0)
                     {
-                        C_BPartner_ID = ppos[i].GetC_BPartner_ID();
+                        VAB_BusinessPartner_ID = ppos[i].GetVAB_BusinessPartner_ID();
                         break;
                     }
                 }
-                if (C_BPartner_ID == 0 && ppos.Length > 0)
+                if (VAB_BusinessPartner_ID == 0 && ppos.Length > 0)
                 {
-                    C_BPartner_ID = ppos[0].GetC_BPartner_ID();
+                    VAB_BusinessPartner_ID = ppos[0].GetVAB_BusinessPartner_ID();
                 }
-                if (C_BPartner_ID == 0)
+                if (VAB_BusinessPartner_ID == 0)
                 {
                     throw new Exception("No Vendor for " + product.GetName());
                 }
@@ -420,9 +420,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	New Order - Different Vendor
             if (_order == null
-                || _order.GetC_BPartner_ID() != C_BPartner_ID)
+                || _order.GetVAB_BusinessPartner_ID() != VAB_BusinessPartner_ID)
             {
-                NewOrder(rLine, C_BPartner_ID);
+                NewOrder(rLine, VAB_BusinessPartner_ID);
             }
 
             //	No Order Line
@@ -434,7 +434,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else
             {
-                _orderLine.SetC_Charge_ID(rLine.GetC_Charge_ID());
+                _orderLine.SetVAB_Charge_ID(rLine.GetVAB_Charge_ID());
                 _orderLine.SetPriceActual(rLine.GetPriceActual());
             }
             _orderLine.SetVAF_Org_ID(rLine.GetVAF_Org_ID());

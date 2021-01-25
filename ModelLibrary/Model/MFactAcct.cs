@@ -102,10 +102,10 @@ namespace VAdvantage.Model
         public MAccount GetMAccount()
         {
             MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(),
-                GetC_AcctSchema_ID(), GetAccount_ID(), GetC_SubAcct_ID(),
-                GetM_Product_ID(), GetC_BPartner_ID(), GetVAF_OrgTrx_ID(),
+                GetVAB_AccountBook_ID(), GetAccount_ID(), GetC_SubAcct_ID(),
+                GetM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
                 GetC_LocFrom_ID(), GetC_LocTo_ID(), GetC_SalesRegion_ID(),
-                GetC_Project_ID(), GetC_Campaign_ID(), GetC_Activity_ID(),
+                GetC_Project_ID(), GetVAB_Promotion_ID(), GetVAB_BillingCode_ID(),
                 GetUser1_ID(), GetUser2_ID(), GetUserElement1_ID(), GetUserElement2_ID());
             if (acct != null && acct.Get_ID() == 0)
                 acct.Save();

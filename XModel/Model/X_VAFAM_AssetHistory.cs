@@ -133,33 +133,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset Group.
-@param A_Asset_Group_ID Group of Assets */
-public void SetA_Asset_Group_ID (int A_Asset_Group_ID)
+@param VAA_AssetGroup_ID Group of Assets */
+public void SetVAA_AssetGroup_ID (int VAA_AssetGroup_ID)
 {
-if (A_Asset_Group_ID <= 0) Set_Value ("A_Asset_Group_ID", null);
+if (VAA_AssetGroup_ID <= 0) Set_Value ("VAA_AssetGroup_ID", null);
 else
-Set_Value ("A_Asset_Group_ID", A_Asset_Group_ID);
+Set_Value ("VAA_AssetGroup_ID", VAA_AssetGroup_ID);
 }
 /** Get Asset Group.
 @return Group of Assets */
-public int GetA_Asset_Group_ID() 
+public int GetVAA_AssetGroup_ID() 
 {
-Object ii = Get_Value("A_Asset_Group_ID");
+Object ii = Get_Value("VAA_AssetGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-public void SetA_Asset_ID (int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+public void SetA_Asset_ID (int VAA_Asset_ID)
 {
-if (A_Asset_ID < 1) throw new ArgumentException ("A_Asset_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_ID", A_Asset_ID);
+if (VAA_Asset_ID < 1) throw new ArgumentException ("VAA_Asset_ID is mandatory.");
+Set_ValueNoCheck ("VAA_Asset_ID", VAA_Asset_ID);
 }
 /** Get Asset.
 @return Asset used internally or by customers */
 public int GetA_Asset_ID() 
 {
-Object ii = Get_Value("A_Asset_ID");
+Object ii = Get_Value("VAA_Asset_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -200,50 +200,50 @@ public DateTime? GetAssetServiceDate()
 return (DateTime?)Get_Value("AssetServiceDate");
 }
 /** Set BPartner (Agent).
-@param C_BPartnerSR_ID Customer Agent */
-public void SetC_BPartnerSR_ID (int C_BPartnerSR_ID)
+@param VAB_BusinessPartnerSR_ID Customer Agent */
+public void SetVAB_BusinessPartnerSR_ID (int VAB_BusinessPartnerSR_ID)
 {
-if (C_BPartnerSR_ID <= 0) Set_Value ("C_BPartnerSR_ID", null);
+if (VAB_BusinessPartnerSR_ID <= 0) Set_Value ("VAB_BusinessPartnerSR_ID", null);
 else
-Set_Value ("C_BPartnerSR_ID", C_BPartnerSR_ID);
+Set_Value ("VAB_BusinessPartnerSR_ID", VAB_BusinessPartnerSR_ID);
 }
 /** Get BPartner (Agent).
 @return Customer Agent */
-public int GetC_BPartnerSR_ID() 
+public int GetVAB_BusinessPartnerSR_ID() 
 {
-Object ii = Get_Value("C_BPartnerSR_ID");
+Object ii = Get_Value("VAB_BusinessPartnerSR_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);
+if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);
 else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Customer/Prospect */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Location.
-@param C_BPartner_Location_ID Identifies the address for this Account/Prospect. */
-public void SetC_BPartner_Location_ID (int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the address for this Account/Prospect. */
+public void SetVAB_BPart_Location_ID (int VAB_BPart_Location_ID)
 {
-if (C_BPartner_Location_ID <= 0) Set_Value ("C_BPartner_Location_ID", null);
+if (VAB_BPart_Location_ID <= 0) Set_Value ("VAB_BPart_Location_ID", null);
 else
-Set_Value ("C_BPartner_Location_ID", C_BPartner_Location_ID);
+Set_Value ("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
 }
 /** Get Location.
 @return Identifies the address for this Account/Prospect. */
-public int GetC_BPartner_Location_ID() 
+public int GetVAB_BPart_Location_ID() 
 {
-Object ii = Get_Value("C_BPartner_Location_ID");
+Object ii = Get_Value("VAB_BPart_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

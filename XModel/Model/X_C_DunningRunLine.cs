@@ -1,36 +1,36 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_DunningRunLine
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_DunningExeLine
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DunningRunLine : PO{public X_C_DunningRunLine (Context ctx, int C_DunningRunLine_ID, Trx trxName) : base (ctx, C_DunningRunLine_ID, trxName){/** if (C_DunningRunLine_ID == 0){SetAmt (0.0);SetC_DunningRunEntry_ID (0);SetC_DunningRunLine_ID (0);SetConvertedAmt (0.0);SetDaysDue (0);SetFeeAmt (0.0);SetInterestAmt (0.0);SetIsInDispute (false);SetOpenAmt (0.0);SetProcessed (false);// N
+public class X_VAB_DunningExeLine : PO{public X_VAB_DunningExeLine (Context ctx, int VAB_DunningExeLine_ID, Trx trxName) : base (ctx, VAB_DunningExeLine_ID, trxName){/** if (VAB_DunningExeLine_ID == 0){SetAmt (0.0);SetVAB_DunningExeEntry_ID (0);SetVAB_DunningExeLine_ID (0);SetConvertedAmt (0.0);SetDaysDue (0);SetFeeAmt (0.0);SetInterestAmt (0.0);SetIsInDispute (false);SetOpenAmt (0.0);SetProcessed (false);// N
 SetTimesDunned (0);SetTotalAmt (0.0);} */
-}public X_C_DunningRunLine (Ctx ctx, int C_DunningRunLine_ID, Trx trxName) : base (ctx, C_DunningRunLine_ID, trxName){/** if (C_DunningRunLine_ID == 0){SetAmt (0.0);SetC_DunningRunEntry_ID (0);SetC_DunningRunLine_ID (0);SetConvertedAmt (0.0);SetDaysDue (0);SetFeeAmt (0.0);SetInterestAmt (0.0);SetIsInDispute (false);SetOpenAmt (0.0);SetProcessed (false);// N
+}public X_VAB_DunningExeLine (Ctx ctx, int VAB_DunningExeLine_ID, Trx trxName) : base (ctx, VAB_DunningExeLine_ID, trxName){/** if (VAB_DunningExeLine_ID == 0){SetAmt (0.0);SetVAB_DunningExeEntry_ID (0);SetVAB_DunningExeLine_ID (0);SetConvertedAmt (0.0);SetDaysDue (0);SetFeeAmt (0.0);SetInterestAmt (0.0);SetIsInDispute (false);SetOpenAmt (0.0);SetProcessed (false);// N
 SetTimesDunned (0);SetTotalAmt (0.0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_DunningExeLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_DunningExeLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_DunningExeLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DunningRunLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_DunningExeLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27837534353617L;/** Last Updated Timestamp 4/16/2019 3:33:56 PM */
 public static long updatedMS = 1555409036828L;/** VAF_TableView_ID=524 */
 public static int Table_ID; // =524;
-/** TableName=C_DunningRunLine */
-public static String Table_Name="C_DunningRunLine";
+/** TableName=VAB_DunningExeLine */
+public static String Table_Name="VAB_DunningExeLine";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -45,19 +45,19 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_DunningRunLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Amount.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_DunningExeLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Amount.
 @param Amt Amount */
 public void SetAmt (Decimal? Amt){if (Amt == null) throw new ArgumentException ("Amt is mandatory.");Set_Value ("Amt", (Decimal?)Amt);}/** Get Amount.
 @return Amount */
 public Decimal GetAmt() {Object bd =Get_Value("Amt");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}/** Set Dunning Run Entry.
-@param C_DunningRunEntry_ID Dunning Run Entry */
-public void SetC_DunningRunEntry_ID (int C_DunningRunEntry_ID){if (C_DunningRunEntry_ID < 1) throw new ArgumentException ("C_DunningRunEntry_ID is mandatory.");Set_ValueNoCheck ("C_DunningRunEntry_ID", C_DunningRunEntry_ID);}/** Get Dunning Run Entry.
+@param VAB_DunningExeEntry_ID Dunning Run Entry */
+public void SetVAB_DunningExeEntry_ID (int VAB_DunningExeEntry_ID){if (VAB_DunningExeEntry_ID < 1) throw new ArgumentException ("VAB_DunningExeEntry_ID is mandatory.");Set_ValueNoCheck ("VAB_DunningExeEntry_ID", VAB_DunningExeEntry_ID);}/** Get Dunning Run Entry.
 @return Dunning Run Entry */
-public int GetC_DunningRunEntry_ID() {Object ii = Get_Value("C_DunningRunEntry_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Dunning Run Line.
-@param C_DunningRunLine_ID Dunning Run Line */
-public void SetC_DunningRunLine_ID (int C_DunningRunLine_ID){if (C_DunningRunLine_ID < 1) throw new ArgumentException ("C_DunningRunLine_ID is mandatory.");Set_ValueNoCheck ("C_DunningRunLine_ID", C_DunningRunLine_ID);}/** Get Dunning Run Line.
+public int GetVAB_DunningExeEntry_ID() {Object ii = Get_Value("VAB_DunningExeEntry_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Dunning Run Line.
+@param VAB_DunningExeLine_ID Dunning Run Line */
+public void SetVAB_DunningExeLine_ID (int VAB_DunningExeLine_ID){if (VAB_DunningExeLine_ID < 1) throw new ArgumentException ("VAB_DunningExeLine_ID is mandatory.");Set_ValueNoCheck ("VAB_DunningExeLine_ID", VAB_DunningExeLine_ID);}/** Get Dunning Run Line.
 @return Dunning Run Line */
-public int GetC_DunningRunLine_ID() {Object ii = Get_Value("C_DunningRunLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Invoice Payment Schedule.
+public int GetVAB_DunningExeLine_ID() {Object ii = Get_Value("VAB_DunningExeLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Invoice Payment Schedule.
 @param C_InvoicePaySchedule_ID Invoice Payment Schedule */
 public void SetC_InvoicePaySchedule_ID (int C_InvoicePaySchedule_ID){if (C_InvoicePaySchedule_ID <= 0) Set_Value ("C_InvoicePaySchedule_ID", null);else
 Set_Value ("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);}/** Get Invoice Payment Schedule.

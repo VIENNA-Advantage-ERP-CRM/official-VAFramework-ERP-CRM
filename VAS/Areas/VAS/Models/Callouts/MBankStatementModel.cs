@@ -21,9 +21,9 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int C_BankAccount_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_Bank_Acct_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MBankAccount ba = MBankAccount.Get(ctx, C_BankAccount_ID);
+            MBankAccount ba = MBankAccount.Get(ctx, VAB_Bank_Acct_ID);
             return ba.GetCurrentBalance();
 
         }
@@ -45,15 +45,15 @@ namespace VIS.Models
             Decimal rate = 0;
             //End Assign parameter value
 
-            string qry = "SELECT PayAmt, C_Currency_ID, C_ConversionType_ID, DateAcct FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
+            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID, DateAcct FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
-                int c_currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
-                int c_conversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
+                int VAB_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
+                int VAB_CurrencyType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
                 DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, dateAcct, c_conversionType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                rate = MConversionRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, dateAcct, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
             }
             return rate;
         }
@@ -75,14 +75,14 @@ namespace VIS.Models
             Decimal rate = 0;
             //End Assign parameter value
 
-            string qry = "SELECT PayAmt, C_Currency_ID, C_ConversionType_ID FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
+            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
-                int c_currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
-                int c_conversionType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
-                rate = MConversionRate.Convert(ctx, payAmt, c_currency_ID, CurTo_ID, convDate, c_conversionType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                int VAB_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
+                int VAB_CurrencyType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
+                rate = MConversionRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, convDate, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
             }
             return rate;
         }

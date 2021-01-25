@@ -22,10 +22,10 @@ namespace VAdvantage.Model
             /** if (RV_BPartner_ID == 0)
             {
             SetVAF_UserContact_ID (0);
-            SetC_BP_Group_ID (0);
-            SetC_BPartner_ID (0);
-            SetC_BPartner_Location_ID (0);
-            SetC_Country_ID (0);
+            SetVAB_BPart_Category_ID (0);
+            SetVAB_BusinessPartner_ID (0);
+            SetVAB_BPart_Location_ID (0);
+            SetVAB_Country_ID (0);
             SetContactName (null);
             SetCountryName (null);
             SetIsCustomer (false);
@@ -49,10 +49,10 @@ namespace VAdvantage.Model
             /** if (RV_BPartner_ID == 0)
             {
             SetVAF_UserContact_ID (0);
-            SetC_BP_Group_ID (0);
-            SetC_BPartner_ID (0);
-            SetC_BPartner_Location_ID (0);
-            SetC_Country_ID (0);
+            SetVAB_BPart_Category_ID (0);
+            SetVAB_BusinessPartner_ID (0);
+            SetVAB_BPart_Location_ID (0);
+            SetVAB_Country_ID (0);
             SetContactName (null);
             SetCountryName (null);
             SetIsCustomer (false);
@@ -352,94 +352,94 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("Birthday");
         }
         /** Set Business Partner Group.
-        @param C_BP_Group_ID Business Partner Group */
-        public void SetC_BP_Group_ID(int C_BP_Group_ID)
+        @param VAB_BPart_Category_ID Business Partner Group */
+        public void SetVAB_BPart_Category_ID(int VAB_BPart_Category_ID)
         {
-            if (C_BP_Group_ID < 1) throw new ArgumentException("C_BP_Group_ID is mandatory.");
-            Set_ValueNoCheck("C_BP_Group_ID", C_BP_Group_ID);
+            if (VAB_BPart_Category_ID < 1) throw new ArgumentException("VAB_BPart_Category_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
         }
         /** Get Business Partner Group.
         @return Business Partner Group */
-        public int GetC_BP_Group_ID()
+        public int GetVAB_BPart_Category_ID()
         {
-            Object ii = Get_Value("C_BP_Group_ID");
+            Object ii = Get_Value("VAB_BPart_Category_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID < 1) throw new ArgumentException("C_BPartner_ID is mandatory.");
-            Set_ValueNoCheck("C_BPartner_ID", C_BPartner_ID);
+            if (VAB_BusinessPartner_ID < 1) throw new ArgumentException("VAB_BusinessPartner_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Partner Location.
-        @param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        @param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+        public void SetVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            if (C_BPartner_Location_ID < 1) throw new ArgumentException("C_BPartner_Location_ID is mandatory.");
-            Set_ValueNoCheck("C_BPartner_Location_ID", C_BPartner_Location_ID);
+            if (VAB_BPart_Location_ID < 1) throw new ArgumentException("VAB_BPart_Location_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
         }
         /** Get Partner Location.
         @return Identifies the (ship to) address for this Business Partner */
-        public int GetC_BPartner_Location_ID()
+        public int GetVAB_BPart_Location_ID()
         {
-            Object ii = Get_Value("C_BPartner_Location_ID");
+            Object ii = Get_Value("VAB_BPart_Location_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Country.
-        @param C_Country_ID Country */
-        public void SetC_Country_ID(int C_Country_ID)
+        @param VAB_Country_ID Country */
+        public void SetVAB_Country_ID(int VAB_Country_ID)
         {
-            if (C_Country_ID < 1) throw new ArgumentException("C_Country_ID is mandatory.");
-            Set_ValueNoCheck("C_Country_ID", C_Country_ID);
+            if (VAB_Country_ID < 1) throw new ArgumentException("VAB_Country_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Country_ID", VAB_Country_ID);
         }
         /** Get Country.
         @return Country */
-        public int GetC_Country_ID()
+        public int GetVAB_Country_ID()
         {
-            Object ii = Get_Value("C_Country_ID");
+            Object ii = Get_Value("VAB_Country_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Dunning.
-        @param C_Dunning_ID Dunning Rules for overdue invoices */
-        public void SetC_Dunning_ID(int C_Dunning_ID)
+        @param VAB_Dunning_ID Dunning Rules for overdue invoices */
+        public void SetVAB_Dunning_ID(int VAB_Dunning_ID)
         {
-            if (C_Dunning_ID <= 0) Set_ValueNoCheck("C_Dunning_ID", null);
+            if (VAB_Dunning_ID <= 0) Set_ValueNoCheck("VAB_Dunning_ID", null);
             else
-                Set_ValueNoCheck("C_Dunning_ID", C_Dunning_ID);
+                Set_ValueNoCheck("VAB_Dunning_ID", VAB_Dunning_ID);
         }
         /** Get Dunning.
         @return Dunning Rules for overdue invoices */
-        public int GetC_Dunning_ID()
+        public int GetVAB_Dunning_ID()
         {
-            Object ii = Get_Value("C_Dunning_ID");
+            Object ii = Get_Value("VAB_Dunning_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Greeting.
-        @param C_Greeting_ID Greeting to print on correspondence */
-        public void SetC_Greeting_ID(int C_Greeting_ID)
+        @param VAB_Greeting_ID Greeting to print on correspondence */
+        public void SetVAB_Greeting_ID(int VAB_Greeting_ID)
         {
-            if (C_Greeting_ID <= 0) Set_ValueNoCheck("C_Greeting_ID", null);
+            if (VAB_Greeting_ID <= 0) Set_ValueNoCheck("VAB_Greeting_ID", null);
             else
-                Set_ValueNoCheck("C_Greeting_ID", C_Greeting_ID);
+                Set_ValueNoCheck("VAB_Greeting_ID", VAB_Greeting_ID);
         }
         /** Get Greeting.
         @return Greeting to print on correspondence */
-        public int GetC_Greeting_ID()
+        public int GetVAB_Greeting_ID()
         {
-            Object ii = Get_Value("C_Greeting_ID");
+            Object ii = Get_Value("VAB_Greeting_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -66,7 +66,7 @@ VIS = window.VIS || {};
                 }
 
                 fieldValue = null;
-                var columnName = "C_BPartner_ID";
+                var columnName = "VAB_BusinessPartner_ID";
                 fieldValue = this.selectedRow[columnName.toLower()];
                 // Check if field is of lookup Type
                 if (VIS.DisplayType.IsLookup(this.curTab.getField(columnName).getDisplayType())

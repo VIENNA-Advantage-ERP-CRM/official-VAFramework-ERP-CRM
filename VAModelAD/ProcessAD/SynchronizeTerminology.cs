@@ -1416,16 +1416,16 @@ namespace VAdvantage.Process
             --	Sync Names - Workflow
             DBMS_OUTPUT.PUT_LINE('Synchronizing Menu with Workflows');
             UPDATE	VAF_MenuConfig m
-            SET		Name = (SELECT p.Name FROM AD_Workflow p WHERE m.AD_Workflow_ID=p.AD_Workflow_ID),
-                    Description = (SELECT p.Description FROM AD_Workflow p WHERE m.AD_Workflow_ID=p.AD_Workflow_ID)
-            WHERE	m.AD_Workflow_ID IS NOT NULL
+            SET		Name = (SELECT p.Name FROM VAF_Workflow p WHERE m.VAF_Workflow_ID=p.VAF_Workflow_ID),
+                    Description = (SELECT p.Description FROM VAF_Workflow p WHERE m.VAF_Workflow_ID=p.VAF_Workflow_ID)
+            WHERE	m.VAF_Workflow_ID IS NOT NULL
               AND	m.Action = 'F';
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE VAF_MenuConfig m " +
-                    "	SET Name = (SELECT p.Name FROM AD_Workflow p WHERE m.AD_Workflow_ID=p.AD_Workflow_ID), " +
-                    "			Description = (SELECT p.Description FROM AD_Workflow p WHERE m.AD_Workflow_ID=p.AD_Workflow_ID) " +
-                    "	WHERE m.AD_Workflow_ID IS NOT NULL " +
+                    "	SET Name = (SELECT p.Name FROM VAF_Workflow p WHERE m.VAF_Workflow_ID=p.VAF_Workflow_ID), " +
+                    "			Description = (SELECT p.Description FROM VAF_Workflow p WHERE m.VAF_Workflow_ID=p.VAF_Workflow_ID) " +
+                    "	WHERE m.VAF_Workflow_ID IS NOT NULL " +
                     "	  AND m.Action = 'F'";
             Execute("Synchronize Menu with Workflows", sql, "  rows updated: ");
 
@@ -1433,35 +1433,35 @@ namespace VAdvantage.Process
 
             UPDATE	VAF_MenuConfig_TL mt
             SET		Name = (SELECT pt.Name FROM VAF_Workflow_TL pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language),
                     Description = (SELECT pt.Description FROM VAF_Workflow_TL pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language),
                     IsTranslated = (SELECT pt.IsTranslated FROM VAF_Workflow_TL pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language)
             WHERE EXISTS (SELECT * FROM VAF_Workflow_TL pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID
                             AND mt.VAF_Language=pt.VAF_Language
-                            AND m.AD_Workflow_ID IS NOT NULL
+                            AND m.VAF_Workflow_ID IS NOT NULL
                             AND	Action = 'F');
             DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE VAF_MenuConfig_TL mt " +
                     "	SET Name = (SELECT pt.Name FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language), " +
                     "			Description = (SELECT pt.Description FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language), " +
                     "			IsTranslated = (SELECT pt.IsTranslated FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language) " +
                     "	WHERE EXISTS (SELECT * FROM VAF_Workflow_TL pt, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Workflow_ID=pt.AD_Workflow_ID " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Workflow_ID=pt.VAF_Workflow_ID " +
                     "					AND mt.VAF_Language=pt.VAF_Language " +
-                    "					AND m.AD_Workflow_ID IS NOT NULL " +
+                    "					AND m.VAF_Workflow_ID IS NOT NULL " +
                     "					AND  Action = 'F')";
             Execute("Synchronize Menu with Workflows Trl", sql, "  rows updated: ");
 

@@ -21,7 +21,7 @@ public X_VAF_WFlow_Block (Context ctx, int VAF_WFlow_Block_ID, Trx trxName) : ba
 /** if (VAF_WFlow_Block_ID == 0)
 {
 SetVAF_WFlow_Block_ID (0);
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetName (null);
 }
  */
@@ -31,7 +31,7 @@ public X_VAF_WFlow_Block (Ctx ctx, int VAF_WFlow_Block_ID, Trx trxName) : base (
 /** if (VAF_WFlow_Block_ID == 0)
 {
 SetVAF_WFlow_Block_ID (0);
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetName (null);
 }
  */
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Workflow.
-@param AD_Workflow_ID Workflow or combination of tasks */
-public void SetAD_Workflow_ID (int AD_Workflow_ID)
+@param VAF_Workflow_ID Workflow or combination of tasks */
+public void SetVAF_Workflow_ID (int VAF_Workflow_ID)
 {
-if (AD_Workflow_ID < 1) throw new ArgumentException ("AD_Workflow_ID is mandatory.");
-Set_ValueNoCheck ("AD_Workflow_ID", AD_Workflow_ID);
+if (VAF_Workflow_ID < 1) throw new ArgumentException ("VAF_Workflow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Workflow_ID", VAF_Workflow_ID);
 }
 /** Get Workflow.
 @return Workflow or combination of tasks */
-public int GetAD_Workflow_ID() 
+public int GetVAF_Workflow_ID() 
 {
-Object ii = Get_Value("AD_Workflow_ID");
+Object ii = Get_Value("VAF_Workflow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

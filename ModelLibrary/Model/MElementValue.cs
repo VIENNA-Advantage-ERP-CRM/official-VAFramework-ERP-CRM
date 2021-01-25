@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MElementValue
  * Purpose        : Natural Account
- * Class Used     : X_C_ElementValue
+ * Class Used     : X_VAB_Acct_Element
  * Chronological    Development
  * Raghunandan     11-Jun-2009
   ******************************************************/
@@ -24,21 +24,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MElementValue : X_C_ElementValue
+    public class MElementValue : X_VAB_Acct_Element
 
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ElementValue_ID">ID or 0 for new</param>
+        /// <param name="VAB_Acct_Element_ID">ID or 0 for new</param>
         /// <param name="trxName">transaction</param>
-        public MElementValue(Ctx ctx, int C_ElementValue_ID, Trx trxName)
-            : base(ctx, C_ElementValue_ID, trxName)
+        public MElementValue(Ctx ctx, int VAB_Acct_Element_ID, Trx trxName)
+            : base(ctx, VAB_Acct_Element_ID, trxName)
         {
-            if (C_ElementValue_ID == 0)
+            if (VAB_Acct_Element_ID == 0)
             {
-                //	setC_Element_ID (0);	//	Parent
+                //	setVAB_Element_ID (0);	//	Parent
                 //	setName (null);
                 //	setValue (null);
                 SetIsSummary(false);
@@ -117,15 +117,15 @@ namespace VAdvantage.Model
             SetAccountSign(imp.GetAccountSign());
             SetIsSummary(imp.IsSummary());
             SetIsDocControlled(imp.IsDocControlled());
-            SetC_Element_ID(imp.GetC_Element_ID());
+            SetVAB_Element_ID(imp.GetVAB_Element_ID());
             SetPostActual(imp.IsPostActual());
             SetPostBudget(imp.IsPostBudget());
             SetPostEncumbrance(imp.IsPostEncumbrance());
             SetPostStatistical(imp.IsPostStatistical());
             //
-            //	setC_BankAccount_ID(imp.getC_BankAccount_ID());
+            //	setVAB_Bank_Acct_ID(imp.getVAB_Bank_Acct_ID());
             //	setIsForeignCurrency(imp.isForeignCurrency());
-            //	setC_Currency_ID(imp.getC_Currency_ID());
+            //	setVAB_Currency_ID(imp.getVAB_Currency_ID());
             //	setIsBankAccount(imp.isIsBankAccount());
             //	setValidFrom(null);
             //	setValidTo(null);
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
             if (!newRecord && IsSummary()
                 && Is_ValueChanged("IsSummary"))
             {
-                String sql = "SELECT COUNT(*) FROM Fact_Acct WHERE Account_ID=" + GetC_ElementValue_ID();
+                String sql = "SELECT COUNT(*) FROM Fact_Acct WHERE Account_ID=" + GetVAB_Acct_Element_ID();
                 int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (no != 0)
                 {
@@ -221,11 +221,11 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "Account_ID=" + GetC_ElementValue_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "Account_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
                 if ("Y".Equals(GetCtx().GetContext("$Element_U1")))
-                    MAccount.UpdateValueDescription(GetCtx(), "User1_ID=" + GetC_ElementValue_ID(), Get_TrxName());
+                    MAccount.UpdateValueDescription(GetCtx(), "User1_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
                 if ("Y".Equals(GetCtx().GetContext("$Element_U2")))
-                    MAccount.UpdateValueDescription(GetCtx(), "User2_ID=" + GetC_ElementValue_ID(), Get_TrxName());
+                    MAccount.UpdateValueDescription(GetCtx(), "User2_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
             }
             return success;
         }

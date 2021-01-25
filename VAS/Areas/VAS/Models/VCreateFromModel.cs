@@ -18,7 +18,7 @@ namespace VIS.Models
         /// <param name="ctx">Context</param>
         /// <param name="display">Display Columns</param>
         /// <param name="column">Column Name</param>
-        /// <param name="C_BPartner_ID">Business Partner</param>
+        /// <param name="VAB_BusinessPartner_ID">Business Partner</param>
         /// <param name="isReturnTrx">Return Transaction</param>       
         /// <param name="OrgId">Organization</param>
         /// <param name="DropShip">Drop Shipment</param>
@@ -27,7 +27,7 @@ namespace VIS.Models
         /// <param name="InvoiceID">C_Invoice_ID</param>
         /// <returns>List<VCreateFromGetCOrder>, List of Orders</returns>
 
-        public List<VCreateFromGetCOrder> VCreateGetOrders(Ctx ctx, string display, string column, int C_BPartner_ID, bool isReturnTrx, int OrgId, bool DropShip, bool IsSOTrx, bool forInvoices, int InvoiceID)
+        public List<VCreateFromGetCOrder> VCreateGetOrders(Ctx ctx, string display, string column, int VAB_BusinessPartner_ID, bool isReturnTrx, int OrgId, bool DropShip, bool IsSOTrx, bool forInvoices, int InvoiceID)
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             var dis = display;
@@ -37,20 +37,20 @@ namespace VIS.Models
             string whereCondition = "";
             if (InvoiceID > 0)
             {
-                DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID  ,
-                CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
-                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.VAF_Client_ID IN (0 , C_Invoice.VAF_Client_ID )
-                AND C_ConversionType.VAF_Org_ID      IN (0 , C_Invoice.VAF_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                DataSet dsInvoice = DB.ExecuteDataset(@"SELECT VAB_Currency_ID  ,
+                CASE WHEN NVL(VAB_CurrencyType_ID , 0) != 0  THEN VAB_CurrencyType_ID ELSE 
+                (SELECT MAX(VAB_CurrencyType_ID) FROM VAB_CurrencyType WHERE VAB_CurrencyType.VAF_Client_ID IN (0 , C_Invoice.VAF_Client_ID )
+                AND VAB_CurrencyType.VAF_Org_ID      IN (0 , C_Invoice.VAF_Org_ID ) AND VAB_CurrencyType.IsDefault = 'Y') END AS VAB_CurrencyType_ID,
                 M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + InvoiceID);
                 if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
                 {
-                    whereCondition = " AND o.C_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["C_Currency_ID"]) +
-                        " AND o.C_ConversionType_ID = " + Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["C_ConversionType_ID"]) +
+                    whereCondition = " AND o.VAB_Currency_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["VAB_Currency_ID"]) +
+                        " AND o.VAB_CurrencyType_ID = " + Util.GetValueOfInt(dsInvoice.Tables[0].Rows[0]["VAB_CurrencyType_ID"]) +
                         " AND o.M_PriceList_ID = " + Convert.ToInt32(dsInvoice.Tables[0].Rows[0]["M_PriceList_ID"]);
                 }
             }
             //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
-            StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.C_BPartner_ID=" + C_BPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
+            StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
                 + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
 
             if (OrgId > 0)
@@ -107,7 +107,7 @@ namespace VIS.Models
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             string sql = "SELECT s.M_InOut_ID," + displays + " AS dis FROM M_InOut s "
-                + "WHERE s.C_BPartner_ID=" + CBPartnerIDs + " AND s.IsSOTrx='" + (IsSOTrx ? "Y" : "N") + "' AND s.DocStatus IN ('CL','CO')"
+                + "WHERE s.VAB_BusinessPartner_ID=" + CBPartnerIDs + " AND s.IsSOTrx='" + (IsSOTrx ? "Y" : "N") + "' AND s.DocStatus IN ('CL','CO')"
                // New column added to fill invoice which drop ship is true
                + " AND s.IsDropShip='" + (IsDrop ? "Y" : "N") + "' AND s.M_InOut_ID IN "
 
@@ -202,9 +202,9 @@ namespace VIS.Models
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             MClient tenant = MClient.Get(ctx);
 
-            StringBuilder sql = new StringBuilder("SELECT i.C_Invoice_ID," + displays + " AS displays FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
+            StringBuilder sql = new StringBuilder("SELECT i.C_Invoice_ID," + displays + " AS displays FROM C_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
                         // New column added to fill invoice which drop ship is true
-                        + "WHERE i.C_BPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' AND i.IsDropShip='" + (IsDrop ? "Y" : "N") + "' "
+                        + "WHERE i.VAB_BusinessPartner_ID=" + cBPartnerId + " AND i.IsSOTrx='N' AND i.IsDropShip='" + (IsDrop ? "Y" : "N") + "' "
                         + "AND d.IsReturnTrx='" + (isReturnTrxs ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO') "
                         //Invoice vendor record created with Document Type having checkbox 'Treat As Discount' is true will not show on 'Create line From' on window : Return to Vendor.
                         + " AND i.TreatAsDiscount = 'N' "
@@ -257,10 +257,10 @@ namespace VIS.Models
 
             string sql =
                  "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
-                 + "FROM M_InOut_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+                 + "FROM M_InOut_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
                  + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
-                 + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
-                 + " AND ic.C_DocType_ID=dt.C_DocType_ID"
+                 + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+                 + " AND ic.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
                  + " AND ic.VAF_Client_ID=" + adClientID;
 
             if (mWarehouseIDs != "")
@@ -312,10 +312,10 @@ namespace VIS.Models
             List<ExecuteQueryVinoutgen> obj = new List<ExecuteQueryVinoutgen>();
 
             var sql = "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
-                      + "FROM C_Invoice_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+                      + "FROM C_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
                       + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
-                      + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
-                      + " AND ic.C_DocType_ID=dt.C_DocType_ID"
+                      + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+                      + " AND ic.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
                       + " AND ic.VAF_Client_ID=" + adClientID;
 
             if (adOrgIDs != "")
@@ -393,14 +393,14 @@ namespace VIS.Models
 
             if (displayMATCH_INVOICEs != "")
             {
-                _sql.Append(@"SELECT hdr.C_Invoice_ID AS IDD,hdr.DocumentNo AS DocNum, hdr.DateInvoiced AS Dates, bp.Name AS BPNames,hdr.C_BPartner_ID AS BPartner_ID,
+                _sql.Append(@"SELECT hdr.C_Invoice_ID AS IDD,hdr.DocumentNo AS DocNum, hdr.DateInvoiced AS Dates, bp.Name AS BPNames,hdr.VAB_BusinessPartner_ID AS BPartner_ID,
                         lin.Line AS Lines,lin.C_InvoiceLine_ID AS lineK, p.Name as Product,lin.M_Product_ID AS productk, lin.QtyInvoiced AS qty,SUM(NVL(mi.Qty,0)) AS MATCH
-                        FROM C_Invoice hdr INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_InvoiceLine lin ON (hdr.C_Invoice_ID=lin.C_Invoice_ID)
-                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN C_DocType dt ON (hdr.C_DocType_ID=dt.C_DocType_ID and dt.DocBaseType in ('API','APC') 
+                        FROM C_Invoice hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN C_InvoiceLine lin ON (hdr.C_Invoice_ID=lin.C_Invoice_ID)
+                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID and dt.DocBaseType in ('API','APC') 
                         AND dt.IsReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + @" FULL JOIN M_MatchInv mi ON (lin.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) 
                         WHERE hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? " AND lin.M_InOutLine_ID = " + MatchToID : ""));
 
-                _groupBy = " GROUP BY hdr.C_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.C_BPartner_ID,"
+                _groupBy = " GROUP BY hdr.C_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.VAB_BusinessPartner_ID,"
                     + " lin.Line,lin.C_InvoiceLine_ID,p.Name,lin.M_Product_ID,lin.QtyInvoiced "
                     + "HAVING "
                     + (matched ? "0" : "lin.QtyInvoiced")
@@ -408,10 +408,10 @@ namespace VIS.Models
             }
             else if (displayMATCH_ORDERs != "")
             {
-                _sql.Append(@"SELECT hdr.C_Order_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.DateOrdered AS Dates, bp.Name AS BPNames,hdr.C_BPartner_ID AS Bpartner_Id,
+                _sql.Append(@"SELECT hdr.C_Order_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.DateOrdered AS Dates, bp.Name AS BPNames,hdr.VAB_BusinessPartner_ID AS Bpartner_Id,
                         lin.Line AS Lines,lin.C_OrderLine_ID AS Linek, p.Name as Product,lin.M_Product_ID AS Productk,lin.QtyOrdered AS qty,SUM(COALESCE(mo.Qty,0)) AS MATCH
-                        FROM C_Order hdr INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_OrderLine lin ON (hdr.C_Order_ID=lin.C_Order_ID)
-                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN C_DocType dt ON (hdr.C_DocType_ID=dt.C_DocType_ID AND dt.DocBaseType='POO'
+                        FROM C_Order hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN C_OrderLine lin ON (hdr.C_Order_ID=lin.C_Order_ID)
+                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID AND dt.DocBaseType='POO'
                         AND dt.isReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + @" FULL JOIN M_MatchPO mo ON (lin.C_OrderLine_ID=mo.C_OrderLine_ID)
                         WHERE  hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? " AND mo.M_InOutLine_ID = " + MatchToID : ""));
 
@@ -421,7 +421,7 @@ namespace VIS.Models
                 //    + (matched ? " IS NOT NULL" : " IS NULL")
                 //    + " AND
 
-                _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.C_BPartner_ID,"
+                _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
                     + " lin.Line,lin.C_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
                     + "HAVING "
                     + (matched ? "0" : "lin.QtyOrdered")
@@ -429,15 +429,15 @@ namespace VIS.Models
             }
             else    //  Shipment
             {
-                _sql.Append(@"SELECT hdr.M_InOut_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.MovementDate AS Dates, bp.Name AS BPNames,hdr.C_BPartner_ID AS Bpartner_Id,
+                _sql.Append(@"SELECT hdr.M_InOut_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.MovementDate AS Dates, bp.Name AS BPNames,hdr.VAB_BusinessPartner_ID AS Bpartner_Id,
                         lin.Line AS Lines,lin.M_InOutLine_ID AS Linek, p.Name as Product,lin.M_Product_ID AS Productk, lin.MovementQty AS qty,SUM(NVL(m.Qty,0)) AS MATCH
-                        FROM M_InOut hdr INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN M_InOutLine lin ON (hdr.M_InOut_ID=lin.M_InOut_ID)
-                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN C_DocType dt ON (hdr.C_DocType_ID = dt.C_DocType_ID AND dt.DocBaseType='MMR'
+                        FROM M_InOut hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN M_InOutLine lin ON (hdr.M_InOut_ID=lin.M_InOut_ID)
+                        INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID = dt.VAB_DocTypes_ID AND dt.DocBaseType='MMR'
                         AND dt.isReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + " FULL JOIN " + (matchToTypes == MATCH_ORDERs ? "M_MatchPO" : "M_MatchInv")
                     + @" m ON (lin.M_InOutLine_ID=m.M_InOutLine_ID) WHERE hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? (matchToTypes == MATCH_ORDERs ? " AND m.C_OrderLine_ID = "
                     + MatchToID : " AND m.C_InvoiceLine_ID = " + MatchToID) : ""));
 
-                _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.C_BPartner_ID,"
+                _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.VAB_BusinessPartner_ID,"
                     + " lin.Line,lin.M_InOutLine_ID,p.Name,lin.M_Product_ID,lin.MovementQty "
                     + "HAVING "
                     + (matched ? "0" : "lin.MovementQty")

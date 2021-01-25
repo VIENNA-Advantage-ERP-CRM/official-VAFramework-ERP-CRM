@@ -221,7 +221,7 @@ OR
                     itm.AD_Node_ID = Util.GetValueOfInt(dr["VAF_WFlow_Node_ID"]);
                     itm.VAF_WFlow_Handler_ID = Util.GetValueOfInt(dr["VAF_WFlow_Handler_ID"]);
                     itm.VAF_WFlow_Incharge_ID = Util.GetValueOfInt(dr["VAF_WFlow_Incharge_ID"]);
-                    itm.AD_Workflow_ID = Util.GetValueOfInt(dr["AD_Workflow_ID"]);
+                    itm.VAF_Workflow_ID = Util.GetValueOfInt(dr["VAF_Workflow_ID"]);
                     itm.CreatedBy = Util.GetValueOfInt(dr["CreatedBy"]);
                     itm.DynPriorityStart = Util.GetValueOfInt(dr["DynPriorityStart"]);
                     itm.Record_ID = Util.GetValueOfInt(dr["Record_ID"]);
@@ -462,7 +462,7 @@ OR
 
                 }
                 //
-                index = _po.Get_ColumnIndex("C_BPartner_ID");
+                index = _po.Get_ColumnIndex("VAB_BusinessPartner_ID");
                 if (index != -1)
                 {
                     // int? bp = (int?)_po.Get_Value(index);
@@ -474,7 +474,7 @@ OR
 
                         SynonymNext();
 
-                        GetFromClause(ctx, "C_BPartner", table.GetTableName(), localSynonmus, "");
+                        GetFromClause(ctx, "VAB_BusinessPartner", table.GetTableName(), localSynonmus, "");
 
                         sb.Append(" || ' ' || ").Append(_synonym).Append(".").Append("Name");
 
@@ -749,7 +749,7 @@ OR
                             }
                         }
                         //Genral Attribute Instance
-                        //else if (column.GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+                        //else if (column.GetColumnName().ToUpper().Equals("VAB_GENFEATURESETINSTANCE_ID"))
                         //{
                         //    if (attrib == null)
                         //    {
@@ -926,10 +926,10 @@ OR
                                                             WHERE WFA.VAF_WFlow_Task_ID=" + activityID, null);
                 PO doc = GetPO(Util.GetValueOfInt(ds.Tables[0].Rows[0][0]), Util.GetValueOfInt(ds.Tables[0].Rows[0][1]), ctx);
                 ds = null;
-                aInfo.GenAttributeSetID = Util.GetValueOfInt(doc.Get_Value("C_GenAttributeSet_ID"));
-                aInfo.GenAttributeSetInstanceID = Util.GetValueOfInt(doc.Get_Value("C_GenAttributeSetInstance_ID"));
+                aInfo.GenAttributeSetID = Util.GetValueOfInt(doc.Get_Value("VAB_GenFeatureSet_ID"));
+                aInfo.GenAttributeSetInstanceID = Util.GetValueOfInt(doc.Get_Value("VAB_GenFeatureSetInstance_ID"));
                 doc = null;
-                doc = GetPO("C_GenAttributeSetInstance", aInfo.GenAttributeSetInstanceID, ctx);
+                doc = GetPO("VAB_GenFeatureSetInstance", aInfo.GenAttributeSetInstanceID, ctx);
                 aInfo.Description = Util.GetValueOfString(doc.Get_Value("Description"));
                 return aInfo;
             }
@@ -1175,7 +1175,7 @@ OR
             get;
             set;
         }
-        public int AD_Workflow_ID
+        public int VAF_Workflow_ID
         {
             get;
             set;

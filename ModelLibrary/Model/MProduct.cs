@@ -142,7 +142,7 @@ namespace VAdvantage.Model
             {
                 _log.Warning("ProductClient_ID=" + retValue.GetVAF_Client_ID() + " <> EnvClient_ID=" + ctx.GetVAF_Client_ID());
             }
-            if (retValue != null && retValue.GetA_Asset_Group_ID() == 0)
+            if (retValue != null && retValue.GetVAA_AssetGroup_ID() == 0)
             {
                 _log.Warning("Product has no Asset Group - " + retValue);
                 return null;
@@ -403,10 +403,10 @@ namespace VAdvantage.Model
         * 	Create Asset Group for this product
         *	@return asset group id
         */
-        public int GetA_Asset_Group_ID()
+        public int GetVAA_AssetGroup_ID()
         {
             MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
-            return pc.GetA_Asset_Group_ID();
+            return pc.GetVAA_AssetGroup_ID();
         }
 
 
@@ -417,7 +417,7 @@ namespace VAdvantage.Model
         public bool IsCreateAsset()
         {
             MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
-            return pc.GetA_Asset_Group_ID() != 0;
+            return pc.GetVAA_AssetGroup_ID() != 0;
         }
 
         /* 	Get Attribute Set
@@ -449,9 +449,9 @@ namespace VAdvantage.Model
         public bool IsOneAssetPerUOM()
         {
             MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
-            if (pc.GetA_Asset_Group_ID() == 0)
+            if (pc.GetVAA_AssetGroup_ID() == 0)
                 return false;
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), pc.GetA_Asset_Group_ID());
+            MAssetGroup ag = MAssetGroup.Get(GetCtx(), pc.GetVAA_AssetGroup_ID());
             return ag.IsOneAssetPerUOM();
 
         }
@@ -724,8 +724,8 @@ namespace VAdvantage.Model
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append("Select  PCA.c_acctschema_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
-                    //_sql.Append("Select C_AcctSchema_ID, C_ValidCombination_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
+                    _sql.Append("Select  PCA.VAB_AccountBook_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
+                    //_sql.Append("Select VAB_AccountBook_ID, C_ValidCombination_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -736,7 +736,7 @@ namespace VAdvantage.Model
                             obj = MTable.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                             obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
-                            obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                            obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                             obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                             obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                             if (!obj.Save())
@@ -752,7 +752,7 @@ namespace VAdvantage.Model
                 //    {
                 //        if (Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                 //        {
-                //            DataSet _dsAcct = DB.ExecuteDataset("SELECT C_AcctSchema_ID, FRPT_AcctDefault_ID, C_VALIDCOMBINATION_ID, SEQNO FROM VA038_Amortization_Acct "
+                //            DataSet _dsAcct = DB.ExecuteDataset("SELECT VAB_AccountBook_ID, FRPT_AcctDefault_ID, C_VALIDCOMBINATION_ID, SEQNO FROM VA038_Amortization_Acct "
                 //                              + "WHERE IsActive='Y' AND  VA038_AmortizationTemplate_ID=" + Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")));
                 //            if (_dsAcct != null && _dsAcct.Tables[0].Rows.Count > 0)
                 //            {
@@ -761,7 +761,7 @@ namespace VAdvantage.Model
                 //                    obj = MTable.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                 //                    obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                 //                    obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
-                //                    obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["C_AcctSchema_ID"]));
+                //                    obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_AccountBook_ID"]));
                 //                    obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["C_ValidCombination_ID"]));
                 //                    obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["FRPT_AcctDefault_ID"]));
                 //                    if (!obj.Save())
@@ -786,8 +786,8 @@ namespace VAdvantage.Model
                 //	Name/Description Change in Asset	MAsset.setValueNameDescription
                 if (!newRecord && (Is_ValueChanged("Name") || Is_ValueChanged("Description")))
                 {
-                    String sql = " UPDATE A_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM M_Product p, C_BPartner bp  WHERE p.M_Product_ID=a.M_Product_ID AND bp.C_BPartner_ID=a.C_BPartner_ID)," +
-      "Description=(SELECT  p.Description FROM M_Product p, C_BPartner bp WHERE p.M_Product_ID=a.M_Product_ID AND bp.C_BPartner_ID=a.C_BPartner_ID)" +
+                    String sql = " UPDATE VAA_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM M_Product p, VAB_BusinessPartner bp  WHERE p.M_Product_ID=a.M_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)," +
+      "Description=(SELECT  p.Description FROM M_Product p, VAB_BusinessPartner bp WHERE p.M_Product_ID=a.M_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)" +
       "WHERE IsActive='Y'  AND M_Product_ID=" + GetM_Product_ID();
 
                     int no = 0;
@@ -819,7 +819,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < mass.Length; i++)
                     {
                         //	Old
-                        MProductCosting pcOld = new MProductCosting(this, mass[i].GetC_AcctSchema_ID());
+                        MProductCosting pcOld = new MProductCosting(this, mass[i].GetVAB_AccountBook_ID());
                         pcOld.Save();
                     }
                 }

@@ -31,11 +31,11 @@ namespace VAdvantage.Process
         /** Warehouse				*/
         private int _M_Warehouse_ID = 0;
         /**	Optional BPartner		*/
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         /** Create (POO)Purchse Order or (POR)Requisition or (MMM)Movements */
         private String _ReplenishmentCreate = null;
         /** Document Type			*/
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         string _DocNo = null;
         /** Return Info				*/
         private String _info = "";
@@ -57,17 +57,17 @@ namespace VAdvantage.Process
                 {
                     _M_Warehouse_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("ReplenishmentCreate"))
                 {
                     _ReplenishmentCreate = Utility.Util.GetValueOfString(para[i].GetParameter());
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -83,13 +83,13 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("M_Warehouse_ID=" + _M_Warehouse_ID
-                + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + " - ReplenishmentCreate=" + _ReplenishmentCreate
-                + ", C_DocType_ID=" + _C_DocType_ID);
-            if (_ReplenishmentCreate != null && _C_DocType_ID == 0 || _C_DocType_ID == -1)
+                + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
+            if (_ReplenishmentCreate != null && _VAB_DocTypes_ID == 0 || _VAB_DocTypes_ID == -1)
             {
 
-                throw new Exception("@FillMandatory@ @C_DocType_ID@");
+                throw new Exception("@FillMandatory@ @VAB_DocTypes_ID@");
             }
             
 
@@ -115,10 +115,10 @@ namespace VAdvantage.Process
                 return "OK";
             }
             //
-            MDocType dt = MDocType.Get(GetCtx(), _C_DocType_ID);
+            MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
             if (!dt.GetDocBaseType().Equals(_ReplenishmentCreate))
             {
-                throw new Exception("@C_DocType_ID@=" + dt.GetName() + " <> " + _ReplenishmentCreate);
+                throw new Exception("@VAB_DocTypes_ID@=" + dt.GetName() + " <> " + _ReplenishmentCreate);
             }
             //
            
@@ -222,11 +222,11 @@ namespace VAdvantage.Process
             String sql = "INSERT INTO T_Replenish "
                 + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                 + " ReplenishType, Level_Min, Level_Max, QtyOnHand,QtyReserved,QtyOrdered,"
-                + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
+                + " VAB_BusinessPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                 + "SELECT " + GetVAF_JInstance_ID()
                     + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                 + " r.ReplenishType, r.Level_Min, r.Level_Max, 0,0,0,"
-                + " po.C_BPartner_ID, po.Order_Min, po.Order_Pack, 0, ";
+                + " po.VAB_BusinessPartner_ID, po.Order_Min, po.Order_Pack, 0, ";
             if (_ReplenishmentCreate == null)
             {
                 sql += "null";
@@ -241,20 +241,20 @@ namespace VAdvantage.Process
                 + " AND r.ReplenishType<>'0'"
                 + " AND po.IsActive='Y' AND r.IsActive='Y'"
                 + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID;
-            if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+            if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
-                sql += " AND po.C_BPartner_ID=" + _C_BPartner_ID;
+                sql += " AND po.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
             }
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Finest(sql);
             log.Fine("Insert (1) #" + no);
 
-            if (_C_BPartner_ID == 0 || _C_BPartner_ID == -1)
+            if (_VAB_BusinessPartner_ID == 0 || _VAB_BusinessPartner_ID == -1)
             {
                 sql = "INSERT INTO T_Replenish "
                     + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                     + " ReplenishType, Level_Min, Level_Max,"
-                    + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
+                    + " VAB_BusinessPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                     + "SELECT " + GetVAF_JInstance_ID()
                     + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                     + " r.ReplenishType, r.Level_Min, r.Level_Max,"
@@ -287,9 +287,9 @@ namespace VAdvantage.Process
                     + " AND l.M_Locator_ID=s.M_Locator_ID AND l.M_Warehouse_ID=t.M_Warehouse_ID),"
                 + "QtyOrdered = (SELECT COALESCE(SUM(QtyOrdered),0) FROM M_Storage s, M_Locator l WHERE t.M_Product_ID=s.M_Product_ID"
                     + " AND l.M_Locator_ID=s.M_Locator_ID AND l.M_Warehouse_ID=t.M_Warehouse_ID)";
-            if (_C_DocType_ID != 0 && _C_DocType_ID != -1)
+            if (_VAB_DocTypes_ID != 0 && _VAB_DocTypes_ID != -1)
             {
-                sql += ", C_DocType_ID=" + _C_DocType_ID;
+                sql += ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID;
             }
             sql += " WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -479,13 +479,13 @@ namespace VAdvantage.Process
                 }
                 //
                 if (order == null
-                    || order.GetC_BPartner_ID() != replenish.GetC_BPartner_ID()
+                    || order.GetVAB_BusinessPartner_ID() != replenish.GetVAB_BusinessPartner_ID()
                     || order.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
                 {
                     order = new MOrder(GetCtx(), 0, Get_TrxName());
                     order.SetIsSOTrx(false);
-                    order.SetC_DocTypeTarget_ID(_C_DocType_ID);
-                    MBPartner bp = new MBPartner(GetCtx(), replenish.GetC_BPartner_ID(), Get_TrxName());
+                    order.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
+                    MBPartner bp = new MBPartner(GetCtx(), replenish.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     order.SetBPartner(bp);
                     order.SetSalesRep_ID(GetVAF_UserContact_ID());
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
@@ -535,7 +535,7 @@ namespace VAdvantage.Process
                 {
                     requisition = new MRequisition(GetCtx(), 0, Get_TrxName());
                     requisition.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
-                    requisition.SetC_DocType_ID(_C_DocType_ID);
+                    requisition.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
                     requisition.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
                     int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
@@ -558,7 +558,7 @@ namespace VAdvantage.Process
                 //
                 MRequisitionLine line = new MRequisitionLine(requisition);
                 line.SetM_Product_ID(replenish.GetM_Product_ID());
-                line.SetC_BPartner_ID(replenish.GetC_BPartner_ID());
+                line.SetVAB_BusinessPartner_ID(replenish.GetVAB_BusinessPartner_ID());
                 line.SetQty(replenish.GetQtyToOrder());
                 line.SetPrice();
                 line.Save();
@@ -617,7 +617,7 @@ namespace VAdvantage.Process
                     M_Warehouse_ID = replenish.GetM_Warehouse_ID();
 
                     move = new MMovement(GetCtx(), 0, Get_TrxName());
-                    move.SetC_DocType_ID(_C_DocType_ID);
+                    move.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
                     move.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment")
                         + ": " + whSource.GetName() + "->" + whTarget.GetName());
                     //	Set Org
@@ -742,12 +742,12 @@ namespace VAdvantage.Process
         private X_T_Replenish[] GetReplenish(String where)
         {
             String sql = "SELECT * FROM T_Replenish "
-                + "WHERE VAF_JInstance_ID=@param AND C_BPartner_ID > 0 ";
+                + "WHERE VAF_JInstance_ID=@param AND VAB_BusinessPartner_ID > 0 ";
             if (where != null && where.Length > 0)
             {
                 sql += " AND " + where;
             }
-            sql += " ORDER BY M_Warehouse_ID, M_WarehouseSource_ID, C_BPartner_ID";
+            sql += " ORDER BY M_Warehouse_ID, M_WarehouseSource_ID, VAB_BusinessPartner_ID";
             List<X_T_Replenish> list = new List<X_T_Replenish>();
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;

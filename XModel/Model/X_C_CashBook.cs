@@ -11,30 +11,30 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_CashBook
+    /** Generated Model for VAB_CashBook
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_CashBook : PO
+    public class X_VAB_CashBook : PO
     {
-        public X_C_CashBook(Context ctx, int C_CashBook_ID, Trx trxName)
-            : base(ctx, C_CashBook_ID, trxName)
+        public X_VAB_CashBook(Context ctx, int VAB_CashBook_ID, Trx trxName)
+            : base(ctx, VAB_CashBook_ID, trxName)
         {
-            /** if (C_CashBook_ID == 0)
+            /** if (VAB_CashBook_ID == 0)
             {
-            SetC_CashBook_ID (0);
-            SetC_Currency_ID (0);	// SQL=SELECT cb.C_Currency_ID FROM C_CashBook cb INNER JOIN C_Cash c ON (cb.C_CashBook_ID=c.C_CashBook_ID) WHERE c.C_Cash_ID=@C_Cash_ID@
+            SetVAB_CashBook_ID (0);
+            SetVAB_Currency_ID (0);	// SQL=SELECT cb.VAB_Currency_ID FROM VAB_CashBook cb INNER JOIN VAB_CashJRNL c ON (cb.VAB_CashBook_ID=c.VAB_CashBook_ID) WHERE c.VAB_CashJRNL_ID=@VAB_CashJRNL_ID@
             SetIsDefault (false);
             SetName (null);
             }
              */
         }
-        public X_C_CashBook(Ctx ctx, int C_CashBook_ID, Trx trxName)
-            : base(ctx, C_CashBook_ID, trxName)
+        public X_VAB_CashBook(Ctx ctx, int VAB_CashBook_ID, Trx trxName)
+            : base(ctx, VAB_CashBook_ID, trxName)
         {
-            /** if (C_CashBook_ID == 0)
+            /** if (VAB_CashBook_ID == 0)
             {
-            SetC_CashBook_ID (0);
-            SetC_Currency_ID (0);	// SQL=SELECT cb.C_Currency_ID FROM C_CashBook cb INNER JOIN C_Cash c ON (cb.C_CashBook_ID=c.C_CashBook_ID) WHERE c.C_Cash_ID=@C_Cash_ID@
+            SetVAB_CashBook_ID (0);
+            SetVAB_Currency_ID (0);	// SQL=SELECT cb.VAB_Currency_ID FROM VAB_CashBook cb INNER JOIN VAB_CashJRNL c ON (cb.VAB_CashBook_ID=c.VAB_CashBook_ID) WHERE c.VAB_CashJRNL_ID=@VAB_CashJRNL_ID@
             SetIsDefault (false);
             SetName (null);
             }
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashBook(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashBook(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashBook(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashBook(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -63,14 +63,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashBook(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_CashBook(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_CashBook()
+        static X_VAB_CashBook()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -83,8 +83,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =408;
 
-        /** TableName=C_CashBook */
-        public static String Table_Name = "C_CashBook";
+        /** TableName=VAB_CashBook */
+        public static String Table_Name = "VAB_CashBook";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -118,36 +118,36 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_CashBook[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_CashBook[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Cash Book.
-        @param C_CashBook_ID Cash Book for recording petty cash transactions */
-        public void SetC_CashBook_ID(int C_CashBook_ID)
+        @param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+        public void SetVAB_CashBook_ID(int VAB_CashBook_ID)
         {
-            if (C_CashBook_ID < 1) throw new ArgumentException("C_CashBook_ID is mandatory.");
-            Set_ValueNoCheck("C_CashBook_ID", C_CashBook_ID);
+            if (VAB_CashBook_ID < 1) throw new ArgumentException("VAB_CashBook_ID is mandatory.");
+            Set_ValueNoCheck("VAB_CashBook_ID", VAB_CashBook_ID);
         }
         /** Get Cash Book.
         @return Cash Book for recording petty cash transactions */
-        public int GetC_CashBook_ID()
+        public int GetVAB_CashBook_ID()
         {
-            Object ii = Get_Value("C_CashBook_ID");
+            Object ii = Get_Value("VAB_CashBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory.");
-            Set_Value("C_Currency_ID", C_Currency_ID);
+            if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory.");
+            Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

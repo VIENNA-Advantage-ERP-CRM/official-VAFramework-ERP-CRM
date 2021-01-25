@@ -95,7 +95,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MInvoiceLine[] lines = invoice.GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    lines[i].SetPrice(invoice.GetM_PriceList_ID(), invoice.GetC_BPartner_ID());
+                    lines[i].SetPrice(invoice.GetM_PriceList_ID(), invoice.GetVAB_BusinessPartner_ID());
                     lines[i].Save();
                 }
                 invoice = new MInvoice(GetCtx(), _C_Invoice_ID, null);

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MAsset
- * Purpose        : used for A_Asset table
+ * Purpose        : used for VAA_Asset table
  * Class Used     : X_A_Asset
  * Chronological    Development
  * Raghunandan     08-Jun-2009
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         public static List<MAsset> GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
         {
             List<MAsset> retValue = new List<MAsset>();
-            String sql = "SELECT * FROM A_Asset WHERE M_InOutLine_ID=" + M_InOutLine_ID;
+            String sql = "SELECT * FROM VAA_Asset WHERE M_InOutLine_ID=" + M_InOutLine_ID;
             DataSet ds = new DataSet();
             try
             {
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
             asset.SetIsOwned(false);
             asset.SetIsTrialPhase(true);
             //
-            MBPartner partner = new MBPartner(ctx, user.GetC_BPartner_ID(), null);
+            MBPartner partner = new MBPartner(ctx, user.GetVAB_BusinessPartner_ID(), null);
             String documentNo = "Trial";
             //	Value
             String value = partner.GetValue() + "_" + product.GetValue();
@@ -120,10 +120,10 @@ namespace VAdvantage.Model
 
             //	User
             asset.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
-            asset.SetC_BPartner_ID(user.GetC_BPartner_ID());
+            asset.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
             //	Product
             asset.SetM_Product_ID(product.GetM_Product_ID());
-            asset.SetA_Asset_Group_ID(product.GetA_Asset_Group_ID());
+            asset.SetVAA_AssetGroup_ID(product.GetVAA_AssetGroup_ID());
             asset.SetQty(new Decimal(product.GetSupportUnits()));
             //	Guarantee & Version
             asset.SetGuaranteeDate(TimeUtil.AddDays(now, product.GetTrialPhaseDays()));
@@ -134,14 +134,14 @@ namespace VAdvantage.Model
 
         /* 	Asset Constructor
      *	@param ctx context
-     *	@param A_Asset_ID asset
+     *	@param VAA_Asset_ID asset
      *	@param trxName transaction name 
      */
-        public MAsset(Ctx ctx, int A_Asset_ID, Trx trxName)
-            : base(ctx, A_Asset_ID, trxName)
+        public MAsset(Ctx ctx, int VAA_Asset_ID, Trx trxName)
+            : base(ctx, VAA_Asset_ID, trxName)
         {
 
-            if (A_Asset_ID == 0)
+            if (VAA_Asset_ID == 0)
             {
                 SetIsDepreciated(false);
                 SetIsFullyDepreciated(false);
@@ -157,11 +157,11 @@ namespace VAdvantage.Model
         /**
          * 	Discontinued Asset Constructor - DO NOT USE (but don't delete either)
          *	@param ctx context
-         *	@param A_Asset_ID asset
+         *	@param VAA_Asset_ID asset
          *	@deprecated
          */
-        public MAsset(Ctx ctx, int A_Asset_ID)
-            : this(ctx, A_Asset_ID, null)
+        public MAsset(Ctx ctx, int VAA_Asset_ID)
+            : this(ctx, VAA_Asset_ID, null)
         {
 
         }
@@ -199,8 +199,8 @@ namespace VAdvantage.Model
             //	Header
 
             // SetIsOwned(true);
-            SetC_BPartner_ID(shipment.GetC_BPartner_ID());
-            SetC_BPartner_Location_ID(shipment.GetC_BPartner_Location_ID());
+            SetVAB_BusinessPartner_ID(shipment.GetVAB_BusinessPartner_ID());
+            SetVAB_BPart_Location_ID(shipment.GetVAB_BPart_Location_ID());
             SetVAF_UserContact_ID(shipment.GetVAF_UserContact_ID());
             SetM_Locator_ID(shipLine.GetM_Locator_ID());
             SetIsInPosession(true);
@@ -209,17 +209,17 @@ namespace VAdvantage.Model
             //	Line
             MProduct product = shipLine.GetProduct();
             SetM_Product_ID(product.GetM_Product_ID());
-            SetA_Asset_Group_ID(product.GetA_Asset_Group_ID());
+            SetVAA_AssetGroup_ID(product.GetVAA_AssetGroup_ID());
 
             //////////////////////////////*
             //Changes for vafam
             // SetAssetServiceDate(shipment.GetMovementDate());
             //SetGuaranteeDate(TimeUtil.AddDays(shipment.GetMovementDate(), product.GetGuaranteeDays()));
-            MAssetGroup _assetGroup = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), shipment.Get_TrxName());
+            MAssetGroup _assetGroup = new MAssetGroup(GetCtx(), GetVAA_AssetGroup_ID(), shipment.Get_TrxName());
             if (_assetGroup.IsOwned())
             {
                 SetIsOwned(true);
-                //SetC_BPartner_ID(0);
+                //SetVAB_BusinessPartner_ID(0);
             }
             if (_assetGroup.IsDepreciated())
             {
@@ -265,7 +265,7 @@ namespace VAdvantage.Model
             SetM_InOutLine_ID(shipLine.GetM_InOutLine_ID());
 
             //	Activate
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
+            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetVAA_AssetGroup_ID());
             if (!ag.IsCreateAsActive())
                 SetIsActive(false);
         }
@@ -346,8 +346,8 @@ namespace VAdvantage.Model
             //	Header
 
             //SetIsOwned(true);
-            SetC_BPartner_ID(invoice.GetC_BPartner_ID());
-            SetC_BPartner_Location_ID(invoice.GetC_BPartner_Location_ID());
+            SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
+            SetVAB_BPart_Location_ID(invoice.GetVAB_BPart_Location_ID());
             SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
             //SetM_Locator_ID(invoice.GetM_Locator_ID());
             SetIsInPosession(true);
@@ -359,17 +359,17 @@ namespace VAdvantage.Model
             //	Line
             MProduct product = invoiceline.GetProduct();
             SetM_Product_ID(product.GetM_Product_ID());
-            SetA_Asset_Group_ID(product.GetA_Asset_Group_ID());
+            SetVAA_AssetGroup_ID(product.GetVAA_AssetGroup_ID());
 
             //////////////////////////////*
             //Changes for vafam
             // SetAssetServiceDate(shipment.GetMovementDate());
             //SetGuaranteeDate(TimeUtil.AddDays(shipment.GetMovementDate(), product.GetGuaranteeDays()));
-            MAssetGroup _assetGroup = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), invoice.Get_TrxName());
+            MAssetGroup _assetGroup = new MAssetGroup(GetCtx(), GetVAA_AssetGroup_ID(), invoice.Get_TrxName());
             if (_assetGroup.IsOwned())
             {
                 SetIsOwned(true);
-                //SetC_BPartner_ID(0);
+                //SetVAB_BusinessPartner_ID(0);
             }
             if (_assetGroup.IsDepreciated())
             {
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
             Set_Value("C_InvoiceLine_ID", invoiceline.GetC_InvoiceLine_ID());
 
             //	Activate
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
+            MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetVAA_AssetGroup_ID());
             if (!ag.IsCreateAsActive())
                 SetIsActive(false);
         }
@@ -429,7 +429,7 @@ namespace VAdvantage.Model
         public void SetValueNameDescription(MInvoice invoice, MInvoiceLine line, int deliveryCount)
         {
             MProduct product = line.GetProduct();
-            MBPartner partner = new MBPartner(GetCtx(), invoice.GetC_BPartner_ID(), null);
+            MBPartner partner = new MBPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
             SetValueNameDescription(invoice, deliveryCount, product, partner);
         }
 
@@ -498,7 +498,7 @@ namespace VAdvantage.Model
         public void SetQty()
         {
             //	UPDATE M_Product SET SupportUnits=1 WHERE SupportUnits IS NULL OR SupportUnits<1;
-            //	UPDATE A_Asset a SET Qty = (SELECT l.MovementQty * p.SupportUnits FROM M_InOutLine l, M_Product p WHERE a.M_InOutLine_ID=l.M_InOutLine_ID AND a.M_Product_ID=p.M_Product_ID) WHERE a.M_Product_ID IS NOT NULL AND a.M_InOutLine_ID IS NOT NULL;
+            //	UPDATE VAA_Asset a SET Qty = (SELECT l.MovementQty * p.SupportUnits FROM M_InOutLine l, M_Product p WHERE a.M_InOutLine_ID=l.M_InOutLine_ID AND a.M_Product_ID=p.M_Product_ID) WHERE a.M_Product_ID IS NOT NULL AND a.M_InOutLine_ID IS NOT NULL;
             Decimal Qty = Env.ONE;
             if (GetM_InOutLine_ID() != 0)
             {
@@ -530,7 +530,7 @@ namespace VAdvantage.Model
         {
             List<MAssetDelivery> list = new List<MAssetDelivery>();
 
-            String sql = "SELECT * FROM A_Asset_Delivery WHERE A_Asset_ID=" + GetA_Asset_ID() + " ORDER BY Created DESC";
+            String sql = "SELECT * FROM VAA_AssetDelivery WHERE VAA_Asset_ID=" + GetA_Asset_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
             IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
             try
@@ -565,7 +565,7 @@ namespace VAdvantage.Model
          */
         public int GetDeliveryCount()
         {
-            String sql = "SELECT COUNT(*) FROM A_Asset_Delivery WHERE A_Asset_ID=" + GetA_Asset_ID();
+            String sql = "SELECT COUNT(*) FROM VAA_AssetDelivery WHERE VAA_Asset_ID=" + GetA_Asset_ID();
             return Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
         }
 
@@ -699,7 +699,7 @@ namespace VAdvantage.Model
          */
         public MAssetGroup GetAssetGroup()
         {
-            return MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
+            return MAssetGroup.Get(GetCtx(), GetVAA_AssetGroup_ID());
         }
 
         /**
@@ -719,7 +719,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             GetQty();		//	set to 1
-            MAssetGroup astGrp = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), Get_TrxName());
+            MAssetGroup astGrp = new MAssetGroup(GetCtx(), GetVAA_AssetGroup_ID(), Get_TrxName());
             if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") > 0)
             {
                 string name = "";
@@ -776,21 +776,21 @@ namespace VAdvantage.Model
             {
                 PO obj = null;
                 int assetId = GetA_Asset_ID();
-                int assetGroupId = GetA_Asset_Group_ID();
+                int assetGroupId = GetVAA_AssetGroup_ID();
                 // get related to value agaisnt asset = 75
                 string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Asset'";
                 string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
 
                 _sql.Clear();
-                _sql.Append("Select Count(*) From FRPT_Asset_Acct   where A_Asset_ID=" + assetId + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                _sql.Append("Select Count(*) From FRPT_Asset_Acct   where VAA_Asset_ID=" + assetId + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append(@"Select  PCA.c_acctschema_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id " +
+                    _sql.Append(@"Select  PCA.VAB_AccountBook_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id " +
                         " From FRPT_Asset_Group_Acct PCA " +
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
-                        " where PCA.A_Asset_Group_ID=" + assetGroupId +
+                        " where PCA.VAA_AssetGroup_ID=" + assetGroupId +
                         " and acc.frpt_relatedto='" + _RelatedToProduct +
                         "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
 
@@ -801,8 +801,8 @@ namespace VAdvantage.Model
                         {
                             obj = MTable.GetPO(GetCtx(), "FRPT_Asset_Acct", 0, null);
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
-                            obj.Set_ValueNoCheck("A_Asset_ID", assetId);
-                            obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                            obj.Set_ValueNoCheck("VAA_Asset_ID", assetId);
+                            obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                             obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                             obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                             if (!obj.Save())
@@ -862,7 +862,7 @@ namespace VAdvantage.Model
             //                                          M_COST.VAF_ORG_ID,
             //                                          M_COST.M_COSTELEMENT_ID,
             //                                          M_PRODUCT.M_PRODUCT_ID,
-            //                                          M_COST.C_ACCTSCHEMA_ID,
+            //                                          M_COST.VAB_ACCOUNTBOOK_ID,
             //                                          M_COST.M_COSTTYPE_ID,
             //                                          M_COST.BASISTYPE,
             //                                          M_PRODUCT.C_UOM_ID,
@@ -899,7 +899,7 @@ namespace VAdvantage.Model
             //                                {
             //                                    if (_costElement.IsLastPOPrice() || _costElement.IsAveragePO())
             //                                    {
-            //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
+            //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
             //                                        _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
             //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
@@ -919,7 +919,7 @@ namespace VAdvantage.Model
             //                                {
             //                                    if (_costElement.IsFifo() || _costElement.IsLifo() || _costElement.IsStandardCosting() || _costElement.IsAveragePO() || _costElement.IsAverageInvoice())
             //                                    {
-            //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
+            //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
             //                                        _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
             //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
@@ -942,7 +942,7 @@ namespace VAdvantage.Model
             //                            {
             //                                if (_costElement.IsLastPOPrice() || _costElement.IsAveragePO() || _costElement.IsFifo() || _costElement.IsLifo() || _costElement.IsStandardCosting() || _costElement.IsLastInvoice() || _costElement.IsAverageInvoice())
             //                                {
-            //                                    _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
+            //                                    _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAB_ACCOUNTBOOK_ID"]), Get_TrxName());
             //                                    _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
             //                                        _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                        Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),

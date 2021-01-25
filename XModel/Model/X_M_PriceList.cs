@@ -20,7 +20,7 @@ public X_M_PriceList (Context ctx, int M_PriceList_ID, Trx trxName) : base (ctx,
 {
 /** if (M_PriceList_ID == 0)
 {
-SetC_Currency_ID (0);	// @$C_Currency_ID@
+SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
 SetEnforcePriceLimit (false);
 SetIsDefault (false);
 SetIsSOPriceList (false);
@@ -35,7 +35,7 @@ public X_M_PriceList (Ctx ctx, int M_PriceList_ID, Trx trxName) : base (ctx, M_P
 {
 /** if (M_PriceList_ID == 0)
 {
-SetC_Currency_ID (0);	// @$C_Currency_ID@
+SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
 SetEnforcePriceLimit (false);
 SetIsDefault (false);
 SetIsSOPriceList (false);
@@ -144,17 +144,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

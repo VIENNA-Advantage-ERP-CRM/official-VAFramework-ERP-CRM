@@ -21,7 +21,7 @@ namespace ModelLibrary.Acct
     class Doc_IncomeTax: Doc
     {
 
-        //private int C_AcctSchema = 0;
+        //private int VAB_AccountBook = 0;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -129,14 +129,14 @@ namespace ModelLibrary.Acct
 
                     //	Account
                     MAccount expense = MAccount.Get(GetCtx(), line.GetC_IncomeTax_Acct());
-                    fact.CreateLine(dline, expense, GetC_Currency_ID(), amount);
+                    fact.CreateLine(dline, expense, GetVAB_Currency_ID(), amount);
                 }
 
                 if (total != Env.ZERO)
                 {
-                    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT T_Due_Acct FROM C_Tax_Acct WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT T_Due_Acct FROM C_Tax_Acct WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     MAccount acct = MAccount.Get(GetCtx(), validComID);
-                    fact.CreateLine(null, acct,GetC_Currency_ID(), Decimal.Negate(total));
+                    fact.CreateLine(null, acct,GetVAB_Currency_ID(), Decimal.Negate(total));
                 }
 
                 facts.Add(fact);

@@ -249,7 +249,7 @@ namespace VAdvantage.Model
                         request.SetClientOrg(this);
                         request.SetSummary(summary);
                         request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
-                        request.SetC_BPartner_ID(user.GetC_BPartner_ID());
+                        request.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
                         request.SetR_Source_ID(source.GetR_Source_ID());
                         request.Save();
                     }
@@ -262,7 +262,7 @@ namespace VAdvantage.Model
                         lead.SetDescription(summary);
                         lead.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
                         lead.SetR_InterestArea_ID(GetR_InterestArea_ID());
-                        lead.SetC_BPartner_ID(user.GetC_BPartner_ID());
+                        lead.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
                         lead.SetR_Source_ID(source.GetR_Source_ID());
                         lead.Save();
                     }

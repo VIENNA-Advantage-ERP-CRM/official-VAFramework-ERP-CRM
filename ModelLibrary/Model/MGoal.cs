@@ -340,7 +340,7 @@ namespace VAdvantage.Model
             //
             String sql = "SELECT * FROM PA_GoalRestriction "
                 + "WHERE PA_Goal_ID=@PA_Goal_ID AND IsActive='Y' "
-                + "ORDER BY Org_ID, C_BPartner_ID, M_Product_ID";
+                + "ORDER BY Org_ID, VAB_BusinessPartner_ID, M_Product_ID";
             DataTable dt;
             IDataReader idr = null;
             try

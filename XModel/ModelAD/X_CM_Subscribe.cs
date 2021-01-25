@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_Subscribe
+/** Generated Model for VACM_Subscribe
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_Subscribe : PO
+public class X_VACM_Subscribe : PO
 {
-public X_CM_Subscribe (Context ctx, int CM_Subscribe_ID, Trx trxName) : base (ctx, CM_Subscribe_ID, trxName)
+public X_VACM_Subscribe (Context ctx, int VACM_Subscribe_ID, Trx trxName) : base (ctx, VACM_Subscribe_ID, trxName)
 {
-/** if (CM_Subscribe_ID == 0)
+/** if (VACM_Subscribe_ID == 0)
 {
-SetCM_Subscribe_ID (0);
+SetVACM_Subscribe_ID (0);
 }
  */
 }
-public X_CM_Subscribe (Ctx ctx, int CM_Subscribe_ID, Trx trxName) : base (ctx, CM_Subscribe_ID, trxName)
+public X_VACM_Subscribe (Ctx ctx, int VACM_Subscribe_ID, Trx trxName) : base (ctx, VACM_Subscribe_ID, trxName)
 {
-/** if (CM_Subscribe_ID == 0)
+/** if (VACM_Subscribe_ID == 0)
 {
-SetCM_Subscribe_ID (0);
+SetVACM_Subscribe_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetCM_Subscribe_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Subscribe (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Subscribe (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_CM_Subscribe (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Subscribe (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Subscribe (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_CM_Subscribe (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Subscribe (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_Subscribe (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_Subscribe()
+static X_VACM_Subscribe()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1404999764348L;
 public static int Table_ID;
  // =1000239;
 
-/** TableName=CM_Subscribe */
-public static String Table_Name="CM_Subscribe";
+/** TableName=VACM_Subscribe */
+public static String Table_Name="VACM_Subscribe";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -107,7 +107,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_Subscribe[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_Subscribe[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -158,18 +158,18 @@ Object ii = Get_Value("VAF_Screen_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set CM_Subscribe_ID.
-@param CM_Subscribe_ID CM_Subscribe_ID */
-public void SetCM_Subscribe_ID (int CM_Subscribe_ID)
+/** Set VACM_Subscribe_ID.
+@param VACM_Subscribe_ID VACM_Subscribe_ID */
+public void SetVACM_Subscribe_ID (int VACM_Subscribe_ID)
 {
-if (CM_Subscribe_ID < 1) throw new ArgumentException ("CM_Subscribe_ID is mandatory.");
-Set_ValueNoCheck ("CM_Subscribe_ID", CM_Subscribe_ID);
+if (VACM_Subscribe_ID < 1) throw new ArgumentException ("VACM_Subscribe_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Subscribe_ID", VACM_Subscribe_ID);
 }
-/** Get CM_Subscribe_ID.
-@return CM_Subscribe_ID */
-public int GetCM_Subscribe_ID() 
+/** Get VACM_Subscribe_ID.
+@return VACM_Subscribe_ID */
+public int GetVACM_Subscribe_ID() 
 {
-Object ii = Get_Value("CM_Subscribe_ID");
+Object ii = Get_Value("VACM_Subscribe_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

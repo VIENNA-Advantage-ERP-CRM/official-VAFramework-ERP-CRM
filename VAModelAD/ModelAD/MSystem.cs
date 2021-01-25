@@ -180,7 +180,7 @@ namespace VAdvantage.Model
                 String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetVAF_Language(GetCtx()));
                 String sql = "SELECT 'C'||(SELECT " + count + " FROM VAF_Client)"
                     + " ||'U'||(SELECT " + count + " FROM VAF_UserContact)"
-                    + " ||'B'||(SELECT " + count + " FROM C_BPartner)"
+                    + " ||'B'||(SELECT " + count + " FROM VAB_BusinessPartner)"
                     + " ||'P'||(SELECT " + count + " FROM M_Product)"
                     + " ||'I'||(SELECT " + count + " FROM C_Invoice)"
                     + " ||'L'||(SELECT " + count + " FROM C_InvoiceLine)"

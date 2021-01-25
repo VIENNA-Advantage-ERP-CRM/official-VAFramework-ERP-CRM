@@ -35,7 +35,7 @@ namespace ViennaAdvantage.Process
         // Warehouse				
         private int _M_Warehouse_ID = 0;
         // BPartner				
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         //Promise Date		
         private DateTime? _datePromised = null;
         //Include Orders w. unconfirmed Shipments	
@@ -54,7 +54,7 @@ namespace ViennaAdvantage.Process
         // Movement Date		
         private DateTime? _movementDate = null;
         //Last BP Location	
-        private int _lastC_BPartner_Location_ID = -1;
+        private int _lastVAB_BPart_Location_ID = -1;
         //The Query sql		
         StringBuilder _sql = new StringBuilder();
         // Storages temp space				
@@ -95,9 +95,9 @@ namespace ViennaAdvantage.Process
                 {
                     _M_Warehouse_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    _VAB_BusinessPartner_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("DatePromised"))
                 {
@@ -148,7 +148,7 @@ namespace ViennaAdvantage.Process
 
             log.Info("Selection=" + _selection
                 + ", M_Warehouse_ID=" + _M_Warehouse_ID
-                + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", Consolidate=" + _consolidateDocument
                 + ", IsUnconfirmed=" + _isUnconfirmedInOut
                 + ", Movement=" + _movementDate);
@@ -172,7 +172,7 @@ namespace ViennaAdvantage.Process
                 _sql.Append("SELECT * FROM C_Order o "
                     + "WHERE DocStatus='CO' AND IsSOTrx='Y'"
                     //	No Offer,POS
-                    + " AND o.C_DocType_ID IN (SELECT C_DocType_ID FROM C_DocType "
+                    + " AND o.VAB_DocTypes_ID IN (SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
                         + "WHERE DocBaseType='SOO' AND DocSubTypeSO NOT IN ('ON','OB','WR')) AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID()
                     + "	AND o.IsDropShip='N'"
                     //	No Manual
@@ -199,12 +199,12 @@ namespace ViennaAdvantage.Process
                 }
                 _sql.Append(" AND o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyDelivered)");
                 //
-                if (_C_BPartner_ID != 0)
+                if (_VAB_BusinessPartner_ID != 0)
                 {
-                    _sql.Append(" AND o.C_BPartner_ID=" + _C_BPartner_ID);					//	#3
+                    _sql.Append(" AND o.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);					//	#3
                 }
             }
-            _sql.Append(" ORDER BY M_Warehouse_ID, PriorityRule, M_Shipper_ID, C_BPartner_ID, C_BPartner_Location_ID, C_PaymentTerm_ID , C_Order_ID");
+            _sql.Append(" ORDER BY M_Warehouse_ID, PriorityRule, M_Shipper_ID, VAB_BusinessPartner_ID, VAB_BPart_Location_ID, C_PaymentTerm_ID , C_Order_ID");
             //	_sql += " FOR UPDATE";
 
             IDataReader idr = null;
@@ -242,7 +242,7 @@ namespace ViennaAdvantage.Process
                 order = new MOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
-                MBPartner bp = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                MBPartner bp = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     decimal creditLimit = bp.GetSO_CreditLimit();
@@ -270,10 +270,10 @@ namespace ViennaAdvantage.Process
                     }
                 }
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
-                else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+                else if (bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
-                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetC_BPartner_Location_ID(), null);
-                    //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
+                    //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                     //if (bpl.GetCreditStatusSettingOn() == "CL")
                     //{
                     decimal creditLimit = bpl.GetSO_CreditLimit();
@@ -306,7 +306,7 @@ namespace ViennaAdvantage.Process
                 //	New Header different Shipper, Shipment Location
                 if (!_consolidateDocument
                     || (_shipment != null
-                    && (_shipment.GetC_BPartner_Location_ID() != order.GetC_BPartner_Location_ID()
+                    && (_shipment.GetVAB_BPart_Location_ID() != order.GetVAB_BPart_Location_ID()
                         || _shipment.GetM_Shipper_ID() != order.GetM_Shipper_ID())))
                 {
                     CompleteShipment();
@@ -349,7 +349,7 @@ namespace ViennaAdvantage.Process
                 }
 
                 //	Deadlock Prevention - Order by M_Product_ID
-                MOrderLine[] lines = order.GetLines(where.ToString(), "ORDER BY C_BPartner_Location_ID, M_Product_ID");
+                MOrderLine[] lines = order.GetLines(where.ToString(), "ORDER BY VAB_BPart_Location_ID, M_Product_ID");
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MOrderLine line = lines[i];
@@ -375,7 +375,7 @@ namespace ViennaAdvantage.Process
                         }
 
                         // Get the lines of Order based on the setting taken on Tenant to allow non item Product                        
-                        if (line.GetC_Charge_ID() != 0 && (!isAllowNonItem || Env.Signum(toDeliver) == 0))        // Nothing to Deliver
+                        if (line.GetVAB_Charge_ID() != 0 && (!isAllowNonItem || Env.Signum(toDeliver) == 0))        // Nothing to Deliver
                         {
                             continue;
                         }
@@ -576,23 +576,23 @@ namespace ViennaAdvantage.Process
             dynamic[] storages, bool force, bool FiFo)
         {
             //	Complete last Shipment - can have multiple shipments
-            if (_lastC_BPartner_Location_ID != orderLine.GetC_BPartner_Location_ID())
+            if (_lastVAB_BPart_Location_ID != orderLine.GetVAB_BPart_Location_ID())
             {
                 CompleteShipment();
             }
-            _lastC_BPartner_Location_ID = orderLine.GetC_BPartner_Location_ID();
+            _lastVAB_BPart_Location_ID = orderLine.GetVAB_BPart_Location_ID();
             //	Create New Shipment
             if (_shipment == null)
             {
                 _shipment = new MInOut(order, 0, _movementDate);
                 _shipment.SetM_Warehouse_ID(orderLine.GetM_Warehouse_ID());	//	sets Org too
-                if (order.GetC_BPartner_ID() != orderLine.GetC_BPartner_ID())
+                if (order.GetVAB_BusinessPartner_ID() != orderLine.GetVAB_BusinessPartner_ID())
                 {
-                    _shipment.SetC_BPartner_ID(orderLine.GetC_BPartner_ID());
+                    _shipment.SetVAB_BusinessPartner_ID(orderLine.GetVAB_BusinessPartner_ID());
                 }
-                if (order.GetC_BPartner_Location_ID() != orderLine.GetC_BPartner_Location_ID())
+                if (order.GetVAB_BPart_Location_ID() != orderLine.GetVAB_BPart_Location_ID())
                 {
-                    _shipment.SetC_BPartner_Location_ID(orderLine.GetC_BPartner_Location_ID());
+                    _shipment.SetVAB_BPart_Location_ID(orderLine.GetVAB_BPart_Location_ID());
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order

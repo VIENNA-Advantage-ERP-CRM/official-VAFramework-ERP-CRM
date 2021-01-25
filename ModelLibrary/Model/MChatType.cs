@@ -28,18 +28,18 @@ namespace VAdvantage.Model
         /// Get MChatType from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="CM_ChatType_ID">id</param>
+        /// <param name="VACM_ChatType_ID">id</param>
         /// <returns>MChatType</returns>
-        public static MChatType Get(Ctx ctx, int CM_ChatType_ID)
+        public static MChatType Get(Ctx ctx, int VACM_ChatType_ID)
         {
-            int key = Utility.Util.GetValueOfInt(CM_ChatType_ID);
+            int key = Utility.Util.GetValueOfInt(VACM_ChatType_ID);
             MChatType retValue = (MChatType)s_cache[key];//.get (key);
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MChatType(ctx, CM_ChatType_ID, null);
-            if (retValue.Get_ID() != CM_ChatType_ID)
+            retValue = new MChatType(ctx, VACM_ChatType_ID, null);
+            if (retValue.Get_ID() != VACM_ChatType_ID)
             {
                 s_cache.Add(key, retValue);// .put(key, retValue);
             }
@@ -48,19 +48,19 @@ namespace VAdvantage.Model
 
         /**	Cache						*/
         private static CCache<int, MChatType> s_cache
-            = new CCache<int, MChatType>("CM_ChatType", 20);
+            = new CCache<int, MChatType>("VACM_ChatType", 20);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="CM_ChatType_ID">id</param>
+        /// <param name="VACM_ChatType_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MChatType(Ctx ctx, int CM_ChatType_ID, Trx trxName)
-            : base(ctx, CM_ChatType_ID, trxName)
+        public MChatType(Ctx ctx, int VACM_ChatType_ID, Trx trxName)
+            : base(ctx, VACM_ChatType_ID, trxName)
         {
 
-            if (CM_ChatType_ID == 0)
+            if (VACM_ChatType_ID == 0)
             {
                 SetModerationType(MODERATIONTYPE_NotModerated);
             }

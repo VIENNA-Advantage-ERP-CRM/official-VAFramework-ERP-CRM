@@ -28,7 +28,7 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Campaign_ID"))
+                else if (name.Equals("VAB_Promotion_ID"))
                 {
                     _Campaign_ID = para[i].GetParameterAsInt();
                 }
@@ -39,14 +39,14 @@ namespace VAdvantage.Process
             StringBuilder _sql = new StringBuilder();
             X_C_InviteeList invi = null;
             //_sql.Clear();
-            _sql.Append(" Select c_inviteelist_ID, Name, email From c_inviteelist where c_campaign_id=" + _Campaign_ID);
+            _sql.Append(" Select c_inviteelist_ID, Name, email From c_inviteelist where VAB_Promotion_id=" + _Campaign_ID);
             DataSet ds1 = DB.ExecuteDataset(_sql.ToString());
 
 
 
             int _SelectedInvitee = GetRecord_ID();
             _sql.Clear();
-            _sql.Append(@"Select C_Campaign_ID FROM C_InviteeList Where C_InviteeList_ID=" + _SelectedInvitee);
+            _sql.Append(@"Select VAB_Promotion_ID FROM C_InviteeList Where C_InviteeList_ID=" + _SelectedInvitee);
             int _SelectedCampaign = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
 
 
@@ -58,7 +58,7 @@ namespace VAdvantage.Process
                 _sql.Append(@" Where IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID());
                 if (_Campaign_ID > 0)
                 {
-                    _sql.Append("  And C_Campaign_ID=" + _SelectedCampaign);
+                    _sql.Append("  And VAB_Promotion_ID=" + _SelectedCampaign);
                 }
                 DataSet ds = new DataSet();
                 ds = DB.ExecuteDataset(_sql.ToString(), null, Get_TrxName());
@@ -71,13 +71,13 @@ namespace VAdvantage.Process
 
 
                         _sql.Clear();
-                        _sql.Append(@"Select C_InviteeList_ID FROM C_InviteeList Where (Name='" + _name + "' AND Email ='" + _mail + "') And c_campaign_id=" + _Campaign_ID);
+                        _sql.Append(@"Select C_InviteeList_ID FROM C_InviteeList Where (Name='" + _name + "' AND Email ='" + _mail + "') And VAB_Promotion_id=" + _Campaign_ID);
                         int _recordID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
 
                         invi = new X_C_InviteeList(Env.GetCtx(), _recordID, null);
                         invi.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
                         invi.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
-                        invi.SetC_Campaign_ID(_Campaign_ID);
+                        invi.SetVAB_Promotion_ID(_Campaign_ID);
                         invi.SetVAF_UserContact_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]));
                         invi.SetName(Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]));
                         invi.SetC_Lead_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Lead_ID"]));
@@ -87,10 +87,10 @@ namespace VAdvantage.Process
                         invi.SetAddress2(Util.GetValueOfString(ds.Tables[0].Rows[i]["Address2"]));
                         invi.SetC_Location_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Location_ID"]));
                         invi.SetCity(Util.GetValueOfString(ds.Tables[0].Rows[i]["City"]));
-                        invi.SetC_City_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_City_ID"]));
+                        invi.SetVAB_City_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_City_ID"]));
                         invi.SetRegionName(Util.GetValueOfString(ds.Tables[0].Rows[i]["RegionName"]));
                         invi.SetC_Region_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Region_ID"]));
-                        invi.SetC_Country_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Country_ID"]));
+                        invi.SetVAB_Country_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Country_ID"]));
                         invi.SetPostal(Util.GetValueOfString(ds.Tables[0].Rows[i]["Postal"]));
                         invi.SetInviteeResponse(Util.GetValueOfString(ds.Tables[0].Rows[i]["InviteeResponse"]));
                         invi.SetRemark(Util.GetValueOfString(ds.Tables[0].Rows[i]["Remark"]));

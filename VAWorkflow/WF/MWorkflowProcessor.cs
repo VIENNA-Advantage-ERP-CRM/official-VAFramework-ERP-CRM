@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MWorkflowProcessor
  * Purpose        : 
- * Class Used     : MWorkflowProcessor inherits X_AD_WorkflowProcessor, ViennaProcessor classes
+ * Class Used     : MWorkflowProcessor inherits X_VAF_WFlowHandler, ViennaProcessor classes
  * Chronological    Development
  * Raghunandan      05-May-2009
   ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 namespace VAdvantage.WF
 {
-    public class MWorkflowProcessor : X_AD_WorkflowProcessor,ViennaProcessor
+    public class MWorkflowProcessor : X_VAF_WFlowHandler,ViennaProcessor
     {
         //Static Logger	
         private static VLogger _log	= VLogger.GetVLogger (typeof(MWorkflowProcessor).FullName);
@@ -30,10 +30,10 @@ namespace VAdvantage.WF
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_WorkflowProcessor_ID">id</param>
+        /// <param name="VAF_WFlowHandler_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWorkflowProcessor(Ctx ctx, int AD_WorkflowProcessor_ID, Trx trxName)
-            : base(ctx, AD_WorkflowProcessor_ID, trxName)
+        public MWorkflowProcessor(Ctx ctx, int VAF_WFlowHandler_ID, Trx trxName)
+            : base(ctx, VAF_WFlowHandler_ID, trxName)
         {
 
         }
@@ -57,7 +57,7 @@ namespace VAdvantage.WF
         public static MWorkflowProcessor[] GetActive(Ctx ctx)
         {
             List<MWorkflowProcessor> list = new List<MWorkflowProcessor>();
-            String sql = "SELECT * FROM AD_WorkflowProcessor WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAF_WFlowHandler WHERE IsActive='Y'";
             DataSet pstmt = null;
             try
             {
@@ -111,8 +111,8 @@ namespace VAdvantage.WF
         {
             List<MWorkflowProcessorLog> list = new List<MWorkflowProcessorLog>();
             String sql = "SELECT * "
-                + "FROM AD_WorkflowProcessorLog "
-                + "WHERE AD_WorkflowProcessor_ID=" + GetAD_WorkflowProcessor_ID() + "ORDER BY Created DESC";
+                + "FROM VAF_WFlowHandlerLog "
+                + "WHERE VAF_WFlowHandler_ID=" + GetVAF_WFlowHandler_ID() + "ORDER BY Created DESC";
             DataSet pstmt = null;
             try
             {
@@ -145,8 +145,8 @@ namespace VAdvantage.WF
         {
             if (GetKeepLogDays() < 1)
                 return 0;
-            String sql = "DELETE FROM AD_WorkflowProcessorLog "
-                + "WHERE AD_WorkflowProcessor_ID=" + GetAD_WorkflowProcessor_ID()
+            String sql = "DELETE FROM VAF_WFlowHandlerLog "
+                + "WHERE VAF_WFlowHandler_ID=" + GetVAF_WFlowHandler_ID()
                 //jz + " AND (Created+" + getKeepLogDays() + ") < SysDate";
                 + " AND addDays(Created," + GetKeepLogDays() + ") < SysDate";
             int no = DB.ExecuteQuery(sql);

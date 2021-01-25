@@ -7,7 +7,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MBankAccountLine : X_C_BankAccountLine
+    public class MBankAccountLine : X_VAB_Bank_AcctLine
     {
         #region variables
         
@@ -18,13 +18,13 @@ namespace VAdvantage.Model
 
         /* Standard Constructor
          * @param ctx context
-	     *	@param C_BankAccountLine_ID id
+	     *	@param VAB_Bank_AcctLine_ID id
 	     *	@param trxName transaction
 	    */
-        public MBankAccountLine(Ctx ctx, int C_BankAccountLine_ID, Trx trxName)
-            : base(ctx, C_BankAccountLine_ID, trxName)
+        public MBankAccountLine(Ctx ctx, int VAB_Bank_AcctLine_ID, Trx trxName)
+            : base(ctx, VAB_Bank_AcctLine_ID, trxName)
         {
-            if (C_BankAccountLine_ID == 0)
+            if (VAB_Bank_AcctLine_ID == 0)
             {
                 SetStatementDifference(Env.ZERO);
             }
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
             : this(bankAccount.GetCtx(), 0, bankAccount.Get_TrxName())
         {
             SetClientOrg(bankAccount);
-            SetC_BankAccount_ID(bankAccount.GetC_BankAccount_ID());
+            SetVAB_Bank_Acct_ID(bankAccount.GetVAB_Bank_Acct_ID());
             _parent = bankAccount;
         }
     }

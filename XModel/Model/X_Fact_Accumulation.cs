@@ -58,16 +58,16 @@ public void SetBALANCEACCUMULATION (String BALANCEACCUMULATION){if (!IsBALANCEAC
 throw new ArgumentException ("BALANCEACCUMULATION Invalid value - " + BALANCEACCUMULATION + " - Reference_ID=1000073 - D - M - P - W");if (BALANCEACCUMULATION != null && BALANCEACCUMULATION.Length > 1){log.Warning("Length > 1 - truncated");BALANCEACCUMULATION = BALANCEACCUMULATION.Substring(0,1);}Set_Value ("BALANCEACCUMULATION", BALANCEACCUMULATION);}/** Get BALANCEACCUMULATION.
 @return BALANCEACCUMULATION */
 public String GetBALANCEACCUMULATION() {return (String)Get_Value("BALANCEACCUMULATION");}/** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID){if (C_AcctSchema_ID <= 0) Set_Value ("C_AcctSchema_ID", null);else
-Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);}/** Get Accounting Schema.
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID){if (VAB_AccountBook_ID <= 0) Set_Value ("VAB_AccountBook_ID", null);else
+Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);}/** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() {Object ii = Get_Value("C_AcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Calendar.
-@param C_Calendar_ID Accounting Calendar Name */
-public void SetC_Calendar_ID (int C_Calendar_ID){if (C_Calendar_ID <= 0) Set_Value ("C_Calendar_ID", null);else
-Set_Value ("C_Calendar_ID", C_Calendar_ID);}/** Get Calendar.
+public int GetVAB_AccountBook_ID() {Object ii = Get_Value("VAB_AccountBook_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Calendar.
+@param VAB_Calender_ID Accounting Calendar Name */
+public void SetVAB_Calender_ID (int VAB_Calender_ID){if (VAB_Calender_ID <= 0) Set_Value ("VAB_Calender_ID", null);else
+Set_Value ("VAB_Calender_ID", VAB_Calender_ID);}/** Get Calendar.
 @return Accounting Calendar Name */
-public int GetC_Calendar_ID() {Object ii = Get_Value("C_Calendar_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Date From.
+public int GetVAB_Calender_ID() {Object ii = Get_Value("VAB_Calender_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Date From.
 @param DateFrom Starting date for a range */
 public void SetDateFrom (DateTime? DateFrom){Set_Value ("DateFrom", (DateTime?)DateFrom);}/** Get Date From.
 @return Starting date for a range */

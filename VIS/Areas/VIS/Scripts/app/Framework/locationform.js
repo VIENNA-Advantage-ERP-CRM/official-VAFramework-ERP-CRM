@@ -225,7 +225,7 @@
                                 return {
                                     label: item.ADDRESS,
                                     value: item.ADDRESS,
-                                    C_COUNTRY_ID: item.C_COUNTRY_ID,
+                                    VAB_COUNTRY_ID: item.VAB_COUNTRY_ID,
                                     C_LOCATION_ID: item.C_LOCATION_ID,
                                     C_REGION_ID: item.C_REGION_ID,
                                     COUNTRYNAME: item.COUNTRYNAME,
@@ -255,7 +255,7 @@
                     stateId = ui.item.C_REGION_ID;
                     $C_Location_ID = 0;//ui.item.C_LOCATION_ID;    
                     cityId = 0;
-                    contryId = ui.item.C_COUNTRY_ID;
+                    contryId = ui.item.VAB_COUNTRY_ID;
                 },
                 open: function () {
                     $root.find(this).removeClass("ui-corner-all").addClass("ui-corner-top");

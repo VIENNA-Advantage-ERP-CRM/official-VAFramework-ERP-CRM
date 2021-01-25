@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MCurrencyAcct
  * Purpose        : Currency Account Model 
- * Class Used     : X_C_Currency_Acct
+ * Class Used     : X_VAB_Currency_Acct
  * Chronological    Development
  * Deepak           23-Nov-2009
   ******************************************************/
@@ -22,7 +22,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MCurrencyAcct : X_C_Currency_Acct
+    public class MCurrencyAcct : X_VAB_Currency_Acct
     {
     /** Static Logger					*/
 	private static VLogger _log = VLogger.GetVLogger(typeof(MCurrencyAcct).FullName);
@@ -31,13 +31,13 @@ namespace VAdvantage.Model
 	/// Get Currency Account for Currency
 	/// </summary>
 	/// <param name="a"> accounting schema default</param>
-	/// <param name="C_Currency_ID">currency</param>
+	/// <param name="VAB_Currency_ID">currency</param>
     /// <returns>Currency Account or null</returns>
-	public static MCurrencyAcct Get(MAcctSchemaDefault a, int C_Currency_ID)
+	public static MCurrencyAcct Get(MAcctSchemaDefault a, int VAB_Currency_ID)
 	{
 		MCurrencyAcct retValue = null;
-		String sql = "SELECT * FROM C_Currency_Acct "
-			+ "WHERE C_AcctSchema_ID=@Param1 AND C_Currency_ID=@Param2";
+		String sql = "SELECT * FROM VAB_Currency_Acct "
+			+ "WHERE VAB_AccountBook_ID=@Param1 AND VAB_Currency_ID=@Param2";
 
         SqlParameter[] Param=new SqlParameter[2];
         IDataReader idr=null;
@@ -45,11 +45,11 @@ namespace VAdvantage.Model
 		//PreparedStatement pstmt = null;
         try
         {
-            Param[0] = new SqlParameter("@Param1", a.GetC_AcctSchema_ID());
+            Param[0] = new SqlParameter("@Param1", a.GetVAB_AccountBook_ID());
             //pstmt = DataBase.prepareStatement(sql, null);
-            //pstmt.setInt(1, as.getC_AcctSchema_ID());
-            //pstmt.setInt(2, C_Currency_ID);
-            Param[1] = new SqlParameter("@Param1", a.GetC_AcctSchema_ID());
+            //pstmt.setInt(1, as.getVAB_AccountBook_ID());
+            //pstmt.setInt(2, VAB_Currency_ID);
+            Param[1] = new SqlParameter("@Param1", a.GetVAB_AccountBook_ID());
             //ResultSet rs = pstmt.executeQuery();
             idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
             dt = new DataTable();

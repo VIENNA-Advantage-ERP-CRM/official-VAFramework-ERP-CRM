@@ -20,7 +20,7 @@ public X_W_Advertisement (Context ctx, int W_Advertisement_ID, Trx trxName) : ba
 {
 /** if (W_Advertisement_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetIsSelfService (true);	// Y
 SetName (null);
 SetPublishStatus (null);	// U
@@ -32,7 +32,7 @@ public X_W_Advertisement (Ctx ctx, int W_Advertisement_ID, Trx trxName) : base (
 {
 /** if (W_Advertisement_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetIsSelfService (true);	// Y
 SetName (null);
 SetPublishStatus (null);	// U
@@ -152,20 +152,20 @@ public String GetAdText()
 return (String)Get_Value("AdText");
 }
 
-/** C_BPartner_ID VAF_Control_Ref_ID=232 */
-public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
+/** VAB_BusinessPartner_ID VAF_Control_Ref_ID=232 */
+public static int VAB_BUSINESSPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

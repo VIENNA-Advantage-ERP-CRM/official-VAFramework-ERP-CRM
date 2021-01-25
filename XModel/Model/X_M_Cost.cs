@@ -22,7 +22,7 @@ public X_M_Cost (Context ctx, int M_Cost_ID, Trx trxName) : base (ctx, M_Cost_ID
 {
 SetA_Asset_ID (0);	// 0
 SetBasisType (null);	// I
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetCurrentCostPrice (0.0);
 SetCurrentQty (0.0);
 SetIsThisLevel (null);	// Y
@@ -40,7 +40,7 @@ public X_M_Cost (Ctx ctx, int M_Cost_ID, Trx trxName) : base (ctx, M_Cost_ID, tr
 {
 SetA_Asset_ID (0);	// 0
 SetBasisType (null);	// I
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetCurrentCostPrice (0.0);
 SetCurrentQty (0.0);
 SetIsThisLevel (null);	// Y
@@ -131,17 +131,17 @@ StringBuilder sb = new StringBuilder ("X_M_Cost[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-public void SetA_Asset_ID (int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+public void SetA_Asset_ID (int VAA_Asset_ID)
 {
-if (A_Asset_ID < 1) throw new ArgumentException ("A_Asset_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_ID", A_Asset_ID);
+if (VAA_Asset_ID < 1) throw new ArgumentException ("VAA_Asset_ID is mandatory.");
+Set_ValueNoCheck ("VAA_Asset_ID", VAA_Asset_ID);
 }
 /** Get Asset.
 @return Asset used internally or by customers */
 public int GetA_Asset_ID() 
 {
-Object ii = Get_Value("A_Asset_ID");
+Object ii = Get_Value("VAA_Asset_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -180,17 +180,17 @@ public String GetBasisType()
 return (String)Get_Value("BasisType");
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

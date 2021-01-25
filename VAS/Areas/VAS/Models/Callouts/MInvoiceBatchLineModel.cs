@@ -28,8 +28,8 @@ namespace VIS.Models
 
             MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, C_InvoiceBatchLine_ID, null);
             //	Need to Increase when different DocType or BP
-            retDic["C_DocType_ID"] = last.GetC_DocType_ID().ToString();
-            retDic["C_BPartner_ID"] = last.GetC_BPartner_ID().ToString();
+            retDic["VAB_DocTypes_ID"] = last.GetVAB_DocTypes_ID().ToString();
+            retDic["VAB_BusinessPartner_ID"] = last.GetVAB_BusinessPartner_ID().ToString();
             retDic["DocumentNo"] = last.GetDocumentNo();
             //	New Number            
             return retDic;

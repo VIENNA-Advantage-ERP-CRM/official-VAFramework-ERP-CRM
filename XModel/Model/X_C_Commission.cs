@@ -11,19 +11,19 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Commission
+/** Generated Model for VAB_WorkCommission
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Commission : PO
+public class X_VAB_WorkCommission : PO
 {
-public X_C_Commission (Context ctx, int C_Commission_ID, Trx trxName) : base (ctx, C_Commission_ID, trxName)
+public X_VAB_WorkCommission (Context ctx, int VAB_WorkCommission_ID, Trx trxName) : base (ctx, VAB_WorkCommission_ID, trxName)
 {
-/** if (C_Commission_ID == 0)
+/** if (VAB_WorkCommission_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_Charge_ID (0);
-SetC_Commission_ID (0);
-SetC_Currency_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_Charge_ID (0);
+SetVAB_WorkCommission_ID (0);
+SetVAB_Currency_ID (0);
 SetDocBasisType (null);	// I
 SetFrequencyType (null);	// M
 SetListDetails (false);
@@ -31,14 +31,14 @@ SetName (null);
 }
  */
 }
-public X_C_Commission (Ctx ctx, int C_Commission_ID, Trx trxName) : base (ctx, C_Commission_ID, trxName)
+public X_VAB_WorkCommission (Ctx ctx, int VAB_WorkCommission_ID, Trx trxName) : base (ctx, VAB_WorkCommission_ID, trxName)
 {
-/** if (C_Commission_ID == 0)
+/** if (VAB_WorkCommission_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_Charge_ID (0);
-SetC_Commission_ID (0);
-SetC_Currency_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_Charge_ID (0);
+SetVAB_WorkCommission_ID (0);
+SetVAB_Currency_ID (0);
 SetDocBasisType (null);	// I
 SetFrequencyType (null);	// M
 SetListDetails (false);
@@ -51,7 +51,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Commission (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommission (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_C_Commission (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Commission (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_WorkCommission (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_C_Commission (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Commission (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_WorkCommission (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Commission()
+static X_VAB_WorkCommission()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389054474L;
 public static int Table_ID;
  // =429;
 
-/** TableName=C_Commission */
-public static String Table_Name="C_Commission";
+/** TableName=VAB_WorkCommission */
+public static String Table_Name="VAB_WorkCommission";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -121,69 +121,69 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Commission[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_WorkCommission[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** C_BPartner_ID VAF_Control_Ref_ID=232 */
-public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
+/** VAB_BusinessPartner_ID VAF_Control_Ref_ID=232 */
+public static int VAB_BUSINESSPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Charge.
-@param C_Charge_ID Additional document charges */
-public void SetC_Charge_ID (int C_Charge_ID)
+@param VAB_Charge_ID Additional document charges */
+public void SetVAB_Charge_ID (int VAB_Charge_ID)
 {
-if (C_Charge_ID < 1) throw new ArgumentException ("C_Charge_ID is mandatory.");
-Set_Value ("C_Charge_ID", C_Charge_ID);
+if (VAB_Charge_ID < 1) throw new ArgumentException ("VAB_Charge_ID is mandatory.");
+Set_Value ("VAB_Charge_ID", VAB_Charge_ID);
 }
 /** Get Charge.
 @return Additional document charges */
-public int GetC_Charge_ID() 
+public int GetVAB_Charge_ID() 
 {
-Object ii = Get_Value("C_Charge_ID");
+Object ii = Get_Value("VAB_Charge_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Commission.
-@param C_Commission_ID Commission */
-public void SetC_Commission_ID (int C_Commission_ID)
+@param VAB_WorkCommission_ID Commission */
+public void SetVAB_WorkCommission_ID (int VAB_WorkCommission_ID)
 {
-if (C_Commission_ID < 1) throw new ArgumentException ("C_Commission_ID is mandatory.");
-Set_ValueNoCheck ("C_Commission_ID", C_Commission_ID);
+if (VAB_WorkCommission_ID < 1) throw new ArgumentException ("VAB_WorkCommission_ID is mandatory.");
+Set_ValueNoCheck ("VAB_WorkCommission_ID", VAB_WorkCommission_ID);
 }
 /** Get Commission.
 @return Commission */
-public int GetC_Commission_ID() 
+public int GetVAB_WorkCommission_ID() 
 {
-Object ii = Get_Value("C_Commission_ID");
+Object ii = Get_Value("VAB_WorkCommission_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

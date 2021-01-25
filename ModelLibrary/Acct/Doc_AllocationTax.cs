@@ -138,9 +138,9 @@ namespace VAdvantage.Acct
                         if (Env.Signum(amount) != 0)
                         {
                             fact.CreateLine(line, _DiscountAccount,
-                                as1.GetC_Currency_ID(), amount, null);
+                                as1.GetVAB_Currency_ID(), amount, null);
                             fact.CreateLine(line, taxAcct,
-                                as1.GetC_Currency_ID(), null, amount);
+                                as1.GetVAB_Currency_ID(), null, amount);
                         }
                     }
                     //	Original Tax is CR - need to correct it DR
@@ -151,9 +151,9 @@ namespace VAdvantage.Acct
                         if (Env.Signum(amount) != 0)
                         {
                             fact.CreateLine(line, taxAcct,
-                                as1.GetC_Currency_ID(), amount, null);
+                                as1.GetVAB_Currency_ID(), amount, null);
                             fact.CreateLine(line, _DiscountAccount,
-                                as1.GetC_Currency_ID(), null, amount);
+                                as1.GetVAB_Currency_ID(), null, amount);
                         }
                     }
                 }	//	Discount
@@ -169,9 +169,9 @@ namespace VAdvantage.Acct
                         if (Env.Signum(amount) != 0)
                         {
                             fact.CreateLine(line, _WriteOffAccount,
-                                as1.GetC_Currency_ID(), amount, null);
+                                as1.GetVAB_Currency_ID(), amount, null);
                             fact.CreateLine(line, taxAcct,
-                                as1.GetC_Currency_ID(), null, amount);
+                                as1.GetVAB_Currency_ID(), null, amount);
                         }
                     }
                     //	Original Tax is CR - need to correct it DR
@@ -182,9 +182,9 @@ namespace VAdvantage.Acct
                         if (Env.Signum(amount) != 0)
                         {
                             fact.CreateLine(line, taxAcct,
-                                as1.GetC_Currency_ID(), amount, null);
+                                as1.GetVAB_Currency_ID(), amount, null);
                             fact.CreateLine(line, _WriteOffAccount,
-                                as1.GetC_Currency_ID(), null, amount);
+                                as1.GetVAB_Currency_ID(), null, amount);
                         }
                     }
                 }	//	WriteOff

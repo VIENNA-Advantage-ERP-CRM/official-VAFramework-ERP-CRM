@@ -30,7 +30,7 @@ namespace ViennaAdvantageServer.Process
         #region Private Variables
         //string msg = "";
         string sql = "";
-        //VAdvantage.Model.X_C_Contract cont = null;
+        //VAdvantage.Model.X_VAB_Contract cont = null;
         #endregion
 
         protected override void Prepare()
@@ -44,13 +44,13 @@ namespace ViennaAdvantageServer.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            int C_Contract_ID = GetRecord_ID();
-            VAdvantage.Model.X_C_Contract con = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, null);
+            int VAB_Contract_ID = GetRecord_ID();
+            VAdvantage.Model.X_VAB_Contract con = new VAdvantage.Model.X_VAB_Contract(GetCtx(), VAB_Contract_ID, null);
             DateTime? start=con.GetStartDate();
             DateTime? end=con.GetEndDate();
             if(end>start)
             {
-            sql = "update c_contract set processed = 'Y' where c_contract_id = " + C_Contract_ID;
+            sql = "update VAB_Contract set processed = 'Y' where VAB_Contract_id = " + VAB_Contract_ID;
             int res = DB.ExecuteQuery(sql, null, null);
             if (res > 0)
             {

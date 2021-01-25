@@ -27,7 +27,7 @@ namespace VAdvantage.WF
         //	The new Client			
         private int p_VAF_Client_ID = 0;
         // The Workflow			
-        private int p_AD_Workflow_ID = 0;
+        private int p_VAF_Workflow_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -44,8 +44,8 @@ namespace VAdvantage.WF
                 }
                 else if (name.Equals("VAF_Client_ID"))
                     p_VAF_Client_ID = para[i].GetParameterAsInt();
-                else if (name.Equals("AD_Workflow_ID"))
-                    p_AD_Workflow_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAF_Workflow_ID"))
+                    p_VAF_Workflow_ID = para[i].GetParameterAsInt();
                 else
                    log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
             }
@@ -57,13 +57,13 @@ namespace VAdvantage.WF
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("doIt - VAF_Client_ID=" + p_VAF_Client_ID + ", AD_Workflow_ID=" + p_AD_Workflow_ID);
+            log.Info("doIt - VAF_Client_ID=" + p_VAF_Client_ID + ", VAF_Workflow_ID=" + p_VAF_Workflow_ID);
 
             int changes = 0;
             //	WF
-            String sql = "UPDATE AD_Workflow SET VAF_Client_ID=" + p_VAF_Client_ID
+            String sql = "UPDATE VAF_Workflow SET VAF_Client_ID=" + p_VAF_Client_ID
                 + " WHERE VAF_Client_ID=0 AND EntityType NOT IN ('D','C')"
-                + " AND AD_Workflow_ID=" + p_AD_Workflow_ID;
+                + " AND VAF_Workflow_ID=" + p_VAF_Workflow_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)
                 throw new SystemException("Error updating Workflow");
@@ -72,7 +72,7 @@ namespace VAdvantage.WF
             //	Node VAF_WFlow_Node table
             sql = "UPDATE VAF_WFlow_Node SET VAF_Client_ID=" + p_VAF_Client_ID
                 + " WHERE VAF_Client_ID=0 AND EntityType NOT IN ('D','C')"
-                + " AND AD_Workflow_ID=" + p_AD_Workflow_ID;
+                + " AND VAF_Workflow_ID=" + p_VAF_Workflow_ID;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)
                 throw new SystemException("Error updating Workflow Node");
@@ -81,8 +81,8 @@ namespace VAdvantage.WF
             //	Node Next from VAF_WFlow_NextNode table
             sql = "UPDATE VAF_WFlow_NextNode SET VAF_Client_ID=" + p_VAF_Client_ID
                 + " WHERE VAF_Client_ID=0 AND EntityType NOT IN ('D','C')"
-                + " AND (VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + p_AD_Workflow_ID
-                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + p_AD_Workflow_ID
+                + " AND (VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
+                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
                     + "))";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)
@@ -92,7 +92,7 @@ namespace VAdvantage.WF
             //	Node Parameters from VAF_WFlow_Node_Para table
             sql = "UPDATE VAF_WFlow_Node_Para SET VAF_Client_ID=" + p_VAF_Client_ID
                 + " WHERE VAF_Client_ID=0 AND EntityType NOT IN ('D','C')"
-                + " AND VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + p_AD_Workflow_ID
+                + " AND VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
                 + ")";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)
@@ -104,8 +104,8 @@ namespace VAdvantage.WF
                 + " WHERE VAF_Client_ID=0 AND EntityType NOT IN ('D','C')"
                 + " AND VAF_WFlow_NextNode_ID IN ("
                     + "SELECT VAF_WFlow_NextNode_ID FROM VAF_WFlow_NextNode "
-                    + "WHERE VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + p_AD_Workflow_ID
-                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE AD_Workflow_ID=" + p_AD_Workflow_ID
+                    + "WHERE VAF_WFlow_Node_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
+                    + ") OR AD_WF_Next_ID IN (SELECT VAF_WFlow_Node_ID FROM VAF_WFlow_Node WHERE VAF_Workflow_ID=" + p_VAF_Workflow_ID
                     + "))";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no == -1)

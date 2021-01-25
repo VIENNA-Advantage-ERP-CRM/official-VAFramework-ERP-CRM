@@ -132,7 +132,7 @@ namespace VAdvantage.Model
             return 0;
         }
 
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             return 0;
         }

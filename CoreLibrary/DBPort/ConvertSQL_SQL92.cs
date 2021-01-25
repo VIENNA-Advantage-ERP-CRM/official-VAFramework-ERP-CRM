@@ -261,8 +261,8 @@ namespace VAdvantage.DBPort
                             {
                                 if (trace)
                                     log.Info("-Third-dep: " + third);
-                                //   FROM ((C_BPartner p LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID))
-                                //  LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID))
+                                //   FROM ((VAB_BusinessPartner p LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID))
+                                //  LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID))
                                 //  LEFT OUTER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID)
                                 newFrom.Insert(6, '(');     //  _FROM ...
                                 newFrom.Append(')');        //  add parantesis on previous relation

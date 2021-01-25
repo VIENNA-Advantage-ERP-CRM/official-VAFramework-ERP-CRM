@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Charge
+    /** Generated Model for VAB_Charge
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Charge : PO
+    public class X_VAB_Charge : PO
     {
-        public X_C_Charge(Context ctx, int C_Charge_ID, Trx trxName)
-            : base(ctx, C_Charge_ID, trxName)
+        public X_VAB_Charge(Context ctx, int VAB_Charge_ID, Trx trxName)
+            : base(ctx, VAB_Charge_ID, trxName)
         {
-            /** if (C_Charge_ID == 0)
+            /** if (VAB_Charge_ID == 0)
             {
-            SetC_Charge_ID (0);
+            SetVAB_Charge_ID (0);
             SetC_TaxCategory_ID (0);
             SetChargeAmt (0.0);
             SetIsSameCurrency (false);
@@ -31,12 +31,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Charge(Ctx ctx, int C_Charge_ID, Trx trxName)
-            : base(ctx, C_Charge_ID, trxName)
+        public X_VAB_Charge(Ctx ctx, int VAB_Charge_ID, Trx trxName)
+            : base(ctx, VAB_Charge_ID, trxName)
         {
-            /** if (C_Charge_ID == 0)
+            /** if (VAB_Charge_ID == 0)
             {
-            SetC_Charge_ID (0);
+            SetVAB_Charge_ID (0);
             SetC_TaxCategory_ID (0);
             SetChargeAmt (0.0);
             SetIsSameCurrency (false);
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Charge(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Charge(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Charge(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Charge(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Charge(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Charge(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Charge()
+        static X_VAB_Charge()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =313;
 
-        /** TableName=C_Charge */
-        public static String Table_Name = "C_Charge";
+        /** TableName=VAB_Charge */
+        public static String Table_Name = "VAB_Charge";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -124,37 +124,37 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Charge[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Charge[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Charge.
-        @param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        @param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID < 1) throw new ArgumentException("C_Charge_ID is mandatory.");
-            Set_ValueNoCheck("C_Charge_ID", C_Charge_ID);
+            if (VAB_Charge_ID < 1) throw new ArgumentException("VAB_Charge_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Charge_ID", VAB_Charge_ID);
         }
         /** Get Charge.
         @return Additional document charges */
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            Object ii = Get_Value("C_Charge_ID");
+            Object ii = Get_Value("VAB_Charge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

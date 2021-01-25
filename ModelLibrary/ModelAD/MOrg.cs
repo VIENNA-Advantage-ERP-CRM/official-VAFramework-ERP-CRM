@@ -142,29 +142,29 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Linked BPartner
         /// </summary>
-        /// <returns>C_BPartner_ID</returns>
-        public int GetLinkedC_BPartner_ID()
+        /// <returns>VAB_BusinessPartner_ID</returns>
+        public int GetLinkedVAB_BusinessPartner_ID()
         {
-            return GetLinkedC_BPartner_ID(null);
+            return GetLinkedVAB_BusinessPartner_ID(null);
         }
 
         /// <summary>
         /// Get Linked BP
         /// </summary>
         /// <param name="trxName">transaction</param>
-        /// <returns>C_BPartner_ID or 0</returns>
-        public int GetLinkedC_BPartner_ID(Trx trxName)
+        /// <returns>VAB_BusinessPartner_ID or 0</returns>
+        public int GetLinkedVAB_BusinessPartner_ID(Trx trxName)
         {
             if (linkedBPartner == -1)
             {
-                string sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE VAF_OrgBP_ID=" + GetVAF_Org_ID();
+                string sql = "SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner WHERE VAF_OrgBP_ID=" + GetVAF_Org_ID();
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
-                int C_BPartner_ID = 0;
+                int VAB_BusinessPartner_ID = 0;
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    C_BPartner_ID = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"].ToString());
+                    VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BusinessPartner_ID"].ToString());
                 }
-                linkedBPartner = C_BPartner_ID;
+                linkedBPartner = VAB_BusinessPartner_ID;
             }
             return linkedBPartner;
         }
@@ -272,9 +272,9 @@ namespace VAdvantage.Model
                 info = MOrgInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (info != null)
             {
-                int C_AcctSchema_ID = info.GetC_AcctSchema_ID();
-                if (C_AcctSchema_ID != 0)
-                    return MAcctSchema.Get(GetCtx(), C_AcctSchema_ID);
+                int VAB_AccountBook_ID = info.GetVAB_AccountBook_ID();
+                if (VAB_AccountBook_ID != 0)
+                    return MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID);
             }
             return null;
         }

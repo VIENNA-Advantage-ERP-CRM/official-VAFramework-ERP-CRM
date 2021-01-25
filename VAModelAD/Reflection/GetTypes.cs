@@ -27,31 +27,31 @@ namespace VAModelAD.Reflection
                 string ele = "";
                 if (columnName.Equals("VAF_Org_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele =  X_C_AcctSchema_Element.ELEMENTTYPE_Organization;
+                    ele =  X_VAB_AccountBook_Element.ELEMENTTYPE_Organization;
                 }
-                else if (columnName.Equals("C_BPartner_ID", StringComparison.OrdinalIgnoreCase))
+                else if (columnName.Equals("VAB_BusinessPartner_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_BPartner;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner;
                 }
                 else if (columnName.Equals("M_Product_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_Product;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Product;
                 }
                 else if (columnName.Equals("C_Project_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_Project;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Project;
                 }
                 else if (columnName.Equals("VAF_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_OrgTrx;
                 }
                 else if (columnName.Equals("Account_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_Account;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Account;
                 }
-                else if (columnName.Equals("C_Campaign_ID", StringComparison.OrdinalIgnoreCase))
+                else if (columnName.Equals("VAB_Promotion_ID", StringComparison.OrdinalIgnoreCase))
                 {
-                    ele = X_C_AcctSchema_Element.ELEMENTTYPE_Campaign;
+                    ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign;
                 }
                 if(ele !="")
                 result1 = (string)_fnGetWhereClause.Invoke(null, new object[] { _ctx, _PA_Hierarchy_ID, ele, Convert.ToInt32(value) });

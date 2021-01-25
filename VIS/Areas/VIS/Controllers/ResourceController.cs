@@ -89,7 +89,7 @@ namespace VIS.Controllers
                 sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
                 sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
 
-                sb.Append(", columnSynonym : { 'VAF_UserContact_ID': 'SalesRep_ID','C_ElementValue_ID':'Account_ID'}");
+                sb.Append(", columnSynonym : { 'VAF_UserContact_ID': 'SalesRep_ID','VAB_Acct_Element_ID':'Account_ID'}");
                 sb.Append("};");
 
                 /* CTX */

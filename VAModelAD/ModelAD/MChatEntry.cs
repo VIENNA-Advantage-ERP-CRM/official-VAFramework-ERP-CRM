@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Form Name      : Chat
- * Purpose        : To featch/insert(get/set) data in the CM_CHATENTRY table.
- * Class Used     : MChatEntry (inherits X_CM_ChatEntry class) 
+ * Purpose        : To featch/insert(get/set) data in the VACM_ChatLine table.
+ * Class Used     : MChatEntry (inherits X_VACM_ChatLine class) 
  * Chronological    Development
  * Raghunandan      13-March-2009 
   ******************************************************/
@@ -17,21 +17,21 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MChatEntry : X_CM_ChatEntry
+    public class MChatEntry : X_VACM_ChatLine
     {
         #region Standard Constructor
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="CM_ChatEntry_ID">id</param>
+        /// <param name="VACM_ChatLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MChatEntry(Ctx ctx, int CM_ChatEntry_ID, Trx trxName)
-            : base(ctx, CM_ChatEntry_ID, trxName)
+        public MChatEntry(Ctx ctx, int VACM_ChatLine_ID, Trx trxName)
+            : base(ctx, VACM_ChatLine_ID, trxName)
         {
-            //super(ctx, CM_ChatEntry_ID, trxName);
+            //super(ctx, VACM_ChatLine_ID, trxName);
             //chatentry in chatentry table is zero
-            if (CM_ChatEntry_ID == 0)
+            if (VACM_ChatLine_ID == 0)
             {
                 //set chat type N
                 SetChatEntryType(CHATENTRYTYPE_NoteFlat);	// N
@@ -87,14 +87,14 @@ namespace VAdvantage.Model
             //set chat in MChatEntry 
             SetCM_Chat_ID(peer.GetCM_Chat_ID());
             //parent chat entry
-            SetCM_ChatEntryParent_ID(peer.GetCM_ChatEntryParent_ID());
+            SetVACM_ChatLineParent_ID(peer.GetVACM_ChatLineParent_ID());
             //	Set GrandParent
-            int id = peer.GetCM_ChatEntryGrandParent_ID();
+            int id = peer.GetVACM_ChatLineGrandParent_ID();
             //if no chat
             if (id == 0)
-                id = peer.GetCM_ChatEntryParent_ID();
+                id = peer.GetVACM_ChatLineParent_ID();
             //set M_ChatEntryGrandParent_ID
-            SetCM_ChatEntryGrandParent_ID(id);
+            SetVACM_ChatLineGrandParent_ID(id);
             //confidential chat type
             SetConfidentialType(peer.GetConfidentialType());
             //chat text

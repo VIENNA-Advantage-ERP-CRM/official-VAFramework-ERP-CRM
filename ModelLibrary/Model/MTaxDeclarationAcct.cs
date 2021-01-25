@@ -58,7 +58,7 @@ namespace VAdvantage.Model
             SetC_TaxDeclaration_ID(parent.GetC_TaxDeclaration_ID());
             //
             SetFact_Acct_ID(fact.GetFact_Acct_ID());
-            SetC_AcctSchema_ID(fact.GetC_AcctSchema_ID());
+            SetVAB_AccountBook_ID(fact.GetVAB_AccountBook_ID());
         }	//	MTaxDeclarationAcct
 
     }	//	MTaxDeclarationAcct

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_GenAttributeInstance
+/** Generated Model for VAB_GenFeatureInstance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_GenAttributeInstance : PO
+public class X_VAB_GenFeatureInstance : PO
 {
-public X_C_GenAttributeInstance (Context ctx, int C_GenAttributeInstance_ID, Trx trxName) : base (ctx, C_GenAttributeInstance_ID, trxName)
+public X_VAB_GenFeatureInstance (Context ctx, int VAB_GenFeatureInstance_ID, Trx trxName) : base (ctx, VAB_GenFeatureInstance_ID, trxName)
 {
-/** if (C_GenAttributeInstance_ID == 0)
+/** if (VAB_GenFeatureInstance_ID == 0)
 {
-SetC_GenAttributeInstance_ID (0);
-SetC_GenAttribute_ID (0);
+SetVAB_GenFeatureInstance_ID (0);
+SetVAB_GenFeature_ID (0);
 }
  */
 }
-public X_C_GenAttributeInstance (Ctx ctx, int C_GenAttributeInstance_ID, Trx trxName) : base (ctx, C_GenAttributeInstance_ID, trxName)
+public X_VAB_GenFeatureInstance (Ctx ctx, int VAB_GenFeatureInstance_ID, Trx trxName) : base (ctx, VAB_GenFeatureInstance_ID, trxName)
 {
-/** if (C_GenAttributeInstance_ID == 0)
+/** if (VAB_GenFeatureInstance_ID == 0)
 {
-SetC_GenAttributeInstance_ID (0);
-SetC_GenAttribute_ID (0);
+SetVAB_GenFeatureInstance_ID (0);
+SetVAB_GenFeature_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetC_GenAttribute_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_GenAttributeInstance (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_GenAttributeInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_GenFeatureInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_GenAttributeInstance()
+static X_VAB_GenFeatureInstance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1385043812249L;
 public static int Table_ID;
  // =1000419;
 
-/** TableName=C_GenAttributeInstance */
-public static String Table_Name="C_GenAttributeInstance";
+/** TableName=VAB_GenFeatureInstance */
+public static String Table_Name="VAB_GenFeatureInstance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_GenAttributeInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_GenFeatureInstance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_GenAttributeInstance_ID.
-@param C_GenAttributeInstance_ID C_GenAttributeInstance_ID */
-public void SetC_GenAttributeSetInstance_ID (int C_GenAttributeSetInstance_ID)
+/** Set VAB_GenFeatureInstance_ID.
+@param VAB_GenFeatureInstance_ID VAB_GenFeatureInstance_ID */
+public void SetVAB_GenFeatureSetInstance_ID (int VAB_GenFeatureSetInstance_ID)
 {
-    if (C_GenAttributeSetInstance_ID < 1) throw new ArgumentException("C_GenAttributeSetInstance_ID is mandatory.");
-    Set_ValueNoCheck("C_GenAttributeSetInstance_ID", C_GenAttributeSetInstance_ID);
+    if (VAB_GenFeatureSetInstance_ID < 1) throw new ArgumentException("VAB_GenFeatureSetInstance_ID is mandatory.");
+    Set_ValueNoCheck("VAB_GenFeatureSetInstance_ID", VAB_GenFeatureSetInstance_ID);
 }
-/** Get C_GenAttributeInstance_ID.
-@return C_GenAttributeInstance_ID */
-public int GetC_GenAttributeSetInstance_ID() 
+/** Get VAB_GenFeatureInstance_ID.
+@return VAB_GenFeatureInstance_ID */
+public int GetVAB_GenFeatureSetInstance_ID() 
 {
-Object ii = Get_Value("C_GenAttributeSetInstance_ID");
+Object ii = Get_Value("VAB_GenFeatureSetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_GenAttributeValue_ID.
-@param C_GenAttributeValue_ID C_GenAttributeValue_ID */
-public void SetC_GenAttributeValue_ID (int C_GenAttributeValue_ID)
+/** Set VAB_GenFeatureValue_ID.
+@param VAB_GenFeatureValue_ID VAB_GenFeatureValue_ID */
+public void SetVAB_GenFeatureValue_ID (int VAB_GenFeatureValue_ID)
 {
-if (C_GenAttributeValue_ID <= 0) Set_Value ("C_GenAttributeValue_ID", null);
+if (VAB_GenFeatureValue_ID <= 0) Set_Value ("VAB_GenFeatureValue_ID", null);
 else
-Set_Value ("C_GenAttributeValue_ID", C_GenAttributeValue_ID);
+Set_Value ("VAB_GenFeatureValue_ID", VAB_GenFeatureValue_ID);
 }
-/** Get C_GenAttributeValue_ID.
-@return C_GenAttributeValue_ID */
-public int GetC_GenAttributeValue_ID() 
+/** Get VAB_GenFeatureValue_ID.
+@return VAB_GenFeatureValue_ID */
+public int GetVAB_GenFeatureValue_ID() 
 {
-Object ii = Get_Value("C_GenAttributeValue_ID");
+Object ii = Get_Value("VAB_GenFeatureValue_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_GenAttribute_ID.
-@param C_GenAttribute_ID C_GenAttribute_ID */
-public void SetC_GenAttribute_ID (int C_GenAttribute_ID)
+/** Set VAB_GenFeature_ID.
+@param VAB_GenFeature_ID VAB_GenFeature_ID */
+public void SetVAB_GenFeature_ID (int VAB_GenFeature_ID)
 {
-if (C_GenAttribute_ID < 1) throw new ArgumentException ("C_GenAttribute_ID is mandatory.");
-Set_ValueNoCheck ("C_GenAttribute_ID", C_GenAttribute_ID);
+if (VAB_GenFeature_ID < 1) throw new ArgumentException ("VAB_GenFeature_ID is mandatory.");
+Set_ValueNoCheck ("VAB_GenFeature_ID", VAB_GenFeature_ID);
 }
-/** Get C_GenAttribute_ID.
-@return C_GenAttribute_ID */
-public int GetC_GenAttribute_ID() 
+/** Get VAB_GenFeature_ID.
+@return VAB_GenFeature_ID */
+public int GetVAB_GenFeature_ID() 
 {
-Object ii = Get_Value("C_GenAttribute_ID");
+Object ii = Get_Value("VAB_GenFeature_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

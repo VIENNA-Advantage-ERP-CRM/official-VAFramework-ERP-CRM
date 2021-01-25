@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MActivity
  * Purpose        : Activity model.
- * Class Used     : X_C_Activity class
+ * Class Used     : X_VAB_BillingCode class
  * Chronological    Development
  * Deepak           19-Nov-2009
   ******************************************************/
@@ -21,18 +21,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MActivity : X_C_Activity
+    public class MActivity : X_VAB_BillingCode
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Activity_ID">id</param>
+        /// <param name="VAB_BillingCode_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MActivity(Ctx ctx, int C_Activity_ID, Trx trxName):base(ctx, C_Activity_ID, trxName)
+        public MActivity(Ctx ctx, int VAB_BillingCode_ID, Trx trxName):base(ctx, VAB_BillingCode_ID, trxName)
         {
-            //super(ctx, C_Activity_ID, trxName);
+            //super(ctx, VAB_BillingCode_ID, trxName);
         }	//	MActivity
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "C_Activity_ID=" + GetC_Activity_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "VAB_BillingCode_ID=" + GetVAB_BillingCode_ID(), Get_TrxName());
             }
             return true;
         }	//	afterSave

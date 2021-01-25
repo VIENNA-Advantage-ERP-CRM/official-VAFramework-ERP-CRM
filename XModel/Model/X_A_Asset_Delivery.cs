@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for A_Asset_Delivery
+/** Generated Model for VAA_AssetDelivery
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_A_Asset_Delivery : PO
+public class X_VAA_AssetDelivery : PO
 {
-public X_A_Asset_Delivery (Context ctx, int A_Asset_Delivery_ID, Trx trxName) : base (ctx, A_Asset_Delivery_ID, trxName)
+public X_VAA_AssetDelivery (Context ctx, int VAA_AssetDelivery_ID, Trx trxName) : base (ctx, VAA_AssetDelivery_ID, trxName)
 {
-/** if (A_Asset_Delivery_ID == 0)
+/** if (VAA_AssetDelivery_ID == 0)
 {
-SetA_Asset_Delivery_ID (0);
+SetVAA_AssetDelivery_ID (0);
 SetA_Asset_ID (0);
 SetMovementDate (DateTime.Now);
 }
  */
 }
-public X_A_Asset_Delivery (Ctx ctx, int A_Asset_Delivery_ID, Trx trxName) : base (ctx, A_Asset_Delivery_ID, trxName)
+public X_VAA_AssetDelivery (Ctx ctx, int VAA_AssetDelivery_ID, Trx trxName) : base (ctx, VAA_AssetDelivery_ID, trxName)
 {
-/** if (A_Asset_Delivery_ID == 0)
+/** if (VAA_AssetDelivery_ID == 0)
 {
-SetA_Asset_Delivery_ID (0);
+SetVAA_AssetDelivery_ID (0);
 SetA_Asset_ID (0);
 SetMovementDate (DateTime.Now);
 }
@@ -41,7 +41,7 @@ SetMovementDate (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Delivery (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAA_AssetDelivery (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_A_Asset_Delivery (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Delivery (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAA_AssetDelivery (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_A_Asset_Delivery (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Delivery (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAA_AssetDelivery (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_A_Asset_Delivery()
+static X_VAA_AssetDelivery()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389050211L;
 public static int Table_ID;
  // =541;
 
-/** TableName=A_Asset_Delivery */
-public static String Table_Name="A_Asset_Delivery";
+/** TableName=VAA_AssetDelivery */
+public static String Table_Name="VAA_AssetDelivery";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_A_Asset_Delivery[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAA_AssetDelivery[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -131,32 +131,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset Delivery.
-@param A_Asset_Delivery_ID Delivery of Asset */
-public void SetA_Asset_Delivery_ID (int A_Asset_Delivery_ID)
+@param VAA_AssetDelivery_ID Delivery of Asset */
+public void SetVAA_AssetDelivery_ID (int VAA_AssetDelivery_ID)
 {
-if (A_Asset_Delivery_ID < 1) throw new ArgumentException ("A_Asset_Delivery_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_Delivery_ID", A_Asset_Delivery_ID);
+if (VAA_AssetDelivery_ID < 1) throw new ArgumentException ("VAA_AssetDelivery_ID is mandatory.");
+Set_ValueNoCheck ("VAA_AssetDelivery_ID", VAA_AssetDelivery_ID);
 }
 /** Get Asset Delivery.
 @return Delivery of Asset */
-public int GetA_Asset_Delivery_ID() 
+public int GetVAA_AssetDelivery_ID() 
 {
-Object ii = Get_Value("A_Asset_Delivery_ID");
+Object ii = Get_Value("VAA_AssetDelivery_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-public void SetA_Asset_ID (int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+public void SetA_Asset_ID (int VAA_Asset_ID)
 {
-if (A_Asset_ID < 1) throw new ArgumentException ("A_Asset_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_ID", A_Asset_ID);
+if (VAA_Asset_ID < 1) throw new ArgumentException ("VAA_Asset_ID is mandatory.");
+Set_ValueNoCheck ("VAA_Asset_ID", VAA_Asset_ID);
 }
 /** Get Asset.
 @return Asset used internally or by customers */
 public int GetA_Asset_ID() 
 {
-Object ii = Get_Value("A_Asset_ID");
+Object ii = Get_Value("VAA_Asset_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

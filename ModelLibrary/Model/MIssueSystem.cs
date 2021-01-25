@@ -125,7 +125,7 @@ namespace VAdvantage.Model
 		StringBuilder sb = new StringBuilder ("MIssueSystem[");
 		sb.Append(Get_ID())
 			.Append ("-").Append (GetDBAddress())
-			.Append(",A_Asset_ID=").Append(GetA_Asset_ID())
+			.Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
 			.Append ("]");
 		return sb.ToString ();
 	}	//	toString

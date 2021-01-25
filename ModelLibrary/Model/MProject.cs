@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             {
                 //	setC_Project_ID(0);
                 //	setValue (null);
-                //	setC_Currency_ID (0);
+                //	setVAB_Currency_ID (0);
                 SetCommittedAmt(Env.ZERO);
                 SetCommittedQty(Env.ZERO);
                 SetInvoicedAmt(Env.ZERO);
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
             {
                 MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), null);
                 if (pl != null && pl.Get_ID() != 0)
-                    SetC_Currency_ID(pl.GetC_Currency_ID());
+                    SetVAB_Currency_ID(pl.GetVAB_Currency_ID());
             }
             return true;
         }
@@ -508,16 +508,16 @@ namespace VAdvantage.Model
                 var relatedtoProject = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
+                _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                     {
-                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -536,7 +536,7 @@ namespace VAdvantage.Model
                                         project.Set_ValueNoCheck("C_Project_ID", Util.GetValueOfInt(GetC_Project_ID()));
                                         project.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         project.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                        project.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                        project.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!project.Save())
                                         {
 
@@ -550,7 +550,7 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-              bool sucs=  Insert_Accounting("C_Project_Acct", "C_AcctSchema_Default", null);
+              bool sucs=  Insert_Accounting("C_Project_Acct", "VAB_AccountBook_Default", null);
               //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
               // Before this, data was being saved but giving message "record not saved".
               if (!sucs)
@@ -564,10 +564,10 @@ namespace VAdvantage.Model
             if (success && !newRecord
                 && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
                 MAccount.UpdateValueDescription(GetCtx(), "C_Project_ID=" + GetC_Project_ID(), Get_TrxName());
-            if (GetC_Campaign_ID() != 0)
+            if (GetVAB_Promotion_ID() != 0)
             {
-                MCampaign cam = new MCampaign(GetCtx(), GetC_Campaign_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.C_Campaign_ID = " + GetC_Campaign_ID()));
+                MCampaign cam = new MCampaign(GetCtx(), GetVAB_Promotion_ID(), null);
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.VAB_Promotion_ID = " + GetVAB_Promotion_ID()));
                 cam.SetCosts(plnAmt);
                 cam.Save();
             }

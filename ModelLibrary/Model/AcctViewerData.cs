@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         //Document Query		
         public bool documentQuery = false;
         // Acct Schema			
-        public int C_AcctSchema_ID = 0;
+        public int VAB_AccountBook_ID = 0;
         //Posting Type		
         public String PostingType = "";
         // Organization		
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
             List<NamePair> options = new List<NamePair>();
             for (int i = 0; i < ASchemas.Length; i++)
             {
-                options.Add(new KeyNamePair(ASchemas[i].GetC_AcctSchema_ID(), ASchemas[i].GetName()));
+                options.Add(new KeyNamePair(ASchemas[i].GetVAB_AccountBook_ID(), ASchemas[i].GetName()));
             }
             //return new ListBoxVO(options, null);
             return new ListBoxVO(options, null);
@@ -278,10 +278,10 @@ namespace VAdvantage.Model
             //  Set Where Clause
             StringBuilder whereClause = new StringBuilder();
             //  Add Organization
-            if (C_AcctSchema_ID != 0)
+            if (VAB_AccountBook_ID != 0)
             {
                 whereClause.Append(RModel.TABLE_ALIAS)
-                    .Append(".C_AcctSchema_ID=").Append(C_AcctSchema_ID);
+                    .Append(".VAB_AccountBook_ID=").Append(VAB_AccountBook_ID);
             }
 
             //	Posting Type Selected
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                 {
                     rm.AddColumn(new RColumn(ctx, "DateTrx", DisplayType.Date));
                 }
-                rm.AddColumn(new RColumn(ctx, "C_Currency_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAB_Currency_ID", DisplayType.TableDir));
                 rm.AddColumn(new RColumn(ctx, "AmtSourceDr", DisplayType.Amount));
                 rm.AddColumn(new RColumn(ctx, "AmtSourceCr", DisplayType.Amount));
                 rm.AddColumn(new RColumn(ctx, "Rate", DisplayType.Amount,

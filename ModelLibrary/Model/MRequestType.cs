@@ -223,18 +223,18 @@ namespace VAdvantage.Model
         /**
          * 	Get Requests of Type
          *	@param selfService self service
-         *	@param C_BPartner_ID id or 0 for public
+         *	@param VAB_BusinessPartner_ID id or 0 for public
          *	@return array of requests
          */
-        public MRequest[] GetRequests(Boolean selfService, int C_BPartner_ID)
+        public MRequest[] GetRequests(Boolean selfService, int VAB_BusinessPartner_ID)
         {
             String sql = "SELECT * FROM R_Request WHERE R_RequestType_ID=" + GetR_RequestType_ID();
             if (selfService)
                 sql += " AND IsSelfService='Y'";
-            if (C_BPartner_ID == 0)
+            if (VAB_BusinessPartner_ID == 0)
                 sql += " AND ConfidentialType='A'";
             else
-                sql += " AND (ConfidentialType='A' OR C_BPartner_ID=" + C_BPartner_ID + ")";
+                sql += " AND (ConfidentialType='A' OR VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ")";
             sql += " ORDER BY DocumentNo DESC";
             //
             List<MRequest> list = new List<MRequest>();
@@ -333,7 +333,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = "M_Product_ID";
             //	PlannedAmt -> PlannedQty -> Count
             StringBuilder sb = new StringBuilder("SELECT COUNT(*) "
@@ -384,7 +384,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = "M_Product_ID";
             //
             StringBuilder sb = new StringBuilder("SELECT COUNT(*), ");
@@ -455,7 +455,7 @@ namespace VAdvantage.Model
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
-            String bpColumn = "C_BPartner_ID";
+            String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = "M_Product_ID";
             //
             Query query = new Query("R_Request");

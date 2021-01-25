@@ -1901,14 +1901,14 @@ namespace VIS.Models
         }
 
         // Added by Bharat on 01 June 2017
-        public Dictionary<string, object> GetBPData(int mProductID, int C_BPartner_ID, Ctx ctx)
+        public Dictionary<string, object> GetBPData(int mProductID, int VAB_BusinessPartner_ID, Ctx ctx)
         {
             Dictionary<string, object> retBP = null;
             string sql = "SELECT bp.ShelfLifeMinPct, bpp.ShelfLifeMinPct AS PCT, bpp.ShelfLifeMinDays "
-                    + "FROM C_BPartner bp "
-                    + " LEFT OUTER JOIN C_BPartner_Product bpp"
-                    + " ON (bp.C_BPartner_ID=bpp.C_BPartner_ID AND bpp.M_Product_ID=" + mProductID + ") "
-                    + "WHERE bp.C_BPartner_ID=" + C_BPartner_ID;
+                    + "FROM VAB_BusinessPartner bp "
+                    + " LEFT OUTER JOIN VAB_BPart_Product bpp"
+                    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.M_Product_ID=" + mProductID + ") "
+                    + "WHERE bp.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)

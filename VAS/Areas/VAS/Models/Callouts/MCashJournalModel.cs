@@ -19,13 +19,13 @@ namespace VIS.Models
         public Dictionary<string, object> GetLocationData(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_BPartner_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[0]);
             int Client_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
             string sql = "SELECT BP.CreditStatusSettingOn, " +
-                         "(SELECT MIN(L.C_BPartner_Location_ID) FROM C_BPartner_Location L WHERE IsActive='Y' AND L.C_BPartner_ID="
-                          + C_BPartner_ID + " AND L.VAF_Client_ID=" + Client_ID + ")AS C_BPartner_Location_ID" +
-                            " FROM C_BPartner BP Where BP.C_BPartner_ID=" + C_BPartner_ID +
+                         "(SELECT MIN(L.VAB_BPart_Location_ID) FROM VAB_BPart_Location L WHERE IsActive='Y' AND L.VAB_BusinessPartner_ID="
+                          + VAB_BusinessPartner_ID + " AND L.VAF_Client_ID=" + Client_ID + ")AS VAB_BPart_Location_ID" +
+                            " FROM VAB_BusinessPartner BP Where BP.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID +
                             " AND VAF_Client_ID=" + Client_ID;
             IDataReader idr = null;
             try
@@ -37,7 +37,7 @@ namespace VIS.Models
                     {
                         retDic = new Dictionary<string, object>();
                         retDic["CreditStatusSettingOn"] = Util.GetValueOfString(idr[0]);
-                        retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(idr[1]);
+                        retDic["VAB_BPart_Location_ID"] = Util.GetValueOfInt(idr[1]);
                     }
                 }
 
@@ -64,12 +64,12 @@ namespace VIS.Models
         /// Get account no and routing no against selected bank account
         /// </summary>        
         /// <param name="ctx"> Context Object </param>
-        /// <param name="C_BankAccount_ID"> ID of bank account </param>
+        /// <param name="VAB_Bank_Acct_ID"> ID of bank account </param>
         /// <returns>Account number and Routing Number</returns> //Added by manjot on 22/02/2019 
-        public Dictionary<string, object> GetAccountData(Ctx ctx, int C_BankAccount_ID)
+        public Dictionary<string, object> GetAccountData(Ctx ctx, int VAB_Bank_Acct_ID)
         {
             Dictionary<string, object> retValue = new Dictionary<string, object>();
-            DataSet _ds = DB.ExecuteDataset(@" SELECT ac.AccountNo, b.RoutingNo FROM C_BankAccount ac INNER JOIN C_Bank b ON b.C_Bank_ID= ac.C_Bank_ID WHERE ac.C_BankAccount_ID = " + C_BankAccount_ID);
+            DataSet _ds = DB.ExecuteDataset(@" SELECT ac.AccountNo, b.RoutingNo FROM VAB_Bank_Acct ac INNER JOIN C_Bank b ON b.C_Bank_ID= ac.C_Bank_ID WHERE ac.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID);
             if (_ds != null && _ds.Tables[0].Rows.Count > 0)
             {
                 retValue["AccountNo"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["AccountNo"]);
@@ -87,12 +87,12 @@ namespace VIS.Models
         public decimal GetBeginningBalCalc(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_CashBook_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_CashBook_ID = Util.GetValueOfInt(paramValue[0]);
             int VAF_Client_ID = Util.GetValueOfInt(paramValue[1]);
             int VAF_Org_ID = Util.GetValueOfInt(paramValue[2]);
-            string sql = "SELECT EndingBalance FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID + " AND" +
+            string sql = "SELECT EndingBalance FROM VAB_CashJRNL WHERE VAB_CashBook_ID=" + VAB_CashBook_ID + " AND" +
              " VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + " AND " +
-             "c_cash_id IN (SELECT Max(c_cash_id) FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID
+             "VAB_CashBook_id IN (SELECT Max(VAB_CashBook_id) FROM VAB_CashJRNL WHERE VAB_CashBook_ID=" + VAB_CashBook_ID
              + "AND VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + ") AND Processed='Y'";
 
             return Util.GetValueOfDecimal(DB.ExecuteScalar(sql));

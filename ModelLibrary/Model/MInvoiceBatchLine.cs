@@ -40,10 +40,10 @@ namespace VAdvantage.Model
             {
                 //	setC_InvoiceBatch_ID (0);
                 /**
-                setC_BPartner_ID (0);
-                setC_BPartner_Location_ID (0);
-                setC_Charge_ID (0);
-                setC_DocType_ID (0);	// @C_DocType_ID@
+                setVAB_BusinessPartner_ID (0);
+                setVAB_BPart_Location_ID (0);
+                setVAB_Charge_ID (0);
+                setVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
                 setC_Tax_ID (0);
                 setDocumentNo (null);
                 setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID=@C_InvoiceBatch_ID@
@@ -75,20 +75,20 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Document Type - Callout.
-         * 	@param oldC_DocType_ID old ID
-         * 	@param newC_DocType_ID new ID
+         * 	@param oldVAB_DocTypes_ID old ID
+         * 	@param newVAB_DocTypes_ID new ID
          * 	@param windowNo window
          */
         //@UICallout 
-        public void SetC_DocType_ID(String oldC_DocType_ID,
-               String newC_DocType_ID, int windowNo)
+        public void SetVAB_DocTypes_ID(String oldVAB_DocTypes_ID,
+               String newVAB_DocTypes_ID, int windowNo)
         {
             try
             {
-                if (newC_DocType_ID == null || newC_DocType_ID.Length == 0)
+                if (newVAB_DocTypes_ID == null || newVAB_DocTypes_ID.Length == 0)
                     return;
-                int C_DocType_ID = int.Parse(newC_DocType_ID);
-                SetC_DocType_ID(C_DocType_ID);
+                int VAB_DocTypes_ID = int.Parse(newVAB_DocTypes_ID);
+                SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                 SetDocumentNo();
             }
             catch (Exception e)
@@ -147,10 +147,10 @@ namespace VAdvantage.Model
             MInvoiceBatchLine last = new MInvoiceBatchLine(GetCtx(), C_InvoiceBatchLine_ID, null);
 
             //	Need to Increase when different DocType or BP
-            int C_DocType_ID = GetC_DocType_ID();
-            int C_BPartner_ID = GetC_BPartner_ID();
-            if (C_DocType_ID == last.GetC_DocType_ID()
-                && C_BPartner_ID == last.GetC_BPartner_ID())
+            int VAB_DocTypes_ID = GetVAB_DocTypes_ID();
+            int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
+            if (VAB_DocTypes_ID == last.GetVAB_DocTypes_ID()
+                && VAB_BusinessPartner_ID == last.GetVAB_BusinessPartner_ID())
                 return;
 
             //	New Number
@@ -174,52 +174,52 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Business Partner - Callout
-         *	@param oldC_BPartner_ID old BP
-         *	@param newC_BPartner_ID new BP
+         *	@param oldVAB_BusinessPartner_ID old BP
+         *	@param newVAB_BusinessPartner_ID new BP
          *	@param windowNo window no
          */
         //@UICallout
-        public void SetC_BPartner_ID(String oldC_BPartner_ID,
-            String newC_BPartner_ID, int windowNo)
+        public void SetVAB_BusinessPartner_ID(String oldVAB_BusinessPartner_ID,
+            String newVAB_BusinessPartner_ID, int windowNo)
         {
-            if (newC_BPartner_ID == null || newC_BPartner_ID.Length == 0)
+            if (newVAB_BusinessPartner_ID == null || newVAB_BusinessPartner_ID.Length == 0)
                 return;
-            int C_BPartner_ID = int.Parse(newC_BPartner_ID);
-            if (C_BPartner_ID == 0)
+            int VAB_BusinessPartner_ID = int.Parse(newVAB_BusinessPartner_ID);
+            if (VAB_BusinessPartner_ID == 0)
                 return;
 
             String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+                + " l.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
-                + "FROM C_BPartner p"
-                + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=@C_BPartner_ID AND p.IsActive='Y'";		//	#1
+                + "FROM VAB_BusinessPartner p"
+                + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+                + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=@VAB_BusinessPartner_ID AND p.IsActive='Y'";		//	#1
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@C_BPartner_ID", C_BPartner_ID);
+                param[0] = new SqlParameter("@VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
                 dr = DataBase.DB.ExecuteReader(sql, param);
                 if (dr.Read())
                 {
                     //	Location
-                    int C_BPartner_Location_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_Location_ID"]);
+                    int VAB_BPart_Location_ID = Utility.Util.GetValueOfInt(dr["VAB_BPart_Location_ID"]);
                     //	overwritten by InfoBP selection - works only if InfoWindow
                     //	was used otherwise creates error (uses last value, may belong to differnt BP)
-                    if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == C_BPartner_ID)
-                        C_BPartner_Location_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_Location_ID");
-                    if (C_BPartner_Location_ID != 0)
-                        SetC_BPartner_Location_ID(C_BPartner_Location_ID);
+                    if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_BusinessPartner_ID") == VAB_BusinessPartner_ID)
+                        VAB_BPart_Location_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_BPart_Location_ID");
+                    if (VAB_BPart_Location_ID != 0)
+                        SetVAB_BPart_Location_ID(VAB_BPart_Location_ID);
                     //	Contact - overwritten by InfoBP selection
                     int VAF_UserContact_ID = int.Parse(dr["VAF_UserContact_ID"].ToString());
-                    if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_BPartner_ID") == C_BPartner_ID)
+                    if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_BusinessPartner_ID") == VAB_BusinessPartner_ID)
                         VAF_UserContact_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAF_UserContact_ID");
                     SetVAF_UserContact_ID(VAF_UserContact_ID);
 
@@ -255,50 +255,50 @@ namespace VAdvantage.Model
             
             //
             SetDocumentNo();
-            SetTax(windowNo, "C_BPartner_ID");
+            SetTax(windowNo, "VAB_BusinessPartner_ID");
         }
 
         /**
          * 	Set Partner Location - Callout
-         *	@param oldC_BPartner_Location_ID old value
-         *	@param newC_BPartner_Location_ID new value
+         *	@param oldVAB_BPart_Location_ID old value
+         *	@param newVAB_BPart_Location_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout
-        public void SetC_BPartner_Location_ID(String oldC_BPartner_Location_ID,
-            String newC_BPartner_Location_ID, int windowNo)
+        public void SetVAB_BPart_Location_ID(String oldVAB_BPart_Location_ID,
+            String newVAB_BPart_Location_ID, int windowNo)
         {
-            if (newC_BPartner_Location_ID == null || newC_BPartner_Location_ID.Length == 0)
+            if (newVAB_BPart_Location_ID == null || newVAB_BPart_Location_ID.Length == 0)
                 return;
-            int C_BPartner_Location_ID = int.Parse(newC_BPartner_Location_ID);
-            if (C_BPartner_Location_ID == 0)
+            int VAB_BPart_Location_ID = int.Parse(newVAB_BPart_Location_ID);
+            if (VAB_BPart_Location_ID == 0)
                 return;
             //
-            base.SetC_BPartner_Location_ID(C_BPartner_Location_ID);
-            SetTax(windowNo, "C_BPartner_Location_ID");
+            base.SetVAB_BPart_Location_ID(VAB_BPart_Location_ID);
+            SetTax(windowNo, "VAB_BPart_Location_ID");
         }
 
         /**
          * 	Set Charge - Callout
-         *	@param oldC_Charge_ID old value
-         *	@param newC_Charge_ID new value
+         *	@param oldVAB_Charge_ID old value
+         *	@param newVAB_Charge_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout 
-        public void SetC_Charge_ID(String oldC_Charge_ID,
-            String newC_Charge_ID, int windowNo)
+        public void SetVAB_Charge_ID(String oldVAB_Charge_ID,
+            String newVAB_Charge_ID, int windowNo)
         {
-            if (newC_Charge_ID == null || newC_Charge_ID.Length == 0)
+            if (newVAB_Charge_ID == null || newVAB_Charge_ID.Length == 0)
                 return;
-            int C_Charge_ID = int.Parse(newC_Charge_ID);
-            base.SetC_Charge_ID(C_Charge_ID);
+            int VAB_Charge_ID = int.Parse(newVAB_Charge_ID);
+            base.SetVAB_Charge_ID(VAB_Charge_ID);
 
-            MCharge charge = MCharge.Get(GetCtx(), C_Charge_ID);
+            MCharge charge = MCharge.Get(GetCtx(), VAB_Charge_ID);
             SetPriceEntered(charge.GetChargeAmt());
-            SetTax(windowNo, "C_Charge_ID");
-        }	//	setC_Charge_ID
+            SetTax(windowNo, "VAB_Charge_ID");
+        }	//	setVAB_Charge_ID
 
         /// <summary>
         /// Calculate Tax
@@ -307,17 +307,17 @@ namespace VAdvantage.Model
         /// <param name="columnName"></param>
         private void SetTax(int windowNo, String columnName)
         {
-            int C_Charge_ID = GetC_Charge_ID();
-            log.Fine("C_Charge_ID=" + C_Charge_ID);
-            if (C_Charge_ID == 0)
+            int VAB_Charge_ID = GetVAB_Charge_ID();
+            log.Fine("VAB_Charge_ID=" + VAB_Charge_ID);
+            if (VAB_Charge_ID == 0)
             {
                 SetAmt(windowNo, columnName);
                 return;
             }
             //	Check Partner Location
-            int C_BPartner_Location_ID = GetC_BPartner_Location_ID();
-            log.Fine("BP_Location=" + C_BPartner_Location_ID);
-            if (C_BPartner_Location_ID == 0)
+            int VAB_BPart_Location_ID = GetVAB_BPart_Location_ID();
+            log.Fine("BP_Location=" + VAB_BPart_Location_ID);
+            if (VAB_BPart_Location_ID == 0)
             {
                 SetAmt(windowNo, columnName);
                 return;
@@ -336,8 +336,8 @@ namespace VAdvantage.Model
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             //
-            int C_Tax_ID = Tax.Get(GetCtx(), 0, C_Charge_ID, billDate, shipDate,
-                VAF_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
+            int C_Tax_ID = Tax.Get(GetCtx(), 0, VAB_Charge_ID, billDate, shipDate,
+                VAF_Org_ID, M_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
                 isSOTrx);
             log.Info("Tax ID=" + C_Tax_ID + " - SOTrx=" + isSOTrx);
 

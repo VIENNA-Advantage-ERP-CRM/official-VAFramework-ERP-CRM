@@ -559,7 +559,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             /***********Compier comment
-            MDocType dt = MDocType.Get(GetCtx(), getC_DocTypeTarget_ID());
+            MDocType dt = MDocType.Get(GetCtx(), getVAB_DocTypesTarget_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), getDateAcct(), dt.GetDocBaseType()))
@@ -723,10 +723,10 @@ namespace VAdvantage.Model
             //	Check if we need to split Shipment
             if (IsInDispute())
             {
-                MDocType dt = MDocType.Get(GetCtx(), inout.GetC_DocType_ID());
+                MDocType dt = MDocType.Get(GetCtx(), inout.GetVAB_DocTypes_ID());
                 if (dt.IsSplitWhenDifference())
                 {
-                    if (dt.GetC_DocTypeDifference_ID() == 0)
+                    if (dt.GetVAB_DocTypesDifference_ID() == 0)
                     {
                         _processMsg = "No Split Document Type defined for: " + dt.GetName();
                         return DocActionVariables.STATUS_INVALID;
@@ -740,7 +740,7 @@ namespace VAdvantage.Model
                     //Arpit to check if there is any difference qty on line of confirmation then we create the difference doc ..google doc issues of standard
                     if (splitQty > 0)
                     {
-                        SplitInOut(inout, dt.GetC_DocTypeDifference_ID(), lines);
+                        SplitInOut(inout, dt.GetVAB_DocTypesDifference_ID(), lines);
                     }
                     _lines = null;
                 }
@@ -930,12 +930,12 @@ namespace VAdvantage.Model
         /**
          * 	Split Shipment into confirmed and dispute
          *	@param original original shipment
-         *	@param C_DocType_ID target DocType
+         *	@param VAB_DocTypes_ID target DocType
          *	@param confirmLines confirm lines
          */
-        private void SplitInOut(MInOut original, int C_DocType_ID, MInOutLineConfirm[] confirmLines)
+        private void SplitInOut(MInOut original, int VAB_DocTypes_ID, MInOutLineConfirm[] confirmLines)
         {
-            MInOut split = new MInOut(original, C_DocType_ID, original.GetMovementDate());
+            MInOut split = new MInOut(original, VAB_DocTypes_ID, original.GetMovementDate());
             split.AddDescription("Splitted from " + original.GetDocumentNo());
             split.SetIsInDispute(true);
             // new 13 jan
@@ -1102,7 +1102,7 @@ namespace VAdvantage.Model
                     _creditMemo = new MInvoice(inout, null);
                     _creditMemo.SetDescription(Msg.Translate(GetCtx(),
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
-                    _creditMemo.SetC_DocTypeTarget_ID(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                    _creditMemo.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
                     if (!_creditMemo.Save(Get_TrxName()))
                     {
                         _processMsg += "Credit Memo not created";
@@ -1146,7 +1146,7 @@ namespace VAdvantage.Model
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
                     //vikas  new 13 jan 2016 1
                     _inventory.SetIsInternalUse(true);
-                    if (_inventory.GetC_DocType_ID() == 0)
+                    if (_inventory.GetVAB_DocTypes_ID() == 0)
                     {
                         MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
                         if (types.Length > 0)
@@ -1154,17 +1154,17 @@ namespace VAdvantage.Model
                             // Get Internal Use Inv Doc Type
                             for (int i = 0; i < types.Length; i++)
                             {
-                                int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM C_DocType WHERE IsActive='Y' AND  IsInternalUse='Y' AND C_DocType_ID=" + types[i].GetC_DocType_ID()));
+                                int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAB_DocTypes WHERE IsActive='Y' AND  IsInternalUse='Y' AND VAB_DocTypes_ID=" + types[i].GetVAB_DocTypes_ID()));
                                 if (_count > 0)
                                 {
-                                    _inventory.SetC_DocType_ID(types[i].GetC_DocType_ID());
+                                    _inventory.SetVAB_DocTypes_ID(types[i].GetVAB_DocTypes_ID());
                                     break;
                                 }
                             }
                         }
                         else
                         {
-                            log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @C_DocType_ID@"));
+                            log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @VAB_DocTypes_ID@"));
                             return false;
                         }
                     }
@@ -1197,8 +1197,8 @@ namespace VAdvantage.Model
                 Tuple<String, String, String> mInfo = null;
                 if (Env.HasModulePrefix("DTD001_", out mInfo))
                 {
-                    int _charge = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Charge_ID FROM C_Charge WHERE isactive='Y' AND  DTD001_ChargeType='INV'"));
-                    line.SetC_Charge_ID(_charge);
+                    int _charge = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Charge_ID FROM VAB_Charge WHERE isactive='Y' AND  DTD001_ChargeType='INV'"));
+                    line.SetVAB_Charge_ID(_charge);
                 }
                 // End
                 if (!line.Save(Get_TrxName()))
@@ -1418,12 +1418,12 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Document Currency
-         *	@return C_Currency_ID
+         *	@return VAB_Currency_ID
          */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             //	MPriceList pl = MPriceList.get(getCtx(), getM_PriceList_ID());
-            //	return pl.getC_Currency_ID();
+            //	return pl.getVAB_Currency_ID();
             return 0;
         }
         //Arpit to freeze quality control Lines

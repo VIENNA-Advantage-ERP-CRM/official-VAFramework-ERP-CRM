@@ -176,7 +176,7 @@ namespace VAdvantage.Model
             //    + "P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct,"			//	7..8
             //    + "P_CostAdjustment_Acct, P_InventoryClearing_Acct "			//	9..10
             //    + "FROM M_Product_Acct "
-            //    + "WHERE M_Product_ID=" + _M_Product_ID + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+            //    + "WHERE M_Product_ID=" + _M_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             //Updated By raghu 7,jun,2011
             /*******************Manfacturing**************************/
             String sql = "SELECT COALESCE(a.P_Revenue_Acct, b.P_Revenue_Acct), " //1
@@ -191,11 +191,11 @@ namespace VAdvantage.Model
             + " COALESCE(a.P_InventoryClearing_Acct, b.P_InventoryClearing_Acct), "          //10
             + " COALESCE(a.P_Resource_Absorption_Acct, b.P_Resource_Absorption_Acct), "      //11
             + " COALESCE(a.P_MaterialOverhd_Acct, b.P_MaterialOverhd_Acct) "	             //12
-            + " FROM C_AcctSchema_Default b "
-            + " LEFT OUTER JOIN M_Product_Acct a  ON (a.C_AcctSchema_ID = b.C_AcctSchema_ID "
+            + " FROM VAB_AccountBook_Default b "
+            + " LEFT OUTER JOIN M_Product_Acct a  ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
             + " AND a.M_Product_ID=" + _M_Product_ID
             + " AND a.IsActive = 'Y') "
-            + " WHERE b.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+            + " WHERE b.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             /*******************Manfacturing**************************/
             int validCombination_ID = 0;
             IDataReader idr = null;
@@ -245,7 +245,7 @@ namespace VAdvantage.Model
             //    + "P_CostAdjustment_Acct, P_InventoryClearing_Acct "
             //    + "FROM M_Product_Category pc, M_Product_Category_Acct pca "
             //    + "WHERE pc.M_Product_Category_ID=pca.M_Product_Category_ID"
-            //    + " AND pca.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
+            //    + " AND pca.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
             //    + "ORDER BY pc.IsDefault DESC, pc.Created";
             //Updated By raghu 7,jun,2011
             /*****************Manfacturing*********************/
@@ -261,12 +261,12 @@ namespace VAdvantage.Model
             + " COALESCE(a.P_InventoryClearing_Acct, b.P_InventoryClearing_Acct), "          //10
             + " COALESCE(a.P_Resource_Absorption_Acct, b.P_Resource_Absorption_Acct), "      //11
             + " COALESCE(a.P_MaterialOverhd_Acct, b.P_MaterialOverhd_Acct) "	             //12
-            + " FROM C_AcctSchema_Default b "
-            + " LEFT OUTER JOIN M_Product_Category_Acct a ON (a.C_AcctSchema_ID = b.C_AcctSchema_ID "
+            + " FROM VAB_AccountBook_Default b "
+            + " LEFT OUTER JOIN M_Product_Category_Acct a ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
             + " AND a.IsActive = 'Y' ),"
             + " M_Product_Category pc "
             + " WHERE pc.M_Product_Category_ID=a.M_Product_Category_ID"
-            + " AND b.C_AcctSchema_ID =" + as1.GetC_AcctSchema_ID()
+            + " AND b.VAB_AccountBook_ID =" + as1.GetVAB_AccountBook_ID()
             + " ORDER BY pc.IsDefault DESC, pc.Created";
             /*****************Manfacturing*********************/
             int validCombination_ID = 0;
@@ -359,7 +359,7 @@ namespace VAdvantage.Model
             {
                 sql.Append("COSTSTANDARD");
             }
-            sql.Append(" FROM M_Product_Costing WHERE M_Product_ID=" + _M_Product_ID + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID());
+            sql.Append(" FROM M_Product_Costing WHERE M_Product_ID=" + _M_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID());
             IDataReader idr = null;
             try
             {
@@ -408,14 +408,14 @@ namespace VAdvantage.Model
             if (create)
             {
                 StringBuilder sql = new StringBuilder("INSERT INTO M_Product_Costing "
-                    + "(M_Product_ID,C_AcctSchema_ID,"
+                    + "(M_Product_ID,VAB_AccountBook_ID,"
                     + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + " CurrentCostPrice,CostStandard,FutureCostPrice,"
                     + " CostStandardPOQty,CostStandardPOAmt,CostStandardCumQty,CostStandardCumAmt,"
                     + " CostAverage,CostAverageCumQty,CostAverageCumAmt,"
                     + " PriceLastPO,PriceLastInv, TotalInvQty,TotalInvAmt) "
                     + "VALUES (");
-                sql.Append(_M_Product_ID).Append(",").Append(as1.GetC_AcctSchema_ID()).Append(",")
+                sql.Append(_M_Product_ID).Append(",").Append(as1.GetVAB_AccountBook_ID()).Append(",")
                     .Append(as1.GetVAF_Client_ID()).Append(",").Append(as1.GetVAF_Org_ID()).Append(",")
                     .Append("'Y',SysDate,0,SysDate,0, 0,0,0,  0,0,0,0,  0,0,0,  0,0,  0,0)");
                 int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, _trx);
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
             StringBuilder sql1 = new StringBuilder("UPDATE M_Product_Costing ");
             sql1.Append("SET CurrentCostPrice=").Append(costs)
                 .Append(" WHERE M_Product_ID=").Append(_M_Product_ID)
-                .Append(" AND C_AcctSchema_ID=").Append(as1.GetC_AcctSchema_ID());
+                .Append(" AND VAB_AccountBook_ID=").Append(as1.GetVAB_AccountBook_ID());
             int no1 = DataBase.DB.ExecuteQuery(sql1.ToString(), null, _trx);
             if (no1 == 1)
             {
@@ -468,7 +468,7 @@ namespace VAdvantage.Model
         private Decimal? GetPriceList(MAcctSchema as1, bool onlyPOPriceList)
         {
             StringBuilder sql = new StringBuilder(
-                "SELECT pl.C_Currency_ID, pp.PriceList, pp.PriceStd, pp.PriceLimit "
+                "SELECT pl.VAB_Currency_ID, pp.PriceList, pp.PriceStd, pp.PriceLimit "
                 + "FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp "
                 + "WHERE pl.M_PriceList_ID = plv.M_PriceList_ID"
                 + " AND plv.M_PriceList_Version_ID = pp.M_PriceList_Version_ID"
@@ -478,7 +478,7 @@ namespace VAdvantage.Model
                 sql.Append(" AND pl.IsSOPriceList='N'");
             }
             sql.Append(" ORDER BY pl.IsSOPriceList ASC, plv.ValidFrom DESC");
-            int C_Currency_ID = 0;
+            int VAB_Currency_ID = 0;
             Decimal? PriceList = null;
             Decimal? PriceStd = null;
             Decimal? PriceLimit = null;
@@ -488,7 +488,7 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, null);
                 if (idr.Read())
                 {
-                    C_Currency_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                    VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     PriceList = Utility.Util.GetValueOfDecimal(idr[1]);//.getBigDecimal(2);
                     PriceStd = Utility.Util.GetValueOfDecimal(idr[2]);//.getBigDecimal(3);
                     PriceLimit = Utility.Util.GetValueOfDecimal(idr[3]);//.getBigDecimal(4);
@@ -500,7 +500,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
             //  nothing found
-            if (C_Currency_ID == 0)
+            if (VAB_Currency_ID == 0)
             {
                 return null;
             }
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
             //  Convert
             if (price != null && !price.Equals(Env.ZERO))
             {
-                price = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(price), C_Currency_ID, as1.GetC_Currency_ID(),
+                price = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(price), VAB_Currency_ID, as1.GetVAB_Currency_ID(),
                     as1.GetVAF_Client_ID(), 0);
             }
             return price;
@@ -530,11 +530,11 @@ namespace VAdvantage.Model
         /// <returns>po cost</returns>
         private Decimal? GetPOCost(MAcctSchema as1)
         {
-            String sql = "SELECT C_Currency_ID, PriceList,PricePO,PriceLastPO "
+            String sql = "SELECT VAB_Currency_ID, PriceList,PricePO,PriceLastPO "
                 + "FROM M_Product_PO WHERE M_Product_ID=" + _M_Product_ID
                 + "ORDER BY IsCurrentVendor DESC";
 
-            int C_Currency_ID = 0;
+            int VAB_Currency_ID = 0;
             Decimal? PriceList = null;
             Decimal? PricePO = null;
             Decimal? PriceLastPO = null;
@@ -544,7 +544,7 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
                 {
-                    C_Currency_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                    VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     PriceList = Utility.Util.GetValueOfDecimal(idr[1]);//.getBigDecimal(2);
                     PricePO = Utility.Util.GetValueOfDecimal(idr[2]);//.getBigDecimal(3);
                     PriceLastPO = Utility.Util.GetValueOfDecimal(idr[3]);//.getBigDecimal(4);
@@ -561,7 +561,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
             //  nothing found
-            if (C_Currency_ID == 0)
+            if (VAB_Currency_ID == 0)
             {
                 return null;
             }
@@ -578,7 +578,7 @@ namespace VAdvantage.Model
             //  Convert - standard precision!! - should be costing precision
             if (cost != null && !cost.Equals(Env.ZERO))
             {
-                cost = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), C_Currency_ID, as1.GetC_Currency_ID(), as1.GetVAF_Client_ID(), as1.GetVAF_Org_ID());
+                cost = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), VAB_Currency_ID, as1.GetVAB_Currency_ID(), as1.GetVAF_Client_ID(), as1.GetVAF_Org_ID());
             }
             return cost;
         }

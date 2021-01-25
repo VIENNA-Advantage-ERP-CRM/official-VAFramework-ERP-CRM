@@ -57,15 +57,15 @@ namespace VAdvantage.Acct
         public static string CASHTYPE_CASHRECIEVEDFROM = "F";
 
         //  References
-        private int _C_BankAccount_ID = 0;
-        private int _C_CashBook_ID = 0;
+        private int _VAB_Bank_Acct_ID = 0;
+        private int _VAB_CashBook_ID = 0;
         private int _C_Invoice_ID = 0;
 
         //  Amounts
         private Decimal _Amount = Env.ZERO;
         private Decimal _DiscountAmt = Env.ZERO;
         private Decimal _WriteOffAmt = Env.ZERO;
-        private int _C_CashLine_Ref_ID = 0;
+        private int _VAB_CashJRNLLine_Ref_ID = 0;
 
         #endregion
 
@@ -74,25 +74,25 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="line"></param>
         /// <param name="doc"></param>
-        public DocLine_Cash(MCashLine line, Doc_Cash doc)
+        public DocLine_Cash(MCashLine line, DoVAB_CashBook doc)
             : base(line, doc)
         {
             _CashType = line.GetCashType();
-            _C_BankAccount_ID = line.GetC_BankAccount_ID();
-            _C_CashBook_ID = line.GetC_CashBook_ID();
+            _VAB_Bank_Acct_ID = line.GetVAB_Bank_Acct_ID();
+            _VAB_CashBook_ID = line.GetVAB_CashBook_ID();
             _C_Invoice_ID = line.GetC_Invoice_ID();
             //
             if (_C_Invoice_ID != 0)
             {
                 MInvoice invoice = MInvoice.Get(line.GetCtx(), _C_Invoice_ID);
-                SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
 
             //
             _Amount = line.GetAmount();
             _DiscountAmt = line.GetDiscountAmt();
             _WriteOffAmt = line.GetWriteOffAmt();
-            _C_CashLine_Ref_ID = line.GetC_CashLine_ID_1();
+            _VAB_CashJRNLLine_Ref_ID = line.GetVAB_CashJRNLLine_ID_1();
             SetAmount(_Amount);
 
 
@@ -111,9 +111,9 @@ namespace VAdvantage.Acct
         /// Get Bank Account
         /// </summary>
         /// <returns>Bank Account</returns>
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            return _C_BankAccount_ID;
+            return _VAB_Bank_Acct_ID;
         }
 
         /// <summary>
@@ -155,13 +155,13 @@ namespace VAdvantage.Acct
         /// Get Currency
         /// </summary>
         /// <returns>Currency</returns>
-        public int Get_C_CashBook_ID()
+        public int Get_VAB_CashBook_ID()
         {
-            return _C_CashBook_ID;
+            return _VAB_CashBook_ID;
         }
-        public int Get_C_CashLine_Ref_ID()
+        public int Get_VAB_CashJRNLLine_Ref_ID()
         {
-            return  _C_CashLine_Ref_ID;
+            return  _VAB_CashJRNLLine_Ref_ID;
         }
 
     }

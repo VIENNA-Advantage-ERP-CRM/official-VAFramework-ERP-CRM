@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 MCostElementDetail ced = new MCostElementDetail(ctx, 0, cd.Get_Trx());
                 ced.SetVAF_Client_ID(VAF_Client_ID);
                 ced.SetVAF_Org_ID(VAF_Org_ID);
-                ced.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
+                ced.SetVAB_AccountBook_ID(mas.GetVAB_AccountBook_ID());
                 ced.SetM_CostElement_ID(M_costElement_ID);
                 ced.SetM_Product_ID(Product.GetM_Product_ID());
                 ced.SetM_AttributeSetInstance_ID(M_ASI_ID);

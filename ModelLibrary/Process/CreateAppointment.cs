@@ -118,7 +118,7 @@ namespace ViennaAdvantageServer.Process
         {
             if (C_ProjectTask_ID != 0)
             {
-                sql = "select name from c_campaign where c_campaign_id = (select c_campaign_id from c_project where c_project_id = (select c_project_id "
+                sql = "select name from VAB_Promotion where VAB_Promotion_id = (select VAB_Promotion_id from c_project where c_project_id = (select c_project_id "
                 + " from c_projectphase where c_projectphase_id = (select c_projectphase_id from c_projecttask where c_projecttask_id = " + C_ProjectTask_ID + ")))";
                 string name = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                 VAdvantage.Model.MProjectTask task = new VAdvantage.Model.MProjectTask(GetCtx(), C_ProjectTask_ID, Get_Trx());

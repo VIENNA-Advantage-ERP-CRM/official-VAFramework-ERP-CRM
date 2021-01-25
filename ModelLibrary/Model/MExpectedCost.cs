@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_ExpectedCost
+ * Class Used     : X_VAB_ExpectedCost
  * Chronological Development
  * Amit Bansal     04-Dec-2019
  ******************************************************/
@@ -16,7 +16,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MExpectedCost : X_C_ExpectedCost
+    public class MExpectedCost : X_VAB_ExpectedCost
     {
 
         #region Variable
@@ -31,10 +31,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ExpectedCost_ID">id</param>
+        /// <param name="VAB_ExpectedCost_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MExpectedCost(Ctx ctx, int C_ExpectedCost_ID, Trx trxName)
-           : base(ctx, C_ExpectedCost_ID, trxName)
+        public MExpectedCost(Ctx ctx, int VAB_ExpectedCost_ID, Trx trxName)
+           : base(ctx, VAB_ExpectedCost_ID, trxName)
         {
 
         }
@@ -65,12 +65,12 @@ namespace VAdvantage.Model
             }
 
             // check Unique constraints basedon Org + Order + cost element + landed cost distribution
-            String sql = "SELECT COUNT(C_ExpectedCost_ID) FROM C_ExpectedCost WHERE IsActive = 'Y' AND VAF_Org_ID = " + GetVAF_Org_ID() +
+            String sql = "SELECT COUNT(VAB_ExpectedCost_ID) FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND VAF_Org_ID = " + GetVAF_Org_ID() +
                 @" AND C_Order_ID = " + GetC_Order_ID() + @" AND M_CostElement_ID = " + GetM_CostElement_ID() +
                 @" AND LandedCostDistribution = '" + GetLandedCostDistribution() + "'";
             if (!newRecord)
             {
-                sql += " AND C_ExpectedCost_ID <> " + GetC_ExpectedCost_ID();
+                sql += " AND VAB_ExpectedCost_ID <> " + GetVAB_ExpectedCost_ID();
             }
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (count > 0)
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
             //	Lines					
             MExpectedCost[] _lines = null;
             List<MExpectedCost> list = new List<MExpectedCost>();
-            String sql = "SELECT * FROM C_ExpectedCost WHERE IsActive = 'Y' AND C_Order_ID=" + C_Order_ID;
+            String sql = "SELECT * FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND C_Order_ID=" + C_Order_ID;
             DataSet ds = null;
             DataRow dr = null;
             try
@@ -173,11 +173,11 @@ namespace VAdvantage.Model
             MExpectedCostDistribution[] _expectedDistributionlines = null;
 
             // Delete expected distribution lines
-            String sql = "DELETE FROM C_ExpectedCostDistribution WHERE  C_ExpectedCost_ID = " + GetC_ExpectedCost_ID();
+            String sql = "DELETE FROM VAB_ExpectedCostDis WHERE  VAB_ExpectedCost_ID = " + GetVAB_ExpectedCost_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             if (no != 0)
             {
-                _log.Info(" C_ExpectedCostDistribution - Deleted #" + no);
+                _log.Info(" VAB_ExpectedCostDis - Deleted #" + no);
             }
 
             // get order lines having only product
@@ -190,7 +190,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < orderLines.Length; i++)
                 {
                     MExpectedCostDistribution allocation = new MExpectedCostDistribution(GetCtx(), 0, Get_Trx());
-                    allocation.SetC_ExpectedCost_ID(GetC_ExpectedCost_ID());
+                    allocation.SetVAB_ExpectedCost_ID(GetVAB_ExpectedCost_ID());
                     allocation.SetC_OrderLine_ID(orderLines[i].GetC_OrderLine_ID());
                     allocation.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                     allocation.SetAmt(Env.ZERO);
@@ -302,7 +302,7 @@ namespace VAdvantage.Model
                 largestAmtAllocation.SetAmt(Decimal.Add(largestAmtAllocation.GetAmt(), difference));
                 largestAmtAllocation.Save();
                 log.Config("Difference=" + difference
-                    + ", C_ExpectedCostDistribution_ID=" + largestAmtAllocation.GetC_ExpectedCostDistribution_ID()
+                    + ", VAB_ExpectedCostDis_ID=" + largestAmtAllocation.GetVAB_ExpectedCostDis_ID()
                     + ", Amt" + largestAmtAllocation.GetAmt());
             }
         }

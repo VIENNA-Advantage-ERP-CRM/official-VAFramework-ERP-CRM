@@ -9,7 +9,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeSet: X_C_GenAttributeSet
+    public class MGenAttributeSet: X_VAB_GenFeatureSet
     {
 
         //	Instance Attributes					
@@ -17,8 +17,8 @@ namespace VAdvantage.Model
         //	Instance Attributes					
         private MGenAttribute[] _productAttributes = null;
 
-        public MGenAttributeSet(Ctx ctx, int C_GenAttributeSet_ID, Trx trxName)
-            : base(ctx, C_GenAttributeSet_ID, trxName)
+        public MGenAttributeSet(Ctx ctx, int VAB_GenFeatureSet_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureSet_ID, trxName)
         {
 
 
@@ -47,13 +47,13 @@ namespace VAdvantage.Model
             if ((_instanceAttributes == null && instanceAttributes)
                 || _productAttributes == null && !instanceAttributes)
             {
-                String sql = "SELECT mau.C_GenAttribute_ID "
-                    + "FROM C_GenAttributeUse mau"
-                    + " INNER JOIN C_GenAttribute ma ON (mau.C_GenAttribute_ID=ma.C_GenAttribute_ID) "
+                String sql = "SELECT mau.VAB_GenFeature_ID "
+                    + "FROM VAB_GenFeatureUse mau"
+                    + " INNER JOIN VAB_GenFeature ma ON (mau.VAB_GenFeature_ID=ma.VAB_GenFeature_ID) "
                     + "WHERE mau.IsActive='Y' AND ma.IsActive='Y'"
-                    + " AND mau.C_GenAttributeSet_ID=" + GetC_GenAttributeSet_ID() + " AND ma.IsInstanceAttribute= " +
+                    + " AND mau.VAB_GenFeatureSet_ID=" + GetVAB_GenFeatureSet_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
-                    + " ORDER BY mau.C_GenAttribute_ID";      // change done by Bharat
+                    + " ORDER BY mau.VAB_GenFeature_ID";      // change done by Bharat
                 List<MGenAttribute> list = new List<MGenAttribute>();
                 DataTable dt = null;
                 IDataReader idr = DB.ExecuteReader(sql, null, Get_TrxName());

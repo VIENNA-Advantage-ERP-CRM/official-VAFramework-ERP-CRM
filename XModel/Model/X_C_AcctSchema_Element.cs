@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_AcctSchema_Element
+/** Generated Model for VAB_AccountBook_Element
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_AcctSchema_Element : PO
+public class X_VAB_AccountBook_Element : PO
 {
-public X_C_AcctSchema_Element (Context ctx, int C_AcctSchema_Element_ID, Trx trxName) : base (ctx, C_AcctSchema_Element_ID, trxName)
+public X_VAB_AccountBook_Element (Context ctx, int VAB_AccountBook_Element_ID, Trx trxName) : base (ctx, VAB_AccountBook_Element_ID, trxName)
 {
-/** if (C_AcctSchema_Element_ID == 0)
+/** if (VAB_AccountBook_Element_ID == 0)
 {
-SetC_AcctSchema_Element_ID (0);
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_Element_ID (0);
+SetVAB_AccountBook_ID (0);
 SetElementType (null);
 SetIsBalanced (false);
 SetIsMandatory (false);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM C_AcctSchema_Element WHERE C_AcctSchema_ID=@C_AcctSchema_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_AccountBook_Element WHERE VAB_AccountBook_ID=@VAB_AccountBook_ID@
 }
  */
 }
-public X_C_AcctSchema_Element (Ctx ctx, int C_AcctSchema_Element_ID, Trx trxName) : base (ctx, C_AcctSchema_Element_ID, trxName)
+public X_VAB_AccountBook_Element (Ctx ctx, int VAB_AccountBook_Element_ID, Trx trxName) : base (ctx, VAB_AccountBook_Element_ID, trxName)
 {
-/** if (C_AcctSchema_Element_ID == 0)
+/** if (VAB_AccountBook_Element_ID == 0)
 {
-SetC_AcctSchema_Element_ID (0);
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_Element_ID (0);
+SetVAB_AccountBook_ID (0);
 SetElementType (null);
 SetIsBalanced (false);
 SetIsMandatory (false);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM C_AcctSchema_Element WHERE C_AcctSchema_ID=@C_AcctSchema_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_AccountBook_Element WHERE VAB_AccountBook_ID=@VAB_AccountBook_ID@
 }
  */
 }
@@ -49,7 +49,7 @@ SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM C_Ac
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctSchema_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountBook_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_AcctSchema_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctSchema_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountBook_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_AcctSchema_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctSchema_Element (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AccountBook_Element (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_AcctSchema_Element()
+static X_VAB_AccountBook_Element()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389052797L;
 public static int Table_ID;
  // =279;
 
-/** TableName=C_AcctSchema_Element */
-public static String Table_Name="C_AcctSchema_Element";
+/** TableName=VAB_AccountBook_Element */
+public static String Table_Name="VAB_AccountBook_Element";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_AcctSchema_Element[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AccountBook_Element[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
@@ -139,112 +139,112 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Acct.Schema Element.
-@param C_AcctSchema_Element_ID Acct.Schema Element */
-public void SetC_AcctSchema_Element_ID (int C_AcctSchema_Element_ID)
+@param VAB_AccountBook_Element_ID Acct.Schema Element */
+public void SetVAB_AccountBook_Element_ID (int VAB_AccountBook_Element_ID)
 {
-if (C_AcctSchema_Element_ID < 1) throw new ArgumentException ("C_AcctSchema_Element_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_Element_ID", C_AcctSchema_Element_ID);
+if (VAB_AccountBook_Element_ID < 1) throw new ArgumentException ("VAB_AccountBook_Element_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_Element_ID", VAB_AccountBook_Element_ID);
 }
 /** Get Acct.Schema Element.
 @return Acct.Schema Element */
-public int GetC_AcctSchema_Element_ID() 
+public int GetVAB_AccountBook_Element_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_Element_ID");
+Object ii = Get_Value("VAB_AccountBook_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Activity.
-@param C_Activity_ID Business Activity */
-public void SetC_Activity_ID (int C_Activity_ID)
+@param VAB_BillingCode_ID Business Activity */
+public void SetVAB_BillingCode_ID (int VAB_BillingCode_ID)
 {
-if (C_Activity_ID <= 0) Set_Value ("C_Activity_ID", null);
+if (VAB_BillingCode_ID <= 0) Set_Value ("VAB_BillingCode_ID", null);
 else
-Set_Value ("C_Activity_ID", C_Activity_ID);
+Set_Value ("VAB_BillingCode_ID", VAB_BillingCode_ID);
 }
 /** Get Activity.
 @return Business Activity */
-public int GetC_Activity_ID() 
+public int GetVAB_BillingCode_ID() 
 {
-Object ii = Get_Value("C_Activity_ID");
+Object ii = Get_Value("VAB_BillingCode_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);
+if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);
 else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID)
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID)
 {
-if (C_Campaign_ID <= 0) Set_Value ("C_Campaign_ID", null);
+if (VAB_Promotion_ID <= 0) Set_Value ("VAB_Promotion_ID", null);
 else
-Set_Value ("C_Campaign_ID", C_Campaign_ID);
+Set_Value ("VAB_Promotion_ID", VAB_Promotion_ID);
 }
 /** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() 
+public int GetVAB_Promotion_ID() 
 {
-Object ii = Get_Value("C_Campaign_ID");
+Object ii = Get_Value("VAB_Promotion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Account Element.
-@param C_ElementValue_ID Account Element */
-public void SetC_ElementValue_ID (int C_ElementValue_ID)
+@param VAB_Acct_Element_ID Account Element */
+public void SetVAB_Acct_Element_ID (int VAB_Acct_Element_ID)
 {
-if (C_ElementValue_ID <= 0) Set_Value ("C_ElementValue_ID", null);
+if (VAB_Acct_Element_ID <= 0) Set_Value ("VAB_Acct_Element_ID", null);
 else
-Set_Value ("C_ElementValue_ID", C_ElementValue_ID);
+Set_Value ("VAB_Acct_Element_ID", VAB_Acct_Element_ID);
 }
 /** Get Account Element.
 @return Account Element */
-public int GetC_ElementValue_ID() 
+public int GetVAB_Acct_Element_ID() 
 {
-Object ii = Get_Value("C_ElementValue_ID");
+Object ii = Get_Value("VAB_Acct_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Element.
-@param C_Element_ID Accounting Element */
-public void SetC_Element_ID (int C_Element_ID)
+@param VAB_Element_ID Accounting Element */
+public void SetVAB_Element_ID (int VAB_Element_ID)
 {
-if (C_Element_ID <= 0) Set_Value ("C_Element_ID", null);
+if (VAB_Element_ID <= 0) Set_Value ("VAB_Element_ID", null);
 else
-Set_Value ("C_Element_ID", C_Element_ID);
+Set_Value ("VAB_Element_ID", VAB_Element_ID);
 }
 /** Get Element.
 @return Accounting Element */
-public int GetC_Element_ID() 
+public int GetVAB_Element_ID() 
 {
-Object ii = Get_Value("C_Element_ID");
+Object ii = Get_Value("VAB_Element_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

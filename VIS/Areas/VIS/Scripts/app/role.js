@@ -699,18 +699,18 @@ VIS.MRole.getDocWhere = function (TableName) {
 
     var VAF_UserContact_ID = VIS.context.getVAF_UserContact_ID();
 
-    //var docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
-    //    + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
+    //var docAccess = "(EXISTS (SELECT 1 FROM VAB_BusinessPartner bp INNER JOIN VAF_UserContact u "
+    //    + "ON (u.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
     //    + " WHERE u.VAF_UserContact_ID="
     //    + VAF_UserContact_ID
-    //    + " AND bp.C_BPartner_ID="
+    //    + " AND bp.VAB_BusinessPartner_ID="
     //    + TableName
-    //    + ".C_BPartner_ID)"
-    //    + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
-    //    + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
+    //    + ".VAB_BusinessPartner_ID)"
+    //    + " OR EXISTS (SELECT 1 FROM VAB_BPart_Relation bpr INNER JOIN VAF_UserContact u "
+    //    + "ON (u.VAB_BusinessPartner_ID=bpr.VAB_BusinessPartnerRelation_ID) "
     //    + " WHERE u.VAF_UserContact_ID="
     //    + VAF_UserContact_ID
-    //    + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
+    //    + " AND bpr.VAB_BusinessPartner_ID=" + TableName + ".VAB_BusinessPartner_ID)";
 
     //var hasUserColumn = false;
     //var sql1 = "SELECT count(*) FROM VAF_TableView t "

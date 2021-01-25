@@ -24,7 +24,7 @@
         var $btnPrint = null;
         var $btnExport = null;
         var $btnCancel = null;
-        var C_BankAccount_ID = null;
+        var VAB_Bank_Acct_ID = null;
         var $divBusy = null;
 
         var baseUrl = VIS.Application.contextUrl;
@@ -75,7 +75,7 @@
                 + " <div class='vis-paymentPrint-field'>"  // div bankAccount starts here
                 + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                 + " <input type='text' name='vis-name vis-fieldreadonly' class='vis-fieldreadonly' disabled id='VIS_txtBankAccount_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
+                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Bank_Acct_ID") + " </label>"
                 + " </div></div></div>" // div bankAccount ends here 
                 + " <div class='vis-paymentPrint-field'>"  // div currentBalance starts here
                 + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
@@ -90,7 +90,7 @@
                 + " <div class='vis-paymentPrint-field'>"  // div Currency starts here
                 + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                 + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrency_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Currency_ID") + " </label>"
+                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Currency_ID") + " </label>"
                 + " </div></div></div>" // div Currency ends here                            
                 + " <div class='vis-paymentPrint-field'>"  // div CheckNo starts here
                 + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
@@ -182,7 +182,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_C_BankAccount_ID: C_BankAccount_ID, PaymentRule: $cmbPaymentMethod.text() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text() },
                 success: function (jsonResult) {
                     var data = JSON.parse(jsonResult);
                     isBusy(false);
@@ -235,7 +235,7 @@
                     $txtCurrentBalance.val(parseFloat(data.PSelectInfo[0].CurrentBalance).toLocaleString());
                     $txtCurreny.val(data.PSelectInfo[0].Currency);
                     $txtNoOfPayments.val(data.PSelectInfo[0].NoOfPayments);
-                    C_BankAccount_ID = data.PSelectInfo[0].BankAccount_ID;
+                    VAB_Bank_Acct_ID = data.PSelectInfo[0].BankAccount_ID;
                 }
             }
             catch (err) {
@@ -303,7 +303,7 @@
         //******************
         function validateInputOnPrint() {
             try {
-                if ($cmbPaymentSelect == null || $cmbPaymentSelect.val() <= -1 || C_BankAccount_ID <= -1 || $cmbPaymentMethod.val() <= -1 || $txtCheckNo.val().length <= 0) {
+                if ($cmbPaymentSelect == null || $cmbPaymentSelect.val() <= -1 || VAB_Bank_Acct_ID <= -1 || $cmbPaymentMethod.val() <= -1 || $txtCheckNo.val().length <= 0) {
                     VIS.ADialog.info("VPayPrintNoRecords");
                     return false;
                 }
@@ -328,7 +328,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_C_BankAccount_ID: C_BankAccount_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
                 success: function (jsonResult) {
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
@@ -365,7 +365,7 @@
             var param = [];
             param.push($cmbPaymentMethod.val());
             param.push($cmbPaymentSelect.val());
-            param.push(C_BankAccount_ID);
+            param.push(VAB_Bank_Acct_ID);
             param.push($cmbPaymentMethod.text());
             param.push($txtCheckNo.val());
             param.push(JSON.stringify(data.check_ID));
@@ -382,7 +382,7 @@
                     // Change by mohit to get check prints.
                     var sql = "VIS_152";
                     var params = [];
-                    params[0] = new VIS.DB.SqlParam("@BankAcct_ID", C_BankAccount_ID);
+                    params[0] = new VIS.DB.SqlParam("@BankAcct_ID", VAB_Bank_Acct_ID);
                     var VAF_Job_id = executeScalar(sql, params);
 
                     sql = "VIS_150";
@@ -469,7 +469,7 @@
                 datatype: "Json",
                 type: "POST",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_C_BankAccount_ID: C_BankAccount_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
                 success: function (jsonResult) {
                     isBusy(false);
                     var data = JSON.parse(jsonResult);

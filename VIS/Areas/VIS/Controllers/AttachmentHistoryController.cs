@@ -49,11 +49,11 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(hisIfno), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UserHistory(int C_BPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
+        public JsonResult UserHistory(int VAB_BusinessPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
         {
             Ctx ct = Session["ctx"] as Ctx;
             AttachmentHistoryModel model = new AttachmentHistoryModel();
-            RealtedHistoryInfoDetails hisIfno = model.Userhistory(C_BPartner_ID, pageSize, pageNo, ct, searchText);
+            RealtedHistoryInfoDetails hisIfno = model.Userhistory(VAB_BusinessPartner_ID, pageSize, pageNo, ct, searchText);
             return Json(JsonConvert.SerializeObject(hisIfno), JsonRequestBehavior.AllowGet);
         }
 

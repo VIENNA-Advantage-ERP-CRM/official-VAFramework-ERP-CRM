@@ -37,7 +37,7 @@ namespace VAdvantage.Process
         // Request Categpry (opt)		
         private int _R_Category_ID = 0;
         // Business Partner (opt)		
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         // Default product				
         private int _M_Product_ID = 0;
 
@@ -73,9 +73,9 @@ namespace VAdvantage.Process
                 {
                     _R_Category_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
 
             int lenth = 1;
             log.Info("R_RequestType_ID=" + _R_RequestType_ID + ", R_Group_ID=" + _R_Group_ID
-                + ", R_Category_ID=" + _R_Category_ID + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", R_Category_ID=" + _R_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", _M_Product_ID=" + _M_Product_ID);
 
             MRequestType type = MRequestType.Get(GetCtx(), _R_RequestType_ID);
@@ -127,13 +127,13 @@ namespace VAdvantage.Process
                 sql += " AND r.R_Category_ID=@Param3";
                 lenth = lenth + 1;
             }
-            if (_C_BPartner_ID != 0)
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql += " AND r.C_BPartner_ID=@Param4";
+                sql += " AND r.VAB_BusinessPartner_ID=@Param4";
                 lenth = lenth + 1;
             }
             sql += " AND r.IsInvoiced='Y' "
-                + "ORDER BY C_BPartner_ID";
+                + "ORDER BY VAB_BusinessPartner_ID";
             SqlParameter[] Param = new SqlParameter[lenth];
             IDataReader idr = null;
             DataTable dt = null;
@@ -152,16 +152,16 @@ namespace VAdvantage.Process
                     index++;
                     Param[index] = new SqlParameter("@Param3", _R_Category_ID);
                 }
-                if (_C_BPartner_ID != 0)
+                if (_VAB_BusinessPartner_ID != 0)
                 {
                     index++;
-                    Param[index] = new SqlParameter("@Param4", _C_BPartner_ID);
+                    Param[index] = new SqlParameter("@Param4", _VAB_BusinessPartner_ID);
                 }
                 idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                int oldC_BPartner_ID = 0;
+                int oldVAB_BusinessPartner_ID = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     MRequest request = new MRequest(GetCtx(), dr, Get_TrxName());
@@ -169,14 +169,14 @@ namespace VAdvantage.Process
                     {
                         continue;
                     }
-                    if (oldC_BPartner_ID != request.GetC_BPartner_ID())
+                    if (oldVAB_BusinessPartner_ID != request.GetVAB_BusinessPartner_ID())
                     {
                         InvoiceDone();
                     }
                     if (_m_invoice == null)
                     {
                         InvoiceNew(request);
-                        oldC_BPartner_ID = request.GetC_BPartner_ID();
+                        oldVAB_BusinessPartner_ID = request.GetVAB_BusinessPartner_ID();
                     }
                     InvoiceLine(request);
                 }
@@ -237,8 +237,8 @@ namespace VAdvantage.Process
         private void InvoiceNew(MRequest request)
         {
             _m_invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
-            _m_invoice.SetC_DocTypeTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
-            MBPartner partner = new MBPartner(GetCtx(), request.GetC_BPartner_ID(), Get_TrxName());
+            _m_invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
+            MBPartner partner = new MBPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
             _m_invoice.SetM_PriceList_ID(partner.GetM_PriceList_ID());
             int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));

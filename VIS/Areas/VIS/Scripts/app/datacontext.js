@@ -496,10 +496,10 @@
             return result;
         };
 
-        function subscribeUnsubscribeRecords(CM_SubScribedID, VAF_Screen_ID, Record_ID, VAF_TableView_ID, reloadSubscribe) {
+        function subscribeUnsubscribeRecords(VACM_SubscribedID, VAF_Screen_ID, Record_ID, VAF_TableView_ID, reloadSubscribe) {
             var url;
             var data;
-            if (CM_SubScribedID == 0) {
+            if (VACM_SubscribedID == 0) {
                 url = VIS.Application.contextUrl + 'Subscribe/Subscribe';
                 data = { VAF_Screen_ID: VAF_Screen_ID, Record_ID: Record_ID, VAF_TableView_ID: VAF_TableView_ID };
             }
@@ -515,7 +515,7 @@
                 data: data,
                 success: function (result) {
                     if (result == 0) {
-                        if (CM_SubScribedID == 0) {
+                        if (VACM_SubscribedID == 0) {
                             //VIS.ADialog.error(VIS.Msg.getMsg("SubscriptionFailed"));
                             VIS.ADialog.error("SubscriptionFailed");
                         }

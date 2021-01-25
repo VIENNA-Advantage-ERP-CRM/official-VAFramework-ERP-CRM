@@ -22,7 +22,7 @@ public X_CM_CStageTTable (Context ctx, int CM_CStageTTable_ID, Trx trxName) : ba
 {
 SetCM_CStageTTable_ID (0);
 SetCM_CStage_ID (0);
-SetCM_TemplateTable_ID (0);
+SetVACM_LayoutTable_ID (0);
 SetName (null);
 }
  */
@@ -33,7 +33,7 @@ public X_CM_CStageTTable (Ctx ctx, int CM_CStageTTable_ID, Trx trxName) : base (
 {
 SetCM_CStageTTable_ID (0);
 SetCM_CStage_ID (0);
-SetCM_TemplateTable_ID (0);
+SetVACM_LayoutTable_ID (0);
 SetName (null);
 }
  */
@@ -147,17 +147,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Template Table.
-@param CM_TemplateTable_ID CM Template Table Link */
-public void SetCM_TemplateTable_ID (int CM_TemplateTable_ID)
+@param VACM_LayoutTable_ID CM Template Table Link */
+public void SetVACM_LayoutTable_ID (int VACM_LayoutTable_ID)
 {
-if (CM_TemplateTable_ID < 1) throw new ArgumentException ("CM_TemplateTable_ID is mandatory.");
-Set_ValueNoCheck ("CM_TemplateTable_ID", CM_TemplateTable_ID);
+if (VACM_LayoutTable_ID < 1) throw new ArgumentException ("VACM_LayoutTable_ID is mandatory.");
+Set_ValueNoCheck ("VACM_LayoutTable_ID", VACM_LayoutTable_ID);
 }
 /** Get Template Table.
 @return CM Template Table Link */
-public int GetCM_TemplateTable_ID() 
+public int GetVACM_LayoutTable_ID() 
 {
-Object ii = Get_Value("CM_TemplateTable_ID");
+Object ii = Get_Value("VACM_LayoutTable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

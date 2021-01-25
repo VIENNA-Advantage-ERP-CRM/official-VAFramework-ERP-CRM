@@ -409,7 +409,7 @@
                     Name: pctl.pi.getTitle(),
                     VAF_TableView_ID: pctl.pi.getTable_ID(),
                     Record_ID: pctl.pi.getRecord_ID(),
-                    C_BPartner_ID: 0,
+                    VAB_BusinessPartner_ID: 0,
                     isReport: true,
                     binaryData: self.reportBytes,
                     reportPath: self.reportPath

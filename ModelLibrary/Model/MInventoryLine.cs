@@ -457,7 +457,7 @@ namespace VAdvantage.Model
                 if (!INVENTORYTYPE_ChargeAccount.Equals(GetInventoryType()))
                     SetInventoryType(INVENTORYTYPE_ChargeAccount);
                 //
-                if (GetC_Charge_ID() == 0)
+                if (GetVAB_Charge_ID() == 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "InternalUseNeedsCharge"));
                     return false;
@@ -465,17 +465,17 @@ namespace VAdvantage.Model
             }
             else if (INVENTORYTYPE_ChargeAccount.Equals(GetInventoryType()))
             {
-                if (GetC_Charge_ID() == 0)
+                if (GetVAB_Charge_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Charge_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Charge_ID"));
                     return false;
                 }
             }
-            else if (GetC_Charge_ID() != 0)
-                SetC_Charge_ID(0);
+            else if (GetVAB_Charge_ID() != 0)
+                SetVAB_Charge_ID(0);
 
             //	Set VAF_Org to parent if not charge
-            if (GetC_Charge_ID() == 0)
+            if (GetVAB_Charge_ID() == 0)
                 SetVAF_Org_ID(GetParent().GetVAF_Org_ID());
 
             // By Amit for Obsolete Inventory - 25-May-2016
@@ -513,8 +513,8 @@ namespace VAdvantage.Model
                         qry1 += @" FROM m_product p  INNER JOIN va024_t_obsoleteinventory oi ON p.m_product_id = oi.M_product_ID
                                  INNER JOIN m_product_category pc ON pc.m_product_category_ID = p.m_product_category_ID
                                  INNER JOIN vaf_client c ON c.VAF_Client_ID = p.vaf_client_ID   INNER JOIN VAF_ClientDetail ci  ON c.VAF_Client_ID = ci.vaf_client_ID
-                                 INNER JOIN m_cost ct ON ( p.M_Product_ID     = ct.M_Product_ID  AND ci.C_AcctSchema1_ID = ct.C_AcctSchema_ID )
-                                 INNER JOIN c_acctschema asch  ON (asch.C_AcctSchema_ID = ci.C_AcctSchema1_ID)
+                                 INNER JOIN m_cost ct ON ( p.M_Product_ID     = ct.M_Product_ID  AND ci.VAB_AccountBook1_ID = ct.VAB_AccountBook_ID )
+                                 INNER JOIN VAB_AccountBook asch  ON (asch.VAB_AccountBook_ID = ci.VAB_AccountBook1_ID)
                                  INNER JOIN va024_obsoleteinvline oil ON oil.va024_obsoleteinvline_ID = oi.va024_obsoleteinvline_ID ";
                         qry1 += @"    WHERE ct.VAF_Org_ID =  
                           CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'O') THEN " + GetVAF_Org_ID() + @" 

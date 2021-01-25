@@ -115,7 +115,7 @@ namespace VAdvantage.Model
                 {
                     MOrder from = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
                     MOrder order = MOrder.CopyFrom(from, dateDoc,
-                        from.GetC_DocType_ID(), false, false, Get_TrxName());
+                        from.GetVAB_DocTypes_ID(), false, false, Get_TrxName());
                     run.SetC_Order_ID(order.GetC_Order_ID());
                     msg += order.GetDocumentNo();
                 }
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
                 {
                     MInvoice from = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
                     MInvoice invoice = MInvoice.CopyFrom(from, dateDoc,
-                        from.GetC_DocType_ID(), false, Get_TrxName(), false);
+                        from.GetVAB_DocTypes_ID(), false, Get_TrxName(), false);
                     run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
                     //Set Invoice Refrence and Description from Orignal to Recurring
                     invoice.Set_Value("InvoiceReference", from.GetDocumentNo() + "_" + (GetRunsMax() - GetRunsRemaining() + 1));
@@ -168,7 +168,7 @@ namespace VAdvantage.Model
                 {
                     MPayment from = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
                     MPayment payment = MPayment.CopyFrom(from, dateDoc,
-                        from.GetC_DocType_ID(), Get_TrxName());
+                        from.GetVAB_DocTypes_ID(), Get_TrxName());
                     run.SetC_Payment_ID(payment.GetC_Payment_ID());
                     msg += payment.GetDocumentNo();
                 }

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Vframwork
  * Purpose        : BP Bank Account Model
- * Class Used     : X_C_BP_BankAccount
+ * Class Used     : X_VAB_BPart_Bank_Acct
  * Chronological Development
  * Raghunandan    24-June-2009
  ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBPBankAccount : X_C_BP_BankAccount
+    public class MBPBankAccount : X_VAB_BPart_Bank_Acct
     {
         /** Bank Link			*/
         private MBank _bank = null;
@@ -31,12 +31,12 @@ namespace VAdvantage.Model
         /**
          * 	Get Accounst Of BPartner
          *	@param ctx context
-         *	@param C_BPartner_ID bpartner
+         *	@param VAB_BusinessPartner_ID bpartner
          *	@return
          */
-        public static MBPBankAccount[] GetOfBPartner(Ctx ctx, int C_BPartner_ID)
+        public static MBPBankAccount[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID)
         {
-            String sql = "SELECT * FROM C_BP_BankAccount WHERE C_BPartner_ID=" + C_BPartner_ID
+            String sql = "SELECT * FROM VAB_BPart_Bank_Acct WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID
                 + " AND IsActive='Y'";
             List<MBPBankAccount> list = new List<MBPBankAccount>();
             DataTable dt = null;
@@ -69,16 +69,16 @@ namespace VAdvantage.Model
         /**
          * 	Constructor
          *	@param ctx context
-         *	@param C_BP_BankAccount_ID BP bank account
+         *	@param VAB_BPart_Bank_Acct_ID BP bank account
          *	@param trxName transaction
          */
-        public MBPBankAccount(Ctx ctx, int C_BP_BankAccount_ID, Trx trxName)
-            : base(ctx, C_BP_BankAccount_ID, trxName)
+        public MBPBankAccount(Ctx ctx, int VAB_BPart_Bank_Acct_ID, Trx trxName)
+            : base(ctx, VAB_BPart_Bank_Acct_ID, trxName)
         {
 
-            if (C_BP_BankAccount_ID == 0)
+            if (VAB_BPart_Bank_Acct_ID == 0)
             {
-                //	setC_BPartner_ID (0);
+                //	setVAB_BusinessPartner_ID (0);
                 SetIsACH(false);
                 SetBPBankAcctUse(BPBANKACCTUSE_Both);
             }
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
 
             SetIsACH(false);
             //
-            SetC_BPartner_ID(bp.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
             //
             SetA_Name(bpc.GetName());
             SetA_EMail(bpc.GetEMail());
@@ -194,7 +194,7 @@ namespace VAdvantage.Model
                 BankVerificationInterface verify = bank.GetVerificationClass();
                 if (verify != null)
                 {
-                    String errorMsg = verify.VerifyRoutingNo(bank.GetC_Country_ID(), GetRoutingNo());
+                    String errorMsg = verify.VerifyRoutingNo(bank.GetVAB_Country_ID(), GetRoutingNo());
                     if (errorMsg != null)
                     {
                         log.SaveError("Error", "@Invalid@ @RoutingNo@ " + errorMsg);

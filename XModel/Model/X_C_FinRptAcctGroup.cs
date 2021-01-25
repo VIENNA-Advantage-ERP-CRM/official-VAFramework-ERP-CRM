@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_FinRptAcctGroup
+/** Generated Model for VAB_FinRptAcctGroup
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_FinRptAcctGroup : PO
+public class X_VAB_FinRptAcctGroup : PO
 {
-    public X_C_FinRptAcctGroup(Context ctx, int C_FinRptAcctGroup_ID, Trx trxName)
-        : base(ctx, C_FinRptAcctGroup_ID, trxName)
+    public X_VAB_FinRptAcctGroup(Context ctx, int VAB_FinRptAcctGroup_ID, Trx trxName)
+        : base(ctx, VAB_FinRptAcctGroup_ID, trxName)
 {
-/** if (C_FinRptAcctGroup_ID == 0)
+/** if (VAB_FinRptAcctGroup_ID == 0)
 {
-SetC_FinRptAcctGroup_ID (0);
-SetC_FinRptConfig_ID (0);
+SetVAB_FinRptAcctGroup_ID (0);
+SetVAB_FinRptConfig_ID (0);
 }
  */
 }
-    public X_C_FinRptAcctGroup(Ctx ctx, int C_FinRptAcctGroup_ID, Trx trxName)
-        : base(ctx, C_FinRptAcctGroup_ID, trxName)
+    public X_VAB_FinRptAcctGroup(Ctx ctx, int VAB_FinRptAcctGroup_ID, Trx trxName)
+        : base(ctx, VAB_FinRptAcctGroup_ID, trxName)
 {
-/** if (C_FinRptAcctGroup_ID == 0)
+/** if (VAB_FinRptAcctGroup_ID == 0)
 {
-SetC_FinRptAcctGroup_ID (0);
-SetC_FinRptConfig_ID (0);
+SetVAB_FinRptAcctGroup_ID (0);
+SetVAB_FinRptConfig_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetC_FinRptConfig_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_C_FinRptAcctGroup(Context ctx, DataRow rs, Trx trxName)
+    public X_VAB_FinRptAcctGroup(Context ctx, DataRow rs, Trx trxName)
         : base(ctx, rs, trxName)
 {
 }
@@ -50,7 +50,7 @@ SetC_FinRptConfig_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_C_FinRptAcctGroup(Ctx ctx, DataRow rs, Trx trxName)
+    public X_VAB_FinRptAcctGroup(Ctx ctx, DataRow rs, Trx trxName)
         : base(ctx, rs, trxName)
 {
 }
@@ -59,14 +59,14 @@ SetC_FinRptConfig_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-    public X_C_FinRptAcctGroup(Ctx ctx, IDataReader dr, Trx trxName)
+    public X_VAB_FinRptAcctGroup(Ctx ctx, IDataReader dr, Trx trxName)
         : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_FinRptAcctGroup()
+static X_VAB_FinRptAcctGroup()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -79,8 +79,8 @@ public static long updatedMS = 1409989543257L;
 public static int Table_ID;
  // =1000489;
 
-/** TableName=C_FinRptAcctGroup */
-public static String Table_Name="C_FinRptAcctGroup";
+/** TableName=VAB_FinRptAcctGroup */
+public static String Table_Name="VAB_FinRptAcctGroup";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -114,52 +114,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_FinRptAcctGroup[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_FinRptAcctGroup[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Account Group.
-@param C_AccountGroup_ID Account Group */
-public void SetC_AccountGroup_ID (int C_AccountGroup_ID)
+@param VAB_AccountGroup_ID Account Group */
+public void SetVAB_AccountGroup_ID (int VAB_AccountGroup_ID)
 {
-if (C_AccountGroup_ID <= 0) Set_Value ("C_AccountGroup_ID", null);
+if (VAB_AccountGroup_ID <= 0) Set_Value ("VAB_AccountGroup_ID", null);
 else
-Set_Value ("C_AccountGroup_ID", C_AccountGroup_ID);
+Set_Value ("VAB_AccountGroup_ID", VAB_AccountGroup_ID);
 }
 /** Get Account Group.
 @return Account Group */
-public int GetC_AccountGroup_ID() 
+public int GetVAB_AccountGroup_ID() 
 {
-Object ii = Get_Value("C_AccountGroup_ID");
+Object ii = Get_Value("VAB_AccountGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_FinRptAcctGroup_ID.
-@param C_FinRptAcctGroup_ID C_FinRptAcctGroup_ID */
-public void SetC_FinRptAcctGroup_ID (int C_FinRptAcctGroup_ID)
+/** Set VAB_FinRptAcctGroup_ID.
+@param VAB_FinRptAcctGroup_ID VAB_FinRptAcctGroup_ID */
+public void SetVAB_FinRptAcctGroup_ID (int VAB_FinRptAcctGroup_ID)
 {
-if (C_FinRptAcctGroup_ID < 1) throw new ArgumentException ("C_FinRptAcctGroup_ID is mandatory.");
-Set_ValueNoCheck ("C_FinRptAcctGroup_ID", C_FinRptAcctGroup_ID);
+if (VAB_FinRptAcctGroup_ID < 1) throw new ArgumentException ("VAB_FinRptAcctGroup_ID is mandatory.");
+Set_ValueNoCheck ("VAB_FinRptAcctGroup_ID", VAB_FinRptAcctGroup_ID);
 }
-/** Get C_FinRptAcctGroup_ID.
-@return C_FinRptAcctGroup_ID */
-public int GetC_FinRptAcctGroup_ID() 
+/** Get VAB_FinRptAcctGroup_ID.
+@return VAB_FinRptAcctGroup_ID */
+public int GetVAB_FinRptAcctGroup_ID() 
 {
-Object ii = Get_Value("C_FinRptAcctGroup_ID");
+Object ii = Get_Value("VAB_FinRptAcctGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report.
-@param C_FinRptConfig_ID Report */
-public void SetC_FinRptConfig_ID (int C_FinRptConfig_ID)
+@param VAB_FinRptConfig_ID Report */
+public void SetVAB_FinRptConfig_ID (int VAB_FinRptConfig_ID)
 {
-if (C_FinRptConfig_ID < 1) throw new ArgumentException ("C_FinRptConfig_ID is mandatory.");
-Set_ValueNoCheck ("C_FinRptConfig_ID", C_FinRptConfig_ID);
+if (VAB_FinRptConfig_ID < 1) throw new ArgumentException ("VAB_FinRptConfig_ID is mandatory.");
+Set_ValueNoCheck ("VAB_FinRptConfig_ID", VAB_FinRptConfig_ID);
 }
 /** Get Report.
 @return Report */
-public int GetC_FinRptConfig_ID() 
+public int GetVAB_FinRptConfig_ID() 
 {
-Object ii = Get_Value("C_FinRptConfig_ID");
+Object ii = Get_Value("VAB_FinRptConfig_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

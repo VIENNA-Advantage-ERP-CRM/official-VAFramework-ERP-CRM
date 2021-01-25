@@ -30,7 +30,7 @@ SetAcceptDirectDeposit (false);
 SetAcceptDiscover (false);
 SetAcceptMC (false);
 SetAcceptVisa (false);
-SetC_BankAccount_ID (0);
+SetVAB_Bank_Acct_ID (0);
 SetC_PaymentProcessor_ID (0);
 SetCommission (0.0);
 SetCostPerTrx (0.0);
@@ -53,7 +53,7 @@ SetAcceptDirectDeposit (false);
 SetAcceptDiscover (false);
 SetAcceptMC (false);
 SetAcceptVisa (false);
-SetC_BankAccount_ID (0);
+SetVAB_Bank_Acct_ID (0);
 SetC_PaymentProcessor_ID (0);
 SetCommission (0.0);
 SetCostPerTrx (0.0);
@@ -340,33 +340,33 @@ if (oo != null)
 return false;
 }
 /** Set Bank Account.
-@param C_BankAccount_ID Account at the Bank */
-public void SetC_BankAccount_ID (int C_BankAccount_ID)
+@param VAB_Bank_Acct_ID Account at the Bank */
+public void SetVAB_Bank_Acct_ID (int VAB_Bank_Acct_ID)
 {
-if (C_BankAccount_ID < 1) throw new ArgumentException ("C_BankAccount_ID is mandatory.");
-Set_ValueNoCheck ("C_BankAccount_ID", C_BankAccount_ID);
+if (VAB_Bank_Acct_ID < 1) throw new ArgumentException ("VAB_Bank_Acct_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
 }
 /** Get Bank Account.
 @return Account at the Bank */
-public int GetC_BankAccount_ID() 
+public int GetVAB_Bank_Acct_ID() 
 {
-Object ii = Get_Value("C_BankAccount_ID");
+Object ii = Get_Value("VAB_Bank_Acct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);
+if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);
 else
-Set_Value ("C_Currency_ID", C_Currency_ID);
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

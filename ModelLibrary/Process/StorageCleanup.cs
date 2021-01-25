@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class StorageCleanup : ProcessEngine.SvrProcess
     {
         // Movement Document Type	
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
 
         /// <summary>
         ///  Prepare - e.g., get Parameters.
@@ -41,9 +41,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Create Movement
             MMovement mh = new MMovement(GetCtx(), 0, Get_Trx());
-            mh.SetC_DocType_ID(_C_DocType_ID);
+            mh.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
             mh.SetDescription(GetName());
             if (!mh.Save())
             {

@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         {
             if (C_Year_ID == 0)
             {
-                //	setC_Calendar_ID (0);
+                //	setVAB_Calender_ID (0);
                 //	setYear (null);
                 SetProcessing(false);	// N
             }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             : this(calendar.GetCtx(), 0, calendar.Get_TrxName())
         {
             SetClientOrg(calendar);
-            SetC_Calendar_ID(calendar.GetC_Calendar_ID());
+            SetVAB_Calender_ID(calendar.GetVAB_Calender_ID());
             SetYear();
         }
 

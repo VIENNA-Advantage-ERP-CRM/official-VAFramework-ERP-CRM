@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_BankAccount
+ * Class Used     : X_VAB_Bank_Acct
  * Chronological Development
  * Veena Pandey     24-June-2009
  ******************************************************/
@@ -19,30 +19,30 @@ using VAdvantage.Common;
 
 namespace VAdvantage.Model
 {
-    public class MBankAccount : X_C_BankAccount
+    public class MBankAccount : X_VAB_Bank_Acct
     {
         /**	Cache						*/
         private static CCache<int, MBankAccount> _cache
-            = new CCache<int, MBankAccount>("C_BankAccount", 5);
+            = new CCache<int, MBankAccount>("VAB_Bank_Acct", 5);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BankAccount_ID">id</param>
+        /// <param name="VAB_Bank_Acct_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MBankAccount(Ctx ctx, int C_BankAccount_ID, Trx trxName)
-            : base(ctx, C_BankAccount_ID, trxName)
+        public MBankAccount(Ctx ctx, int VAB_Bank_Acct_ID, Trx trxName)
+            : base(ctx, VAB_Bank_Acct_ID, trxName)
         {
-            if (C_BankAccount_ID == 0)
+            if (VAB_Bank_Acct_ID == 0)
             {
                 SetIsDefault(false);
                 SetBankAccountType(BANKACCOUNTTYPE_Checking);
                 SetCurrentBalance(Env.ZERO);
                 SetUnMatchedBalance(Env.ZERO);
-                //	SetC_Currency_ID (0);
+                //	SetVAB_Currency_ID (0);
                 SetCreditLimit(Env.ZERO);
-                //	SetC_BankAccount_ID (0);
+                //	SetVAB_Bank_Acct_ID (0);
             }
         }
 
@@ -60,16 +60,16 @@ namespace VAdvantage.Model
         /**
 	     * 	Get BankAccount from Cache
 	     *	@param ctx context
-	     *	@param C_BankAccount_ID id
+	     *	@param VAB_Bank_Acct_ID id
 	     *	@return MBankAccount
 	     */
-        public static MBankAccount Get(Ctx ctx, int C_BankAccount_ID)
+        public static MBankAccount Get(Ctx ctx, int VAB_Bank_Acct_ID)
         {
-            int key = C_BankAccount_ID;
+            int key = VAB_Bank_Acct_ID;
             MBankAccount retValue = (MBankAccount)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MBankAccount(ctx, C_BankAccount_ID, null);
+            retValue = new MBankAccount(ctx, VAB_Bank_Acct_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -125,23 +125,23 @@ namespace VAdvantage.Model
             }
 
             //Issue ID- SI_0613 in Google Sheet Standard Issues.. On Bank account currency should not allow to change if any transcation made against bank.
-            if (!newRecord && Is_ValueChanged("C_Currency_ID"))
+            if (!newRecord && Is_ValueChanged("VAB_Currency_ID"))
             {
-                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM C_PAYMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM C_ELEMENTVALUE WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BP_BANKACCOUNT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_BANKACCOUNT_ACCT  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKSTATEMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_PAYMENTPROCESSOR  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_CASHLINE WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_PAYSELECTION WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_BANKACCOUNTDOC WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS Total FROM C_BankAccountLine WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID();
+                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM C_PAYMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL SELECT COUNT(*) AS TOTAL FROM VAB_ACCT_ELEMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BPart_Bank_Acct WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM VAB_BANK_ACCT_ACCT  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BANKINGJRNL WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_PAYMENTPROCESSOR  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM VAB_CASHJRNLLINE WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_PAYSELECTION WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BANK_ACCTDOC WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS Total FROM VAB_Bank_AcctLine WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID();
 
                 if (Env.IsModuleInstalled("VA026_")) // if Letter Of Credit Module is Installed..
-                    sql += " UNION ALL SELECT count(*) as Total FROM VA026_LCDETAIL WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID();
+                    sql += " UNION ALL SELECT count(*) as Total FROM VA026_LCDETAIL WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID();
                 if (Env.IsModuleInstalled("VA027_")) // If Post dated Check Module is Installed..
-                    sql += " UNION ALL SELECT count(*) as total FROM VA027_POSTDATEDCHECK WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND C_BANKACCOUNT_ID =" + GetC_BankAccount_ID();
+                    sql += " UNION ALL SELECT count(*) as total FROM VA027_POSTDATEDCHECK WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID();
 
                 sql += ")";
 
@@ -196,16 +196,16 @@ namespace VAdvantage.Model
                     //MAcctSchema acschma = new MAcctSchema(GetCtx(), 0, null);
                     _client_ID = GetVAF_Client_ID();
                     _sql.Clear();
-                    _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
+                    _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where VAF_CLIENT_ID=" + _client_ID);
                     DataSet ds3 = new DataSet();
                     ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                     if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                     {
                         for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                         {
-                            int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                            int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                             _sql.Clear();
-                            _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                            _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                             DataSet ds = new DataSet();
                             ds = DB.ExecuteDataset(_sql.ToString(), null);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
                                         if (_relatedTo == relatedto)
                                         {
                                             _sql.Clear();
-                                            _sql.Append("Select COUNT(*) From C_BankAccount Ba Left Join FRPT_BankAccount_Acct ca On Ba.C_BANKACCOUNT_ID=ca.C_BANKACCOUNT_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Ba.IsActive='Y' AND Ba.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Ba.C_BankAccount_ID = " + GetC_BankAccount_ID());
+                                            _sql.Append("Select COUNT(*) From VAB_Bank_Acct Ba Left Join FRPT_BankAccount_Acct ca On Ba.VAB_BANK_ACCT_ID=ca.VAB_BANK_ACCT_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Ba.IsActive='Y' AND Ba.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Ba.VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID());
                                             int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                             //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                             //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -235,11 +235,11 @@ namespace VAdvantage.Model
                                             if (recordFound == 0)
                                             {
                                                 bnkact = MTable.GetPO(GetCtx(), "FRPT_BankAccount_Acct", 0, null);
-                                                bnkact.Set_ValueNoCheck("C_BankAccount_ID", Util.GetValueOfInt(GetC_BankAccount_ID()));
+                                                bnkact.Set_ValueNoCheck("VAB_Bank_Acct_ID", Util.GetValueOfInt(GetVAB_Bank_Acct_ID()));
                                                 bnkact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                                 bnkact.Set_Value("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                                 bnkact.Set_Value("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                                bnkact.Set_Value("C_AcctSchema_ID", _AcctSchema_ID);
+                                                bnkact.Set_Value("VAB_AccountBook_ID", _AcctSchema_ID);
                                                 if (!bnkact.Save())
                                                 { }
                                             }
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
                 }
                 else if (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y")
                 {
-                    bool sucs = Insert_Accounting("C_BankAccount_Acct", "C_AcctSchema_Default", null);
+                    bool sucs = Insert_Accounting("VAB_Bank_Acct_Acct", "VAB_AccountBook_Default", null);
 
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
@@ -275,7 +275,7 @@ namespace VAdvantage.Model
          */
         protected override Boolean BeforeDelete()
         {
-            return Delete_Accounting("C_BankAccount_Acct");
+            return Delete_Accounting("VAB_Bank_Acct_Acct");
         }
 
         /**

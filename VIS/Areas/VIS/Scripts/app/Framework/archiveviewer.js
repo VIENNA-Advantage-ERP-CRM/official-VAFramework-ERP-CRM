@@ -103,8 +103,8 @@
             lblCreatedByQ = new VIS.Controls.VLabel();
             lblCreatedOnQ = new VIS.Controls.VLabel();
 
-            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 0, VIS.DisplayType.Search, "C_BPartner_ID", 0, false, null);
-            vSearchBPartnerQ = new VIS.Controls.VTextBoxButton("C_BPartner_ID", false, false, true, VIS.DisplayType.Search, lookup);
+            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 0, VIS.DisplayType.Search, "VAB_BusinessPartner_ID", 0, false, null);
+            vSearchBPartnerQ = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", false, false, true, VIS.DisplayType.Search, lookup);
 
             cmbTableQ = new VIS.Controls.VComboBox('', false, false, true);
             cmbProcess = new VIS.Controls.VComboBox('', false, false, true);
@@ -452,7 +452,7 @@
             //chkReportQ.find("label").text(VIS.Msg.translate(VIS.Env.getCtx(), "IsReport"));
             lblProcessQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Job_ID"));
             lblTableQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_TableView_ID"));
-            lblBPartnerQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
+            lblBPartnerQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"));
             lblNameQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Name"));
             lblDescriptionQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Description"));
             lblCommentQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Help"));
@@ -627,8 +627,8 @@
 
                     sql = sql.concat(")");
 
-                    if (gVAF_TableView_ID == X_C_BPartner.Table_ID && gRecord_ID > 0)
-                        sql = sql.concat(" OR C_BPartner_ID=").concat(gRecord_ID);
+                    if (gVAF_TableView_ID == X_VAB_BusinessPartner.Table_ID && gRecord_ID > 0)
+                        sql = sql.concat(" OR VAB_BusinessPartner_ID=").concat(gRecord_ID);
 
                     sql = sql.concat(")");
                     //	Reset for query
@@ -646,9 +646,9 @@
                 if (!reports) {
                     var ii = vSearchBPartnerQ.getValue();
                     if (ii != null)
-                        sql = sql.concat(" AND C_BPartner_ID=").concat(ii);
+                        sql = sql.concat(" AND VAB_BusinessPartner_ID=").concat(ii);
                     else
-                        sql = sql.concat(" AND C_BPartner_ID IS NOT NULL");
+                        sql = sql.concat(" AND VAB_BusinessPartner_ID IS NOT NULL");
                 }
 
                 //	Name
@@ -712,7 +712,7 @@
 
             var whereClause = sql;
 
-            var sqlMain = "SELECT VAF_ARCHIVE_ID,VAF_CLIENT_ID,VAF_ORG_ID,VAF_JOB_ID,VAF_TABLEVIEW_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
+            var sqlMain = "SELECT VAF_ARCHIVE_ID,VAF_CLIENT_ID,VAF_ORG_ID,VAF_JOB_ID,VAF_TABLEVIEW_ID,VAB_BUSINESSPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
                 " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM VAF_Archive WHERE VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
             if (whereClause != null && whereClause.length > 0)
                 sqlMain += whereClause;
@@ -801,7 +801,7 @@
                 arrListColumns.push({ field: "VAF_ARCHIVE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_ARCHIVE_ID"), hidden: true });
                 //arrListColumns.push({ field: "VAF_JOB_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_JOB_ID"), hidden: true });
                 //arrListColumns.push({ field: "VAF_TABLEVIEW_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_TABLEVIEW_ID"), hidden: true });
-                //arrListColumns.push({ field: "C_BPARTNER_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPARTNER_ID"), hidden: true });
+                //arrListColumns.push({ field: "VAB_BUSINESSPARTNER_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BUSINESSPARTNER_ID"), hidden: true });
                 //arrListColumns.push({ field: "RECORD_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "RECORD_ID"), hidden: true });
                 //arrListColumns.push({ field: "EXPORT_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "EXPORT_ID"), hidden: true });
             }
@@ -895,7 +895,7 @@
                     line['VAF_ARCHIVE_ID'] = dr.getInt('VAF_ARCHIVE_ID');
                     //line['VAF_JOB_ID'] = dr.getInt('VAF_JOB_ID');
                     //line['VAF_TABLEVIEW_ID'] = dr.getInt('VAF_TABLEVIEW_ID');
-                    //line['C_BPARTNER_ID'] = dr.getInt('C_BPARTNER_ID');
+                    //line['VAB_BUSINESSPARTNER_ID'] = dr.getInt('VAB_BUSINESSPARTNER_ID');
                     //line['RECORD_ID'] = dr.getInt('RECORD_ID');
                     //line['EXPORT_ID'] = dr.getInt('EXPORT_ID');
                     line['recid'] = count;

@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MConversionType
- * Purpose        : Currency Conversion Type using C_ConversionType table
- * Class Used     : X_C_ConversionType
+ * Purpose        : Currency Conversion Type using VAB_CurrencyType table
+ * Class Used     : X_VAB_CurrencyType
  * Chronological    Development
  * Raghunandan      28-04-2009
   ******************************************************/
@@ -23,19 +23,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MConversionType : X_C_ConversionType
+    public class MConversionType : X_VAB_CurrencyType
     {
         //Cache Client-ID				
-        private static CCache<int, int> s_cache = new CCache<int, int>("C_ConversionType", 4);
+        private static CCache<int, int> s_cache = new CCache<int, int>("VAB_CurrencyType", 4);
 
         /// <summary>
         ///	Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ConversionType_ID">id</param>
+        /// <param name="VAB_CurrencyType_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MConversionType(Ctx ctx, int C_ConversionType_ID, Trx trxName)
-            : base(ctx, C_ConversionType_ID, trxName)
+        public MConversionType(Ctx ctx, int VAB_CurrencyType_ID, Trx trxName)
+            : base(ctx, VAB_CurrencyType_ID, trxName)
         {
 
         }
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         ///Get Default Conversion Rate for Client/Org
         /// </summary>
         /// <param name="VAF_Client_ID">client</param>
-        /// <returns>C_ConversionType_ID or 0 if not found</returns>
+        /// <returns>VAB_CurrencyType_ID or 0 if not found</returns>
         public static int GetDefault(int VAF_Client_ID)
         {
             //	Try Cache
@@ -68,17 +68,17 @@ namespace VAdvantage.Model
             }
 
             //	Get from DB
-            int C_ConversionType_ID = 0;
-            String sql = "SELECT C_ConversionType_ID "
-                + "FROM C_ConversionType "
+            int VAB_CurrencyType_ID = 0;
+            String sql = "SELECT VAB_CurrencyType_ID "
+                + "FROM VAB_CurrencyType "
                 + "WHERE IsActive='Y'"
                 + " AND VAF_Client_ID IN (0, @param1)"		//	#1
                 + "ORDER BY IsDefault DESC, VAF_Client_ID DESC";
-            C_ConversionType_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql, VAF_Client_ID);
+            VAB_CurrencyType_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, sql, VAF_Client_ID);
 
             //	Return
-            s_cache.Add(key, C_ConversionType_ID);
-            return C_ConversionType_ID;
+            s_cache.Add(key, VAB_CurrencyType_ID);
+            return VAB_CurrencyType_ID;
         }
 
         /// <summary>

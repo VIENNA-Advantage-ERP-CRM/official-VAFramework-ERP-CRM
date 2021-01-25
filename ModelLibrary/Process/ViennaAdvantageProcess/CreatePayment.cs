@@ -50,8 +50,8 @@ namespace ViennaAdvantage.Process
                 }
                 //int c_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Order_ID From C_Order WHERE DocumentNo=" + salesOrderNo));
                 MOrder order = new MOrder(GetCtx(), C_Order_ID, Get_TrxName());
-                int C_DocType_ID = order.GetC_DocTypeTarget_ID();
-                string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From C_DocType WHERE isactive='Y' AND C_DocType_ID=" + C_DocType_ID).ToString();
+                int VAB_DocTypes_ID = order.GetVAB_DocTypesTarget_ID();
+                string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From VAB_DocTypes WHERE isactive='Y' AND VAB_DocTypes_ID=" + VAB_DocTypes_ID).ToString();
 
                 if (!(baseType.Equals("PR") || baseType.Equals("WI")))
                 {
@@ -61,16 +61,16 @@ namespace ViennaAdvantage.Process
                 payment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 payment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 //payment.SetDocumentNo(MS
-                payment.SetC_BankAccount_ID(Util.GetValueOfInt(DB.ExecuteScalar("Select c_bankAccount_ID from c_bankaccount where isdefault='Y' and isactive='Y'")));
+                payment.SetVAB_Bank_Acct_ID(Util.GetValueOfInt(DB.ExecuteScalar("Select VAB_Bank_Acct_ID from VAB_Bank_Acct where isdefault='Y' and isactive='Y'")));
                 payment.SetDateTrx(DateTime.Now);
                 payment.SetDateAcct(DateTime.Now);
-                payment.SetC_BPartner_ID(order.GetC_BPartner_ID());
+                payment.SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
                 payment.SetPayAmt(order.GetGrandTotal());
-                payment.SetC_Currency_ID(order.GetC_Currency_ID());
+                payment.SetVAB_Currency_ID(order.GetVAB_Currency_ID());
                 payment.SetTenderType("K");
                 payment.SetDocStatus("IP");
-                C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID From C_DocType WHERE isactive='Y' AND DocBaseType = 'ARR' AND VAF_Client_ID = " + order.GetVAF_Client_ID() + " ORDER BY IsDefault DESC"));
-                payment.SetC_DocType_ID(C_DocType_ID);
+                VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_DocTypes_ID From VAB_DocTypes WHERE isactive='Y' AND DocBaseType = 'ARR' AND VAF_Client_ID = " + order.GetVAF_Client_ID() + " ORDER BY IsDefault DESC"));
+                payment.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                 if (baseType.Equals("PR")) //prepay Order
                 {
                     payment.SetC_Order_ID(order.GetC_Order_ID());

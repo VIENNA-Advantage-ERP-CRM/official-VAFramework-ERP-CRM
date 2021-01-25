@@ -265,22 +265,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set BP from BPartnerKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_BPartner_ID = (SELECT C_BPartner_ID FROM C_BPartner b"
+                      + " SET VAB_BusinessPartner_ID = (SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner b"
                       + " WHERE b.Value=r.BPartnerValue AND b.VAF_Client_ID=r.VAF_Client_ID ), "
-                      + " BPartnerName=(SELECT Name FROM C_BPartner b"
+                      + " BPartnerName=(SELECT Name FROM VAB_BusinessPartner b"
                       + " WHERE b.Value=r.BPartnerValue AND b.VAF_Client_ID=r.VAF_Client_ID )"
-                      + " WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
+                      + " WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartner from BPartnerKey=" + no);
 
             //	Set BP from BPartnerName
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_BPartner b"
+                  + " SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner b"
                   + " WHERE b.Name=r.BpartnerName AND b.VAF_Client_ID=r.VAF_Client_ID ), "
-                  + " BPartnerValue=(SELECT Value FROM C_BPartner b"
+                  + " BPartnerValue=(SELECT Value FROM VAB_BusinessPartner b"
                   + " WHERE b.Name=r.BpartnerName AND b.VAF_Client_ID=r.VAF_Client_ID )"
-                  + " WHERE C_BPartner_ID IS NULL AND BPartnerName IS NOT NULL"
+                  + " WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartner from BPartnerName=" + no);
@@ -289,7 +289,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Bpartner, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_BPartner_ID is NULL"
+                      + " AND r.VAB_BusinessPartner_ID is NULL"
                       + " AND (r.BPartnerName is NOT NULL OR r.BPartnerValue IS NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -298,9 +298,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set User from UserKey
             sql = new StringBuilder("UPDATE I_Request r"
                   + " SET VAF_UserContact_ID =(SELECT VAF_UserContact_ID FROM VAF_UserContact u"
-                  + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID), "
+                  + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID = r.VAB_BusinessPartner_ID), "
                   + " ContactName =(SELECT Name FROM VAF_UserContact u"
-                  + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID) "
+                  + " WHERE r.ContactValue=u.Value AND r.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID = r.VAB_BusinessPartner_ID) "
                   + " WHERE VAF_UserContact_ID IS NULL AND ContactValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -309,9 +309,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set User from UserName
             sql = new StringBuilder("UPDATE I_Request r"
                   + " SET VAF_UserContact_ID=(SELECT VAF_UserContact_ID FROM VAF_UserContact u"
-                  + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID ),"
+                  + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID = r.VAB_BusinessPartner_ID ),"
                   + " ContactValue =(SELECT Value FROM VAF_UserContact u"
-                  + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID )"
+                  + " WHERE r.ContactName=u.Name AND r.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID = r.VAB_BusinessPartner_ID )"
                   + " WHERE VAF_UserContact_ID IS NULL AND ContactName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -325,7 +325,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                       + " (r.VAF_UserContact_ID is NULL AND (r.ContactName is NOT NULL OR r.ContactValue IS NOT NULL))"
                       + " OR (r.VAF_UserContact_ID is NOT NULL AND NOT EXISTS"
                       + "(SELECT 1 FROM VAF_USERCONTACT u WHERE u.VAF_UserContact_ID = r.VAF_UserContact_ID "
-                      + " AND r.VAF_Client_ID=u.VAF_Client_ID AND u.C_Bpartner_ID = r.C_BPartner_ID)))").Append(clientCheck);
+                      + " AND r.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID = r.VAB_BusinessPartner_ID)))").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid User=" + no);
@@ -493,22 +493,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Activity from ActivityKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Activity_ID=(SELECT C_Activity_ID FROM C_Activity a"
+                      + " SET VAB_BillingCode_ID=(SELECT VAB_BillingCode_ID FROM VAB_BillingCode a"
                       + " WHERE r.ActivityValue=a.Value AND r.VAF_Client_ID=a.VAF_Client_ID ), "
-                      + " ActivityName=(SELECT Name FROM C_Activity a"
+                      + " ActivityName=(SELECT Name FROM VAB_BillingCode a"
                       + " WHERE r.ActivityValue=a.Value AND r.VAF_Client_ID=a.VAF_Client_ID )"
-                      + " WHERE C_Activity_ID IS NULL AND ActivityValue IS NOT NULL"
+                      + " WHERE VAB_BillingCode_ID IS NULL AND ActivityValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Activity from ActivityValue =" + no);
 
             //	Set Activity from ActivityName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Activity_ID = (SELECT C_Activity_ID FROM C_Activity a"
+                      + " SET VAB_BillingCode_ID = (SELECT VAB_BillingCode_ID FROM VAB_BillingCode a"
                       + " WHERE r.ActivityName=a.Name AND r.VAF_Client_ID=a.VAF_Client_ID ), "
-                      + " ActivityValue =(SELECT Value FROM C_Activity a"
+                      + " ActivityValue =(SELECT Value FROM VAB_BillingCode a"
                       + " WHERE r.ActivityName=a.Name AND r.VAF_Client_ID=a.VAF_Client_ID )"
-                      + " WHERE C_Activity_ID IS NULL AND ActivityName IS NOT NULL"
+                      + " WHERE VAB_BillingCode_ID IS NULL AND ActivityName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Activity from ActivityName =" + no);
@@ -517,7 +517,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Activity, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Activity_ID IS NULL"
+                      + " AND r.VAB_BillingCode_ID IS NULL"
                       + " AND (r.ActivityName IS NOT NULL OR r.ActivityValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -525,22 +525,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set BP from BPartnerKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_BPartnerSR_ID=(SELECT C_BPartner_ID FROM C_BPartner b"
+                      + " SET VAB_BusinessPartnerSR_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner b"
                       + " WHERE b.Value=r.BPartnerSRValue AND b.VAF_Client_ID=r.VAF_Client_ID AND isSalesRep='Y'), "
-                      + " BPartnerSRName =(SELECT Name FROM C_BPartner b"
+                      + " BPartnerSRName =(SELECT Name FROM VAB_BusinessPartner b"
                       + " WHERE b.Value=r.BPartnerSRValue AND b.VAF_Client_ID=r.VAF_Client_ID AND isSalesRep='Y')"
-                      + " WHERE C_BPartnerSR_ID IS NULL AND BPartnerSRValue IS NOT NULL"
+                      + " WHERE VAB_BusinessPartnerSR_ID IS NULL AND BPartnerSRValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartnerSR from BPartnerSRKey=" + no);
 
             //	Set BP (Agent) from BPartnerSRName
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET C_BPartnerSR_ID=(SELECT C_BPartner_ID FROM C_BPartner b"
+                  + " SET VAB_BusinessPartnerSR_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner b"
                   + " WHERE b.Name=r.BPartnerSRName AND b.VAF_Client_ID=r.VAF_Client_ID AND isSalesRep='Y'), "
-                  + " BPartnerSRValue =(SELECT value FROM C_BPartner b"
+                  + " BPartnerSRValue =(SELECT value FROM VAB_BusinessPartner b"
                   + " WHERE b.Name=r.BPartnerSRName AND b.VAF_Client_ID=r.VAF_Client_ID AND isSalesRep='Y')"
-                  + " WHERE C_BPartnerSR_ID IS NULL AND BPartnerSRName IS NOT NULL"
+                  + " WHERE VAB_BusinessPartnerSR_ID IS NULL AND BPartnerSRName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartnerSR from BPartnerSRName=" + no);
@@ -549,9 +549,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Bpartner(Agent), ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND ((r.C_BPartnerSR_ID is NULL AND (r.BPartnerSRName is NOT NULL OR r.BPartnerSRValue IS NOT NULL))"
-                      + " OR (r.C_BPartnerSR_ID is NOT NULL AND "
-                      + " NOT EXISTS (SELECT 1 from C_BPartner b WHERE b.C_BPartner_ID = r.C_BPartnerSR_ID"
+                      + " AND ((r.VAB_BusinessPartnerSR_ID is NULL AND (r.BPartnerSRName is NOT NULL OR r.BPartnerSRValue IS NOT NULL))"
+                      + " OR (r.VAB_BusinessPartnerSR_ID is NOT NULL AND "
+                      + " NOT EXISTS (SELECT 1 from VAB_BusinessPartner b WHERE b.VAB_BusinessPartner_ID = r.VAB_BusinessPartnerSR_ID"
                       + " AND b.VAF_Client_ID=r.VAF_Client_ID AND isSalesRep='Y')))").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -591,22 +591,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Asset from AssetKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET A_Asset_ID=(SELECT A_Asset_ID FROM A_Asset a"
+                      + " SET VAA_Asset_ID=(SELECT VAA_Asset_ID FROM VAA_Asset a"
                       + " WHERE a.Value=r.AssetValue AND a.VAF_Client_ID=r.VAF_Client_ID ), "
-                      + " AssetName =(SELECT Name FROM A_Asset a"
+                      + " AssetName =(SELECT Name FROM VAA_Asset a"
                       + " WHERE a.Value=r.AssetValue AND a.VAF_Client_ID=r.VAF_Client_ID ) "
-                      + " WHERE A_Asset_ID IS NULL AND AssetValue IS NOT NULL"
+                      + " WHERE VAA_Asset_ID IS NULL AND AssetValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Asset from AssetKey=" + no);
 
             // Set Project from AssetName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET A_Asset_ID=(SELECT A_Asset_ID FROM A_Asset a"
+                      + " SET VAA_Asset_ID=(SELECT VAA_Asset_ID FROM VAA_Asset a"
                       + " WHERE a.Name=r.AssetName AND a.VAF_Client_ID=r.VAF_Client_ID ), "
-                      + " AssetValue=(SELECT Value FROM A_Asset a"
+                      + " AssetValue=(SELECT Value FROM VAA_Asset a"
                       + " WHERE a.Name=r.AssetName AND a.VAF_Client_ID=r.VAF_Client_ID ) "
-                      + " WHERE A_Asset_ID IS NULL AND AssetName IS NOT NULL"
+                      + " WHERE VAA_Asset_ID IS NULL AND AssetName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Asset from AssetName=" + no);
@@ -615,7 +615,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Asset, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.A_Asset_ID is NULL"
+                      + " AND r.VAA_Asset_ID is NULL"
                       + " AND (r.AssetName is NOT NULL OR r.AssetValue IS NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -656,22 +656,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Campaign from CampaignKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Campaign_ID=(SELECT C_Campaign_ID FROM C_Campaign c"
+                      + " SET VAB_Promotion_ID=(SELECT VAB_Promotion_ID FROM VAB_Promotion c"
                       + " WHERE r.CampaignValue=c.Value AND r.VAF_Client_ID=c.VAF_Client_ID ), "
-                      + " CampaignName =(SELECT Name FROM C_Campaign c"
+                      + " CampaignName =(SELECT Name FROM VAB_Promotion c"
                       + " WHERE r.CampaignValue=c.Value AND r.VAF_Client_ID=c.VAF_Client_ID )"
-                      + " WHERE C_Campaign_ID IS NULL AND CampaignValue IS NOT NULL"
+                      + " WHERE VAB_Promotion_ID IS NULL AND CampaignValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Campaign from CampaignValue =" + no);
 
             //	Set Campaign from CampaignName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Campaign_ID =(SELECT C_Campaign_ID FROM C_Campaign c"
+                      + " SET VAB_Promotion_ID =(SELECT VAB_Promotion_ID FROM VAB_Promotion c"
                       + " WHERE r.CampaignName=c.Name AND r.VAF_Client_ID=c.VAF_Client_ID ), "
-                      + " CampaignValue =(SELECT Value FROM C_Campaign c"
+                      + " CampaignValue =(SELECT Value FROM VAB_Promotion c"
                       + " WHERE r.CampaignName=c.Name AND r.VAF_Client_ID=c.VAF_Client_ID )"
-                      + " WHERE C_Campaign_ID IS NULL AND CampaignName IS NOT NULL"
+                      + " WHERE VAB_Promotion_ID IS NULL AND CampaignName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Campaign from CampaignValue =" + no);
@@ -681,7 +681,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Campaign, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Campaign_ID IS NULL"
+                      + " AND r.VAB_Promotion_ID IS NULL"
                       + " AND (r.CampaignName IS NOT NULL OR r.CampaignValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

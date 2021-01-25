@@ -10,7 +10,7 @@
         this.dGrid = null;
         var whereClause = null;
         var VAF_Org_ID = null;
-        var C_BPartner_ID = null;
+        var VAB_BusinessPartner_ID = null;
 
         var toggle = false;
         var toggleGen = false;
@@ -222,7 +222,7 @@
 
         function jbInit() {
             $self.lblOrg.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Org_ID"));
-            $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
+            $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"));
             $self.tabSelect.getControl().text(VIS.Msg.getMsg("Select", false, false));
             $self.tabGenrate.getControl().text(VIS.Msg.getMsg("Generate", false, false));
             //Changed Msg By Pratap - 4/12/15 
@@ -238,7 +238,7 @@
             $self.cmbOrg = new VIS.Controls.VComboBox("VAF_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
             var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search);
-            $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value, 0);
+            $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, value, 0);
 
             // var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search);
             var orderShipmentvalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "C_Order_ID", 0, false, "DocStatus='CO'");
@@ -258,9 +258,9 @@
             if ($self.arrListColumns.length == 0) {
                 // this.arrListColumns.push({ field: "Select", caption: VIS.Msg.getMsg("Select"), sortable: true, size: '50px', hidden: false });
                 $self.arrListColumns.push({ field: "VAF_Org_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Org_ID"), sortable: true, size: '16%', min: 150, hidden: false });
-                $self.arrListColumns.push({ field: "C_DocType_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_DocType_ID"), sortable: true, size: '16%', min: 150, hidden: false });
+                $self.arrListColumns.push({ field: "VAB_DocTypes_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_DocTypes_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '16%', min: 150, hidden: false });
-                $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '16%', min: 150, hidden: false });
+                $self.arrListColumns.push({ field: "VAB_BusinessPartner_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({
                     field: "DateOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DateOrdered"), sortable: true, size: '16%', min: 150, hidden: false, render: function (record, index, col_index) {
                         var val;
@@ -310,8 +310,8 @@
                     adOrgID = " AND ic.VAF_Org_ID=" + VAF_Org_ID;
                 }
             }
-            if (C_BPartner_ID != null) {
-                cBPartnerID = " AND ic.C_BPartner_ID=" + C_BPartner_ID;
+            if (VAB_BusinessPartner_ID != null) {
+                cBPartnerID = " AND ic.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             }
             if (ordershipment_id != null) {
                 ordShipmentid = " AND C_Order_ID=" + ordershipment_id;
@@ -339,9 +339,9 @@
                                 var line = {};
                                 line['C_Order_ID'] = ress[i].c_order_id,
                                     line['VAF_Org_ID'] = ress[i].ord,
-                                    line['C_DocType_ID'] = ress[i].doctype,
+                                    line['VAB_DocTypes_ID'] = ress[i].doctype,
                                     line['DocumentNo'] = ress[i].documentno,
-                                    line['C_BPartner_ID'] = ress[i].bpname,
+                                    line['VAB_BusinessPartner_ID'] = ress[i].bpname,
                                     line['DateOrdered'] = ress[i].dateordered,
                                     line['TotalLines'] = ress[i].tLines,
                                     line['recid'] = count;
@@ -386,10 +386,10 @@
         //    //  Create SQL
         //    var sql = (
         //        "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
-        //        + "FROM C_Invoice_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+        //        + "FROM C_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
         //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
-        //        + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
-        //        + " AND ic.C_DocType_ID=dt.C_DocType_ID"
+        //        + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+        //        + " AND ic.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
         //        + " AND ic.VAF_Client_ID=" + VAF_Client_ID);
 
         //    if (VAF_Org_ID != null) {
@@ -397,8 +397,8 @@
         //            sql = sql.concat(" AND ic.VAF_Org_ID=").concat(VAF_Org_ID);
         //        }
         //    }
-        //    if (C_BPartner_ID != null) {
-        //        sql = sql.concat(" AND ic.C_BPartner_ID=").concat(C_BPartner_ID);
+        //    if (VAB_BusinessPartner_ID != null) {
+        //        sql = sql.concat(" AND ic.VAB_BusinessPartner_ID=").concat(VAB_BusinessPartner_ID);
         //    }
         //    if (ordershipment_id != null)
         //    {
@@ -413,9 +413,9 @@
         //            var line = {};
         //            line['C_Order_ID'] = dr.getInt(0);
         //            line['VAF_Org_ID'] = dr.getString(1);
-        //            line['C_DocType_ID'] = dr.getString(2);
+        //            line['VAB_DocTypes_ID'] = dr.getString(2);
         //            line['DocumentNo'] = dr.getString(3);
-        //            line['C_BPartner_ID'] = dr.getString(4);
+        //            line['VAB_BusinessPartner_ID'] = dr.getString(4);
         //            line['DateOrdered'] = dr.getString(5);
         //            line['TotalLines'] = dr.getString(6);
         //            line['recid'] = count;
@@ -549,7 +549,7 @@
         }
 
         this.vetoablechange = function (evt) {
-            C_BPartner_ID = $self.vSearchBPartner.getValue();
+            VAB_BusinessPartner_ID = $self.vSearchBPartner.getValue();
             ordershipment_id = $self.vSearchOrderShipment.getValue();
             $self.okBtn.removeAttr('disabled');
             executeQuery();
@@ -619,7 +619,7 @@
                     $self.okBtn.removeAttr('disabled');
 
                     VAF_Org_ID = $self.cmbOrg.getControl().find('option:selected').val();
-                    C_BPartner_ID = $self.vSearchBPartner.getValue();
+                    VAB_BusinessPartner_ID = $self.vSearchBPartner.getValue();
                     executeQuery();
 
                 });
@@ -786,7 +786,7 @@
             this.dGrid = null;
             whereClause = null;
             VAF_Org_ID = null;
-            C_BPartner_ID = null;
+            VAB_BusinessPartner_ID = null;
 
             toggle = null;
             toggleGen = null;

@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CashBook_Acct
+/** Generated Model for VAB_CashBook_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CashBook_Acct : PO
+public class X_VAB_CashBook_Acct : PO
 {
-public X_C_CashBook_Acct (Context ctx, int C_CashBook_Acct_ID, Trx trxName) : base (ctx, C_CashBook_Acct_ID, trxName)
+public X_VAB_CashBook_Acct (Context ctx, int VAB_CashBook_Acct_ID, Trx trxName) : base (ctx, VAB_CashBook_Acct_ID, trxName)
 {
-/** if (C_CashBook_Acct_ID == 0)
-{
-SetCB_Asset_Acct (0);
-SetCB_CashTransfer_Acct (0);
-SetCB_Differences_Acct (0);
-SetCB_Expense_Acct (0);
-SetCB_Receipt_Acct (0);
-SetC_AcctSchema_ID (0);
-SetC_CashBook_ID (0);
-}
- */
-}
-public X_C_CashBook_Acct (Ctx ctx, int C_CashBook_Acct_ID, Trx trxName) : base (ctx, C_CashBook_Acct_ID, trxName)
-{
-/** if (C_CashBook_Acct_ID == 0)
+/** if (VAB_CashBook_Acct_ID == 0)
 {
 SetCB_Asset_Acct (0);
 SetCB_CashTransfer_Acct (0);
 SetCB_Differences_Acct (0);
 SetCB_Expense_Acct (0);
 SetCB_Receipt_Acct (0);
-SetC_AcctSchema_ID (0);
-SetC_CashBook_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_CashBook_ID (0);
+}
+ */
+}
+public X_VAB_CashBook_Acct (Ctx ctx, int VAB_CashBook_Acct_ID, Trx trxName) : base (ctx, VAB_CashBook_Acct_ID, trxName)
+{
+/** if (VAB_CashBook_Acct_ID == 0)
+{
+SetCB_Asset_Acct (0);
+SetCB_CashTransfer_Acct (0);
+SetCB_Differences_Acct (0);
+SetCB_Expense_Acct (0);
+SetCB_Receipt_Acct (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_CashBook_ID (0);
 }
  */
 }
@@ -49,7 +49,7 @@ SetC_CashBook_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CashBook_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CashBook_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_CashBook_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CashBook_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CashBook_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_CashBook_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CashBook_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_CashBook_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CashBook_Acct()
+static X_VAB_CashBook_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389054301L;
 public static int Table_ID;
  // =409;
 
-/** TableName=C_CashBook_Acct */
-public static String Table_Name="C_CashBook_Acct";
+/** TableName=VAB_CashBook_Acct */
+public static String Table_Name="VAB_CashBook_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CashBook_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_CashBook_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Cash Book Asset.
@@ -193,17 +193,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -211,20 +211,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Cash Book.
-@param C_CashBook_ID Cash Book for recording petty cash transactions */
-public void SetC_CashBook_ID (int C_CashBook_ID)
+@param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+public void SetVAB_CashBook_ID (int VAB_CashBook_ID)
 {
-if (C_CashBook_ID < 1) throw new ArgumentException ("C_CashBook_ID is mandatory.");
-Set_ValueNoCheck ("C_CashBook_ID", C_CashBook_ID);
+if (VAB_CashBook_ID < 1) throw new ArgumentException ("VAB_CashBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_CashBook_ID", VAB_CashBook_ID);
 }
 /** Get Cash Book.
 @return Cash Book for recording petty cash transactions */
-public int GetC_CashBook_ID() 
+public int GetVAB_CashBook_ID() 
 {
-Object ii = Get_Value("C_CashBook_ID");
+Object ii = Get_Value("VAB_CashBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

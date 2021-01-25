@@ -46,7 +46,7 @@ namespace VAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "VIS_BlanketNotValid");
                 }
 
-                MDocType dt = MDocType.Get(GetCtx(), from.GetC_DocType_ID());
+                MDocType dt = MDocType.Get(GetCtx(), from.GetVAB_DocTypes_ID());
 
                 //Document Type against Release Order
                 if (dt.GetDocumentTypeforReleases() == 0)

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDunning
  * Purpose        : Dunning Model
- * Class Used     : X_C_Dunning
+ * Class Used     : X_VAB_Dunning
  * Chronological    Development
  * Raghunandan     10-Nov-2009
   ******************************************************/
@@ -23,16 +23,16 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MDunning : X_C_Dunning
+    public class MDunning : X_VAB_Dunning
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_Dunning_ID"></param>
+        /// <param name="VAB_Dunning_ID"></param>
         /// <param name="trxName"></param>
-        public MDunning(Ctx ctx, int C_Dunning_ID, Trx trxName)
-            : base(ctx, C_Dunning_ID, trxName)
+        public MDunning(Ctx ctx, int VAB_Dunning_ID, Trx trxName)
+            : base(ctx, VAB_Dunning_ID, trxName)
         {
 
         }

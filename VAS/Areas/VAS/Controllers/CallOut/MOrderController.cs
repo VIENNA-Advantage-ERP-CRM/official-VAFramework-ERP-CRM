@@ -45,14 +45,14 @@ namespace VIS.Controllers
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetC_Currency_ID(string fields)
+        public JsonResult GetVAB_Currency_ID(string fields)
         {
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MOrderModel objOrder = new MOrderModel();
-                retJSON = JsonConvert.SerializeObject(objOrder.GetC_Currency_ID(ctx, fields));
+                retJSON = JsonConvert.SerializeObject(objOrder.GetVAB_Currency_ID(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

@@ -19,7 +19,7 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             //throw new NotImplementedException();
-            string sql=@"DELETE C_CURRENCYSOURCE WHERE VAF_CLIENT_ID="+GetCtx().GetVAF_Client_ID();
+            string sql=@"DELETE VAB_CURRENCYSOURCE WHERE VAF_CLIENT_ID="+GetCtx().GetVAF_Client_ID();
             if (DB.ExecuteQuery(sql) == -1)
             {
                 return "ErrorInDeleteEntries";

@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Client to be imported to		*/
         private int _VAF_Client_ID = 0;
         /** Default Element					*/
-        private int _C_Element_ID = 0;
+        private int _VAB_Element_ID = 0;
         /**	Update Default Accounts			*/
         private bool _updateDefaultAccounts = false;
         /** Create New Combination			*/
@@ -53,8 +53,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 else if (name.Equals("VAF_Client_ID"))
                     _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                else if (name.Equals("C_Element_ID"))
-                    _C_Element_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAB_Element_ID"))
+                    _VAB_Element_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("UpdateDefaultAccounts"))
                     _updateDefaultAccounts = "Y".Equals(para[i].GetParameter());
                 else if (name.Equals("CreateNewCombination"))
@@ -108,28 +108,28 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	****	Prepare	****
 
             //	Set Element
-            if (_C_Element_ID != 0)
+            if (_VAB_Element_ID != 0)
             {
                 sql = new StringBuilder("UPDATE I_ElementValue "
-                    + "SET ElementName=(SELECT Name FROM C_Element WHERE C_Element_ID=")
-                        .Append(_C_Element_ID).Append(") "
-                    + "WHERE ElementName IS NULL AND C_Element_ID IS NULL"
+                    + "SET ElementName=(SELECT Name FROM VAB_Element WHERE VAB_Element_ID=")
+                        .Append(_VAB_Element_ID).Append(") "
+                    + "WHERE ElementName IS NULL AND VAB_Element_ID IS NULL"
                     + " AND I_IsImported<>'Y'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Set Element Default=" + no);
             }
             //
             sql = new StringBuilder("UPDATE I_ElementValue i "
-                + "SET C_Element_ID = (SELECT C_Element_ID FROM C_Element e"
+                + "SET VAB_Element_ID = (SELECT VAB_Element_ID FROM VAB_Element e"
                 + " WHERE i.ElementName=e.Name AND i.VAF_Client_ID=e.VAF_Client_ID)"
-                + "WHERE C_Element_ID IS NULL"
+                + "WHERE VAB_Element_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Element=" + no);
             //
             sql = new StringBuilder("UPDATE I_ElementValue "
                 + "SET I_IsImported='E', I_ErrorMsg='ERR=Invalid Element, ' "
-                + "WHERE C_Element_ID IS NULL"
+                + "WHERE VAB_Element_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid Element=" + no);
@@ -230,11 +230,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	****	Update ElementValue from existing
             sql = new StringBuilder("UPDATE I_ElementValue i "
-                + "SET C_ElementValue_ID=(SELECT C_ElementValue_ID FROM C_ElementValue ev"
-                + " INNER JOIN C_Element e ON (ev.C_Element_ID=e.C_Element_ID)"
-                + " WHERE i.C_Element_ID=e.C_Element_ID AND i.VAF_Client_ID=e.VAF_Client_ID"
+                + "SET VAB_Acct_Element_ID=(SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element ev"
+                + " INNER JOIN VAB_Element e ON (ev.VAB_Element_ID=e.VAB_Element_ID)"
+                + " WHERE i.VAB_Element_ID=e.VAB_Element_ID AND i.VAF_Client_ID=e.VAF_Client_ID"
                 + " AND i.Value=ev.Value) "
-                + "WHERE C_ElementValue_ID IS NULL"
+                + "WHERE VAB_Acct_Element_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found ElementValue=" + no);
@@ -258,17 +258,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     X_I_ElementValue impEV = new X_I_ElementValue(GetCtx(), idr, Get_TrxName());
-                    int C_ElementValue_ID = impEV.GetC_ElementValue_ID();
+                    int VAB_Acct_Element_ID = impEV.GetVAB_Acct_Element_ID();
                     int I_ElementValue_ID = impEV.GetI_ElementValue_ID();
 
                     //	****	Create/Update ElementValue
-                    if (C_ElementValue_ID == 0)		//	New
+                    if (VAB_Acct_Element_ID == 0)		//	New
                     {
                         MElementValue ev = new MElementValue(impEV);
                         if (ev.Save())
                         {
                             noInsert++;
-                            impEV.SetC_ElementValue_ID(ev.GetC_ElementValue_ID());
+                            impEV.SetVAB_Acct_Element_ID(ev.GetVAB_Acct_Element_ID());
                             impEV.SetI_IsImported(X_I_ElementValue.I_ISIMPORTED_Yes);
                             impEV.Save();
                         }
@@ -282,8 +282,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else							//	Update existing
                     {
-                        MElementValue ev = new MElementValue(GetCtx(), C_ElementValue_ID, null);
-                        if (ev.Get_ID() != C_ElementValue_ID)
+                        MElementValue ev = new MElementValue(GetCtx(), VAB_Acct_Element_ID, null);
+                        if (ev.Get_ID() != VAB_Acct_Element_ID)
                         {
                         }
                         ev.Set(impEV);
@@ -319,15 +319,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@C_ElementValue_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@C_ElementValue_ID@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAB_Acct_Element_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@VAB_Acct_Element_ID@: @Updated@");
 
             Commit();
 
             //	*****	Set Parent
             sql = new StringBuilder("UPDATE I_ElementValue i "
-                + "SET ParentElementValue_ID=(SELECT C_ElementValue_ID"
-                + " FROM C_ElementValue ev WHERE i.C_Element_ID=ev.C_Element_ID"
+                + "SET ParentElementValue_ID=(SELECT VAB_Acct_Element_ID"
+                + " FROM VAB_Acct_Element ev WHERE i.VAB_Element_ID=ev.VAB_Element_ID"
                 + " AND i.ParentValue=ev.Value AND i.VAF_Client_ID=ev.VAF_Client_ID) "
                 + "WHERE ParentElementValue_ID IS NULL"
                 + " AND I_IsImported='Y' AND Processed='N'").Append(clientCheck);
@@ -342,10 +342,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Config("Not Found Patent ElementValue=" + no);
             //
             sql = new StringBuilder("SELECT i.ParentElementValue_ID, i.I_ElementValue_ID,"
-                + " e.VAF_TreeInfo_ID, i.C_ElementValue_ID, i.Value||'-'||i.Name AS Info "
+                + " e.VAF_TreeInfo_ID, i.VAB_Acct_Element_ID, i.Value||'-'||i.Name AS Info "
                 + "FROM I_ElementValue i"
-                + " INNER JOIN C_Element e ON (i.C_Element_ID=e.C_Element_ID) "
-                + "WHERE i.C_ElementValue_ID IS NOT NULL AND e.VAF_TreeInfo_ID IS NOT NULL"
+                + " INNER JOIN VAB_Element e ON (i.VAB_Element_ID=e.VAB_Element_ID) "
+                + "WHERE i.VAB_Acct_Element_ID IS NOT NULL AND e.VAF_TreeInfo_ID IS NOT NULL"
                 + " AND i.ParentElementValue_ID IS NOT NULL"
                 + " AND i.I_IsImported='Y' AND Processed='N' AND i.VAF_Client_ID=").Append(_VAF_Client_ID);
             int noParentUpdate = 0;
@@ -402,7 +402,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_ElementValue "
                 + "SET Processing='-'"
                 + "WHERE I_IsImported='Y' AND Processed='N' AND Processing='Y'"
-                + " AND C_ElementValue_ID IS NOT NULL")
+                + " AND VAB_Acct_Element_ID IS NOT NULL")
                 .Append(clientCheck);
             if (_updateDefaultAccounts)
                 sql.Append(" AND VAF_Column_ID IS NULL");
@@ -415,7 +415,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Update Description
             sql = new StringBuilder("SELECT * FROM C_ValidCombination vc "
                 + "WHERE EXISTS (SELECT * FROM I_ElementValue i "
-                    + "WHERE vc.Account_ID=i.C_ElementValue_ID)");
+                    + "WHERE vc.Account_ID=i.VAB_Acct_Element_ID)");
 
             //	Done
             sql = new StringBuilder("UPDATE I_ElementValue "
@@ -438,16 +438,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Config("CreateNewCombination=" + _createNewCombination);
 
             //	****	Update Defaults
-            StringBuilder sql = new StringBuilder("SELECT C_AcctSchema_ID FROM C_AcctSchema_Element "
-                + "WHERE C_Element_ID=@param").Append(clientCheck);
+            StringBuilder sql = new StringBuilder("SELECT VAB_AccountBook_ID FROM VAB_AccountBook_Element "
+                + "WHERE VAB_Element_ID=@param").Append(clientCheck);
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql.ToString(), Get_TrxName());
 
-                //pstmt.setInt(1, _C_Element_ID);
-                param[0] = new SqlParameter("@param", _C_Element_ID);
+                //pstmt.setInt(1, _VAB_Element_ID);
+                param[0] = new SqlParameter("@param", _VAB_Element_ID);
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), param, Get_TrxName());
                 while (idr.Read())
                 {
@@ -465,59 +465,59 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Default Account		DEFAULT_ACCT
-            sql = new StringBuilder("UPDATE C_AcctSchema_Element e "
-                + "SET C_ElementValue_ID=(SELECT C_ElementValue_ID FROM I_ElementValue i"
-                + " WHERE e.C_Element_ID=i.C_Element_ID AND i.C_ElementValue_ID IS NOT NULL"
+            sql = new StringBuilder("UPDATE VAB_AccountBook_Element e "
+                + "SET VAB_Acct_Element_ID=(SELECT VAB_Acct_Element_ID FROM I_ElementValue i"
+                + " WHERE e.VAB_Element_ID=i.VAB_Element_ID AND i.VAB_Acct_Element_ID IS NOT NULL"
                 + " AND UPPER(i.Default_Account)='DEFAULT_ACCT') "
                 + "WHERE EXISTS (SELECT * FROM I_ElementValue i"
-                + " WHERE e.C_Element_ID=i.C_Element_ID AND i.C_ElementValue_ID IS NOT NULL"
+                + " WHERE e.VAB_Element_ID=i.VAB_Element_ID AND i.VAB_Acct_Element_ID IS NOT NULL"
                 + " AND UPPER(i.Default_Account)='DEFAULT_ACCT' "
                 + "	AND i.I_IsImported='Y' AND i.Processing='-')")
                 .Append(clientCheck);
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@C_AcctSchema_Element_ID@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@VAB_AccountBook_Element_ID@: @Updated@");
         }	//	updateDefaults
 
         /// <summary>
         ///	Update Default Accounts.
-        // _Default.xxxx = C_ValidCombination_ID  =>  Account_ID=C_ElementValue_ID
+        // _Default.xxxx = C_ValidCombination_ID  =>  Account_ID=VAB_Acct_Element_ID
         /// </summary>
-        /// <param name="C_AcctSchema_ID">Accounting Schema</param>
-        private void UpdateDefaultAccounts(int C_AcctSchema_ID)
+        /// <param name="VAB_AccountBook_ID">Accounting Schema</param>
+        private void UpdateDefaultAccounts(int VAB_AccountBook_ID)
         {
-            log.Config("C_AcctSchema_ID=" + C_AcctSchema_ID);
+            log.Config("VAB_AccountBook_ID=" + VAB_AccountBook_ID);
 
-            MAcctSchema aas = new MAcctSchema(GetCtx(), C_AcctSchema_ID, null);
-            if (aas.GetAcctSchemaElement("AC").GetC_Element_ID() != _C_Element_ID)
+            MAcctSchema aas = new MAcctSchema(GetCtx(), VAB_AccountBook_ID, null);
+            if (aas.GetAcctSchemaElement("AC").GetVAB_Element_ID() != _VAB_Element_ID)
             {
-                log.Log(Level.SEVERE, "C_Element_ID=" + _C_Element_ID + " not in AcctSchema=" + aas);
+                log.Log(Level.SEVERE, "VAB_Element_ID=" + _VAB_Element_ID + " not in AcctSchema=" + aas);
                 return;
             }
 
             int[] counts = new int[] { 0, 0, 0 };
 
-            String sql = "SELECT i.C_ElementValue_ID, t.TableName, c.ColumnName, i.I_ElementValue_ID "
+            String sql = "SELECT i.VAB_Acct_Element_ID, t.TableName, c.ColumnName, i.I_ElementValue_ID "
                 + "FROM I_ElementValue i"
                 + " INNER JOIN VAF_Column c ON (i.VAF_Column_ID=c.VAF_Column_ID)"
                 + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE i.I_IsImported='Y' AND Processing='-'"
-                + " AND i.C_ElementValue_ID IS NOT NULL AND C_Element_ID=@param";
+                + " AND i.VAB_Acct_Element_ID IS NOT NULL AND VAB_Element_ID=@param";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, Get_TrxName());
-                //pstmt.setInt(1, _C_Element_ID);
-                param[0] = new SqlParameter("@param", _C_Element_ID);
+                //pstmt.setInt(1, _VAB_Element_ID);
+                param[0] = new SqlParameter("@param", _VAB_Element_ID);
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 while (idr.Read())
                 {
-                    int C_ElementValue_ID = Utility.Util.GetValueOfInt(idr[0]);//  rs.getInt(1);
+                    int VAB_Acct_Element_ID = Utility.Util.GetValueOfInt(idr[0]);//  rs.getInt(1);
                     String TableName = Utility.Util.GetValueOfString(idr[1]);//  rs.getString(2);
                     String ColumnName = Utility.Util.GetValueOfString(idr[2]);
                     int I_ElementValue_ID = Utility.Util.GetValueOfInt(idr[3]);
                     //	Update it
-                    int u = UpdateDefaultAccount(TableName, ColumnName, C_AcctSchema_ID, C_ElementValue_ID);
+                    int u = UpdateDefaultAccount(TableName, ColumnName, VAB_AccountBook_ID, VAB_Acct_Element_ID);
                     counts[u]++;
                     if (u != UPDATE_ERROR)
                     {
@@ -552,25 +552,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <summary>
         ///	Update Default Account.
         //This is the sql to delete unused accounts - with the import still in the table(!):
-        //DELETE C_ElementValue e
-        //WHERE NOT EXISTS (SELECT * FROM Fact_Acct f WHERE f.Account_ID=e.C_ElementValue_ID)
-        // AND NOT EXISTS (SELECT * FROM C_ValidCombination vc WHERE vc.Account_ID=e.C_ElementValue_ID)
-        // AND NOT EXISTS (SELECT * FROM I_ElementValue i WHERE i.C_ElementValue_ID=e.C_ElementValue_ID);
+        //DELETE VAB_Acct_Element e
+        //WHERE NOT EXISTS (SELECT * FROM Fact_Acct f WHERE f.Account_ID=e.VAB_Acct_Element_ID)
+        // AND NOT EXISTS (SELECT * FROM C_ValidCombination vc WHERE vc.Account_ID=e.VAB_Acct_Element_ID)
+        // AND NOT EXISTS (SELECT * FROM I_ElementValue i WHERE i.VAB_Acct_Element_ID=e.VAB_Acct_Element_ID);
         /// </summary>
         /// <param name="TableName">trx</param>
         /// <param name="ColumnName">table name</param>
-        /// <param name="C_AcctSchema_ID">column name</param>
-        /// <param name="C_ElementValue_ID">account schema</param>
+        /// <param name="VAB_AccountBook_ID">column name</param>
+        /// <param name="VAB_Acct_Element_ID">account schema</param>
         /// <returns>update * statues</returns>
-        private int UpdateDefaultAccount(String TableName, String ColumnName, int C_AcctSchema_ID, int C_ElementValue_ID)
+        private int UpdateDefaultAccount(String TableName, String ColumnName, int VAB_AccountBook_ID, int VAB_Acct_Element_ID)
         {
-            log.Fine(TableName + "." + ColumnName + " - " + C_ElementValue_ID);
+            log.Fine(TableName + "." + ColumnName + " - " + VAB_Acct_Element_ID);
             int retValue = UPDATE_ERROR;
             StringBuilder sql = new StringBuilder("SELECT x.")
                 .Append(ColumnName).Append(",Account_ID FROM ")
                 .Append(TableName).Append(" x INNER JOIN C_ValidCombination vc ON (x.")
                 .Append(ColumnName).Append("=vc.C_ValidCombination_ID) ")
-                .Append("WHERE x.C_AcctSchema_ID=").Append(C_AcctSchema_ID);
+                .Append("WHERE x.VAB_AccountBook_ID=").Append(VAB_AccountBook_ID);
             IDataReader idr = null;
             try
             {
@@ -581,7 +581,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     int C_ValidCombination_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                     int Account_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
                     //	The current account value is the same
-                    if (Account_ID == C_ElementValue_ID)
+                    if (Account_ID == VAB_Acct_Element_ID)
                     {
                         retValue = UPDATE_SAME;
                         log.Fine("Account_ID same as new value");
@@ -592,7 +592,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (_createNewCombination)
                         {
                             MAccount acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
-                            acct.SetAccount_ID(C_ElementValue_ID);
+                            acct.SetAccount_ID(VAB_Acct_Element_ID);
                             if (acct.Save())
                             {
                                 int newC_ValidCombination_ID = acct.GetC_ValidCombination_ID();
@@ -600,10 +600,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 {
                                     sql = new StringBuilder("UPDATE ").Append(TableName)
                                         .Append(" SET ").Append(ColumnName).Append("=").Append(newC_ValidCombination_ID)
-                                        .Append(" WHERE C_AcctSchema_ID=").Append(C_AcctSchema_ID);
+                                        .Append(" WHERE VAB_AccountBook_ID=").Append(VAB_AccountBook_ID);
                                     int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                                     log.Fine("New #" + no + " - "
-                                        + TableName + "." + ColumnName + " - " + C_ElementValue_ID
+                                        + TableName + "." + ColumnName + " - " + VAB_Acct_Element_ID
                                         + " -- " + C_ValidCombination_ID + " -> " + newC_ValidCombination_ID);
                                     if (no == 1)
                                         retValue = UPDATE_YES;
@@ -616,24 +616,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         {
                             //	Only Acct Combination directly
                             sql = new StringBuilder("UPDATE C_ValidCombination SET Account_ID=")
-                                .Append(C_ElementValue_ID).Append(" WHERE C_ValidCombination_ID=").Append(C_ValidCombination_ID);
+                                .Append(VAB_Acct_Element_ID).Append(" WHERE C_ValidCombination_ID=").Append(C_ValidCombination_ID);
                             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                             log.Fine("Replace #" + no + " - "
-                                    + "C_ValidCombination_ID=" + C_ValidCombination_ID + ", New Account_ID=" + C_ElementValue_ID);
+                                    + "C_ValidCombination_ID=" + C_ValidCombination_ID + ", New Account_ID=" + VAB_Acct_Element_ID);
                             if (no == 1)
                             {
                                 retValue = UPDATE_YES;
                                 //	Where Acct was used
                                 sql = new StringBuilder("UPDATE C_ValidCombination SET Account_ID=")
-                                    .Append(C_ElementValue_ID).Append(" WHERE Account_ID=").Append(Account_ID);
+                                    .Append(VAB_Acct_Element_ID).Append(" WHERE Account_ID=").Append(Account_ID);
                                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                                 log.Fine("ImportAccount.updateDefaultAccount - Replace VC #" + no + " - "
-                                        + "Account_ID=" + Account_ID + ", New Account_ID=" + C_ElementValue_ID);
+                                        + "Account_ID=" + Account_ID + ", New Account_ID=" + VAB_Acct_Element_ID);
                                 sql = new StringBuilder("UPDATE Fact_Acct SET Account_ID=")
-                                    .Append(C_ElementValue_ID).Append(" WHERE Account_ID=").Append(Account_ID);
+                                    .Append(VAB_Acct_Element_ID).Append(" WHERE Account_ID=").Append(Account_ID);
                                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                                 log.Fine("ImportAccount.updateDefaultAccount - Replace Fact #" + no + " - "
-                                        + "Account_ID=" + Account_ID + ", New Account_ID=" + C_ElementValue_ID);
+                                        + "Account_ID=" + Account_ID + ", New Account_ID=" + VAB_Acct_Element_ID);
                             }
                         }	//	replace combination
                     }	//	need to update

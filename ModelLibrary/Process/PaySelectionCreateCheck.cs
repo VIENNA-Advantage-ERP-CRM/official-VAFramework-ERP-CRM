@@ -109,7 +109,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MPaySelectionCheck check = (MPaySelectionCheck)_list[i];
                 //	Add to existing
-                if (check.GetC_BPartner_ID() == line.GetInvoice().GetC_BPartner_ID())
+                if (check.GetVAB_BusinessPartner_ID() == line.GetInvoice().GetVAB_BusinessPartner_ID())
                 {
                     check.AddLine(line);
                     if (!check.Save())
@@ -137,9 +137,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MPaySelectionCheck check1 = new MPaySelectionCheck(line, PaymentRule);
             if (!check1.IsValid())
             {
-                int C_BPartner_ID = check1.GetC_BPartner_ID();
-                MBPartner bp = MBPartner.Get(GetCtx(), C_BPartner_ID);
-                String msg = "@NotFound@ @C_BP_BankAccount@: " + bp.GetName();
+                int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();
+                MBPartner bp = MBPartner.Get(GetCtx(), VAB_BusinessPartner_ID);
+                String msg = "@NotFound@ @VAB_BPart_Bank_Acct@: " + bp.GetName();
                 throw new Exception(msg);
             }
             if (!check1.Save())

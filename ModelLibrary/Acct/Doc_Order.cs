@@ -229,7 +229,7 @@ namespace VAdvantage.Acct
         {
             if (_precision == -1)
             {
-                _precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                _precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
             }
             return _precision;
         }
@@ -364,7 +364,7 @@ namespace VAdvantage.Acct
 
                         //	Account
                         MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
-                        fact.CreateLine(line, expense, GetC_Currency_ID(), cost, null);
+                        fact.CreateLine(line, expense, GetVAB_Currency_ID(), cost, null);
                     }
                     //	Offset
                     MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
@@ -374,7 +374,7 @@ namespace VAdvantage.Acct
                         log.Log(Level.SEVERE, _error);
                         return null;
                     }
-                    fact.CreateLine(null, offset, GetC_Currency_ID(), null, total);
+                    fact.CreateLine(null, offset, GetVAB_Currency_ID(), null, total);
                     //
                     facts.Add(fact);
                 }
@@ -396,7 +396,7 @@ namespace VAdvantage.Acct
 
                         //	Account
                         MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
-                        fact.CreateLine(line, expense, GetC_Currency_ID(), null, cost);
+                        fact.CreateLine(line, expense, GetVAB_Currency_ID(), null, cost);
                     }
                     //	Offset
                     MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
@@ -406,7 +406,7 @@ namespace VAdvantage.Acct
                         log.Log(Level.SEVERE, _error);
                         return null;
                     }
-                    fact.CreateLine(null, offset, GetC_Currency_ID(), total, null);
+                    fact.CreateLine(null, offset, GetVAB_Currency_ID(), total, null);
                     //
                     facts.Add(fact);
                 }	//	reservations
@@ -423,17 +423,17 @@ namespace VAdvantage.Acct
         private void UpdateProductPO(MAcctSchema as1)
         {
             MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
-            if (ci.GetC_AcctSchema1_ID() != as1.GetC_AcctSchema_ID())
+            if (ci.GetVAB_AccountBook1_ID() != as1.GetVAB_AccountBook_ID())
             {
                 return;
             }
 
             StringBuilder sql = new StringBuilder(
                 "UPDATE M_Product_PO po "
-                + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.C_Currency_ID,po.C_Currency_ID,o.DateOrdered,o.C_ConversionType_ID,o.VAF_Client_ID,o.VAF_Org_ID) "
+                + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.VAB_Currency_ID,po.VAB_Currency_ID,o.DateOrdered,o.VAB_CurrencyType_ID,o.VAF_Client_ID,o.VAF_Org_ID) "
                 + "FROM C_Order o, C_OrderLine ol "
                 + "WHERE o.C_Order_ID=ol.C_Order_ID"
-                + " AND po.M_Product_ID=ol.M_Product_ID AND po.C_BPartner_ID=o.C_BPartner_ID");
+                + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID");
             //	AND ROWNUM=1 AND o.C_Order_ID=").Append(get_ID()).Append(") ")
             if (DataBase.DB.IsOracle()) //jz
             {
@@ -444,7 +444,7 @@ namespace VAdvantage.Acct
                 sql.Append(" AND o.UPDATED IN (SELECT MAX(o1.UPDATED) "
                         + "FROM C_Order o1, C_OrderLine ol1 "
                         + "WHERE o1.C_Order_ID=ol1.C_Order_ID"
-                        + " AND po.M_Product_ID=ol1.M_Product_ID AND po.C_BPartner_ID=o1.C_BPartner_ID")
+                        + " AND po.M_Product_ID=ol1.M_Product_ID AND po.VAB_BusinessPartner_ID=o1.VAB_BusinessPartner_ID")
                         .Append("  AND o1.C_Order_ID=").Append(Get_ID()).Append(") ");
             }
 
@@ -452,7 +452,7 @@ namespace VAdvantage.Acct
             .Append("WHERE EXISTS (SELECT * "
             + "FROM C_Order o, C_OrderLine ol "
             + "WHERE o.C_Order_ID=ol.C_Order_ID"
-            + " AND po.M_Product_ID=ol.M_Product_ID AND po.C_BPartner_ID=o.C_BPartner_ID"
+            + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID"
             + " AND o.C_Order_ID=").Append(Get_ID()).Append(")");
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
             log.Fine("Updated=" + no);
@@ -495,8 +495,8 @@ namespace VAdvantage.Acct
                     //	Currency
                     if (precision == -1)
                     {
-                        doc.SetC_Currency_ID(docLine.GetC_Currency_ID());
-                        precision = MCurrency.GetStdPrecision(doc.GetCtx(), docLine.GetC_Currency_ID());
+                        doc.SetVAB_Currency_ID(docLine.GetVAB_Currency_ID());
+                        precision = MCurrency.GetStdPrecision(doc.GetCtx(), docLine.GetVAB_Currency_ID());
                     }
                     //	Qty
                     Decimal Qty = Math.Max(line.GetQtyOrdered(), maxQty);
@@ -574,15 +574,15 @@ namespace VAdvantage.Acct
             Fact fact = new Fact(doc, as1, Fact.POST_Commitment);
             DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, C_InvoiceLine_ID);
             Decimal total = Env.ZERO;
-            int C_Currency_ID = -1;
+            int VAB_Currency_ID = -1;
             for (int i = 0; i < commitments.Length; i++)
             {
                 DocLine line = commitments[i];
-                if (C_Currency_ID == -1)
+                if (VAB_Currency_ID == -1)
                 {
-                    C_Currency_ID = line.GetC_Currency_ID();
+                    VAB_Currency_ID = line.GetVAB_Currency_ID();
                 }
-                else if (C_Currency_ID != line.GetC_Currency_ID())
+                else if (VAB_Currency_ID != line.GetVAB_Currency_ID())
                 {
                     doc._error = "Different Currencies of Order Lines";
                     _log.Log(Level.SEVERE, doc._error);
@@ -593,7 +593,7 @@ namespace VAdvantage.Acct
 
                 //	Account
                 MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
-                fact.CreateLine(line, expense, C_Currency_ID, null, cost);
+                fact.CreateLine(line, expense, VAB_Currency_ID, null, cost);
             }
             //	Offset
             MAccount offset = doc.GetAccount(ACCTTYPE_CommitmentOffset, as1);
@@ -603,7 +603,7 @@ namespace VAdvantage.Acct
                 _log.Log(Level.SEVERE, doc._error);
                 return null;
             }
-            fact.CreateLine(null, offset, C_Currency_ID, total, null);
+            fact.CreateLine(null, offset, VAB_Currency_ID, total, null);
             return fact;
         }
 

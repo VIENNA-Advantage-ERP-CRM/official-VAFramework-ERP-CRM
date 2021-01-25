@@ -170,83 +170,83 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("AccountType");
         }
-        /** Set C_AccountGroup_ID.
-        @param C_AccountGroup_ID C_AccountGroup_ID */
-        public void SetC_AccountGroup_ID(int C_AccountGroup_ID)
+        /** Set VAB_AccountGroup_ID.
+        @param VAB_AccountGroup_ID VAB_AccountGroup_ID */
+        public void SetVAB_AccountGroup_ID(int VAB_AccountGroup_ID)
         {
-            if (C_AccountGroup_ID <= 0) Set_Value("C_AccountGroup_ID", null);
+            if (VAB_AccountGroup_ID <= 0) Set_Value("VAB_AccountGroup_ID", null);
             else
-                Set_Value("C_AccountGroup_ID", C_AccountGroup_ID);
+                Set_Value("VAB_AccountGroup_ID", VAB_AccountGroup_ID);
         }
-        /** Get C_AccountGroup_ID.
-        @return C_AccountGroup_ID */
-        public int GetC_AccountGroup_ID()
+        /** Get VAB_AccountGroup_ID.
+        @return VAB_AccountGroup_ID */
+        public int GetVAB_AccountGroup_ID()
         {
-            Object ii = Get_Value("C_AccountGroup_ID");
+            Object ii = Get_Value("VAB_AccountGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set C_AccountSubGroup_ID.
-        @param C_AccountSubGroup_ID C_AccountSubGroup_ID */
-        public void SetC_AccountSubGroup_ID(int C_AccountSubGroup_ID)
+        /** Set VAB_AccountSubGroup_ID.
+        @param VAB_AccountSubGroup_ID VAB_AccountSubGroup_ID */
+        public void SetVAB_AccountSubGroup_ID(int VAB_AccountSubGroup_ID)
         {
-            if (C_AccountSubGroup_ID <= 0) Set_Value("C_AccountSubGroup_ID", null);
+            if (VAB_AccountSubGroup_ID <= 0) Set_Value("VAB_AccountSubGroup_ID", null);
             else
-                Set_Value("C_AccountSubGroup_ID", C_AccountSubGroup_ID);
+                Set_Value("VAB_AccountSubGroup_ID", VAB_AccountSubGroup_ID);
         }
-        /** Get C_AccountSubGroup_ID.
-        @return C_AccountSubGroup_ID */
-        public int GetC_AccountSubGroup_ID()
+        /** Get VAB_AccountSubGroup_ID.
+        @return VAB_AccountSubGroup_ID */
+        public int GetVAB_AccountSubGroup_ID()
         {
-            Object ii = Get_Value("C_AccountSubGroup_ID");
+            Object ii = Get_Value("VAB_AccountSubGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank Account.
-        @param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        @param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            if (C_BankAccount_ID <= 0) Set_Value("C_BankAccount_ID", null);
+            if (VAB_Bank_Acct_ID <= 0) Set_Value("VAB_Bank_Acct_ID", null);
             else
-                Set_Value("C_BankAccount_ID", C_BankAccount_ID);
+                Set_Value("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
         }
         /** Get Bank Account.
         @return Account at the Bank */
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BankAccount_ID");
+            Object ii = Get_Value("VAB_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Element.
-        @param C_Element_ID Accounting Element */
-        public void SetC_Element_ID(int C_Element_ID)
+        @param VAB_Element_ID Accounting Element */
+        public void SetVAB_Element_ID(int VAB_Element_ID)
         {
-            if (C_Element_ID <= 0) Set_Value("C_Element_ID", null);
+            if (VAB_Element_ID <= 0) Set_Value("VAB_Element_ID", null);
             else
-                Set_Value("C_Element_ID", C_Element_ID);
+                Set_Value("VAB_Element_ID", VAB_Element_ID);
         }
         /** Get Element.
         @return Accounting Element */
-        public int GetC_Element_ID()
+        public int GetVAB_Element_ID()
         {
-            Object ii = Get_Value("C_Element_ID");
+            Object ii = Get_Value("VAB_Element_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -470,50 +470,50 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set MPG Primary Group.
-        @param Ref_C_AccountGroup_ID MPG Primary Group */
-        public void SetRef_C_AccountGroup_ID(int Ref_C_AccountGroup_ID)
+        @param Ref_VAB_AccountGroup_ID MPG Primary Group */
+        public void SetRef_VAB_AccountGroup_ID(int Ref_VAB_AccountGroup_ID)
         {
-            if (Ref_C_AccountGroup_ID <= 0) Set_Value("Ref_C_AccountGroup_ID", null);
+            if (Ref_VAB_AccountGroup_ID <= 0) Set_Value("Ref_VAB_AccountGroup_ID", null);
             else
-                Set_Value("Ref_C_AccountGroup_ID", Ref_C_AccountGroup_ID);
+                Set_Value("Ref_VAB_AccountGroup_ID", Ref_VAB_AccountGroup_ID);
         }
         /** Get MPG Primary Group.
         @return MPG Primary Group */
-        public int GetRef_C_AccountGroup_ID()
+        public int GetRef_VAB_AccountGroup_ID()
         {
-            Object ii = Get_Value("Ref_C_AccountGroup_ID");
+            Object ii = Get_Value("Ref_VAB_AccountGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set MPG Sub Group.
-        @param Ref_C_AccountSubGroup_ID MPG Sub Group */
-        public void SetRef_C_AccountSubGroup_ID(int Ref_C_AccountSubGroup_ID)
+        @param Ref_VAB_AccountSubGroup_ID MPG Sub Group */
+        public void SetRef_VAB_AccountSubGroup_ID(int Ref_VAB_AccountSubGroup_ID)
         {
-            if (Ref_C_AccountSubGroup_ID <= 0) Set_Value("Ref_C_AccountSubGroup_ID", null);
+            if (Ref_VAB_AccountSubGroup_ID <= 0) Set_Value("Ref_VAB_AccountSubGroup_ID", null);
             else
-                Set_Value("Ref_C_AccountSubGroup_ID", Ref_C_AccountSubGroup_ID);
+                Set_Value("Ref_VAB_AccountSubGroup_ID", Ref_VAB_AccountSubGroup_ID);
         }
         /** Get MPG Sub Group.
         @return MPG Sub Group */
-        public int GetRef_C_AccountSubGroup_ID()
+        public int GetRef_VAB_AccountSubGroup_ID()
         {
-            Object ii = Get_Value("Ref_C_AccountSubGroup_ID");
+            Object ii = Get_Value("Ref_VAB_AccountSubGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Element Value.
-        @param Ref_C_ElementValue_ID Element Value */
-        public void SetRef_C_ElementValue_ID(int Ref_C_ElementValue_ID)
+        @param Ref_VAB_Acct_Element_ID Element Value */
+        public void SetRef_VAB_Acct_Element_ID(int Ref_VAB_Acct_Element_ID)
         {
-            if (Ref_C_ElementValue_ID <= 0) Set_Value("Ref_C_ElementValue_ID", null);
+            if (Ref_VAB_Acct_Element_ID <= 0) Set_Value("Ref_VAB_Acct_Element_ID", null);
             else
-                Set_Value("Ref_C_ElementValue_ID", Ref_C_ElementValue_ID);
+                Set_Value("Ref_VAB_Acct_Element_ID", Ref_VAB_Acct_Element_ID);
         }
         /** Get Element Value.
         @return Element Value */
-        public int GetRef_C_ElementValue_ID()
+        public int GetRef_VAB_Acct_Element_ID()
         {
-            Object ii = Get_Value("Ref_C_ElementValue_ID");
+            Object ii = Get_Value("Ref_VAB_Acct_Element_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

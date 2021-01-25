@@ -37,7 +37,7 @@ namespace VIS.Controllers
                 {
                     DefaultCountry result = obj.GetCountryName(VAF_Language, ctx);
                     obj.Country = result.CountryName;
-                    obj.C_Country_ID = result.CountryID;
+                    obj.VAB_Country_ID = result.CountryID;
                 }
             }
             return PartialView(obj);

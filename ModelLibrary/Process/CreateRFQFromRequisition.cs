@@ -23,7 +23,7 @@ namespace VAdvantage.Process
         DateTime? ReqDateFrom = null, ReqDateTo = null; // Requested date filter on requisition.
         DateTime? DateResponse = null;
         private bool isConsolidate = false; // Create consolidated document or not.
-        private int C_Currency_ID = 0; // Currency to map on rfq header.
+        private int VAB_Currency_ID = 0; // Currency to map on rfq header.
 
 
         protected override string DoIt()
@@ -37,7 +37,7 @@ namespace VAdvantage.Process
                  + " RfQ Type=" + RfQtype
                 + ", DocDate=" + DocDateFrom + "/" + DocDateTo
                 + ", DateRequired=" + ReqDateFrom + "/" + ReqDateTo
-                + ", Currency =" + C_Currency_ID
+                + ", Currency =" + VAB_Currency_ID
                 + ", ConsolidateDocument" + isConsolidate);
 
             StringBuilder Sql = new StringBuilder();
@@ -157,9 +157,9 @@ namespace VAdvantage.Process
                 {
                     Warehouse_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_Currency_ID"))
+                else if (name.Equals("VAB_Currency_ID"))
                 {
-                    C_Currency_ID = para[i].GetParameterAsInt();
+                    VAB_Currency_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_Requisition_ID"))
                 {
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                         rfq.SetIsInvitedVendorsOnly(true);
                         rfq.SetIsQuoteAllQty(true);
                         rfq.SetIsRfQResponseAccepted(true);
-                        rfq.SetC_Currency_ID(C_Currency_ID);
+                        rfq.SetVAB_Currency_ID(VAB_Currency_ID);
                         if (rfq.Save())
                         {
                             DB.ExecuteQuery("UPDATE C_Rfq SET Name='" + rfq.GetDocumentNo() + "' WHERE C_RfQ_ID= " + rfq.GetC_RfQ_ID(), null, Get_TrxName());
@@ -298,7 +298,7 @@ namespace VAdvantage.Process
                         rfq.SetIsInvitedVendorsOnly(true);
                         rfq.SetIsQuoteAllQty(true);
                         rfq.SetIsRfQResponseAccepted(true);
-                        rfq.SetC_Currency_ID(C_Currency_ID);
+                        rfq.SetVAB_Currency_ID(VAB_Currency_ID);
                         if (!rfq.Save())
                         {
                             ValueNamePair vp = VLogger.RetrieveError();

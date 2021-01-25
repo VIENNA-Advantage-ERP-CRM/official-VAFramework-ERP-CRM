@@ -64,12 +64,12 @@ namespace VIS.Models
                                       VAF_UserContact.VAF_Image_ID,
                                         VAF_UserContact.VAF_Client_ID,
                                         VAF_UserContact.VAF_Org_ID,
-                                      C_Country.Name as CName
+                                      VAB_Country.Name as CName
                                     FROM VAF_UserContact
                                     LEFT OUTER JOIN C_LOcation
                                     ON VAF_UserContact.C_Location_ID=C_Location.C_Location_ID
-                                    LEFT OUTER JOIN C_Country
-                                    ON C_Country.C_Country_ID=C_Location.C_Country_ID WHERE IsLoginUser='Y' ";
+                                    LEFT OUTER JOIN VAB_Country
+                                    ON VAB_Country.VAB_Country_ID=C_Location.VAB_Country_ID WHERE IsLoginUser='Y' ";
             if (!String.IsNullOrEmpty(searchText))
             {
                 sql += " AND ( upper(VAF_UserContact.Value) like Upper('%" + searchText + "%') OR upper(VAF_UserContact.Name) like Upper('%" + searchText + "%')  OR  upper(VAF_UserContact.Email) like Upper('%" + searchText + "%'))";
@@ -731,7 +731,7 @@ namespace VIS.Models
         /// <param name="grantAccess"></param>
         private void ProvideWorkflowAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
-            string sql = "SELECT AD_Workflow_ID from VAF_Group_Workflow WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
+            string sql = "SELECT VAF_Workflow_ID from VAF_Group_Workflow WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             List<int> groupWindowIDs = new List<int>();
             Dictionary<int, bool> roleWindowIDsDictinary = new Dictionary<int, bool>();
@@ -740,26 +740,26 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (ds.Tables[0].Rows[i]["AD_Workflow_ID"] != null && ds.Tables[0].Rows[i]["AD_Workflow_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Workflow_ID"] != null && ds.Tables[0].Rows[i]["VAF_Workflow_ID"] != DBNull.Value)
                     {
                         if (winIDs.Length > 0)
                         {
                             winIDs.Append(",");
                         }
-                        winIDs.Append(ds.Tables[0].Rows[i]["AD_Workflow_ID"].ToString());
-                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Workflow_ID"]));
+                        winIDs.Append(ds.Tables[0].Rows[i]["VAF_Workflow_ID"].ToString());
+                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Workflow_ID"]));
                     }
                 }
 
                 groupWindowIDs.Sort();
 
-                sql = "SELECT AD_Workflow_ID,IsReadWrite FROM AD_workflow_Access WHERE VAF_Role_ID=" + VAF_Role_ID + " AND AD_Workflow_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT VAF_Workflow_ID,IsReadWrite FROM VAF_WFlow_Rights WHERE VAF_Role_ID=" + VAF_Role_ID + " AND VAF_Workflow_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Workflow_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
+                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Workflow_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
                     }
                 }
 
@@ -775,11 +775,11 @@ namespace VIS.Models
                             //wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
+                                sql = "UPDATE VAF_WFlow_Rights Set IsReadWrite='Y',IsActive='Y' WHERE VAF_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
+                                sql = "UPDATE VAF_WFlow_Rights Set IsReadWrite='N',IsActive='N' WHERE VAF_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
                         }
@@ -790,7 +790,7 @@ namespace VIS.Models
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                         wAccess.SetVAF_Role_ID(VAF_Role_ID);
-                        wAccess.SetAD_Workflow_ID(groupWindowIDs[i]);
+                        wAccess.SetVAF_Workflow_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         wAccess.Save();
                     }
@@ -922,9 +922,9 @@ namespace VIS.Models
             gInfo.ProcessName = processes.ToString();
 
 
-            sql = @"SELECT AD_workflow.Name FROM VAF_Group_workflow  JOIN AD_workflow
-                     ON VAF_Group_workflow.AD_workflow_ID=AD_workflow.AD_workflow_ID
-                     WHERE VAF_Group_workflow.IsActive='Y' AND VAF_Group_workflow.VAF_GroupInfo_ID=" + groupID + " ORDER BY AD_workflow.Name";
+            sql = @"SELECT VAF_Workflow.Name FROM VAF_Group_workflow  JOIN VAF_Workflow
+                     ON VAF_Group_workflow.VAF_Workflow_ID=VAF_Workflow.VAF_Workflow_ID
+                     WHERE VAF_Group_workflow.IsActive='Y' AND VAF_Group_workflow.VAF_GroupInfo_ID=" + groupID + " ORDER BY VAF_Workflow.Name";
 
             ds = DB.ExecuteDataset(sql);
 

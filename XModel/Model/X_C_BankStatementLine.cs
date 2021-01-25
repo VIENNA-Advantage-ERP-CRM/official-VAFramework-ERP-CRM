@@ -11,25 +11,25 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_BankStatementLine
+    /** Generated Model for VAB_BankingJRNLLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_BankStatementLine : PO
+    public class X_VAB_BankingJRNLLine : PO
     {
-        public X_C_BankStatementLine(Context ctx, int C_BankStatementLine_ID, Trx trxName)
-            : base(ctx, C_BankStatementLine_ID, trxName)
+        public X_VAB_BankingJRNLLine(Context ctx, int VAB_BankingJRNLLine_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNLLine_ID, trxName)
         {
-            /** if (C_BankStatementLine_ID == 0)
+            /** if (VAB_BankingJRNLLine_ID == 0)
             {
-            SetC_BankStatementLine_ID (0);
-            SetC_BankStatement_ID (0);
-            SetC_Currency_ID (0);	// @SQL=SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID=@C_BankAccount_ID@
+            SetVAB_BankingJRNLLine_ID (0);
+            SetVAB_BankingJRNL_ID (0);
+            SetVAB_Currency_ID (0);	// @SQL=SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID@
             SetChargeAmt (0.0);
             SetDateAcct (DateTime.Now);	// @StatementDate@
             SetInterestAmt (0.0);
             SetIsManual (true);	// Y
             SetIsReversal (false);
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 FROM C_BankStatementLine WHERE C_BankStatement_ID=@C_BankStatement_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 FROM VAB_BankingJRNLLine WHERE VAB_BankingJRNL_ID=@VAB_BankingJRNL_ID@
             SetProcessed (false);	// N
             SetStatementLineDate (DateTime.Now);	// @StatementLineDate@
             SetStmtAmt (0.0);
@@ -38,20 +38,20 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_BankStatementLine(Ctx ctx, int C_BankStatementLine_ID, Trx trxName)
-            : base(ctx, C_BankStatementLine_ID, trxName)
+        public X_VAB_BankingJRNLLine(Ctx ctx, int VAB_BankingJRNLLine_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNLLine_ID, trxName)
         {
-            /** if (C_BankStatementLine_ID == 0)
+            /** if (VAB_BankingJRNLLine_ID == 0)
             {
-            SetC_BankStatementLine_ID (0);
-            SetC_BankStatement_ID (0);
-            SetC_Currency_ID (0);	// @SQL=SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID=@C_BankAccount_ID@
+            SetVAB_BankingJRNLLine_ID (0);
+            SetVAB_BankingJRNL_ID (0);
+            SetVAB_Currency_ID (0);	// @SQL=SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID@
             SetChargeAmt (0.0);
             SetDateAcct (DateTime.Now);	// @StatementDate@
             SetInterestAmt (0.0);
             SetIsManual (true);	// Y
             SetIsReversal (false);
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 FROM C_BankStatementLine WHERE C_BankStatement_ID=@C_BankStatement_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 FROM VAB_BankingJRNLLine WHERE VAB_BankingJRNL_ID=@VAB_BankingJRNL_ID@
             SetProcessed (false);	// N
             SetStatementLineDate (DateTime.Now);	// @StatementLineDate@
             SetStmtAmt (0.0);
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankStatementLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_BankingJRNLLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankStatementLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_BankingJRNLLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -83,14 +83,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankStatementLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_BankingJRNLLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_BankStatementLine()
+        static X_VAB_BankingJRNLLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -103,8 +103,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =393;
 
-        /** TableName=C_BankStatementLine */
-        public static String Table_Name = "C_BankStatementLine";
+        /** TableName=VAB_BankingJRNLLine */
+        public static String Table_Name = "VAB_BankingJRNLLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -138,83 +138,83 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_BankStatementLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_BankingJRNLLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank statement line.
-        @param C_BankStatementLine_ID Line on a statement from this Bank */
-        public void SetC_BankStatementLine_ID(int C_BankStatementLine_ID)
+        @param VAB_BankingJRNLLine_ID Line on a statement from this Bank */
+        public void SetVAB_BankingJRNLLine_ID(int VAB_BankingJRNLLine_ID)
         {
-            if (C_BankStatementLine_ID < 1) throw new ArgumentException("C_BankStatementLine_ID is mandatory.");
-            Set_ValueNoCheck("C_BankStatementLine_ID", C_BankStatementLine_ID);
+            if (VAB_BankingJRNLLine_ID < 1) throw new ArgumentException("VAB_BankingJRNLLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BankingJRNLLine_ID", VAB_BankingJRNLLine_ID);
         }
         /** Get Bank statement line.
         @return Line on a statement from this Bank */
-        public int GetC_BankStatementLine_ID()
+        public int GetVAB_BankingJRNLLine_ID()
         {
-            Object ii = Get_Value("C_BankStatementLine_ID");
+            Object ii = Get_Value("VAB_BankingJRNLLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank Statement.
-        @param C_BankStatement_ID Bank Statement of account */
-        public void SetC_BankStatement_ID(int C_BankStatement_ID)
+        @param VAB_BankingJRNL_ID Bank Statement of account */
+        public void SetVAB_BankingJRNL_ID(int VAB_BankingJRNL_ID)
         {
-            if (C_BankStatement_ID < 1) throw new ArgumentException("C_BankStatement_ID is mandatory.");
-            Set_ValueNoCheck("C_BankStatement_ID", C_BankStatement_ID);
+            if (VAB_BankingJRNL_ID < 1) throw new ArgumentException("VAB_BankingJRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAB_BankingJRNL_ID", VAB_BankingJRNL_ID);
         }
         /** Get Bank Statement.
         @return Bank Statement of account */
-        public int GetC_BankStatement_ID()
+        public int GetVAB_BankingJRNL_ID()
         {
-            Object ii = Get_Value("C_BankStatement_ID");
+            Object ii = Get_Value("VAB_BankingJRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Charge.
-        @param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        @param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }
         /** Get Charge.
         @return Additional document charges */
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            Object ii = Get_Value("C_Charge_ID");
+            Object ii = Get_Value("VAB_Charge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory.");
-            Set_Value("C_Currency_ID", C_Currency_ID);
+            if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory.");
+            Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -687,18 +687,18 @@ namespace VAdvantage.Model
 
 
         /** Set Cash Book.
-        @param C_CashBook_ID Cash Book for recording petty cash transactions */
-        public void SetC_CashBook_ID(int C_CashBook_ID)
+        @param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+        public void SetVAB_CashBook_ID(int VAB_CashBook_ID)
         {
-            if (C_CashBook_ID <= 0) Set_Value("C_CashBook_ID", null);
+            if (VAB_CashBook_ID <= 0) Set_Value("VAB_CashBook_ID", null);
             else
-                Set_Value("C_CashBook_ID", C_CashBook_ID);
+                Set_Value("VAB_CashBook_ID", VAB_CashBook_ID);
         }
         /** Get Cash Book.
         @return Cash Book for recording petty cash transactions */
-        public int GetC_CashBook_ID()
+        public int GetVAB_CashBook_ID()
         {
-            Object ii = Get_Value("C_CashBook_ID");
+            Object ii = Get_Value("VAB_CashBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -949,18 +949,18 @@ namespace VAdvantage.Model
 
         //Added By Pratap 1/30/16
         /** Set Cash Journal Line.
-        @param C_CashLine_ID Cash Journal Line */
-        public void SetC_CashLine_ID(int C_CashLine_ID)
+        @param VAB_CashJRNLLine_ID Cash Journal Line */
+        public void SetVAB_CashJRNLLine_ID(int VAB_CashJRNLLine_ID)
         {
-            if (C_CashLine_ID <= 0) Set_Value("C_CashLine_ID", null);
+            if (VAB_CashJRNLLine_ID <= 0) Set_Value("VAB_CashJRNLLine_ID", null);
             else
-                Set_Value("C_CashLine_ID", C_CashLine_ID);
+                Set_Value("VAB_CashJRNLLine_ID", VAB_CashJRNLLine_ID);
         }
         /** Get Cash Journal Line.
         @return Cash Journal Line */
-        public int GetC_CashLine_ID()
+        public int GetVAB_CashJRNLLine_ID()
         {
-            Object ii = Get_Value("C_CashLine_ID");
+            Object ii = Get_Value("VAB_CashJRNLLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

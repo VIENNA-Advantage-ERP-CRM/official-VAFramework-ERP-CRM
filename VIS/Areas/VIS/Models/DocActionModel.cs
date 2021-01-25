@@ -370,28 +370,28 @@ namespace VIS.Models
 
             // check applied to display Document Actions on Transactions based on the document type
             // and the setting "Check Document Action Access" on Role window
-            int C_DocType_ID = 0;
-            int C_DocTypeTarget_ID = 0;
+            int VAB_DocTypes_ID = 0;
+            int VAB_DocTypesTarget_ID = 0;
             MTable table = MTable.Get(ctx, VAF_TableView_ID);
             PO po = table.GetPO(ctx, Record_ID, null);
-            if (Util.GetValueOfInt(po.Get_Value("C_DocType_ID")) > 0)
+            if (Util.GetValueOfInt(po.Get_Value("VAB_DocTypes_ID")) > 0)
             {
-                C_DocType_ID = Util.GetValueOfInt(po.Get_Value("C_DocType_ID"));
+                VAB_DocTypes_ID = Util.GetValueOfInt(po.Get_Value("VAB_DocTypes_ID"));
             }
-            if (Util.GetValueOfInt(po.Get_Value("C_DocTypeTarget_ID")) > 0)
+            if (Util.GetValueOfInt(po.Get_Value("VAB_DocTypesTarget_ID")) > 0)
             {
-                C_DocTypeTarget_ID = Util.GetValueOfInt(po.Get_Value("C_DocTypeTarget_ID"));
-                C_DocType_ID = C_DocTypeTarget_ID;
+                VAB_DocTypesTarget_ID = Util.GetValueOfInt(po.Get_Value("VAB_DocTypesTarget_ID"));
+                VAB_DocTypes_ID = VAB_DocTypesTarget_ID;
             }
 
-            if (C_DocType_ID > 0)
+            if (VAB_DocTypes_ID > 0)
             {
                 String[] docActionHolder = new String[] { docAction };
                 if (po is DocOptions)
                     index = ((DocOptions)po).customizeValidActions(docStatus, processing, orderType, isSOTrx ? "Y" : "N",
                             VAF_TableView_ID, docActionHolder, options, index);
 
-                options = DocumentEngine.checkActionAccess(ctx, ctx.GetVAF_Client_ID(), ctx.GetVAF_Role_ID(), C_DocType_ID, options, ref index);
+                options = DocumentEngine.checkActionAccess(ctx, ctx.GetVAF_Client_ID(), ctx.GetVAF_Role_ID(), VAB_DocTypes_ID, options, ref index);
             }
 
             for (int i = 0; i < _values.Count() && defaultV.Equals(""); i++)

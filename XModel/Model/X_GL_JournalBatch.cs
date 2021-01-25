@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (GL_JournalBatch_ID == 0)
             {
-            SetC_DocType_ID (0);
+            SetVAB_DocTypes_ID (0);
             SetDescription (null);
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
         {
             /** if (GL_JournalBatch_ID == 0)
             {
-            SetC_DocType_ID (0);
+            SetVAB_DocTypes_ID (0);
             SetDescription (null);
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -140,33 +140,33 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID < 0) throw new ArgumentException("C_DocType_ID is mandatory.");
-            Set_Value("C_DocType_ID", C_DocType_ID);
+            if (VAB_DocTypes_ID < 0) throw new ArgumentException("VAB_DocTypes_ID is mandatory.");
+            Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

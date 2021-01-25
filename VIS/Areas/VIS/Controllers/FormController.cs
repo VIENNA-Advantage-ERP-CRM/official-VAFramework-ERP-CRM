@@ -161,11 +161,11 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(model.GetValidAccountCombination(VAF_Client_ID, onlyActive)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GenAttributeSetInstance(int C_GenAttributeSet_ID, bool onlyActive)
+        public JsonResult GenAttributeSetInstance(int VAB_GenFeatureSet_ID, bool onlyActive)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GenAttributeSetInstance(C_GenAttributeSet_ID, onlyActive)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GenAttributeSetInstance(VAB_GenFeatureSet_ID, onlyActive)), JsonRequestBehavior.AllowGet);
         }
 
         #endregion

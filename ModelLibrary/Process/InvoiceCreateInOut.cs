@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Warehouse			
         private int _M_Warehouse_ID = 0;
         // Document Type		
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         // Invoice			
         private int _C_Invoice_ID = 0;
         /// <summary>
@@ -50,9 +50,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _M_Warehouse_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -71,7 +71,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //log.info("C_Invoice_ID=" + _C_Invoice_ID 
             //    + ", M_Warehouse_ID=" + _M_Warehouse_ID
-            //    + ", C_DocType_ID=" + _C_DocType_ID);
+            //    + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
             if (_C_Invoice_ID == 0)
             {
                 throw new ArgumentException("@NotFound@ @C_Invoice_ID@");
@@ -90,20 +90,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new ArgumentException("@InvoiceCreateDocNotCompleted@");
             }
-            MDocType dt = MDocType.Get(GetCtx(), _C_DocType_ID);
+            MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
             if (invoice.IsSOTrx() != dt.IsSOTrx()
                 || invoice.IsReturnTrx() != dt.IsReturnTrx())
             {
-                throw new ArgumentException("@C_DocType_ID@ <> @C_Invoice_ID@");
+                throw new ArgumentException("@VAB_DocTypes_ID@ <> @C_Invoice_ID@");
             }
 
             //*****************************Vikas  1 Dec 2015  *********************************
             //Case Msg Not Showing Proper
             MInOut ship = null;
             MOrder ord = new MOrder(GetCtx(), invoice.GetC_Order_ID(), null);
-            if (ord.GetC_BPartner_ID() > 0)
+            if (ord.GetVAB_BusinessPartner_ID() > 0)
             {
-                ship = new MInOut(invoice, _C_DocType_ID, null, _M_Warehouse_ID);
+                ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);
                 // Change by Mohit Asked by Amardeep sir 02/03/2016
                 ship.SetPOReference(invoice.GetPOReference());
                 // End
@@ -119,7 +119,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //throw new ArgumentException("@InvoiceNotLinkedWithPO@");
             }
             /*
-             MInOut ship = new MInOut(invoice, _C_DocType_ID, null, _M_Warehouse_ID);
+             MInOut ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);
                if (!ship.Save())
                {
                    throw new ArgumentException("@SaveError@ Receipt");
@@ -136,7 +136,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 // Get the lines of Invoice based on the setting taken on Tenant to allow non item Product         
                 if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N")
-                    && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetC_Charge_ID() != 0))
+                    && ((product != null && product.GetProductType() != MProduct.PRODUCTTYPE_Item) || invoiceLine.GetVAB_Charge_ID() != 0))
                 {
                     continue;
                 }

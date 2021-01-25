@@ -35,28 +35,28 @@ namespace ViennaAdvantageServer.Process
 
             String date = string.Format("{0:dd/MM/yy}", today);
             int Record_id = GetRecord_ID();
-            X_C_Contract con = new X_C_Contract(GetCtx(), Record_id, Get_TrxName());
+            X_VAB_Contract con = new X_VAB_Contract(GetCtx(), Record_id, Get_TrxName());
 
             if (Record_id != 0)
             {
-                Sql.Append("SELECT RenewalType FROM C_Contract WHERE C_Contract_ID = " + Record_id + " AND RenewContract = 'N' AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                Sql.Append("SELECT RenewalType FROM VAB_Contract WHERE VAB_Contract_ID = " + Record_id + " AND RenewContract = 'N' AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 string renewType = Util.GetValueOfString(DB.ExecuteScalar(Sql.ToString(), null, Get_TrxName()));
                 if (renewType == "M")
                 {
                     Sql.Clear();
-                    Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE C_Contract_ID=" + Record_id + " AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                    Sql.Append("SELECT VAB_Contract_ID FROM VAB_Contract WHERE VAB_Contract_ID=" + Record_id + " AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 }
                 else
                 {
                     Sql.Clear();
-                    Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND C_Contract_ID=" + Record_id
+                    Sql.Append("SELECT VAB_Contract_ID FROM VAB_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND VAB_Contract_ID=" + Record_id
                         + " AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 }
             }
             else
             {
                 Sql.Clear();
-                Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND RenewalType='A' AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                Sql.Append("SELECT VAB_Contract_ID FROM VAB_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND RenewalType='A' AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
             }
 
             IDataReader dr = DB.ExecuteReader(Sql.ToString(), null, Get_TrxName());
@@ -68,14 +68,14 @@ namespace ViennaAdvantageServer.Process
 
             MPriceList priceList = null;
             MTax tax = null;
-            X_C_Contract contact = null;
-            X_C_Contract New = null;
+            X_VAB_Contract contact = null;
+            X_VAB_Contract New = null;
             ValueNamePair pp = null;
             try
             {
                 while (dr.Read())
                 {
-                    contact = new X_C_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
+                    contact = new X_VAB_Contract(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
                     if (contact.GetRenewalType() == "M")
                     {
                         // SI_0772: By Clicking on Renew Contract, System is throwing an error as 'NoContractReNewed'.
@@ -87,25 +87,25 @@ namespace ViennaAdvantageServer.Process
                             continue;
                         }
 
-                        New = new X_C_Contract(GetCtx(), 0, Get_TrxName());
+                        New = new X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                         New.SetRefContract(contact.GetDocumentNo());
                         New.SetC_Order_ID(contact.GetC_Order_ID());
                         New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
                         OldStart = (DateTime)(contact.GetStartDate());
                         Start = (DateTime)(contact.GetEndDate());
                         New.SetStartDate(Start.AddDays(1));
-                        New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
+                        New.SetVAB_BusinessPartner_ID(contact.GetVAB_BusinessPartner_ID());
                         New.SetBill_Location_ID(contact.GetBill_Location_ID());
                         New.SetBill_User_ID(contact.GetBill_User_ID());
                         New.SetSalesRep_ID(contact.GetSalesRep_ID());
-                        New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
+                        New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
                         New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
 
-                        frequency = contact.GetC_Frequency_ID();
-                        New.SetC_Frequency_ID(frequency);
+                        frequency = contact.GetVAB_Frequency_ID();
+                        New.SetVAB_Frequency_ID(frequency);
 
                         // Get No Of Months from Frequency
-                        months = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NoOfMonths FROM C_Frequency WHERE C_Frequency_ID=" + frequency, null, Get_TrxName()));
+                        months = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NoOfMonths FROM VAB_Frequency WHERE VAB_Frequency_ID=" + frequency, null, Get_TrxName()));
                         duration = months * cycles;
                         endDate = New.GetStartDate().Value.AddMonths(duration);
                         endDate = endDate.AddDays(-1);
@@ -155,14 +155,14 @@ namespace ViennaAdvantageServer.Process
                             New.SetPriceActual(contact.GetPriceActual());
                             New.SetPriceList(contact.GetPriceList());
                         }
-                        New.SetC_Currency_ID(priceList.GetC_Currency_ID());
+                        New.SetVAB_Currency_ID(priceList.GetVAB_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
                         New.SetM_Product_ID(contact.GetM_Product_ID());
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
                         New.SetQtyEntered(contact.GetQtyEntered());
                         New.SetC_Tax_ID(contact.GetC_Tax_ID());
-                        New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
-                        New.SetRef_Contract_ID(contact.GetC_Contract_ID());
+                        New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
+                        New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
                         New.SetC_Project_ID(contact.GetC_Project_ID());
                         New.SetDescription(contact.GetDescription());
                         //New.SetTaxAmt(contact.GetTaxAmt());
@@ -232,7 +232,7 @@ namespace ViennaAdvantageServer.Process
                             count++;
                             if (Record_id != 0)
                             {
-                                contact.SetRef_Contract_ID(New.GetC_Contract_ID());
+                                contact.SetRef_Contract_ID(New.GetVAB_Contract_ID());
                                 contact.SetRenewContract("Y");
                                 if (!contact.Save())
                                 {
@@ -267,7 +267,7 @@ namespace ViennaAdvantageServer.Process
                             continue;
                         }
 
-                        New = new X_C_Contract(GetCtx(), 0, Get_TrxName());
+                        New = new X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                         New.SetRefContract(contact.GetDocumentNo());
                         New.SetC_Order_ID(contact.GetC_Order_ID());
                         New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
@@ -275,23 +275,23 @@ namespace ViennaAdvantageServer.Process
                         Start = (DateTime)(contact.GetEndDate());
                         New.SetStartDate(Start.AddDays(1));
 
-                        frequency = contact.GetC_Frequency_ID();
+                        frequency = contact.GetVAB_Frequency_ID();
 
                         // Get No Of Months from Frequency
-                        months = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NoOfMonths FROM C_Frequency WHERE C_Frequency_ID=" + frequency, null, Get_TrxName()));
+                        months = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NoOfMonths FROM VAB_Frequency WHERE VAB_Frequency_ID=" + frequency, null, Get_TrxName()));
                         duration = months * cycles;
 
                         endDate = New.GetStartDate().Value.AddMonths(duration);
                         endDate = endDate.AddDays(-1);
 
                         New.SetEndDate(endDate);
-                        New.SetC_BPartner_ID(contact.GetC_BPartner_ID());
+                        New.SetVAB_BusinessPartner_ID(contact.GetVAB_BusinessPartner_ID());
                         New.SetBill_Location_ID(contact.GetBill_Location_ID());
                         New.SetBill_User_ID(contact.GetBill_User_ID());
                         New.SetSalesRep_ID(contact.GetSalesRep_ID());
-                        New.SetC_ConversionType_ID(contact.GetC_ConversionType_ID());
+                        New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
                         New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
-                        New.SetC_Frequency_ID(frequency);
+                        New.SetVAB_Frequency_ID(frequency);
 
                         // invoice Count Start                       
 
@@ -348,14 +348,14 @@ namespace ViennaAdvantageServer.Process
 
                         }
                         New.SetTotalInvoice(contact.GetCycles());
-                        New.SetC_Currency_ID(priceList.GetC_Currency_ID());
+                        New.SetVAB_Currency_ID(priceList.GetVAB_Currency_ID());
                         New.SetC_UOM_ID(contact.GetC_UOM_ID());
                         New.SetM_Product_ID(contact.GetM_Product_ID());
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
                         New.SetQtyEntered(contact.GetQtyEntered());
                         New.SetC_Tax_ID(contact.GetC_Tax_ID());
-                        New.SetC_Campaign_ID(contact.GetC_Campaign_ID());
-                        New.SetRef_Contract_ID(contact.GetC_Contract_ID());
+                        New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
+                        New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
                         New.SetC_Project_ID(contact.GetC_Project_ID());
                         New.SetDescription(contact.GetDescription());
                         New.SetCancelBeforeDays(contact.GetCancelBeforeDays());
@@ -418,7 +418,7 @@ namespace ViennaAdvantageServer.Process
                         {
                             newcon = New.GetDocumentNo();
                             count++;
-                            contact.SetRef_Contract_ID(New.GetC_Contract_ID());
+                            contact.SetRef_Contract_ID(New.GetVAB_Contract_ID());
                             contact.SetRenewContract("Y");
                             if (!contact.Save())
                             {
@@ -426,7 +426,7 @@ namespace ViennaAdvantageServer.Process
                                 Get_TrxName().Rollback();
                                 return Msg.GetMsg(GetCtx(), "ContractNotRenew");
                             }
-                            if (!EnterSchedules(New.GetC_Contract_ID(), cycles))
+                            if (!EnterSchedules(New.GetVAB_Contract_ID(), cycles))
                             {
                                 dr.Close();
                                 Get_TrxName().Rollback();
@@ -490,17 +490,17 @@ namespace ViennaAdvantageServer.Process
         /// <summary>
         /// Create Entry On Schedule Tab
         /// </summary>
-        /// <param name="C_Contract_ID">Contract ID</param>
+        /// <param name="VAB_Contract_ID">Contract ID</param>
         /// <param name="cycles">No of Invoices</param>
         /// <returns>true, if Schedules created</returns>
-        private bool EnterSchedules(int C_Contract_ID, int cycles)
+        private bool EnterSchedules(int VAB_Contract_ID, int cycles)
         {
-            X_C_ContractSchedule CSchedule = null;
-            X_C_Contract contract = new X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
+            X_VAB_ContractSchedule CSchedule = null;
+            X_VAB_Contract contract = new X_VAB_Contract(GetCtx(), VAB_Contract_ID, Get_TrxName());
             DateTime start = (DateTime)contract.GetStartDate();
-            int frequency = contract.GetC_Frequency_ID();
+            int frequency = contract.GetVAB_Frequency_ID();
 
-            string Sql = "SELECT NoOfMonths FROM C_Frequency WHERE C_Frequency_ID=" + frequency;
+            string Sql = "SELECT NoOfMonths FROM VAB_Frequency WHERE VAB_Frequency_ID=" + frequency;
             int months = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
             int totalcount = months * cycles;
             DateTime end = start.AddMonths(totalcount);
@@ -509,9 +509,9 @@ namespace ViennaAdvantageServer.Process
             {
                 for (int i = 1; i <= cycles; i++)
                 {
-                    CSchedule = new X_C_ContractSchedule(GetCtx(), 0, Get_TrxName());
-                    CSchedule.SetC_Contract_ID(C_Contract_ID);
-                    CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());
+                    CSchedule = new X_VAB_ContractSchedule(GetCtx(), 0, Get_TrxName());
+                    CSchedule.SetVAB_Contract_ID(VAB_Contract_ID);
+                    CSchedule.SetVAB_BusinessPartner_ID(contract.GetVAB_BusinessPartner_ID());
                     CSchedule.SetFROMDATE(start);
                     CSchedule.SetUnitsDelivered(contract.GetQtyEntered());
                     if (i != cycles)

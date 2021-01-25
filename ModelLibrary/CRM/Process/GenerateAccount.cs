@@ -19,19 +19,19 @@ namespace VAdvantage.Process
 {
     public class GenerateAccount:SvrProcess
     {
-        private int C_Bpartner_ID = 0;
+        private int VAB_BusinessPartner_ID = 0;
 
         protected override void Prepare()
         {
-            C_Bpartner_ID = GetRecord_ID();
+            VAB_BusinessPartner_ID = GetRecord_ID();
         } //prepare
 
         protected override String DoIt()
         {
             int value = 0;
-            VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_ID, Get_TrxName());
-            //BPartner.SetC_Greeting_ID(
-            String sqlbp = "update c_bpartner set iscustomer='Y', isprospect='N' where c_bpartner_id=" + C_Bpartner_ID + "";
+            VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
+            //BPartner.SetVAB_Greeting_ID(
+            String sqlbp = "update VAB_BusinessPartner set iscustomer='Y', isprospect='N' where VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "";
             value = DB.ExecuteQuery(sqlbp, null, Get_TrxName());
             if (value == -1)
             {

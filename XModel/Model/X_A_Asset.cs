@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for A_Asset
+    /** Generated Model for VAA_Asset
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_A_Asset : PO
     {
-        public X_A_Asset(Context ctx, int A_Asset_ID, Trx trxName)
-            : base(ctx, A_Asset_ID, trxName)
+        public X_A_Asset(Context ctx, int VAA_Asset_ID, Trx trxName)
+            : base(ctx, VAA_Asset_ID, trxName)
         {
-            /** if (A_Asset_ID == 0)
+            /** if (VAA_Asset_ID == 0)
             {
-            SetA_Asset_Group_ID (0);
+            SetVAA_AssetGroup_ID (0);
             SetA_Asset_ID (0);
             SetIsDepreciated (false);
             SetIsDisposed (false);
@@ -33,12 +33,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_A_Asset(Ctx ctx, int A_Asset_ID, Trx trxName)
-            : base(ctx, A_Asset_ID, trxName)
+        public X_A_Asset(Ctx ctx, int VAA_Asset_ID, Trx trxName)
+            : base(ctx, VAA_Asset_ID, trxName)
         {
-            /** if (A_Asset_ID == 0)
+            /** if (VAA_Asset_ID == 0)
             {
-            SetA_Asset_Group_ID (0);
+            SetVAA_AssetGroup_ID (0);
             SetA_Asset_ID (0);
             SetIsDepreciated (false);
             SetIsDisposed (false);
@@ -93,8 +93,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =539;
 
-        /** TableName=A_Asset */
-        public static String Table_Name = "A_Asset";
+        /** TableName=VAA_Asset */
+        public static String Table_Name = "VAA_Asset";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -148,32 +148,32 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Asset Group.
-        @param A_Asset_Group_ID Group of Assets */
-        public void SetA_Asset_Group_ID(int A_Asset_Group_ID)
+        @param VAA_AssetGroup_ID Group of Assets */
+        public void SetVAA_AssetGroup_ID(int VAA_AssetGroup_ID)
         {
-            if (A_Asset_Group_ID < 1) throw new ArgumentException("A_Asset_Group_ID is mandatory.");
-            Set_Value("A_Asset_Group_ID", A_Asset_Group_ID);
+            if (VAA_AssetGroup_ID < 1) throw new ArgumentException("VAA_AssetGroup_ID is mandatory.");
+            Set_Value("VAA_AssetGroup_ID", VAA_AssetGroup_ID);
         }
         /** Get Asset Group.
         @return Group of Assets */
-        public int GetA_Asset_Group_ID()
+        public int GetVAA_AssetGroup_ID()
         {
-            Object ii = Get_Value("A_Asset_Group_ID");
+            Object ii = Get_Value("VAA_AssetGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Asset.
-        @param A_Asset_ID Asset used internally or by customers */
-        public void SetA_Asset_ID(int A_Asset_ID)
+        @param VAA_Asset_ID Asset used internally or by customers */
+        public void SetA_Asset_ID(int VAA_Asset_ID)
         {
-            if (A_Asset_ID < 1) throw new ArgumentException("A_Asset_ID is mandatory.");
-            Set_ValueNoCheck("A_Asset_ID", A_Asset_ID);
+            if (VAA_Asset_ID < 1) throw new ArgumentException("VAA_Asset_ID is mandatory.");
+            Set_ValueNoCheck("VAA_Asset_ID", VAA_Asset_ID);
         }
         /** Get Asset.
         @return Asset used internally or by customers */
         public int GetA_Asset_ID()
         {
-            Object ii = Get_Value("A_Asset_ID");
+            Object ii = Get_Value("VAA_Asset_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -214,53 +214,53 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("AssetServiceDate");
         }
 
-        /** C_BPartnerSR_ID VAF_Control_Ref_ID=353 */
-        public static int C_BPARTNERSR_ID_VAF_Control_Ref_ID = 353;
+        /** VAB_BusinessPartnerSR_ID VAF_Control_Ref_ID=353 */
+        public static int VAB_BUSINESSPARTNERSR_ID_VAF_Control_Ref_ID = 353;
         /** Set BPartner (Agent).
-        @param C_BPartnerSR_ID Business Partner (Agent or Sales Rep) */
-        public void SetC_BPartnerSR_ID(int C_BPartnerSR_ID)
+        @param VAB_BusinessPartnerSR_ID Business Partner (Agent or Sales Rep) */
+        public void SetVAB_BusinessPartnerSR_ID(int VAB_BusinessPartnerSR_ID)
         {
-            if (C_BPartnerSR_ID <= 0) Set_Value("C_BPartnerSR_ID", null);
+            if (VAB_BusinessPartnerSR_ID <= 0) Set_Value("VAB_BusinessPartnerSR_ID", null);
             else
-                Set_Value("C_BPartnerSR_ID", C_BPartnerSR_ID);
+                Set_Value("VAB_BusinessPartnerSR_ID", VAB_BusinessPartnerSR_ID);
         }
         /** Get BPartner (Agent).
         @return Business Partner (Agent or Sales Rep) */
-        public int GetC_BPartnerSR_ID()
+        public int GetVAB_BusinessPartnerSR_ID()
         {
-            Object ii = Get_Value("C_BPartnerSR_ID");
+            Object ii = Get_Value("VAB_BusinessPartnerSR_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Partner Location.
-        @param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        @param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+        public void SetVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            if (C_BPartner_Location_ID <= 0) Set_Value("C_BPartner_Location_ID", null);
+            if (VAB_BPart_Location_ID <= 0) Set_Value("VAB_BPart_Location_ID", null);
             else
-                Set_Value("C_BPartner_Location_ID", C_BPartner_Location_ID);
+                Set_Value("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
         }
         /** Get Partner Location.
         @return Identifies the (ship to) address for this Business Partner */
-        public int GetC_BPartner_Location_ID()
+        public int GetVAB_BPart_Location_ID()
         {
-            Object ii = Get_Value("C_BPartner_Location_ID");
+            Object ii = Get_Value("VAB_BPart_Location_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -138,21 +138,21 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** C_Country_ID VAF_Control_Ref_ID=156 */
-        public static int C_COUNTRY_ID_VAF_Control_Ref_ID = 156;
+        /** VAB_Country_ID VAF_Control_Ref_ID=156 */
+        public static int VAB_COUNTRY_ID_VAF_Control_Ref_ID = 156;
         /** Set Country.
-        @param C_Country_ID Country */
-        public void SetC_Country_ID(int C_Country_ID)
+        @param VAB_Country_ID Country */
+        public void SetVAB_Country_ID(int VAB_Country_ID)
         {
-            if (C_Country_ID <= 0) Set_Value("C_Country_ID", null);
+            if (VAB_Country_ID <= 0) Set_Value("VAB_Country_ID", null);
             else
-                Set_Value("C_Country_ID", C_Country_ID);
+                Set_Value("VAB_Country_ID", VAB_Country_ID);
         }
         /** Get Country.
         @return Country */
-        public int GetC_Country_ID()
+        public int GetVAB_Country_ID()
         {
-            Object ii = Get_Value("C_Country_ID");
+            Object ii = Get_Value("VAB_Country_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

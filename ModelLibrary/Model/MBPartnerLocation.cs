@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MBPartnerLocation
  * Purpose        : Partner Location Model
- * Class Used     : X_C_BPartner_Location
+ * Class Used     : X_VAB_BPart_Location
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBPartnerLocation : X_C_BPartner_Location
+    public class MBPartnerLocation : X_VAB_BPart_Location
     {
         //	Cached Location			
         private MLocation _location = null;
@@ -37,13 +37,13 @@ namespace VAdvantage.Model
 
         /* 	Get Locations for BPartner
         *	@param ctx context
-        *	@param C_BPartner_ID bp
+        *	@param VAB_BusinessPartner_ID bp
         *	@return array of locations
         */
-        public MBPartnerLocation[] GetForBPartner(Ctx ctx, int C_BPartner_ID, Trx trxName)
+        public MBPartnerLocation[] GetForBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
         {
             List<MBPartnerLocation> list = new List<MBPartnerLocation>();
-            String sql = "SELECT * FROM C_BPartner_Location WHERE C_BPartner_ID=" + C_BPartner_ID;
+            String sql = "SELECT * FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             DataSet ds = new DataSet();
             try
             {
@@ -69,13 +69,13 @@ namespace VAdvantage.Model
         /****
          * 	Default Constructor
          *	@param ctx context
-         *	@param C_BPartner_Location_ID id
+         *	@param VAB_BPart_Location_ID id
          *	@param trxName transaction
          */
-        public MBPartnerLocation(Ctx ctx, int C_BPartner_Location_ID, Trx trxName)
-            : base(ctx, C_BPartner_Location_ID, trxName)
+        public MBPartnerLocation(Ctx ctx, int VAB_BPart_Location_ID, Trx trxName)
+            : base(ctx, VAB_BPart_Location_ID, trxName)
         {
-            if (C_BPartner_Location_ID == 0)
+            if (VAB_BPart_Location_ID == 0)
             {
                 SetName(".");
                 //
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
 
             SetClientOrg(bp);
             //	may (still) be 0
-            Set_ValueNoCheck("C_BPartner_ID", (int)(bp.GetC_BPartner_ID()));
+            Set_ValueNoCheck("VAB_BusinessPartner_ID", (int)(bp.GetVAB_BusinessPartner_ID()));
         }
 
         /**
@@ -162,17 +162,17 @@ namespace VAdvantage.Model
                 // Error if Customer Location No is not unique
                 if (GetVA077_LocNo() != null)
                 {
-                    string sql = @"SELECT C_BPartner_ID, VA077_IsMailAdd  FROM C_BPartner_Location 
-                                   WHERE VA077_LocNo = '" + GetVA077_LocNo() + "' AND C_BPartner_Location_ID !=" + GetC_BPartner_Location_ID();
+                    string sql = @"SELECT VAB_BusinessPartner_ID, VA077_IsMailAdd  FROM VAB_BPart_Location 
+                                   WHERE VA077_LocNo = '" + GetVA077_LocNo() + "' AND VAB_BPart_Location_ID !=" + GetVAB_BPart_Location_ID();
                     DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
 
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         if (ds.Tables[0].Rows.Count == 1)
                         {
-                            int PartnerID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                            int PartnerID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BusinessPartner_ID"]);
                             bool value = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA077_IsMailAdd"]).Equals("Y") ? true : false;
-                            if (value.Equals(IsVA077_IsMailAdd()) || PartnerID != GetC_BPartner_ID())
+                            if (value.Equals(IsVA077_IsMailAdd()) || PartnerID != GetVAB_BusinessPartner_ID())
                             {
                                 log.SaveError("VA077_UniqueLocNo", "");
                                 return false;
@@ -225,7 +225,7 @@ namespace VAdvantage.Model
             //MakeUnique(address);
 
             //	Check uniqueness
-            MBPartnerLocation[] locations = GetForBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            MBPartnerLocation[] locations = GetForBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             bool unique = locations.Length == 0;
             while (!unique)
             {
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < locations.Length; i++)
                 {
                     MBPartnerLocation location = locations[i];
-                    if (location.GetC_BPartner_Location_ID() == Get_ID())
+                    if (location.GetVAB_BPart_Location_ID() == Get_ID())
                         continue;
                     if (_uniqueName.Equals(location.GetName()))
                     {
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
 
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
-                int _count = Util.GetValueOfInt(DB.ExecuteQuery(DBFunctionCollection.UpdateLocAndNameOnBPHeader(GetC_BPartner_ID()), null, null));
+                int _count = Util.GetValueOfInt(DB.ExecuteQuery(DBFunctionCollection.UpdateLocAndNameOnBPHeader(GetVAB_BusinessPartner_ID()), null, null));
                 if (_count < 0)
                 {
                     return false;
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
         /// </summary>
         public void SetSOCreditStatus()
         {
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             Decimal creditLimit = GetSO_CreditLimit();
             //	Nothing to do
             if (SOCREDITSTATUS_NoCreditCheck.Equals(GetSOCreditStatus())
@@ -457,7 +457,7 @@ namespace VAdvantage.Model
                 return success;
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
-                int _count = Util.GetValueOfInt(DB.ExecuteQuery(DBFunctionCollection.UpdateLocAndNameOnBPHeader(GetC_BPartner_ID()), null, null));
+                int _count = Util.GetValueOfInt(DB.ExecuteQuery(DBFunctionCollection.UpdateLocAndNameOnBPHeader(GetVAB_BusinessPartner_ID()), null, null));
                 if (_count < 0)
                 {
                     return false;

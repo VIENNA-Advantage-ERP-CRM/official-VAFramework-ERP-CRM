@@ -120,10 +120,10 @@
             return "";
         }
 
-        //var C_DocType_ID = Util.getValueOfInt(value);		//	Actually C_DocTypeTarget_ID
-        var C_DocType_ID = Util.getValueOfInt(value);
+        //var VAB_DocTypes_ID = Util.getValueOfInt(value);		//	Actually VAB_DocTypesTarget_ID
+        var VAB_DocTypes_ID = Util.getValueOfInt(value);
 
-        if (C_DocType_ID == null || C_DocType_ID == 0) {
+        if (VAB_DocTypes_ID == null || VAB_DocTypes_ID == 0) {
             return "";
         }
 
@@ -138,14 +138,14 @@
         if (!newDocNo && oldDocNo.startsWith("<") && oldDocNo.endsWith(">"))
             newDocNo = true;
 
-        var oldC_DocType_ID = Util.getValueOfInt(mTab.getValue("C_DocType_ID"));
+        var oldVAB_DocTypes_ID = Util.getValueOfInt(mTab.getValue("VAB_DocTypes_ID"));
 
         var sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
             + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
             + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx "              //	7..9
-            + "FROM C_DocType d "
+            + "FROM VAB_DocTypes d "
             + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
-            + "WHERE C_DocType_ID=@param1";	//	#1
+            + "WHERE VAB_DocTypes_ID=@param1";	//	#1
         var idr = null;
         //var param = new SqlParameter[1];
         var p = [];
@@ -153,10 +153,10 @@
         try {
             var VAF_Record_Seq_ID = 0;
             //	Get old AD_SeqNo for comparison
-            if (!newDocNo && Util.getValueOfInt(oldC_DocType_ID) != 0) {
-                p[0] = new VIS.DB.SqlParam("@param1", oldC_DocType_ID);
+            if (!newDocNo && Util.getValueOfInt(oldVAB_DocTypes_ID) != 0) {
+                p[0] = new VIS.DB.SqlParam("@param1", oldVAB_DocTypes_ID);
 
-                //param[0] = new SqlParameter("@param1", oldC_DocType_ID);
+                //param[0] = new SqlParameter("@param1", oldVAB_DocTypes_ID);
                 idr = VIS.DB.executeReader(sql, p);
                 if (idr.read()) {
                     //VAF_Record_Seq_ID = Util.getValueOfInt(idr.tables[0].rows[0].cells["currentnextsys"]);
@@ -164,7 +164,7 @@
                 }
                 idr.close();
             }
-            p[0] = new VIS.DB.SqlParam("@param1", C_DocType_ID);
+            p[0] = new VIS.DB.SqlParam("@param1", VAB_DocTypes_ID);
             idr = VIS.DB.executeReader(sql, p);
 
             p.length = 0;
@@ -268,14 +268,14 @@
                 || (DocSubTypeSO == DocSubTypeSO_Prepay))    //  not for POS/PrePay
                 ;
             else {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 sql = "SELECT PaymentRule,C_PaymentTerm_ID,"            //  1..2
                     + "InvoiceRule,DeliveryRule,"                       //  3..4
                     + "FreightCostRule,DeliveryViaRule, "               //  5..6
                     + "PaymentRulePO,PO_PaymentTerm_ID "
-                    + "FROM C_BPartner "
-                    + "WHERE C_BPartner_ID=" + C_BPartner_ID;		//	#1
-                if (C_BPartner_ID != 0) {
+                    + "FROM VAB_BusinessPartner "
+                    + "WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;		//	#1
+                if (VAB_BusinessPartner_ID != 0) {
                     idr = VIS.DB.executeReader(sql, null);
                 }
 
@@ -354,7 +354,7 @@
             dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", param);
             if (dr != null) {
                 var M_Product_ID = Util.getValueOfInt(dr["M_Product_ID"]);
-                var C_Charge_ID = Util.getValueOfInt(dr["C_Charge_ID"]);
+                var VAB_Charge_ID = Util.getValueOfInt(dr["VAB_Charge_ID"]);
                 var Qty = Util.getValueOfInt(dr["Qty"]);
                 var QtyOrdered = Util.getValueOfInt(dr["QtyOrdered"]);
                 var QtyReleased = Util.getValueOfInt(dr["QtyReleased"]);
@@ -409,7 +409,7 @@
                     mTab.setValue("M_Product_ID", M_Product_ID);
                 }
                 else {
-                    mTab.setValue("C_Charge_ID", C_Charge_ID);
+                    mTab.setValue("VAB_Charge_ID", VAB_Charge_ID);
                 }
 
                 if (Qty != 0 && Qty != null) {
@@ -485,23 +485,23 @@
             var param = C_Order_Blanket.toString();
             dr = VIS.dataContext.getJSONRecord("MOrder/GetOrder", param);
             if (dr != null) {
-                var C_BPartner_ID = Util.getValueOfDouble(dr["C_BPartner_ID"]);
+                var VAB_BusinessPartner_ID = Util.getValueOfDouble(dr["VAB_BusinessPartner_ID"]);
                 var M_PriceList_ID = Util.getValueOfDouble(dr["M_PriceList_ID"]);
                 var M_Warehouse_ID = Util.getValueOfDouble(dr["M_Warehouse_ID"]);
                 var C_PaymentTerm_ID = Util.getValueOfDouble(dr["C_PaymentTerm_ID"]);
                 var PaymentRule = Util.getValueOfDouble(dr["PaymentRule"]);
                 var C_Payment_ID = Util.getValueOfDouble(dr["C_Payment_ID"]);
                 var VA009_PaymentMethod_ID = Util.getValueOfDouble(dr["VA009_PaymentMethod_ID"]);
-                var C_Currency_ID = Util.getValueOfDouble(dr["C_Currency_ID"]);
+                var VAB_Currency_ID = Util.getValueOfDouble(dr["VAB_Currency_ID"]);
 
                 var C_Project_ID = Util.getValueOfDouble(dr["C_Project_ID"]);
-                var C_Campaign_ID = Util.getValueOfDouble(dr["C_Campaign_ID"]); C_ProjectRef_ID
+                var VAB_Promotion_ID = Util.getValueOfDouble(dr["VAB_Promotion_ID"]); C_ProjectRef_ID
                 var C_ProjectRef_ID = Util.getValueOfDouble(dr["C_ProjectRef_ID"]);
                 var SalesRep_ID = Util.getValueOfDouble(dr["SalesRep_ID"]);
                 var PriorityRule = Util.getValueOfDouble(dr["PriorityRule"]);
 
-                if (C_BPartner_ID != 0 && C_BPartner_ID != null) {
-                    mTab.setValue("C_BPartner_ID", C_BPartner_ID);
+                if (VAB_BusinessPartner_ID != 0 && VAB_BusinessPartner_ID != null) {
+                    mTab.setValue("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
                 }
 
                 if (M_PriceList_ID != 0 && M_PriceList_ID != null) {
@@ -526,16 +526,16 @@
                     mTab.setValue("VA009_PaymentMethod_ID", VA009_PaymentMethod_ID);
                 }
 
-                if (C_Currency_ID != 0 && C_Currency_ID != null) {
-                    mTab.setValue("C_Currency_ID", C_Currency_ID);
+                if (VAB_Currency_ID != 0 && VAB_Currency_ID != null) {
+                    mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
                 }
 
                 if (C_Project_ID != 0 && C_Project_ID != null) {
                     mTab.setValue("C_Project_ID", C_Project_ID);
                 }
 
-                if (C_Campaign_ID != 0 && C_Campaign_ID != null) {
-                    mTab.setValue("C_Campaign_ID", C_Campaign_ID);
+                if (VAB_Promotion_ID != 0 && VAB_Promotion_ID != null) {
+                    mTab.setValue("VAB_Promotion_ID", VAB_Promotion_ID);
                 }
 
                 if (C_ProjectRef_ID != 0 && C_ProjectRef_ID != null) {
@@ -565,13 +565,13 @@
         this.setCalloutActive(false);
 
         oldValue = null;
-        return this.BPartner(ctx, windowNo, mTab, mField, mTab.getValue("C_BPartner_ID"));
+        return this.BPartner(ctx, windowNo, mTab, mField, mTab.getValue("VAB_BusinessPartner_ID"));
     };
 
     /// <summary>
     /// Order Header - BPartner.
     /// - M_PriceList_ID (+ Context)
-    /// - C_BPartner_Location_ID
+    /// - VAB_BPart_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
     /// 	- VAF_UserContact_ID
     /// 	- POReference
@@ -655,12 +655,12 @@
         }
         try {
 
-            var C_BPartner_ID = 0;
+            var VAB_BusinessPartner_ID = 0;
             var isvendor = 'N';
             var isCustomer = 'N';
             if (value != null)
-                C_BPartner_ID = Util.getValueOfInt(value.toString());
-            if (C_BPartner_ID == 0)
+                VAB_BusinessPartner_ID = Util.getValueOfInt(value.toString());
+            if (VAB_BusinessPartner_ID == 0)
                 return "";
 
             // Skip rest of steps for RMA. These fields are copied over from the orignal order instead.
@@ -680,7 +680,7 @@
                 _CountVA009 = dr["VA009_"];
             }
 
-            paramString = _CountVA009.toString() + "," + C_BPartner_ID;
+            paramString = _CountVA009.toString() + "," + VAB_BusinessPartner_ID;
             dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPartnerOrderData", paramString);
             if (dr != null) {
                 // Price List
@@ -704,7 +704,7 @@
                 }
 
                 //	Bill-To BPartner
-                mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
+                mTab.setValue("Bill_BPartner_ID", VAB_BusinessPartner_ID);
                 var bill_Location_ID = Util.getValueOfInt(dr["Bill_Location_ID"]);
                 if (bill_Location_ID == 0) {
                     var bill_Partner_ID = Util.getValueOfInt(dr["Bill_BPartner_ID"]);
@@ -715,16 +715,16 @@
                     mTab.setValue("Bill_Location_ID", bill_Location_ID);
 
                 // Ship-To Location
-                var shipTo_ID = Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
-                if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
-                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                var shipTo_ID = Util.getValueOfInt(dr["VAB_BPart_Location_ID"]);
+                if (VAB_BusinessPartner_ID.toString() == ctx.getContext("VAB_BusinessPartner_ID")) {
+                    var loc = ctx.getContext("VAB_BPart_Location_ID");
                     if (loc.length > 0)
                         shipTo_ID = Util.getValueOfInt(loc);
                 }
                 if (shipTo_ID == 0)
-                    mTab.setValue("C_BPartner_Location_ID", null);
+                    mTab.setValue("VAB_BPart_Location_ID", null);
                 else {
-                    mTab.setValue("C_BPartner_Location_ID", shipTo_ID);
+                    mTab.setValue("VAB_BPart_Location_ID", shipTo_ID);
                     if ("Y" == Util.getValueOfString(dr["IsShipTo"]))	//	set the same
                         mTab.setValue("Bill_Location_ID", shipTo_ID);
                 }
@@ -741,7 +741,7 @@
                     if (C_Order_Blanket < 0) {
 
 
-                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
+                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", VAB_BusinessPartner_ID);
                         if (bpdtl != null) {
                             isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
                             isCustomer = Util.getValueOfString(bpdtl["IsCustomer"]);
@@ -825,7 +825,7 @@
                 }
 
                 var contID = Util.getValueOfInt(dr["VAF_UserContact_ID"]);
-                if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
+                if (VAB_BusinessPartner_ID.toString() == ctx.getContext("VAB_BusinessPartner_ID")) {
                     var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.length > 0)
                         contID = Util.getValueOfInt(cont);
@@ -850,7 +850,7 @@
                         }
                     }
                     else {
-                        var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
+                        var locId = Util.getValueOfInt(mTab.getValue("VAB_BPart_Location_ID"));
                         var dr1 = VIS.dataContext.getJSONRecord("MBPartner/GetLocationData", locId.toString());
                         if (dr1 != null) {
                             CreditStatus = Util.getValueOfString(dr1["CreditStatusSettingOn"]);
@@ -967,7 +967,7 @@
                         ii = Util.getValueOfInt(isSOTrx ? dr["C_PaymentTerm_ID"] : dr["PO_PaymentTerm_ID"]);
                         //when doc type = Warehouse Order / Credit Order / POS Order / Prepay order --- and payment term is advance -- not to update
                         // false means - not to update
-                        var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("C_DocTypeTarget_ID")), ii);
+                        var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("VAB_DocTypesTarget_ID")), ii);
                         if (isPaymentTermUpdate) {
                             if (ii != 0)//ii=0 when dr return ""
                             {
@@ -1008,15 +1008,15 @@
             //sql += " p.IsDiscountPrinted,"
             //+ " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
             //+ " p.CreditStatusSettingOn,p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //+ " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+            //+ " lship.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
             //+ " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
-            //+ " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
-            //+ " FROM C_BPartner p"
-            //+ " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-            //+ " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-            //+ " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-            //+ " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-            //+ "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+            //+ " lbill.VAB_BPart_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
+            //+ " FROM VAB_BusinessPartner p"
+            //+ " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+            //+ " LEFT OUTER JOIN VAB_BPart_Location lbill ON (p.VAB_BusinessPartner_ID=lbill.VAB_BusinessPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
+            //+ " LEFT OUTER JOIN VAB_BPart_Location lship ON (p.VAB_BusinessPartner_ID=lship.VAB_BusinessPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
+            //+ " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+            //+ "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND p.IsActive='Y'";		//	#1
             //var isSOTrx = ctx.isSOTrx(windowNo);
 
             //dr = CalloutDB.executeCalloutReader(sql);
@@ -1033,10 +1033,10 @@
             //}
 
             ////	Bill-To BPartner               
-            //mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);                
+            //mTab.setValue("Bill_BPartner_ID", VAB_BusinessPartner_ID);                
             //var bill_Location_ID = Util.getValueOfInt(dr.get("bill_location_id"));
             //if (bill_Location_ID == 0) {
-            //    sql = "SELECT C_BPartnerRelation_ID FROM C_BP_Relation WHERE C_BPartner_ID = " + C_BPartner_ID;
+            //    sql = "SELECT VAB_BusinessPartnerRelation_ID FROM VAB_BPart_Relation WHERE VAB_BusinessPartner_ID = " + VAB_BusinessPartner_ID;
             //    var bill_Partner_ID = Util.getValueOfInt(CalloutDB.executeCalloutScalar(sql));
             //    if (bill_Partner_ID > 0)
             //        mTab.setValue("Bill_BPartner_ID", bill_Partner_ID);
@@ -1045,16 +1045,16 @@
             //    mTab.setValue("Bill_Location_ID", bill_Location_ID);
 
             //// Ship-To Location               
-            //var shipTo_ID = Util.getValueOfInt(dr.get("c_bpartner_location_id"));                
-            //if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
-            //    var loc = ctx.getContext("C_BPartner_Location_ID");
+            //var shipTo_ID = Util.getValueOfInt(dr.get("VAB_BPart_Location_id"));                
+            //if (VAB_BusinessPartner_ID.toString() == ctx.getContext("VAB_BusinessPartner_ID")) {
+            //    var loc = ctx.getContext("VAB_BPart_Location_ID");
             //    if (loc.length > 0)
             //        shipTo_ID = Util.getValueOfInt(loc);
             //}
             //if (shipTo_ID == 0)
-            //    mTab.setValue("C_BPartner_Location_ID", null);
+            //    mTab.setValue("VAB_BPart_Location_ID", null);
             //else {
-            //    mTab.setValue("C_BPartner_Location_ID", shipTo_ID);
+            //    mTab.setValue("VAB_BPart_Location_ID", shipTo_ID);
             //    if ("Y" == dr.get("isshipto"))	//	set the same
             //        mTab.setValue("Bill_Location_ID", shipTo_ID);
             //}
@@ -1093,7 +1093,7 @@
 
             //var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
 
-            //if (C_BPartner_ID.toString() == ctx.getContext("C_BPartner_ID")) {
+            //if (VAB_BusinessPartner_ID.toString() == ctx.getContext("VAB_BusinessPartner_ID")) {
             //    var cont = ctx.getContext("VAF_UserContact_ID");
             //    if (cont.length > 0)
             //        contID = Util.getValueOfInt(cont);
@@ -1118,9 +1118,9 @@
             //        }
             //    }
             //    else {
-            //        var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
+            //        var locId = Util.getValueOfInt(mTab.getValue("VAB_BPart_Location_ID"));
             //        sql = "SELECT p.CreditStatusSettingOn,p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable" +
-            //            " FROM C_BPartner_Location p WHERE C_BPartner_Location_ID = " + locId;
+            //            " FROM VAB_BPart_Location p WHERE VAB_BPart_Location_ID = " + locId;
             //        drl = CalloutDB.executeCalloutReader(sql);
             //        if (drl.read()) {
             //            CreditStatus = drl.getString("CreditStatusSettingOn");
@@ -1255,8 +1255,8 @@
     };
 
     /// <summary>
-    /// Order Header - C_BPartner_Location.
-    /// - C_BPartner_Location_ID
+    /// Order Header - VAB_BPart_Location.
+    /// - VAB_BPart_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
     /// 	- VAF_UserContact_ID
     /// 	- POReference
@@ -1278,10 +1278,10 @@
             return "";
         }
         try {
-            var C_BPartner_Location_ID = 0;
+            var VAB_BPart_Location_ID = 0;
             if (value != null)
-                C_BPartner_Location_ID = Util.getValueOfInt(value.toString());
-            if (C_BPartner_Location_ID == 0)
+                VAB_BPart_Location_ID = Util.getValueOfInt(value.toString());
+            if (VAB_BPart_Location_ID == 0)
                 return "";
 
             // Skip rest of steps for RMA. These fields are copied over from the orignal order instead.
@@ -1293,7 +1293,7 @@
             if (isSOTrx) {
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019 
                 sql = "SELECT bp.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
-                    " FROM C_BPartner_Location p INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = p.C_BPartner_ID) WHERE p.C_BPartner_Location_ID = " + C_BPartner_Location_ID;
+                    " FROM VAB_BPart_Location p INNER JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_ID = p.VAB_BusinessPartner_ID) WHERE p.VAB_BPart_Location_ID = " + VAB_BPart_Location_ID;
                 dr = VIS.DB.executeReader(sql);
                 if (dr.read()) {
                     var CreditStatus = dr.getString("CreditStatusSettingOn");
@@ -1428,11 +1428,11 @@
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
                 + "c.VAF_UserContact_ID,"
                 + "p.PO_PriceList_ID, p.PaymentRulePO, p.PO_PaymentTerm_ID,"
-                + "lbill.C_BPartner_Location_ID AS Bill_Location_ID "
-                + "FROM C_BPartner p"
-                + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+                + "lbill.VAB_BPart_Location_ID AS Bill_Location_ID "
+                + "FROM VAB_BusinessPartner p"
+                + " LEFT OUTER JOIN VAB_BPart_Location lbill ON (p.VAB_BusinessPartner_ID=lbill.VAB_BusinessPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=" + bill_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             var isSOTrx = "Y" == (ctx.getWindowContext(windowNo, "IsSOTrx", true));
             //var isSOTrx = false;
@@ -1466,8 +1466,8 @@
                 var bill_Location_ID = Util.getValueOfInt(dr.get("bill_location_id"));
                 //	overwritten by InfoBP selection - works only if InfoWindow
                 //	was used otherwise creates error (uses last value, may belong to differnt BP)
-                if (bill_BPartner_ID.toString() == (ctx.getContext("C_BPartner_ID"))) {
-                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                if (bill_BPartner_ID.toString() == (ctx.getContext("VAB_BusinessPartner_ID"))) {
+                    var loc = ctx.getContext("VAB_BPart_Location_ID");
                     if (loc.length > 0)
                         bill_Location_ID = Util.getValueOfInt(loc);
                 }
@@ -1478,7 +1478,7 @@
 
                 //	Contact - overwritten by InfoBP selection
                 var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
-                if (bill_BPartner_ID.toString() == (ctx.getContext("C_BPartner_ID"))) {
+                if (bill_BPartner_ID.toString() == (ctx.getContext("VAB_BusinessPartner_ID"))) {
                     var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.length > 0)
                         contID = Util.getValueOfInt(cont);
@@ -1554,7 +1554,7 @@
                         ii = dr.get(isSOTrx ? "c_paymentterm_id" : "po_paymentterm_id");
                         //when doc type = Warehouse Order / Credit Order / POS Order / Prepay order --- and payment term is advance -- not to update
                         // false means - not to update
-                        var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("C_DocTypeTarget_ID")), ii);
+                        var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("VAB_DocTypesTarget_ID")), ii);
                         if (isPaymentTermUpdate) {
                             if (dr != null)
                                 mTab.setValue("C_PaymentTerm_ID", ii);
@@ -1591,7 +1591,7 @@
     /// <summary>
     /// Order Header - PriceList.
     /// (used also in Invoice)
-    /// - C_Currency_ID
+    /// - VAB_Currency_ID
     /// 	- IsTaxIncluded
     /// 	Window Context:
     /// 	- EnforcePriceLimit
@@ -1621,10 +1621,10 @@
                 this.log.warning("init");
             }
 
-            sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,c.StdPrecision,"
+            sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
                 + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
-                + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+                + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
                 + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
                 + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
                 + "ORDER BY plv.ValidFrom DESC";
@@ -1638,14 +1638,14 @@
                 //	Price Limit Enforce
                 ctx.setContext(windowNo, "EnforcePriceLimit", dr.get("enforcepricelimit").toString());
                 //	Currency
-                var ii = Util.getValueOfInt(dr.get("c_currency_id"));
+                var ii = Util.getValueOfInt(dr.get("VAB_Currency_id"));
 
-                var CurrencyPresent = Util.getValueOfInt(mTab.getValue("C_Currency_ID")); //Price List from BSO/BPO window
+                var CurrencyPresent = Util.getValueOfInt(mTab.getValue("VAB_Currency_ID")); //Price List from BSO/BPO window
                 var C_Order_Blanket = Util.getValueOfDecimal(mTab.getValue("C_Order_Blanket"))
                 if (CurrencyPresent > 0 && C_Order_Blanket > 0) {
                 }
                 else {
-                    mTab.setValue("C_Currency_ID", ii);
+                    mTab.setValue("VAB_Currency_ID", ii);
                 }
                 var prislst = Util.getValueOfInt(dr.get("m_pricelist_version_id"));
                 //	PriceList Version
@@ -1671,8 +1671,8 @@
 
     /// <summary>
     /// Order Line - Product.
-    /// - reset C_Charge_ID / M_AttributeSetInstance_ID
-    /// - PriceList, PriceStd, PriceLimit, C_Currency_ID, EnforcePriceLimit
+    /// - reset VAB_Charge_ID / M_AttributeSetInstance_ID
+    /// - PriceList, PriceStd, PriceLimit, VAB_Currency_ID, EnforcePriceLimit
     /// - UOM
     /// Calls Tax
     /// </summary>
@@ -1703,7 +1703,7 @@
                 this.log.warning("init");
             }
             //
-            mTab.setValue("C_Charge_ID", null);
+            mTab.setValue("VAB_Charge_ID", null);
             //	Set Attribute
             // JID_0910: On change of product on line system is not removing the ASI. if product is changed then also update the ASI field.
 
@@ -1716,7 +1716,7 @@
             //}
 
             // Amit 26-05-2015
-            var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_BPartner_ID")).toString());
+            var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("VAB_BusinessPartner_ID")).toString());
             var productInfo = VIS.dataContext.getJSONRecord("MOrderLine/GetProductInfo", params);
 
             //
@@ -1731,9 +1731,9 @@
                 mTab.setValue("NoofCycle", null);
                 mTab.setValue("QtyPerCycle", null);
                 mTab.setValue("StartDate", null);
-                mTab.setValue("C_Contract_ID", 0); // Contract
+                mTab.setValue("VAB_Contract_ID", 0); // Contract
                 mTab.setValue("EndDate", null);
-                mTab.setValue("C_Frequency_ID", 0);  // Billing frequncy
+                mTab.setValue("VAB_Frequency_ID", 0);  // Billing frequncy
             }
             //
             //CalloutOrder.prototype.BPartner
@@ -1774,7 +1774,7 @@
             /*****Amit done *******/
 
             /*****	Price Calculation see also qty	****/
-            var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
+            var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
             var Qty = Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID", false);
@@ -1787,7 +1787,7 @@
             var C_UOM_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
             /*** Amit Done ***/
 
-            var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                 Qty.toString(), ",", //3
                 isSOTrx, ",", //4 
                 M_PriceList_ID.toString(), ",", //5
@@ -1808,7 +1808,7 @@
                     mTab.setValue("PriceLimit", dr.PriceLimit);
                     mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.PriceActual.toFixed(stdPrecision)));
                     mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(stdPrecision)));
-                    mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+                    mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr.VAB_Currency_ID));
                     mTab.setValue("Discount", Util.getValueOfDecimal(dr.Discount.toFixed(stdPrecision)));
                     if (countEd011 <= 0) {
                         mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
@@ -1819,7 +1819,7 @@
                     if (countEd011 > 0 && purchasingUom > 0 && isSOTrx == false && isReturnTrx == false) {
 
                         var params = mTab.getValue("M_Product_ID").toString().concat("," + ctx.getVAF_Client_ID().toString() + "," + (mTab.getValue("C_Order_ID")).toString() +
-                            "," + (C_BPartner_ID).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(purchasingUom));
+                            "," + (VAB_BusinessPartner_ID).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(purchasingUom));
                         var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnProductChange", params);
 
                         PriceList = Util.getValueOfDecimal(prices["PriceList"]);
@@ -1946,8 +1946,8 @@
                 return "";
             }
             this.setCalloutActive(true);
-            var C_Charge_ID = Util.getValueOfInt(value);
-            if (C_Charge_ID == null || C_Charge_ID == 0) {
+            var VAB_Charge_ID = Util.getValueOfInt(value);
+            if (VAB_Charge_ID == null || VAB_Charge_ID == 0) {
                 this.setCalloutActive(false);
                 return "";
             }
@@ -1962,7 +1962,7 @@
             if (mTab.getValue("M_Product_ID") != null) {
 
                 mTab.setValue("M_Product_ID", null);
-                //mTab.setValue("C_Charge_ID", null);
+                //mTab.setValue("VAB_Charge_ID", null);
                 //this.setCalloutActive(false);
                 //return "ChargeExclusively";
             }
@@ -1978,7 +1978,7 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
             ctx.setContext(windowNo, "DiscountSchema", "N");
-            var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
+            var sql = "SELECT ChargeAmt FROM VAB_Charge WHERE VAB_Charge_ID=" + VAB_Charge_ID;
             var dr = null;
 
 
@@ -2041,11 +2041,11 @@
             return "";
         }
         ///*Created By Sunil 10/11/2016*/
-        //if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) > 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        //if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) > 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
         //    return "";
         //}
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
             return "";
         }
         this.setCalloutActive(true);
@@ -2057,7 +2057,7 @@
 
             //change by amit 7-june-2016
             var params = Util.getValueOfString(mTab.getValue("M_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
-                "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
+                "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
             //end 
 
@@ -2082,15 +2082,15 @@
                 //sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
                 //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
                 //    paramString = Util.getValueOfInt(mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
-                //        "," + Util.getValueOfInt(mTab.getValue("C_Charge_ID")).toString();
+                //        "," + Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")).toString();
                 //    taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTax", paramString);
                 //}
                 //else {
-                //    sql = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID =" + Util.getValueOfInt(order["C_BPartner_ID"]) +
-                //                      " AND IsActive = 'Y'  AND C_BPartner_Location_ID = " + Util.getValueOfInt(order["Bill_Location_ID"]);
+                //    sql = "SELECT VATAX_TaxType_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID =" + Util.getValueOfInt(order["VAB_BusinessPartner_ID"]) +
+                //                      " AND IsActive = 'Y'  AND VAB_BPart_Location_ID = " + Util.getValueOfInt(order["Bill_Location_ID"]);
                 //    var taxType = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    if (taxType == 0) {
-                //        sql = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID =" + Util.getValueOfInt(order["C_BPartner_ID"]) + " AND IsActive = 'Y'";
+                //        sql = "SELECT VATAX_TaxType_ID FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID =" + Util.getValueOfInt(order["VAB_BusinessPartner_ID"]) + " AND IsActive = 'Y'";
                 //        taxType = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    }
                 //    var prodtaxCategory = VIS.dataContext.getJSONRecord("MProduct/GetTaxCategory", value.toString());
@@ -2099,8 +2099,8 @@
                 //}
 
                 //change by amit 7-june-2016
-                //var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")) +
-                //    "," + Util.getValueOfString(order["C_BPartner_ID"]) + "," + Util.getValueOfString(order["Bill_Location_ID"]));
+                //var params = mTab.getValue("M_Product_ID").toString().concat(",", (mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")) +
+                //    "," + Util.getValueOfString(order["VAB_BusinessPartner_ID"]) + "," + Util.getValueOfString(order["Bill_Location_ID"]));
                 //taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
                 //end 
 
@@ -2118,8 +2118,8 @@
                             return VIS.ADialog.info("VATAX_DefineTax");
                         }
                     }
-                    else if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) > 0) {
-                        mTab.setValue("C_Charge_ID", "");
+                    else if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) > 0) {
+                        mTab.setValue("VAB_Charge_ID", "");
                         this.setCalloutActive(false);
                         if (recDic["TaxExempt"] == "Y") {
                             return VIS.ADialog.info("TaxNoExemptFound");
@@ -2146,31 +2146,31 @@
                 else {
                     M_Product_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "M_Product_ID"));
                 }
-                var C_Charge_ID = 0;
-                if (column == "C_Charge_ID") {
-                    C_Charge_ID = Util.getValueOfInt(value);
+                var VAB_Charge_ID = 0;
+                if (column == "VAB_Charge_ID") {
+                    VAB_Charge_ID = Util.getValueOfInt(value);
                 }
                 else {
-                    C_Charge_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "C_Charge_ID"));
+                    VAB_Charge_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAB_Charge_ID"));
                 }
-                this.log.fine("Product=" + M_Product_ID + ", C_Charge_ID=" + C_Charge_ID);
-                if (M_Product_ID == 0 && C_Charge_ID == 0) {
+                this.log.fine("Product=" + M_Product_ID + ", VAB_Charge_ID=" + VAB_Charge_ID);
+                if (M_Product_ID == 0 && VAB_Charge_ID == 0) {
                     this.setCalloutActive(false);
                     return this.Amt(ctx, windowNo, mTab, mField, value);		//
                 }
                 //	Check Partner Location
-                var shipC_BPartner_Location_ID = 0;
-                if (column == "C_BPartner_Location_ID") {
-                    shipC_BPartner_Location_ID = Util.getValueOfInt(value);
+                var shipVAB_BPart_Location_ID = 0;
+                if (column == "VAB_BPart_Location_ID") {
+                    shipVAB_BPart_Location_ID = Util.getValueOfInt(value);
                 }
                 else {
-                    shipC_BPartner_Location_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "C_BPartner_Location_ID"));
+                    shipVAB_BPart_Location_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAB_BPart_Location_ID"));
                 }
-                if (shipC_BPartner_Location_ID == 0) {
+                if (shipVAB_BPart_Location_ID == 0) {
                     this.setCalloutActive(false);
                     return this.Amt(ctx, windowNo, mTab, mField, value);		// 
                 }
-                this.log.fine("Ship BP_Location=" + shipC_BPartner_Location_ID);
+                this.log.fine("Ship BP_Location=" + shipVAB_BPart_Location_ID);
                 //DateTime billDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateOrdered"));
                 var billDate = ctx.getContext("DateOrdered");
                 this.log.fine("Bill Date=" + billDate);
@@ -2181,17 +2181,17 @@
                 this.log.fine("Org=" + VAF_Org_ID);
                 var M_Warehouse_ID = ctx.getContextAsInt(windowNo, "M_Warehouse_ID");
                 this.log.fine("Warehouse=" + M_Warehouse_ID);
-                var billC_BPartner_Location_ID = ctx.getContextAsInt(windowNo, "Bill_Location_ID");
-                if (billC_BPartner_Location_ID == 0)
-                    billC_BPartner_Location_ID = shipC_BPartner_Location_ID;
-                this.log.fine("Bill BP_Location=" + billC_BPartner_Location_ID);
-                //var C_Tax_ID = VAdvantage.Model.Tax.get(ctx, M_Product_ID, C_Charge_ID, billDate, shipDate,
-                //    VAF_Org_ID, M_Warehouse_ID, billC_BPartner_Location_ID, shipC_BPartner_Location_ID,
+                var billVAB_BPart_Location_ID = ctx.getContextAsInt(windowNo, "Bill_Location_ID");
+                if (billVAB_BPart_Location_ID == 0)
+                    billVAB_BPart_Location_ID = shipVAB_BPart_Location_ID;
+                this.log.fine("Bill BP_Location=" + billVAB_BPart_Location_ID);
+                //var C_Tax_ID = VAdvantage.Model.Tax.get(ctx, M_Product_ID, VAB_Charge_ID, billDate, shipDate,
+                //    VAF_Org_ID, M_Warehouse_ID, billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID,
                 //    "Y" == (ctx.getContext("IsSOTrx")));
                 var isSotTrx = "Y" == ctx.getWindowContext(windowNo, "IsSOTrx", true);
-                var paramString = M_Product_ID.toString() + "," + C_Charge_ID.toString() + "," + billDate.toString() + "," +
-                    shipDate.toString() + "," + VAF_Org_ID.toString() + "," + M_Warehouse_ID.toString() + "," + billC_BPartner_Location_ID.toString()
-                    + "," + shipC_BPartner_Location_ID.toString() + ","
+                var paramString = M_Product_ID.toString() + "," + VAB_Charge_ID.toString() + "," + billDate.toString() + "," +
+                    shipDate.toString() + "," + VAF_Org_ID.toString() + "," + M_Warehouse_ID.toString() + "," + billVAB_BPart_Location_ID.toString()
+                    + "," + shipVAB_BPart_Location_ID.toString() + ","
                     + isSotTrx.toString();
                 var C_Tax_ID = VIS.dataContext.getJSONRecord("MTax/Get_Tax_ID", paramString);
                 this.log.info("Tax ID=" + C_Tax_ID);
@@ -2237,7 +2237,7 @@
             return "";
         }
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
             return "";
         }
         console.log("After Charge Or Product");
@@ -2289,10 +2289,10 @@
 
             //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
 
-            var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
+            var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
             var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID1.toString() +
+                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID1.toString() +
                 "," + (mTab.getValue("QtyEntered")).toString());
             var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
 
@@ -2332,7 +2332,7 @@
                 || mField.getColumnName() == "QtyEntered"
                 || mField.getColumnName() == "M_Product_ID")
                 && !("N" == (ctx.getContext("DiscountSchema")))) {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 if (mField.getColumnName() == "QtyEntered") {
                     var paramString = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString() + "," + QtyEntered.toString());
 
@@ -2349,7 +2349,7 @@
                 else {
                     var isSOTrx = (ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y");
                     var orderDate = mTab.getValue("DateOrdered");
-                    var paramStr = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                    var paramStr = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                         QtyOrdered.toString(), ",", //3
                         isSOTrx, ",", //4 
                         M_PriceList_ID.toString(), ",", //5
@@ -2371,7 +2371,7 @@
                     }
                     else {
                         //Start Amit Uom Conversion                        
-                        var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
+                        var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
 
                         // SI_0605: not to update price when blanket order line exist
                         // JID_1362: when qty delivered / invoiced > 0, then priace acual and entererd not change
@@ -2379,7 +2379,7 @@
                             var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
                                 "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                                 "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() +
-                                "," + C_BPartner_ID1.toString() +
+                                "," + VAB_BusinessPartner_ID1.toString() +
                                 "," + (mTab.getValue("QtyEntered")).toString() + "," + countEd011.toString() + "," + countVAPRC.toString());
                             var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
 
@@ -2856,7 +2856,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "")
             return "";
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) == 0 && Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
             return "";
         }
         console.log("After Charge Or Product");
@@ -2878,8 +2878,8 @@
             var isQuotationOrderLine = Util.getValueOfInt(mTab.getValue("C_Quotation_Line_ID")) > 0 ? true : false;
             // if order line having sales quotation ID then set isBlanketOrderLine AS TRUE
             if (isQuotationOrderLine) { isBlanketOrderLine = isQuotationOrderLine }
-            var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-            var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID.toString());
+            var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
+            var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID.toString());
             var prodC_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID.toString());
             //	No Product
             if (M_Product_ID == 0) {
@@ -2894,7 +2894,7 @@
 
                 /*** Start Amit ***/
 
-                var params = C_BPartner_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
+                var params = VAB_BusinessPartner_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                     "," + Util.getValueOfString(C_UOM_To_ID) + "," + ctx.getVAF_Client_ID().toString() +
                     "," + (mTab.getValue("M_Product_ID")).toString() + "," + (mTab.getValue("QtyEntered")).toString());
@@ -3261,7 +3261,7 @@
                 var pricelist = 0;
                 var params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID.toString() +
+                    "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                     "," + QtyEntered.toString());
                 var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
                 if (prices != null) {
@@ -3321,7 +3321,7 @@
                     else {
                         if (!isBlanketOrderLine) {
                             params = M_Product_ID.toString().concat(",", (mTab.getValue("C_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID.toString() +
+                                "," + Util.getValueOfString(mTab.getValue("C_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                                 "," + QtyEntered.toString() + "," + countEd011.toString() + "," + _countVAPRC.toString());
                             var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
 
@@ -3376,8 +3376,8 @@
                 ////Get PriceListversion based on Pricelist
                 //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
 
-                //var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-                //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID1.toString());
+                //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
+                //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
 
                 //if (countEd011 > 0 && _countVAPRC > 0) {
                 //    sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE IsActive='Y' AND M_Product_ID = " + M_Product_ID +
@@ -3699,14 +3699,14 @@
             //dr = VIS.dataContext.getJSONRecord("CalloutOrder/GetQtyInfo", paramString);
             var order = VIS.dataContext.getJSONRecord("MOrder/GetOrder", C_Order_ID.toString());
             //MOrder order = new MOrder(ctx, C_Order_ID, null);
-            var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", order["C_BPartner_ID"].toString());
-            //MBPartner bpartner = new MBPartner(ctx, order.C_BPartner_ID, null);
+            var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", order["VAB_BusinessPartner_ID"].toString());
+            //MBPartner bpartner = new MBPartner(ctx, order.VAB_BusinessPartner_ID, null);
 
             // Reset Orig Shipment
             mTab.setValue("Orig_InOut_ID", null);
 
-            mTab.setValue("C_BPartner_ID", Util.getValueOfInt(order["C_BPartner_ID"]));
-            mTab.setValue("C_BPartner_Location_ID", Util.getValueOfInt(order["C_BPartner_Location_ID"]));
+            mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(order["VAB_BusinessPartner_ID"]));
+            mTab.setValue("VAB_BPart_Location_ID", Util.getValueOfInt(order["VAB_BPart_Location_ID"]));
             mTab.setValue("Bill_BPartner_ID", Util.getValueOfInt(order["Bill_BPartner_ID"]));
             mTab.setValue("Bill_Location_ID", Util.getValueOfInt(order["Bill_Location_ID"]));
 
@@ -3735,7 +3735,7 @@
             mTab.setValue("PaymentRule", order["PaymentRule"]);
             //when doc type = Warehouse Order / Credit Order / POS Order / Prepay order --- and payment term is advance -- not to update
             // false means - not to update
-            var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("C_DocTypeTarget_ID")), Util.getValueOfInt(order["C_PaymentTerm_ID"]));
+            var isPaymentTermUpdate = this.checkAdvancePaymentTerm(Util.getValueOfInt(mTab.getValue("VAB_DocTypesTarget_ID")), Util.getValueOfInt(order["C_PaymentTerm_ID"]));
             if (isPaymentTermUpdate) {
                 mTab.setValue("C_PaymentTerm_ID", Util.getValueOfInt(order["C_PaymentTerm_ID"]));
             }
@@ -3800,8 +3800,8 @@
             var io = VIS.dataContext.getJSONRecord("MInOut/GetInOut", Orig_InOut_ID.toString());
             //mTab.setValue("ShipDate", Util.getValueOfDate(io.MovementDate));
             mTab.setValue("C_Project_ID", Util.getValueOfInt(io.C_Project_ID));
-            mTab.setValue("C_Campaign_ID", Util.getValueOfInt(io.C_Campaign_ID));
-            mTab.setValue("C_Activity_ID", Util.getValueOfInt(io.C_Activity_ID));
+            mTab.setValue("VAB_Promotion_ID", Util.getValueOfInt(io.VAB_Promotion_ID));
+            mTab.setValue("VAB_BillingCode_ID", Util.getValueOfInt(io.VAB_BillingCode_ID));
             mTab.setValue("VAF_OrgTrx_ID", Util.getValueOfInt(io.VAF_OrgTrx_ID));
             mTab.setValue("User1_ID", Util.getValueOfInt(io.User1_ID));
             mTab.setValue("User2_ID", Util.getValueOfInt(io.User2_ID));
@@ -3851,7 +3851,7 @@
             mTab.setValue("PriceLimit", Util.getValueOfDecimal(orderline["PriceLimit"]));
             mTab.setValue("PriceActual", Util.getValueOfDecimal(orderline["PriceActual"]));
             mTab.setValue("PriceEntered", Util.getValueOfDecimal(orderline["PriceEntered"]));
-            mTab.setValue("C_Currency_ID", Util.getValueOfInt(orderline["C_Currency_ID"]));
+            mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(orderline["VAB_Currency_ID"]));
             mTab.setValue("Discount", Util.getValueOfDecimal(orderline["Discount"]));
             // mTab.setValue("Discount", Util.getValueOfDecimal(orderline.Discount));
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
@@ -3911,7 +3911,7 @@
 
             if (Orig_InOutLine != null) {
                 mTab.setValue("C_Project_ID", Util.getValueOfInt(Orig_InOutLine["C_Project_ID"]));
-                mTab.setValue("C_Campaign_ID", Util.getValueOfInt(Orig_InOutLine["C_Campaign_ID"]));
+                mTab.setValue("VAB_Promotion_ID", Util.getValueOfInt(Orig_InOutLine["VAB_Promotion_ID"]));
                 mTab.setValue("M_Product_ID", Util.getValueOfInt(Orig_InOutLine["M_Product_ID"]));
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(Orig_InOutLine["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(Orig_InOutLine["C_UOM_ID"]));
@@ -4176,7 +4176,7 @@
     };
     VIS.Utility.inheritPrototype(CalloutCashJournal, VIS.CalloutEngine);//inherit CalloutEngine
     /// <summary>
-    ///  Cash Journal Line Invoice. when Invoice selected - set C_Currency,
+    ///  Cash Journal Line Invoice. when Invoice selected - set VAB_Currency,
     ///  DiscountAnt, Amount, WriteOffAmt
     /// </summary>
     /// <param name="ctx"></param>
@@ -4195,8 +4195,8 @@
             /*Clear references and amounts when we clear invoice*/
             if (mField.getColumnName() == "C_Invoice_ID") {
                 this.setCalloutActive(true);
-                mTab.setValue("C_BPartner_ID", null);
-                mTab.setValue("C_BPartner_Location_ID", null);
+                mTab.setValue("VAB_BusinessPartner_ID", null);
+                mTab.setValue("VAB_BPart_Location_ID", null);
                 mTab.setValue("C_InvoicePaySchedule_ID", null);
                 ctx.setContext(windowNo, "InvTotalAmt", "");
 
@@ -4227,8 +4227,8 @@
         //+ "  AND ips.C_InvoicePaySchedule_ID NOT IN"
         //+ "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
         //+ "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "
-        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE c_cashline_id IN"
-        //+ "(SELECT NVL(c_cashline_id,0) FROM C_InvoicePaySchedule )) "
+        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE VAB_CashJRNLLine_id IN"
+        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
         //+ " ORDER BY ips.duedate ASC  ) WHERE rownum=1";
         var drAmt = null;
         try {
@@ -4250,11 +4250,11 @@
         }
         //-------------
         if (C_Invoice_ID == null || C_Invoice_ID == 0) {
-            mTab.setValue("C_Currency_ID", null);
+            mTab.setValue("VAB_Currency_ID", null);
             // commented by Arpit
             /*
-            mTab.setValue("C_BPartner_ID", null);
-            mTab.setValue("C_BPartner_Location_ID", null);
+            mTab.setValue("VAB_BusinessPartner_ID", null);
+            mTab.setValue("VAB_BPart_Location_ID", null);
             mTab.setValue("ConvertedAmt", VIS.Env.ZERO);
             mTab.setValue("Amount", VIS.Env.ZERO);
             mTab.setValue("DiscountAmt", VIS.Env.ZERO);
@@ -4270,11 +4270,11 @@
         //DateTime billDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateOrdered"));
         var ts = new Date(ctx.getContext(windowNo, "DateAcct"));
         //DateTime ts = new DateTime(ctx.getContextAsTime(windowNo, "DateAcct")); // from
-        // C_Cash
+        // VAB_CashJRNL
         var tsDate = "TO_DATE( '" + (Number(ts.getMonth()) + 1) + "-" + ts.getDate() + "-" + ts.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
         var paramString = C_Invoice_ID.toString() + "," + tsDate.toString() + "," + C_InvoicePaySchedule_ID.toString();
-        //var sql = "SELECT C_BPartner_ID, C_Currency_ID, invoiceOpen(C_Invoice_ID, 0) as invoiceOpen, IsSOTrx, paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),C_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + tsDate
-        //    + " ) as paymentTermDiscount,C_DocTypeTarget_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
+        //var sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID, invoiceOpen(C_Invoice_ID, 0) as invoiceOpen, IsSOTrx, paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + tsDate
+        //    + " ) as paymentTermDiscount,VAB_DocTypesTarget_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
         var data = null;
         try {
             data = VIS.dataContext.getJSONRecord("MInvoice/GetInvoiceDetails", paramString);
@@ -4286,12 +4286,12 @@
             if (data != null) {
 
                 var payAmt = 0;
-                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(data["C_BPartner_ID"]));
-                mTab.setValue("C_Currency_ID", Util.getValueOfInt(data["C_Currency_ID"]));//.getInt(2)));
+                mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(data["VAB_BusinessPartner_ID"]));
+                mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(data["VAB_Currency_ID"]));//.getInt(2)));
 
                 // JID_1208: System should set Currency Type that is defined on Invoice.
-                mTab.setValue("C_ConversionType_ID", Util.getValueOfInt(data["C_ConversionType_ID"]));
-                mTab.setValue("C_BPartner_Location_ID", Util.getValueOfInt(data["C_BPartner_Location_ID"]));//Arpit
+                mTab.setValue("VAB_CurrencyType_ID", Util.getValueOfInt(data["VAB_CurrencyType_ID"]));
+                mTab.setValue("VAB_BPart_Location_ID", Util.getValueOfInt(data["VAB_BPart_Location_ID"]));//Arpit
                 if (_chk == 0) {
                     payAmt = Util.getValueOfDecimal(data["invoiceOpen"]);//.getBigDecimal(3);
                 }
@@ -4313,8 +4313,8 @@
                     discountAmt = (discountAmt) * (-1);//.negate();
                 }
                 // // Bharat
-                //var doctype_ID = Util.getValueOfInt(idr.get("c_doctypetarget_id"));
-                //var _qry = "SELECT DocBaseType FROM C_DocType WHERE C_DocType_ID = " + doctype_ID;
+                //var doctype_ID = Util.getValueOfInt(idr.get("VAB_DocTypestarget_id"));
+                //var _qry = "SELECT DocBaseType FROM VAB_DocTypes WHERE VAB_DocTypes_ID = " + doctype_ID;
                 var docbaseType = Util.getValueOfString(data["docbaseType"]);
                 if ("ARC" == docbaseType || "API" == docbaseType) {
                     mTab.setValue("VSS_PAYMENTTYPE", "P");
@@ -4369,7 +4369,7 @@
             if (Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) > 0) {
                 //var sql = "SELECT sum(ips.DueAmt)  FROM C_Invoice i INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID=ips.C_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
                 //   "AND i.C_Invoice_ID = " + Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) + " AND C_InvoicePaySchedule_ID NOT IN (SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Payment_ID IN " +
-                //  "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Cashline_ID IN (SELECT NVL(C_Cashline_ID,0) FROM C_InvoicePaySchedule))";
+                //  "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM C_InvoicePaySchedule))";
                 //var Amount = Util.getValueOfDecimal(CalloutDB.executeCalloutScalar(sql, null, null));
                 var Amount = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MCashBook/GetPaySheduleAmt", mTab.getValue("C_Invoice_ID").toString()));
                 ctx.setContext(windowNo, "InvTotalAmt", Amount.toString());
@@ -4405,7 +4405,7 @@
                 return "";
             }
             //var qry = "SELECT DueAmt , DiscountDate , DiscountAmt , DiscountDays2 , Discount2  FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID=" + C_InvoicePaySchedule_ID;
-            var paramString = C_InvoicePaySchedule_ID.toString() + "," + mTab.getValue("C_Cash_ID") + "," + mTab.getValue("C_Invoice_ID");
+            var paramString = C_InvoicePaySchedule_ID.toString() + "," + mTab.getValue("VAB_CashJRNL_ID") + "," + mTab.getValue("C_Invoice_ID");
             var data = VIS.dataContext.getJSONRecord("MCashBook/GetPaySheduleData", paramString);
             if (data != null) {
                 if (mTab.getTableName() == "C_Payment") {
@@ -4424,7 +4424,7 @@
                     ctx.setContext(windowNo, "InvTotalAmt", Util.getValueOfDecimal(mTab.getValue("Amount")));
                     mTab.setValue("WriteOffAmt", 0);
                     mTab.setValue("OverUnderAmt", 0);
-                    //qry = "SELECT DateAcct FROM C_Cash WHERE IsActive = 'Y' AND C_Cash_ID = " + mTab.getValue("C_Cash_ID");
+                    //qry = "SELECT DateAcct FROM VAB_CashJRNL WHERE IsActive = 'Y' AND VAB_CashJRNL_ID = " + mTab.getValue("VAB_CashJRNL_ID");
                     var accountDate = Util.getValueOfDate(data["accountDate"]);
                     //qry = "SELECT IsSoTrx FROM C_Invoice WHERE C_Invoice_ID = " + mTab.getValue("C_Invoice_ID");
                     var isSoTrx = Util.getValueOfString(data["isSoTrx"]);
@@ -4629,17 +4629,17 @@
                 }
             }
         }
-        var paramString = mTab.getValue("C_Cash_ID").toString();
+        var paramString = mTab.getValue("VAB_CashJRNL_ID").toString();
         var cash = VIS.dataContext.getJSONRecord("MCashBook/GetCashJournal", paramString);
         var convDate = cash["DateAcct"];
-        var CurrFrom = cash["C_Currency_ID"];
-        var CurrTo = cash["C_Currency_ID"];
-        if (mTab.getValue("C_Currency_ID") != null) {
-            CurrFrom = mTab.getValue("C_Currency_ID").toString();
+        var CurrFrom = cash["VAB_Currency_ID"];
+        var CurrTo = cash["VAB_Currency_ID"];
+        if (mTab.getValue("VAB_Currency_ID") != null) {
+            CurrFrom = mTab.getValue("VAB_Currency_ID").toString();
         }
         var conversionType_ID = 0;
-        if (mTab.getField("C_ConversionType_ID") != null) {
-            conversionType_ID = Util.getValueOfInt(mTab.getValue("C_ConversionType_ID"));
+        if (mTab.getField("VAB_CurrencyType_ID") != null) {
+            conversionType_ID = Util.getValueOfInt(mTab.getValue("VAB_CurrencyType_ID"));
         }
         if (CurrFrom != CurrTo) {
             paramString = payAmt.toString() + "," + CurrFrom + "," + CurrTo + "," + convDate + "," + conversionType_ID.toString() + "," +
@@ -4677,15 +4677,15 @@
         }
         this.setCalloutActive(true);
 
-        var C_Cash_ID = Util.getValueOfInt(value);
-        if (C_Cash_ID == null || C_Cash_ID == 0) {
+        var VAB_CashJRNL_ID = Util.getValueOfInt(value);
+        if (VAB_CashJRNL_ID == null || VAB_CashJRNL_ID == 0) {
             mTab.setValue("BeginningBalance", 0);
             this.setCalloutActive(false);
             return "";
         }
 
 
-        var C_CashBook_ID = Util.getValueOfInt(mTab.getValue("C_CashBook_ID"));
+        var VAB_CashBook_ID = Util.getValueOfInt(mTab.getValue("VAB_CashBook_ID"));
         var VAF_Client_ID = Util.getValueOfInt(mTab.getValue("VAF_Client_ID"));
         var VAF_Org_ID = Util.getValueOfInt(mTab.getValue("VAF_Org_ID"));
 
@@ -4693,18 +4693,18 @@
         //var ts = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateAcct"));
         var ts = ctx.getContext("DateAcct");
         //DateTime ts = new DateTime(ctx.getContextAsTime(windowNo, "DateAcct"));     // from
-        // C_Cash
-        var sql = "SELECT EndingBalance FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID + " AND" +
+        // VAB_CashJRNL
+        var sql = "SELECT EndingBalance FROM VAB_CashJRNL WHERE VAB_CashBook_ID=" + VAB_CashBook_ID + " AND" +
             " VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + " AND " +
-            "c_cash_id IN (SELECT Max(c_cash_id) FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID
+            "VAB_CashBook_id IN (SELECT Max(VAB_CashBook_id) FROM VAB_CashJRNL WHERE VAB_CashBook_ID=" + VAB_CashBook_ID
             + "AND VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + ") AND Processed='Y'";
         var idr = null;
         try {
             idr = VIS.DB.executeReader(sql, null, null);
-            //pstmt.setInt(1, C_CashBook_ID.intValue());
+            //pstmt.setInt(1, VAB_CashBook_ID.intValue());
             //pstmt.setInt(2, VAF_Client_ID.intValue());
             //pstmt.setInt(3, VAF_Org_ID.intValue());
-            //pstmt.setInt(4, C_CashBook_ID.intValue());
+            //pstmt.setInt(4, VAB_CashBook_ID.intValue());
             //pstmt.setInt(5, VAF_Client_ID.intValue());
             //pstmt.setInt(6, VAF_Org_ID.intValue());
             //ResultSet rs = pstmt.executeQuery();
@@ -4735,9 +4735,9 @@
 
     CalloutCashJournal.prototype.SetCurrency = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
-        if ((value == null || value.toString() == "") && mField.getColumnName() != "C_ConversionType_ID") {
+        if ((value == null || value.toString() == "") && mField.getColumnName() != "VAB_CurrencyType_ID") {
             //if (value == null || value.toString() == "") {
-            //mTab.setValue("C_Currency_ID", 0);
+            //mTab.setValue("VAB_Currency_ID", 0);
             return "";
         }
         if (this.isCalloutActive())		// assuming it is resetting value
@@ -4747,44 +4747,44 @@
         this.setCalloutActive(true);
         var paramString = "";
         var payAmt = Util.getValueOfDecimal(mTab.getValue("Amount"));
-        if (mField.getColumnName() == "C_CashBook_ID") {
-            var C_CashBook_ID = Util.getValueOfInt(value);
-            if (C_CashBook_ID == null || C_CashBook_ID == 0) {
-                mTab.setValue("C_Currency_ID", 0);
+        if (mField.getColumnName() == "VAB_CashBook_ID") {
+            var VAB_CashBook_ID = Util.getValueOfInt(value);
+            if (VAB_CashBook_ID == null || VAB_CashBook_ID == 0) {
+                mTab.setValue("VAB_Currency_ID", 0);
                 this.setCalloutActive(false);
                 return "";
             }
-            paramString = C_CashBook_ID.toString();
-            //var paramString = C_CashBook_ID.toString();
+            paramString = VAB_CashBook_ID.toString();
+            //var paramString = VAB_CashBook_ID.toString();
             var cBook = VIS.dataContext.getJSONRecord("MCashBook/GetCashBook", paramString);
-            // MCashBook cBook = new MCashBook(ctx, C_CashBook_ID, null);
-            mTab.setValue("C_Currency_ID", cBook["C_Currency_ID"]);
+            // MCashBook cBook = new MCashBook(ctx, VAB_CashBook_ID, null);
+            mTab.setValue("VAB_Currency_ID", cBook["VAB_Currency_ID"]);
         }
-        else if (mField.getColumnName() == "C_BankAccount_ID") {
-            var C_BankAccount_ID = Util.getValueOfInt(value);
-            if (C_BankAccount_ID == null || C_BankAccount_ID == 0) {
-                mTab.setValue("C_Currency_ID", 0);
+        else if (mField.getColumnName() == "VAB_Bank_Acct_ID") {
+            var VAB_Bank_Acct_ID = Util.getValueOfInt(value);
+            if (VAB_Bank_Acct_ID == null || VAB_Bank_Acct_ID == 0) {
+                mTab.setValue("VAB_Currency_ID", 0);
                 this.setCalloutActive(false);
                 return "";
             }
-            paramString = C_BankAccount_ID.toString();
-            var qry = "SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + C_BankAccount_ID;
+            paramString = VAB_Bank_Acct_ID.toString();
+            var qry = "SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID;
             var currency = Util.getValueOfInt(VIS.DB.executeScalar(qry, null, null));
-            mTab.setValue("C_Currency_ID", currency);
+            mTab.setValue("VAB_Currency_ID", currency);
         }
         if (payAmt != 0) {
-            paramString = mTab.getValue("C_Cash_ID").toString();
+            paramString = mTab.getValue("VAB_CashJRNL_ID").toString();
             var convertedAmt = 0;
             var cash = VIS.dataContext.getJSONRecord("MCashBook/GetCashJournal", paramString);
             var convDate = cash["DateAcct"];
-            var CurrFrom = cash["C_Currency_ID"];
-            var CurrTo = cash["C_Currency_ID"];
-            if (mTab.getValue("C_Currency_ID") != null) {
-                CurrFrom = mTab.getValue("C_Currency_ID").toString();
+            var CurrFrom = cash["VAB_Currency_ID"];
+            var CurrTo = cash["VAB_Currency_ID"];
+            if (mTab.getValue("VAB_Currency_ID") != null) {
+                CurrFrom = mTab.getValue("VAB_Currency_ID").toString();
             }
             var conversionType_ID = 0;
-            if (mTab.getField("C_ConversionType_ID") != null) {
-                conversionType_ID = Util.getValueOfInt(mTab.getValue("C_ConversionType_ID"));
+            if (mTab.getField("VAB_CurrencyType_ID") != null) {
+                conversionType_ID = Util.getValueOfInt(mTab.getValue("VAB_CurrencyType_ID"));
             }
             if (CurrFrom != CurrTo) {
                 paramString = payAmt.toString() + "," + CurrFrom + "," + CurrTo + "," + convDate + "," + conversionType_ID.toString() + "," +
@@ -4822,22 +4822,22 @@
             return "";
         }
         this.setCalloutActive(true);
-        var sql = "SELECT CASHLINE.Amount FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + value;
+        var sql = "SELECT CASHLINE.Amount FROM VAB_CashJRNLLine CASHLINE INNER JOIN VAB_CashBook CB ON (CB.VAB_CashBook_ID=CASHLINE.VAB_CashBook_ID) WHERE CASHLINE.VAB_CashJRNLLine_ID =" + value;
         try {
-            var currTo = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=(SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + mTab.getValue("C_Cash_ID") + ")"));
+            var currTo = Util.getValueOfInt(VIS.DB.executeScalar("SELECT VAB_Currency_ID FROM VAB_CashBook WHERE VAB_CashBook_ID=(SELECT VAB_CashBook_ID FROM VAB_CashJRNL WHERE VAB_CashJRNL_ID=" + mTab.getValue("VAB_CashJRNL_ID") + ")"));
             if (currTo == 0) {
                 // ShowMessage.Info("PleaseSelectCashBook", true, null, null);
                 this.setCalloutActive(false);
                 return "";
             }
             var amt = Util.getValueOfDecimal(VIS.DB.executeScalar(sql));
-            var CurrFrom = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID="
-                + " (SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + value + "))"));
+            var CurrFrom = Util.getValueOfInt(VIS.DB.executeScalar("SELECT VAB_Currency_ID FROM VAB_CashBook WHERE VAB_CashBook_ID= (SELECT VAB_CashBook_ID FROM VAB_CashJRNL WHERE VAB_CashJRNL_ID="
+                + " (SELECT VAB_CashJRNL_ID FROM VAB_CashJRNLLine WHERE VAB_CashJRNLLine_ID= " + value + "))"));
             var paramString = amt.toString() + "," + CurrFrom.toString() + "," + currTo.toString() + "," +
                 ctx.getVAF_Client_ID().toString() + "," + ctx.getVAF_Org_ID().toString();
 
             //ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(ctx,
-            //    ConvertedAmt, Util.getValueOfInt(C_Currency_From_ID), C_Currency_To_ID,
+            //    ConvertedAmt, Util.getValueOfInt(VAB_Currency_From_ID), VAB_Currency_To_ID,
             //    DateExpense, 0, VAF_Client_ID, VAF_Org_ID);
             var transferdAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
             //var transferdAmt = MConversionRate.Convert(Env.GetCtx(),amt,CurrFrom,currTo,
@@ -4869,10 +4869,10 @@
             return "";
         }
         this.setCalloutActive(true);
-        //decimal BeginAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(" select CompletedBalance from c_cashbook where c_cashbook_id=" + value));
+        //decimal BeginAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(" select CompletedBalance from VAB_CashBook where VAB_CashBook_id=" + value));
         //tab.SetValue("BeginningBalance", BeginAmt);
         //Added By Manjot Changes Done to  Set Beginning Balance
-        var TotalAmt = Util.getValueOfDecimal(VIS.DB.executeScalar(" select sum(nvl(CompletedBalance,0)) + sum(nvl(runningbalance,0)) as TotalBal from c_cashbook where c_cashbook_id=" + value));
+        var TotalAmt = Util.getValueOfDecimal(VIS.DB.executeScalar(" select sum(nvl(CompletedBalance,0)) + sum(nvl(runningbalance,0)) as TotalBal from VAB_CashBook where VAB_CashBook_id=" + value));
         mTab.setValue("BeginningBalance", TotalAmt);
         this.setCalloutActive(false);
         return "";
@@ -5240,11 +5240,11 @@
         }
         this.setCalloutActive(true);
 
-        var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+        var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
         var Qty = Util.getValueOfDecimal(mTab.getValue("PlannedQty"));
         var IsSOTrx = true;
         //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-        //    Util.getValueOfInt(M_Product_ID), C_BPartner_ID, Qty, IsSOTrx);
+        //    Util.getValueOfInt(M_Product_ID), VAB_BusinessPartner_ID, Qty, IsSOTrx);
         //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
         var date = Util.getValueOfDateTime(mTab.getValue("PlannedDate"));
         //DateTime date = (DateTime)mTab.getValue("PlannedDate");
@@ -5272,7 +5272,7 @@
             //mTab.setValue("PlannedAmt", PlannedAmt);
 
 
-            var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                 Qty.toString(), ",", //3
                 isSOTrx, ",", //4 
                 M_PriceList_ID.toString(), ",", //5
@@ -5293,7 +5293,7 @@
 
 
             // MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-            //     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+            //     M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
 
             //		
@@ -5301,7 +5301,7 @@
             // mTab.setValue("PriceLimit", dr.PriceLimit);
             mTab.setValue("PlannedPrice", dr.PriceActual);
             //mTab.setValue("PriceEntered", dr.PriceEntered);
-            //  mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+            //  mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr.VAB_Currency_ID));
             mTab.setValue("Discount", dr.Discount);
             mTab.setValue("PlannedAmt", dr.LineAmt);
 
@@ -5338,7 +5338,7 @@
         }
 
         try {
-            var C_BankAccount_ID = value;//).intValue();
+            var VAB_Bank_Acct_ID = value;//).intValue();
 
             var paramString = value.toString();
 
@@ -5349,7 +5349,7 @@
 
 
             //dr = jQuery.parseJSON(VIS.dataContext.getJSONRecord("MBankStatement/GetBankAccount", paramString));
-            //MBankAccount ba = MBankAccount.Get(ctx, C_BankAccount_ID);
+            //MBankAccount ba = MBankAccount.Get(ctx, VAB_Bank_Acct_ID);
             mTab.setValue("BeginningBalance", balance);
         }
         catch (err) {
@@ -5495,7 +5495,7 @@
             mTab.setValue("TrxAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("C_BPartner_ID", 0);
+            mTab.setValue("VAB_BusinessPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
             return "";
         }
@@ -5505,7 +5505,7 @@
             mTab.setValue("TrxAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
-            mTab.setValue("C_BPartner_ID", 0);
+            mTab.setValue("VAB_BusinessPartner_ID", 0);
             mTab.setValue("C_Invoice_ID", 0);
             return "";
         }
@@ -5516,7 +5516,7 @@
         }
 
         //JID_0084: if the Payment currency is different from the bank statement currency it will add the converted amount based in the currency conversion available for selected date.
-        var C_Currency_ID = mTab.getValue("C_Currency_ID");
+        var VAB_Currency_ID = mTab.getValue("VAB_Currency_ID");
         var statementDate = mTab.getValue("ValutaDate");
 
         // JID_1418: When select payment on Bank statement line, system gives an error meassage
@@ -5528,7 +5528,7 @@
         //var dr = null;
         //var param = [];
         try {
-            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + statementDate.toString();
+            var paramStr = C_Payment_ID.toString() + "," + VAB_Currency_ID.toString() + "," + statementDate.toString();
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetPayment", paramStr);
             mTab.setValue("TrxAmt", payAmt);
             if (stmt == 0) {
@@ -5579,11 +5579,11 @@
         //    stmt = 0;
         //}
 
-        var C_Currency_ID = mTab.getValue("C_Currency_ID");
+        var VAB_Currency_ID = mTab.getValue("VAB_Currency_ID");
         var acctDate = mTab.getValue("DateAcct");
 
         try {
-            var paramStr = C_Payment_ID.toString() + "," + C_Currency_ID.toString() + "," + acctDate.toString();
+            var paramStr = C_Payment_ID.toString() + "," + VAB_Currency_ID.toString() + "," + acctDate.toString();
             var payAmt = VIS.dataContext.getJSONRecord("MBankStatement/GetConvertedAmt", paramStr);
             mTab.setValue("StmtAmt", payAmt);
             //if (stmt == 0) {
@@ -11923,22 +11923,22 @@
             return "";
         }
 
-        var C_DocType_ID = value;//(int)value;
-        if (C_DocType_ID == null || C_DocType_ID == 0)
+        var VAB_DocTypes_ID = value;//(int)value;
+        if (VAB_DocTypes_ID == null || VAB_DocTypes_ID == 0)
             return "";
 
         //var sql = "SELECT d.HasCharges,'N',d.IsDocNoControlled,"
         //    + "s.CurrentNext, d.DocBaseType "
         //    /*//jz outer join
-        //    + "FROM C_DocType d, VAF_Record_Seq s "
-        //    + "WHERE C_DocType_ID=?"		//	1
+        //    + "FROM VAB_DocTypes d, VAF_Record_Seq s "
+        //    + "WHERE VAB_DocTypes_ID=?"		//	1
         //    + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
         //    */
-        //    + "FROM C_DocType d "
+        //    + "FROM VAB_DocTypes d "
         //    + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
-        //    + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
+        //    + "WHERE VAB_DocTypes_ID=" + VAB_DocTypes_ID;		//	1
 
-        var paramString = C_DocType_ID.toString();
+        var paramString = VAB_DocTypes_ID.toString();
         var dr = VIS.dataContext.getJSONRecord("MDocType/GetDocTypeData", paramString);
 
         try {
@@ -11988,7 +11988,7 @@
     /**
      *	Invoice Header- BPartner.
      *		- M_PriceList_ID (+ Context)
-     *		- C_BPartner_Location_ID
+     *		- VAB_BPart_Location_ID
      *		- VAF_UserContact_ID
      *		- POReference
      *		- SO_Description
@@ -12009,8 +12009,8 @@
         }
         try {
 
-            var C_BPartner_ID = Util.getValueOfInt(value);//(int)value;
-            if (C_BPartner_ID == null || C_BPartner_ID == 0) {
+            var VAB_BusinessPartner_ID = Util.getValueOfInt(value);//(int)value;
+            if (VAB_BusinessPartner_ID == null || VAB_BusinessPartner_ID == 0) {
                 return "";
             }
             var isvendor = 'N';
@@ -12019,13 +12019,13 @@
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //    + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+            //    + " l.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
             //    + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
-            //    + "FROM C_BPartner p"
-            //    + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-            //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-            //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+            //    + "FROM VAB_BusinessPartner p"
+            //    + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+            //    + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
+            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+            //    + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             //-----------------ANuj----Code----------
             var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
@@ -12040,14 +12040,14 @@
             }
 
             sql += "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+                + " l.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID, "
                 + " p.SalesRep_ID,p.IsSalesRep, p.C_Withholding_ID "
-                + " FROM C_BPartner p"
-                + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+                + " FROM VAB_BusinessPartner p"
+                + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+                + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             var isSOTrx = ctx.isSOTrx(windowNo);
             var dr = null;
@@ -12090,7 +12090,7 @@
                         var _PaymentMethod_ID = Util.getValueOfInt(dr.get("VA009_PaymentMethod_ID"));
                         ////VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
                         var isvendor = 'N';
-                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
+                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", VAB_BusinessPartner_ID);
                         if (bpdtl != null) {
                             isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
                             isCustomer = Util.getValueOfString(bpdtl["IsCustomer"]);
@@ -12158,25 +12158,25 @@
                         }
                     }
                     //	Location
-                    var locID = Util.getValueOfInt(dr.get("c_bpartner_location_id"));
+                    var locID = Util.getValueOfInt(dr.get("VAB_BPart_Location_id"));
                     //	overwritten by InfoBP selection - works only if InfoWindow
                     //	was used otherwise creates error (uses last value, may bevar  to differnt BP)
-                    if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                        var loc = ctx.getContext("C_BPartner_Location_ID");
+                    if (VAB_BusinessPartner_ID.toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
+                        var loc = ctx.getContext("VAB_BPart_Location_ID");
                         if (loc && loc.toString().length > 0) {
                             locID = parseInt(loc);
                         }
                     }
                     if (locID == 0) {
-                        mTab.setValue("C_BPartner_Location_ID", null);
+                        mTab.setValue("VAB_BPart_Location_ID", null);
                     }
                     else {
-                        mTab.setValue("C_BPartner_Location_ID", locID);
+                        mTab.setValue("VAB_BPart_Location_ID", locID);
                     }
 
                     //	Contact - overwritten by InfoBP selection
                     var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id"));
-                    if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                    if (VAB_BusinessPartner_ID.toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
                         var cont = ctx.getContext("VAF_UserContact_ID");
                         if (cont && cont.toString().length > 0) {
                             contID = parseInt(cont);
@@ -12219,10 +12219,10 @@
                             }
                         }
                         else {
-                            var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
+                            var locId = Util.getValueOfInt(mTab.getValue("VAB_BPart_Location_ID"));
                             // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019 
                             sql = "SELECT bp.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
-                                " FROM C_BPartner_Location p INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = p.C_BPartner_ID) WHERE p.C_BPartner_Location_ID = " + locId;
+                                " FROM VAB_BPart_Location p INNER JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_ID = p.VAB_BusinessPartner_ID) WHERE p.VAB_BPart_Location_ID = " + locId;
                             drl = VIS.DB.executeReader(sql);
                             if (drl.read()) {
                                 CreditStatus = drl.getString("CreditStatusSettingOn");
@@ -12349,8 +12349,8 @@
 
     /***
      *	Invoice Line - Product.
-     *		- reset C_Charge_ID / M_AttributeSetInstance_ID
-     *		- PriceList, PriceStd, PriceLimit, C_Currency_ID, EnforcePriceLimit
+     *		- reset VAB_Charge_ID / M_AttributeSetInstance_ID
+     *		- PriceList, PriceStd, PriceLimit, VAB_Currency_ID, EnforcePriceLimit
      *		- UOM
      *	Calls Tax
      *	@param ctx context
@@ -12374,7 +12374,7 @@
         this.setCalloutActive(true);
         try {
 
-            mTab.setValue("C_Charge_ID", null);
+            mTab.setValue("VAB_Charge_ID", null);
 
             //	Set Attribute
             // JID_0910: On change of product on line system is not removing the ASI. if product is changed then also update the ASI field.
@@ -12396,7 +12396,7 @@
 
             var purchasingUom = 0;
             if (countEd011 > 0) {
-                sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  C_BPartner_ID = " + Util.getValueOfInt(invoiceRecord["C_BPartner_ID"]) +
+                sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = " + Util.getValueOfInt(invoiceRecord["VAB_BusinessPartner_ID"]) +
                     " AND M_Product_ID = " + M_Product_ID;
                 purchasingUom = Util.getValueOfInt(VIS.DB.executeScalar(sql));
 
@@ -12450,7 +12450,7 @@
 
             /*****	Price Calculation see also qty	****/
 
-            var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
+            var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
             var Qty = mTab.getValue("QtyInvoiced");
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID", false);
             // pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -12466,7 +12466,7 @@
             var C_UOM_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
             /*** Amit Done ***/
 
-            //var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            //var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
             //                                               Qty.toString(), ",", //3
             //                                               isSOTrx, ",", //4 
             //                                               M_PriceList_ID.toString(), ",", //5
@@ -12475,7 +12475,7 @@
             //                                               time.toString(), ",",
             //                                               M_AttributeSetInstance_ID.toString()); //8
 
-            var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                 Qty.toString(), ",", //3
                 isSOTrx, ",", //4 
                 M_PriceList_ID.toString(), ",", //5
@@ -12495,16 +12495,16 @@
 
             var rowDataDB = null;
 
-            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.C_Currency_ID);
+            var stdPrecision = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", dr.VAB_Currency_ID);
             // MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-            //     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+            //     M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
             //		
             mTab.setValue("PriceList", dr["PriceList"]);
             mTab.setValue("PriceLimit", dr.PriceLimit);
             mTab.setValue("PriceActual", Util.getValueOfDecimal(dr.PriceActual.toFixed(stdPrecision)));
             mTab.setValue("PriceEntered", Util.getValueOfDecimal(dr.PriceEntered.toFixed(stdPrecision)));
-            mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+            mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr.VAB_Currency_ID));
             // mTab.setValue("Discount", dr.Discount);
             if (countEd011 <= 0) {
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
@@ -12526,7 +12526,7 @@
                 //Get StandardPrecision From UOM
                 var standardPrecision = VIS.dataContext.getJSONRecord("MUOM/GetPrecision", C_UOM_ID.toString());
 
-                var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID.toString());
+                var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID.toString());
 
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.getValueOfInt(mTab.getValue("M_Product_ID"))
                     + " AND M_PriceList_Version_ID = " + _priceListVersion_ID
@@ -12660,7 +12660,7 @@
             //mTab.setValue("PriceLimit", pp.GetPriceLimit());
             //mTab.setValue("PriceActual", pp.GetPriceStd());
             //mTab.setValue("PriceEntered", pp.GetPriceStd());
-            //mTab.setValue("C_Currency_ID", pp.GetC_Currency_ID());
+            //mTab.setValue("VAB_Currency_ID", pp.GetVAB_Currency_ID());
             //mTab.setValue("C_UOM_ID", pp.GetC_UOM_ID());
             //ctx.setContext(windowNo, "EnforcePriceLimit", pp.IsEnforcePriceLimit() ? "Y" : "N");
             //ctx.setContext(windowNo, "DiscountSchema", pp.IsDiscountSchema() ? "Y" : "N");
@@ -12831,13 +12831,13 @@
         }
         var dr = null;
         try {
-            var C_Charge_ID = value;
-            if (C_Charge_ID == null || C_Charge_ID == 0)
+            var VAB_Charge_ID = value;
+            if (VAB_Charge_ID == null || VAB_Charge_ID == 0)
                 return "";
 
             //	No Product defined
             if (mTab.getValue("M_Product_ID") != null) {
-                mTab.setValue("C_Charge_ID", null);
+                mTab.setValue("VAB_Charge_ID", null);
                 return "ChargeExclusively";
             }
             mTab.setValue("M_AttributeSetInstance_ID", null);
@@ -12852,7 +12852,7 @@
                 mTab.setValue("C_UOM_ID", 100);	//	EA
             }
             ctx.setContext(windowNo, "DiscountSchema", "N");
-            var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=" + C_Charge_ID;
+            var sql = "SELECT ChargeAmt FROM VAB_Charge WHERE VAB_Charge_ID=" + VAB_Charge_ID;
 
 
             //JID_1744 The precision should be as per Currenct Precision
@@ -12873,7 +12873,7 @@
             //var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
             //if (countVA038 > 0 && !isSOTrx) {
-            //    var ds1 = VIS.DB.executeDataSet("SELECT VA038_AmortizationTemplate_ID FROM C_Charge where IsActive='Y' AND C_Charge_ID=" + Util.getValueOfInt(value));
+            //    var ds1 = VIS.DB.executeDataSet("SELECT VA038_AmortizationTemplate_ID FROM VAB_Charge where IsActive='Y' AND VAB_Charge_ID=" + Util.getValueOfInt(value));
             //    if (ds1.getTables().length > 0) {
             //        if (ds1.getTables()[0].getRows().length > 0) {
             //            if (Util.getValueOfInt(ds1.getTables()[0].getRows()[0].getCell("VA038_AmortizationTemplate_ID")) > 0) {
@@ -12922,7 +12922,7 @@
             var sql = "";
             // JID_1449: Tax is not working in case of charge on invoice line
             var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_Product_ID")) +
-                "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
+                "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
             //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
@@ -12946,15 +12946,15 @@
                 //sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
                 //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
                 //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
-                //        "," + Util.getValueOfInt(mTab.getValue("C_Charge_ID")).toString();
+                //        "," + Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")).toString();
                 //    taxid = VIS.dataContext.getJSONRecord("MInvoice/GetTax", paramString);
                 //}
                 //else {
-                //    sql = "select vatax_taxtype_id from c_bpartner_location where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) +
-                //                      " and isactive = 'Y'  and c_bpartner_location_id = " + util.getvalueofint(invoice["c_bpartner_location_id"]);
+                //    sql = "select vatax_taxtype_id from VAB_BPart_Location where VAB_BusinessPartner_id =" + util.getvalueofint(invoice["VAB_BusinessPartner_id"]) +
+                //                      " and isactive = 'Y'  and VAB_BPart_Location_id = " + util.getvalueofint(invoice["VAB_BPart_Location_id"]);
                 //    var taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    if (taxtype == 0) {
-                //        sql = "select vatax_taxtype_id from c_bpartner where c_bpartner_id =" + util.getvalueofint(invoice["c_bpartner_id"]) + " and isactive = 'Y'";
+                //        sql = "select vatax_taxtype_id from VAB_BusinessPartner where VAB_BusinessPartner_id =" + util.getvalueofint(invoice["VAB_BusinessPartner_id"]) + " and isactive = 'Y'";
                 //        taxtype = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 //    }
                 //    var prodtaxcategory = vis.datacontext.getjsonrecord("MProduct/GetTaxCategory", value.tostring());
@@ -12975,8 +12975,8 @@
                             return VIS.ADialog.info("VATAX_DefineTax");
                         }
                     }
-                    else if (Util.getValueOfInt(mTab.getValue("C_Charge_ID")) > 0) {
-                        mTab.setValue("C_Charge_ID", "");
+                    else if (Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")) > 0) {
+                        mTab.setValue("VAB_Charge_ID", "");
                         this.setCalloutActive(false);
                         if (recDic["TaxExempt"] == "Y") {
                             return VIS.ADialog.info("TaxNoExemptFound");
@@ -12997,26 +12997,26 @@
                 else {
                     M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
                 }
-                var C_Charge_ID = 0;
-                if (column.toString() == "C_Charge_ID") {
-                    C_Charge_ID = value;
+                var VAB_Charge_ID = 0;
+                if (column.toString() == "VAB_Charge_ID") {
+                    VAB_Charge_ID = value;
                 }
                 else {
-                    C_Charge_ID = ctx.getContextAsInt(windowNo, "C_Charge_ID");
+                    VAB_Charge_ID = ctx.getContextAsInt(windowNo, "VAB_Charge_ID");
                 }
-                this.log.fine("Product=" + M_Product_ID + ", C_Charge_ID=" + C_Charge_ID);
-                if (M_Product_ID == 0 && C_Charge_ID == 0) {
+                this.log.fine("Product=" + M_Product_ID + ", VAB_Charge_ID=" + VAB_Charge_ID);
+                if (M_Product_ID == 0 && VAB_Charge_ID == 0) {
                     return this.Amt(ctx, windowNo, mTab, mField, value);
                 }
 
                 //	Check Partner Location
-                var shipC_BPartner_Location_ID = ctx.getContextAsInt(windowNo, "C_BPartner_Location_ID");
-                if (shipC_BPartner_Location_ID == 0) {
+                var shipVAB_BPart_Location_ID = ctx.getContextAsInt(windowNo, "VAB_BPart_Location_ID");
+                if (shipVAB_BPart_Location_ID == 0) {
                     return this.Amt(ctx, windowNo, mTab, mField, value);
                 }
-                this.log.fine("Ship BP_Location=" + shipC_BPartner_Location_ID);
-                var billC_BPartner_Location_ID = shipC_BPartner_Location_ID;
-                this.log.fine("Bill BP_Location=" + billC_BPartner_Location_ID);
+                this.log.fine("Ship BP_Location=" + shipVAB_BPart_Location_ID);
+                var billVAB_BPart_Location_ID = shipVAB_BPart_Location_ID;
+                this.log.fine("Bill BP_Location=" + billVAB_BPart_Location_ID);
 
                 //	Dates 
                 //DateTime billDate = new DateTime(ctx.getContextAsTime(windowNo, "DateInvoiced"));
@@ -13033,20 +13033,20 @@
 
 
 
-                var paramString = C_Charge_ID.toString().concat(",", billDate.toString(),
+                var paramString = VAB_Charge_ID.toString().concat(",", billDate.toString(),
                     shipDate.toString(), ",",
                     VAF_Org_ID.toString(), ",",
                     M_Warehouse_ID.toString(), ",",
-                    billC_BPartner_Location_ID.toString(), ",",
-                    shipC_BPartner_Location_ID.toString(), ",",
+                    billVAB_BPart_Location_ID.toString(), ",",
+                    shipVAB_BPart_Location_ID.toString(), ",",
                     ctx.getWindowContext(windowNo, "IsSOTrx", true).equals("Y"));
 
 
                 var C_Tax_ID = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MTax/Get", paramString));
 
 
-                //var C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, C_Charge_ID, billDate, shipDate,
-                //    VAF_Org_ID, M_Warehouse_ID, billC_BPartner_Location_ID, shipC_BPartner_Location_ID,
+                //var C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, VAB_Charge_ID, billDate, shipDate,
+                //    VAF_Org_ID, M_Warehouse_ID, billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID,
                 //    ctx.getContext("IsSOTrx").equals("Y"));
                 this.log.info("Tax ID=" + C_Tax_ID);
                 //
@@ -13121,12 +13121,12 @@
             //Start Amit UOM
             if (mField.getColumnName() == "QtyEntered" && countEd011 > 0) {
 
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
 
                 if (orderline_ID == 0) {
                     paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
                         "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                        "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID.toString() +
+                        "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                         "," + QtyEntered.toString());
                     var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramStr);
 
@@ -13148,8 +13148,8 @@
                 ////Get PriceListversion based on Pricelist
                 //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", invoiceRecord["M_PriceList_ID"].toString());
 
-                //var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-                //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID1.toString());
+                //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
+                //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
                 //if (orderline_ID == 0) {
                 //    if (Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")) > 0) {
                 //        sql = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.getValueOfInt(mTab.getValue("M_Product_ID"))
@@ -13289,7 +13289,7 @@
                 || mField.getColumnName() == "QtyEntered"
                 || mField.getColumnName() == "M_Product_ID")
                 && !"N" == ctx.getContext("DiscountSchema")) {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 if (mField.getColumnName() == "QtyEntered") {
                     var paramStr = M_Product_ID.toString().concat(",", C_UOM_To_ID.toString(), ",", //2
                         QtyEntered.toString()); //3
@@ -13317,7 +13317,7 @@
 
                     var paramString;
                     if (date == null) {
-                        paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                        paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                             QtyInvoiced.toString(), ",", //3
                             isSOTrx, ",", //4 
                             M_PriceList_ID.toString(), ",", //5
@@ -13326,7 +13326,7 @@
                             C_UOM_To_ID.toString(), ",", countEd011);
                     }
                     else {
-                        paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                        paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                             QtyInvoiced.toString(), ",", //3
                             isSOTrx, ",", //4 
                             M_PriceList_ID.toString(), ",", //5
@@ -13349,7 +13349,7 @@
                     else {
                         paramString = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
                             "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                            "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID.toString() +
+                            "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                             "," + QtyEntered.toString());
                         var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramString);
 
@@ -13367,8 +13367,8 @@
                         ////Get PriceListversion based on Pricelist
                         //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", invoiceRecord["M_PriceList_ID"].toString());
 
-                        //var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-                        //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID1.toString());
+                        //var VAB_BusinessPartner_ID1 = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
+                        //var bpartner1 = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID1.toString());
 
                         //if (Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")) > 0) {
                         //    sql = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + Util.getValueOfInt(mTab.getValue("M_Product_ID"))
@@ -13746,12 +13746,12 @@
 
                 /*** Start Amit ***/
 
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
-                var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", C_BPartner_ID.toString());
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
+                var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID.toString());
 
                 paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
-                    "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + C_BPartner_ID.toString() +
+                    "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                     "," + QtyEntered.toString());
                 var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramStr);
 
@@ -14146,7 +14146,7 @@
     /// <summary>
     /// Order Header - PriceList.
     /// (used also in Invoice)
-    /// - C_Currency_ID
+    /// - VAB_Currency_ID
     /// 	- IsTaxIncluded
     /// 	Window Context:
     /// 	- EnforcePriceLimit
@@ -14171,10 +14171,10 @@
             if (M_PriceList_ID == null || M_PriceList_ID == 0)
                 return "";
 
-            sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,c.StdPrecision,"
+            sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
                 + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
-                + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+                + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
                 + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
                 + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
                 + "ORDER BY plv.ValidFrom DESC";
@@ -14191,8 +14191,8 @@
                 //	Price Limit Enforce
                 ctx.setContext(windowNo, "EnforcePriceLimit", dr.get("enforcepricelimit"));
                 //	Currency
-                var ii = Util.getValueOfInt(dr.get("c_currency_id"));
-                mTab.setValue("C_Currency_ID", ii);
+                var ii = Util.getValueOfInt(dr.get("VAB_Currency_id"));
+                mTab.setValue("VAB_Currency_ID", ii);
                 var prislst = Util.getValueOfInt(dr.get("m_pricelist_version_id"));
                 //	PriceList Version
                 ctx.setContext(windowNo, "M_PriceList_Version_ID", prislst);
@@ -14247,7 +14247,7 @@
 
     /// <summary>
     ///  Invoice Batch Line - BPartner.
-    //		- C_BPartner_Location_ID
+    //		- VAB_BPart_Location_ID
     //		- VAF_UserContact_ID
     //		- PaymentRule
     //		- C_PaymentTerm_ID
@@ -14264,28 +14264,28 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_BPartner_ID = Util.getValueOfInt(value);
-        if (C_BPartner_ID == null || C_BPartner_ID == 0) {
+        var VAB_BusinessPartner_ID = Util.getValueOfInt(value);
+        if (VAB_BusinessPartner_ID == null || VAB_BusinessPartner_ID == 0) {
             return "";
         }
         var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
             + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             + " p.SO_Description,p.IsDiscountPrinted,"
             + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            + " l.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+            + " l.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
             + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID "
-            + "FROM C_BPartner p"
-            + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-            + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
-            + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-            + "WHERE p.C_BPartner_ID=@Param1 AND p.IsActive='Y'";		//	#1
+            + "FROM VAB_BusinessPartner p"
+            + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+            + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID AND l.IsBillTo='Y' AND l.IsActive='Y')"
+            + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+            + "WHERE p.VAB_BusinessPartner_ID=@Param1 AND p.IsActive='Y'";		//	#1
 
         var IsSOTrx = ctx.isSOTrx();
         var Param = [];
         //SqlParameter[] Param = new SqlParameter[1];
         var idr = null;
         try {
-            Param[0] = new VIS.DB.SqlParam("@Param1", C_BPartner_ID);
+            Param[0] = new VIS.DB.SqlParam("@Param1", VAB_BusinessPartner_ID);
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
                 //	PaymentRule
@@ -14308,27 +14308,27 @@
                     mTab.setValue("C_PaymentTerm_ID", ii);
                 }
                 //	Location
-                //var locID = Util.getValueOfInt(idr["C_BPartner_Location_ID"]);
-                var locID = Util.getValueOfInt(idr.get("c_bpartner_location_id"));
+                //var locID = Util.getValueOfInt(idr["VAB_BPart_Location_ID"]);
+                var locID = Util.getValueOfInt(idr.get("VAB_BPart_Location_id"));
                 //	overwritten by InfoBP selection - works only if InfoWindow
                 //	was used otherwise creates error (uses last value, may belong to differnt BP)
-                if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                if (VAB_BusinessPartner_ID.toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
+                    var loc = ctx.getContext("VAB_BPart_Location_ID");
                     if (loc.toString().length > 0) {
                         locID = Util.getValueOfInt(loc);
                     }
                 }
                 if (locID == 0) {
-                    mTab.setValue("C_BPartner_Location_ID", null);
+                    mTab.setValue("VAB_BPart_Location_ID", null);
                 }
                 else {
-                    mTab.setValue("C_BPartner_Location_ID", Util.getValueOfInt(locID));
+                    mTab.setValue("VAB_BPart_Location_ID", Util.getValueOfInt(locID));
                 }
 
                 //	Contact - overwritten by InfoBP selection
                 //var contID = Util.getValueOfInt(idr["VAF_UserContact_ID"]);
                 var contID = Util.getValueOfInt(idr.get("VAF_UserContact_id"));
-                if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                if (VAB_BusinessPartner_ID.toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
                     var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.toString().length > 0) {
                         contID = Util.getValueOfInt(cont);
@@ -14418,15 +14418,15 @@
         //MInvoiceBatchLine last = new MInvoiceBatchLine(Env.GetCtx(), C_InvoiceBatchLine_ID, null);
         //MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, C_InvoiceBatchLine_ID, null);
         //	Need to Increase when different DocType or BP
-        var C_DocType_ID = ctx.getContextAsInt(windowNo, "C_DocType_ID");
-        var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
-        //if (C_DocType_ID == last.GetC_DocType_ID()
-        //    && C_BPartner_ID == last.GetC_BPartner_ID())
+        var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
+        var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
+        //if (VAB_DocTypes_ID == last.GetVAB_DocTypes_ID()
+        //    && VAB_BusinessPartner_ID == last.GetVAB_BusinessPartner_ID())
         //{
         //    return;
         //}
-        if (C_DocType_ID == dr["C_DocType_ID"]
-            && C_BPartner_ID == dr["C_BPartner_ID"]) {
+        if (VAB_DocTypes_ID == dr["VAB_DocTypes_ID"]
+            && VAB_BusinessPartner_ID == dr["VAB_BusinessPartner_ID"]) {
             return;
         }
         //	New Number
@@ -14461,16 +14461,16 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_Charge_ID = Util.getValueOfInt(value);
-        if (C_Charge_ID == null || Util.getValueOfInt(C_Charge_ID) == 0) {
+        var VAB_Charge_ID = Util.getValueOfInt(value);
+        if (VAB_Charge_ID == null || Util.getValueOfInt(VAB_Charge_ID) == 0) {
             return "";
         }
-        var sql = "SELECT ChargeAmt FROM C_Charge WHERE C_Charge_ID=@Param1";
+        var sql = "SELECT ChargeAmt FROM VAB_Charge WHERE VAB_Charge_ID=@Param1";
         var Param = [];
         // SqlParameter[] Param = new SqlParameter[1];
         var idr = null;
         try {
-            Param[0] = new VIS.DB.SqlParam("@Param1", C_Charge_ID);
+            Param[0] = new VIS.DB.SqlParam("@Param1", VAB_Charge_ID);
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
                 mTab.setValue("PriceEntered", Util.getValueOfDecimal(idr.get(0)));
@@ -14508,22 +14508,22 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_Charge_ID = 0;
-        if (column.equals("C_Charge_ID")) {
-            C_Charge_ID = Util.getValueOfInt(value);
+        var VAB_Charge_ID = 0;
+        if (column.equals("VAB_Charge_ID")) {
+            VAB_Charge_ID = Util.getValueOfInt(value);
         }
         else {
-            C_Charge_ID = ctx.getContextAsInt(windowNo, "C_Charge_ID");
+            VAB_Charge_ID = ctx.getContextAsInt(windowNo, "VAB_Charge_ID");
         }
-        this.log.fine("C_Charge_ID=" + C_Charge_ID);
-        if (C_Charge_ID == 0) {
+        this.log.fine("VAB_Charge_ID=" + VAB_Charge_ID);
+        if (VAB_Charge_ID == 0) {
             return this.Amt(ctx, windowNo, mTab, mField, value);	//
         }
-        var C_BPartner_Location_ID = ctx.getContextAsInt(windowNo, "C_BPartner_Location_ID");
-        if (C_BPartner_Location_ID == 0) {
+        var VAB_BPart_Location_ID = ctx.getContextAsInt(windowNo, "VAB_BPart_Location_ID");
+        if (VAB_BPart_Location_ID == 0) {
             return this.Amt(ctx, windowNo, mTab, mField, value);	//
         }
-        this.log.fine("BP_Location=" + C_BPartner_Location_ID);
+        this.log.fine("BP_Location=" + VAB_BPart_Location_ID);
 
         //	Dates
         //var billDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime(windowNo, "DateInvoiced"));//Sarab
@@ -14538,19 +14538,19 @@
         var M_Warehouse_ID = ctx.getContextAsInt("#M_Warehouse_ID");
         this.log.fine("Warehouse=" + M_Warehouse_ID);
 
-        var paramString = C_Charge_ID.toString().concat(",", billDate.toString(),
+        var paramString = VAB_Charge_ID.toString().concat(",", billDate.toString(),
             shipDate.toString(), ",",
             VAF_Org_ID.toString(), ",",
             M_Warehouse_ID.toString(), ",",
-            C_BPartner_Location_ID.toString(), ",",
-            C_BPartner_Location_ID.toString(), ",",
+            VAB_BPart_Location_ID.toString(), ",",
+            VAB_BPart_Location_ID.toString(), ",",
             ctx.getWindowContext(windowNo, "IsSOTrx", true).equals("Y"));
 
 
         var C_Tax_ID = VIS.dataContext.getJSONRecord("MTax/Get", paramString);
 
-        //var C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, 0, C_Charge_ID, billDate, shipDate,
-        //VAF_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
+        //var C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, 0, VAB_Charge_ID, billDate, shipDate,
+        //VAF_Org_ID, M_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
         // ctx.getContext("IsSOTrx").equals("Y"));
 
 
@@ -15022,8 +15022,8 @@
             //var sql = "SELECT C_Period_ID "
             //    + "FROM C_Period "
             //    + "WHERE C_Year_ID IN "
-            //    + "	(SELECT C_Year_ID FROM C_Year WHERE C_Calendar_ID ="
-            //    + "  (SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE VAF_Client_ID=@param1))"
+            //    + "	(SELECT C_Year_ID FROM C_Year WHERE VAB_Calender_ID ="
+            //    + "  (SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE VAF_Client_ID=@param1))"
             //    + " AND @param2 BETWEEN StartDate AND EndDate"
             //    + " AND PeriodType='S'";
             //var param = [];            
@@ -15112,7 +15112,7 @@
 
 
     /// <summary>
-    /// Journal/Line - rate.	Set CurrencyRate from DateAcct, C_ConversionType_ID, C_Currency_ID
+    /// Journal/Line - rate.	Set CurrencyRate from DateAcct, VAB_CurrencyType_ID, VAB_Currency_ID
     /// </summary>
     /// <param name="ctx">context</param>
     /// <param name="windowNo">window no</param>
@@ -15128,10 +15128,10 @@
 
         //  Source info
         try {
-            var Currency_ID = Util.getValueOfInt(mTab.getValue("C_Currency_ID"));
-            var C_Currency_ID = Util.getValueOfInt(Currency_ID);
-            var ConversionType_ID = Util.getValueOfInt(mTab.getValue("C_ConversionType_ID"));
-            var C_ConversionType_ID = Util.getValueOfInt(ConversionType_ID);
+            var Currency_ID = Util.getValueOfInt(mTab.getValue("VAB_Currency_ID"));
+            var VAB_Currency_ID = Util.getValueOfInt(Currency_ID);
+            var ConversionType_ID = Util.getValueOfInt(mTab.getValue("VAB_CurrencyType_ID"));
+            var VAB_CurrencyType_ID = Util.getValueOfInt(ConversionType_ID);
             var DateAcct = mTab.getValue("DateAcct");
             if (DateAcct == null) {
                 var currentDate = new Date();
@@ -15139,16 +15139,16 @@
                 DateAcct = currentDate.toGMTString();
             }
             //
-            var C_AcctSchema_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "C_AcctSchema_ID", false));
-            var paramString = C_AcctSchema_ID;
+            var VAB_AccountBook_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAB_AccountBook_ID", false));
+            var paramString = VAB_AccountBook_ID;
             var aas = VIS.dataContext.getJSONRecord("MAcctSchema/GetAcctSchema", paramString);
-            // MAcctSchema aas = MAcctSchema.Get(ctx, C_AcctSchema_ID.Value);
+            // MAcctSchema aas = MAcctSchema.Get(ctx, VAB_AccountBook_ID.Value);
             var VAF_Client_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAF_Client_ID", false));
             var VAF_Org_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAF_Org_ID", false));
 
-            //var CurrencyRate = MConversionRate.GetRate(C_Currency_ID.Value, aas.GetC_Currency_ID(),
-            //    DateAcct, C_ConversionType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
-            var paramStr = C_Currency_ID + "," + aas["C_Currency_ID"] + "," + DateAcct + "," + C_ConversionType_ID + "," + VAF_Client_ID + "," + VAF_Org_ID;
+            //var CurrencyRate = MConversionRate.GetRate(VAB_Currency_ID.Value, aas.GetVAB_Currency_ID(),
+            //    DateAcct, VAB_CurrencyType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
+            var paramStr = VAB_Currency_ID + "," + aas["VAB_Currency_ID"] + "," + DateAcct + "," + VAB_CurrencyType_ID + "," + VAF_Client_ID + "," + VAF_Org_ID;
             var CurrencyRate = VIS.dataContext.getJSONRecord("MConversionRate/GetRate", paramStr);
             this.log.fine("rate = " + CurrencyRate);
             if (CurrencyRate == null) {
@@ -15184,12 +15184,12 @@
 
         this.setCalloutActive(true);
 
-        //  Get Target Currency & Precision from C_AcctSchema.C_Currency_ID
-        var C_AcctSchema_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "C_AcctSchema_ID"));
-        var paramString = C_AcctSchema_ID.toString();
+        //  Get Target Currency & Precision from VAB_AccountBook.VAB_Currency_ID
+        var VAB_AccountBook_ID = Util.getValueOfInt(ctx.getContextAsInt(windowNo, "VAB_AccountBook_ID"));
+        var paramString = VAB_AccountBook_ID.toString();
         var aas = VIS.dataContext.getJSONRecord("MAcctSchema/GetAcctSchema", paramString);
 
-        //MAcctSchema aas = MAcctSchema.Get(ctx, C_AcctSchema_ID);
+        //MAcctSchema aas = MAcctSchema.Get(ctx, VAB_AccountBook_ID);
         //var Precision = aas.GetStdPrecision();
 
         var Precision = aas["StdPrecision"];
@@ -15492,7 +15492,7 @@
 
     //    this.setCalloutActive(true);
 
-    //    var sql = "Select VAF_UserContact_ID FROM VAF_UserContact WHERE IsActive='Y' AND C_BPartner_ID=" + value;
+    //    var sql = "Select VAF_UserContact_ID FROM VAF_UserContact WHERE IsActive='Y' AND VAB_BusinessPartner_ID=" + value;
     //    var VAF_UserContact_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql));
 
     //    if (VAF_UserContact_ID) {
@@ -15548,11 +15548,11 @@
             // JID_0910: On change of product on line system is not removing the ASI. if product is changed then also update the ASI field.
             mTab.setValue("M_AttributeSetInstance_ID", null);
 
-            var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+            var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             var qty = mTab.getValue("Qty");
             var isSOTrx = false;
             //  MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-            //     M_Product_ID, C_BPartner_ID, qty, isSOTrx);
+            //     M_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
             //
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
             // pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -15568,7 +15568,7 @@
             var paramString;
             var C_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID);
             if (existEd011 > 0) {
-                paramString = M_Product_ID.toString().concat(",", C_BPartner_ID, ",", //2
+                paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID, ",", //2
                     qty, ",", //3
                     isSOTrx, ",", //4 
                     M_PriceList_ID, ",", //5
@@ -15576,7 +15576,7 @@
                     orderDate, ",", null, ",", C_UOM_ID, ",", existEd011); //7
             }
             else {
-                paramString = M_Product_ID.toString().concat(",", C_BPartner_ID, ",", //2
+                paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID, ",", //2
                     qty, ",", //3
                     isSOTrx, ",", //4 
                     M_PriceList_ID, ",", //5
@@ -15646,7 +15646,7 @@
             if (mField.getColumnName() == "Qty"
                 && "Y" == ctx.getContext("DiscountSchema")) {
                 var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 var qty = value;
                 var isSOTrx = false;
                 var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
@@ -15659,7 +15659,7 @@
                 //
 
                 //*******************
-                var paramString = M_Product_ID.concat(",", C_BPartner_ID, ",", //2
+                var paramString = M_Product_ID.concat(",", VAB_BusinessPartner_ID, ",", //2
                     qty, ",", //3
                     isSOTrx, ",", //4 
                     M_PriceList_ID, ",", //5
@@ -15682,7 +15682,7 @@
                 //    mTab.setValue("PriceLimit", dr.PriceLimit);
                 //    mTab.setValue("PriceActual", dr.PriceActual);
                 //    mTab.setValue("PriceEntered", dr.PriceEntered);
-                //    mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+                //    mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr.VAB_Currency_ID));
                 //    mTab.setValue("Discount", dr.Discount);
                 //    mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
                 //    mTab.setValue("QtyOrdered", mTab.getValue("QtyEntered"));
@@ -15699,7 +15699,7 @@
 
 
                 //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-                //    M_Product_ID, C_BPartner_ID, qty, isSOTrx);
+                //    M_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
                 //
 
                 mTab.setValue("PriceActual", dr["PriceActual"]);
@@ -15778,14 +15778,14 @@
                 if (dr != null) {
                     countEd011 = dr["VA009_"] ? 1 : 0;
                 }
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 var M_AttributeSetInstance_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
                 var isSOTrx = false;
                 var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
                 var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
 
                 var orderDate = ctx.getContext(windowNo, "DateDoc");
-                paramStr = M_Product_ID.toString().concat(",", C_BPartner_ID, ",", //2
+                paramStr = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID, ",", //2
                     QtyEntered, ",", //3
                     isSOTrx, ",", //4 
                     M_PriceList_ID, ",", //5
@@ -15972,7 +15972,7 @@
         if (C_Invoice_ID == 0) {
             return "";
         }
-        var C_BankAccount_ID = ctx.getContextAsInt(windowNo, "C_BankAccount_ID");
+        var VAB_Bank_Acct_ID = ctx.getContextAsInt(windowNo, "VAB_Bank_Acct_ID");
         //var PayDate = CommonFunctions.CovertMilliToDate(ctx.getContextAsTime("PayDate"));// new DateTime(ctx.getContextAsTime("PayDate"));
 
         var PayDate = ctx.getContext("PayDate");
@@ -15983,18 +15983,18 @@
 
         var DiscountAmt = VIS.Env.ZERO;
         var isSOTrx = false;//            Boolean.FALSE;
-        var sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.C_Currency_ID,"
-            + "ba.C_Currency_ID, i.DateInvoiced, i.C_ConversionType_ID, i.VAF_Client_ID, i.VAF_Org_ID) as OpenAmt,"
-            + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced,'" + PayDate + "') As DiscountAmt, i.IsSOTrx "
-            + "FROM C_Invoice_v i, C_BankAccount ba "
-            + "WHERE i.C_Invoice_ID=@Param2 AND ba.C_BankAccount_ID=@Param3";	//	#1..2
+        var sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.VAB_Currency_ID,"
+            + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID) as OpenAmt,"
+            + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced,'" + PayDate + "') As DiscountAmt, i.IsSOTrx "
+            + "FROM C_Invoice_v i, VAB_Bank_Acct ba "
+            + "WHERE i.C_Invoice_ID=@Param2 AND ba.VAB_Bank_Acct_ID=@Param3";	//	#1..2
         var Param = [];
         //SqlParameter[] Param = new SqlParameter[3];
         var idr = null;
         try {
             //Param[0] = new VIS.DB.SqlParam("@Param1", PayDate);  //Temporary Commented By Sarab
             Param[0] = new VIS.DB.SqlParam("@Param2", C_Invoice_ID);
-            Param[1] = new VIS.DB.SqlParam("@Param3", C_BankAccount_ID);
+            Param[1] = new VIS.DB.SqlParam("@Param3", VAB_Bank_Acct_ID);
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
                 OpenAmt = idr.get("openamt");
@@ -16011,7 +16011,7 @@
             this.log.log(Level.SEVERE, sql, err);
         }
 
-        this.log.fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + C_BankAccount_ID + ")");
+        this.log.fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
         mTab.setValue("OpenAmt", OpenAmt);
         mTab.setValue("PayAmt", (OpenAmt - DiscountAmt));
         mTab.setValue("DiscountAmt", DiscountAmt);
@@ -16038,9 +16038,9 @@
             return ""; //Must sir but it was not the case
         }
         var SDate = new Date(mTab.getValue("StartDate"));
-        var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
-        //var Sql = "Select NoOfDays from C_Frequency where C_Frequency_ID=" + frequency; //By Sarab
-        var Sql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+        var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
+        //var Sql = "Select NoOfDays from VAB_Frequency where VAB_Frequency_ID=" + frequency; //By Sarab
+        var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         var days = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var invoice = Util.getValueOfInt(mTab.getValue("NoofCycle"));
         //var End = SDate.addDays(days * invoice);     //By sarab 
@@ -16110,7 +16110,7 @@
             mTab.setValue("M_Product_ID", dr["M_Product_ID"]);
             mTab.setValue("Qty", dr["Qty"]);
             mTab.setValue("C_UOM_ID", dr["C_UOM_ID"]);
-            mTab.setValue("C_BPartner_ID", dr["C_BPartner_ID"]);
+            mTab.setValue("VAB_BusinessPartner_ID", dr["VAB_BusinessPartner_ID"]);
             mTab.setValue("PlannedHours", dr["PlannedHours"]);
             this.setCalloutActive(false);
         }
@@ -16136,9 +16136,9 @@
         }
         var sql = "";
         try {
-            sql = "select C_Currency_id from m_pricelist where m_pricelist_ID = " + Util.getValueOfInt(value);
-            var C_Currency_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
-            mTab.setValue("C_Currency_ID", C_Currency_ID);
+            sql = "select VAB_Currency_id from m_pricelist where m_pricelist_ID = " + Util.getValueOfInt(value);
+            var VAB_Currency_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
+            mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -16265,9 +16265,9 @@
 
         var SDate = Util.getValueOfDateTime(mTab.getValue("StartDate"));
         var Edate = mTab.getValue("EndDate");
-        var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
+        var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
 
-        var Sql = "Select NoOfDays from C_Frequency where C_Frequency_ID=" + frequency;
+        var Sql = "Select NoOfDays from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         var days = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var totaldays = (Edate - SDate).Days;
         var count = totaldays / days;
@@ -16282,9 +16282,9 @@
         //  
         var SDate = new Date(mTab.getValue("StartDate"));
         var startDate = new Date(mTab.getValue("StartDate"));
-        //var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
-        var months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("C_Frequency_ID")));
-        //var Sql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+        //var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
+        var months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
+        //var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         //var months = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var invoice = Util.getValueOfInt(mTab.getValue("TotalInvoice"));
         //var End = SDate.AddMonths(months * invoice).AddDays(-1);
@@ -16323,8 +16323,8 @@
             return "";
         }
         var SDate = new Date(mTab.getValue("StartDate"));
-        var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
-        var Sql = "Select NoOfDays from C_Frequency where C_Frequency_ID=" + frequency;
+        var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
+        var Sql = "Select NoOfDays from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         var days = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var totalInvoice = Util.getValueOfInt(mTab.getValue("TotalInvoice"));
         var cycles = totalInvoice * days;
@@ -16341,8 +16341,8 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
-        var Sql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+        var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
+        var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         var months = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var totalInvoice = Util.getValueOfInt(mTab.getValue("TotalInvoice"));
         var SDate = new Date(value);
@@ -16476,7 +16476,7 @@
             sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
                 + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
                 + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
-                + "p.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
+                + "p.C_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                 + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList_Version pv "
                 + "WHERE p.M_Product_ID=pp.M_Product_ID"
                 + " AND pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID"
@@ -16512,9 +16512,9 @@
                         priceActual = Util.getValueOfDecimal(idr.get("pricelimit"));//.GetDecimal("PriceLimit");
                     }
                     //	Currency
-                    var ii = Util.getValueOfInt(idr.get("c_currency_id"));
+                    var ii = Util.getValueOfInt(idr.get("VAB_Currency_id"));
                     if (!(idr == null)) {
-                        mTab.setValue("C_Currency_ID", ii);
+                        mTab.setValue("VAB_Currency_ID", ii);
                     }
                 }
             }
@@ -16525,7 +16525,7 @@
                 sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
                     + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
                     + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
-                    + "p.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
+                    + "p.C_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                     + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList bpl, M_PriceList_Version pv "
                     + "WHERE p.M_Product_ID=pp.M_Product_ID"
                     + " AND pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID"
@@ -16559,9 +16559,9 @@
                             priceActual = Util.getValueOfDecimal(idr.get("pricelimit"));//.GetDecimal("PriceLimit");
                         }
                         //	Currency
-                        var ii = Util.getValueOfInt(idr.get("c_currency_id"));
+                        var ii = Util.getValueOfInt(idr.get("VAB_Currency_id"));
                         if (!(idr == null)) {
-                            mTab.setValue("C_Currency_ID", ii);
+                            mTab.setValue("VAB_Currency_ID", ii);
                         }
                     }
                 }
@@ -16587,7 +16587,7 @@
     };	//	Expense_Product
 
     /// <summary>
-    ///  Expense - Amount.- called from ExpenseAmt, C_Currency_ID,- calculates ConvertedAmt
+    ///  Expense - Amount.- called from ExpenseAmt, VAB_Currency_ID,- calculates ConvertedAmt
     /// </summary>
     /// <param name="ctx">context</param>
     /// <param name="windowNo">current Window No</param>
@@ -16605,26 +16605,26 @@
         //	get values
         var ExpenseAmt = mTab.getValue("ExpenseAmt");
         // did changes to correct the logic for conversion and to consider expense date in conversion.-Mohit
-        //var C_Currency_From_ID = mTab.getValue("C_Currency_ID");        
-        //var C_Currency_To_ID = ctx.getContextAsInt(windowNo, "$C_Currency_ID");
-        var C_Currency_To_ID = 0;
-        var C_Currency_From_ID = mTab.getValue("C_Currency_ID");
-        C_Currency_To_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
+        //var VAB_Currency_From_ID = mTab.getValue("VAB_Currency_ID");        
+        //var VAB_Currency_To_ID = ctx.getContextAsInt(windowNo, "$VAB_Currency_ID");
+        var VAB_Currency_To_ID = 0;
+        var VAB_Currency_From_ID = mTab.getValue("VAB_Currency_ID");
+        VAB_Currency_To_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
         //DateTime DateExpense = new DateTime(ctx.getContextAsTime(windowNo, "DateExpense"));
         var DateExpense = ctx.getContext(windowNo, "DateExpense");
         //
-        this.log.fine("Amt=" + ExpenseAmt + ", C_Currency_ID=" + C_Currency_From_ID);
+        this.log.fine("Amt=" + ExpenseAmt + ", VAB_Currency_ID=" + VAB_Currency_From_ID);
         //	Converted Amount = Unit price
         var ConvertedAmt = ExpenseAmt.toString();
         //	convert if required
-        if (!ConvertedAmt.equals(VIS.Env.ZERO) && C_Currency_To_ID != Util.getValueOfInt(C_Currency_From_ID)) {
+        if (!ConvertedAmt.equals(VIS.Env.ZERO) && VAB_Currency_To_ID != Util.getValueOfInt(VAB_Currency_From_ID)) {
             var VAF_Client_ID = ctx.getContextAsInt(windowNo, "VAF_Client_ID");
             var VAF_Org_ID = ctx.getContextAsInt(windowNo, "VAF_Org_ID");
-            var paramString = ConvertedAmt.toString() + "," + C_Currency_From_ID.toString() + "," + C_Currency_To_ID.toString() + "," + DateExpense +
+            var paramString = ConvertedAmt.toString() + "," + VAB_Currency_From_ID.toString() + "," + VAB_Currency_To_ID.toString() + "," + DateExpense +
                 "," + 0 + "," + VAF_Client_ID.toString() + "," + VAF_Org_ID.toString();
 
             //ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(ctx,
-            //    ConvertedAmt, Util.getValueOfInt(C_Currency_From_ID), C_Currency_To_ID,
+            //    ConvertedAmt, Util.getValueOfInt(VAB_Currency_From_ID), VAB_Currency_To_ID,
             //    DateExpense, 0, VAF_Client_ID, VAF_Org_ID);
             // ConvertedAmt = VIS.dataContext.getJSONRecord("MConversionRate/Convert", paramString);
 
@@ -16835,7 +16835,7 @@
         }
         try {
             this.setCalloutActive(true);
-            mTab.setValue("C_BPartner_ID", Util.getValueOfInt(value));
+            mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(value));
             this.setCalloutActive(false);
         }
         catch (err) {
@@ -16858,8 +16858,8 @@
             return "";
         }
 
-        var paramString = mTab.getValue("C_Charge_ID").toString();
-        //X_C_Charge charge = new X_C_Charge(ctx, Cid, null);
+        var paramString = mTab.getValue("VAB_Charge_ID").toString();
+        //X_VAB_Charge charge = new X_VAB_Charge(ctx, Cid, null);
         //var amt=charge.GetChargeAmt();
         var amt = VIS.dataContext.getJSONRecord("MCharge/GetCharge", paramString);
         mTab.setValue("PlannedQty", 1);
@@ -16985,10 +16985,10 @@
             if (M_PriceList_ID != 0) {
                 mTab.setValue("M_PriceList_ID", M_PriceList_ID);
 
-                sql = "select C_Currency_id from m_pricelist where m_pricelist_ID = " + M_PriceList_ID;
-                var C_Currency_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
-                if (C_Currency_ID != 0) {
-                    mTab.setValue("C_Currency_ID", C_Currency_ID);
+                sql = "select VAB_Currency_id from m_pricelist where m_pricelist_ID = " + M_PriceList_ID;
+                var VAB_Currency_ID = Util.getValueOfInt(VIS.DB.executeScalar(sql, null, null));
+                if (VAB_Currency_ID != 0) {
+                    mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
                 }
                 else {
                     //  ShowMessage.Info("CurrencyNotDefinedForThePriceList", true, null, null);
@@ -17052,13 +17052,13 @@
                 mTab.setValue("FreightCostRule", dr["FreightCostRule"]);
                 mTab.setValue("FreightAmt", dr["FreightAmt"]);
 
-                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr["C_BPartner_ID"]));
+                mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(dr["VAB_BusinessPartner_ID"]));
                 //sraval: source forge bug # 1503219 - added to default ship to location
-                mTab.setValue("C_BPartner_Location_ID", Util.getValueOfInt(dr["C_BPartner_Location_ID"]));
+                mTab.setValue("VAB_BPart_Location_ID", Util.getValueOfInt(dr["VAB_BPart_Location_ID"]));
 
                 mTab.setValue("VAF_OrgTrx_ID", Util.getValueOfInt(dr["VAF_OrgTrx_ID"]));
-                mTab.setValue("C_Activity_ID", Util.getValueOfInt(dr["C_Activity_ID"]));
-                mTab.setValue("C_Campaign_ID", Util.getValueOfInt(dr["C_Campaign_ID"]));
+                mTab.setValue("VAB_BillingCode_ID", Util.getValueOfInt(dr["VAB_BillingCode_ID"]));
+                mTab.setValue("VAB_Promotion_ID", Util.getValueOfInt(dr["VAB_Promotion_ID"]));
                 mTab.setValue("C_Project_ID", Util.getValueOfInt(dr["C_Project_ID"]));
                 mTab.setValue("User1_ID", Util.getValueOfInt(dr["User1_ID"]));
                 mTab.setValue("User2_ID", Util.getValueOfInt(dr["User2_ID"]));
@@ -17108,17 +17108,17 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_DocType_ID = Util.getValueOfInt(value.toString());// (int)value;
-        if (C_DocType_ID == null || C_DocType_ID == 0) {
+        var VAB_DocTypes_ID = Util.getValueOfInt(value.toString());// (int)value;
+        if (VAB_DocTypes_ID == null || VAB_DocTypes_ID == 0) {
             return "";
         }
         var sql = "SELECT d.docBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-            + "FROM C_DocType d, VAF_Record_Seq s "
-            + "WHERE C_DocType_ID=" + C_DocType_ID		//	1
+            + "FROM VAB_DocTypes d, VAF_Record_Seq s "
+            + "WHERE VAB_DocTypes_ID=" + VAB_DocTypes_ID		//	1
             + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
         var dr = null;
         try {
-            ctx.setContext(windowNo, "C_DocTypeTarget_ID", C_DocType_ID);
+            ctx.setContext(windowNo, "VAB_DocTypesTarget_ID", VAB_DocTypes_ID);
             dr = VIS.DB.executeReader(sql, null, null);
             if (dr.read()) {
                 //	Set Movement Type
@@ -17185,8 +17185,8 @@
         }
         try {
 
-            var C_BPartner_ID = Util.getValueOfInt(value.toString());// (int)value;
-            if (C_BPartner_ID == null || C_BPartner_ID == 0) {
+            var VAB_BusinessPartner_ID = Util.getValueOfInt(value.toString());// (int)value;
+            if (VAB_BusinessPartner_ID == null || VAB_BusinessPartner_ID == 0) {
                 return "";
             }
 
@@ -17197,32 +17197,32 @@
 
             //sql = "SELECT p.VAF_Language, p.POReference,"
             //    + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-            //    + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID "
-            //    + "FROM C_BPartner p"
-            //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-            //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
+            //    + "l.VAB_BPart_Location_ID, c.VAF_UserContact_ID "
+            //    + "FROM VAB_BusinessPartner p"
+            //    + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID)"
+            //    + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+            //    + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;		//	1
             sql = "SELECT p.VAF_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID , p.SOCreditStatus "
-                + "FROM C_BPartner p"
-                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1 // SD
+                + "l.VAB_BPart_Location_ID, c.VAF_UserContact_ID , p.SOCreditStatus "
+                + "FROM VAB_BusinessPartner p"
+                + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID)"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;		//	1 // SD
 
 
             idr = VIS.DB.executeReader(sql, null, null);
             if (idr.read()) {
                 //	Location
-                var ii = Util.getValueOfInt(idr.get("c_bpartner_location_id"));
+                var ii = Util.getValueOfInt(idr.get("VAB_BPart_Location_id"));
                 // sraval: source forge bug # 1503219 - default location for material receipt
                 if (order == null) {
                     //if (dr.wasNull())
                     if (ii == 0) {
-                        mTab.setValue("C_BPartner_Location_ID", null);
+                        mTab.setValue("VAB_BPart_Location_ID", null);
                     }
                     else {
-                        mTab.setValue("C_BPartner_Location_ID", ii);
+                        mTab.setValue("VAB_BPart_Location_ID", ii);
                     }
                 }
                 //	Contact
@@ -17250,9 +17250,9 @@
                         }
                     }
                     else {
-                        var locId = Util.getValueOfInt(mTab.getValue("C_BPartner_Location_ID"));
+                        var locId = Util.getValueOfInt(mTab.getValue("VAB_BPart_Location_ID"));
                         sql = "SELECT bp.CreditStatusSettingOn,p.SOCreditStatus,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable" +
-                            " FROM C_BPartner_Location p INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = p.C_BPartner_ID) WHERE p.C_BPartner_Location_ID = " + locId;
+                            " FROM VAB_BPart_Location p INNER JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_ID = p.VAB_BusinessPartner_ID) WHERE p.VAB_BPart_Location_ID = " + locId;
                         drl = VIS.DB.executeReader(sql);
                         if (drl.read()) {
                             CreditStatus = drl.getString("CreditStatusSettingOn");
@@ -17402,7 +17402,7 @@
                     mTab.setValue("M_Product_ID", Util.getValueOfInt(dr["M_Product_ID"]));
                 }
                 else {
-                    mTab.setValue("C_Charge_ID", Util.getValueOfInt(dr["C_Charge_ID"]));
+                    mTab.setValue("VAB_Charge_ID", Util.getValueOfInt(dr["VAB_Charge_ID"]));
                 }
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(dr["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr["C_UOM_ID"]));
@@ -17416,8 +17416,8 @@
                 }
                 mTab.setValue("QtyEntered", qtyEntered);
                 //
-                mTab.setValue("C_Activity_ID", Util.getValueOfInt(dr["C_Activity_ID"]));
-                mTab.setValue("C_Campaign_ID", Util.getValueOfInt(dr["C_Campaign_ID"]));
+                mTab.setValue("VAB_BillingCode_ID", Util.getValueOfInt(dr["VAB_BillingCode_ID"]));
+                mTab.setValue("VAB_Promotion_ID", Util.getValueOfInt(dr["VAB_Promotion_ID"]));
                 mTab.setValue("C_Project_ID", Util.getValueOfInt(dr["C_Project_ID"]));
                 mTab.setValue("C_ProjectPhase_ID", Util.getValueOfInt(dr["C_ProjectPhase_ID"]));
                 mTab.setValue("C_ProjectTask_ID", Util.getValueOfInt(dr["C_ProjectTask_ID"]));
@@ -17504,9 +17504,9 @@
             mTab.setValue("C_UOM_ID", C_UOM_ID);
             var qtyEntered = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             mTab.setValue("MovementQty", qtyEntered);
-            var qryBP = "SELECT C_BPartner_ID FROM M_InOut WHERE M_InOut_ID = " + Util.getValueOfInt(mTab.getValue("M_InOut_ID"));
+            var qryBP = "SELECT VAB_BusinessPartner_ID FROM M_InOut WHERE M_InOut_ID = " + Util.getValueOfInt(mTab.getValue("M_InOut_ID"));
             var bpartner = Util.getValueOfInt(VIS.DB.executeScalar(qryBP));
-            var qryUom = "SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.C_BPartner_ID = " + bpartner;
+            var qryUom = "SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + bpartner;
             var uom = Util.getValueOfInt(VIS.DB.executeScalar(qryUom));
             if (C_UOM_ID != 0) {
                 if (C_UOM_ID != uom && uom != 0) {
@@ -17840,7 +17840,7 @@
 
 
         // MPayment payment = new MPayment(ctx, C_Payment_ID, null);
-        if (payment["C_Charge_ID"] != 0 || payment["C_Invoice_ID"] != 0
+        if (payment["VAB_Charge_ID"] != 0 || payment["C_Invoice_ID"] != 0
             || payment["C_Order_ID"] != 0)
             return VIS.Msg.getMsg("PaymentIsAllocated");
 
@@ -17889,7 +17889,7 @@
             ts = new Date();
         }
 
-        //var sql = "SELECT C_BPartner_ID,C_Currency_ID,"		//	1..2
+        //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		//	1..2
         //    + " invoiceOpen(C_Invoice_ID, " + C_InvoicePaySchedule_ID + ") as invoiceOpen ,"					//	3		#1
         //    + " invoiceDiscount(C_Invoice_ID," + VIS.DB.to_date(ts, true) + "," + C_InvoicePaySchedule_ID + ") as invoiceDiscount , IsSOTrx "	//	4..5	#2/3
         //    + "FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
@@ -17954,7 +17954,7 @@
     /// Payment_Amounts.
     /// Change of:
     /// - IsOverUnderPayment -> set OverUnderAmt to 0
-    /// - C_Currency_ID, C_ConvesionRate_ID -> convert all
+    /// - VAB_Currency_ID, C_ConvesionRate_ID -> convert all
     /// - PayAmt, DiscountAmt, WriteOffAmt, OverUnderAmt -> PayAmt
     /// make sure that add up to InvoiceOpenAmt
     /// </summary>
@@ -17989,7 +17989,7 @@
         }
         var invoiceOpenAmt = VIS.Env.ZERO;
         var IsReturnTrx = "N";
-        var C_Currency_Invoice_ID = 0;
+        var VAB_Currency_Invoice_ID = 0;
         var checkPrecision = true;
         var amount = Util.getValueOfDecimal(mTab.getValue("Amount"));
         var discountAmt = Util.getValueOfDecimal(mTab.getValue("DiscountAmt"));
@@ -18008,7 +18008,7 @@
         var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
         var dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
         if (dr != null) {
-            C_Currency_Invoice_ID = Util.getValueOfInt(dr["C_Currency_ID"]);
+            VAB_Currency_Invoice_ID = Util.getValueOfInt(dr["VAB_Currency_ID"]);
             invoiceOpenAmt = Util.getValueOfDecimal(dr["invoiceOpen"]);
             if (invoiceOpenAmt == null) {
                 invoiceOpenAmt = VIS.Env.ZERO;
@@ -18064,7 +18064,7 @@
         }
         //	Changed Column
         var colName = mField.getColumnName();
-        paramString = C_Currency_Invoice_ID.toString();
+        paramString = VAB_Currency_Invoice_ID.toString();
         var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
         var precision = currency["StdPrecision"];
         //  PayAmt - calculate write off
@@ -18149,8 +18149,8 @@
     /// <summary>
     /// Payment_Invoice.
     /// when Invoice selected
-    /// - set C_Currency_ID 
-    /// - C_BPartner_ID
+    /// - set VAB_Currency_ID 
+    /// - VAB_BusinessPartner_ID
     /// - DiscountAmt = C_Invoice_Discount (ID, DateTrx)
     /// - PayAmt = invoiceOpen (ID) - Discount
     /// - WriteOffAmt = 0
@@ -18174,7 +18174,7 @@
         }
         this.setCalloutActive(true);
         mTab.setValue("C_Order_ID", null);
-        mTab.setValue("C_Charge_ID", null);
+        mTab.setValue("VAB_Charge_ID", null);
         mTab.setValue("IsPrepayment", false);//Boolean.FALSE);
         //
         mTab.setValue("DiscountAmt", VIS.Env.ZERO);
@@ -18234,8 +18234,8 @@
         //+ "  AND ips.C_InvoicePaySchedule_ID NOT IN"
         //+ "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
         //+ "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule) union "
-        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE c_cashline_id IN"
-        //+ "(SELECT NVL(c_cashline_id,0) FROM C_InvoicePaySchedule )) "
+        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE VAB_CashJRNLLine_id IN"
+        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
         //+ " ORDER BY ips.duedate ASC  ) WHERE rownum=1";
         //var drAmt = null;
         //try {
@@ -18340,13 +18340,13 @@
         try {
             dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
             if (dr != null) {
-                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr["C_BPartner_ID"]));//.getInt(1)));
-                mTab.setValue("C_Bpartner_Location_Id", Util.getValueOfInt(dr["C_Bpartner_Location_Id"]));
-                var C_Currency_ID = Util.getValueOfInt(dr["C_Currency_ID"]);					//	Set Invoice Currency
-                mTab.setValue("C_Currency_ID", C_Currency_ID);
+                mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(dr["VAB_BusinessPartner_ID"]));//.getInt(1)));
+                mTab.setValue("VAB_BPart_Location_Id", Util.getValueOfInt(dr["VAB_BPart_Location_Id"]));
+                var VAB_Currency_ID = Util.getValueOfInt(dr["VAB_Currency_ID"]);					//	Set Invoice Currency
+                mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
 
                 // JID_1208: System should set Currency Type that is defined on Invoice.
-                mTab.setValue("C_ConversionType_ID", dr["C_ConversionType_ID"]);
+                mTab.setValue("VAB_CurrencyType_ID", dr["VAB_CurrencyType_ID"]);
                 var invoiceOpen = Util.getValueOfDecimal(dr["invoiceOpen"]);            		//	Set Invoice Open Amount
                 if (invoiceOpen == null) {
                     invoiceOpen = VIS.Env.ZERO;
@@ -18381,7 +18381,7 @@
 
         }
 
-        //var sql = "SELECT C_BPartner_ID,C_Currency_ID,C_Bpartner_Location_Id,"		//	1..2
+        //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,VAB_BPart_Location_Id,"		//	1..2
         //    + " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen ,"					//	3		#1
         //    + " invoiceDiscount(C_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx, IsInDispute "	//	4..5	#2/3
         //    + "FROM C_Invoice WHERE C_Invoice_ID=@param4";			//			#4
@@ -18397,10 +18397,10 @@
         //    dr = VIS.DB.executeReader(sql, param, null);
 
         //    if (dr.read()) {
-        //        mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr.get("c_bpartner_id")));//.getInt(1)));
-        //        mTab.setValue("C_Bpartner_Location_Id", Util.getValueOfInt(dr.get("c_bpartner_location_id")));
-        //        var C_Currency_ID = Util.getValueOfInt(dr.get("c_currency_id"));//dr.getInt(2);					//	Set Invoice Currency
-        //        mTab.setValue("C_Currency_ID", C_Currency_ID);
+        //        mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(dr.get("VAB_BusinessPartner_id")));//.getInt(1)));
+        //        mTab.setValue("VAB_BPart_Location_Id", Util.getValueOfInt(dr.get("VAB_BPart_Location_id")));
+        //        var VAB_Currency_ID = Util.getValueOfInt(dr.get("VAB_Currency_id"));//dr.getInt(2);					//	Set Invoice Currency
+        //        mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
         //        //
         //        var invoiceOpen = Util.getValueOfDecimal(dr.get("invoiceopen"));//.getBigDecimal(3);		//	Set Invoice OPen Amount
         //        if (invoiceOpen == null) {
@@ -18450,8 +18450,8 @@
     /// <summary>
     /// Payment_Order.
     /// when Waiting Payment Order selected
-    /// - set C_Currency_ID
-    /// - C_BPartner_ID
+    /// - set VAB_Currency_ID
+    /// - VAB_BusinessPartner_ID
     /// - DiscountAmt = C_Invoice_Discount (ID, DateTrx)
     /// - PayAmt = invoiceOpen (ID) - Discount
     /// - WriteOffAmt = 0
@@ -18475,7 +18475,7 @@
         }
         this.setCalloutActive(true);
         mTab.setValue("C_Invoice_ID", null);
-        mTab.setValue("C_Charge_ID", null);
+        mTab.setValue("VAB_Charge_ID", null);
         mTab.setValue("IsPrepayment", true);// Boolean.TRUE);
         //
         mTab.setValue("DiscountAmt", VIS.Env.ZERO);
@@ -18495,10 +18495,10 @@
         try {
             dr = VIS.dataContext.getJSONRecord("MPayment/GetOrderData", paramString);
             if (dr != null) {
-                mTab.setValue("C_BPartner_ID", Util.getValueOfInt(dr["C_BPartner_ID"]));
-                mTab.setValue("C_Bpartner_Location_Id", Util.getValueOfInt(dr["C_BPartner_Location_ID"]));
-                mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr["C_Currency_ID"]));
-                mTab.setValue("C_ConversionType_ID", Util.getValueOfInt(dr["C_ConversionType_ID"]));
+                mTab.setValue("VAB_BusinessPartner_ID", Util.getValueOfInt(dr["VAB_BusinessPartner_ID"]));
+                mTab.setValue("VAB_BPart_Location_Id", Util.getValueOfInt(dr["VAB_BPart_Location_ID"]));
+                mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr["VAB_Currency_ID"]));
+                mTab.setValue("VAB_CurrencyType_ID", Util.getValueOfInt(dr["VAB_CurrencyType_ID"]));
                 //
                 var grandTotal = Util.getValueOfDecimal(dr["GrandTotal"]);
                 if (grandTotal == null) {
@@ -18535,7 +18535,7 @@
     };
     /// <summary>
     /// Payment_Charge.
-    /// - reset - C_BPartner_ID, Invoice, Order, Project,
+    /// - reset - VAB_BusinessPartner_ID, Invoice, Order, Project,
     /// Discount, WriteOff
     /// </summary>
     /// <param name="ctx">context</param>
@@ -18549,10 +18549,10 @@
         if (value == null || value.toString() == "") {
             return "";
 
-            var C_Charge_ID = value;
+            var VAB_Charge_ID = value;
             if (this.isCalloutActive()		//	assuming it is resetting value
-                || C_Charge_ID == null
-                || C_Charge_ID == 0) {
+                || VAB_Charge_ID == null
+                || VAB_Charge_ID == 0) {
                 return "";
             }
             this.setCalloutActive(true);
@@ -18585,14 +18585,14 @@
 
         var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
         var C_Order_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
-        var C_DocType_ID = ctx.getContextAsInt(windowNo, "C_DocType_ID");
-        this.log.fine("Payment_DocType - C_Invoice_ID=" + C_Invoice_ID + ", C_DocType_ID=" + C_DocType_ID);
-        var paramString = C_DocType_ID.toString();
+        var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
+        this.log.fine("Payment_DocType - C_Invoice_ID=" + C_Invoice_ID + ", VAB_DocTypes_ID=" + VAB_DocTypes_ID);
+        var paramString = VAB_DocTypes_ID.toString();
 
         var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", paramString);
         var isSOTrx = Util.getValueOfBoolean(dt["IsSOTrx"]);
-        if (C_DocType_ID != 0) {
-            // dt = MDocType.Get(ctx, C_DocType_ID);
+        if (VAB_DocTypes_ID != 0) {
+            // dt = MDocType.Get(ctx, VAB_DocTypes_ID);
 
             // ctx.setIsSOTrx(windowNo, dt["IsSOTrx"]);
             // Change by mohit to set the Sales transaction value in window context according to the selection of document type on payment window- asked by Mukesh Sir- 3 April 2019.
@@ -18642,7 +18642,7 @@
         /*
         this.setCalloutActive(true);
         var amounts = "";
-        var bp_BusinessPartner = mTab.getValue("C_BPartner_ID");
+        var bp_BusinessPartner = mTab.getValue("VAB_BusinessPartner_ID");
         var asOnDate = mTab.getValue("AsOnDate");
         if (asOnDate == "" || asOnDate == null || bp_BusinessPartner == "" || bp_BusinessPartner == null) {
             mTab.setValue("OutStandingAmount", amounts);
@@ -18667,7 +18667,7 @@
         */
         this.setCalloutActive(true);
 
-        var bp_BusinessPartner = mTab.getValue("C_BPartner_ID");
+        var bp_BusinessPartner = mTab.getValue("VAB_BusinessPartner_ID");
         var asOnDate = mTab.getValue("AsOnDate");
         asOnDate = VIS.DB.to_date(asOnDate, true);
         // changed by Bharat on 06 April 2017 for AP Payment and AR Receipt cases
@@ -18675,14 +18675,14 @@
             "(SELECT ConvertPrice, ROW_NUMBER () OVER (ORDER BY ConvertPrice ) RN, COUNT (*) OVER () CNT FROM " +
             "(SELECT iso_code || ':' || SUM(OpenAmt) AS ConvertPrice " +
             "FROM (SELECT c.iso_code,  invoiceOpen (i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)*MultiplierAP AS OpenAmt  FROM C_Invoice_V i " +
-            "LEFT JOIN C_Currency C ON C.C_Currency_ID=i.C_Currency_ID " +
+            "LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=i.VAB_Currency_ID " +
             "LEFT JOIN C_InvoicePaySchedule IPS ON IPS.c_invoice_ID = i.c_invoice_ID " +
             "WHERE i.docstatus IN ('CO','CL') " +
             "AND i.IsActive ='Y' " +
             "AND i.ispaid ='N' " +
             "AND ips.duedate IS NOT NULL " +
             "AND NVL(ips.dueamt,0)!=0 " +
-            "AND i.c_bpartner_id = " + bp_BusinessPartner +
+            "AND i.VAB_BusinessPartner_id = " + bp_BusinessPartner +
             "AND to_date(ips.duedate,'dd-mm-yyyy')" +
             "<= ( CASE " +
             "WHEN to_date(" + asOnDate + ",'dd-mm-yyyy')>to_date(sysdate,'dd-mm-yyyy') " +
@@ -18690,9 +18690,9 @@
             "ELSE to_date(" + asOnDate + ",'dd-mm-yyyy') " +
             "END ) " +
             "UNION SELECT c.iso_code, paymentAvailable(p.C_Payment_ID)*p.MultiplierAP*-1 AS OpenAmt " +
-            "FROM C_Payment_v p LEFT JOIN C_Currency C ON C.C_Currency_ID=p.C_Currency_ID " +
+            "FROM C_Payment_v p LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=p.VAB_Currency_ID " +
             "LEFT JOIN c_payment pay ON (p.c_payment_id   =pay.c_payment_ID) WHERE p.IsAllocated  ='N' " +
-            "AND p.C_BPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " +
+            "AND p.VAB_BUSINESSPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " +
             "AND to_date(pay.DateTrx,'dd-mm-yyyy')" +
             "<=( CASE " +
             "WHEN to_date(" + asOnDate + ",'dd-mm-yyyy')>to_date(sysdate,'dd-mm-yyyy') " +
@@ -18728,8 +18728,8 @@
                      ELSE pdc.VA027_PayAmt END AS PdcDue \
                       FROM VA027_PostDatedCheck pdc LEFT JOIN VA027_ChequeDetails chk \
                       ON chk.VA027_PostDatedCheck_ID = pdc.VA027_PostDatedCheck_ID \
-                      INNER JOIN C_Currency C ON C.C_Currency_ID=PDC.C_Currency_ID \
-                      INNER JOIN C_DocType doc ON doc.C_DocType_ID = pdc.C_DocType_ID\
+                      INNER JOIN VAB_Currency C ON C.VAB_Currency_ID=PDC.VAB_Currency_ID \
+                      INNER JOIN VAB_DocTypes doc ON doc.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID\
                       WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDR'\
                       AND pdc.DocStatus = 'CO' \
                       AND pdc.VA027_PAYMENTGENERATED ='N'\
@@ -18738,15 +18738,15 @@
                       THEN to_date(chk.VA027_CheckDate,'dd-mm-yyyy') " +
                         "ELSE to_date(pdc.VA027_CheckDate,'dd-mm-yyyy') " +
                         "END ) <= to_date(" + asOnDate + ", 'dd-mm-yyyy') \
-                       AND PDC.c_bpartner_id = " + bp_BusinessPartner +
+                       AND PDC.VAB_BusinessPartner_id = " + bp_BusinessPartner +
                         " UNION SELECT c.iso_code, \
                        CASE WHEN (pdc.VA027_MultiCheque = 'Y') \
                         THEN chk.VA027_ChequeAmount*-1 \
                         ELSE pdc.VA027_PayAmt*-1 END AS PdcDue \
                         FROM VA027_PostDatedCheck pdc LEFT JOIN VA027_ChequeDetails chk \
                         ON chk.VA027_PostDatedCheck_ID = pdc.VA027_PostDatedCheck_ID \
-                        INNER JOIN C_Currency C ON C.C_Currency_ID=pdc.C_Currency_ID \
-                        INNER JOIN C_DocType doc ON doc.C_DocType_ID = pdc.C_DocType_ID \
+                        INNER JOIN VAB_Currency C ON C.VAB_Currency_ID=pdc.VAB_Currency_ID \
+                        INNER JOIN VAB_DocTypes doc ON doc.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID \
                         WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDP' \
                         AND pdc.VA027_PAYMENTGENERATED ='N' \
                         AND pdc.VA027_PaymentStatus !=3 \
@@ -18754,7 +18754,7 @@
                       THEN to_date(chk.VA027_CheckDate,'dd-mm-yyyy') " +
                         "ELSE to_date(pdc.VA027_CheckDate,'dd-mm-yyyy') " +
                         "END ) <= to_date(" + asOnDate + ", 'dd-mm-yyyy') \
-                       AND pdc.c_bpartner_id = " + bp_BusinessPartner +
+                       AND pdc.VAB_BusinessPartner_id = " + bp_BusinessPartner +
                         ") GROUP BY iso_code \
                       )\
                      )\
@@ -18808,7 +18808,7 @@
     /// Payment_Amounts.
     /// Change of:
     /// - IsOverUnderPayment -> set OverUnderAmt to 0
-    /// - C_Currency_ID, C_ConvesionRate_ID -> convert all
+    /// - VAB_Currency_ID, C_ConvesionRate_ID -> convert all
     /// - PayAmt, DiscountAmt, WriteOffAmt, OverUnderAmt -> PayAmt
     /// make sure that add up to InvoiceOpenAmt
     /// </summary>
@@ -18828,11 +18828,11 @@
         var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
         //	New Payment
         if (ctx.getContextAsInt(windowNo, "C_Payment_ID") == 0
-            && ctx.getContextAsInt(windowNo, "C_BPartner_ID") == 0
+            && ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID") == 0
             && C_Invoice_ID == 0) {
             return "";
         }
-        var cur = mTab.getValue("C_Currency_ID");
+        var cur = mTab.getValue("VAB_Currency_ID");
         if (cur == null) {
             return "";
         }
@@ -18851,7 +18851,7 @@
             //	Get Open Amount & Invoice Currency
             var invoiceOpenAmt = VIS.Env.ZERO;
             var discountAmt = VIS.Env.ZERO;
-            var C_Currency_Invoice_ID = 0, conversionType_Invioce_ID = 0;
+            var VAB_Currency_Invoice_ID = 0, conversionType_Invioce_ID = 0;
             var IsReturnTrx = "N";
             var checkPrecision = true;
             if (C_Invoice_ID != 0) {
@@ -18865,8 +18865,8 @@
                 var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
                 var dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
                 if (dr != null) {
-                    C_Currency_Invoice_ID = Util.getValueOfInt(dr["C_Currency_ID"]);
-                    conversionType_Invioce_ID = Util.getValueOfInt(dr["C_ConversionType_ID"]);
+                    VAB_Currency_Invoice_ID = Util.getValueOfInt(dr["VAB_Currency_ID"]);
+                    conversionType_Invioce_ID = Util.getValueOfInt(dr["VAB_CurrencyType_ID"]);
                     invoiceOpenAmt = Util.getValueOfDecimal(dr["invoiceOpen"]);
                     if (invoiceOpenAmt == null) {
                         invoiceOpenAmt = VIS.Env.ZERO;
@@ -18874,7 +18874,7 @@
                     discountAmt = Util.getValueOfDecimal(dr["invoiceDiscount"]);
                     IsReturnTrx = dr["IsReturnTrx"];
                 }
-                //var sql = "SELECT C_BPartner_ID,C_Currency_ID,"		//	1..2
+                //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		//	1..2
                 //    + " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"					//	3		#1
                 //    + " invoiceDiscount(C_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx "	//	4..5	#2/3
                 //    + "FROM C_Invoice WHERE C_Invoice_ID=@param4";			//			#4
@@ -18890,7 +18890,7 @@
                 //    dr = CalloutDB.executeCalloutReader(sql, param, null);
 
                 //    if (dr.read()) {
-                //        C_Currency_Invoice_ID = Util.getValueOfInt(dr.get("c_currency_id"));//.getInt(2);
+                //        VAB_Currency_Invoice_ID = Util.getValueOfInt(dr.get("VAB_Currency_id"));//.getInt(2);
                 //        invoiceOpenAmt = Util.getValueOfDecimal(dr.get("invoiceopen"));//.getBigDecimal(3);		//	Set Invoice Open Amount
                 //        if (invoiceOpenAmt == null) {
                 //            invoiceOpenAmt = VIS.Env.ZERO;
@@ -18911,7 +18911,7 @@
 
             this.log.fine("Open=" + invoiceOpenAmt + " Discount= " + discountAmt
                 + ", C_Invoice_ID=" + C_Invoice_ID
-                + ", C_Currency_ID=" + C_Currency_Invoice_ID);
+                + ", VAB_Currency_ID=" + VAB_Currency_Invoice_ID);
 
             //	Get Info from Tab
             if (colName == "PaymentAmount") {
@@ -18978,46 +18978,46 @@
             this.log.fine("Pay=" + payAmt + ", Discount=" + enteredDiscountAmt
                 + ", WriteOff=" + writeOffAmt + ", OverUnderAmt=" + overUnderAmt);
             //	Get Currency Info
-            var C_Currency_ID = Util.getValueOfInt(cur);
-            var paramString = C_Currency_ID.toString();
+            var VAB_Currency_ID = Util.getValueOfInt(cur);
+            var paramString = VAB_Currency_ID.toString();
             var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
             var precision = currency["StdPrecision"];
-            //MCurrency currency = MCurrency.Get(ctx, C_Currency_ID);
+            //MCurrency currency = MCurrency.Get(ctx, VAB_Currency_ID);
             var ConvDate = mTab.getValue("DateAcct");
-            var C_ConversionType_ID = 0;
-            var ii = Util.getValueOfInt(mTab.getValue("C_ConversionType_ID"));
+            var VAB_CurrencyType_ID = 0;
+            var ii = Util.getValueOfInt(mTab.getValue("VAB_CurrencyType_ID"));
             if (ii != null) {
-                C_ConversionType_ID = ii;
+                VAB_CurrencyType_ID = ii;
             }
             var VAF_Client_ID = ctx.getContextAsInt(windowNo, "VAF_Client_ID");
             var VAF_Org_ID = ctx.getContextAsInt(windowNo, "VAF_Org_ID");
             //	Get Currency Rate
             var currencyRate = VIS.Env.ONE;
-            if ((C_Currency_ID > 0 && C_Currency_Invoice_ID > 0 && C_Currency_ID != C_Currency_Invoice_ID) || colName == "C_Currency_ID" || colName == "C_ConversionType_ID") {
-                this.log.fine("InvCurrency=" + C_Currency_Invoice_ID
-                    + ", PayCurrency=" + C_Currency_ID
-                    + ", Date=" + ConvDate + ", Type=" + C_ConversionType_ID);
+            if ((VAB_Currency_ID > 0 && VAB_Currency_Invoice_ID > 0 && VAB_Currency_ID != VAB_Currency_Invoice_ID) || colName == "VAB_Currency_ID" || colName == "VAB_CurrencyType_ID") {
+                this.log.fine("InvCurrency=" + VAB_Currency_Invoice_ID
+                    + ", PayCurrency=" + VAB_Currency_ID
+                    + ", Date=" + ConvDate + ", Type=" + VAB_CurrencyType_ID);
 
 
-                var paramStr = C_Currency_Invoice_ID + "," + C_Currency_ID + "," + ConvDate + "," + C_ConversionType_ID + "," + VAF_Client_ID + "," + VAF_Org_ID;
+                var paramStr = VAB_Currency_Invoice_ID + "," + VAB_Currency_ID + "," + ConvDate + "," + VAB_CurrencyType_ID + "," + VAF_Client_ID + "," + VAF_Org_ID;
                 currencyRate = VIS.dataContext.getJSONRecord("MConversionRate/GetRate", paramStr);
 
-                //currencyRate = MConversionRate.GetRate(C_Currency_Invoice_ID, C_Currency_ID,
-                //    ConvDate, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+                //currencyRate = MConversionRate.GetRate(VAB_Currency_Invoice_ID, VAB_Currency_ID,
+                //    ConvDate, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
                 if (currencyRate == null || currencyRate.toString() == 0) {
-                    //	 mTab.setValue("C_Currency_ID", new int(C_Currency_Invoice_ID));	//	does not work
+                    //	 mTab.setValue("VAB_Currency_ID", new int(VAB_Currency_Invoice_ID));	//	does not work
                     this.setCalloutActive(false);
-                    if (C_Currency_Invoice_ID == 0) {
+                    if (VAB_Currency_Invoice_ID == 0) {
                         return "";		//	no error message when no invoice is selected
                     }
-                    mTab.setValue("C_Currency_ID", C_Currency_Invoice_ID);
+                    mTab.setValue("VAB_Currency_ID", VAB_Currency_Invoice_ID);
 
                     // Set Invoice Currency and Currency Type if Currency Conversion not available
-                    if (colName == "C_ConversionType_ID") {
+                    if (colName == "VAB_CurrencyType_ID") {
                         if (conversionType_Invioce_ID == 0) {
                             return "";
                         }
-                        mTab.setValue("C_ConversionType_ID", conversionType_Invioce_ID);
+                        mTab.setValue("VAB_CurrencyType_ID", conversionType_Invioce_ID);
                     }
                     return "NoCurrencyConversion";
                 }
@@ -19031,7 +19031,7 @@
             }
 
             //	Currency Changed - convert all
-            if (colName == "C_Currency_ID" || colName == "C_ConversionType_ID") {
+            if (colName == "VAB_Currency_ID" || colName == "VAB_CurrencyType_ID") {
 
                 //writeOffAmt = (writeOffAmt * currencyRate).toFixed(currency["StdPrecision"]);
                 writeOffAmt = 0;
@@ -19186,14 +19186,14 @@
             return "";
         }
 
-        var c_bankaccount_ID = value;
+        var VAB_Bank_Acct_ID = value;
         if (this.isCalloutActive()) {
             return "";
         }
         this.setCalloutActive(true);
         try {
-            var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", c_bankaccount_ID.toString()));
-            mTab.setValue("C_Currency_ID", currency);
+            var currency = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPayment/GetBankAcctCurrency", VAB_Bank_Acct_ID.toString()));
+            mTab.setValue("VAB_Currency_ID", currency);
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -19289,8 +19289,8 @@
             if (value == null || value.toString() == "") {
                 return "";
             }
-            var C_DocType_ID = value;		//	Actually C_DocTypeTarget_ID
-            if (C_DocType_ID == null || C_DocType_ID == 0) {
+            var VAB_DocTypes_ID = value;		//	Actually VAB_DocTypesTarget_ID
+            if (VAB_DocTypes_ID == null || VAB_DocTypes_ID == 0) {
                 return "";
             }
             var oldDocNo;
@@ -19309,27 +19309,27 @@
             var newDocNo = (oldDocNo == null);
             if (!newDocNo && oldDocNo.toString().startsWith("<") && oldDocNo.toString().endsWith(">"))
                 newDocNo = true;
-            var oldC_DocType_ID = mTab.getValue("C_DocType_ID");
+            var oldVAB_DocTypes_ID = mTab.getValue("VAB_DocTypes_ID");
 
             sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
                 + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
                 + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx "              //	7..9
                 /*//jz right outer join
-                + "FROM C_DocType d, VAF_Record_Seq s "
-                + "WHERE C_DocType_ID=?"	//	#1
+                + "FROM VAB_DocTypes d, VAF_Record_Seq s "
+                + "WHERE VAB_DocTypes_ID=?"	//	#1
                 + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)"; */
-                + "FROM C_DocType d "
+                + "FROM VAB_DocTypes d "
                 + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
-                + "WHERE C_DocType_ID=";	//	#1
+                + "WHERE VAB_DocTypes_ID=";	//	#1
 
             var VAF_Record_Seq_ID = 0;
             //DataSet ds = new DataSet();
             var ds = null;
             //	Get old AD_SeqNo for comparison
-            if (!newDocNo && oldC_DocType_ID != 0) {
-                sql = sql + oldC_DocType_ID;
+            if (!newDocNo && oldVAB_DocTypes_ID != 0) {
+                sql = sql + oldVAB_DocTypes_ID;
                 ds = VIS.DB.executeDataset(sql, null);
-                //ds.setInt(1, oldC_DocType_ID.intValue());
+                //ds.setInt(1, oldVAB_DocTypes_ID.intValue());
                 //ResultSet dr = ds.executeQuery();
                 for (var i = 0; i < ds.getTables()[0].rows.count; i++) {
                     // DataRow dr = ds.Tables[0].Rows[i];
@@ -19337,7 +19337,7 @@
                 }
             }
             else {
-                sql = sql + C_DocType_ID;
+                sql = sql + VAB_DocTypes_ID;
                 ds = VIS.DB.executeDataset(sql, null);
             }
             var DocSubTypeSO = "";
@@ -19428,13 +19428,13 @@
 
             }
             else {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 sql = "SELECT PaymentRule,C_PaymentTerm_ID,"            //  1..2
                     + "InvoiceRule,DeliveryRule,"                       //  3..4
                     + "FreightCostRule,DeliveryViaRule, "               //  5..6
                     + "PaymentRulePO,PO_PaymentTerm_ID "
-                    + "FROM C_BPartner "
-                    + "WHERE C_BPartner_ID=" + C_BPartner_ID;		//	#1
+                    + "FROM VAB_BusinessPartner "
+                    + "WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;		//	#1
                 ds = VIS.DB.executeDataset(sql, null);
                 for (var i = 0; i < ds.getTables()[0].rows.count; i++) {
                     var dr = ds.getTables()[0].rows[i];
@@ -19489,7 +19489,7 @@
     /// <summary>
     /// Order Header - BPartner.
     /// - M_PriceList_ID (+ Context)
-    /// - C_BPartner_Location_ID
+    /// - VAB_BPart_Location_ID
     /// - Bill_BPartner_ID/Bill_Location_ID
     /// 	- VAF_UserContact_ID
     /// 	- POReference
@@ -19559,10 +19559,10 @@
             if (value == null || value == 0 || value.toString() == "") {
                 return "";
             }
-            var C_BPartner_ID = 0;
+            var VAB_BusinessPartner_ID = 0;
             if (value != null)
-                C_BPartner_ID = Util.getValueOfInt(value.toString());
-            if (C_BPartner_ID == 0)
+                VAB_BusinessPartner_ID = Util.getValueOfInt(value.toString());
+            if (VAB_BusinessPartner_ID == 0)
                 return "";
 
             // Skip rest of steps for RMA. These fields are copied over from the orignal order instead.
@@ -19577,15 +19577,15 @@
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + " lship.C_BPartner_Location_ID,c.VAF_UserContact_ID,"
+                + " lship.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
                 + " COALESCE(p.PO_PriceList_ID,g.PO_PriceList_ID) AS PO_PriceList_ID, p.PaymentRulePO,p.PO_PaymentTerm_ID,"
-                + " lbill.C_BPartner_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
-                + "FROM C_BPartner p"
-                + " INNER JOIN C_BP_Group g ON (p.C_BP_Group_ID=g.C_BP_Group_ID)"
-                + " LEFT OUTER JOIN C_BPartner_Location lbill ON (p.C_BPartner_ID=lbill.C_BPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
-                + " LEFT OUTER JOIN C_BPartner_Location lship ON (p.C_BPartner_ID=lship.C_BPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
+                + " lbill.VAB_BPart_Location_ID AS Bill_Location_ID, p.SOCreditStatus, lbill.IsShipTo "
+                + "FROM VAB_BusinessPartner p"
+                + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID)"
+                + " LEFT OUTER JOIN VAB_BPart_Location lbill ON (p.VAB_BusinessPartner_ID=lbill.VAB_BusinessPartner_ID AND lbill.IsBillTo='Y' AND lbill.IsActive='Y')"
+                + " LEFT OUTER JOIN VAB_BPart_Location lship ON (p.VAB_BusinessPartner_ID=lship.VAB_BusinessPartner_ID AND lship.IsShipTo='Y' AND lship.IsActive='Y')"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND p.IsActive='Y'";		//	#1
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
             var ds = VIS.DB.executeDataset(sql, null);
@@ -19605,7 +19605,7 @@
                 //        mTab.setValue("M_PriceList_ID", i1);
                 //}
                 //	Bill-To BPartner
-                mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
+                mTab.setValue("Bill_BPartner_ID", VAB_BusinessPartner_ID);
                 var bill_Location_ID = Util.getValueOfInt(dr.get("bill_location_id"));
                 if (bill_Location_ID == 0)
                     mTab.setValue("Bill_Location_ID", null);
@@ -19613,24 +19613,24 @@
                     mTab.setValue("Bill_Location_ID", bill_Location_ID);
 
                 // Ship-To Location
-                var shipTo_ID = Util.getValueOfInt(dr.get("c_bpartner_location_id"));
+                var shipTo_ID = Util.getValueOfInt(dr.get("VAB_BPart_Location_id"));
                 //	overwritten by InfoBP selection - works only if InfoWindow
                 //	was used otherwise creates error (uses last value, may belong to differnt BP)
-                if (C_BPartner_ID.toString().equals(ctx.getContext("C_BPartner_ID"))) {
-                    var loc = ctx.getContext("C_BPartner_Location_ID");
+                if (VAB_BusinessPartner_ID.toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
+                    var loc = ctx.getContext("VAB_BPart_Location_ID");
                     if (loc.toString().length > 0)
                         shipTo_ID = int.Parse(loc);
                 }
                 if (shipTo_ID == 0)
-                    mTab.setValue("C_BPartner_Location_ID", null);
+                    mTab.setValue("VAB_BPart_Location_ID", null);
                 else {
-                    mTab.setValue("C_BPartner_Location_ID", shipTo_ID);
+                    mTab.setValue("VAB_BPart_Location_ID", shipTo_ID);
                     if ("Y".toString().equals(Util.getValueOfString(dr.get("isshipto"))))	//	set the same
                         mTab.setValue("Bill_Location_ID", shipTo_ID);
                 }
                 //	Contact - overwritten by InfoBP selection
                 var contID = Util.getValueOfInt(dr.get("VAF_UserContact_id").toString());
-                if (C_BPartner_ID.toString().toString().equals(ctx.getContext("C_BPartner_ID"))) {
+                if (VAB_BusinessPartner_ID.toString().toString().equals(ctx.getContext("VAB_BusinessPartner_ID"))) {
                     var cont = ctx.getContext("VAF_UserContact_ID");
                     if (cont.toString().length > 0)
                         contID = Util.getValueOfInt(cont);
@@ -19736,8 +19736,8 @@
 
     /// <summary>
     /// Order Line - Product.
-    /// - reset C_Charge_ID / M_AttributeSetInstance_ID
-    /// - PriceList, PriceStd, PriceLimit, C_Currency_ID, EnforcePriceLimit
+    /// - reset VAB_Charge_ID / M_AttributeSetInstance_ID
+    /// - PriceList, PriceStd, PriceLimit, VAB_Currency_ID, EnforcePriceLimit
     /// - UOM
     /// Calls Tax
     /// </summary>
@@ -19770,7 +19770,7 @@
                 this.log.warning("init");
             }
             //
-            mTab.setValue("C_Charge_ID", null);
+            mTab.setValue("VAB_Charge_ID", null);
             //	Set Attribute
             // JID_0910: On change of product on line system is not removing the ASI. if product is changed then also update the ASI field.
 
@@ -19783,11 +19783,11 @@
             //}
 
             /*****	Price Calculation see also qty	****/
-            var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+            var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
             var Qty = Util.getValueOfDecimal(mTab.getValue("QtyEntered"));
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-            //        M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+            //        M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
             // pp.SetM_PriceList_ID(M_PriceList_ID);
 
@@ -19811,7 +19811,7 @@
             countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var purchasingUom = 0;
             if (countEd011 > 0) {
-                sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  C_BPartner_ID = " + Util.getValueOfInt(mTab.getValue("C_BPartner_ID")) +
+                sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = " + Util.getValueOfInt(mTab.getValue("VAB_BusinessPartner_ID")) +
                     " AND M_Product_ID = " + M_Product_ID;
                 purchasingUom = Util.getValueOfInt(VIS.DB.executeScalar(sql));
 
@@ -19826,7 +19826,7 @@
             var C_UOM_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
 
 
-            var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                 Qty.toString(), ",", //3
                 isSOTrx, ",", //4 
                 M_PriceList_ID.toString(), ",", //5
@@ -19835,7 +19835,7 @@
                 null, ",", null, ",",  //8 , 9
                 C_UOM_ID, ",", countEd011); // 10 , 11
 
-            //var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+            //var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
             //                                           Qty.toString(), ",", //3
             //                                           isSOTrx, ",", //4 
             //                                           M_PriceList_ID.toString(), ",", //5
@@ -19850,7 +19850,7 @@
             //mTab.setValue("PriceLimit", pp.GetPriceLimit());
             //mTab.setValue("PriceActual", pp.GetPriceStd());
             //mTab.setValue("PriceEntered", pp.GetPriceStd());
-            //mTab.setValue("C_Currency_ID", Util.getValueOfInt(pp.GetC_Currency_ID()));
+            //mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(pp.GetVAB_Currency_ID()));
             //mTab.setValue("Discount", pp.GetDiscount());
             //mTab.setValue("C_UOM_ID", Util.getValueOfInt(pp.GetC_UOM_ID()));
             //mTab.setValue("QtyEntered", mTab.getValue("QtyEntered"));
@@ -19862,8 +19862,8 @@
             mTab.setValue("PriceLimit", dr.PriceLimit);
             mTab.setValue("PriceActual", dr.PriceActual);
             mTab.setValue("PriceEntered", dr.PriceEntered);
-            if (Util.getValueOfInt(dr.C_Currency_ID) > 0) {
-                mTab.setValue("C_Currency_ID", Util.getValueOfInt(dr.C_Currency_ID));
+            if (Util.getValueOfInt(dr.VAB_Currency_ID) > 0) {
+                mTab.setValue("VAB_Currency_ID", Util.getValueOfInt(dr.VAB_Currency_ID));
             }
             mTab.setValue("Discount", dr.Discount);
             mTab.setValue("C_UOM_ID", Util.getValueOfInt(dr.C_UOM_ID));
@@ -20003,7 +20003,7 @@
                 || mField.getColumnName().toString().equals("QtyEntered")
                 || mField.getColumnName().toString().equals("M_Product_ID"))
                 && !"N".toString().equals(ctx.getContext("DiscountSchema"))) {
-                var C_BPartner_ID = ctx.getContextAsInt(windowNo, "C_BPartner_ID");
+                var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
                 if (mField.getColumnName().toString().equals("QtyEntered")) {
                     var paramString = M_Product_ID.toString() + "," + C_UOM_To_ID.toString() + "," + QtyEntered.toString();
                     //QtyEntered = MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
@@ -20030,7 +20030,7 @@
                 countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 var purchasingUom = 0;
                 if (countEd011 > 0) {
-                    sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  C_BPartner_ID = " + Util.getValueOfInt(mTab.getValue("C_BPartner_ID")) +
+                    sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = " + Util.getValueOfInt(mTab.getValue("VAB_BusinessPartner_ID")) +
                         " AND M_Product_ID = " + M_Product_ID;
                     purchasingUom = Util.getValueOfInt(VIS.DB.executeScalar(sql));
 
@@ -20045,7 +20045,7 @@
                 var C_UOM_ID = Util.getValueOfInt(mTab.getValue("C_UOM_ID"))
 
 
-                var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                     QtyEntered.toString(), ",", //3
                     isSOTrx, ",", //4 
                     M_PriceList_ID.toString(), ",", //5
@@ -20054,7 +20054,7 @@
                     null, ",", null, ",",  //8 , 9
                     C_UOM_ID, ",", countEd011); // 10 , 11
 
-                //var paramString = M_Product_ID.toString().concat(",", C_BPartner_ID.toString(), ",", //2
+                //var paramString = M_Product_ID.toString().concat(",", VAB_BusinessPartner_ID.toString(), ",", //2
                 //                                            QtyEntered.toString(), ",", //3
                 //                                            isSOTrx, ",", //4 
                 //                                            M_PriceList_ID.toString(), ",", //5
@@ -20067,7 +20067,7 @@
 
 
                 //MProductPricing pp = new MProductPricing(ctx.getVAF_Client_ID(), ctx.getVAF_Org_ID(),
-                //        M_Product_ID, C_BPartner_ID, QtyEntered, isSOTrx);
+                //        M_Product_ID, VAB_BusinessPartner_ID, QtyEntered, isSOTrx);
                 //pp.SetM_PriceList_ID(M_PriceList_ID);
                 //var M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
                 //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
@@ -20734,7 +20734,7 @@
         }
         this.setCalloutActive(true);
 
-        if ((Util.getValueOfString(VIS.DB.executeScalar("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID=" + value))).toLower() == "C_GenAttributeSetInstance_ID".toLower()) {
+        if ((Util.getValueOfString(VIS.DB.executeScalar("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID=" + value))).toLower() == "VAB_GenFeatureSetInstance_ID".toLower()) {
             ctx.setContext(windowNo, "IsGenericAttribute", "Y");
         }
         else {
@@ -20815,11 +20815,11 @@
                 //this.setCalloutActive(false);
 
                 //Neha-- Update End Date on the basis of No of Cycle on Sales Order Line and Start Date and Billing Frequency (No of Months)” 05 Sep,2018
-                // var frequency = Util.getValueOfInt(mTab.getValue("C_Frequency_ID"));
-                //var Sql = "Select NoOfMonths from C_Frequency where C_Frequency_ID=" + frequency;
+                // var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
+                //var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                 //var months = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
                 var months = "";
-                months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("C_Frequency_ID")));
+                months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
                 var SDate = new Date(mTab.getValue("StartDate"));
                 var endDate = SDate.setMonth(SDate.getMonth() + (months * Util.getValueOfInt(mTab.getValue("NoofCycle"))));
                 endDate = new Date(SDate.setDate(SDate.getDate() - 1));
@@ -20848,9 +20848,9 @@
             return "";
 
         }
-        if (Util.getValueOfInt(mTab.getValue("C_DocTypeTarget_ID")) != 0) {
-            var sql = "select dc.DocSubTypeSO from c_doctype dc inner join c_docbasetype db on(dc.DocBaseType=db.DocBaseType)"
-                + "where c_doctype_id=" + Util.getValueOfInt(mTab.getValue("C_DocTypeTarget_ID")) + " and db.DocBaseType='SOO' and dc.DocSubTypeSO in ('WR','WI')";
+        if (Util.getValueOfInt(mTab.getValue("VAB_DocTypesTarget_ID")) != 0) {
+            var sql = "select dc.DocSubTypeSO from VAB_DocTypes dc inner join VAB_MasterDocType db on(dc.DocBaseType=db.DocBaseType)"
+                + "where VAB_DocTypes_id=" + Util.getValueOfInt(mTab.getValue("VAB_DocTypesTarget_ID")) + " and db.DocBaseType='SOO' and dc.DocSubTypeSO in ('WR','WI')";
             var _DocBaseType = Util.getValueOfString(VIS.DB.executeScalar(sql, null, null));
             if (_DocBaseType == "WR" || _DocBaseType == "WI") {
                 mTab.setValue("InvoicePrint", "Y");
@@ -21019,18 +21019,18 @@
         }
         try {
             this.setCalloutActive(true);
-            if (mField.getColumnName() == "C_BPartner_ID") {
+            if (mField.getColumnName() == "VAB_BusinessPartner_ID") {
                 if (mTab.getField("Ref_BPartner_ID") != null) {
                     mTab.setValue("Ref_BPartner_ID", value)
                 }
                 var dr = null;
-                dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPData", Util.getValueOfString(mTab.getValue("C_BPartner_ID")));
+                dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPData", Util.getValueOfString(mTab.getValue("VAB_BusinessPartner_ID")));
                 if (dr != null) {
-                    var _Location_ID = VIS.Utility.Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
+                    var _Location_ID = VIS.Utility.Util.getValueOfInt(dr["VAB_BPart_Location_ID"]);
                     if (_Location_ID == 0)
-                        mTab.setValue("C_BPartner_Location_ID", null);
+                        mTab.setValue("VAB_BPart_Location_ID", null);
                     else
-                        mTab.setValue("C_BPartner_Location_ID", _Location_ID);
+                        mTab.setValue("VAB_BPart_Location_ID", _Location_ID);
                     var _User_ID = VIS.Utility.Util.getValueOfInt(dr["VAF_UserContact_ID"]);
                     if (_User_ID == 0)
                         mTab.setValue("VAF_UserContact_ID", null);
@@ -21038,18 +21038,18 @@
                         mTab.setValue("VAF_UserContact_ID", _User_ID);
                 }
             }
-            else if (mField.getColumnName() == "C_BPartnerSR_ID") {
+            else if (mField.getColumnName() == "VAB_BusinessPartnerSR_ID") {
                 if (mTab.getField("Ref_BPartner_ID") != null) {
                     mTab.setValue("Ref_BPartner_ID", value)
                 }
                 var dr = null;
-                dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPData", Util.getValueOfString(mTab.getValue("C_BPartnerSR_ID")));
+                dr = VIS.dataContext.getJSONRecord("MBPartner/GetBPData", Util.getValueOfString(mTab.getValue("VAB_BusinessPartnerSR_ID")));
                 if (dr != null) {
-                    var _Location_ID = VIS.Utility.Util.getValueOfInt(dr["C_BPartner_Location_ID"]);
+                    var _Location_ID = VIS.Utility.Util.getValueOfInt(dr["VAB_BPart_Location_ID"]);
                     if (_Location_ID == 0)
-                        mTab.setValue("C_BPartner_Location_ID", null);
+                        mTab.setValue("VAB_BPart_Location_ID", null);
                     else
-                        mTab.setValue("C_BPartner_Location_ID", _Location_ID);
+                        mTab.setValue("VAB_BPart_Location_ID", _Location_ID);
                     var _User_ID = VIS.Utility.Util.getValueOfInt(dr["VAF_UserContact_ID"]);
                     if (_User_ID == 0)
                         mTab.setValue("VAF_UserContact_ID", null);
@@ -21057,17 +21057,17 @@
                         mTab.setValue("VAF_UserContact_ID", _User_ID);
                 }
             }
-            //var sql = "SELECT au.VAF_UserContact_id,  cl.c_bpartner_location_id FROM c_bpartner cp  INNER JOIN c_bpartner_location cl ON cl.c_bpartner_id=cp.c_bpartner_id INNER JOIN VAF_UserContact au ON au.c_bpartner_id   =cp.c_bpartner_id WHERE cp.c_bpartner_id= " + VIS.Utility.Util.getValueOfString(mTab.getValue("C_BPartner_ID")) + " AND cp.isactive       ='Y'  ORDER BY cp.created";
+            //var sql = "SELECT au.VAF_UserContact_id,  cl.VAB_BPart_Location_id FROM VAB_BusinessPartner cp  INNER JOIN VAB_BPart_Location cl ON cl.VAB_BusinessPartner_id=cp.VAB_BusinessPartner_id INNER JOIN VAF_UserContact au ON au.VAB_BusinessPartner_id   =cp.VAB_BusinessPartner_id WHERE cp.VAB_BusinessPartner_id= " + VIS.Utility.Util.getValueOfString(mTab.getValue("VAB_BusinessPartner_ID")) + " AND cp.isactive       ='Y'  ORDER BY cp.created";
 
             //var ds = CalloutDB.executeCalloutDataSet(sql, null);
             //for (var i = 0; i < ds.tables[0].rows.length; i++) {
             //    var dr = ds.tables[0].rows[i];
             //    if (dr != null) {
-            //        var _Location_ID = VIS.Utility.Util.getValueOfInt(dr.getCell("C_BPartner_Location_ID"));
+            //        var _Location_ID = VIS.Utility.Util.getValueOfInt(dr.getCell("VAB_BPart_Location_ID"));
             //        if (_Location_ID == 0)
-            //            mTab.setValue("C_BPartner_Location_ID", null);
+            //            mTab.setValue("VAB_BPart_Location_ID", null);
             //        else
-            //            mTab.setValue("C_BPartner_Location_ID", _Location_ID);
+            //            mTab.setValue("VAB_BPart_Location_ID", _Location_ID);
 
             //        var _User_ID = VIS.Utility.Util.getValueOfInt(dr.getCell("VAF_UserContact_ID"));
             //        if (_User_ID == 0)
@@ -21080,7 +21080,7 @@
 
             //var _locatio_id = Util.getValueOfString(CalloutDB.executeCalloutScalar(sql, null, null));
             //if (parseInt(_locatio_id)>0) {
-            //     mTab.setValue("C_BPartner_Location_ID", parseInt(_locatio_id));
+            //     mTab.setValue("VAB_BPart_Location_ID", parseInt(_locatio_id));
             //}
 
         }
@@ -21352,7 +21352,7 @@
         this.setCalloutActive(true);
         try {
             // get precision from currency
-            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", mTab.getValue("C_Currency_ID").toString());
+            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", mTab.getValue("VAB_Currency_ID").toString());
             var StdPrecision = currency["StdPrecision"];
 
             if (mField.getColumnName() == "C_Tax_ID") {
@@ -21443,7 +21443,7 @@
         this.setCalloutActive(true);
         try {
             // get precision from currency
-            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", ctx.getContext(windowNo, "C_Currency_ID").toString());
+            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", ctx.getContext(windowNo, "VAB_Currency_ID").toString());
             var StdPrecision = currency["StdPrecision"];
 
             if (mField.getColumnName() == "C_Tax_ID") {
@@ -21536,7 +21536,7 @@
         var paramString = "";
         try {
             // Need to round Tax Amount according to Currency Precision  
-            paramString = mTab.getValue("C_Currency_ID").toString();
+            paramString = mTab.getValue("VAB_Currency_ID").toString();
             var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", paramString);
             var StdPrecision = currency["StdPrecision"];
 
@@ -21682,9 +21682,9 @@
             // Change Done By Mohit Aortization Process 02/11/2016, Checkin By Sukhwinder on 06 March, 2017
             if (countVA038 > 0) {
                 if (Util.getValueOfString(result.tables[0].rows[0].cells.producttype) == "E" || Util.getValueOfString(result.tables[0].rows[0].cells.producttype) == "S") {
-                    var AssetGroup_ID = Util.getValueOfInt(VIS.DB.executeScalar("SELECT A_Asset_Group_ID FROM M_Product_Category WHERE M_Product_Category_ID=" + Util.getValueOfInt(value)));
+                    var AssetGroup_ID = Util.getValueOfInt(VIS.DB.executeScalar("SELECT VAA_AssetGroup_ID FROM M_Product_Category WHERE M_Product_Category_ID=" + Util.getValueOfInt(value)));
                     if (AssetGroup_ID > 0) {
-                        var AmortizTemp_ID = Util.getValueOfInt(VIS.DB.executeScalar("SELECT VA038_AmortizationTemplate_ID FROM A_Asset_Group WHERE A_Asset_Group_ID=" + AssetGroup_ID));
+                        var AmortizTemp_ID = Util.getValueOfInt(VIS.DB.executeScalar("SELECT VA038_AmortizationTemplate_ID FROM VAA_AssetGroup WHERE VAA_AssetGroup_ID=" + AssetGroup_ID));
                         if (AmortizTemp_ID > 0) {
                             mTab.setValue("VA038_AmortizationTemplate_ID", AmortizTemp_ID);
                         }
@@ -21810,7 +21810,7 @@
         }
         this.setCalloutActive(true);
         try {
-            var _sql = "select M_ReturnPolicy_ID, M_DiscountSchema_ID, M_PRICELIST_ID, PO_PriceList_ID,PO_DiscountSchema_ID,PO_ReturnPolicy_ID from C_BP_Group where C_BP_Group_ID=" + Util.getValueOfInt(value);
+            var _sql = "select M_ReturnPolicy_ID, M_DiscountSchema_ID, M_PRICELIST_ID, PO_PriceList_ID,PO_DiscountSchema_ID,PO_ReturnPolicy_ID from VAB_BPart_Category where VAB_BPart_Category_ID=" + Util.getValueOfInt(value);
             var ds = VIS.DB.executeDataSet(_sql);
             var IsCustomer = mTab.getValue("IsCustomer");
             var IsVendor = mTab.getValue("IsVendor");
@@ -22002,9 +22002,9 @@
 
             var dr = VIS.dataContext.getJSONRecord("Common/GetCurrencyFromAccountingSchema", paramString);
             if (dr != null) {
-                var C_Currency_ID = Util.getValueOfInt(dr["CurrencyID"]);
+                var VAB_Currency_ID = Util.getValueOfInt(dr["CurrencyID"]);
 
-                mTab.setValue("C_Currency_ID", C_Currency_ID);
+                mTab.setValue("VAB_Currency_ID", VAB_Currency_ID);
             }
         }
         catch (err) {
@@ -22093,15 +22093,15 @@
     VIS.Utility.inheritPrototype(CalloutCashJournalLine, VIS.CalloutEngine); //inherit prototype
     CalloutCashJournalLine.prototype.SetBPLocation = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            mTab.setValue("C_BPartner_Location_ID", null);
+            mTab.setValue("VAB_BPart_Location_ID", null);
             return "";
         }
         this.setCalloutActive(true);
         try {
             if (mTab.getValue("CashType") == "B" || mTab.getValue("CashType") == "C") {
-                var BusinessPartner_ID = mTab.getValue("C_BPartner_ID");
+                var BusinessPartner_ID = mTab.getValue("VAB_BusinessPartner_ID");
                 if (BusinessPartner_ID == null || BusinessPartner_ID == "") {
-                    mTab.setValue("C_BPartner_Location_ID", null);
+                    mTab.setValue("VAB_BPart_Location_ID", null);
                     this.setCalloutActive(false);
                     return "";
                 }
@@ -22109,12 +22109,12 @@
                 var data = VIS.dataContext.getJSONRecord("MCashJournal/GetBPLocation", paramString);
                 if (data != null) {
                     var CreditStatus = Util.getValueOfInt(data["CreditStatusSettingOn"]);
-                    var Location_ID = Util.getValueOfInt(data["C_BPartner_Location_ID"]);
+                    var Location_ID = Util.getValueOfInt(data["VAB_BPart_Location_ID"]);
                     if (CreditStatus == "CL" && Location_ID == 0) {
                         this.setCalloutActive(false);
                         return VIS.Msg.getMsg("LocationNew");
                     }
-                    mTab.setValue("C_BPartner_Location_ID", Location_ID);
+                    mTab.setValue("VAB_BPart_Location_ID", Location_ID);
                 }
             }
         }
@@ -22140,7 +22140,7 @@
     */
     CalloutCashJournalLine.prototype.setAccountNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
-            //mTab.setValue("C_BankAccount_ID", null);
+            //mTab.setValue("VAB_Bank_Acct_ID", null);
             return "";
         }
         this.setCalloutActive(true);
@@ -22288,14 +22288,14 @@
                 mTab.setValue("VAF_Client_ID", result["VAF_Client_ID"]);
                 mTab.setValue("VAF_Org_ID", result["VAF_Org_ID"]);
                 mTab.setValue("Description", result["Description"]);
-                mTab.setValue("C_DocTypeTarget_ID", result["C_DocTypeTarget_ID"]);
+                mTab.setValue("VAB_DocTypesTarget_ID", result["VAB_DocTypesTarget_ID"]);
                 mTab.setValue("DateOrdered", Dateoffset(result["DateOrdered"]));
                 mTab.setValue("DatePromised", Dateoffset(result["DatePromised"]));
                 mTab.setValue("OrderValidFrom", Dateoffset(result["OrderValidFrom"]));
                 mTab.setValue("OrderValidTo", Dateoffset(result["OrderValidTo"]));
-                mTab.setValue("C_BPartner_ID", result["C_BPartner_ID"]);
+                mTab.setValue("VAB_BusinessPartner_ID", result["VAB_BusinessPartner_ID"]);
                 mTab.setValue("Bill_BPartner_ID", result["Bill_BPartner_ID"]);
-                mTab.setValue("C_BPartner_Location_ID", result["C_BPartner_Location_ID"]);
+                mTab.setValue("VAB_BPart_Location_ID", result["VAB_BPart_Location_ID"]);
                 mTab.setValue("Bill_Location_ID", result["Bill_Location_ID"]);
                 mTab.setValue("VAF_UserContact_ID", result["VAF_UserContact_ID"]);
                 mTab.setValue("Bill_User_ID", result["Bill_User_ID"]);
@@ -22303,15 +22303,15 @@
                 mTab.setValue("PriorityRule", result["PriorityRule"]);
                 mTab.setValue("M_PriceList_ID", result["M_PriceList_ID"]);
                 mTab.setValue("C_IncoTerm_ID", result["C_IncoTerm_ID"]);
-                mTab.setValue("C_Currency_ID", result["C_Currency_ID"]);
-                mTab.setValue("C_ConversionType_ID", result["C_ConversionType_ID"]);
+                mTab.setValue("VAB_Currency_ID", result["VAB_Currency_ID"]);
+                mTab.setValue("VAB_CurrencyType_ID", result["VAB_CurrencyType_ID"]);
                 mTab.setValue("SalesRep_ID", result["SalesRep_ID"]);
                 if (DataPrefix["VA009_"]) {
                     mTab.setValue("VA009_PaymentMethod_ID", result["VA009_PaymentMethod_ID"]);
                 }
                 mTab.setValue("C_PaymentTerm_ID", result["C_PaymentTerm_ID"]);
-                mTab.setValue("C_Campaign_ID", result["C_Campaign_ID"]);
-                mTab.setValue("C_Activity_ID", result["C_Activity_ID"]);
+                mTab.setValue("VAB_Promotion_ID", result["VAB_Promotion_ID"]);
+                mTab.setValue("VAB_BillingCode_ID", result["VAB_BillingCode_ID"]);
                 mTab.setValue("VAF_OrgTrx_ID", result["VAF_OrgTrx_ID"]);
                 mTab.setValue("User1_ID", result["User1_ID"]);
                 mTab.setValue("User2_ID", result["User2_ID"]);
@@ -22369,7 +22369,7 @@
             return "";
         }
         this.setCalloutActive(true);
-        if (mField.getColumnName() == "C_Frequency_ID") {
+        if (mField.getColumnName() == "VAB_Frequency_ID") {
             if (value != oldValue) {
                 mTab.setValue("StartDate", "");
                 mTab.setValue("EndDate", "");

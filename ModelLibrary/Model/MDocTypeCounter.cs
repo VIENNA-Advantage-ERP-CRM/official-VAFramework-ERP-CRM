@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDocTypeCounter
  * Purpose        : Counter Document Type Model
- * Class Used     : X_C_DocTypeCounter
+ * Class Used     : X_VAB_InterCompanyDoc
  * Chronological    Development
  * Raghunandan     08-Jun-2009
   ******************************************************/
@@ -25,13 +25,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDocTypeCounter : X_C_DocTypeCounter
+    public class MDocTypeCounter : X_VAB_InterCompanyDoc
     {
         #region Varables
         //	Object Cache				
-        private static CCache<int, MDocTypeCounter> s_cache = new CCache<int, MDocTypeCounter>("C_DocTypeCounter", 20);
+        private static CCache<int, MDocTypeCounter> s_cache = new CCache<int, MDocTypeCounter>("VAB_InterCompanyDoc", 20);
         //	Counter Relationship Cache	
-        private static CCache<int, MDocTypeCounter> s_counter = new CCache<int, MDocTypeCounter>("C_DocTypeCounter", 20);
+        private static CCache<int, MDocTypeCounter> s_counter = new CCache<int, MDocTypeCounter>("VAB_InterCompanyDoc", 20);
         //	Static Logger	
         //private static CLogger	s_log	= CLogger.getCLogger (MDocTypeCounter.class);
         private static VLogger _log = VLogger.GetVLogger(typeof(MDocTypeCounter).FullName);
@@ -40,23 +40,23 @@ namespace VAdvantage.Model
         /**
         * 	Get Counter document for document type
         *	@param ctx context
-        *	@param C_DocType_ID base document
-        *	@return counter document C_DocType_ID or 0 or -1 if no counter doc
+        *	@param VAB_DocTypes_ID base document
+        *	@return counter document VAB_DocTypes_ID or 0 or -1 if no counter doc
         */
-        public static int GetCounterDocType_ID(Ctx ctx, int C_DocType_ID)
+        public static int GetCounterDocType_ID(Ctx ctx, int VAB_DocTypes_ID)
         {
             //	Direct Relationship
-            MDocTypeCounter dtCounter = GetCounterDocType(ctx, C_DocType_ID);
+            MDocTypeCounter dtCounter = GetCounterDocType(ctx, VAB_DocTypes_ID);
             if (dtCounter != null)
             {
                 if (!dtCounter.IsCreateCounter() || !dtCounter.IsValid())
                     return -1;
-                return dtCounter.GetCounter_C_DocType_ID();
+                return dtCounter.GetCounter_VAB_DocTypes_ID();
             }
             return 0;
             //	Indirect Relationship
-            //int Counter_C_DocType_ID = 0;
-            //MDocType dt = MDocType.Get(ctx, C_DocType_ID);
+            //int Counter_VAB_DocTypes_ID = 0;
+            //MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);
             //if (!dt.IsCreateCounter())
             //    return -1;
             //String cDocBaseType = "";// = getCounterDocBaseType(dt.getDocBaseType());
@@ -68,33 +68,33 @@ namespace VAdvantage.Model
             //    MDocType counter = counters[i];
             //    if (counter.IsDefaultCounterDoc())
             //    {
-            //        Counter_C_DocType_ID = counter.GetC_DocType_ID();
+            //        Counter_VAB_DocTypes_ID = counter.GetVAB_DocTypes_ID();
             //        break;
             //    }
             //    if (counter.IsDefault())
-            //        Counter_C_DocType_ID = counter.GetC_DocType_ID();
+            //        Counter_VAB_DocTypes_ID = counter.GetVAB_DocTypes_ID();
             //    else if (i == 0)
-            //        Counter_C_DocType_ID = counter.GetC_DocType_ID();
+            //        Counter_VAB_DocTypes_ID = counter.GetVAB_DocTypes_ID();
             //}
-            //return Counter_C_DocType_ID;
+            //return Counter_VAB_DocTypes_ID;
         }
 
         /**
         * 	Get (first) valid Counter document for document type
         *	@param ctx context
-        *	@param C_DocType_ID base document
+        *	@param VAB_DocTypes_ID base document
         *	@return counter document (may be invalid) or null
         */
-        public static MDocTypeCounter GetCounterDocType(Ctx ctx, int C_DocType_ID)
+        public static MDocTypeCounter GetCounterDocType(Ctx ctx, int VAB_DocTypes_ID)
         {
-            int key = (int)C_DocType_ID;
+            int key = (int)VAB_DocTypes_ID;
             MDocTypeCounter retValue = (MDocTypeCounter)s_counter[key];
             if (retValue != null)
                 return retValue;
 
             //	Direct Relationship
             MDocTypeCounter temp = null;
-            String sql = "SELECT * FROM C_DocTypeCounter WHERE IsActive = 'Y' AND C_DocType_ID=" + C_DocType_ID;
+            String sql = "SELECT * FROM VAB_InterCompanyDoc WHERE IsActive = 'Y' AND VAB_DocTypes_ID=" + VAB_DocTypes_ID;
             //  DataSet pstmt = new DataSet();
             DataTable dt = null;
             IDataReader idr = null;
@@ -141,17 +141,17 @@ namespace VAdvantage.Model
 
         /*	Get MDocTypeCounter from Cache
         *	@param ctx context
-        *	@param C_DocTypeCounter_ID id
+        *	@param VAB_InterCompanyDoc_ID id
         *	@return MDocTypeCounter
         *	@param trxName transaction
         */
-        public static MDocTypeCounter Get(Ctx ctx, int C_DocTypeCounter_ID, Trx trxName)
+        public static MDocTypeCounter Get(Ctx ctx, int VAB_InterCompanyDoc_ID, Trx trxName)
         {
-            int key = C_DocTypeCounter_ID;
+            int key = VAB_InterCompanyDoc_ID;
             MDocTypeCounter retValue = (MDocTypeCounter)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MDocTypeCounter(ctx, C_DocTypeCounter_ID, trxName);
+            retValue = new MDocTypeCounter(ctx, VAB_InterCompanyDoc_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -226,13 +226,13 @@ namespace VAdvantage.Model
 
         /* Standard Constructor
         *	@param ctx context
-        *	@param C_DocTypeCounter_ID id
+        *	@param VAB_InterCompanyDoc_ID id
         *	@param trxName transaction
         */
-        public MDocTypeCounter(Ctx ctx, int C_DocTypeCounter_ID, Trx trxName)
-            : base(ctx, C_DocTypeCounter_ID, trxName)
+        public MDocTypeCounter(Ctx ctx, int VAB_InterCompanyDoc_ID, Trx trxName)
+            : base(ctx, VAB_InterCompanyDoc_ID, trxName)
         {
-            if (C_DocTypeCounter_ID == 0)
+            if (VAB_InterCompanyDoc_ID == 0)
             {
                 SetIsCreateCounter(true);	// Y
                 SetIsValid(false);
@@ -252,12 +252,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set C_DocType_ID
-         *	@param C_DocType_ID id
+         * 	Set VAB_DocTypes_ID
+         *	@param VAB_DocTypes_ID id
          */
-        public new void SetC_DocType_ID(int C_DocType_ID)
+        public new void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            base.SetC_DocType_ID(C_DocType_ID);
+            base.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
             if (IsValid())
             {
                 SetIsValid(false);
@@ -265,12 +265,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set Counter C_DocType_ID
-         *	@param Counter_C_DocType_ID id
+         * 	Set Counter VAB_DocTypes_ID
+         *	@param Counter_VAB_DocTypes_ID id
          */
-        public new void SetCounter_C_DocType_ID(int Counter_C_DocType_ID)
+        public new void SetCounter_VAB_DocTypes_ID(int Counter_VAB_DocTypes_ID)
         {
-            base.SetCounter_C_DocType_ID(Counter_C_DocType_ID);
+            base.SetCounter_VAB_DocTypes_ID(Counter_VAB_DocTypes_ID);
             if (IsValid())
             {
                 SetIsValid(false);
@@ -283,9 +283,9 @@ namespace VAdvantage.Model
         public MDocType GetDocType()
         {
             MDocType dt = null;
-            if (GetC_DocType_ID() > 0)
+            if (GetVAB_DocTypes_ID() > 0)
             {
-                dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+                dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
                 if (dt.Get_ID() == 0)
                 {
                     dt = null;
@@ -301,9 +301,9 @@ namespace VAdvantage.Model
         public MDocType GetCounterDocType()
         {
             MDocType dt = null;
-            if (GetCounter_C_DocType_ID() > 0)
+            if (GetCounter_VAB_DocTypes_ID() > 0)
             {
-                dt = MDocType.Get(GetCtx(), GetCounter_C_DocType_ID());
+                dt = MDocType.Get(GetCtx(), GetCounter_VAB_DocTypes_ID());
                 if (dt.Get_ID() == 0)
                 {
                     dt = null;
@@ -320,14 +320,14 @@ namespace VAdvantage.Model
             MDocType dt = GetDocType();
             if (dt == null)
             {
-                log.Log(Level.SEVERE, "No DocType=" + GetC_DocType_ID());
+                log.Log(Level.SEVERE, "No DocType=" + GetVAB_DocTypes_ID());
                 SetIsValid(false);
                 return "No Document Type";
             }
             MDocType c_dt = GetCounterDocType();
             if (c_dt == null)
             {
-                log.Log(Level.SEVERE, "No Counter DocType=" + GetCounter_C_DocType_ID());
+                log.Log(Level.SEVERE, "No Counter DocType=" + GetCounter_VAB_DocTypes_ID());
                 SetIsValid(false);
                 return "No Counter Document Type";
             }
@@ -388,8 +388,8 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MDocTypeCounter[");
             sb.Append(Get_ID()).Append(",").Append(GetName())
-                .Append(",C_DocType_ID=").Append(GetC_DocType_ID())
-                .Append(",Counter=").Append(GetCounter_C_DocType_ID())
+                .Append(",VAB_DocTypes_ID=").Append(GetVAB_DocTypes_ID())
+                .Append(",Counter=").Append(GetCounter_VAB_DocTypes_ID())
                 .Append(",DocAction=").Append(GetDocAction())
                 .Append("]");
             return sb.ToString();
@@ -406,7 +406,7 @@ namespace VAdvantage.Model
                 SetVAF_Org_ID(0);
 
             if (!newRecord
-                && (Is_ValueChanged("C_DocType_ID") || Is_ValueChanged("Counter_C_DocType_ID")))
+                && (Is_ValueChanged("VAB_DocTypes_ID") || Is_ValueChanged("Counter_VAB_DocTypes_ID")))
                 SetIsValid(false);
 
             //	try to validate

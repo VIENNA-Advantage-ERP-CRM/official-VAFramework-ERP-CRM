@@ -28,7 +28,7 @@ namespace VIS.Models
         public void FIllInfoWinMenu(Ctx ctx)
         {
 
-            bool isBaseLanguage = VAdvantage.Utility.Env.IsBaseLanguage(ctx, "C_Currency");
+            bool isBaseLanguage = VAdvantage.Utility.Env.IsBaseLanguage(ctx, "VAB_Currency");
             string sql = "";
             if (isBaseLanguage)
             {

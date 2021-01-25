@@ -2,7 +2,7 @@
 // * Project Name   : VAdvantage
 // * Class Name     : MDunningLevel
 // * Purpose        : Dunning Level Model
-// * Class Used     : X_C_DunningLevel
+// * Class Used     : X_VAB_DunningStep
 // * Chronological    Development
 // * Deepak          10-Nov-2009
 //  ******************************************************/
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDunningLevel : X_C_DunningLevel
+    public class MDunningLevel : X_VAB_DunningStep
     {
         //Logger								
         private static VLogger _log = VLogger.GetVLogger(typeof(MDunningLevel).FullName);
@@ -37,10 +37,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_DunningLevel_ID"></param>
+        /// <param name="VAB_DunningStep_ID"></param>
         /// <param name="trxName"></param>
-        public MDunningLevel(Ctx ctx, int C_DunningLevel_ID, Trx trxName)
-            : base(ctx, C_DunningLevel_ID, trxName)
+        public MDunningLevel(Ctx ctx, int VAB_DunningStep_ID, Trx trxName)
+            : base(ctx, VAB_DunningStep_ID, trxName)
         {
 
         }
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         {
             if (_dunning == null)
             {
-                _dunning = new MDunning(GetCtx(), GetC_Dunning_ID(), Get_TrxName());
+                _dunning = new MDunning(GetCtx(), GetVAB_Dunning_ID(), Get_TrxName());
             }
             return _dunning;
         }
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
                 return null;
             }
             List<MDunningLevel> list = new List<MDunningLevel>();
-            String sql = "SELECT * FROM C_DunningLevel WHERE C_Dunning_ID=@Param1 AND DaysAfterDue+DaysBetweenDunning<@Param2";
+            String sql = "SELECT * FROM VAB_DunningStep WHERE VAB_Dunning_ID=@Param1 AND DaysAfterDue+DaysBetweenDunning<@Param2";
             DataTable dt = null;
             IDataReader idr = null;
             SqlParameter[] Param = new SqlParameter[2];

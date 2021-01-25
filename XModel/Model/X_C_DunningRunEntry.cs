@@ -11,37 +11,37 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_DunningRunEntry
+/** Generated Model for VAB_DunningExeEntry
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DunningRunEntry : PO
+public class X_VAB_DunningExeEntry : PO
 {
-public X_C_DunningRunEntry (Context ctx, int C_DunningRunEntry_ID, Trx trxName) : base (ctx, C_DunningRunEntry_ID, trxName)
+public X_VAB_DunningExeEntry (Context ctx, int VAB_DunningExeEntry_ID, Trx trxName) : base (ctx, VAB_DunningExeEntry_ID, trxName)
 {
-/** if (C_DunningRunEntry_ID == 0)
+/** if (VAB_DunningExeEntry_ID == 0)
 {
 SetAmt (0.0);
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
-SetC_Currency_ID (0);
-SetC_DunningRunEntry_ID (0);
-SetC_DunningRun_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_DunningExeEntry_ID (0);
+SetVAB_DunningExe_ID (0);
 SetProcessed (false);	// N
 SetQty (0.0);
 SetSalesRep_ID (0);
 }
  */
 }
-public X_C_DunningRunEntry (Ctx ctx, int C_DunningRunEntry_ID, Trx trxName) : base (ctx, C_DunningRunEntry_ID, trxName)
+public X_VAB_DunningExeEntry (Ctx ctx, int VAB_DunningExeEntry_ID, Trx trxName) : base (ctx, VAB_DunningExeEntry_ID, trxName)
 {
-/** if (C_DunningRunEntry_ID == 0)
+/** if (VAB_DunningExeEntry_ID == 0)
 {
 SetAmt (0.0);
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
-SetC_Currency_ID (0);
-SetC_DunningRunEntry_ID (0);
-SetC_DunningRun_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_DunningExeEntry_ID (0);
+SetVAB_DunningExe_ID (0);
 SetProcessed (false);	// N
 SetQty (0.0);
 SetSalesRep_ID (0);
@@ -53,7 +53,7 @@ SetSalesRep_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunEntry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_DunningExeEntry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_C_DunningRunEntry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunEntry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_DunningExeEntry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_C_DunningRunEntry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningRunEntry (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_DunningExeEntry (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DunningRunEntry()
+static X_VAB_DunningExeEntry()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -88,8 +88,8 @@ public static long updatedMS = 1280389055241L;
 public static int Table_ID;
  // =527;
 
-/** TableName=C_DunningRunEntry */
-public static String Table_Name="C_DunningRunEntry";
+/** TableName=VAB_DunningExeEntry */
+public static String Table_Name="VAB_DunningExeEntry";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -123,7 +123,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_DunningRunEntry[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_DunningExeEntry[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -158,77 +158,77 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Partner Location.
-@param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-public void SetC_BPartner_Location_ID (int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+public void SetVAB_BPart_Location_ID (int VAB_BPart_Location_ID)
 {
-if (C_BPartner_Location_ID < 1) throw new ArgumentException ("C_BPartner_Location_ID is mandatory.");
-Set_Value ("C_BPartner_Location_ID", C_BPartner_Location_ID);
+if (VAB_BPart_Location_ID < 1) throw new ArgumentException ("VAB_BPart_Location_ID is mandatory.");
+Set_Value ("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
 }
 /** Get Partner Location.
 @return Identifies the (ship to) address for this Business Partner */
-public int GetC_BPartner_Location_ID() 
+public int GetVAB_BPart_Location_ID() 
 {
-Object ii = Get_Value("C_BPartner_Location_ID");
+Object ii = Get_Value("VAB_BPart_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dunning Run Entry.
-@param C_DunningRunEntry_ID Dunning Run Entry */
-public void SetC_DunningRunEntry_ID (int C_DunningRunEntry_ID)
+@param VAB_DunningExeEntry_ID Dunning Run Entry */
+public void SetVAB_DunningExeEntry_ID (int VAB_DunningExeEntry_ID)
 {
-if (C_DunningRunEntry_ID < 1) throw new ArgumentException ("C_DunningRunEntry_ID is mandatory.");
-Set_ValueNoCheck ("C_DunningRunEntry_ID", C_DunningRunEntry_ID);
+if (VAB_DunningExeEntry_ID < 1) throw new ArgumentException ("VAB_DunningExeEntry_ID is mandatory.");
+Set_ValueNoCheck ("VAB_DunningExeEntry_ID", VAB_DunningExeEntry_ID);
 }
 /** Get Dunning Run Entry.
 @return Dunning Run Entry */
-public int GetC_DunningRunEntry_ID() 
+public int GetVAB_DunningExeEntry_ID() 
 {
-Object ii = Get_Value("C_DunningRunEntry_ID");
+Object ii = Get_Value("VAB_DunningExeEntry_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dunning Run.
-@param C_DunningRun_ID Dunning Run */
-public void SetC_DunningRun_ID (int C_DunningRun_ID)
+@param VAB_DunningExe_ID Dunning Run */
+public void SetVAB_DunningExe_ID (int VAB_DunningExe_ID)
 {
-if (C_DunningRun_ID < 1) throw new ArgumentException ("C_DunningRun_ID is mandatory.");
-Set_ValueNoCheck ("C_DunningRun_ID", C_DunningRun_ID);
+if (VAB_DunningExe_ID < 1) throw new ArgumentException ("VAB_DunningExe_ID is mandatory.");
+Set_ValueNoCheck ("VAB_DunningExe_ID", VAB_DunningExe_ID);
 }
 /** Get Dunning Run.
 @return Dunning Run */
-public int GetC_DunningRun_ID() 
+public int GetVAB_DunningExe_ID() 
 {
-Object ii = Get_Value("C_DunningRun_ID");
+Object ii = Get_Value("VAB_DunningExe_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -236,7 +236,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_DunningRun_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_DunningExe_ID().ToString());
 }
 /** Set Note.
 @param Note Optional additional user defined information */

@@ -71,8 +71,8 @@ namespace VAdvantage.Model
         /// <param name="subscriber"></param>
         public MRfQResponse(MRfQ rfq, MRfQTopicSubscriber subscriber)
             : this(rfq, subscriber,
-                subscriber.GetC_BPartner_ID(),
-                subscriber.GetC_BPartner_Location_ID(),
+                subscriber.GetVAB_BusinessPartner_ID(),
+                subscriber.GetVAB_BPart_Location_ID(),
                 subscriber.GetVAF_UserContact_ID())
         {
 
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         /// <param name="partner">web response</param>
         public MRfQResponse(MRfQ rfq, MBPartner partner)
             : this(rfq, null,
-                partner.GetC_BPartner_ID(),
-                partner.GetPrimaryC_BPartner_Location_ID(),
+                partner.GetVAB_BusinessPartner_ID(),
+                partner.GetPrimaryVAB_BPart_Location_ID(),
                 partner.GetPrimaryVAF_UserContact_ID())
         {
 
@@ -100,22 +100,22 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="rfq">rfq</param>
         /// <param name="subscriber">optional subscriber</param>
-        /// <param name="C_BPartner_ID">bpartner</param>
-        /// <param name="C_BPartner_Location_ID">bpartner location</param>
+        /// <param name="VAB_BusinessPartner_ID">bpartner</param>
+        /// <param name="VAB_BPart_Location_ID">bpartner location</param>
         /// <param name="VAF_UserContact_ID">bpartner user</param>
         public MRfQResponse(MRfQ rfq, MRfQTopicSubscriber subscriber,
-            int C_BPartner_ID, int C_BPartner_Location_ID, int VAF_UserContact_ID)
+            int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID, int VAF_UserContact_ID)
             : this(rfq.GetCtx(), 0, rfq.Get_TrxName())
         {
 
             SetClientOrg(rfq);
             SetC_RfQ_ID(rfq.GetC_RfQ_ID());
-            SetC_Currency_ID(rfq.GetC_Currency_ID());
+            SetVAB_Currency_ID(rfq.GetVAB_Currency_ID());
             SetName(rfq.GetName());
             _rfq = rfq;
             //	Subscriber info
-            SetC_BPartner_ID(C_BPartner_ID);
-            SetC_BPartner_Location_ID(C_BPartner_Location_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
+            SetVAB_BPart_Location_ID(VAB_BPart_Location_ID);
             SetVAF_UserContact_ID(VAF_UserContact_ID);
 
             //	Create Lines

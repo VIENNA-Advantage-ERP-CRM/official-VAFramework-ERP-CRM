@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (M_CostQueue_ID == 0)
             {
-            SetC_AcctSchema_ID (0);
+            SetVAB_AccountBook_ID (0);
             SetCurrentCostPrice (0.0);
             SetCurrentQty (0.0);
             SetM_AttributeSetInstance_ID (0);
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         {
             /** if (M_CostQueue_ID == 0)
             {
-            SetC_AcctSchema_ID (0);
+            SetVAB_AccountBook_ID (0);
             SetCurrentCostPrice (0.0);
             SetCurrentQty (0.0);
             SetM_AttributeSetInstance_ID (0);
@@ -130,17 +130,17 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Accounting Schema.
-        @param C_AcctSchema_ID Rules for accounting */
-        public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+        @param VAB_AccountBook_ID Rules for accounting */
+        public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID)
         {
-            if (C_AcctSchema_ID < 1) throw new ArgumentException("C_AcctSchema_ID is mandatory.");
-            Set_ValueNoCheck("C_AcctSchema_ID", C_AcctSchema_ID);
+            if (VAB_AccountBook_ID < 1) throw new ArgumentException("VAB_AccountBook_ID is mandatory.");
+            Set_ValueNoCheck("VAB_AccountBook_ID", VAB_AccountBook_ID);
         }
         /** Get Accounting Schema.
         @return Rules for accounting */
-        public int GetC_AcctSchema_ID()
+        public int GetVAB_AccountBook_ID()
         {
-            Object ii = Get_Value("C_AcctSchema_ID");
+            Object ii = Get_Value("VAB_AccountBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

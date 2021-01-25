@@ -11,19 +11,19 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Cash
+    /** Generated Model for VAB_CashJRNL
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Cash : PO
+    public class X_VAB_CashJRNL : PO
     {
-        public X_C_Cash(Context ctx, int C_Cash_ID, Trx trxName)
-            : base(ctx, C_Cash_ID, trxName)
+        public X_VAB_CashJRNL(Context ctx, int VAB_CashJRNL_ID, Trx trxName)
+            : base(ctx, VAB_CashJRNL_ID, trxName)
         {
-            /** if (C_Cash_ID == 0)
+            /** if (VAB_CashJRNL_ID == 0)
             {
             SetBeginningBalance (0.0); 
-            SetC_CashBook_ID (0);
-            SetC_Cash_ID (0);
+            SetVAB_CashBook_ID (0);
+            SetVAB_CashJRNL_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -36,14 +36,14 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Cash(Ctx ctx, int C_Cash_ID, Trx trxName)
-            : base(ctx, C_Cash_ID, trxName)
+        public X_VAB_CashJRNL(Ctx ctx, int VAB_CashJRNL_ID, Trx trxName)
+            : base(ctx, VAB_CashJRNL_ID, trxName)
         {
-            /** if (C_Cash_ID == 0)
+            /** if (VAB_CashJRNL_ID == 0)
             {
             SetBeginningBalance (0.0);
-            SetC_CashBook_ID (0);
-            SetC_Cash_ID (0);
+            SetVAB_CashBook_ID (0);
+            SetVAB_CashJRNL_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Cash(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashJRNL(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Cash(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashJRNL(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -79,14 +79,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Cash(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_CashJRNL(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Cash()
+        static X_VAB_CashJRNL()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -99,8 +99,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =407;
 
-        /** TableName=C_Cash */
-        public static String Table_Name = "C_Cash";
+        /** TableName=VAB_CashJRNL */
+        public static String Table_Name = "VAB_CashJRNL";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Cash[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_CashJRNL[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -172,80 +172,80 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Activity.
-        @param C_Activity_ID Business Activity */
-        public void SetC_Activity_ID(int C_Activity_ID)
+        @param VAB_BillingCode_ID Business Activity */
+        public void SetVAB_BillingCode_ID(int VAB_BillingCode_ID)
         {
-            if (C_Activity_ID <= 0) Set_Value("C_Activity_ID", null);
+            if (VAB_BillingCode_ID <= 0) Set_Value("VAB_BillingCode_ID", null);
             else
-                Set_Value("C_Activity_ID", C_Activity_ID);
+                Set_Value("VAB_BillingCode_ID", VAB_BillingCode_ID);
         }
         /** Get Activity.
         @return Business Activity */
-        public int GetC_Activity_ID()
+        public int GetVAB_BillingCode_ID()
         {
-            Object ii = Get_Value("C_Activity_ID");
+            Object ii = Get_Value("VAB_BillingCode_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Campaign.
-        @param C_Campaign_ID Marketing Campaign */
-        public void SetC_Campaign_ID(int C_Campaign_ID)
+        @param VAB_Promotion_ID Marketing Campaign */
+        public void SetVAB_Promotion_ID(int VAB_Promotion_ID)
         {
-            if (C_Campaign_ID <= 0) Set_Value("C_Campaign_ID", null);
+            if (VAB_Promotion_ID <= 0) Set_Value("VAB_Promotion_ID", null);
             else
-                Set_Value("C_Campaign_ID", C_Campaign_ID);
+                Set_Value("VAB_Promotion_ID", VAB_Promotion_ID);
         }
         /** Get Campaign.
         @return Marketing Campaign */
-        public int GetC_Campaign_ID()
+        public int GetVAB_Promotion_ID()
         {
-            Object ii = Get_Value("C_Campaign_ID");
+            Object ii = Get_Value("VAB_Promotion_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cash Book.
-        @param C_CashBook_ID Cash Book for recording petty cash transactions */
-        public void SetC_CashBook_ID(int C_CashBook_ID)
+        @param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+        public void SetVAB_CashBook_ID(int VAB_CashBook_ID)
         {
-            if (C_CashBook_ID < 1) throw new ArgumentException("C_CashBook_ID is mandatory.");
-            Set_ValueNoCheck("C_CashBook_ID", C_CashBook_ID);
+            if (VAB_CashBook_ID < 1) throw new ArgumentException("VAB_CashBook_ID is mandatory.");
+            Set_ValueNoCheck("VAB_CashBook_ID", VAB_CashBook_ID);
         }
         /** Get Cash Book.
         @return Cash Book for recording petty cash transactions */
-        public int GetC_CashBook_ID()
+        public int GetVAB_CashBook_ID()
         {
-            Object ii = Get_Value("C_CashBook_ID");
+            Object ii = Get_Value("VAB_CashBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cash Journal.
-        @param C_Cash_ID Cash Journal */
-        public void SetC_Cash_ID(int C_Cash_ID)
+        @param VAB_CashJRNL_ID Cash Journal */
+        public void SetVAB_CashJRNL_ID(int VAB_CashJRNL_ID)
         {
-            if (C_Cash_ID < 1) throw new ArgumentException("C_Cash_ID is mandatory.");
-            Set_ValueNoCheck("C_Cash_ID", C_Cash_ID);
+            if (VAB_CashJRNL_ID < 1) throw new ArgumentException("VAB_CashJRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAB_CashJRNL_ID", VAB_CashJRNL_ID);
         }
         /** Get Cash Journal.
         @return Cash Journal */
-        public int GetC_Cash_ID()
+        public int GetVAB_CashJRNL_ID()
         {
-            Object ii = Get_Value("C_Cash_ID");
+            Object ii = Get_Value("VAB_CashJRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Document Type.
-        @param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID)
+        @param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID)
         {
-            if (C_DocType_ID <= 0) Set_Value("C_DocType_ID", null);
+            if (VAB_DocTypes_ID <= 0) Set_Value("VAB_DocTypes_ID", null);
             else
-                Set_Value("C_DocType_ID", C_DocType_ID);
+                Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID);
         }
         /** Get Document Type.
         @return Document type or rules */
-        public int GetC_DocType_ID()
+        public int GetVAB_DocTypes_ID()
         {
-            Object ii = Get_Value("C_DocType_ID");
+            Object ii = Get_Value("VAB_DocTypes_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -664,15 +664,15 @@ namespace VAdvantage.Model
         }
 
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_Value("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_Value("VAB_Currency_ID", null);
             else
-                Set_Value("C_Currency_ID", C_Currency_ID);
+                Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }/** Get Currency.
 @return The Currency for this record */
-        public int GetC_Currency_ID() { Object ii = Get_Value("C_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Currency_ID() { Object ii = Get_Value("VAB_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

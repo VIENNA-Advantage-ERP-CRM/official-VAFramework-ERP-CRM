@@ -66,8 +66,8 @@ namespace VAdvantage.Model
             SetIsManual(false);
             //
             SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            SetC_BPartner_ID(invoice.GetC_BPartner_ID());
-            SetC_Currency_ID(invoice.GetC_Currency_ID());
+            SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
+            SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             SetDateAcct(invoice.GetDateAcct());
             //
             SetC_InvoiceLine_ID(iLine.GetC_InvoiceLine_ID());
@@ -98,8 +98,8 @@ namespace VAdvantage.Model
             SetIsManual(false);
             //
             SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            SetC_BPartner_ID(invoice.GetC_BPartner_ID());
-            SetC_Currency_ID(invoice.GetC_Currency_ID());
+            SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
+            SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             SetDateAcct(invoice.GetDateAcct());
             //
             SetC_Tax_ID(tLine.GetC_Tax_ID());

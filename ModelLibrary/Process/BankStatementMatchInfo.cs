@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class BankStatementMatchInfo
     {
         #region
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private int _C_Payment_ID = 0;
         private int _C_Invoice_ID = 0;
         #endregion
@@ -50,25 +50,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>true if something could be matched</returns>
         public bool IsMatched()
         {
-            return _C_BPartner_ID > 0 || _C_Payment_ID > 0 || _C_Invoice_ID > 0;
+            return _VAB_BusinessPartner_ID > 0 || _C_Payment_ID > 0 || _C_Invoice_ID > 0;
         }
 
         /// <summary>
         /// Get matched BPartner
         /// </summary>
         /// <returns>BPartner</returns>
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            return _C_BPartner_ID;
+            return _VAB_BusinessPartner_ID;
         }
 
         /// <summary>
         /// Set matched BPartner
         /// </summary>
-        /// <param name="C_BPartner_ID">BPartner</param>
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        /// <param name="VAB_BusinessPartner_ID">BPartner</param>
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            _C_BPartner_ID = C_BPartner_ID;
+            _VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
         }
 
         /// <summary>

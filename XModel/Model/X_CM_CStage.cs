@@ -157,18 +157,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Template.
-@param CM_Template_ID Template defines how content is displayed */
-public void SetCM_Template_ID (int CM_Template_ID)
+@param VACM_Layout_ID Template defines how content is displayed */
+public void SetVACM_Layout_ID (int VACM_Layout_ID)
 {
-if (CM_Template_ID <= 0) Set_Value ("CM_Template_ID", null);
+if (VACM_Layout_ID <= 0) Set_Value ("VACM_Layout_ID", null);
 else
-Set_Value ("CM_Template_ID", CM_Template_ID);
+Set_Value ("VACM_Layout_ID", VACM_Layout_ID);
 }
 /** Get Template.
 @return Template defines how content is displayed */
-public int GetCM_Template_ID() 
+public int GetVACM_Layout_ID() 
 {
-Object ii = Get_Value("CM_Template_ID");
+Object ii = Get_Value("VACM_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

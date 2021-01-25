@@ -83,10 +83,10 @@ namespace VAdvantage.Model
             if (M_InOut_ID == 0)
             {
                 //	setDocumentNo (null);
-                //	setC_BPartner_ID (0);
-                //	setC_BPartner_Location_ID (0);
+                //	setVAB_BusinessPartner_ID (0);
+                //	setVAB_BPart_Location_ID (0);
                 //	setM_Warehouse_ID (0);
-                //	setC_DocType_ID (0);
+                //	setVAB_DocTypes_ID (0);
                 SetIsSOTrx(false);
                 SetMovementDate(DateTime.Now);
                 SetDateAcct(GetMovementDate());
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
          * 	Create new Shipment by copying
          * 	@param from shipment
          * 	@param dateDoc date of the document date
-         * 	@param C_DocType_ID doc type
+         * 	@param VAB_DocTypes_ID doc type
          * 	@param isSOTrx sales order
          * 	@param counter create counter links
          * 	@param trxName trx
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
          *	@return Shipment
          */
         public static MInOut CopyFrom(MInOut from, DateTime? dateDoc,
-            int C_DocType_ID, bool isSOTrx, bool isReturnTrx,
+            int VAB_DocTypes_ID, bool isSOTrx, bool isReturnTrx,
             bool counter, Trx trxName, bool setOrder)
         {
             MInOut to = new MInOut(from.GetCtx(), 0, null);
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
             to.SetDocStatus(DOCSTATUS_Drafted);		//	Draft
             to.SetDocAction(DOCACTION_Complete);
             //
-            to.SetC_DocType_ID(C_DocType_ID);
+            to.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
             to.SetIsReturnTrx(isReturnTrx);
             to.SetIsSOTrx(isSOTrx);
             if (counter)
@@ -479,19 +479,19 @@ namespace VAdvantage.Model
          * 	Order Constructor - create header only
          *	@param order order
          *	@param movementDate optional movement date (default today)
-         *	@param C_DocTypeShipment_ID document type or 0
+         *	@param VAB_DocTypesShipment_ID document type or 0
          */
-        public MInOut(MOrder order, int C_DocTypeShipment_ID, DateTime? movementDate)
+        public MInOut(MOrder order, int VAB_DocTypesShipment_ID, DateTime? movementDate)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
 
             SetOrder(order);
 
-            if (C_DocTypeShipment_ID == 0)
+            if (VAB_DocTypesShipment_ID == 0)
             {
-                C_DocTypeShipment_ID = VAdvantage.Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar("SELECT C_DocTypeShipment_ID FROM C_DocType WHERE C_DocType_ID=" + order.GetC_DocTypeTarget_ID()));
+                VAB_DocTypesShipment_ID = VAdvantage.Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar("SELECT VAB_DocTypesShipment_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + order.GetVAB_DocTypesTarget_ID()));
             }
-            SetC_DocType_ID(C_DocTypeShipment_ID, true);
+            SetVAB_DocTypes_ID(VAB_DocTypesShipment_ID, true);
 
             //	Default - Today
             if (movementDate != null)
@@ -507,19 +507,19 @@ namespace VAdvantage.Model
         /**
          * 	Invoice Constructor - create header only
          *	@param invoice invoice
-         *	@param C_DocTypeShipment_ID document type or 0
+         *	@param VAB_DocTypesShipment_ID document type or 0
          *	@param movementDate optional movement date (default today)
          *	@param M_Warehouse_ID warehouse
          */
-        public MInOut(MInvoice invoice, int C_DocTypeShipment_ID,
+        public MInOut(MInvoice invoice, int VAB_DocTypesShipment_ID,
             DateTime? movementDate, int M_Warehouse_ID)
             : this(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
             SetClientOrg(invoice);
             MOrder ord = new MOrder(GetCtx(), invoice.GetC_Order_ID(), null);
-            SetC_BPartner_ID(ord.GetC_BPartner_ID());
-            //SetC_BPartner_ID(invoice.GetC_BPartner_ID());
-            SetC_BPartner_Location_ID(ord.GetC_BPartner_Location_ID());	//	shipment address
+            SetVAB_BusinessPartner_ID(ord.GetVAB_BusinessPartner_ID());
+            //SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
+            SetVAB_BPart_Location_ID(ord.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(ord.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(M_Warehouse_ID);
@@ -534,12 +534,12 @@ namespace VAdvantage.Model
             MOrder order = null;
             if (invoice.GetC_Order_ID() != 0)
                 order = new MOrder(invoice.GetCtx(), invoice.GetC_Order_ID(), invoice.Get_TrxName());
-            if (C_DocTypeShipment_ID == 0 && order != null)
-                C_DocTypeShipment_ID = int.Parse(ExecuteQuery.ExecuteScalar("SELECT C_DocTypeShipment_ID FROM C_DocType WHERE C_DocType_ID=" + order.GetC_DocType_ID()));
-            if (C_DocTypeShipment_ID != 0)
-                SetC_DocType_ID(C_DocTypeShipment_ID, true);
+            if (VAB_DocTypesShipment_ID == 0 && order != null)
+                VAB_DocTypesShipment_ID = int.Parse(ExecuteQuery.ExecuteScalar("SELECT VAB_DocTypesShipment_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + order.GetVAB_DocTypes_ID()));
+            if (VAB_DocTypesShipment_ID != 0)
+                SetVAB_DocTypes_ID(VAB_DocTypesShipment_ID, true);
             else
-                SetC_DocType_ID();
+                SetVAB_DocTypes_ID();
 
             //	Default - Today
             if (movementDate != null)
@@ -550,9 +550,9 @@ namespace VAdvantage.Model
             SetC_Order_ID(invoice.GetC_Order_ID());
             SetSalesRep_ID(invoice.GetSalesRep_ID());
             //
-            SetC_Activity_ID(invoice.GetC_Activity_ID());
-            SetC_Campaign_ID(invoice.GetC_Campaign_ID());
-            SetC_Charge_ID(invoice.GetC_Charge_ID());
+            SetVAB_BillingCode_ID(invoice.GetVAB_BillingCode_ID());
+            SetVAB_Promotion_ID(invoice.GetVAB_Promotion_ID());
+            SetVAB_Charge_ID(invoice.GetVAB_Charge_ID());
             SetChargeAmt(invoice.GetChargeAmt());
             //
             SetC_Project_ID(invoice.GetC_Project_ID());
@@ -577,27 +577,27 @@ namespace VAdvantage.Model
          * 	Copy Constructor - create header only
          *	@param original original 
          *	@param movementDate optional movement date (default today)
-         *	@param C_DocTypeShipment_ID document type or 0
+         *	@param VAB_DocTypesShipment_ID document type or 0
          */
-        public MInOut(MInOut original, int C_DocTypeShipment_ID, DateTime? movementDate)
+        public MInOut(MInOut original, int VAB_DocTypesShipment_ID, DateTime? movementDate)
             : this(original.GetCtx(), 0, original.Get_TrxName())
         {
 
             SetClientOrg(original);
-            SetC_BPartner_ID(original.GetC_BPartner_ID());
-            SetC_BPartner_Location_ID(original.GetC_BPartner_Location_ID());	//	shipment address
+            SetVAB_BusinessPartner_ID(original.GetVAB_BusinessPartner_ID());
+            SetVAB_BPart_Location_ID(original.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(original.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(original.GetM_Warehouse_ID());
             SetIsSOTrx(original.IsSOTrx());
             SetMovementType(original.GetMovementType());
-            if (C_DocTypeShipment_ID == 0)
+            if (VAB_DocTypesShipment_ID == 0)
             {
-                SetC_DocType_ID(original.GetC_DocType_ID());
+                SetVAB_DocTypes_ID(original.GetVAB_DocTypes_ID());
                 SetIsReturnTrx(original.IsReturnTrx());
             }
             else
-                SetC_DocType_ID(C_DocTypeShipment_ID, true);
+                SetVAB_DocTypes_ID(VAB_DocTypesShipment_ID, true);
 
             //	Default - Today
             if (movementDate != null)
@@ -613,9 +613,9 @@ namespace VAdvantage.Model
             SetFreightAmt(original.GetFreightAmt());
             SetSalesRep_ID(original.GetSalesRep_ID());
             //
-            SetC_Activity_ID(original.GetC_Activity_ID());
-            SetC_Campaign_ID(original.GetC_Campaign_ID());
-            SetC_Charge_ID(original.GetC_Charge_ID());
+            SetVAB_BillingCode_ID(original.GetVAB_BillingCode_ID());
+            SetVAB_Promotion_ID(original.GetVAB_Promotion_ID());
+            SetVAB_Charge_ID(original.GetVAB_Charge_ID());
             SetChargeAmt(original.GetChargeAmt());
             //
             SetC_Project_ID(original.GetC_Project_ID());
@@ -669,7 +669,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -1032,8 +1032,8 @@ namespace VAdvantage.Model
             SetClientOrg(order);
             SetC_Order_ID(order.GetC_Order_ID());
             //
-            SetC_BPartner_ID(order.GetC_BPartner_ID());
-            SetC_BPartner_Location_ID(order.GetC_BPartner_Location_ID());	//	shipment address
+            SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
+            SetVAB_BPart_Location_ID(order.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(order.GetVAF_UserContact_ID());
             //
             SetM_Warehouse_ID(order.GetM_Warehouse_ID());
@@ -1052,9 +1052,9 @@ namespace VAdvantage.Model
             SetFreightAmt(order.GetFreightAmt());
             SetSalesRep_ID(order.GetSalesRep_ID());
             //
-            SetC_Activity_ID(order.GetC_Activity_ID());
-            SetC_Campaign_ID(order.GetC_Campaign_ID());
-            SetC_Charge_ID(order.GetC_Charge_ID());
+            SetVAB_BillingCode_ID(order.GetVAB_BillingCode_ID());
+            SetVAB_Promotion_ID(order.GetVAB_Promotion_ID());
+            SetVAB_Charge_ID(order.GetVAB_Charge_ID());
             SetChargeAmt(order.GetChargeAmt());
             //
             SetC_Project_ID(order.GetC_Project_ID());
@@ -1113,7 +1113,7 @@ namespace VAdvantage.Model
         public MBPartner GetBPartner()
         {
             if (_partner == null)
-                _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+                _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _partner;
         }
 
@@ -1121,23 +1121,23 @@ namespace VAdvantage.Model
          * 	Set Document Type
          * 	@param DocBaseType doc type MDocBaseType.DOCBASETYPE_
          */
-        public void SetC_DocType_ID(String DocBaseType)
+        public void SetVAB_DocTypes_ID(String DocBaseType)
         {
-            String sql = "SELECT C_DocType_ID FROM C_DocType "
+            String sql = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
                 + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND DocBaseType=" + DocBaseType
                 + " AND IsActive='Y' AND IsReturnTrx='N'"
                 + " AND IsSOTrx='" + (IsSOTrx() ? "Y" : "N") + "' "
                 + "ORDER BY IsDefault DESC";
-            int C_DocType_ID = int.Parse(ExecuteQuery.ExecuteScalar(sql));
-            if (C_DocType_ID <= 0)
+            int VAB_DocTypes_ID = int.Parse(ExecuteQuery.ExecuteScalar(sql));
+            if (VAB_DocTypes_ID <= 0)
             {
                 log.Log(Level.SEVERE, "Not found for AC_Client_ID="
                      + GetVAF_Client_ID() + " - " + DocBaseType);
             }
             else
             {
-                log.Fine("DocBaseType=" + DocBaseType + " - C_DocType_ID=" + C_DocType_ID);
-                SetC_DocType_ID(C_DocType_ID);
+                log.Fine("DocBaseType=" + DocBaseType + " - VAB_DocTypes_ID=" + VAB_DocTypes_ID);
+                SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                 bool isSOTrx = MDocBaseType.DOCBASETYPE_MATERIALDELIVERY.Equals(DocBaseType);
                 SetIsSOTrx(isSOTrx);
                 SetIsReturnTrx(false);
@@ -1145,28 +1145,28 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set Default C_DocType_ID.
+         * 	Set Default VAB_DocTypes_ID.
          * 	Based on SO flag
          */
-        public void SetC_DocType_ID()
+        public void SetVAB_DocTypes_ID()
         {
             if (IsSOTrx())
-                SetC_DocType_ID(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY);
+                SetVAB_DocTypes_ID(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY);
             else
-                SetC_DocType_ID(MDocBaseType.DOCBASETYPE_MATERIALRECEIPT);
+                SetVAB_DocTypes_ID(MDocBaseType.DOCBASETYPE_MATERIALRECEIPT);
         }
 
         /**
          * 	Set Document Type
-         *	@param C_DocType_ID dt
+         *	@param VAB_DocTypes_ID dt
          *	@param setReturnTrx if true set IsRteurnTrx and SOTrx
          */
-        public void SetC_DocType_ID(int C_DocType_ID, bool setReturnTrx)
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID, bool setReturnTrx)
         {
-            base.SetC_DocType_ID(C_DocType_ID);
+            base.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
             if (setReturnTrx)
             {
-                MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
+                MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
                 SetIsReturnTrx(dt.IsReturnTrx());
                 SetIsSOTrx(dt.IsSOTrx());
             }
@@ -1175,22 +1175,22 @@ namespace VAdvantage.Model
         /**
          * 	Set Document Type - Callout.
          * 	Sets MovementType, DocumentNo
-         * 	@param oldC_DocType_ID old ID
-         * 	@param newC_DocType_ID new ID
+         * 	@param oldVAB_DocTypes_ID old ID
+         * 	@param newVAB_DocTypes_ID new ID
          * 	@param windowNo window
          */
         //	@UICallout
-        public void SetC_DocType_ID(String oldC_DocType_ID,
-               String newC_DocType_ID, int windowNo)
+        public void SetVAB_DocTypes_ID(String oldVAB_DocTypes_ID,
+               String newVAB_DocTypes_ID, int windowNo)
         {
-            if (newC_DocType_ID == null || newC_DocType_ID.Length == 0)
+            if (newVAB_DocTypes_ID == null || newVAB_DocTypes_ID.Length == 0)
                 return;
-            int C_DocType_ID = int.Parse(newC_DocType_ID);
-            if (C_DocType_ID == 0)
+            int VAB_DocTypes_ID = int.Parse(newVAB_DocTypes_ID);
+            if (VAB_DocTypes_ID == 0)
                 return;
             String sql = "SELECT d.DocBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-                + "FROM C_DocType d, VAF_Record_Seq s "
-                + "WHERE C_DocType_ID=" + C_DocType_ID		//	1
+                + "FROM VAB_DocTypes d, VAF_Record_Seq s "
+                + "WHERE VAB_DocTypes_ID=" + VAB_DocTypes_ID		//	1
                 + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
             try
             {
@@ -1198,12 +1198,12 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    SetC_DocType_ID(C_DocType_ID);
+                    SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                     /********************************************************************************************/
                     /********************************************************************************************/
                     //Consequences of - Field Value Changes	- New Row- Save (Update/Insert) Row
                     //Set Ctx - add to changed Ctx
-                    //p_changeVO.setContext(getCtx(), windowNo, "C_DocTypeTarget_ID", C_DocType_ID);
+                    //p_changeVO.setContext(getCtx(), windowNo, "VAB_DocTypesTarget_ID", VAB_DocTypes_ID);
                     //	Set Movement Type
                     String DocBaseType = dr["DocBaseType"].ToString();
                     Boolean IsReturnTrx = "Y".Equals(dr[3].ToString());
@@ -1244,7 +1244,7 @@ namespace VAdvantage.Model
             if (bp == null)
                 return;
 
-            SetC_BPartner_ID(bp.GetC_BPartner_ID());
+            SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
 
             //	Set Locations*******************************************************************************
             MBPartnerLocation[] locs = bp.GetLocations(false);
@@ -1253,13 +1253,13 @@ namespace VAdvantage.Model
                 for (int i = 0; i < locs.Length; i++)
                 {
                     if (locs[i].IsShipTo())
-                        SetC_BPartner_Location_ID(locs[i].GetC_BPartner_Location_ID());
+                        SetVAB_BPart_Location_ID(locs[i].GetVAB_BPart_Location_ID());
                 }
                 //	set to first if not set
-                if (GetC_BPartner_Location_ID() == 0 && locs.Length > 0)
-                    SetC_BPartner_Location_ID(locs[0].GetC_BPartner_Location_ID());
+                if (GetVAB_BPart_Location_ID() == 0 && locs.Length > 0)
+                    SetVAB_BPart_Location_ID(locs[0].GetVAB_BPart_Location_ID());
             }
-            if (GetC_BPartner_Location_ID() == 0)
+            if (GetVAB_BPart_Location_ID() == 0)
             {
                 log.Log(Level.SEVERE, "Has no To Address: " + bp);
             }
@@ -1273,36 +1273,36 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Business Partner - Callout
         /// </summary>
-        /// <param name="oldC_BPartner_ID">old BP</param>
-        /// <param name="newC_BPartner_ID">new BP</param>
+        /// <param name="oldVAB_BusinessPartner_ID">old BP</param>
+        /// <param name="newVAB_BusinessPartner_ID">new BP</param>
         /// <param name="windowNo">window no</param>
         /// @UICallout
-        public void SetC_BPartner_ID(String oldC_BPartner_ID,
-               String newC_BPartner_ID, int windowNo)
+        public void SetVAB_BusinessPartner_ID(String oldVAB_BusinessPartner_ID,
+               String newVAB_BusinessPartner_ID, int windowNo)
         {
-            if (newC_BPartner_ID == null || newC_BPartner_ID.Length == 0)
+            if (newVAB_BusinessPartner_ID == null || newVAB_BusinessPartner_ID.Length == 0)
                 return;
-            int C_BPartner_ID = int.Parse(newC_BPartner_ID);
-            if (C_BPartner_ID == 0)
+            int VAB_BusinessPartner_ID = int.Parse(newVAB_BusinessPartner_ID);
+            if (VAB_BusinessPartner_ID == 0)
                 return;
             String sql = "SELECT p.VAF_Language, p.POReference,"
                 + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.VAF_UserContact_ID "
-                + "FROM C_BPartner p"
-                + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
-                + " LEFT OUTER JOIN VAF_UserContact c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
-                + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
+                + "l.VAB_BPart_Location_ID, c.VAF_UserContact_ID "
+                + "FROM VAB_BusinessPartner p"
+                + " LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID)"
+                + " LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "WHERE p.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;		//	1
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    SetC_BPartner_ID(C_BPartner_ID);
+                    SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
                     //	Location
-                    int ii = (int)dr["C_BPartner_Location_ID"];
+                    int ii = (int)dr["VAB_BPart_Location_ID"];
                     if (ii != 0)
-                        SetC_BPartner_Location_ID(ii);
+                        SetVAB_BPart_Location_ID(ii);
                     //	Contact
                     ii = (int)dr["VAF_UserContact_ID"];
                     SetVAF_UserContact_ID(ii);
@@ -1332,8 +1332,8 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Movement Date - Callout
         /// </summary>
-        /// <param name="oldC_BPartner_ID">old BP</param>
-        /// <param name="newC_BPartner_ID">new BP</param>
+        /// <param name="oldVAB_BusinessPartner_ID">old BP</param>
+        /// <param name="newVAB_BusinessPartner_ID">new BP</param>
         /// <param name="windowNo">window no</param>
         /// @UICallout
         public void SetMovementDate(String oldMovementDate,
@@ -1374,8 +1374,8 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Business Partner - Callout
         /// </summary>
-        /// <param name="oldC_BPartner_ID">old BP</param>
-        /// <param name="newC_BPartner_ID">new BP</param>
+        /// <param name="oldVAB_BusinessPartner_ID">old BP</param>
+        /// <param name="newVAB_BusinessPartner_ID">new BP</param>
         /// <param name="windowNo">window no</param>
         /// @UICallout
         public void SetM_Warehouse_ID(String oldM_Warehouse_ID,
@@ -1429,7 +1429,7 @@ namespace VAdvantage.Model
         public void CreateConfirmation(bool _Status = false)
         {
             bool checkDocStatus = _Status;
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             bool pick = dt.IsPickQAConfirm();
             bool ship = dt.IsShipConfirm();
             //	Nothing to do
@@ -1522,12 +1522,12 @@ namespace VAdvantage.Model
                 log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
                 return false;
             }
-            if (newRecord || Is_ValueChanged("C_BPartner_ID"))
+            if (newRecord || Is_ValueChanged("VAB_BusinessPartner_ID"))
             {
-                MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
                 if (!bp.IsActive())
                 {
-                    log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "C_BPartner_ID"));
+                    log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "VAB_BusinessPartner_ID"));
                     return false;
                 }
             }
@@ -1548,7 +1548,7 @@ namespace VAdvantage.Model
             ////Added by Bharat for Credit Limit on 24/08/2016
             //if (IsSOTrx())
             //{
-            //    MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+            //    MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
             //    if (bp.GetCreditStatusSettingOn() == "CH")
             //    {
             //        decimal creditLimit = bp.GetSO_CreditLimit();
@@ -1571,9 +1571,9 @@ namespace VAdvantage.Model
             //        }
             //    }
             //    // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
-            //    else if(bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+            //    else if(bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
             //    {
-            //        MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
+            //        MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetVAB_BPart_Location_ID(), null);
             //        //if (bpl.GetCreditStatusSettingOn() == "CL")
             //        //{
             //            decimal creditLimit = bpl.GetSO_CreditLimit();
@@ -1630,15 +1630,15 @@ namespace VAdvantage.Model
             {
                 MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
                 Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
-                        ord.GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-                        ord.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                        ord.GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
+                        ord.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
+                MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
                 string retMsg = "";
-                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                bool crdAll = bp.IsCreditAllowed(GetVAB_BPart_Location_ID(), grandTotal, out retMsg);
                 if (!crdAll)
                     log.SaveWarning("Warning", retMsg);
-                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                else if (bp.IsCreditWatch(GetVAB_BPart_Location_ID()))
                 {
                     log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
                 }
@@ -1705,7 +1705,7 @@ namespace VAdvantage.Model
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             SetIsReturnTrx(dt.IsReturnTrx());
             SetIsSOTrx(dt.IsSOTrx());
 
@@ -1749,7 +1749,7 @@ namespace VAdvantage.Model
                 }
                 if (checkCreditStatus)
                 {
-                    MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
+                    MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
                     //if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
                     //{
                     //    _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
@@ -1765,7 +1765,7 @@ namespace VAdvantage.Model
                     //    return DocActionVariables.STATUS_INVALID;
                     //}
 
-                    Decimal notInvoicedAmt = MBPartner.GetNotInvoicedAmt(GetC_BPartner_ID());
+                    Decimal notInvoicedAmt = MBPartner.GetNotInvoicedAmt(GetVAB_BusinessPartner_ID());
                     if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(notInvoicedAmt)))
                     {
                         _processMsg = "@BPartnerOverSCreditHold@ - @TotalOpenBalance@="
@@ -1776,10 +1776,10 @@ namespace VAdvantage.Model
 
                     // check for Credit limit and Credit validation on Customer Master or Location
                     string retMsg = "";
-                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), 0, out retMsg);
+                    bool crdAll = bp.IsCreditAllowed(GetVAB_BPart_Location_ID(), 0, out retMsg);
                     if (!crdAll)
                     {
-                        if (bp.ValidateCreditValidation("B,D,E,F", GetC_BPartner_Location_ID()))
+                        if (bp.ValidateCreditValidation("B,D,E,F", GetVAB_BPart_Location_ID()))
                         {
                             _processMsg = retMsg;
                             return DocActionVariables.STATUS_INVALID;
@@ -1921,7 +1921,7 @@ namespace VAdvantage.Model
                     if (disallow.ToUpper() == "Y")
                     {
                         // is used to handle Non Stocked Item which are not in Storage
-                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND C_Charge_ID IS NULL AND M_Product_ID NOT IN 
+                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND VAB_Charge_ID IS NULL AND M_Product_ID NOT IN 
                             (SELECT M_InoutLine.M_Product_ID FROM M_InoutLine INNER JOIN M_Product ON M_InoutLine.M_Product_ID = M_Product.M_Product_ID 
                             WHERE M_Product.IsStocked = 'N' AND M_InoutLine.M_Inout_ID  = " + GetM_InOut_ID() + " ) ";
                         int[] ioLine = MInOutLine.GetAllIDs("M_InoutLine", whereClause, Get_TrxName());
@@ -2044,7 +2044,7 @@ namespace VAdvantage.Model
 
             //    //----------------------Change by Lokesh Chauhan--------------------------
             //    X_M_InOut inOut = new X_M_InOut(GetCtx(), GetM_InOut_ID(), null);
-            //    string sqlL = "select name from c_bpartner_location where c_bpartner_location_id=" + inOut.GetC_BPartner_Location_ID();
+            //    string sqlL = "select name from VAB_BPart_Location where VAB_BPart_Location_id=" + inOut.GetVAB_BPart_Location_ID();
             //    string name = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlL));
             //    Boolean result = name.StartsWith("POS -");
             //    if (result)
@@ -2058,8 +2058,8 @@ namespace VAdvantage.Model
             //                MProdReceived ProdReceived = new MProdReceived(GetCtx(), 0, null);
             //                ProdReceived.SetVAF_Client_ID(inOut.GetVAF_Client_ID());
             //                ProdReceived.SetVAF_Org_ID(inOut.GetVAF_Org_ID());
-            //                ProdReceived.SetC_BPartner_ID(inOut.GetC_BPartner_ID());
-            //                ProdReceived.SetC_BPartner_Location_ID(inOut.GetC_BPartner_Location_ID());
+            //                ProdReceived.SetVAB_BusinessPartner_ID(inOut.GetVAB_BusinessPartner_ID());
+            //                ProdReceived.SetVAB_BPart_Location_ID(inOut.GetVAB_BPart_Location_ID());
             //                ProdReceived.SetDS_AREA_ID(inOut.GetDS_AREA_ID());
             //                ProdReceived.SetDS_SUBLOCATION_ID(inOut.GetDS_SUBLOCATION_ID());
             //                ProdReceived.SetM_InOut_ID(GetM_InOut_ID());
@@ -2256,7 +2256,7 @@ namespace VAdvantage.Model
                         MProductCategory pc = new MProductCategory(Env.GetCtx(), product.GetM_Product_Category_ID(), Get_TrxName());
                         if (VAPOS_POSTerminal_ID > 0)
                         {
-                            if (IsSOTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && pc.GetVAA_AssetGroup_ID() > 0 && sLine.GetA_Asset_ID() == 0)
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -2264,7 +2264,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && !IsReturnTrx() && pc.GetVAA_AssetGroup_ID() > 0 && sLine.GetA_Asset_ID() == 0)
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -3045,7 +3045,7 @@ namespace VAdvantage.Model
                             }
                             try
                             {
-                                inv.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                                inv.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
                             }
                             catch { }
                             if (!inv.Save(Get_TrxName()))
@@ -3072,7 +3072,7 @@ namespace VAdvantage.Model
                         MMatchPO po = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
                         try
                         {
-                            po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                            po.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
                         }
                         catch { }
                         if (!po.Save(Get_TrxName()))
@@ -3098,7 +3098,7 @@ namespace VAdvantage.Model
                             MMatchPO po = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
                             try
                             {
-                                po.Set_ValueNoCheck("C_BPartner_ID", GetC_BPartner_ID());
+                                po.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
                             }
                             catch { }
                             if (!po.Save(Get_TrxName()))
@@ -3179,7 +3179,7 @@ namespace VAdvantage.Model
                         //}
                         //}
 
-                        _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
+                        _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
                         orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
                         if (!IsSOTrx() && !IsReturnTrx()) // Material Receipt
                         {
@@ -3532,7 +3532,7 @@ namespace VAdvantage.Model
                        && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0)
                     {
                         log.Fine("Asset");
-                        Info.Append("@A_Asset_ID@: ");
+                        Info.Append("@VAA_Asset_ID@: ");
                         int noAssets = (int)sLine.GetMovementQty();
 
                         // Check Added only run when Product is one Asset Per UOM
@@ -3769,8 +3769,8 @@ namespace VAdvantage.Model
                 #region If shipment happened against an Asset, then UnCheck 'InPossesion' check box from checkbox.
                 if (IsSOTrx() && !IsReturnTrx() && sLine.GetA_Asset_ID() > 0)
                 {
-                    DB.ExecuteQuery(@"UPDATE A_Asset Set IsInposession = 'N' 
-                                WHERE IsInposession = 'Y' AND A_Asset_ID = " + sLine.GetA_Asset_ID(), null, Get_Trx());
+                    DB.ExecuteQuery(@"UPDATE VAA_Asset Set IsInposession = 'N' 
+                                WHERE IsInposession = 'Y' AND VAA_Asset_ID = " + sLine.GetA_Asset_ID(), null, Get_Trx());
                 }
                 #endregion
 
@@ -3896,7 +3896,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -3924,7 +3924,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -4909,35 +4909,35 @@ namespace VAdvantage.Model
 
             //	Org Must be linked to BPartner
             MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
-            //jz int counterC_BPartner_ID = org.getLinkedC_BPartner_ID(get_TrxName()); 
-            int counterC_BPartner_ID = org.GetLinkedC_BPartner_ID(Get_TrxName());
-            if (counterC_BPartner_ID == 0)
+            //jz int counterVAB_BusinessPartner_ID = org.getLinkedVAB_BusinessPartner_ID(get_TrxName()); 
+            int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(Get_TrxName());
+            if (counterVAB_BusinessPartner_ID == 0)
                 return null;
             //	Business Partner needs to be linked to Org
-            //jz MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+            //jz MBPartner bp = new MBPartner (getCtx(), getVAB_BusinessPartner_ID(), null);
+            MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             int counterVAF_Org_ID = bp.GetVAF_OrgBP_ID_Int();
             if (counterVAF_Org_ID == 0)
                 return null;
 
-            //jz MBPartner counterBP = new MBPartner (getCtx(), counterC_BPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterC_BPartner_ID, Get_TrxName());
+            //jz MBPartner counterBP = new MBPartner (getCtx(), counterVAB_BusinessPartner_ID, null);
+            MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
             MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type
-            int C_DocTypeTarget_ID = 0;
+            int VAB_DocTypesTarget_ID = 0;
             bool isReturnTrx = false;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetC_DocType_ID());
+            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
                 if (!counterDT.IsCreateCounter() || !counterDT.IsValid())
                     return null;
-                C_DocTypeTarget_ID = counterDT.GetCounter_C_DocType_ID();
+                VAB_DocTypesTarget_ID = counterDT.GetCounter_VAB_DocTypes_ID();
                 isReturnTrx = counterDT.GetCounterDocType().IsReturnTrx();
             }
-            if (C_DocTypeTarget_ID <= 0)
+            if (VAB_DocTypesTarget_ID <= 0)
                 return null;
 
             // ReversalDoc_ID --> contain reference of Orignal Document which is to be reversed
@@ -4959,7 +4959,7 @@ namespace VAdvantage.Model
 
             //	Deep Copy
             MInOut counter = CopyFrom(this, GetMovementDate(),
-                C_DocTypeTarget_ID, !IsSOTrx(), isReturnTrx, true, Get_TrxName(), true);
+                VAB_DocTypesTarget_ID, !IsSOTrx(), isReturnTrx, true, Get_TrxName(), true);
 
             //
             counter.SetVAF_Org_ID(counterVAF_Org_ID);
@@ -5065,7 +5065,7 @@ namespace VAdvantage.Model
                         line.Save(Get_TrxName());
                         //if (countVA038 > 0)
                         //{
-                        //    Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT A_Asset_ID FROM A_Asset WHERE M_INOUTLINE_ID=" + line.GetM_InOutLine_ID()));
+                        //    Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAA_Asset_ID FROM VAA_Asset WHERE M_INOUTLINE_ID=" + line.GetM_InOutLine_ID()));
                         //    if (Asset_ID > 0)
                         //    {
                         //        MAsset Asset = new MAsset(GetCtx(), Asset_ID, Get_TrxName());
@@ -5141,7 +5141,7 @@ namespace VAdvantage.Model
             log.Info(ToString());
             string reversedDocno = null;
             string ss = ToString();
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -5157,7 +5157,7 @@ namespace VAdvantage.Model
             }
 
             MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
-            MDocType dtOrder = MDocType.Get(GetCtx(), ord.GetC_DocType_ID());
+            MDocType dtOrder = MDocType.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
             String DocSubTypeSO = dtOrder.GetDocSubTypeSO();
 
             // if any linked record exist on invoice for PO/SO cycle then not able to reverse this record
@@ -5219,7 +5219,7 @@ namespace VAdvantage.Model
 
             //	Deep Copy
             MInOut reversal = CopyFrom(this, GetMovementDate(),
-                GetC_DocType_ID(), IsSOTrx(), dt.IsReturnTrx(), false, Get_TrxName(), true);
+                GetVAB_DocTypes_ID(), IsSOTrx(), dt.IsReturnTrx(), false, Get_TrxName(), true);
             if (reversal.Get_ColumnIndex("IsFutureCostCalculated") > 0)
             {
                 reversal.SetIsFutureCostCalculated(false);
@@ -5474,12 +5474,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get C_Currency_ID
+        /// Get VAB_Currency_ID
         /// </summary>
         /// <returns>Accounting Currency</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            return GetCtx().GetContextAsInt("$C_Currency_ID ");
+            return GetCtx().GetContextAsInt("$VAB_Currency_ID ");
         }
 
         /// <summary>

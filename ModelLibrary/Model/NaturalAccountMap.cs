@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /**	Logger			*/
         private static VLogger log = VLogger.GetVLogger(typeof(NaturalAccountMap<K, V>).FullName);
 
-        public bool SaveAccounts(int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID)
+        public bool SaveAccounts(int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID)
         {
             log.Config("");
 
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
                 MElementValue na = (MElementValue)s_base[key];
                 na.SetVAF_Client_ID(VAF_Client_ID);
                 na.SetVAF_Org_ID(VAF_Org_ID);
-                na.SetC_Element_ID(C_Element_ID);
+                na.SetVAB_Element_ID(VAB_Element_ID);
                 na.SetVIS_DefaultAccount(key);
 
                 if (!na.Save())
@@ -54,15 +54,15 @@ namespace VAdvantage.Model
         }   //  saveAccounts
 
 
-        public int GetC_ElementValue_ID(String key)
+        public int GetVAB_Acct_Element_ID(String key)
         {
             MElementValue na = null;
             if (s_base.ContainsKey(key))
                 na = (MElementValue)s_base[key];
             if (na == null)
                 return 0;
-            return na.GetC_ElementValue_ID();
-        }   //  getC_ElementValue_ID
+            return na.GetVAB_Acct_Element_ID();
+        }   //  getVAB_Acct_Element_ID
 
 
         public String ParseFile(FileStream file)
@@ -241,7 +241,7 @@ namespace VAdvantage.Model
 
 
 
-        public String ParseFile(FileStream file, int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID, MTree tree)
+        public String ParseFile(FileStream file, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID, MTree tree)
         {
             //log.Config(file.Name);
             String line = null;
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
 
                 //  read lines
                 while ((line = inn.ReadLine()) != null && errMsg.Length == 0)
-                    errMsg = ParseAndSaveLine(line, VAF_Client_ID, VAF_Org_ID, C_Element_ID,tree);
+                    errMsg = ParseAndSaveLine(line, VAF_Client_ID, VAF_Org_ID, VAB_Element_ID,tree);
                 line = "";
                 inn.Close();
 
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         }   //  parse
 
 
-        public String ParseAndSaveLine(String line, int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID,MTree tree)
+        public String ParseAndSaveLine(String line, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID,MTree tree)
         {
             log.Config(line);
 
@@ -383,19 +383,19 @@ namespace VAdvantage.Model
                 {
                     //  Create Account - save later
                     na = new MElementValue(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
-                    int refElementID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ElementValue_ID FROM C_ElementValue
+                    int refElementID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element
                                                                                     WHERE IsActive='Y' AND VAF_Client_ID=" + na.GetVAF_Client_ID() + " AND Value='" + accountParent + @"'
-                                                                                    AND C_Element_ID=" + C_Element_ID, null, m_trx));
-                    na.SetRef_C_ElementValue_ID(refElementID);
+                                                                                    AND VAB_Element_ID=" + VAB_Element_ID, null, m_trx));
+                    na.SetRef_VAB_Acct_Element_ID(refElementID);
                     m_valueMap[Value] = na;
                     na.SetVAF_Client_ID(VAF_Client_ID);
                     na.SetVAF_Org_ID(VAF_Org_ID);
-                    na.SetC_Element_ID(C_Element_ID);
+                    na.SetVAB_Element_ID(VAB_Element_ID);
                     na.SetVIS_DefaultAccount(Default_Account);
                     if (!na.Save(m_trx))
                     {
                         return "Acct Element Values NOT inserted";
-                        //m_info.Append(Msg.Translate(m_lang, "C_ElementValue_ID")).Append(" # ").Append(m_nap.Count).Append("\n");
+                        //m_info.Append(Msg.Translate(m_lang, "VAB_Acct_Element_ID")).Append(" # ").Append(m_nap.Count).Append("\n");
                     }
                     VAdvantage.Model.MTreeNode mNode = VAdvantage.Model.MTreeNode.Get(tree, na.Get_ID());
                     if (mNode == null)

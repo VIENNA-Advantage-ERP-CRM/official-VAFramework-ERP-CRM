@@ -30,9 +30,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** Old DocumentNo			*/
         private String _oldDocumentNo = null;
         /** Old BPartner			*/
-        private int _oldC_BPartner_ID = 0;
+        private int _oldVAB_BusinessPartner_ID = 0;
         /** Old BPartner Loc		*/
-        private int _oldC_BPartner_Location_ID = 0;
+        private int _oldVAB_BPart_Location_ID = 0;
 
         /** Counter					*/
         private int _count = 0;
@@ -101,8 +101,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 if ((_oldDocumentNo != null
                         && !_oldDocumentNo.Equals(line.GetDocumentNo()))
-                    || _oldC_BPartner_ID != line.GetC_BPartner_ID()
-                    || _oldC_BPartner_Location_ID != line.GetC_BPartner_Location_ID())
+                    || _oldVAB_BusinessPartner_ID != line.GetVAB_BusinessPartner_ID()
+                    || _oldVAB_BPart_Location_ID != line.GetVAB_BPart_Location_ID())
                     CompleteInvoice();
                 //	New Invoice
                 if (_invoice == null)
@@ -113,8 +113,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //throw new Exception("Cannot save Invoice");
                     //
                     _oldDocumentNo = line.GetDocumentNo();
-                    _oldC_BPartner_ID = line.GetC_BPartner_ID();
-                    _oldC_BPartner_Location_ID = line.GetC_BPartner_Location_ID();
+                    _oldVAB_BusinessPartner_ID = line.GetVAB_BusinessPartner_ID();
+                    _oldVAB_BPart_Location_ID = line.GetVAB_BPart_Location_ID();
                 }
 
                 if (line.IsTaxIncluded() != _invoice.IsTaxIncluded())
@@ -127,7 +127,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Add Line
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetDescription(line.GetDescription());
-                invoiceLine.SetC_Charge_ID(line.GetC_Charge_ID());
+                invoiceLine.SetVAB_Charge_ID(line.GetVAB_Charge_ID());
                 invoiceLine.SetQty(line.GetQtyEntered());	// Entered/Invoiced
                 invoiceLine.SetPrice(line.GetPriceEntered());
                 invoiceLine.SetC_Tax_ID(line.GetC_Tax_ID());

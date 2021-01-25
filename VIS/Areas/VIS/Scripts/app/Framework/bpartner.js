@@ -1334,7 +1334,7 @@
                         url: url,
                         dataType: "json",
                         data: {
-                            C_BPartner_ID: BPartnerID,
+                            VAB_BusinessPartner_ID: BPartnerID,
                             searchKey: searchKey,
                             name: name,
                             name2: name2,

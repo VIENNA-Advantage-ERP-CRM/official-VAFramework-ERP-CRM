@@ -16,7 +16,7 @@ namespace VAdvantage.Model
     {
         public X_C_Payment(Context ctx, int C_Payment_ID, Trx trxName)
             : base(ctx, C_Payment_ID, trxName)
-        {/** if (C_Payment_ID == 0){SetC_BankAccount_ID (0);SetC_Currency_ID (0);SetC_DocType_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
+        {/** if (C_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
 SetDateTrx (DateTime.Now);// @#Date@
 SetDocAction (null);// CO
 SetDocStatus (null);// DR
@@ -32,7 +32,7 @@ SetTrxType (null);// S
         }
         public X_C_Payment(Ctx ctx, int C_Payment_ID, Trx trxName)
             : base(ctx, C_Payment_ID, trxName)
-        {/** if (C_Payment_ID == 0){SetC_BankAccount_ID (0);SetC_Currency_ID (0);SetC_DocType_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
+        {/** if (C_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
 SetDateTrx (DateTime.Now);// @#Date@
 SetDocAction (null);// CO
 SetDocStatus (null);// DR
@@ -135,72 +135,72 @@ SetTrxType (null);// S
         public void SetAccountNo(String AccountNo) { if (AccountNo != null && AccountNo.Length > 20) { log.Warning("Length > 20 - truncated"); AccountNo = AccountNo.Substring(0, 20); } Set_Value("AccountNo", AccountNo); }/** Get Account No.
 @return Account Number */
         public String GetAccountNo() { return (String)Get_Value("AccountNo"); }/** Set Activity.
-@param C_Activity_ID Business Activity */
-        public void SetC_Activity_ID(int C_Activity_ID)
+@param VAB_BillingCode_ID Business Activity */
+        public void SetVAB_BillingCode_ID(int VAB_BillingCode_ID)
         {
-            if (C_Activity_ID <= 0) Set_Value("C_Activity_ID", null);
+            if (VAB_BillingCode_ID <= 0) Set_Value("VAB_BillingCode_ID", null);
             else
-                Set_Value("C_Activity_ID", C_Activity_ID);
+                Set_Value("VAB_BillingCode_ID", VAB_BillingCode_ID);
         }/** Get Activity.
 @return Business Activity */
-        public int GetC_Activity_ID() { Object ii = Get_Value("C_Activity_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Partner Bank Account.
-@param C_BP_BankAccount_ID Bank Account of the Business Partner */
-        public void SetC_BP_BankAccount_ID(int C_BP_BankAccount_ID)
+        public int GetVAB_BillingCode_ID() { Object ii = Get_Value("VAB_BillingCode_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Partner Bank Account.
+@param VAB_BPart_Bank_Acct_ID Bank Account of the Business Partner */
+        public void SetVAB_BPart_Bank_Acct_ID(int VAB_BPart_Bank_Acct_ID)
         {
-            if (C_BP_BankAccount_ID <= 0) Set_Value("C_BP_BankAccount_ID", null);
+            if (VAB_BPart_Bank_Acct_ID <= 0) Set_Value("VAB_BPart_Bank_Acct_ID", null);
             else
-                Set_Value("C_BP_BankAccount_ID", C_BP_BankAccount_ID);
+                Set_Value("VAB_BPart_Bank_Acct_ID", VAB_BPart_Bank_Acct_ID);
         }/** Get Partner Bank Account.
 @return Bank Account of the Business Partner */
-        public int GetC_BP_BankAccount_ID() { Object ii = Get_Value("C_BP_BankAccount_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        public int GetVAB_BPart_Bank_Acct_ID() { Object ii = Get_Value("VAB_BPart_Bank_Acct_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID() { Object ii = Get_Value("C_BPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Bank Account.
-@param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID) { if (C_BankAccount_ID < 1) throw new ArgumentException("C_BankAccount_ID is mandatory."); Set_Value("C_BankAccount_ID", C_BankAccount_ID); }/** Get Bank Account.
+        public int GetVAB_BusinessPartner_ID() { Object ii = Get_Value("VAB_BusinessPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Bank Account.
+@param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID) { if (VAB_Bank_Acct_ID < 1) throw new ArgumentException("VAB_Bank_Acct_ID is mandatory."); Set_Value("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID); }/** Get Bank Account.
 @return Account at the Bank */
-        public int GetC_BankAccount_ID() { Object ii = Get_Value("C_BankAccount_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-        public void SetC_Campaign_ID(int C_Campaign_ID)
+        public int GetVAB_Bank_Acct_ID() { Object ii = Get_Value("VAB_Bank_Acct_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Campaign.
+@param VAB_Promotion_ID Marketing Campaign */
+        public void SetVAB_Promotion_ID(int VAB_Promotion_ID)
         {
-            if (C_Campaign_ID <= 0) Set_Value("C_Campaign_ID", null);
+            if (VAB_Promotion_ID <= 0) Set_Value("VAB_Promotion_ID", null);
             else
-                Set_Value("C_Campaign_ID", C_Campaign_ID);
+                Set_Value("VAB_Promotion_ID", VAB_Promotion_ID);
         }/** Get Campaign.
 @return Marketing Campaign */
-        public int GetC_Campaign_ID() { Object ii = Get_Value("C_Campaign_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Charge.
-@param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        public int GetVAB_Promotion_ID() { Object ii = Get_Value("VAB_Promotion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Charge.
+@param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }/** Get Charge.
 @return Additional document charges */
-        public int GetC_Charge_ID() { Object ii = Get_Value("C_Charge_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        public int GetVAB_Charge_ID() { Object ii = Get_Value("VAB_Charge_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency Type.
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID <= 0) Set_Value("C_ConversionType_ID", null);
+            if (VAB_CurrencyType_ID <= 0) Set_Value("VAB_CurrencyType_ID", null);
             else
-                Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+                Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }/** Get Currency Type.
 @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID() { Object ii = Get_Value("C_ConversionType_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency.
-@param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID) { if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory."); Set_Value("C_Currency_ID", C_Currency_ID); }/** Get Currency.
+        public int GetVAB_CurrencyType_ID() { Object ii = Get_Value("VAB_CurrencyType_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency.
+@param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID) { if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory."); Set_Value("VAB_Currency_ID", VAB_Currency_ID); }/** Get Currency.
 @return The Currency for this record */
-        public int GetC_Currency_ID() { Object ii = Get_Value("C_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Document Type.
-@param C_DocType_ID Document type or rules */
-        public void SetC_DocType_ID(int C_DocType_ID) { if (C_DocType_ID < 0) throw new ArgumentException("C_DocType_ID is mandatory."); Set_Value("C_DocType_ID", C_DocType_ID); }/** Get Document Type.
+        public int GetVAB_Currency_ID() { Object ii = Get_Value("VAB_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Document Type.
+@param VAB_DocTypes_ID Document type or rules */
+        public void SetVAB_DocTypes_ID(int VAB_DocTypes_ID) { if (VAB_DocTypes_ID < 0) throw new ArgumentException("VAB_DocTypes_ID is mandatory."); Set_Value("VAB_DocTypes_ID", VAB_DocTypes_ID); }/** Get Document Type.
 @return Document type or rules */
-        public int GetC_DocType_ID() { Object ii = Get_Value("C_DocType_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Payment Schedule.
+        public int GetVAB_DocTypes_ID() { Object ii = Get_Value("VAB_DocTypes_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Payment Schedule.
 @param C_InvoicePaySchedule_ID Invoice Payment Schedule */
         public void SetC_InvoicePaySchedule_ID(int C_InvoicePaySchedule_ID)
         {
@@ -890,15 +890,15 @@ SetTrxType (null);// S
         }
 
         /** Set Location.
-        @param C_BPartner_Location_ID Identifies the address for this Account/Prospect. */
-        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        @param VAB_BPart_Location_ID Identifies the address for this Account/Prospect. */
+        public void SetVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            if (C_BPartner_Location_ID <= 0) Set_Value("C_BPartner_Location_ID", null);
+            if (VAB_BPart_Location_ID <= 0) Set_Value("VAB_BPart_Location_ID", null);
             else
-                Set_Value("C_BPartner_Location_ID", C_BPartner_Location_ID);
+                Set_Value("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
         }/** Get Location.
         @return Identifies the address for this Account/Prospect. */
-        public int GetC_BPartner_Location_ID() { Object ii = Get_Value("C_BPartner_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_BPart_Location_ID() { Object ii = Get_Value("VAB_BPart_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
 

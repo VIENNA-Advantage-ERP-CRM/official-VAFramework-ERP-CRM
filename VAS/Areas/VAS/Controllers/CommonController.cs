@@ -86,14 +86,14 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public JsonResult SaveStatment(List<Dictionary<string, string>> model, string selectedItems, string C_BankStatement_ID)
+        public JsonResult SaveStatment(List<Dictionary<string, string>> model, string selectedItems, string VAB_BankingJRNL_ID)
         {
             var value = false;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveStatmentData(ctx, model, selectedItems, Convert.ToInt32(C_BankStatement_ID));
+                value = obj.SaveStatmentData(ctx, model, selectedItems, Convert.ToInt32(VAB_BankingJRNL_ID));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -597,9 +597,9 @@ namespace VIS.Controllers
             //	Price List
             String sql = "SELECT M_PriceList_Version.M_PriceList_Version_ID,"
                 + " M_PriceList_Version.Name || ' (' || c.Iso_Code || ')' AS ValueName "
-                + "FROM M_PriceList_Version, M_PriceList pl, C_Currency c "
+                + "FROM M_PriceList_Version, M_PriceList pl, VAB_Currency c "
                 + "WHERE M_PriceList_Version.M_PriceList_ID=pl.M_PriceList_ID"
-                + " AND pl.C_Currency_ID=c.C_Currency_ID"
+                + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
                 + " AND M_PriceList_Version.IsActive='Y' AND pl.IsActive='Y'";
             //	Add Access & Order
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_PriceList_Version", true, false)	// fully qualidfied - RO 
@@ -919,7 +919,7 @@ namespace VIS.Controllers
                     //item.Select = false;
                     item.Date = Util.GetValueOfString(data.Tables[0].Rows[i]["DateTrx"]);
                     item.C_Payment_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["DocumentNo"]);
-                    item.C_Currency_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["ISO_Code"]);
+                    item.VAB_Currency_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["ISO_Code"]);
                     item.Amount = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["PayAmt"]);
                     item.ConvertedAmount = Util.GetValueOfDecimal(data.Tables[0].Rows[i]["ConvertedAmt"]);
 
@@ -929,10 +929,10 @@ namespace VIS.Controllers
                         desc.Substring(0, 50);
                     }
                     item.Description = desc;
-                    item.C_BPartner_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["Name"]);
+                    item.VAB_BusinessPartner_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["Name"]);
                     item.Type = Util.GetValueOfString(data.Tables[0].Rows[i]["Type"]);
                     item.C_Payment_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_Payment_ID"]);
-                    item.C_Currency_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_Currency_ID"]);
+                    item.VAB_Currency_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["VAB_Currency_ID"]);
 
 
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
@@ -1269,21 +1269,21 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("C_ProjectTask_ID", ol.GetC_ProjectTask_ID());
                     }
-                    if (ol.GetC_Activity_ID() <= 0)
+                    if (ol.GetVAB_BillingCode_ID() <= 0)
                     {
-                        po.Set_Value("C_Activity_ID", null);
+                        po.Set_Value("VAB_BillingCode_ID", null);
                     }
                     else
                     {
-                        po.Set_Value("C_Activity_ID", ol.GetC_Activity_ID());
+                        po.Set_Value("VAB_BillingCode_ID", ol.GetVAB_BillingCode_ID());
                     }
-                    if (ol.GetC_Campaign_ID() <= 0)
+                    if (ol.GetVAB_Promotion_ID() <= 0)
                     {
-                        po.Set_Value("C_Campaign_ID", null);
+                        po.Set_Value("VAB_Promotion_ID", null);
                     }
                     else
                     {
-                        po.Set_Value("C_Campaign_ID", ol.GetC_Campaign_ID());
+                        po.Set_Value("VAB_Promotion_ID", ol.GetVAB_Promotion_ID());
                     }
                     if (ol.GetVAF_OrgTrx_ID() <= 0)
                     {
@@ -1314,8 +1314,8 @@ namespace VIS.Controllers
                     //iol.SetC_Project_ID(ol.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(ol.GetC_ProjectPhase_ID());
                     //iol.SetC_ProjectTask_ID(ol.GetC_ProjectTask_ID());
-                    //iol.SetC_Activity_ID(ol.GetC_Activity_ID());
-                    //iol.SetC_Campaign_ID(ol.GetC_Campaign_ID());
+                    //iol.SetVAB_BillingCode_ID(ol.GetVAB_BillingCode_ID());
+                    //iol.SetVAB_Promotion_ID(ol.GetVAB_Promotion_ID());
                     //iol.SetVAF_OrgTrx_ID(ol.GetVAF_OrgTrx_ID());
                     //iol.SetUser1_ID(ol.GetUser1_ID());
                     //iol.SetUser2_ID(ol.GetUser2_ID());
@@ -1362,21 +1362,21 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("C_ProjectTask_ID", il.GetC_ProjectTask_ID());
                     }
-                    if (il.GetC_Campaign_ID() <= 0)
+                    if (il.GetVAB_Promotion_ID() <= 0)
                     {
 
                     }
                     else
                     {
-                        po.Set_Value("C_Activity_ID", il.GetC_Activity_ID());
+                        po.Set_Value("VAB_BillingCode_ID", il.GetVAB_BillingCode_ID());
                     }
-                    if (il.GetC_Campaign_ID() <= 0)
+                    if (il.GetVAB_Promotion_ID() <= 0)
                     {
-                        po.Set_Value("C_Campaign_ID", null);
+                        po.Set_Value("VAB_Promotion_ID", null);
                     }
                     else
                     {
-                        po.Set_Value("C_Campaign_ID", il.GetC_Campaign_ID());
+                        po.Set_Value("VAB_Promotion_ID", il.GetVAB_Promotion_ID());
                     }
                     if (il.GetVAF_OrgTrx_ID() <= 0)
                     {
@@ -1406,8 +1406,8 @@ namespace VIS.Controllers
                     //iol.SetC_Project_ID(il.GetC_Project_ID());
                     //iol.SetC_ProjectPhase_ID(il.GetC_ProjectPhase_ID());
                     //iol.SetC_ProjectTask_ID(il.GetC_ProjectTask_ID());
-                    //iol.SetC_Activity_ID(il.GetC_Activity_ID());
-                    //iol.SetC_Campaign_ID(il.GetC_Campaign_ID());
+                    //iol.SetVAB_BillingCode_ID(il.GetVAB_BillingCode_ID());
+                    //iol.SetVAB_Promotion_ID(il.GetVAB_Promotion_ID());
                     //iol.SetVAF_OrgTrx_ID(il.GetVAF_OrgTrx_ID());
                     //iol.SetUser1_ID(il.GetUser1_ID());
                     //iol.SetUser2_ID(il.GetUser2_ID());
@@ -1415,15 +1415,15 @@ namespace VIS.Controllers
                 //	Charge
                 if (M_Product_ID == 0)
                 {
-                    if (ol != null && ol.GetC_Charge_ID() != 0)			//	from order
+                    if (ol != null && ol.GetVAB_Charge_ID() != 0)			//	from order
                     {
-                        po.Set_Value("C_Charge_ID", ol.GetC_Charge_ID());
-                        //iol.SetC_Charge_ID(ol.GetC_Charge_ID());
+                        po.Set_Value("VAB_Charge_ID", ol.GetVAB_Charge_ID());
+                        //iol.SetVAB_Charge_ID(ol.GetVAB_Charge_ID());
                     }
-                    else if (il != null && il.GetC_Charge_ID() != 0)	//	from invoice
+                    else if (il != null && il.GetVAB_Charge_ID() != 0)	//	from invoice
                     {
-                        po.Set_Value("C_Charge_ID", il.GetC_Charge_ID());
-                        //iol.SetC_Charge_ID(il.GetC_Charge_ID());
+                        po.Set_Value("VAB_Charge_ID", il.GetVAB_Charge_ID());
+                        //iol.SetVAB_Charge_ID(il.GetVAB_Charge_ID());
                     }
                 }
                 po.Set_Value("M_Locator_ID", M_Locator_ID);
@@ -1456,8 +1456,8 @@ namespace VIS.Controllers
                 inout.SetDateOrdered(_order.GetDateOrdered());
                 inout.SetVAF_OrgTrx_ID(_order.GetVAF_OrgTrx_ID());
                 inout.SetC_Project_ID(_order.GetC_Project_ID());
-                inout.SetC_Campaign_ID(_order.GetC_Campaign_ID());
-                inout.SetC_Activity_ID(_order.GetC_Activity_ID());
+                inout.SetVAB_Promotion_ID(_order.GetVAB_Promotion_ID());
+                inout.SetVAB_BillingCode_ID(_order.GetVAB_BillingCode_ID());
                 inout.SetUser1_ID(_order.GetUser1_ID());
                 inout.SetUser2_ID(_order.GetUser2_ID());
                 // Change by Mohit asked by Amardeep sir 02/03/2016
@@ -1480,8 +1480,8 @@ namespace VIS.Controllers
                 inout.SetDateOrdered(_invoice.GetDateOrdered());
                 inout.SetVAF_OrgTrx_ID(_invoice.GetVAF_OrgTrx_ID());
                 inout.SetC_Project_ID(_invoice.GetC_Project_ID());
-                inout.SetC_Campaign_ID(_invoice.GetC_Campaign_ID());
-                inout.SetC_Activity_ID(_invoice.GetC_Activity_ID());
+                inout.SetVAB_Promotion_ID(_invoice.GetVAB_Promotion_ID());
+                inout.SetVAB_BillingCode_ID(_invoice.GetVAB_BillingCode_ID());
                 inout.SetUser1_ID(_invoice.GetUser1_ID());
                 inout.SetUser2_ID(_invoice.GetUser2_ID());
                 // Change by Mohit asked by Amardeep sir 02/03/2016
@@ -1693,9 +1693,9 @@ namespace VIS.Controllers
                         //            }
                         //        }
                         //    }
-                        //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
+                        //    if (Util.GetValueOfInt(inoutLine.GetVAB_Charge_ID()) > 0)
                         //    {
-                        //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
+                        //        MCharge charge = new MCharge(ctx, inoutLine.GetVAB_Charge_ID(), null);
                         //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                         //        {
                         //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -1793,9 +1793,9 @@ namespace VIS.Controllers
                     //            }
                     //        }
                     //    }
-                    //    if (Util.GetValueOfInt(orderLine.GetC_Charge_ID()) > 0)
+                    //    if (Util.GetValueOfInt(orderLine.GetVAB_Charge_ID()) > 0)
                     //    {
-                    //        MCharge charge = new MCharge(ctx, orderLine.GetC_Charge_ID(), null);
+                    //        MCharge charge = new MCharge(ctx, orderLine.GetVAB_Charge_ID(), null);
                     //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -1884,9 +1884,9 @@ namespace VIS.Controllers
                     //            }
                     //        }
                     //    }
-                    //    if (Util.GetValueOfInt(inoutLine.GetC_Charge_ID()) > 0)
+                    //    if (Util.GetValueOfInt(inoutLine.GetVAB_Charge_ID()) > 0)
                     //    {
-                    //        MCharge charge = new MCharge(ctx, inoutLine.GetC_Charge_ID(), null);
+                    //        MCharge charge = new MCharge(ctx, inoutLine.GetVAB_Charge_ID(), null);
                     //        if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                     //        {
                     //            invoiceLine.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -1952,17 +1952,17 @@ namespace VIS.Controllers
             return true;
         }
 
-        public bool SaveStatmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_BankStatement_ID)
+        public bool SaveStatmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int VAB_BankingJRNL_ID)
         {
-            MBankStatement bs = new MBankStatement(ctx, C_BankStatement_ID, null);
+            MBankStatement bs = new MBankStatement(ctx, VAB_BankingJRNL_ID, null);
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
                 DateTime trxDate = Convert.ToDateTime(model[i]["Date"]);          //  1-DateTrx
                 int C_Payment_ID = Convert.ToInt32(model[i]["C_Payment_ID_K"]);   //  2-C_Payment_ID
-                //int C_Currency_ID = Convert.ToInt32(model[i]["C_Currency_ID_K"]); //  3-Currency
+                //int VAB_Currency_ID = Convert.ToInt32(model[i]["VAB_Currency_ID_K"]); //  3-Currency
                 //Decimal TrxAmt = Convert.ToDecimal(model[i]["Amount"]);           //  4-PayAmt
-                int C_Currency_ID = Convert.ToInt32(model[i]["C_Currency_ID_K"]); //  3-Currency
+                int VAB_Currency_ID = Convert.ToInt32(model[i]["VAB_Currency_ID_K"]); //  3-Currency
                 Decimal TrxAmt = Convert.ToDecimal(model[i]["ConvertedAmount"]);           //  4-PayAmt
                 string type = Util.GetValueOfString(model[i]["Type"]);
                 MBankStatementLine bsl = new MBankStatementLine(bs);
@@ -1975,9 +1975,9 @@ namespace VIS.Controllers
                 }
                 else
                 {
-                    bsl.SetC_CashLine_ID(C_Payment_ID);
+                    bsl.SetVAB_CashJRNLLine_ID(C_Payment_ID);
                 }
-                bsl.SetC_Currency_ID(C_Currency_ID);
+                bsl.SetVAB_Currency_ID(VAB_Currency_ID);
                 bsl.SetTrxAmt(TrxAmt);
                 bsl.SetStmtAmt(TrxAmt);
                 bsl.SetDescription(pmt.GetDescription());
@@ -2038,14 +2038,14 @@ namespace VIS.Controllers
             public bool Select { get; set; }
             public string Date { get; set; }
             public string C_Payment_ID { get; set; }
-            public string C_Currency_ID { get; set; }
+            public string VAB_Currency_ID { get; set; }
             public decimal Amount { get; set; }
             public decimal ConvertedAmount { get; set; }
             public string Description { get; set; }
-            public string C_BPartner_ID { get; set; }
+            public string VAB_BusinessPartner_ID { get; set; }
             public string Type { get; set; }
             public int C_Payment_ID_K { get; set; }
-            public int C_Currency_ID_K { get; set; }
+            public int VAB_Currency_ID_K { get; set; }
             public string VA034_DepositSlipNo { get; set; }
             public string AuthCode { get; set; }
             public string CheckNo { get; set; }
@@ -2430,7 +2430,7 @@ namespace VIS.Controllers
                             if (iLine.GetM_Product_ID() != 0)
                             {
                                 MMatchInv match = new MMatchInv(iLine, inv.GetDateInvoiced(), qty);
-                                match.Set_ValueNoCheck("C_BPartner_ID", inv.GetC_BPartner_ID());
+                                match.Set_ValueNoCheck("VAB_BusinessPartner_ID", inv.GetVAB_BusinessPartner_ID());
                                 match.SetM_InOutLine_ID(M_InOutLine_ID);
                                 if (match.Save())
                                 {
@@ -2465,7 +2465,7 @@ namespace VIS.Controllers
                             if (iLine.GetC_OrderLine_ID() != 0 && iLine.GetM_Product_ID() != 0)
                             {
                                 MMatchPO matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
-                                matchPO.Set_ValueNoCheck("C_BPartner_ID", inv.GetC_BPartner_ID());
+                                matchPO.Set_ValueNoCheck("VAB_BusinessPartner_ID", inv.GetVAB_BusinessPartner_ID());
                                 matchPO.SetC_InvoiceLine_ID(iLine);
                                 matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
                                 if (!matchPO.Save())
@@ -2523,7 +2523,7 @@ namespace VIS.Controllers
                             if (sLine.GetM_Product_ID() != 0)
                             {
                                 MMatchPO match = new MMatchPO(sLine, ship.GetMovementDate(), qty);
-                                match.Set_ValueNoCheck("C_BPartner_ID", ship.GetC_BPartner_ID());
+                                match.Set_ValueNoCheck("VAB_BusinessPartner_ID", ship.GetVAB_BusinessPartner_ID());
                                 if (Util.GetValueOfInt(DB.ExecuteScalar("select count(*) from vaf_column where columnname like 'IsMatchPOForm'", null, trx)) > 0)
                                     match.SetIsMatchPOForm(true);
                                 if (!match.Save())
@@ -2763,7 +2763,7 @@ namespace VIS.Controllers
                 {
                     rm.AddColumn(new RColumn(ctx, "DateTrx", DisplayType.Date));
                 }
-                rm.AddColumn(new RColumn(ctx, "C_Currency_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAB_Currency_ID", DisplayType.TableDir));
                 rm.AddColumn(new RColumn(ctx, "AmtSourceDr", DisplayType.Amount));
                 rm.AddColumn(new RColumn(ctx, "AmtSourceCr", DisplayType.Amount));
                 rm.AddColumn(new RColumn(ctx, "Rate", DisplayType.Amount,
@@ -3200,9 +3200,9 @@ namespace VIS.Controllers
                     int AdClientID = Util.GetValueOfInt(paramValue[1]);
 
                     int CurrencyID = 0;
-                    CurrencyID = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT C_CURRENCY_ID "
-                                                                      + "  FROM C_ACCTSCHEMA "
-                                                                      + "  WHERE C_ACCTSCHEMA_ID = " + AccountingSchemaId
+                    CurrencyID = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT VAB_CURRENCY_ID "
+                                                                      + "  FROM VAB_ACCOUNTBOOK "
+                                                                      + "  WHERE VAB_ACCOUNTBOOK_ID = " + AccountingSchemaId
                                                                       + "  AND VAF_CLIENT_ID     = " + AdClientID));
 
 

@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Greeting
+/** Generated Model for VAB_Greeting
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Greeting : PO
+public class X_VAB_Greeting : PO
 {
-public X_C_Greeting (Context ctx, int C_Greeting_ID, Trx trxName) : base (ctx, C_Greeting_ID, trxName)
+public X_VAB_Greeting (Context ctx, int VAB_Greeting_ID, Trx trxName) : base (ctx, VAB_Greeting_ID, trxName)
 {
-/** if (C_Greeting_ID == 0)
+/** if (VAB_Greeting_ID == 0)
 {
-SetC_Greeting_ID (0);
+SetVAB_Greeting_ID (0);
 SetIsDefault (false);
 SetIsFirstNameOnly (false);
 SetName (null);
 }
  */
 }
-public X_C_Greeting (Ctx ctx, int C_Greeting_ID, Trx trxName) : base (ctx, C_Greeting_ID, trxName)
+public X_VAB_Greeting (Ctx ctx, int VAB_Greeting_ID, Trx trxName) : base (ctx, VAB_Greeting_ID, trxName)
 {
-/** if (C_Greeting_ID == 0)
+/** if (VAB_Greeting_ID == 0)
 {
-SetC_Greeting_ID (0);
+SetVAB_Greeting_ID (0);
 SetIsDefault (false);
 SetIsFirstNameOnly (false);
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Greeting (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Greeting (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_Greeting (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Greeting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Greeting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_Greeting (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Greeting (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Greeting (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Greeting()
+static X_VAB_Greeting()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389055383L;
 public static int Table_ID;
  // =346;
 
-/** TableName=C_Greeting */
-public static String Table_Name="C_Greeting";
+/** TableName=VAB_Greeting */
+public static String Table_Name="VAB_Greeting";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Greeting[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Greeting[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Greeting.
-@param C_Greeting_ID Greeting to print on correspondence */
-public void SetC_Greeting_ID (int C_Greeting_ID)
+@param VAB_Greeting_ID Greeting to print on correspondence */
+public void SetVAB_Greeting_ID (int VAB_Greeting_ID)
 {
-if (C_Greeting_ID < 1) throw new ArgumentException ("C_Greeting_ID is mandatory.");
-Set_ValueNoCheck ("C_Greeting_ID", C_Greeting_ID);
+if (VAB_Greeting_ID < 1) throw new ArgumentException ("VAB_Greeting_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Greeting_ID", VAB_Greeting_ID);
 }
 /** Get Greeting.
 @return Greeting to print on correspondence */
-public int GetC_Greeting_ID() 
+public int GetVAB_Greeting_ID() 
 {
-Object ii = Get_Value("C_Greeting_ID");
+Object ii = Get_Value("VAB_Greeting_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

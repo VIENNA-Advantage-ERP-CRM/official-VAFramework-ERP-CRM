@@ -74,11 +74,11 @@ namespace VAdvantage.Model
         }
 
         // added By Amit 4-8-2015 VAMRP
-        public static MProductPO GetOfVendorProduct(Ctx ctx, int C_BPartner_ID, int M_Product_ID, Trx trx)
+        public static MProductPO GetOfVendorProduct(Ctx ctx, int VAB_BusinessPartner_ID, int M_Product_ID, Trx trx)
         {
             MProductPO productPO = null;
             String sql = "SELECT * FROM M_Product_PO "
-                + "WHERE C_BPartner_ID=" + C_BPartner_ID + " AND M_Product_ID = " + M_Product_ID;
+                + "WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND M_Product_ID = " + M_Product_ID;
 
             IDataReader idr = null;
             try
@@ -125,7 +125,7 @@ namespace VAdvantage.Model
             else
             {
                 //	setM_Product_ID (0);	// @M_Product_ID@
-                //	setC_BPartner_ID (0);	// 0
+                //	setVAB_BusinessPartner_ID (0);	// 0
                 //	setVendorProductNo (null);	// @Value@
                 SetIsCurrentVendor(true);	// Y
             }
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
             if (IsCurrentVendor())
             {
                 String sql = "SELECT COUNT(M_Product_ID) FROM M_Product_PO "
-                    + "WHERE C_BPartner_ID != " + GetC_BPartner_ID() + " AND M_Product_ID = " + GetM_Product_ID() + " AND IsActive = 'Y' "
+                    + "WHERE VAB_BusinessPartner_ID != " + GetVAB_BusinessPartner_ID() + " AND M_Product_ID = " + GetM_Product_ID() + " AND IsActive = 'Y' "
                     + " AND IsCurrentVendor = 'Y'";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (no > 0)

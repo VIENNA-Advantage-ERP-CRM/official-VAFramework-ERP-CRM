@@ -92,17 +92,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set BP_Group
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET GroupValue=(SELECT MAX(Value) FROM C_BP_Group g WHERE g.IsDefault='Y'"
+                + "SET GroupValue=(SELECT MAX(Value) FROM VAB_BPart_Category g WHERE g.IsDefault='Y'"
                 + " AND g.VAF_Client_ID=i.VAF_Client_ID) ");
-            sql.Append("WHERE GroupValue IS NULL AND C_BP_Group_ID IS NULL"
+            sql.Append("WHERE GroupValue IS NULL AND VAB_BPart_Category_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Group Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET C_BP_Group_ID=(SELECT C_BP_Group_ID FROM C_BP_Group g"
+                + "SET VAB_BPart_Category_ID=(SELECT VAB_BPart_Category_ID FROM VAB_BPart_Category g"
                 + " WHERE i.GroupValue=g.Value AND g.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_BP_Group_ID IS NULL"
+                + "WHERE VAB_BPart_Category_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Group=" + no);
@@ -110,7 +110,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_BPartner "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Group, ' "
-                + "WHERE C_BP_Group_ID IS NULL"
+                + "WHERE VAB_BPart_Category_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid Group=" + no);
@@ -118,25 +118,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Country
             /**
             sql = new StringBuilder ("UPDATE I_BPartner i "
-                + "SET CountryCode=(SELECT CountryCode FROM C_Country c WHERE c.IsDefault='Y'"
+                + "SET CountryCode=(SELECT CountryCode FROM VAB_Country c WHERE c.IsDefault='Y'"
                 + " AND c.VAF_Client_ID IN (0, i.VAF_Client_ID) AND ROWNUM=1) "
-                + "WHERE CountryCode IS NULL AND C_Country_ID IS NULL"
+                + "WHERE CountryCode IS NULL AND VAB_Country_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
             log.Fine("Set Country Default=" + no);
             **/
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET C_Country_ID=(SELECT C_Country_ID FROM C_Country c"
+                + "SET VAB_Country_ID=(SELECT VAB_Country_ID FROM VAB_Country c"
                 + " WHERE i.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
-                + "WHERE C_Country_ID IS NULL"
+                + "WHERE VAB_Country_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Country=" + no);
             //
             sql = new StringBuilder("UPDATE I_BPartner "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Country, ' "
-                + "WHERE C_Country_ID IS NULL AND (City IS NOT NULL OR Address1 IS NOT NULL)"
+                + "WHERE VAB_Country_ID IS NULL AND (City IS NOT NULL OR Address1 IS NOT NULL)"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid Country=" + no);
@@ -144,7 +144,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Region
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "Set RegionName=(SELECT Name FROM C_Region r"
-                + " WHERE r.IsDefault='Y' AND r.C_Country_ID=i.C_Country_ID"
+                + " WHERE r.IsDefault='Y' AND r.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) ");
             /*
             if (DataBase.isOracle()) //jz
@@ -153,7 +153,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else 
                 sql.Append(" AND r.UPDATED IN (SELECT MAX(UPDATED) FROM C_Region r1"
-                + " WHERE r1.IsDefault='Y' AND r1.C_Country_ID=i.C_Country_ID"
+                + " WHERE r1.IsDefault='Y' AND r1.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r1.VAF_Client_ID IN (0, i.VAF_Client_ID) ");
                 */
             sql.Append("WHERE RegionName IS NULL AND C_Region_ID IS NULL"
@@ -163,7 +163,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
-                + " WHERE r.Name=i.RegionName AND r.C_Country_ID=i.C_Country_ID"
+                + " WHERE r.Name=i.RegionName AND r.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
                 + "WHERE C_Region_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -173,32 +173,32 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Region, ' "
                 + "WHERE C_Region_ID IS NULL "
-                + " AND EXISTS (SELECT * FROM C_Country c"
-                + " WHERE c.C_Country_ID=i.C_Country_ID AND c.HasRegion='Y')"
+                + " AND EXISTS (SELECT * FROM VAB_Country c"
+                + " WHERE c.VAB_Country_ID=i.VAB_Country_ID AND c.HasRegion='Y')"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid Region=" + no);
 
             //	Set Greeting
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET C_Greeting_ID=(SELECT C_Greeting_ID FROM C_Greeting g"
+                + "SET VAB_Greeting_ID=(SELECT VAB_Greeting_ID FROM VAB_Greeting g"
                 + " WHERE i.BPContactGreeting=g.Name AND g.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
-                + "WHERE C_Greeting_ID IS NULL AND BPContactGreeting IS NOT NULL"
+                + "WHERE VAB_Greeting_ID IS NULL AND BPContactGreeting IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Greeting=" + no);
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Greeting, ' "
-                + "WHERE C_Greeting_ID IS NULL AND BPContactGreeting IS NOT NULL"
+                + "WHERE VAB_Greeting_ID IS NULL AND BPContactGreeting IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid Greeting=" + no);
 
             //	Existing User ?
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET (C_BPartner_ID,VAF_UserContact_ID)="
-                    + "(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u "
+                + "SET (VAB_BusinessPartner_ID,VAF_UserContact_ID)="
+                    + "(SELECT VAB_BusinessPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u "
                     + "WHERE i.EMail=u.EMail AND u.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE i.EMail IS NOT NULL AND I_IsImported='N'").Append(clientCheck);
 
@@ -207,9 +207,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Existing BPartner ? Match Value
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_BPartner p"
+                + "SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner p"
                 + " WHERE i.Value=p.Value AND p.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_BPartner_ID IS NULL AND Value IS NOT NULL"
+                + "WHERE VAB_BusinessPartner_ID IS NULL AND Value IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found BPartner=" + no);
@@ -217,21 +217,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Existing Contact ? Match Name
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET VAF_UserContact_ID=(SELECT VAF_UserContact_ID FROM VAF_UserContact c"
-                + " WHERE i.ContactName=c.Name AND i.C_BPartner_ID=c.C_BPartner_ID AND c.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE C_BPartner_ID IS NOT NULL AND VAF_UserContact_ID IS NULL AND ContactName IS NOT NULL"
+                + " WHERE i.ContactName=c.Name AND i.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID AND c.VAF_Client_ID=i.VAF_Client_ID) "
+                + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAF_UserContact_ID IS NULL AND ContactName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found Contact=" + no);
 
             //	Existing Location ? Exact Match
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET C_BPartner_Location_ID=(SELECT C_BPartner_Location_ID"
-                + " FROM C_BPartner_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
-                + " WHERE i.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.VAF_Client_ID=i.VAF_Client_ID"
+                + "SET VAB_BPart_Location_ID=(SELECT VAB_BPart_Location_ID"
+                + " FROM VAB_BPart_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
+                + " WHERE i.VAB_BusinessPartner_ID=bpl.VAB_BusinessPartner_ID AND bpl.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND DUMP(i.Address1)=DUMP(l.Address1) AND DUMP(i.Address2)=DUMP(l.Address2)"
                 + " AND DUMP(i.City)=DUMP(l.City) AND DUMP(i.Postal)=DUMP(l.Postal) AND DUMP(i.Postal_Add)=DUMP(l.Postal_Add)"
-                + " AND DUMP(i.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(i.C_Country_ID)=DUMP(l.C_Country_ID)) "
-                + "WHERE C_BPartner_ID IS NOT NULL AND C_BPartner_Location_ID IS NULL"
+                + " AND DUMP(i.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(i.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
+                + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found Location=" + no);
@@ -263,20 +263,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     X_I_BPartner impBP = new X_I_BPartner(GetCtx(), idr, Get_TrxName());
                     log.Fine("I_BPartner_ID=" + impBP.GetI_BPartner_ID()
-                        + ", C_BPartner_ID=" + impBP.GetC_BPartner_ID()
-                        + ", C_BPartner_Location_ID=" + impBP.GetC_BPartner_Location_ID()
+                        + ", VAB_BusinessPartner_ID=" + impBP.GetVAB_BusinessPartner_ID()
+                        + ", VAB_BPart_Location_ID=" + impBP.GetVAB_BPart_Location_ID()
                         + ", VAF_UserContact_ID=" + impBP.GetVAF_UserContact_ID());
 
 
                     //	****	Create/Update BPartner	****
                     MBPartner bp = null;
-                    if (impBP.GetC_BPartner_ID() == 0)	//	Insert new BPartner
+                    if (impBP.GetVAB_BusinessPartner_ID() == 0)	//	Insert new BPartner
                     {
                         bp = new MBPartner(impBP);
                         if (bp.Save())
                         {
-                            impBP.SetC_BPartner_ID(bp.GetC_BPartner_ID());
-                            log.Finest("Insert BPartner - " + bp.GetC_BPartner_ID());
+                            impBP.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
+                            log.Finest("Insert BPartner - " + bp.GetVAB_BusinessPartner_ID());
                             noInsert++;
                         }
                         else
@@ -291,7 +291,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else				//	Update existing BPartner
                     {
-                        bp = new MBPartner(GetCtx(), impBP.GetC_BPartner_ID(), Get_TrxName());
+                        bp = new MBPartner(GetCtx(), impBP.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         //	if (impBP.getValue() != null)			//	not to overwite
                         //		bp.setValue(impBP.getValue());
                         if (impBP.GetName() != null)
@@ -305,14 +305,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             bp.SetTaxID(impBP.GetTaxID());
                         if (impBP.GetNAICS() != null)
                             bp.SetNAICS(impBP.GetNAICS());
-                        if (impBP.GetC_BP_Group_ID() != 0)
-                            bp.SetC_BP_Group_ID(impBP.GetC_BP_Group_ID());
+                        if (impBP.GetVAB_BPart_Category_ID() != 0)
+                            bp.SetVAB_BPart_Category_ID(impBP.GetVAB_BPart_Category_ID());
                         if (impBP.GetDescription() != null)
                             bp.SetDescription(impBP.GetDescription());
                         //
                         if (bp.Save())
                         {
-                            log.Finest("Update BPartner - " + bp.GetC_BPartner_ID());
+                            log.Finest("Update BPartner - " + bp.GetVAB_BusinessPartner_ID());
                             noUpdate++;
                         }
                         else
@@ -328,11 +328,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	****	Create/Update BPartner Location	****
                     MBPartnerLocation bpl = null;
-                    if (impBP.GetC_BPartner_Location_ID() != 0)		//	Update Location
+                    if (impBP.GetVAB_BPart_Location_ID() != 0)		//	Update Location
                     {
-                        bpl = new MBPartnerLocation(GetCtx(), impBP.GetC_BPartner_Location_ID(), Get_TrxName());
+                        bpl = new MBPartnerLocation(GetCtx(), impBP.GetVAB_BPart_Location_ID(), Get_TrxName());
                         MLocation location = new MLocation(GetCtx(), bpl.GetC_Location_ID(), Get_TrxName());
-                        location.SetC_Country_ID(impBP.GetC_Country_ID());
+                        location.SetVAB_Country_ID(impBP.GetVAB_Country_ID());
                         location.SetC_Region_ID(impBP.GetC_Region_ID());
                         location.SetCity(impBP.GetCity());
                         location.SetAddress1(impBP.GetAddress1());
@@ -353,11 +353,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         bpl.Save();
                     }
                     else 	//	New Location
-                        if (impBP.GetC_Country_ID() != 0
+                        if (impBP.GetVAB_Country_ID() != 0
                             && impBP.GetAddress1() != null
                             && impBP.GetCity() != null)
                         {
-                            MLocation location = new MLocation(GetCtx(), impBP.GetC_Country_ID(),
+                            MLocation location = new MLocation(GetCtx(), impBP.GetVAB_Country_ID(),
                                 impBP.GetC_Region_ID(), impBP.GetCity(), Get_TrxName());
                             location.SetAddress1(impBP.GetAddress1());
                             location.SetAddress2(impBP.GetAddress2());
@@ -385,8 +385,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             bpl.SetFax(impBP.GetFax());
                             if (bpl.Save())
                             {
-                                log.Finest("Insert BP Location - " + bpl.GetC_BPartner_Location_ID());
-                                impBP.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
+                                log.Finest("Insert BP Location - " + bpl.GetVAB_BPart_Location_ID());
+                                impBP.SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
                             }
                             else
                             {
@@ -406,9 +406,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (impBP.GetVAF_UserContact_ID() != 0)
                     {
                         user = new MUser(GetCtx(), impBP.GetVAF_UserContact_ID(), Get_TrxName());
-                        if (user.GetC_BPartner_ID() == 0)
-                            user.SetC_BPartner_ID(bp.GetC_BPartner_ID());
-                        else if (user.GetC_BPartner_ID() != bp.GetC_BPartner_ID())
+                        if (user.GetVAB_BusinessPartner_ID() == 0)
+                            user.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
+                        else if (user.GetVAB_BusinessPartner_ID() != bp.GetVAB_BusinessPartner_ID())
                         {
                             Rollback();
                             noInsert--;
@@ -419,8 +419,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                             continue;
                         }
-                        if (impBP.GetC_Greeting_ID() != 0)
-                            user.SetC_Greeting_ID(impBP.GetC_Greeting_ID());
+                        if (impBP.GetVAB_Greeting_ID() != 0)
+                            user.SetVAB_Greeting_ID(impBP.GetVAB_Greeting_ID());
                         String name = impBP.GetContactName();
                         if (name == null || name.Length == 0)
                             name = impBP.GetEMail();
@@ -442,7 +442,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (impBP.GetBirthday() != null)
                             user.SetBirthday(impBP.GetBirthday());
                         if (bpl != null)
-                            user.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
+                            user.SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
                         if (user.Save())
                         {
                             log.Finest("Update BP Contact - " + user.GetVAF_UserContact_ID());
@@ -463,8 +463,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (impBP.GetContactName() != null || impBP.GetEMail() != null)
                         {
                             user = new MUser(bp);
-                            if (impBP.GetC_Greeting_ID() != 0)
-                                user.SetC_Greeting_ID(impBP.GetC_Greeting_ID());
+                            if (impBP.GetVAB_Greeting_ID() != 0)
+                                user.SetVAB_Greeting_ID(impBP.GetVAB_Greeting_ID());
                             String name = impBP.GetContactName();
                             if (name == null || name.Length == 0)
                                 name = impBP.GetEMail();
@@ -478,7 +478,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             user.SetEMail(impBP.GetEMail());
                             user.SetBirthday(impBP.GetBirthday());
                             if (bpl != null)
-                                user.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
+                                user.SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
                             if (user.Save())
                             {
                                 log.Finest("Insert BP Contact - " + user.GetVAF_UserContact_ID());
@@ -530,8 +530,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@C_BPartner_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@C_BPartner_ID@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAB_BusinessPartner_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@VAB_BusinessPartner_ID@: @Updated@");
             return "";
         }	//	doIt
     }

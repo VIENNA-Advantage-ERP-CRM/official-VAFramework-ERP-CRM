@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_DocTypeCounter
+/** Generated Model for VAB_InterCompanyDoc
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DocTypeCounter : PO
+public class X_VAB_InterCompanyDoc : PO
 {
-public X_C_DocTypeCounter (Context ctx, int C_DocTypeCounter_ID, Trx trxName) : base (ctx, C_DocTypeCounter_ID, trxName)
+public X_VAB_InterCompanyDoc (Context ctx, int VAB_InterCompanyDoc_ID, Trx trxName) : base (ctx, VAB_InterCompanyDoc_ID, trxName)
 {
-/** if (C_DocTypeCounter_ID == 0)
+/** if (VAB_InterCompanyDoc_ID == 0)
 {
-SetC_DocTypeCounter_ID (0);
-SetC_DocType_ID (0);
+SetVAB_InterCompanyDoc_ID (0);
+SetVAB_DocTypes_ID (0);
 SetIsCreateCounter (true);	// Y
 SetIsValid (false);
 SetName (null);
 }
  */
 }
-public X_C_DocTypeCounter (Ctx ctx, int C_DocTypeCounter_ID, Trx trxName) : base (ctx, C_DocTypeCounter_ID, trxName)
+public X_VAB_InterCompanyDoc (Ctx ctx, int VAB_InterCompanyDoc_ID, Trx trxName) : base (ctx, VAB_InterCompanyDoc_ID, trxName)
 {
-/** if (C_DocTypeCounter_ID == 0)
+/** if (VAB_InterCompanyDoc_ID == 0)
 {
-SetC_DocTypeCounter_ID (0);
-SetC_DocType_ID (0);
+SetVAB_InterCompanyDoc_ID (0);
+SetVAB_DocTypes_ID (0);
 SetIsCreateCounter (true);	// Y
 SetIsValid (false);
 SetName (null);
@@ -45,7 +45,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocTypeCounter (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InterCompanyDoc (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_DocTypeCounter (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocTypeCounter (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InterCompanyDoc (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_DocTypeCounter (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DocTypeCounter (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_InterCompanyDoc (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DocTypeCounter()
+static X_VAB_InterCompanyDoc()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389055132L;
 public static int Table_ID;
  // =718;
 
-/** TableName=C_DocTypeCounter */
-public static String Table_Name="C_DocTypeCounter";
+/** TableName=VAB_InterCompanyDoc */
+public static String Table_Name="VAB_InterCompanyDoc";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -115,55 +115,55 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_DocTypeCounter[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_InterCompanyDoc[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Counter Document.
-@param C_DocTypeCounter_ID Counter Document Relationship */
-public void SetC_DocTypeCounter_ID (int C_DocTypeCounter_ID)
+@param VAB_InterCompanyDoc_ID Counter Document Relationship */
+public void SetVAB_InterCompanyDoc_ID (int VAB_InterCompanyDoc_ID)
 {
-if (C_DocTypeCounter_ID < 1) throw new ArgumentException ("C_DocTypeCounter_ID is mandatory.");
-Set_ValueNoCheck ("C_DocTypeCounter_ID", C_DocTypeCounter_ID);
+if (VAB_InterCompanyDoc_ID < 1) throw new ArgumentException ("VAB_InterCompanyDoc_ID is mandatory.");
+Set_ValueNoCheck ("VAB_InterCompanyDoc_ID", VAB_InterCompanyDoc_ID);
 }
 /** Get Counter Document.
 @return Counter Document Relationship */
-public int GetC_DocTypeCounter_ID() 
+public int GetVAB_InterCompanyDoc_ID() 
 {
-Object ii = Get_Value("C_DocTypeCounter_ID");
+Object ii = Get_Value("VAB_InterCompanyDoc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Document Type.
-@param C_DocType_ID Document type or rules */
-public void SetC_DocType_ID (int C_DocType_ID)
+@param VAB_DocTypes_ID Document type or rules */
+public void SetVAB_DocTypes_ID (int VAB_DocTypes_ID)
 {
-if (C_DocType_ID < 0) throw new ArgumentException ("C_DocType_ID is mandatory.");
-Set_Value ("C_DocType_ID", C_DocType_ID);
+if (VAB_DocTypes_ID < 0) throw new ArgumentException ("VAB_DocTypes_ID is mandatory.");
+Set_Value ("VAB_DocTypes_ID", VAB_DocTypes_ID);
 }
 /** Get Document Type.
 @return Document type or rules */
-public int GetC_DocType_ID() 
+public int GetVAB_DocTypes_ID() 
 {
-Object ii = Get_Value("C_DocType_ID");
+Object ii = Get_Value("VAB_DocTypes_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Counter_C_DocType_ID VAF_Control_Ref_ID=170 */
-public static int COUNTER_C_DOCTYPE_ID_VAF_Control_Ref_ID=170;
+/** Counter_VAB_DocTypes_ID VAF_Control_Ref_ID=170 */
+public static int COUNTER_VAB_DocTypes_ID_VAF_Control_Ref_ID=170;
 /** Set Counter Document Type.
-@param Counter_C_DocType_ID Generated Counter Document Type (To) */
-public void SetCounter_C_DocType_ID (int Counter_C_DocType_ID)
+@param Counter_VAB_DocTypes_ID Generated Counter Document Type (To) */
+public void SetCounter_VAB_DocTypes_ID (int Counter_VAB_DocTypes_ID)
 {
-if (Counter_C_DocType_ID <= 0) Set_Value ("Counter_C_DocType_ID", null);
+if (Counter_VAB_DocTypes_ID <= 0) Set_Value ("Counter_VAB_DocTypes_ID", null);
 else
-Set_Value ("Counter_C_DocType_ID", Counter_C_DocType_ID);
+Set_Value ("Counter_VAB_DocTypes_ID", Counter_VAB_DocTypes_ID);
 }
 /** Get Counter Document Type.
 @return Generated Counter Document Type (To) */
-public int GetCounter_C_DocType_ID() 
+public int GetCounter_VAB_DocTypes_ID() 
 {
-Object ii = Get_Value("Counter_C_DocType_ID");
+Object ii = Get_Value("Counter_VAB_DocTypes_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

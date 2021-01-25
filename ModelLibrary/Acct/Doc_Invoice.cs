@@ -228,7 +228,7 @@ namespace VAdvantage.Acct
         {
             if (_precision == -1)
             {
-                _precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                _precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
             }
             return _precision;
         }
@@ -319,7 +319,7 @@ namespace VAdvantage.Acct
                 if (Env.HasModulePrefix("ED005_", out aInfo) && Env.HasModulePrefix("ED002_", out aInfo) && Env.HasModulePrefix("ED007_", out aInfo))
                 {
                     //Check For Applying Accounts Custom Codes
-                    string isAccount = Util.GetValueOfString(DB.ExecuteScalar("SELECT ED005_ApplyAccount FROM C_AcctSchema WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()));
+                    string isAccount = Util.GetValueOfString(DB.ExecuteScalar("SELECT ED005_ApplyAccount FROM VAB_AccountBook WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()));
                     if (isAccount == "Y")
                     {
                         addPost = true;
@@ -336,8 +336,8 @@ namespace VAdvantage.Acct
                     int custCnt = 0;
 
                     //Check For Country Of Organization And Customer
-                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM VAF_OrgDetail org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
-                    custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM C_Invoice inv INNER JOIN C_Bpartner_Location bl ON (inv.C_Bpartner_Location_ID=bl.C_Bpartner_Location_ID) INNER JOIN C_Location loc ON (bl.C_Location_ID=loc.C_Location_ID) WHERE inv.C_Invoice_ID=" + Get_ID()));
+                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM VAF_OrgDetail org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
+                    custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM C_Invoice inv INNER JOIN VAB_BPart_Location bl ON (inv.VAB_BPart_Location_ID=bl.VAB_BPart_Location_ID) INNER JOIN C_Location loc ON (bl.C_Location_ID=loc.C_Location_ID) WHERE inv.C_Invoice_ID=" + Get_ID()));
 
                     if (orgCnt == custCnt)
                     {
@@ -349,7 +349,7 @@ namespace VAdvantage.Acct
                         if (amt != null && Env.Signum(amt) != 0)
                         {
                             fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                                GetC_Currency_ID(), null, amt);
+                                GetVAB_Currency_ID(), null, amt);
                         }
                         //  TaxDue                  CR
                         for (int i = 0; i < _taxes.Length; i++)
@@ -358,7 +358,7 @@ namespace VAdvantage.Acct
                             if (amt != null && Env.Signum(amt) != 0)
                             {
                                 FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(DocTax.ACCTTYPE_TaxDue, as1),
-                                    GetC_Currency_ID(), null, amt);
+                                    GetVAB_Currency_ID(), null, amt);
                                 if (tl != null)
                                 {
                                     tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -381,7 +381,7 @@ namespace VAdvantage.Acct
                             }
                             fact.CreateLine(_lines[i],
                                 _lines[i].GetAccount(ProductCost.ACCTTYPE_P_Revenue, as1),
-                                GetC_Currency_ID(), dAmt, amt);
+                                GetVAB_Currency_ID(), dAmt, amt);
                             if (!_lines[i].IsItem())
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -395,7 +395,7 @@ namespace VAdvantage.Acct
                             if (fLines[i] != null)
                             {
                                 fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
-                                fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                                fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                             }
                         }
 
@@ -410,7 +410,7 @@ namespace VAdvantage.Acct
                             if (isFree == "Y")
                             {
                                 int prodCat = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PRoduct_Category_ID FROM M_Product WHERE M_Product_ID=" + _lines[i].GetM_Product_ID()));
-                                int freeProd = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_FreeProduct_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.C_Country_ID=" + custCnt + " AND cod.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()));
+                                int freeProd = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_FreeProduct_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.VAB_Country_ID=" + custCnt + " AND cod.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()));
 
                                 amt = _lines[i].GetAmtSource();
                                 String sql = "SELECT il.LineNetAmt,tx.rate FROM C_InvoiceLine il"
@@ -427,7 +427,7 @@ namespace VAdvantage.Acct
                                         rate = Utility.Util.GetValueOfDecimal(idr[1]);
                                         //	TaxAmt                                   
                                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                         if (taxAmt != null && Env.Scale(taxAmt) > precision)
                                         {
                                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -453,7 +453,7 @@ namespace VAdvantage.Acct
                                     prdAmt = amt + taxAmt;
                                 }
                                 grossAmt = Decimal.Subtract(grossAmt, prdAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetC_Currency_ID(), prdAmt, 0);
+                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
                                 //grossAmt = Decimal.Add(grossAmt, taxAmt);
                             }
                         }
@@ -467,7 +467,7 @@ namespace VAdvantage.Acct
                             if (disAmt != Env.ZERO)
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, disAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetC_Currency_ID(), disAmt, 0);
+                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
                             }
                         }
 
@@ -488,12 +488,12 @@ namespace VAdvantage.Acct
                         if (Env.Signum(grossAmt) != 0)
                         {
                             fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
-                                GetC_Currency_ID(), grossAmt, null);
+                                GetVAB_Currency_ID(), grossAmt, null);
                         }
                         if (Env.Signum(serviceAmt) != 0)
                         {
                             fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                GetC_Currency_ID(), serviceAmt, null);
+                                GetVAB_Currency_ID(), serviceAmt, null);
                         }
                     }
                     else
@@ -506,7 +506,7 @@ namespace VAdvantage.Acct
                         if (amt != null && Env.Signum(amt) != 0)
                         {
                             fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                                GetC_Currency_ID(), null, amt);
+                                GetVAB_Currency_ID(), null, amt);
                         }
                         //  TaxDue                  CR
                         for (int i = 0; i < _taxes.Length; i++)
@@ -515,7 +515,7 @@ namespace VAdvantage.Acct
                             if (amt != null && Env.Signum(amt) != 0)
                             {
                                 FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(DocTax.ACCTTYPE_TaxDue, as1),
-                                    GetC_Currency_ID(), null, amt);
+                                    GetVAB_Currency_ID(), null, amt);
                                 if (tl != null)
                                 {
                                     tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -526,7 +526,7 @@ namespace VAdvantage.Acct
                         for (int i = 0; i < _lines.Length; i++)
                         {
                             int prodCat = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PRoduct_Category_ID FROM M_Product WHERE M_Product_ID=" + _lines[i].GetM_Product_ID()));
-                            int expRevenue = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_ExportRevenue_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.C_Country_ID=" + custCnt + " AND cod.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()));
+                            int expRevenue = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_ExportRevenue_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.VAB_Country_ID=" + custCnt + " AND cod.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()));
                             amt = _lines[i].GetAmtSource();
                             Decimal? dAmt = null;
                             if (as1.IsTradeDiscountPosted())
@@ -538,7 +538,7 @@ namespace VAdvantage.Acct
                                     dAmt = discount;
                                 }
                             }
-                            fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), expRevenue), GetC_Currency_ID(), dAmt, amt);
+                            fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), expRevenue), GetVAB_Currency_ID(), dAmt, amt);
                             if (!_lines[i].IsItem())
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -552,7 +552,7 @@ namespace VAdvantage.Acct
                             if (fLines[i] != null)
                             {
                                 fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
-                                fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                                fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                             }
                         }
 
@@ -567,7 +567,7 @@ namespace VAdvantage.Acct
                             if (isFree == "Y")
                             {
                                 int prodCat = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PRoduct_Category_ID FROM M_Product WHERE M_Product_ID=" + _lines[i].GetM_Product_ID()));
-                                int freeProd = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_FreeProduct_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.C_Country_ID=" + custCnt + " AND cod.C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()));
+                                int freeProd = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_FreeProduct_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.VAB_Country_ID=" + custCnt + " AND cod.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()));
                                 amt = _lines[i].GetAmtSource();
                                 String sql = "SELECT il.LineNetAmt,tx.rate FROM C_InvoiceLine il"
                                     + " INNER JOIN C_Tax tx ON (il.C_Tax_ID=tx.C_Tax_ID) "
@@ -583,7 +583,7 @@ namespace VAdvantage.Acct
                                         rate = Utility.Util.GetValueOfDecimal(idr[1]);
                                         //	TaxAmt                                   
                                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                         if (taxAmt != null && Env.Scale(taxAmt) > precision)
                                         {
                                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -609,7 +609,7 @@ namespace VAdvantage.Acct
                                     prdAmt = amt + taxAmt;
                                 }
                                 grossAmt = Decimal.Subtract(grossAmt, prdAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetC_Currency_ID(), prdAmt, 0);
+                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
                                 //grossAmt = Decimal.Add(grossAmt, taxAmt);
                             }
                         }
@@ -624,7 +624,7 @@ namespace VAdvantage.Acct
                             if (disAmt != Env.ZERO)
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, disAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetC_Currency_ID(), disAmt, 0);
+                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
                             }
                         }
 
@@ -645,12 +645,12 @@ namespace VAdvantage.Acct
                         if (Env.Signum(grossAmt) != 0)
                         {
                             fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
-                                GetC_Currency_ID(), grossAmt, null);
+                                GetVAB_Currency_ID(), grossAmt, null);
                         }
                         if (Env.Signum(serviceAmt) != 0)
                         {
                             fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                GetC_Currency_ID(), serviceAmt, null);
+                                GetVAB_Currency_ID(), serviceAmt, null);
                         }
                     }
                 }
@@ -668,7 +668,7 @@ namespace VAdvantage.Acct
                     if (amt != null && Env.Signum(amt) != 0)
                     {
                         fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                            GetC_Currency_ID(), null, amt);
+                            GetVAB_Currency_ID(), null, amt);
                     }
                     //  TaxDue                  CR
                     for (int i = 0; i < _taxes.Length; i++)
@@ -677,7 +677,7 @@ namespace VAdvantage.Acct
                         if (amt != null && Env.Signum(amt) != 0)
                         {
                             FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(DocTax.ACCTTYPE_TaxDue, as1),
-                                GetC_Currency_ID(), null, amt);
+                                GetVAB_Currency_ID(), null, amt);
                             if (tl != null)
                             {
                                 tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -688,7 +688,7 @@ namespace VAdvantage.Acct
                     string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + Get_ID() +
                          " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
-                         " INNER JOIN c_charge prod ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
+                         " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                     IDataReader idr = DB.ExecuteReader(sql);
                     while (idr.Read())
                     {
@@ -697,7 +697,7 @@ namespace VAdvantage.Acct
                         rate = Utility.Util.GetValueOfDecimal(idr[2]);
                         //	TaxAmt                                   
                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                         if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                         {
                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -712,13 +712,13 @@ namespace VAdvantage.Acct
                             {
                                 serviceAmt = serviceAmt + lineAmt;
                                 //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                                //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                             }
                             else
                             {
                                 itemAmt = itemAmt + lineAmt;
                                 //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                                //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                                //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                             }
                         }
                     }
@@ -739,7 +739,7 @@ namespace VAdvantage.Acct
                         }
                         fact.CreateLine(_lines[i],
                             _lines[i].GetAccount(ProductCost.ACCTTYPE_P_Revenue, as1),
-                            GetC_Currency_ID(), dAmt, amt);
+                            GetVAB_Currency_ID(), dAmt, amt);
                         if (!_lines[i].IsItem())
                         {
                             grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -753,7 +753,7 @@ namespace VAdvantage.Acct
                         if (fLines[i] != null)
                         {
                             fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
-                            fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                            fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         }
                     }
 
@@ -782,12 +782,12 @@ namespace VAdvantage.Acct
                     if (Env.Signum(grossAmt) != 0)
                     {
                         fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
-                            GetC_Currency_ID(), grossAmt, null);
+                            GetVAB_Currency_ID(), grossAmt, null);
                     }
                     if (Env.Signum(serviceAmt) != 0)
                     {
                         fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
-                            GetC_Currency_ID(), serviceAmt, null);
+                            GetVAB_Currency_ID(), serviceAmt, null);
                     }
                 }
             }
@@ -807,7 +807,7 @@ namespace VAdvantage.Acct
                 if (amt != null && Env.Signum(amt) != 0)
                 {
                     fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                        GetC_Currency_ID(), amt, null);
+                        GetVAB_Currency_ID(), amt, null);
                 }
                 //  TaxDue          DR
                 for (int i = 0; i < _taxes.Length; i++)
@@ -816,7 +816,7 @@ namespace VAdvantage.Acct
                     if (amt != null && Env.Signum(amt) != 0)
                     {
                         FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(DocTax.ACCTTYPE_TaxDue, as1),
-                            GetC_Currency_ID(), amt, null);
+                            GetVAB_Currency_ID(), amt, null);
                         if (tl != null)
                         {
                             tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -826,7 +826,7 @@ namespace VAdvantage.Acct
                 string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + Get_ID() +
                          " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
-                         " INNER JOIN c_charge prod ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
+                         " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
                 {
@@ -835,7 +835,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -850,13 +850,13 @@ namespace VAdvantage.Acct
                         {
                             serviceAmt = serviceAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
                 }
@@ -876,7 +876,7 @@ namespace VAdvantage.Acct
                     }
                     fact.CreateLine(_lines[i],
                         _lines[i].GetAccount(ProductCost.ACCTTYPE_P_Revenue, as1),
-                        GetC_Currency_ID(), amt, dAmt);
+                        GetVAB_Currency_ID(), amt, dAmt);
                     if (!_lines[i].IsItem())
                     {
                         grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -890,7 +890,7 @@ namespace VAdvantage.Acct
                     if (fLines[i] != null)
                     {
                         fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);      //  from Loc
-                        fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                        fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                     }
                 }
                 //  Receivables             CR
@@ -918,12 +918,12 @@ namespace VAdvantage.Acct
                 if (Env.Signum(grossAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
-                        GetC_Currency_ID(), null, grossAmt);
+                        GetVAB_Currency_ID(), null, grossAmt);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
-                        GetC_Currency_ID(), null, serviceAmt);
+                        GetVAB_Currency_ID(), null, serviceAmt);
                 }
             }
 
@@ -938,12 +938,12 @@ namespace VAdvantage.Acct
                 Decimal lineAmt = Env.ZERO;
                 //  Charge          DR
                 fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                    GetC_Currency_ID(), GetAmount(Doc.AMTTYPE_Charge), null);
+                    GetVAB_Currency_ID(), GetAmount(Doc.AMTTYPE_Charge), null);
                 //  TaxCredit       DR
                 for (int i = 0; i < _taxes.Length; i++)
                 {
                     FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(_taxes[i].GetAPTaxType(), as1),
-                        GetC_Currency_ID(), _taxes[i].GetAmount(), null);
+                        GetVAB_Currency_ID(), _taxes[i].GetAmount(), null);
                     if (tl != null)
                     {
                         tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -952,7 +952,7 @@ namespace VAdvantage.Acct
                 string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + Get_ID() +
                          " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
-                         " INNER JOIN c_charge prod ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
+                         " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
                 {
@@ -961,7 +961,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -976,13 +976,13 @@ namespace VAdvantage.Acct
                         {
                             serviceAmt = serviceAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
                 }
@@ -994,10 +994,10 @@ namespace VAdvantage.Acct
                     if (landedCost && as1.IsExplicitCostAdjustment())
                     {
                         fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                            GetC_Currency_ID(), line.GetAmtSource(), null);
+                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
                         //
                         FactLine fl = fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                            GetC_Currency_ID(), null, line.GetAmtSource());
+                            GetVAB_Currency_ID(), null, line.GetAmtSource());
                         String desc = line.GetDescription();
                         if (desc == null)
                         {
@@ -1027,7 +1027,7 @@ namespace VAdvantage.Acct
                                 dAmt = discount;
                             }
                         }
-                        fact.CreateLine(line, expense, GetC_Currency_ID(), amt, dAmt);
+                        fact.CreateLine(line, expense, GetVAB_Currency_ID(), amt, dAmt);
                         if (!line.IsItem())
                         {
                             grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -1055,7 +1055,7 @@ namespace VAdvantage.Acct
                 {
                     if (fLines[i] != null)
                     {
-                        fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
+                        fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);  //  from Loc
                         fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                 }
@@ -1085,12 +1085,12 @@ namespace VAdvantage.Acct
                 if (Env.Signum(grossAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), payables_ID),
-                        GetC_Currency_ID(), null, grossAmt);
+                        GetVAB_Currency_ID(), null, grossAmt);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), payablesServices_ID),
-                        GetC_Currency_ID(), null, serviceAmt);
+                        GetVAB_Currency_ID(), null, serviceAmt);
                 }
                 //
                 UpdateProductPO(as1);	//	Only API
@@ -1106,12 +1106,12 @@ namespace VAdvantage.Acct
                 Decimal lineAmt = Env.ZERO;
                 //  Charge                  CR
                 fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_Charge, as1),
-                    GetC_Currency_ID(), null, GetAmount(Doc.AMTTYPE_Charge));
+                    GetVAB_Currency_ID(), null, GetAmount(Doc.AMTTYPE_Charge));
                 //  TaxCredit               CR
                 for (int i = 0; i < _taxes.Length; i++)
                 {
                     FactLine tl = fact.CreateLine(null, _taxes[i].GetAccount(_taxes[i].GetAPTaxType(), as1),
-                        GetC_Currency_ID(), null, _taxes[i].GetAmount());
+                        GetVAB_Currency_ID(), null, _taxes[i].GetAmount());
                     if (tl != null)
                     {
                         tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
@@ -1120,7 +1120,7 @@ namespace VAdvantage.Acct
                 string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + Get_ID() +
                          " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
-                         " INNER JOIN c_charge prod ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
+                         " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
                 {
@@ -1129,7 +1129,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -1144,13 +1144,13 @@ namespace VAdvantage.Acct
                         {
                             serviceAmt = serviceAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
                             //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                            //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                            //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
                 }
@@ -1162,10 +1162,10 @@ namespace VAdvantage.Acct
                     if (landedCost && as1.IsExplicitCostAdjustment())
                     {
                         fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                            GetC_Currency_ID(), null, line.GetAmtSource());
+                            GetVAB_Currency_ID(), null, line.GetAmtSource());
                         //
                         FactLine fl = fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                            GetC_Currency_ID(), line.GetAmtSource(), null);
+                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
                         String desc = line.GetDescription();
                         if (desc == null)
                         {
@@ -1196,7 +1196,7 @@ namespace VAdvantage.Acct
                             }
                         }
                         fact.CreateLine(line, expense,
-                            GetC_Currency_ID(), dAmt, amt);
+                            GetVAB_Currency_ID(), dAmt, amt);
                         if (!line.IsItem())
                         {
                             grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -1222,7 +1222,7 @@ namespace VAdvantage.Acct
                 {
                     if (fLines[i] != null)
                     {
-                        fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
+                        fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);  //  from Loc
                         fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                 }
@@ -1251,12 +1251,12 @@ namespace VAdvantage.Acct
                 if (Env.Signum(grossAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), payables_ID),
-                        GetC_Currency_ID(), grossAmt, null);
+                        GetVAB_Currency_ID(), grossAmt, null);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
                     fact.CreateLine(null, MAccount.Get(GetCtx(), payablesServices_ID),
-                        GetC_Currency_ID(), serviceAmt, null);
+                        GetVAB_Currency_ID(), serviceAmt, null);
                 }
             }
             else
@@ -1297,10 +1297,10 @@ namespace VAdvantage.Acct
                 if (landedCost && as1.IsExplicitCostAdjustment())
                 {
                     fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                        GetC_Currency_ID(), null, line.GetAmtSource());
+                        GetVAB_Currency_ID(), null, line.GetAmtSource());
                     //
                     fl = fact.CreateLine(line, line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1),
-                        GetC_Currency_ID(), line.GetAmtSource(), null);
+                        GetVAB_Currency_ID(), line.GetAmtSource(), null);
                     String desc = line.GetDescription();
                     if (desc == null)
                     {
@@ -1334,12 +1334,12 @@ namespace VAdvantage.Acct
                     if (payables)	//	Vendor = DR
                     {
                         fl = fact.CreateLine(line, acct,
-                            GetC_Currency_ID(), amt, amt2);
+                            GetVAB_Currency_ID(), amt, amt2);
                     }
                     else			//	Customer = CR
                     {
                         fl = fact.CreateLine(line, acct,
-                            GetC_Currency_ID(), amt2, amt);
+                            GetVAB_Currency_ID(), amt2, amt);
                     }
                     if (fl != null)
                     {
@@ -1361,12 +1361,12 @@ namespace VAdvantage.Acct
                 if (payables)
                 {
                     tl = fact.CreateLine(null, _taxes[i].GetAccount(_taxes[i].GetAPTaxType(), as1),
-                        GetC_Currency_ID(), amt, amt2);
+                        GetVAB_Currency_ID(), amt, amt2);
                 }
                 else
                 {
                     tl = fact.CreateLine(null, _taxes[i].GetAccount(DocTax.ACCTTYPE_TaxDue, as1),
-                        GetC_Currency_ID(), amt2, amt);
+                        GetVAB_Currency_ID(), amt2, amt);
                 }
                 if (tl != null)
                 {
@@ -1381,13 +1381,13 @@ namespace VAdvantage.Acct
                 {
                     if (payables)
                     {
-                        fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), true);  //  from Loc
+                        fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);  //  from Loc
                         fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), false);    //  to Loc
                     }
                     else
                     {
                         fLines[i].SetLocationFromOrg(fLines[i].GetVAF_Org_ID(), true);    //  from Loc
-                        fLines[i].SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
+                        fLines[i].SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                     }
                 }
             }
@@ -1464,16 +1464,16 @@ namespace VAdvantage.Acct
                     crAmt = lca.GetAmt();
                 }
                 FactLine fl = fact.CreateLine(line, pc.GetAccount(ProductCost.ACCTTYPE_P_CostAdjustment, as1),
-                    GetC_Currency_ID(), drAmt, crAmt);
+                    GetVAB_Currency_ID(), drAmt, crAmt);
                 fl.SetDescription(desc);
 
                 //	Cost Detail - Convert to AcctCurrency
                 Decimal allocationAmt = lca.GetAmt();
-                if (GetC_Currency_ID() != as1.GetC_Currency_ID())
+                if (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID())
                 {
                     allocationAmt = MConversionRate.Convert(GetCtx(), allocationAmt,
-                        GetC_Currency_ID(), as1.GetC_Currency_ID(),
-                        GetDateAcct(), GetC_ConversionType_ID(),
+                        GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
+                        GetDateAcct(), GetVAB_CurrencyType_ID(),
                         GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 if (Env.Scale(allocationAmt) > as1.GetCostingPrecision())
@@ -1517,7 +1517,7 @@ namespace VAdvantage.Acct
         private void UpdateProductPO(MAcctSchema as1)
         {
             MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
-            if (ci.GetC_AcctSchema1_ID() != as1.GetC_AcctSchema_ID())
+            if (ci.GetVAB_AccountBook1_ID() != as1.GetVAB_AccountBook_ID())
             {
                 return;
             }
@@ -1526,10 +1526,10 @@ namespace VAdvantage.Acct
                 "UPDATE M_Product_PO po "
                 + "SET PriceLastInv = "
                 //	select
-                + "(SELECT currencyConvert(il.PriceActual,i.C_Currency_ID,po.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID) "
+                + "(SELECT currencyConvert(il.PriceActual,i.VAB_Currency_ID,po.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID) "
                 + "FROM C_Invoice i, C_InvoiceLine il "
                 + "WHERE i.C_Invoice_ID=il.C_Invoice_ID"
-                + " AND po.M_Product_ID=il.M_Product_ID AND po.C_BPartner_ID=i.C_BPartner_ID");
+                + " AND po.M_Product_ID=il.M_Product_ID AND po.VAB_BusinessPartner_ID=i.VAB_BusinessPartner_ID");
             //jz + " AND ROWNUM=1 AND i.C_Invoice_ID=").Append(get_ID()).Append(") ")
             if (DataBase.DB.IsOracle()) //jz
             {
@@ -1539,14 +1539,14 @@ namespace VAdvantage.Acct
                 sql.Append(" AND i.UPDATED IN (SELECT MAX(i1.UPDATED) "
                         + "FROM C_Invoice i1, C_InvoiceLine il1 "
                         + "WHERE i1.C_Invoice_ID=il1.C_Invoice_ID"
-                        + " AND po.M_Product_ID=il1.M_Product_ID AND po.C_BPartner_ID=i1.C_BPartner_ID")
+                        + " AND po.M_Product_ID=il1.M_Product_ID AND po.VAB_BusinessPartner_ID=i1.VAB_BusinessPartner_ID")
                         .Append("  AND i1.C_Invoice_ID=").Append(Get_ID()).Append(") ");
             sql.Append("  AND i.C_Invoice_ID=").Append(Get_ID()).Append(") ")
                 //	update
             .Append("WHERE EXISTS (SELECT * "
             + "FROM C_Invoice i, C_InvoiceLine il "
             + "WHERE i.C_Invoice_ID=il.C_Invoice_ID"
-            + " AND po.M_Product_ID=il.M_Product_ID AND po.C_BPartner_ID=i.C_BPartner_ID"
+            + " AND po.M_Product_ID=il.M_Product_ID AND po.VAB_BusinessPartner_ID=i.VAB_BusinessPartner_ID"
             + " AND i.C_Invoice_ID=").Append(Get_ID()).Append(")");
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrxName());

@@ -59,7 +59,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             _issue = (MProjectIssue)GetPO();
             SetDateDoc(_issue.GetMovementDate());
             SetDateAcct(_issue.GetMovementDate());
@@ -117,7 +117,7 @@ namespace VAdvantage.Acct
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             MProject project = new MProject(GetCtx(), _issue.GetC_Project_ID(), null);
             String ProjectCategory = project.GetProjectCategory();
@@ -147,7 +147,7 @@ namespace VAdvantage.Acct
                 acctType = ACCTTYPE_ProjectAsset;
             }
             dr = fact.CreateLine(_line,
-                GetAccount(acctType, as1), as1.GetC_Currency_ID(), cost, null);
+                GetAccount(acctType, as1), as1.GetVAB_Currency_ID(), cost, null);
             dr.SetQty((Decimal?)Decimal.Negate(Utility.Util.GetValueOfDecimal(_line.GetQty())));
 
             //  Inventory               CR
@@ -158,7 +158,7 @@ namespace VAdvantage.Acct
             }
             cr = fact.CreateLine(_line,
                 _line.GetAccount(acctType, as1),
-                as1.GetC_Currency_ID(), null, cost);
+                as1.GetVAB_Currency_ID(), null, cost);
             cr.SetM_Locator_ID(_line.GetM_Locator_ID());
             cr.SetLocationFromLocator(_line.GetM_Locator_ID(), true);	// from Loc
             //
@@ -176,7 +176,7 @@ namespace VAdvantage.Acct
         {
             Decimal? retValue = null;
             //	Uses PO Date
-            String sql = "SELECT currencyConvert(ol.PriceActual, o.C_Currency_ID, @param1, o.DateOrdered, o.C_ConversionType_ID, @param2, @param3) "
+            String sql = "SELECT currencyConvert(ol.PriceActual, o.VAB_Currency_ID, @param1, o.DateOrdered, o.VAB_CurrencyType_ID, @param2, @param3) "
                 + "FROM C_OrderLine ol"
                 + " INNER JOIN M_InOutLine iol ON (iol.C_OrderLine_ID=ol.C_OrderLine_ID)"
                 + " INNER JOIN C_Order o ON (o.C_Order_ID=ol.C_Order_ID) "
@@ -185,7 +185,7 @@ namespace VAdvantage.Acct
             try
             {
                 SqlParameter[] param = new SqlParameter[4];
-                param[0] = new SqlParameter("@param1", as1.GetC_Currency_ID());
+                param[0] = new SqlParameter("@param1", as1.GetVAB_Currency_ID());
                 param[1] = new SqlParameter("@param2", GetVAF_Client_ID());
                 param[2] = new SqlParameter("@param3", GetVAF_Org_ID());
                 param[3] = new SqlParameter("@param4", _issue.GetM_InOutLine_ID());

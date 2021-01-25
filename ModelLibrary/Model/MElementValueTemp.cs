@@ -14,12 +14,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Activity_ID">id</param>
+        /// <param name="VAB_BillingCode_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MElementValueTemp(Ctx ctx, int C_ElementValueTemp, Trx trxName)
-            : base(ctx, C_ElementValueTemp, trxName)
+        public MElementValueTemp(Ctx ctx, int VAB_Acct_ElementValueTmp, Trx trxName)
+            : base(ctx, VAB_Acct_ElementValueTmp, trxName)
         {
-            //super(ctx, C_Activity_ID, trxName);
+            //super(ctx, VAB_BillingCode_ID, trxName);
         }
     }
 }

@@ -11,12 +11,12 @@ using VAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-    public class MCampaignPhase : X_C_CampaignPhase
+    public class MCampaignPhase : X_VAB_PromotionPhase
     {
 
         
-        public MCampaignPhase(Ctx ctx, int C_CampaignPhase_ID, Trx trxName)
-            : base(ctx, C_CampaignPhase_ID, trxName)
+        public MCampaignPhase(Ctx ctx, int VAB_PromotionPhase_ID, Trx trxName)
+            : base(ctx, VAB_PromotionPhase_ID, trxName)
         {
             
         }

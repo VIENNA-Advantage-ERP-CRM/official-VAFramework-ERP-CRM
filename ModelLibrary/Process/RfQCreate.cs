@@ -89,8 +89,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	existing response
                 for (int r = 0; r < responses.Length; r++)
                 {
-                    if (subscriber.GetC_BPartner_ID() == responses[r].GetC_BPartner_ID()
-                        && subscriber.GetC_BPartner_Location_ID() == responses[r].GetC_BPartner_Location_ID())
+                    if (subscriber.GetVAB_BusinessPartner_ID() == responses[r].GetVAB_BusinessPartner_ID()
+                        && subscriber.GetVAB_BPart_Location_ID() == responses[r].GetVAB_BPart_Location_ID())
                     {
                         skip = true;
                         break;

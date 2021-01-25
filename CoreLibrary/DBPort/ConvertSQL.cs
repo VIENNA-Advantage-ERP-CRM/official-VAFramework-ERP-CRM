@@ -348,9 +348,9 @@ namespace VAdvantage.DBPort
                 "AD_REPLICATION_LOG",
                 "VAF_JOBRUN_LOG",
                 "AD_SESSION",
-                "AD_WORKFLOWPROCESSORLOG",
+                "VAF_WFLOWHANDLERLOG",
                 "CM_WEBACCESSLOG",
-                "C_ACCTPROCESSORLOG",
+                "VAB_ACCOUNTHANDLERLOG",
                 "K_INDEXLOG",
                 "R_REQUESTPROCESSORLOG",
                 "T_AGING",
@@ -369,8 +369,8 @@ namespace VAdvantage.DBPort
 				// Do not log *Access records - teo_Sarca BF [ 2782095 ]
 				"VAF_JOB_RIGHTS",
                 "VAF_SCREEN_RIGHTS",
-                "AD_WORKFLOW_ACCESS",
-                "VAF_Page_Rights",
+                "VAF_WFLOW_RIGHTS",
+                "VAF_PAGE_RIGHTS",
 				//
 			};
             String uppStmt = statement.ToUpper().Trim();

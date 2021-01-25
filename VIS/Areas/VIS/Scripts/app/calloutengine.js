@@ -115,7 +115,7 @@
         mTab.setValue("DateAcct", value);
 
         // JID_1332: Set Value in Effective Date on selection of Statement date.
-        if (mTab.getTableName() == "C_BankStatementLine") {
+        if (mTab.getTableName() == "VAB_BankingJRNLLine") {
             mTab.setValue("ValutaDate", value);
         }
 

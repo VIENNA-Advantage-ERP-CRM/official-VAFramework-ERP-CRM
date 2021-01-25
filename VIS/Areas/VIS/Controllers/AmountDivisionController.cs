@@ -142,7 +142,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("C_Activity_ID", "C_Activity", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAB_BillingCode_ID", "VAB_BillingCode", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -166,7 +166,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAB_BusinessPartner_ID", "VAB_BusinessPartner", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -191,7 +191,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("C_Campaign_ID", "C_Campaign", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAB_Promotion_ID", "VAB_Promotion", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -299,7 +299,7 @@ namespace VIS.Controllers
                 {
                     int bpid = 0;
                     dt.Columns.Add("AccoutId", typeof(int));
-                    dt.Columns.Add("C_Element_ID", typeof(int));
+                    dt.Columns.Add("VAB_Element_ID", typeof(int));
                     dt.Columns.Add("AccountValue", typeof(String));
                     dt.Columns.Add("BPartnerId", typeof(int));
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -318,8 +318,8 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            dt = model.GetAcountIdByValue((Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
-                            bpid = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
+                            dt = model.GetAcountIdByValue((Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$VAB_AccountBook_ID") : Util.GetValueOfInt(param[2])), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
+                            bpid = model.DimnesionValue("VAB_BusinessPartner_ID", "VAB_BusinessPartner", dt.Rows[i][1].ToString());
                             dt.Rows[i]["BPartnerId"] = bpid;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -337,10 +337,10 @@ namespace VIS.Controllers
                 {
                     string columName = "";
                     string tableName = "";
-                    var sql = "select adt.columnname,adtab.TableName from c_acctschema_element ac inner join vaf_column ad on ac.vaf_column_id=ad.vaf_column_id " +
+                    var sql = "select adt.columnname,adtab.TableName from VAB_AccountBook_element ac inner join vaf_column ad on ac.vaf_column_id=ad.vaf_column_id " +
                 " inner join vaf_column adt on ad.vaf_tableview_ID=adt.vaf_tableview_ID and adt.isactive='Y' " +
                 "  inner join vaf_tableview adtab on adtab.vaf_tableview_id=ad.vaf_tableview_ID " +
-                " where ac.c_acctschema_id=" + (Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])) + " and ac.elementtype='" + param[1].ToString() + "' and adt.isidentifier='Y' order by adt.seqno ASC ";
+                " where ac.VAB_AccountBook_id=" + (Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$VAB_AccountBook_ID") : Util.GetValueOfInt(param[2])) + " and ac.elementtype='" + param[1].ToString() + "' and adt.isidentifier='Y' order by adt.seqno ASC ";
                     DataSet dsColumnDetail = (DB.ExecuteDataset(sql, null, null));
                     if (dsColumnDetail != null && dsColumnDetail.Tables.Count > 0 && dsColumnDetail.Tables[0].Rows.Count > 0)
                     {
@@ -517,7 +517,7 @@ namespace VIS.Controllers
             string retJSON = "";
             if (Session["ctx"] != null)
             {
-                Decimal temLineAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT amount FROM c_dimamtline WHERE c_dimamtline_id IN ("
+                Decimal temLineAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT amount FROM VAB_DimAmtline WHERE VAB_DimAmtline_id IN ("
                                                                                 + fields + ") AND ROWNUM=1"));
                 retJSON = JsonConvert.SerializeObject(temLineAmount);
             }

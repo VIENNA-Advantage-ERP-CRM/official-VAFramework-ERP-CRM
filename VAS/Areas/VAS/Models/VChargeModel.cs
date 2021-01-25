@@ -27,36 +27,36 @@ namespace VIS.Controllers
         /// <param name="value"></param>
         /// <param name="name"></param>
         /// <param name="isExpenseType"></param>
-        /// <param name="m_C_Element_ID"></param>
+        /// <param name="m_VAB_Element_ID"></param>
         /// <returns></returns>
-        public int CreateElementValue(Ctx ctx, int m_VAF_Org_ID, String value, String name, Boolean isExpenseType, int m_C_Element_ID)
+        public int CreateElementValue(Ctx ctx, int m_VAF_Org_ID, String value, String name, Boolean isExpenseType, int m_VAB_Element_ID)
         {
             MElementValue ev = new MElementValue(ctx, value, name, null,
-                isExpenseType ? X_C_ElementValue.ACCOUNTTYPE_Expense : X_C_ElementValue.ACCOUNTTYPE_Revenue,
-                    X_C_ElementValue.ACCOUNTSIGN_Natural,
+                isExpenseType ? X_VAB_Acct_Element.ACCOUNTTYPE_Expense : X_VAB_Acct_Element.ACCOUNTTYPE_Revenue,
+                    X_VAB_Acct_Element.ACCOUNTSIGN_Natural,
                     false, false, null);
-            ev.SetC_Element_ID(m_C_Element_ID);
+            ev.SetVAB_Element_ID(m_VAB_Element_ID);
             ev.SetVAF_Org_ID(m_VAF_Org_ID);
             if (!ev.Save())
             {
-                //log.Log(Level.WARNING, "C_ElementValue_ID not created");
-                Msg = "C_ElementValue_ID not created";
+                //log.Log(Level.WARNING, "VAB_Acct_Element_ID not created");
+                Msg = "VAB_Acct_Element_ID not created";
             }
-            ID = ev.GetC_ElementValue_ID();
-            return ev.GetC_ElementValue_ID();
+            ID = ev.GetVAB_Acct_Element_ID();
+            return ev.GetVAB_Acct_Element_ID();
         }
 
         /// <summary>
         /// Create new Charge based on the parameters passed
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="m_C_AcctSchema_ID"></param>
+        /// <param name="m_VAB_AccountBook_ID"></param>
         /// <param name="m_C_TaxCategory_ID"></param>
         /// <param name="name"></param>
-        /// <param name="primaryC_ElementValue_ID"></param>
+        /// <param name="primaryVAB_Acct_Element_ID"></param>
         /// <param name="expense"></param>
         /// <returns></returns>
-        public int CreateCharge(Ctx ctx, int m_C_AcctSchema_ID, int m_C_TaxCategory_ID, String name, int primaryC_ElementValue_ID, Boolean expense)
+        public int CreateCharge(Ctx ctx, int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, String name, int primaryVAB_Acct_Element_ID, Boolean expense)
         {
             MCharge charge = new MCharge(ctx, 0, null);
             charge.SetName(name);
@@ -73,14 +73,14 @@ namespace VIS.Controllers
             //  Get Primary AcctSchama
             if (m_acctSchema == null)
             {
-                m_acctSchema = new MAcctSchema(ctx, m_C_AcctSchema_ID, null);
+                m_acctSchema = new MAcctSchema(ctx, m_VAB_AccountBook_ID, null);
             }
-            if (m_acctSchema == null || m_acctSchema.GetC_AcctSchema_ID() == 0)
+            if (m_acctSchema == null || m_acctSchema.GetVAB_AccountBook_ID() == 0)
             {
                 ID = 0;
                 return 0;
             }
-            MAcctSchemaElement primary_ase = m_acctSchema.GetAcctSchemaElement(X_C_AcctSchema_Element.ELEMENTTYPE_Account);
+            MAcctSchemaElement primary_ase = m_acctSchema.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
 
             //	Get All
             MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, charge.GetVAF_Client_ID());
@@ -89,27 +89,27 @@ namespace VIS.Controllers
                 //	Target Account
                 MAccount defaultAcct = MAccount.GetDefault(ac, true);	//	optional null
                 //	Natural Account
-                int C_ElementValue_ID = primaryC_ElementValue_ID;
-                MAcctSchemaElement ase = ac.GetAcctSchemaElement(X_C_AcctSchema_Element.ELEMENTTYPE_Account);
-                if (primary_ase.GetC_Element_ID() != ase.GetC_Element_ID())
+                int VAB_Acct_Element_ID = primaryVAB_Acct_Element_ID;
+                MAcctSchemaElement ase = ac.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
+                if (primary_ase.GetVAB_Element_ID() != ase.GetVAB_Element_ID())
                 {
-                    MAcctSchemaDefault defAccts = MAcctSchemaDefault.Get(ctx, ac.GetC_AcctSchema_ID());
+                    MAcctSchemaDefault defAccts = MAcctSchemaDefault.Get(ctx, ac.GetVAB_AccountBook_ID());
                     int C_ValidCombination_ID = defAccts.GetCh_Expense_Acct();
                     if (!expense)
                     {
                         C_ValidCombination_ID = defAccts.GetCh_Revenue_Acct();
                     }
                     MAccount chargeAcct = MAccount.Get(ctx, C_ValidCombination_ID);
-                    C_ElementValue_ID = chargeAcct.GetAccount_ID();
+                    VAB_Acct_Element_ID = chargeAcct.GetAccount_ID();
                     //	Fallback
-                    if (C_ElementValue_ID == 0)
+                    if (VAB_Acct_Element_ID == 0)
                     {
-                        C_ElementValue_ID = defaultAcct.GetAccount_ID();
-                        if (C_ElementValue_ID == 0)
+                        VAB_Acct_Element_ID = defaultAcct.GetAccount_ID();
+                        if (VAB_Acct_Element_ID == 0)
                         {
-                            C_ElementValue_ID = ase.GetC_ElementValue_ID();
+                            VAB_Acct_Element_ID = ase.GetVAB_Acct_Element_ID();
                         }
-                        if (C_ElementValue_ID == 0)
+                        if (VAB_Acct_Element_ID == 0)
                         {
                             // log.Log(Level.WARNING, "No Default ElementValue for " + ac);
                             Msg = "No Default ElementValue for " + ac;
@@ -120,11 +120,11 @@ namespace VIS.Controllers
 
                 MAccount acct = MAccount.Get(ctx,
                     charge.GetVAF_Client_ID(), charge.GetVAF_Org_ID(),
-                    ac.GetC_AcctSchema_ID(),
-                    C_ElementValue_ID, defaultAcct.GetC_SubAcct_ID(),
-                    defaultAcct.GetM_Product_ID(), defaultAcct.GetC_BPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
+                    ac.GetVAB_AccountBook_ID(),
+                    VAB_Acct_Element_ID, defaultAcct.GetC_SubAcct_ID(),
+                    defaultAcct.GetM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
                     defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetC_SalesRegion_ID(),
-                    defaultAcct.GetC_Project_ID(), defaultAcct.GetC_Campaign_ID(), defaultAcct.GetC_Activity_ID(),
+                    defaultAcct.GetC_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),
                     defaultAcct.GetUserElement1_ID(), defaultAcct.GetUserElement2_ID());
                 if (acct == null)
@@ -135,11 +135,11 @@ namespace VIS.Controllers
                 }
 
                 //  Update Accounts
-                StringBuilder sql = new StringBuilder("UPDATE C_Charge_Acct ");
+                StringBuilder sql = new StringBuilder("UPDATE VAB_Charge_Acct ");
                 sql.Append("SET CH_Expense_Acct=").Append(acct.GetC_ValidCombination_ID());
                 sql.Append(", CH_Revenue_Acct=").Append(acct.GetC_ValidCombination_ID());
-                sql.Append(" WHERE C_Charge_ID=").Append(charge.GetC_Charge_ID());
-                sql.Append(" AND C_AcctSchema_ID=").Append(ac.GetC_AcctSchema_ID());
+                sql.Append(" WHERE VAB_Charge_ID=").Append(charge.GetVAB_Charge_ID());
+                sql.Append(" AND VAB_AccountBook_ID=").Append(ac.GetVAB_AccountBook_ID());
                 //
                 int no = VAdvantage.DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
                 if (no != 1)
@@ -148,19 +148,19 @@ namespace VIS.Controllers
                     Msg = "Update #" + no + "\n" + sql.ToString();
                 }
             }
-            ID = charge.GetC_Charge_ID();
-            return charge.GetC_Charge_ID();
+            ID = charge.GetVAB_Charge_ID();
+            return charge.GetVAB_Charge_ID();
         }
 
-        public void CreateChargeByList(Ctx ctx, int m_C_AcctSchema_ID, int m_C_TaxCategory_ID, List<string> eleName, List<string> eleValue_ID, List<bool> expense)
+        public void CreateChargeByList(Ctx ctx, int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, List<string> eleName, List<string> eleValue_ID, List<bool> expense)
         {
             StringBuilder listCreated = new StringBuilder();
             StringBuilder listRejected = new StringBuilder();
 
             for (int j = 0; j < eleValue_ID.Count; j++)
             {
-                int C_Charge_ID = CreateCharge(ctx, m_C_AcctSchema_ID, m_C_TaxCategory_ID, eleName[j], Convert.ToInt32(eleValue_ID[j]), Convert.ToBoolean(expense[j]));
-                if (C_Charge_ID == 0)
+                int VAB_Charge_ID = CreateCharge(ctx, m_VAB_AccountBook_ID, m_C_TaxCategory_ID, eleName[j], Convert.ToInt32(eleValue_ID[j]), Convert.ToBoolean(expense[j]));
+                if (VAB_Charge_ID == 0)
                 {
                     if (listRejected.Length > 0)
                     {
@@ -182,7 +182,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// get data from c_elementvalue for load grid
+        /// get data from VAB_Acct_Element for load grid
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="mcAcctSchemaID"></param>
@@ -193,7 +193,7 @@ namespace VIS.Controllers
             VChargeLodGrideData obj = new VChargeLodGrideData();
             obj.meID = 1;
 
-            // Get c_element_id
+            // Get VAB_Element_id
             int MCElement_ID = GetMCElement_ID(mcAcctSchemaID, mADClientId);
             if (MCElement_ID == 0)
             {                
@@ -236,7 +236,7 @@ namespace VIS.Controllers
 
 
         /// <summary>
-        /// get data from c_elementvalue_id
+        /// get data from VAB_Acct_Element_id
         /// </summary>
         /// <param name="MCElement_ID"></param>
         /// <returns></returns>
@@ -244,11 +244,11 @@ namespace VIS.Controllers
         {
             List<VchargeCElementValue> obj = new List<VchargeCElementValue>();
 
-            string sql = "SELECT 'false' as Select1,C_ElementValue_ID,Value, Name, case when AccountType = 'E' THEN 'true' else 'false' end as Expense"
-                  + " FROM C_ElementValue "
+            string sql = "SELECT 'false' as Select1,VAB_Acct_Element_ID,Value, Name, case when AccountType = 'E' THEN 'true' else 'false' end as Expense"
+                  + " FROM VAB_Acct_Element "
                   + " WHERE AccountType IN ('R','E')"
                   + " AND IsSummary='N'"
-                  + " AND C_Element_ID= " + MCElement_ID
+                  + " AND VAB_Element_ID= " + MCElement_ID
                   + " ORDER BY 2 desc";
             DataSet ds = DB.ExecuteDataset(sql);
 
@@ -258,7 +258,7 @@ namespace VIS.Controllers
                 {
                     obj.Add(new VchargeCElementValue()
                     {
-                        C_ElementValue_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ElementValue_ID"]),
+                        VAB_Acct_Element_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_Element_ID"]),
                         Value = Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]),
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
                         Expense = Util.GetValueOfString(ds.Tables[0].Rows[i]["Expense"])
@@ -269,7 +269,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// get c_element_id
+        /// get VAB_Element_id
         /// </summary>
         /// <param name="mcAcctSchemaID"></param>
         /// <param name="mADClientId"></param>
@@ -277,8 +277,8 @@ namespace VIS.Controllers
         private int GetMCElement_ID(int mcAcctSchemaID, int mADClientId)
         {
             int i = 0;
-            var sql = "SELECT C_Element_ID FROM C_AcctSchema_Element "
-                          + "WHERE ElementType='AC' AND C_AcctSchema_ID= " + mcAcctSchemaID;
+            var sql = "SELECT VAB_Element_ID FROM VAB_AccountBook_Element "
+                          + "WHERE ElementType='AC' AND VAB_AccountBook_ID= " + mcAcctSchemaID;
 
             object defaultAcct = DB.ExecuteScalar(sql);
             if (defaultAcct != null && defaultAcct != DBNull.Value)

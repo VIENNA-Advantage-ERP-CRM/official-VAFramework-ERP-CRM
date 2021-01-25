@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_ExpectedCostDistribution
+ * Class Used     : X_VAB_ExpectedCostDis
  * Chronological Development
  * Amit Bansal     04-Dec-2019
  ******************************************************/
@@ -16,7 +16,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MExpectedCostDistribution : X_C_ExpectedCostDistribution
+    public class MExpectedCostDistribution : X_VAB_ExpectedCostDis
     {
         #region Variable
         //	Logger	
@@ -28,10 +28,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ExpectedCostDistribution_ID">id</param>
+        /// <param name="VAB_ExpectedCostDis_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MExpectedCostDistribution(Ctx ctx, int C_ExpectedCostDistribution_ID, Trx trxName)
-           : base(ctx, C_ExpectedCostDistribution_ID, trxName)
+        public MExpectedCostDistribution(Ctx ctx, int VAB_ExpectedCostDis_ID, Trx trxName)
+           : base(ctx, VAB_ExpectedCostDis_ID, trxName)
         {
 
         }

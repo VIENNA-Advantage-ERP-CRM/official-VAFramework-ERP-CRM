@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int to_ID = 0;
 
         static private String VAF_ORG_ID = "VAF_Org_ID";
-        static private String C_BPARTNER_ID = "C_BPartner_ID";
+        static private String VAB_BUSINESSPARTNER_ID = "VAB_BusinessPartner_ID";
         static private String VAF_USERCONTACT_ID = "VAF_UserContact_ID";
         static private String M_PRODUCT_ID = "M_Product_ID";
 
@@ -40,7 +40,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         static private String[] s_delete_Org = new String[] { "VAF_OrgDetail" };
         /** Tables to delete (not update) for VAF_UserContact	*/
         static private String[] s_delete_User = new String[] { "VAF_UserContact_Roles" };
-        /** Tables to delete (not update) for C_BPartner	*/
+        /** Tables to delete (not update) for VAB_BusinessPartner	*/
         static private String[] s_delete_BPartner = new String[]
 		{"C_BP_Employee_Acct", "C_BP_Vendor_Acct", "C_BP_Customer_Acct", 
 		"T_Aging", "FRPT_BP_Customer_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
@@ -96,15 +96,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     m_deleteTables = s_delete_User;
                     columnName = VAF_USERCONTACT_ID;
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
                     from_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();					
                 }
-                else if (name.Equals("C_BPartner_To_ID"))
+                else if (name.Equals("VAB_BusinessPartner_To_ID"))
                 {
                     to_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                     m_deleteTables = s_delete_BPartner;
-                    columnName = C_BPARTNER_ID;
+                    columnName = VAB_BUSINESSPARTNER_ID;
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
@@ -151,7 +151,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MUser fromUsr = new MUser(GetCtx(), from_ID, Get_TrxName());
                 MUser toUsr = new MUser(GetCtx(), to_ID, Get_TrxName());
-                if(fromUsr.GetC_BPartner_ID() != toUsr.GetC_BPartner_ID())
+                if(fromUsr.GetVAB_BusinessPartner_ID() != toUsr.GetVAB_BusinessPartner_ID())
                 {
                     return Msg.GetMsg(GetCtx(), "MergeUserError");
                 }
@@ -426,19 +426,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 
             }
-            else if (ColumnName.Equals(C_BPARTNER_ID))
+            else if (ColumnName.Equals(VAB_BUSINESSPARTNER_ID))
             {
                 MBPartner bp = new MBPartner(GetCtx(), to_ID, Get_TrxName());
                 if (bp.Get_ID() != 0)
                 {
-                    MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetC_BPartner_ID(), Get_TrxName());
+                    MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     for (int i = 0; i < payments.Length; i++)
                     {
                         MPayment payment = payments[i];
                         if (payment.TestAllocation())
                             payment.Save();
                     }
-                    MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetC_BPartner_ID(), Get_TrxName());
+                    MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     for (int i = 0; i < invoices.Length; i++)
                     {
                         MInvoice invoice = invoices[i];

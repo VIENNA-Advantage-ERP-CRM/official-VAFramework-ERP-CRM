@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Charge_Acct
+/** Generated Model for VAB_Charge_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Charge_Acct : PO
+public class X_VAB_Charge_Acct : PO
 {
-public X_C_Charge_Acct (Context ctx, int C_Charge_Acct_ID, Trx trxName) : base (ctx, C_Charge_Acct_ID, trxName)
+public X_VAB_Charge_Acct (Context ctx, int VAB_Charge_Acct_ID, Trx trxName) : base (ctx, VAB_Charge_Acct_ID, trxName)
 {
-/** if (C_Charge_Acct_ID == 0)
+/** if (VAB_Charge_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_Charge_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Charge_ID (0);
 SetCh_Expense_Acct (0);
 SetCh_Revenue_Acct (0);
 }
  */
 }
-public X_C_Charge_Acct (Ctx ctx, int C_Charge_Acct_ID, Trx trxName) : base (ctx, C_Charge_Acct_ID, trxName)
+public X_VAB_Charge_Acct (Ctx ctx, int VAB_Charge_Acct_ID, Trx trxName) : base (ctx, VAB_Charge_Acct_ID, trxName)
 {
-/** if (C_Charge_Acct_ID == 0)
+/** if (VAB_Charge_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
-SetC_Charge_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Charge_ID (0);
 SetCh_Expense_Acct (0);
 SetCh_Revenue_Acct (0);
 }
@@ -43,7 +43,7 @@ SetCh_Revenue_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Charge_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Charge_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_Charge_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Charge_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Charge_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_Charge_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Charge_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Charge_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Charge_Acct()
+static X_VAB_Charge_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389054427L;
 public static int Table_ID;
  // =396;
 
-/** TableName=C_Charge_Acct */
-public static String Table_Name="C_Charge_Acct";
+/** TableName=VAB_Charge_Acct */
+public static String Table_Name="VAB_Charge_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Charge_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Charge_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,20 +135,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Charge.
-@param C_Charge_ID Additional document charges */
-public void SetC_Charge_ID (int C_Charge_ID)
+@param VAB_Charge_ID Additional document charges */
+public void SetVAB_Charge_ID (int VAB_Charge_ID)
 {
-if (C_Charge_ID < 1) throw new ArgumentException ("C_Charge_ID is mandatory.");
-Set_ValueNoCheck ("C_Charge_ID", C_Charge_ID);
+if (VAB_Charge_ID < 1) throw new ArgumentException ("VAB_Charge_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Charge_ID", VAB_Charge_ID);
 }
 /** Get Charge.
 @return Additional document charges */
-public int GetC_Charge_ID() 
+public int GetVAB_Charge_ID() 
 {
-Object ii = Get_Value("C_Charge_ID");
+Object ii = Get_Value("VAB_Charge_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

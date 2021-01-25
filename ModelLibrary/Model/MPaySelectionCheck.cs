@@ -100,7 +100,7 @@ namespace VAdvantage.Model
 
             //	Create new PaySelection
             MPaySelection ps = new MPaySelection(ctx, 0, trxName);
-            ps.SetC_BankAccount_ID(payment.GetC_BankAccount_ID());
+            ps.SetVAB_Bank_Acct_ID(payment.GetVAB_Bank_Acct_ID());
             ps.SetName(Msg.Translate(ctx, "C_Payment_ID") + ": " + payment.GetDocumentNo());
             ps.SetDescription(payment.GetDescription());
             ps.SetPayDate(payment.GetDateTrx());
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
 
             //	Create new PaySelection Check
             MPaySelectionCheck psc = new MPaySelectionCheck(ps, PaymentRule);
-            psc.SetC_BPartner_ID(payment.GetC_BPartner_ID());
+            psc.SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
             psc.SetC_Payment_ID(payment.GetC_Payment_ID());
             psc.SetIsReceipt(payment.IsReceipt());
             psc.SetPayAmt(payment.GetPayAmt());
@@ -281,9 +281,9 @@ namespace VAdvantage.Model
                     if (mpp == null)
                         continue;
                     //  BPartner Info
-                    String[] bp = GetBPartnerInfo(mpp.GetC_BPartner_ID());
+                    String[] bp = GetBPartnerInfo(mpp.GetVAB_BusinessPartner_ID());
                     //  TarGet BankAccount Info
-                    String[] bpba = GetBPBankAccountInfo(mpp.GetC_BP_BankAccount_ID());
+                    String[] bpba = GetBPBankAccountInfo(mpp.GetVAB_BPart_Bank_Acct_ID());
 
                     //  Comment - list of invoice document no
                     StringBuilder comment = new StringBuilder();
@@ -317,7 +317,7 @@ namespace VAdvantage.Model
                         //  Payment Info
                         .Append(x).Append(mpp.GetDocumentNo()).Append(x).Append(",")    // DocumentNo
                         .Append(mpp.GetParent().GetPayDate()).Append(",")               // PayDate
-                        .Append(x).Append(MCurrency.GetISO_Code(Env.GetContext(), mpp.GetParent().GetC_Currency_ID())).Append(x).Append(",")    // Currency
+                        .Append(x).Append(MCurrency.GetISO_Code(Env.GetContext(), mpp.GetParent().GetVAB_Currency_ID())).Append(x).Append(",")    // Currency
                         .Append(mpp.GetPayAmt()).Append(",")                // PayAmount
                         .Append(x).Append(comment.ToString()).Append(x)     // Comment
                         .Append(Env.NL);
@@ -339,10 +339,10 @@ namespace VAdvantage.Model
         /**
          *  Get Customer/Vendor Info.
          *  Based on BP_ static variables
-         *  @param C_BPartner_ID BPartner
+         *  @param VAB_BusinessPartner_ID BPartner
          *  @return info array
          */
-        private static String[] GetBPartnerInfo(int C_BPartner_ID)
+        private static String[] GetBPartnerInfo(int VAB_BusinessPartner_ID)
         {
             String[] bp = new String[10];
 
@@ -350,21 +350,21 @@ namespace VAdvantage.Model
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
-                + "WHERE bp.C_BPartner_ID=?"        // #1
-                + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
-                + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
+                + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
+                + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
                 + " AND l.C_Location_ID=a.C_Location_ID"
                 + " AND a.C_Region_ID=r.C_Region_ID(+)"
-                + " AND a.C_Country_ID=cc.C_Country_ID "
+                + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
-                + "FROM C_BPartner bp "
-                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.C_BPartner_ID=c.C_BPartner_ID) "
-                + "INNER JOIN C_BPartner_Location l ON (bp.C_BPartner_ID=l.C_BPartner_ID) "
+                + "FROM VAB_BusinessPartner bp "
+                + "LEFT OUTER JOIN VAF_UserContact c ON (bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
+                + "INNER JOIN VAB_BPart_Location l ON (bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID) "
                 + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
                 + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
-                + "INNER JOIN C_Country cc ON (a.C_Country_ID=cc.C_Country_ID) "
-                + "WHERE bp.C_BPartner_ID= " + C_BPartner_ID          // #1
+                + "INNER JOIN VAB_Country cc ON (a.VAB_Country_ID=cc.VAB_Country_ID) "
+                + "WHERE bp.VAB_BusinessPartner_ID= " + VAB_BusinessPartner_ID          // #1
                 + " ORDER BY l.IsBillTo DESC";
 
             IDataReader idr = null;
@@ -443,27 +443,27 @@ namespace VAdvantage.Model
         /**
          *  Get Bank Account Info for tarGet Accpimt.
          *  Based on BP_ static variables
-         *  @param C_BPartner_ID BPartner
+         *  @param VAB_BusinessPartner_ID BPartner
          *  @return info array
          */
-        private static String[] GetBPBankAccountInfo(int C_BP_BankAccount_ID)
+        private static String[] GetBPBankAccountInfo(int VAB_BPart_Bank_Acct_ID)
         {
             String[] bp = new String[10];
 
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM C_BPartner bp, VAF_UserContact c, C_BPartner_Location l, C_Location a, C_Region r, C_Country cc "
-                + "WHERE bp.C_BPartner_ID=?"        // #1
-                + " AND bp.C_BPartner_ID=c.C_BPartner_ID(+)"
-                + " AND bp.C_BPartner_ID=l.C_BPartner_ID"
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
+                + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
+                + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
                 + " AND l.C_Location_ID=a.C_Location_ID"
                 + " AND a.C_Region_ID=r.C_Region_ID(+)"
-                + " AND a.C_Country_ID=cc.C_Country_ID "
+                + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
-                + "FROM C_BP_BankAccount bpba "
+                + "FROM VAB_BPart_Bank_Acct bpba "
                 + "LEFT OUTER JOIN C_Bank ba ON (bpba.C_Bank_ID = ba.C_Bank_ID) "
-                + "WHERE bpba.C_BP_BankAccount_ID=" + C_BP_BankAccount_ID;        // #1
+                + "WHERE bpba.VAB_BPart_Bank_Acct_ID=" + VAB_BPart_Bank_Acct_ID;        // #1
 
             IDataReader idr = null;
             try
@@ -560,11 +560,11 @@ namespace VAdvantage.Model
 
                         payment = new MPayment(check.GetCtx(), 0, null);
                         payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
-                        payment.SetC_DocType_ID(false);
+                        payment.SetVAB_DocTypes_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
                         {
-                            payment.SetBankCheck(check.GetParent().GetC_BankAccount_ID(), false, check.GetDocumentNo());
+                            payment.SetBankCheck(check.GetParent().GetVAB_Bank_Acct_ID(), false, check.GetDocumentNo());
                             payment.SetCheckDate(check.GetParent().GetPayDate());               // Set Check date from Payment selection date
                         }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
@@ -578,11 +578,11 @@ namespace VAdvantage.Model
                             continue;
                         }
                         payment.SetTrxType(X_C_Payment.TRXTYPE_CreditPayment);
-                        payment.SetAmount(check.GetParent().GetC_Currency_ID(), check.GetPayAmt());
+                        payment.SetAmount(check.GetParent().GetVAB_Currency_ID(), check.GetPayAmt());
                         payment.SetDiscountAmt(check.GetDiscountAmt());
                         payment.SetDateTrx(check.GetParent().GetPayDate());
                         payment.SetDateAcct(check.GetParent().GetPayDate());
-                        payment.SetC_BPartner_ID(check.GetC_BPartner_ID());
+                        payment.SetVAB_BusinessPartner_ID(check.GetVAB_BusinessPartner_ID());
 
                         //to set VA009_PaymentMethod_ID on payment from Print Export Form
                         VA009_PaymentMethod_ID = Util.GetValueOfInt(check.Get_Value("VA009_PaymentMethod_ID"));
@@ -720,11 +720,11 @@ namespace VAdvantage.Model
                     {
                         payment = new MPayment(check.GetCtx(), 0, null);
                         payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
-                        payment.SetC_DocType_ID(false);
+                        payment.SetVAB_DocTypes_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
                         {
-                            payment.SetBankCheck(check.GetParent().GetC_BankAccount_ID(), false, check.GetDocumentNo());
+                            payment.SetBankCheck(check.GetParent().GetVAB_Bank_Acct_ID(), false, check.GetDocumentNo());
                             payment.SetCheckDate(check.GetParent().GetPayDate());                   // Set Check date from Payment selection date
                         }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
@@ -738,10 +738,10 @@ namespace VAdvantage.Model
                             continue;
                         }
                         payment.SetTrxType(X_C_Payment.TRXTYPE_CreditPayment);
-                        payment.SetAmount(check.GetParent().GetC_Currency_ID(), check.GetPayAmt());
+                        payment.SetAmount(check.GetParent().GetVAB_Currency_ID(), check.GetPayAmt());
                         payment.SetDiscountAmt(check.GetDiscountAmt());
                         payment.SetDateTrx(check.GetParent().GetPayDate());
-                        payment.SetC_BPartner_ID(check.GetC_BPartner_ID());
+                        payment.SetVAB_BusinessPartner_ID(check.GetVAB_BusinessPartner_ID());
                         //	Link to Batch
                         if (batch != null)
                         {
@@ -900,7 +900,7 @@ namespace VAdvantage.Model
             if (C_PaySelectionCheck_ID == 0)
             {
                 //	SetC_PaySelection_ID (0);
-                //	SetC_BPartner_ID (0);
+                //	SetVAB_BusinessPartner_ID (0);
                 //	SetPaymentRule (null);
                 SetPayAmt(Env.ZERO);
                 SetDiscountAmt(Env.ZERO);
@@ -931,31 +931,31 @@ namespace VAdvantage.Model
         {
             SetClientOrg(line);
             SetC_PaySelection_ID(line.GetC_PaySelection_ID());
-            int C_BPartner_ID = line.GetInvoice().GetC_BPartner_ID();
-            SetC_BPartner_ID(C_BPartner_ID);
+            int VAB_BusinessPartner_ID = line.GetInvoice().GetVAB_BusinessPartner_ID();
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             //
             if (X_C_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
             {
-                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), C_BPartner_ID);
+                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
                 {
                     MBPBankAccount account = bas[i];
                     if (account.IsDirectDebit())
                     {
-                        SetC_BP_BankAccount_ID(account.GetC_BP_BankAccount_ID());
+                        SetVAB_BPart_Bank_Acct_ID(account.GetVAB_BPart_Bank_Acct_ID());
                         break;
                     }
                 }
             }
             else if (X_C_Order.PAYMENTRULE_DirectDeposit.Equals(PaymentRule))
             {
-                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), C_BPartner_ID);
+                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
                 {
                     MBPBankAccount account = bas[i];
                     if (account.IsDirectDeposit())
                     {
-                        SetC_BP_BankAccount_ID(account.GetC_BP_BankAccount_ID());
+                        SetVAB_BPart_Bank_Acct_ID(account.GetVAB_BPart_Bank_Acct_ID());
                         break;
                     }
                 }
@@ -994,7 +994,7 @@ namespace VAdvantage.Model
          */
         public void AddLine(MPaySelectionLine line)
         {
-            if (GetC_BPartner_ID() != line.GetInvoice().GetC_BPartner_ID())
+            if (GetVAB_BusinessPartner_ID() != line.GetInvoice().GetVAB_BusinessPartner_ID())
                 throw new ArgumentException("Line for fifferent BPartner");
             //
             if (IsReceipt() == line.IsSOTrx())
@@ -1027,7 +1027,7 @@ namespace VAdvantage.Model
          */
         public Boolean IsValid()
         {
-            if (GetC_BP_BankAccount_ID() != 0)
+            if (GetVAB_BPart_Bank_Acct_ID() != 0)
                 return true;
             return !IsDirect();
         }

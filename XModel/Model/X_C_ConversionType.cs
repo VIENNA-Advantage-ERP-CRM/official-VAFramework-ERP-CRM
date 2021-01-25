@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ConversionType
+/** Generated Model for VAB_CurrencyType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ConversionType : PO
+public class X_VAB_CurrencyType : PO
 {
-public X_C_ConversionType (Context ctx, int C_ConversionType_ID, Trx trxName) : base (ctx, C_ConversionType_ID, trxName)
+public X_VAB_CurrencyType (Context ctx, int VAB_CurrencyType_ID, Trx trxName) : base (ctx, VAB_CurrencyType_ID, trxName)
 {
-/** if (C_ConversionType_ID == 0)
+/** if (VAB_CurrencyType_ID == 0)
 {
-SetC_ConversionType_ID (0);
+SetVAB_CurrencyType_ID (0);
 SetIsDefault (false);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_ConversionType (Ctx ctx, int C_ConversionType_ID, Trx trxName) : base (ctx, C_ConversionType_ID, trxName)
+public X_VAB_CurrencyType (Ctx ctx, int VAB_CurrencyType_ID, Trx trxName) : base (ctx, VAB_CurrencyType_ID, trxName)
 {
-/** if (C_ConversionType_ID == 0)
+/** if (VAB_CurrencyType_ID == 0)
 {
-SetC_ConversionType_ID (0);
+SetVAB_CurrencyType_ID (0);
 SetIsDefault (false);
 SetName (null);
 SetValue (null);
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ConversionType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CurrencyType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_ConversionType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ConversionType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CurrencyType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_ConversionType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ConversionType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_CurrencyType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ConversionType()
+static X_VAB_CurrencyType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389054662L;
 public static int Table_ID;
  // =637;
 
-/** TableName=C_ConversionType */
-public static String Table_Name="C_ConversionType";
+/** TableName=VAB_CurrencyType */
+public static String Table_Name="VAB_CurrencyType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ConversionType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_CurrencyType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-public void SetC_ConversionType_ID (int C_ConversionType_ID)
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+public void SetVAB_CurrencyType_ID (int VAB_CurrencyType_ID)
 {
-if (C_ConversionType_ID < 1) throw new ArgumentException ("C_ConversionType_ID is mandatory.");
-Set_ValueNoCheck ("C_ConversionType_ID", C_ConversionType_ID);
+if (VAB_CurrencyType_ID < 1) throw new ArgumentException ("VAB_CurrencyType_ID is mandatory.");
+Set_ValueNoCheck ("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
 }
 /** Get Currency Type.
 @return Currency Conversion Rate Type */
-public int GetC_ConversionType_ID() 
+public int GetVAB_CurrencyType_ID() 
 {
-Object ii = Get_Value("C_ConversionType_ID");
+Object ii = Get_Value("VAB_CurrencyType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

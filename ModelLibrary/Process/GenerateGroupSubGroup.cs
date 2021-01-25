@@ -34,11 +34,11 @@ namespace VAdvantage.Process
             try
             {
                 MFinRptConfig Report = new MFinRptConfig(GetCtx(), _C_FinRecordConfig_ID, Get_TrxName());
-                Report.GetC_AccountGroupBatch_ID();
+                Report.GetVAB_AccountGroupBatch_ID();
                 Report.GetC_ReportType();
 
                 StringBuilder sql =new StringBuilder();
-                sql.Append( "Select * from c_accountgroup where c_accountgroupbatch_id=" + Report.GetC_AccountGroupBatch_ID());
+                sql.Append( "Select * from VAB_AccountGroup where VAB_AccountGroupbatch_id=" + Report.GetVAB_AccountGroupBatch_ID());
 
                 if (Report.GetC_ReportType() == "B")
                 {
@@ -68,13 +68,13 @@ namespace VAdvantage.Process
                         MFinRptAcctGroup acctGroup = new MFinRptAcctGroup(GetCtx(), 0, null);
                         acctGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr["VAF_Client_ID"]));
                         acctGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr["VAF_Org_ID"]));
-                        acctGroup.SetC_AccountGroup_ID(Util.GetValueOfInt(dr["C_ACCOUNTGROUP_ID"]));
-                        acctGroup.SetC_FinRptConfig_ID(_C_FinRecordConfig_ID);
+                        acctGroup.SetVAB_AccountGroup_ID(Util.GetValueOfInt(dr["VAB_ACCOUNTGROUP_ID"]));
+                        acctGroup.SetVAB_FinRptConfig_ID(_C_FinRecordConfig_ID);
                         acctGroup.SetLine(Util.GetValueOfString(dr["Line"]));
                         if (acctGroup.Save())
                         {
                             StringBuilder query = new StringBuilder();
-                            query.Append("Select * from C_AccountSubGroup where c_accountgroup_id=" + Util.GetValueOfInt(dr["C_ACCOUNTGROUP_ID"]));
+                            query.Append("Select * from VAB_AccountSubGroup where VAB_AccountGroup_id=" + Util.GetValueOfInt(dr["VAB_ACCOUNTGROUP_ID"]));
 
                             if (Report.GetC_ReportType() == "B")
                             {
@@ -100,8 +100,8 @@ namespace VAdvantage.Process
                                 MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
                                 AcctSubGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr1["VAF_Client_ID"]));
                                 AcctSubGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr1["VAF_Org_ID"]));
-                                AcctSubGroup.SetC_AccountSubGroup_ID(Util.GetValueOfInt(dr1["C_ACCOUNTSUBGROUP_ID"]));
-                                AcctSubGroup.SetC_FinRptAcctGroup_ID(acctGroup.GetC_FinRptAcctGroup_ID());
+                                AcctSubGroup.SetVAB_AccountSubGroup_ID(Util.GetValueOfInt(dr1["VAB_ACCOUNTSUBGROUP_ID"]));
+                                AcctSubGroup.SetVAB_FinRptAcctGroup_ID(acctGroup.GetVAB_FinRptAcctGroup_ID());
                                 AcctSubGroup.SetLine(Util.GetValueOfString(dr1["LINE"]));
                                 if (!AcctSubGroup.Save())
                                 {

@@ -587,7 +587,7 @@ namespace VAdvantage.Utility
         public static bool IsBaseTranslation(string tableName)
         {
             if (tableName.StartsWith("AD")
-                || tableName.Equals("C_Country_Trl"))
+                || tableName.Equals("VAB_Country_TL"))
                 return true;
             return false;
         }	//	
@@ -701,7 +701,7 @@ namespace VAdvantage.Utility
         ///////////////////Manfacturing//////////////////////////////
         /**
          *	Parse Context replaces global or Window context @tag@ with actual value.
-         *	The tag may have a | with a fixed value e.g. @C_BPartner_ID|0@
+         *	The tag may have a | with a fixed value e.g. @VAB_BusinessPartner_ID|0@
          *  @param ctx context
          *	@param WindowNo	Number of Window
          *	@param value Message to be parsed

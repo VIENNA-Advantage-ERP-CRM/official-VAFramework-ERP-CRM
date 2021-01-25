@@ -147,50 +147,50 @@ public String GetAddress2()
 return (String)Get_Value("Address2");
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);
+if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);
 else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set City.
-@param C_City_ID City */
-public void SetC_City_ID (int C_City_ID)
+@param VAB_City_ID City */
+public void SetVAB_City_ID (int VAB_City_ID)
 {
-if (C_City_ID <= 0) Set_Value ("C_City_ID", null);
+if (VAB_City_ID <= 0) Set_Value ("VAB_City_ID", null);
 else
-Set_Value ("C_City_ID", C_City_ID);
+Set_Value ("VAB_City_ID", VAB_City_ID);
 }
 /** Get City.
 @return City */
-public int GetC_City_ID() 
+public int GetVAB_City_ID() 
 {
-Object ii = Get_Value("C_City_ID");
+Object ii = Get_Value("VAB_City_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Country.
-@param C_Country_ID Country  */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country  */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID <= 0) Set_Value ("C_Country_ID", null);
+if (VAB_Country_ID <= 0) Set_Value ("VAB_Country_ID", null);
 else
-Set_Value ("C_Country_ID", C_Country_ID);
+Set_Value ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country  */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

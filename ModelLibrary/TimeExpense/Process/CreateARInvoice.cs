@@ -23,13 +23,13 @@ namespace VAdvantage.Process
     public class CreateARInvoice : SvrProcess
     {
         #region Private Variable
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private DateTime? _DateInvoiced = null;
        // private int _noInvoices = 0;
         string sql = "";
        // string msg = "";
-        List<int> C_BPartner_ID = new List<int>();
-        // List<int> C_BPartner_IDAP = new List<int>();
+        List<int> VAB_BusinessPartner_ID = new List<int>();
+        // List<int> VAB_BusinessPartner_IDAP = new List<int>();
         List<int> M_Product_ID = new List<int>();
         Dictionary<int, int> BPInvoice = new Dictionary<int, int>();
         // Dictionary<int, int> BPAPInvoice = new Dictionary<int, int>();
@@ -55,9 +55,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateInvoiced"))
                 {
@@ -109,9 +109,9 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    if (_C_BPartner_ID != 0)
+                    if (_VAB_BusinessPartner_ID != 0)
                     {
-                        sqlWhere.Append(" AND C_BPartner_ID = " + _C_BPartner_ID);
+                        sqlWhere.Append(" AND VAB_BusinessPartner_ID = " + _VAB_BusinessPartner_ID);
                     }
                     if (VAF_Org_ID != 0)
                     {
@@ -128,7 +128,7 @@ namespace VAdvantage.Process
                     sql = sqlSelect;
                 }
 
-                sql = sql + " order by C_order_ID, c_bpartner_id";
+                sql = sql + " order by C_order_ID, VAB_BusinessPartner_id";
 
                 IDataReader idr = null;
                 try
@@ -136,7 +136,7 @@ namespace VAdvantage.Process
                     idr = DB.ExecuteReader(sql, null, null);
                     while (idr.Read())
                     {
-                        if (C_BPartner_ID.Contains(Util.GetValueOfInt(idr["C_BPartner_ID"])))
+                        if (VAB_BusinessPartner_ID.Contains(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"])))
                         {
                             VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), Util.GetValueOfInt(idr["C_Order_ID"]), null);
                             bool chk = false;
@@ -160,7 +160,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            C_BPartner_ID.Add(Util.GetValueOfInt(idr["C_BPartner_ID"]));
+                            VAB_BusinessPartner_ID.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]));
                             VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
                             VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
                             int C_Invoice_ID = GenerateInvoice(tLine, tExp, isExpense);
@@ -187,9 +187,9 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                if (_C_BPartner_ID != 0)
+                                if (_VAB_BusinessPartner_ID != 0)
                                 {
-                                    sqlWhere.Append(" AND C_BPartner_ID = " + _C_BPartner_ID);
+                                    sqlWhere.Append(" AND VAB_BusinessPartner_ID = " + _VAB_BusinessPartner_ID);
                                 }
                                 if (VAF_Org_ID != 0)
                                 {
@@ -206,7 +206,7 @@ namespace VAdvantage.Process
                                 sql = sqlSelect;
                             }
 
-                            sql = sql + " order by C_order_ID, c_bpartner_id";
+                            sql = sql + " order by C_order_ID, VAB_BusinessPartner_id";
 
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
                             if (ds != null)
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                                         {
                                             VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[j]["C_Order_ID"]), null);
                                             VAdvantage.Model.MInvoice inv1 = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[l]), null);
-                                            if ((inv1.GetC_PaymentTerm_ID() == ord.GetC_PaymentTerm_ID()) && (inv1.GetC_BPartner_ID() == ord.GetC_BPartner_ID())
+                                            if ((inv1.GetC_PaymentTerm_ID() == ord.GetC_PaymentTerm_ID()) && (inv1.GetVAB_BusinessPartner_ID() == ord.GetVAB_BusinessPartner_ID())
                                                 && (inv1.GetM_PriceList_ID() == ord.GetM_PriceList_ID()))
                                             {
                                                 chk1 = true;
@@ -284,9 +284,9 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    if (_C_BPartner_ID != 0)
+                    if (_VAB_BusinessPartner_ID != 0)
                     {
-                        sqlWhere.Append(" AND C_BPartner_ID = " + _C_BPartner_ID);
+                        sqlWhere.Append(" AND VAB_BusinessPartner_ID = " + _VAB_BusinessPartner_ID);
                     }
                     if (VAF_Org_ID != 0)
                     {
@@ -303,7 +303,7 @@ namespace VAdvantage.Process
                     sql = sqlSelect;
                 }
 
-                sql = sql + " order by C_order_ID, c_bpartner_id";
+                sql = sql + " order by C_order_ID, VAB_BusinessPartner_id";
                 IDataReader idr = null;
                 try
                 {
@@ -476,12 +476,12 @@ namespace VAdvantage.Process
 
             if (tLine.IsBillToCustomer())
             {
-                if (Util.GetValueOfInt(tLine.GetC_Charge_ID()) != 0)
+                if (Util.GetValueOfInt(tLine.GetVAB_Charge_ID()) != 0)
                 {
                     sql = "select max(line) from c_invoiceline where c_invoice_id = " + C_Invoice_ID;
                     int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                    sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and c_charge_ID = " + tLine.GetC_Charge_ID() + " and c_tax_id = " + tLine.GetC_Tax_ID();
+                    sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and VAB_Charge_ID = " + tLine.GetVAB_Charge_ID() + " and c_tax_id = " + tLine.GetC_Tax_ID();
                     int C_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (C_InvoiceLine_ID != 0)
                     {
@@ -508,7 +508,7 @@ namespace VAdvantage.Process
                         iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
                         iLine.SetC_UOM_ID(100);
                         iLine.SetDescription(tLine.GetDescription());
-                        iLine.SetC_Charge_ID(tLine.GetC_Charge_ID());
+                        iLine.SetVAB_Charge_ID(tLine.GetVAB_Charge_ID());
                         iLine.SetQtyEntered(Decimal.One);
                         iLine.SetQtyInvoiced(Decimal.One);
                         iLine.SetPriceEntered(tLine.GetApprovedARExpenseAmt());
@@ -546,8 +546,8 @@ namespace VAdvantage.Process
             }
 
 
-            sql = "select C_BPartner_Location_ID from c_Bpartner_Location where c_bpartner_ID = " + tLine.GetC_BPartner_ID();
-            int C_BPartner_Location_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            sql = "select VAB_BPart_Location_ID from VAB_BPart_Location where VAB_BusinessPartner_ID = " + tLine.GetVAB_BusinessPartner_ID();
+            int VAB_BPart_Location_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             if (_DateInvoiced == null)
             {
@@ -558,9 +558,9 @@ namespace VAdvantage.Process
             inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             inv.SetVAF_UserContact_ID(tExp.GetVAF_UserContact_ID());
-            inv.SetC_BPartner_ID(tLine.GetC_BPartner_ID());
-            inv.SetC_BPartner_Location_ID(C_BPartner_Location_ID);
-            inv.SetC_Currency_ID(tLine.GetC_Currency_ID());
+            inv.SetVAB_BusinessPartner_ID(tLine.GetVAB_BusinessPartner_ID());
+            inv.SetVAB_BPart_Location_ID(VAB_BPart_Location_ID);
+            inv.SetVAB_Currency_ID(tLine.GetVAB_Currency_ID());
             inv.SetDateInvoiced(_DateInvoiced);
             inv.SetM_PriceList_ID(tExp.GetM_PriceList_ID());
             inv.SetDateAcct(_DateInvoiced);
@@ -570,18 +570,18 @@ namespace VAdvantage.Process
             if (!IsExpense)
             {
                 inv.SetIsSOTrx(true);
-                sql = "select C_DocType_ID from c_doctype where name = 'AR Invoice' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
-                int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                inv.SetC_DocType_ID(C_DocType_ID);
-                inv.SetC_DocTypeTarget_ID(C_DocType_ID);
+                sql = "select VAB_DocTypes_ID from VAB_DocTypes where name = 'AR Invoice' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                inv.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
+                inv.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
             }
             else
             {
                 inv.SetIsSOTrx(false);
-                sql = "select C_DocType_ID from c_doctype where docbasetype = 'API' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
-                int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                inv.SetC_DocType_ID(C_DocType_ID);
-                inv.SetC_DocTypeTarget_ID(C_DocType_ID);
+                sql = "select VAB_DocTypes_ID from VAB_DocTypes where docbasetype = 'API' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
+                int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                inv.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
+                inv.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
             }
             //inv.SetSalesRep_ID();
             inv.SetDocAction("CO");
@@ -595,7 +595,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                sql = " select c_paymentterm_id from c_bpartner where c_bpartner_id = " + tLine.GetC_BPartner_ID();
+                sql = " select c_paymentterm_id from VAB_BusinessPartner where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID();
                 C_PaymentTerm_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 if (C_PaymentTerm_ID == 0)
@@ -632,12 +632,12 @@ namespace VAdvantage.Process
         //    // Case to Generate AP in Generation of AR Invoice
         //    if (tLine.IsExpenseInvoice())
         //    {
-        //        if (Util.GetValueOfInt(tLine.GetC_Charge_ID()) != 0)
+        //        if (Util.GetValueOfInt(tLine.GetVAB_Charge_ID()) != 0)
         //        {
         //            sql = "select max(line) from c_invoiceline where c_invoice_id = " + C_Invoice_ID;
         //            int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-        //            sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and c_charge_ID = " + tLine.GetC_Charge_ID();
+        //            sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and VAB_Charge_ID = " + tLine.GetVAB_Charge_ID();
         //            int C_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
         //            if (C_InvoiceLine_ID != 0)
         //            {
@@ -664,7 +664,7 @@ namespace VAdvantage.Process
         //                iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
         //                iLine.SetC_UOM_ID(100);
         //                iLine.SetDescription(tLine.GetDescription());
-        //                iLine.SetC_Charge_ID(tLine.GetC_Charge_ID());
+        //                iLine.SetVAB_Charge_ID(tLine.GetVAB_Charge_ID());
         //                iLine.SetQtyEntered(Decimal.One);
         //                iLine.SetQtyInvoiced(Decimal.One);
         //                iLine.SetPriceEntered(tLine.GetApprovedExpenseAmt());

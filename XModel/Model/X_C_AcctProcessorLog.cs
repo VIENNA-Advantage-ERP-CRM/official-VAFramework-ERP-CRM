@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_AcctProcessorLog
+/** Generated Model for VAB_AccountHanlderLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_AcctProcessorLog : PO
+public class X_VAB_AccountHanlderLog : PO
 {
-public X_C_AcctProcessorLog (Context ctx, int C_AcctProcessorLog_ID, Trx trxName) : base (ctx, C_AcctProcessorLog_ID, trxName)
+public X_VAB_AccountHanlderLog (Context ctx, int VAB_AccountHanlderLog_ID, Trx trxName) : base (ctx, VAB_AccountHanlderLog_ID, trxName)
 {
-/** if (C_AcctProcessorLog_ID == 0)
+/** if (VAB_AccountHanlderLog_ID == 0)
 {
-SetC_AcctProcessorLog_ID (0);
-SetC_AcctProcessor_ID (0);
+SetVAB_AccountHanlderLog_ID (0);
+SetVAB_AccountHanlder_ID (0);
 SetIsError (false);
 }
  */
 }
-public X_C_AcctProcessorLog (Ctx ctx, int C_AcctProcessorLog_ID, Trx trxName) : base (ctx, C_AcctProcessorLog_ID, trxName)
+public X_VAB_AccountHanlderLog (Ctx ctx, int VAB_AccountHanlderLog_ID, Trx trxName) : base (ctx, VAB_AccountHanlderLog_ID, trxName)
 {
-/** if (C_AcctProcessorLog_ID == 0)
+/** if (VAB_AccountHanlderLog_ID == 0)
 {
-SetC_AcctProcessorLog_ID (0);
-SetC_AcctProcessor_ID (0);
+SetVAB_AccountHanlderLog_ID (0);
+SetVAB_AccountHanlder_ID (0);
 SetIsError (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsError (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountHanlderLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_AcctProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountHanlderLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_AcctProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AcctProcessorLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AccountHanlderLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_AcctProcessorLog()
+static X_VAB_AccountHanlderLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389052624L;
 public static int Table_ID;
  // =694;
 
-/** TableName=C_AcctProcessorLog */
-public static String Table_Name="C_AcctProcessorLog";
+/** TableName=VAB_AccountHanlderLog */
+public static String Table_Name="VAB_AccountHanlderLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_AcctProcessorLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AccountHanlderLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set BinaryData.
@@ -127,32 +127,32 @@ public Byte[] GetBinaryData()
 return (Byte[])Get_Value("BinaryData");
 }
 /** Set Accounting Processor Log.
-@param C_AcctProcessorLog_ID Result of the execution of the Accounting Processor */
-public void SetC_AcctProcessorLog_ID (int C_AcctProcessorLog_ID)
+@param VAB_AccountHanlderLog_ID Result of the execution of the Accounting Processor */
+public void SetVAB_AccountHanlderLog_ID (int VAB_AccountHanlderLog_ID)
 {
-if (C_AcctProcessorLog_ID < 1) throw new ArgumentException ("C_AcctProcessorLog_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctProcessorLog_ID", C_AcctProcessorLog_ID);
+if (VAB_AccountHanlderLog_ID < 1) throw new ArgumentException ("VAB_AccountHanlderLog_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountHanlderLog_ID", VAB_AccountHanlderLog_ID);
 }
 /** Get Accounting Processor Log.
 @return Result of the execution of the Accounting Processor */
-public int GetC_AcctProcessorLog_ID() 
+public int GetVAB_AccountHanlderLog_ID() 
 {
-Object ii = Get_Value("C_AcctProcessorLog_ID");
+Object ii = Get_Value("VAB_AccountHanlderLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Processor.
-@param C_AcctProcessor_ID Accounting Processor/Server Parameters */
-public void SetC_AcctProcessor_ID (int C_AcctProcessor_ID)
+@param VAB_AccountHanlder_ID Accounting Processor/Server Parameters */
+public void SetVAB_AccountHanlder_ID (int VAB_AccountHanlder_ID)
 {
-if (C_AcctProcessor_ID < 1) throw new ArgumentException ("C_AcctProcessor_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctProcessor_ID", C_AcctProcessor_ID);
+if (VAB_AccountHanlder_ID < 1) throw new ArgumentException ("VAB_AccountHanlder_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountHanlder_ID", VAB_AccountHanlder_ID);
 }
 /** Get Accounting Processor.
 @return Accounting Processor/Server Parameters */
-public int GetC_AcctProcessor_ID() 
+public int GetVAB_AccountHanlder_ID() 
 {
-Object ii = Get_Value("C_AcctProcessor_ID");
+Object ii = Get_Value("VAB_AccountHanlder_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

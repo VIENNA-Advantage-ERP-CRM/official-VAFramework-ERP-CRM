@@ -3,7 +3,7 @@
  * Class Name     : Doc_Payment
  * Purpose        : Post Allocation Documents.
  *                  <pre>
- *                  Table:  C_AllocationHdr
+ *                  Table:  VAB_DocAllocation
  *                  Document Types:     CMA
  *                  </pre>
  * Class Used      : Doc
@@ -90,8 +90,8 @@ namespace VAdvantage.Acct
                 if (line.GetC_Payment_ID() != 0)
                 {
                     MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), GetTrxName());
-                    int C_ConversionType_ID = payment.GetC_ConversionType_ID();
-                    docLine.SetC_ConversionType_ID(C_ConversionType_ID);
+                    int VAB_CurrencyType_ID = payment.GetVAB_CurrencyType_ID();
+                    docLine.SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
                 }
                 //
                 log.Fine(docLine.ToString());
@@ -166,12 +166,12 @@ namespace VAdvantage.Acct
         //    for (int i = 0; i < _lines.Length; i++)
         //    {
         //        DocLine_Allocation line = (DocLine_Allocation)_lines[i];
-        //        SetC_BPartner_ID(line.GetC_BPartner_ID());
+        //        SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
 
         //        //  CashBankTransfer - all references null and Discount/WriteOff = 0
         //        if (line.GetC_Payment_ID() != 0
         //            && line.GetC_Invoice_ID() == 0 && line.GetC_Order_ID() == 0
-        //            && line.GetC_CashLine_ID() == 0 && line.GetC_BPartner_ID() == 0
+        //            && line.GetVAB_CashJRNLLine_ID() == 0 && line.GetVAB_BusinessPartner_ID() == 0
         //            && Env.ZERO.CompareTo(line.GetDiscountAmt()) == 0
         //            && Env.ZERO.CompareTo(line.GetWriteOffAmt()) == 0)
         //        {
@@ -203,7 +203,7 @@ namespace VAdvantage.Acct
         //            if (line.GetC_Invoice_ID() == 0 && line.GetC_Payment_ID() != 0)
         //            {
         //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -223,17 +223,17 @@ namespace VAdvantage.Acct
         //            if (line.GetC_Payment_ID() != 0)
         //            {
         //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
         //                }
         //            }
-        //            else if (line.GetC_CashLine_ID() != 0)
+        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
         //            {
-        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
-        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
+        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
         //                if (fl != null && cashLine.Get_ID() != 0)
         //                {
         //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -243,7 +243,7 @@ namespace VAdvantage.Acct
         //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
         //            {
         //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountExp, as1),
-        //                    GetC_Currency_ID(), line.GetDiscountAmt(), null);
+        //                    GetVAB_Currency_ID(), line.GetDiscountAmt(), null);
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -253,7 +253,7 @@ namespace VAdvantage.Acct
         //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
         //            {
         //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-        //                    GetC_Currency_ID(), line.GetWriteOffAmt(), null);
+        //                    GetVAB_Currency_ID(), line.GetWriteOffAmt(), null);
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -264,7 +264,7 @@ namespace VAdvantage.Acct
         //            if (as1.IsAccrual())
         //            {
         //                bpAcct = GetAccount(Doc.ACCTTYPE_C_Receivable, as1);
-        //                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, allocationSource);		//	payment currency 
+        //                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, allocationSource);		//	payment currency 
         //                if (fl != null)
         //                {
         //                    allocationAccounted = Decimal.Negate(fl.GetAcctBalance());
@@ -287,7 +287,7 @@ namespace VAdvantage.Acct
         //            if (as1.IsAccrual())
         //            {
         //                bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-        //                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), allocationSource, null);		//	payment currency
+        //                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), allocationSource, null);		//	payment currency
         //                if (fl != null)
         //                {
         //                    allocationAccounted = fl.GetAcctBalance();
@@ -307,7 +307,7 @@ namespace VAdvantage.Acct
         //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
         //            {
         //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountRev, as1),
-        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
+        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -317,7 +317,7 @@ namespace VAdvantage.Acct
         //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
         //            {
         //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
+        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -327,17 +327,17 @@ namespace VAdvantage.Acct
         //            if (line.GetC_Payment_ID() != 0)
         //            {
         //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
         //                if (fl != null && payment != null)
         //                {
         //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
         //                }
         //            }
-        //            else if (line.GetC_CashLine_ID() != 0)
+        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
         //            {
-        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
-        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
         //                if (fl != null && cashLine.Get_ID() != 0)
         //                {
         //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -372,8 +372,8 @@ namespace VAdvantage.Acct
 
         //        //	Realized Gain & Loss
         //        if (invoice != null
-        //            && (GetC_Currency_ID() != as1.GetC_Currency_ID()			//	payment allocation in foreign currency
-        //                || GetC_Currency_ID() != line.GetInvoiceC_Currency_ID()))	//	allocation <> invoice currency
+        //            && (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID()			//	payment allocation in foreign currency
+        //                || GetVAB_Currency_ID() != line.GetInvoiceVAB_Currency_ID()))	//	allocation <> invoice currency
         //        {
         //            _error = CreateRealizedGainLoss(as1, fact, bpAcct, invoice, allocationSource, allocationAccounted);
         //            if (_error != null)
@@ -385,7 +385,7 @@ namespace VAdvantage.Acct
         //    }	//	for all lines
 
         //    //	reset line info
-        //    SetC_BPartner_ID(0);
+        //    SetVAB_BusinessPartner_ID(0);
         //    //
         //    _facts.Add(fact);
         //    return _facts;
@@ -401,15 +401,15 @@ namespace VAdvantage.Acct
             for (int i = 0; i < _lines.Length; i++)
             {
                 Decimal paymentAount = 0, invoiceAmt = 0, payPercent = 0;
-                int C_Currecy_ID = 0, c_conversiontype_id = 0;
+                int C_Currecy_ID = 0, VAB_CurrencyType_id = 0;
                 string CurrencyDate = "";
                 DocLine_Allocation line = (DocLine_Allocation)_lines[i];
-                SetC_BPartner_ID(line.GetC_BPartner_ID());
+                SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
 
                 //  CashBankTransfer - all references null and Discount/WriteOff = 0
                 if (line.GetC_Payment_ID() != 0
                     && line.GetC_Invoice_ID() == 0 && line.GetC_Order_ID() == 0
-                    && line.GetC_CashLine_ID() == 0 && line.GetC_BPartner_ID() == 0
+                    && line.GetVAB_CashJRNLLine_ID() == 0 && line.GetVAB_BusinessPartner_ID() == 0
                     && Env.ZERO.CompareTo(line.GetDiscountAmt()) == 0
                     && Env.ZERO.CompareTo(line.GetWriteOffAmt()) == 0)
                 {
@@ -431,10 +431,10 @@ namespace VAdvantage.Acct
                 if (payment != null)
                 {
                     paymentAount = payment.GetPayAmt();
-                    if (payment.GetC_Currency_ID() != GetC_Currency_ID())
+                    if (payment.GetVAB_Currency_ID() != GetVAB_Currency_ID())
                     {
-                        string CurrencyRate = " SELECT c_conversiontype_id FROM C_Conversion_Rate" +
-                                             " WHERE c_currency_id=" + payment.GetC_Currency_ID() + " AND c_currency_to_ID =" + GetC_Currency_ID() + " AND isactive ='Y'" +
+                        string CurrencyRate = " SELECT VAB_CurrencyType_id FROM VAB_ExchangeRate" +
+                                             " WHERE VAB_Currency_id=" + payment.GetVAB_Currency_ID() + " AND VAB_Currency_to_ID =" + GetVAB_Currency_ID() + " AND isactive ='Y'" +
                                              " and validfrom<(select dateacct from c_payment WHERE c_payment_id=" + line.GetC_Payment_ID() + ")" +
                                              " and validto>(select dateacct from c_payment WHERE c_payment_id=" + line.GetC_Payment_ID() + ")";
                         int conversiontype_id = DB.GetSQLValue(null, CurrencyRate);
@@ -445,7 +445,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         allocationSource = MConversionRate.Convert(Env.GetCtx(), allocationSource
-                                  , payment.GetC_Currency_ID(), GetC_Currency_ID(), null, conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                  , payment.GetVAB_Currency_ID(), GetVAB_Currency_ID(), null, conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                 }
                 MInvoice invoice = null;
@@ -455,15 +455,15 @@ namespace VAdvantage.Acct
                 }
                 if (invoice != null)
                 {
-                    C_Currecy_ID = DB.GetSQLValue(null, "select c_currency_id from c_invoice  WHERE c_invoice_id     =" + line.GetC_Invoice_ID());
-                    if (C_Currecy_ID != GetC_Currency_ID())
+                    C_Currecy_ID = DB.GetSQLValue(null, "select VAB_Currency_id from c_invoice  WHERE c_invoice_id     =" + line.GetC_Invoice_ID());
+                    if (C_Currecy_ID != GetVAB_Currency_ID())
                     {
-                        CurrencyDate = " SELECT c_conversiontype_id FROM C_Conversion_Rate" +
-                                              " WHERE c_currency_id=" + C_Currecy_ID + " AND c_currency_to_ID =" + GetC_Currency_ID() + " AND isactive ='Y'" +
+                        CurrencyDate = " SELECT VAB_CurrencyType_id FROM VAB_ExchangeRate" +
+                                              " WHERE VAB_Currency_id=" + C_Currecy_ID + " AND VAB_Currency_to_ID =" + GetVAB_Currency_ID() + " AND isactive ='Y'" +
                                               " and validfrom<(select dateacct from c_invoice where c_invoice_id=" + line.GetC_Invoice_ID() + ")" +
                                               " and validto>(select dateacct from c_invoice where c_invoice_id=" + line.GetC_Invoice_ID() + ")";
-                        c_conversiontype_id = DB.GetSQLValue(null, CurrencyDate);
-                        if (c_conversiontype_id == -1)
+                        VAB_CurrencyType_id = DB.GetSQLValue(null, CurrencyDate);
+                        if (VAB_CurrencyType_id == -1)
                         {
                             _error = "Conversion Not Available";
                             log.Log(Level.SEVERE, _error);
@@ -476,30 +476,30 @@ namespace VAdvantage.Acct
                 string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
                              " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + line.GetC_Invoice_ID() +
                              " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM c_invoiceline cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
-                             " INNER JOIN c_charge prod ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + line.GetC_Invoice_ID() + " GROUP BY tx.rate";
-                string newsql = " SELECT SUM(al.amount) FROM c_allocationline al INNER JOIN c_allocationhdr alh" +
-                                " ON al.c_allocationhdr_id=alh.c_allocationhdr_id WHERE  alh.posted   ='Y' and c_invoice_id=" + line.GetC_Invoice_ID();
+                             " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + line.GetC_Invoice_ID() + " GROUP BY tx.rate";
+                string newsql = " SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN VAB_DocAllocation alh" +
+                                " ON al.VAB_DocAllocation_id=alh.VAB_DocAllocation_id WHERE  alh.posted   ='Y' and c_invoice_id=" + line.GetC_Invoice_ID();
                 //	No Invoice
                 if (invoice == null)
                 {
                     //	Payment Only
                     if (line.GetC_Invoice_ID() == 0 && line.GetC_Payment_ID() != 0)
                     {
-                        MDocType dbt = new MDocType(GetCtx(), payment.GetC_DocType_ID(), GetTrxName());
+                        MDocType dbt = new MDocType(GetCtx(), payment.GetVAB_DocTypes_ID(), GetTrxName());
                         if (dbt.GetDocBaseType() == "ARR" && line.GetAmtSource() < 0)
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                GetC_Currency_ID(), null, line.GetAmtSource());
+                                GetVAB_Currency_ID(), null, line.GetAmtSource());
                         }
                         else if (dbt.GetDocBaseType() == "APP" && line.GetAmtSource() < 0)
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                GetC_Currency_ID(), null, line.GetAmtSource());
+                                GetVAB_Currency_ID(), null, line.GetAmtSource());
                         }
                         else
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                GetC_Currency_ID(), line.GetAmtSource(), null);
+                                GetVAB_Currency_ID(), line.GetAmtSource(), null);
                         }
                         if (fl != null && payment != null)
                         {
@@ -538,31 +538,31 @@ namespace VAdvantage.Acct
 
                                 if (acct == null)
                                 {
-                                    validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                                    validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                     acct = MAccount.Get(Env.GetCtx(), validComID);
                                 }
-                                fl = fact.CreateLine(line, acct, GetC_Currency_ID(), line.GetAmtSource(), null);
+                                fl = fact.CreateLine(line, acct, GetVAB_Currency_ID(), line.GetAmtSource(), null);
                             }
                             else
                             {
-                                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()), GetC_Currency_ID(), line.GetAmtSource(), null);
+                                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()), GetVAB_Currency_ID(), line.GetAmtSource(), null);
                             }
                         }
                         else
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                GetC_Currency_ID(), line.GetAmtSource(), null);
+                                GetVAB_Currency_ID(), line.GetAmtSource(), null);
                         }
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
                         }
                     }
-                    else if (line.GetC_CashLine_ID() != 0)
+                    else if (line.GetVAB_CashJRNLLine_ID() != 0)
                     {
-                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-                            GetC_Currency_ID(), line.GetAmtSource(), null);
-                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
+                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
                         if (fl != null && cashLine.Get_ID() != 0)
                         {
                             fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -572,7 +572,7 @@ namespace VAdvantage.Acct
                     if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
                     {
                         fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountExp, as1),
-                            GetC_Currency_ID(), line.GetDiscountAmt(), null);
+                            GetVAB_Currency_ID(), line.GetDiscountAmt(), null);
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -582,7 +582,7 @@ namespace VAdvantage.Acct
                     if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
                     {
                         fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-                            GetC_Currency_ID(), line.GetWriteOffAmt(), null);
+                            GetVAB_Currency_ID(), line.GetWriteOffAmt(), null);
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -608,10 +608,10 @@ namespace VAdvantage.Acct
 
                         if (invoice != null)
                         {
-                            if (C_Currecy_ID != GetC_Currency_ID())
+                            if (C_Currecy_ID != GetVAB_Currency_ID())
                             {
                                 invoiceAmt = MConversionRate.Convert(Env.GetCtx(), invoice.GetGrandTotal()
-                                      , C_Currecy_ID, GetC_Currency_ID(), null, c_conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                      , C_Currecy_ID, GetVAB_Currency_ID(), null, VAB_CurrencyType_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                             }
                             else
                             {
@@ -628,15 +628,15 @@ namespace VAdvantage.Acct
                             rate = Utility.Util.GetValueOfDecimal(idr[2]);
                             //	TaxAmt                                   
                             taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                            int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                            int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                             if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                             {
                                 taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
                             }
-                            if (GetC_Currency_ID() != C_Currecy_ID)
+                            if (GetVAB_Currency_ID() != C_Currecy_ID)
                             {
                                 ConvertedValue = MConversionRate.Convert(Env.GetCtx(), baseAmt + taxAmt
-                                      , C_Currecy_ID, GetC_Currency_ID(), null, c_conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                      , C_Currecy_ID, GetVAB_Currency_ID(), null, VAB_CurrencyType_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                             }
                             else
                             {
@@ -686,13 +686,13 @@ namespace VAdvantage.Acct
                                 {
                                     serviceAmt = serviceAmt + ConvertedValue;
                                     //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                    //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                                    //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                                 }
                                 else
                                 {
                                     itemAmt = itemAmt + ConvertedValue;
                                     //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                                    //     GetC_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
+                                    //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                                 }
                             }
                         }
@@ -703,14 +703,14 @@ namespace VAdvantage.Acct
                                 serviceAmt = (serviceAmt * payPercent) / 100;
 
                                 fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                     GetC_Currency_ID(), serviceAmt, null);// - line.GetAmtSource(), null);
+                                     GetVAB_Currency_ID(), serviceAmt, null);// - line.GetAmtSource(), null);
                             }
                             if (itemAmt > 0)
                             {
                                 itemAmt = (itemAmt * payPercent) / 100;
 
                                 fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                                     GetC_Currency_ID(), itemAmt, null);// - line.GetAmtSource(), null);
+                                     GetVAB_Currency_ID(), itemAmt, null);// - line.GetAmtSource(), null);
                             }
 
                         }
@@ -720,13 +720,13 @@ namespace VAdvantage.Acct
                             {
                                 serviceAmt = (serviceAmt * payPercent) / 100;
                                 fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                                         GetC_Currency_ID(), null, serviceAmt);// Util.GetValueOfDecimal(idr[0]));
+                                         GetVAB_Currency_ID(), null, serviceAmt);// Util.GetValueOfDecimal(idr[0]));
                             }
                             if (itemAmt > 0)
                             {
                                 itemAmt = (itemAmt * payPercent) / 100;
                                 fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                                         GetC_Currency_ID(), null, itemAmt);// Util.GetValueOfDecimal(idr[0]));
+                                         GetVAB_Currency_ID(), null, itemAmt);// Util.GetValueOfDecimal(idr[0]));
                             }
                         }
                         if (idr != null)
@@ -742,19 +742,19 @@ namespace VAdvantage.Acct
                         //{
                         //    //here we have to diffrent entries of amount
                         //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-                        //       GetC_Currency_ID(), null, allocationSource);
+                        //       GetVAB_Currency_ID(), null, allocationSource);
                         //}
                         //if (_allLinesService)
                         //{
                         //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-                        //         GetC_Currency_ID(), null, allocationSource);
+                        //         GetVAB_Currency_ID(), null, allocationSource);
                         //}
 
                         #endregion
 
                         //Old code comment by raghu on 21March
                         //bpAcct = GetAccount(Doc.ACCTTYPE_C_Receivable, as1);
-                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, allocationSource);		//	payment currency 
+                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, allocationSource);		//	payment currency 
                         if (fl != null)
                         {
                             allocationAccounted = Decimal.Negate(fl.GetAcctBalance());
@@ -789,10 +789,10 @@ namespace VAdvantage.Acct
                         Decimal ConvertedValue = 0;
                         if (invoice != null)
                         {
-                            if (C_Currecy_ID != GetC_Currency_ID())
+                            if (C_Currecy_ID != GetVAB_Currency_ID())
                             {
                                 invoiceAmt = MConversionRate.Convert(Env.GetCtx(), invoice.GetGrandTotal()
-                                      , C_Currecy_ID, GetC_Currency_ID(), null, c_conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                      , C_Currecy_ID, GetVAB_Currency_ID(), null, VAB_CurrencyType_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                             }
                             else
                             {
@@ -812,15 +812,15 @@ namespace VAdvantage.Acct
                                 rate = Utility.Util.GetValueOfDecimal(idr[2]);
                                 //	TaxAmt                                   
                                 taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                                int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                 if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                                 {
                                     taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
                                 }
-                                if (GetC_Currency_ID() != C_Currecy_ID)
+                                if (GetVAB_Currency_ID() != C_Currecy_ID)
                                 {
                                     ConvertedValue = MConversionRate.Convert(Env.GetCtx(), baseAmt + taxAmt
-                                          , C_Currecy_ID, GetC_Currency_ID(), null, c_conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                          , C_Currecy_ID, GetVAB_Currency_ID(), null, VAB_CurrencyType_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                                 }
                                 else
                                 {
@@ -843,13 +843,13 @@ namespace VAdvantage.Acct
                                     {
                                         serviceAmt = serviceAmt + ConvertedValue;
                                         //bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability_Services, as1);//payables services agianst charge.
-                                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, ConvertedValue);
+                                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, ConvertedValue);
                                     }
                                     else
                                     {
                                         itemAmt = itemAmt + ConvertedValue;
                                         //bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-                                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, ConvertedValue);
+                                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, ConvertedValue);
                                     }
                                 }
                             }
@@ -859,14 +859,14 @@ namespace VAdvantage.Acct
                                 serviceAmt = (serviceAmt * payPercent) / 100;
 
                                 bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability_Services, as1);//payables services agianst charge.
-                                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, serviceAmt);
+                                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, serviceAmt);
                             }
                             if (itemAmt > 0)
                             {
                                 itemAmt = (itemAmt * payPercent) / 100;
 
                                 bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-                                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, itemAmt);
+                                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, itemAmt);
                             }
                         }
                         else/***********************New Logic****************/
@@ -878,15 +878,15 @@ namespace VAdvantage.Acct
                                 rate = Utility.Util.GetValueOfDecimal(idr[2]);
                                 //	TaxAmt                                   
                                 taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                int precision = MCurrency.GetStdPrecision(GetCtx(), GetC_Currency_ID());
+                                int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                 if (taxAmt != null && Env.Scale(taxAmt) > precision)
                                 {
                                     taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
                                 }
-                                if (GetC_Currency_ID() != C_Currecy_ID)
+                                if (GetVAB_Currency_ID() != C_Currecy_ID)
                                 {
                                     ConvertedValue = MConversionRate.Convert(Env.GetCtx(), baseAmt + taxAmt
-                                          , C_Currecy_ID, GetC_Currency_ID(), null, c_conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
+                                          , C_Currecy_ID, GetVAB_Currency_ID(), null, VAB_CurrencyType_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                                 }
                                 else
                                 {
@@ -909,13 +909,13 @@ namespace VAdvantage.Acct
                                     {
                                         serviceAmt = serviceAmt + ConvertedValue;
                                         //bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability_Services, as1);//payables services agianst charge.
-                                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, ConvertedValue);
+                                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, ConvertedValue);
                                     }
                                     else
                                     {
                                         itemAmt = itemAmt + ConvertedValue;
                                         //bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-                                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, ConvertedValue);
+                                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, ConvertedValue);
                                     }
                                 }
                             }
@@ -925,17 +925,17 @@ namespace VAdvantage.Acct
                                 serviceAmt = (serviceAmt * payPercent) / 100;
 
                                 bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability_Services, as1);//payables services agianst charge.
-                                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), serviceAmt, null);
+                                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), serviceAmt, null);
                             }
                             if (itemAmt > 0)
                             {
                                 itemAmt = (itemAmt * payPercent) / 100;
 
                                 bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-                                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), itemAmt, null);
+                                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), itemAmt, null);
                             }
                             //bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-                            //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), allocationSource, null);		//	payment currency
+                            //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), allocationSource, null);		//	payment currency
                         }
                         if (fl != null)
                         {
@@ -956,7 +956,7 @@ namespace VAdvantage.Acct
                     if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
                     {
                         fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountRev, as1),
-                            GetC_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
+                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -966,7 +966,7 @@ namespace VAdvantage.Acct
                     if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
                     {
                         fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-                            GetC_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
+                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -990,32 +990,32 @@ namespace VAdvantage.Acct
 
                                 if (acct == null)
                                 {
-                                    validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                                    validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                     acct = MAccount.Get(Env.GetCtx(), validComID);
                                 }
-                                fl = fact.CreateLine(line, acct, GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+                                fl = fact.CreateLine(line, acct, GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
                             }
                             else
                             {
                                 fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+                                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
                             }
                         }
                         else
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-                                GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+                                GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
                         }
                         if (fl != null && payment != null)
                         {
                             fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
                         }
                     }
-                    else if (line.GetC_CashLine_ID() != 0)
+                    else if (line.GetVAB_CashJRNLLine_ID() != 0)
                     {
-                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-                            GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
-                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
                         if (fl != null && cashLine.Get_ID() != 0)
                         {
                             fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -1050,8 +1050,8 @@ namespace VAdvantage.Acct
 
                 //	Realized Gain & Loss
                 if (invoice != null
-                    && (GetC_Currency_ID() != as1.GetC_Currency_ID()			//	payment allocation in foreign currency
-                        || GetC_Currency_ID() != line.GetInvoiceC_Currency_ID()))	//	allocation <> invoice currency
+                    && (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID()			//	payment allocation in foreign currency
+                        || GetVAB_Currency_ID() != line.GetInvoiceVAB_Currency_ID()))	//	allocation <> invoice currency
                 {
                     //posting against currency diffrence is risticted 28-March-2011
                     //_error = CreateRealizedGainLoss(as1, fact, bpAcct, invoice, allocationSource, allocationAccounted);
@@ -1064,7 +1064,7 @@ namespace VAdvantage.Acct
             }	//	for all lines
 
             //	reset line info
-            SetC_BPartner_ID(0);
+            SetVAB_BusinessPartner_ID(0);
             //
             _facts.Add(fact);
             return _facts;
@@ -1125,18 +1125,18 @@ namespace VAdvantage.Acct
         /// <returns>acct</returns>
         private MAccount GetPaymentAcct(MAcctSchema as1, int C_Payment_ID)
         {
-            SetC_BankAccount_ID(0);
+            SetVAB_Bank_Acct_ID(0);
             //	Doc.ACCTTYPE_UnallocatedCash (AR) or C_Prepayment 
             //	or Doc.ACCTTYPE_PaymentSelect (AP) or V_Prepayment
             int accountType = Doc.ACCTTYPE_UnallocatedCash;
             //
-            //String sql = "SELECT p.C_BankAccount_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment "
-            //    + "FROM C_Payment p INNER JOIN C_DocType d ON (p.C_DocType_ID=d.C_DocType_ID) "
+            //String sql = "SELECT p.VAB_Bank_Acct_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment "
+            //    + "FROM C_Payment p INNER JOIN VAB_DocTypes d ON (p.VAB_DocTypes_ID=d.VAB_DocTypes_ID) "
             //    + "WHERE C_Payment_ID=" + C_Payment_ID;
 
             // Change to set posting of Charge against Prepayment and Charge
-            String sql = "SELECT p.C_BankAccount_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment, p.C_Charge_ID "
-               + "FROM C_Payment p INNER JOIN C_DocType d ON (p.C_DocType_ID=d.C_DocType_ID) "
+            String sql = "SELECT p.VAB_Bank_Acct_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment, p.VAB_Charge_ID "
+               + "FROM C_Payment p INNER JOIN VAB_DocTypes d ON (p.VAB_DocTypes_ID=d.VAB_DocTypes_ID) "
                + "WHERE C_Payment_ID=" + C_Payment_ID;
 
             IDataReader idr = null;
@@ -1145,7 +1145,7 @@ namespace VAdvantage.Acct
                 idr = DataBase.DB.ExecuteReader(sql, null, GetTrxName());
                 if (idr.Read())
                 {
-                    SetC_BankAccount_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
+                    SetVAB_Bank_Acct_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
                     if (MDocBaseType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
                     {
                         accountType = Doc.ACCTTYPE_PaymentSelect;
@@ -1160,11 +1160,11 @@ namespace VAdvantage.Acct
                             string sqlGetCombID = "";
                             if ("Y".Equals(Utility.Util.GetValueOfString(idr[2])))
                             {
-                                sqlGetCombID = "SELECT CH_Revenue_Acct FROM C_Charge_Acct WHERE C_Charge_ID=" + charge_ID + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                                sqlGetCombID = "SELECT CH_Revenue_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=" + charge_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
                             }
                             else
                             {
-                                sqlGetCombID = "SELECT CH_Expense_Acct FROM C_Charge_Acct WHERE C_Charge_ID=" + charge_ID + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                                sqlGetCombID = "SELECT CH_Expense_Acct FROM VAB_Charge_Acct WHERE VAB_Charge_ID=" + charge_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
 
 
                             }
@@ -1198,7 +1198,7 @@ namespace VAdvantage.Acct
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            if (GetC_BankAccount_ID() <= 0)
+            if (GetVAB_Bank_Acct_ID() <= 0)
             {
                 log.Log(Level.SEVERE, "NONE for C_Payment_ID=" + C_Payment_ID);
                 return null;
@@ -1210,17 +1210,17 @@ namespace VAdvantage.Acct
         /// 	Get Cash (Transfer) Acct of CashBook
         /// </summary>
         /// <param name="as1">accounting schema</param>
-        /// <param name="C_CashLine_ID"></param>
+        /// <param name="VAB_CashJRNLLine_ID"></param>
         /// <returns>acct</returns>
-        private MAccount GetCashAcct(MAcctSchema as1, int C_CashLine_ID)
+        private MAccount GetCashAcct(MAcctSchema as1, int VAB_CashJRNLLine_ID)
         {
-            String sql = "SELECT c.C_CashBook_ID "
-                + "FROM C_Cash c, C_CashLine cl "
-                + "WHERE c.C_Cash_ID=cl.C_Cash_ID AND cl.C_CashLine_ID=@param1";
-            SetC_CashBook_ID(DataBase.DB.GetSQLValue(null, sql, C_CashLine_ID));
-            if (GetC_CashBook_ID() <= 0)
+            String sql = "SELECT c.VAB_CashBook_ID "
+                + "FROM VAB_CashJRNL c, VAB_CashJRNLLine cl "
+                + "WHERE c.VAB_CashJRNL_ID=cl.VAB_CashJRNL_ID AND cl.VAB_CashJRNLLine_ID=@param1";
+            SetVAB_CashBook_ID(DataBase.DB.GetSQLValue(null, sql, VAB_CashJRNLLine_ID));
+            if (GetVAB_CashBook_ID() <= 0)
             {
-                log.Log(Level.SEVERE, "NONE for C_CashLine_ID=" + C_CashLine_ID);
+                log.Log(Level.SEVERE, "NONE for VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID);
                 return null;
             }
             return GetAccount(Doc.ACCTTYPE_CashTransfer, as1);
@@ -1250,9 +1250,9 @@ namespace VAdvantage.Acct
                     : "SUM(AmtSourceCr), SUM(AmtAcctCr)")	//	po
                 + " FROM Fact_Acct "
                 + "WHERE VAF_TableView_ID=318 AND Record_ID=" + invoice.GetC_Invoice_ID()	//	Invoice
-                + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
+                + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
                 + " AND PostingType='A'";
-            //AND C_Currency_ID=102
+            //AND VAB_Currency_ID=102
             IDataReader idr = null;
             try
             {
@@ -1280,22 +1280,22 @@ namespace VAdvantage.Acct
                 return "Gain/Loss - Invoice not posted yet";
             }
             //
-            String description = "Invoice=(" + invoice.GetC_Currency_ID() + ")" + invoiceSource + "/" + invoiceAccounted
-                + " - Allocation=(" + GetC_Currency_ID() + ")" + allocationSource + "/" + allocationAccounted;
+            String description = "Invoice=(" + invoice.GetVAB_Currency_ID() + ")" + invoiceSource + "/" + invoiceAccounted
+                + " - Allocation=(" + GetVAB_Currency_ID() + ")" + allocationSource + "/" + allocationAccounted;
             log.Fine(description);
             //	Allocation not Invoice Currency
-            if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
+            if (GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
             {
                 Decimal allocationSourceNew = MConversionRate.Convert(GetCtx(),
-                    allocationSource.Value, GetC_Currency_ID(),
-                    invoice.GetC_Currency_ID(), GetDateAcct(),
-                    invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                    allocationSource.Value, GetVAB_Currency_ID(),
+                    invoice.GetVAB_Currency_ID(), GetDateAcct(),
+                    invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 if (allocationSourceNew == null)
                 {
                     return "Gain/Loss - No Conversion from Allocation->Invoice";
                 }
-                String d2 = "Allocation=(" + GetC_Currency_ID() + ")" + allocationSource
-                    + "->(" + invoice.GetC_Currency_ID() + ")" + allocationSourceNew;
+                String d2 = "Allocation=(" + GetVAB_Currency_ID() + ")" + allocationSource
+                    + "->(" + invoice.GetVAB_Currency_ID() + ")" + allocationSourceNew;
                 log.Fine(d2);
                 description += " - " + d2;
                 allocationSource = allocationSourceNew;
@@ -1346,18 +1346,18 @@ namespace VAdvantage.Acct
             if (invoice.IsSOTrx())
             {
                 FactLine fl = fact.CreateLine(null, loss, gain,
-                    as1.GetC_Currency_ID(), acctDifference);
+                    as1.GetVAB_Currency_ID(), acctDifference);
                 fl.SetDescription(description);
                 fact.CreateLine(null, acct,
-                    as1.GetC_Currency_ID(), Decimal.Negate(acctDifference.Value));
+                    as1.GetVAB_Currency_ID(), Decimal.Negate(acctDifference.Value));
                 fl.SetDescription(description);
             }
             else
             {
                 fact.CreateLine(null, acct,
-                    as1.GetC_Currency_ID(), acctDifference);
+                    as1.GetVAB_Currency_ID(), acctDifference);
                 fact.CreateLine(null, loss, gain,
-                    as1.GetC_Currency_ID(), Decimal.Negate(acctDifference.Value));
+                    as1.GetVAB_Currency_ID(), Decimal.Negate(acctDifference.Value));
             }
             return null;
         }
@@ -1402,7 +1402,7 @@ namespace VAdvantage.Acct
             String sql = "SELECT * "
                 + "FROM Fact_Acct "
                 + "WHERE VAF_TableView_ID=318 AND Record_ID=" + line.GetC_Invoice_ID()	//	Invoice
-                + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
+                + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
                 + " AND Line_ID IS NULL";	//	header lines like tax or total
 
             IDataReader idr = null;
@@ -1452,7 +1452,7 @@ namespace VAdvantage.Acct
 // * Class Name     : Doc_Payment
 // * Purpose        : Post Allocation Documents.
 // *                  <pre>
-// *                  Table:  C_AllocationHdr
+// *                  Table:  VAB_DocAllocation
 // *                  Document Types:     CMA
 // *                  </pre>
 // * Class Used      : Doc
@@ -1542,8 +1542,8 @@ namespace VAdvantage.Acct
 //                if (line.GetC_Payment_ID() != 0)
 //                {
 //                    MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), GetTrxName());
-//                    int C_ConversionType_ID = payment.GetC_ConversionType_ID();
-//                    docLine.SetC_ConversionType_ID(C_ConversionType_ID);
+//                    int VAB_CurrencyType_ID = payment.GetVAB_CurrencyType_ID();
+//                    docLine.SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
 //                }
 
 //                //#region ViewAllocation21-March-2011-Raghu
@@ -1634,12 +1634,12 @@ namespace VAdvantage.Acct
 //            for (int i = 0; i < _lines.Length; i++)
 //            {
 //                DocLine_Allocation line = (DocLine_Allocation)_lines[i];
-//                SetC_BPartner_ID(line.GetC_BPartner_ID());
+//                SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
 
 //                //  CashBankTransfer - all references null and Discount/WriteOff = 0
 //                if (line.GetC_Payment_ID() != 0
 //                    && line.GetC_Invoice_ID() == 0 && line.GetC_Order_ID() == 0
-//                    && line.GetC_CashLine_ID() == 0 && line.GetC_BPartner_ID() == 0
+//                    && line.GetVAB_CashJRNLLine_ID() == 0 && line.GetVAB_BusinessPartner_ID() == 0
 //                    && Env.ZERO.CompareTo(line.GetDiscountAmt()) == 0
 //                    && Env.ZERO.CompareTo(line.GetWriteOffAmt()) == 0)
 //                {
@@ -1671,7 +1671,7 @@ namespace VAdvantage.Acct
 //                    if (line.GetC_Invoice_ID() == 0 && line.GetC_Payment_ID() != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//                            GetC_Currency_ID(), line.GetAmtSource(), null);
+//                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -1693,17 +1693,17 @@ namespace VAdvantage.Acct
 //                    if (line.GetC_Payment_ID() != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//                            GetC_Currency_ID(), line.GetAmtSource(), null);
+//                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //                        }
 //                    }
-//                    else if (line.GetC_CashLine_ID() != 0)
+//                    else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //                    {
-//                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//                            GetC_Currency_ID(), line.GetAmtSource(), null);
-//                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//                            GetVAB_Currency_ID(), line.GetAmtSource(), null);
+//                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //                        if (fl != null && cashLine.Get_ID() != 0)
 //                        {
 //                            fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -1713,7 +1713,7 @@ namespace VAdvantage.Acct
 //                    if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountExp, as1),
-//                            GetC_Currency_ID(), line.GetDiscountAmt(), null);
+//                            GetVAB_Currency_ID(), line.GetDiscountAmt(), null);
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -1723,7 +1723,7 @@ namespace VAdvantage.Acct
 //                    if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//                            GetC_Currency_ID(), line.GetWriteOffAmt(), null);
+//                            GetVAB_Currency_ID(), line.GetWriteOffAmt(), null);
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -1742,8 +1742,8 @@ namespace VAdvantage.Acct
 
 //                        string sql = " SELECT SUM(cl.linenetamt),  prod.producttype   FROM c_invoiceline cl" +
 //" INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE c_invoice_id=" + line.GetC_Invoice_ID() +
-//" GROUP BY prod.producttype UNION SELECT SUM(cl.linenetamt),  'CH'   FROM c_invoiceline cl INNER JOIN c_charge prod" +
-//"     ON prod.c_charge_id=cl.c_charge_id  WHERE c_invoice_id     =" + line.GetC_Invoice_ID();
+//" GROUP BY prod.producttype UNION SELECT SUM(cl.linenetamt),  'CH'   FROM c_invoiceline cl INNER JOIN VAB_Charge prod" +
+//"     ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE c_invoice_id     =" + line.GetC_Invoice_ID();
 
 //                        IDataReader idr = null;
 //                        try
@@ -1754,8 +1754,8 @@ namespace VAdvantage.Acct
 //                            int receivablesServices_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable_Services, as1);
 //                            Decimal value = Env.ZERO;
 //                            value = line.GetAmtSource();
-//                            string newsql = " SELECT SUM(al.amount) FROM c_allocationline al INNER JOIN c_allocationhdr alh" +
-//                                            " ON al.c_allocationhdr_id=alh.c_allocationhdr_id WHERE  alh.posted   ='Y' and c_invoice_id=" + line.GetC_Invoice_ID();
+//                            string newsql = " SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN VAB_DocAllocation alh" +
+//                                            " ON al.VAB_DocAllocation_id=alh.VAB_DocAllocation_id WHERE  alh.posted   ='Y' and c_invoice_id=" + line.GetC_Invoice_ID();
 //                            Decimal postedValue = Util.GetValueOfDecimal(DB.ExecuteScalar(newsql));
 
 //                            Decimal Oldpostedvalue = postedValue;
@@ -1807,13 +1807,13 @@ namespace VAdvantage.Acct
 
 
 //                                        fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-//                                             GetC_Currency_ID(), null, amount);// Util.GetValueOfDecimal(idr[0]));
+//                                             GetVAB_Currency_ID(), null, amount);// Util.GetValueOfDecimal(idr[0]));
 //                                    }
 //                                    else
 //                                    {
 
 //                                        fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-//                                             GetC_Currency_ID(), null, amount);// Util.GetValueOfDecimal(idr[0]));
+//                                             GetVAB_Currency_ID(), null, amount);// Util.GetValueOfDecimal(idr[0]));
 //                                    }
 //                                }
 
@@ -1835,19 +1835,19 @@ namespace VAdvantage.Acct
 //                        //{
 //                        //    //here we have to diffrent entries of amount
 //                        //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-//                        //       GetC_Currency_ID(), null, allocationSource);
+//                        //       GetVAB_Currency_ID(), null, allocationSource);
 //                        //}
 //                        //if (_allLinesService)
 //                        //{
 //                        //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-//                        //         GetC_Currency_ID(), null, allocationSource);
+//                        //         GetVAB_Currency_ID(), null, allocationSource);
 //                        //}
 
 //                        #endregion
 
 //                        //Old code comment by raghu on 21March
 //                        //bpAcct = GetAccount(Doc.ACCTTYPE_C_Receivable, as1);
-//                        //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, allocationSource);		//	payment currency 
+//                        //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, allocationSource);		//	payment currency 
 //                        if (fl != null)
 //                        {
 //                            allocationAccounted = Decimal.Negate(fl.GetAcctBalance());
@@ -1872,7 +1872,7 @@ namespace VAdvantage.Acct
 //                    if (as1.IsAccrual())
 //                    {
 //                        bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-//                        fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), allocationSource, null);		//	payment currency
+//                        fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), allocationSource, null);		//	payment currency
 //                        if (fl != null)
 //                        {
 //                            allocationAccounted = fl.GetAcctBalance();
@@ -1892,7 +1892,7 @@ namespace VAdvantage.Acct
 //                    if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountRev, as1),
-//                            GetC_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
+//                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -1902,7 +1902,7 @@ namespace VAdvantage.Acct
 //                    if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//                            GetC_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
+//                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -1912,17 +1912,17 @@ namespace VAdvantage.Acct
 //                    if (line.GetC_Payment_ID() != 0)
 //                    {
 //                        fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//                            GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
 //                        if (fl != null && payment != null)
 //                        {
 //                            fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //                        }
 //                    }
-//                    else if (line.GetC_CashLine_ID() != 0)
+//                    else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //                    {
-//                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//                            GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
-//                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//                        fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//                            GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//                        MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //                        if (fl != null && cashLine.Get_ID() != 0)
 //                        {
 //                            fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -1957,8 +1957,8 @@ namespace VAdvantage.Acct
 
 //                //	Realized Gain & Loss
 //                if (invoice != null
-//                    && (GetC_Currency_ID() != as1.GetC_Currency_ID()			//	payment allocation in foreign currency
-//                        || GetC_Currency_ID() != line.GetInvoiceC_Currency_ID()))	//	allocation <> invoice currency
+//                    && (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID()			//	payment allocation in foreign currency
+//                        || GetVAB_Currency_ID() != line.GetInvoiceVAB_Currency_ID()))	//	allocation <> invoice currency
 //                {
 //                    //posting against currency diffrence is risticted 28-March-2011
 //                    //_error = CreateRealizedGainLoss(as1, fact, bpAcct, invoice, allocationSource, allocationAccounted);
@@ -1971,7 +1971,7 @@ namespace VAdvantage.Acct
 //            }	//	for all lines
 
 //            //	reset line info
-//            SetC_BPartner_ID(0);
+//            SetVAB_BusinessPartner_ID(0);
 //            //
 //            _facts.Add(fact);
 //            return _facts;
@@ -1990,12 +1990,12 @@ namespace VAdvantage.Acct
 //        //    for (int i = 0; i < _lines.Length; i++)
 //        //    {
 //        //        DocLine_Allocation line = (DocLine_Allocation)_lines[i];
-//        //        SetC_BPartner_ID(line.GetC_BPartner_ID());
+//        //        SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
 
 //        //        //  CashBankTransfer - all references null and Discount/WriteOff = 0
 //        //        if (line.GetC_Payment_ID() != 0
 //        //            && line.GetC_Invoice_ID() == 0 && line.GetC_Order_ID() == 0
-//        //            && line.GetC_CashLine_ID() == 0 && line.GetC_BPartner_ID() == 0
+//        //            && line.GetVAB_CashJRNLLine_ID() == 0 && line.GetVAB_BusinessPartner_ID() == 0
 //        //            && Env.ZERO.CompareTo(line.GetDiscountAmt()) == 0
 //        //            && Env.ZERO.CompareTo(line.GetWriteOffAmt()) == 0)
 //        //        {
@@ -2027,7 +2027,7 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Invoice_ID() == 0 && line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2047,17 +2047,17 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //        //                }
 //        //            }
-//        //            else if (line.GetC_CashLine_ID() != 0)
+//        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //        //            {
-//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
-//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
+//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //        //                if (fl != null && cashLine.Get_ID() != 0)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -2067,7 +2067,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountExp, as1),
-//        //                    GetC_Currency_ID(), line.GetDiscountAmt(), null);
+//        //                    GetVAB_Currency_ID(), line.GetDiscountAmt(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2077,7 +2077,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//        //                    GetC_Currency_ID(), line.GetWriteOffAmt(), null);
+//        //                    GetVAB_Currency_ID(), line.GetWriteOffAmt(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2093,19 +2093,19 @@ namespace VAdvantage.Acct
 //        //                if (_allLinesItem || !as1.IsPostServices() || receivables_ID == receivablesServices_ID)
 //        //                {
 //        //                    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-//        //                       GetC_Currency_ID(), null, allocationSource);
+//        //                       GetVAB_Currency_ID(), null, allocationSource);
 //        //                }
 //        //                else if (_allLinesService)
 //        //                {
 //        //                    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-//        //                         GetC_Currency_ID(), null, allocationSource);
+//        //                         GetVAB_Currency_ID(), null, allocationSource);
 //        //                }
 
 //        //                #endregion
 
 //        //                //OLD CODE
 //        //                //bpAcct = GetAccount(Doc.ACCTTYPE_C_Receivable, as1);
-//        //                //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, allocationSource);		//	payment currency 
+//        //                //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, allocationSource);		//	payment currency 
 //        //                if (fl != null)
 //        //                {
 //        //                    allocationAccounted = Decimal.Negate(fl.GetAcctBalance());
@@ -2128,7 +2128,7 @@ namespace VAdvantage.Acct
 //        //            if (as1.IsAccrual())
 //        //            {
 //        //                bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-//        //                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), allocationSource, null);		//	payment currency
+//        //                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), allocationSource, null);		//	payment currency
 //        //                if (fl != null)
 //        //                {
 //        //                    allocationAccounted = fl.GetAcctBalance();
@@ -2148,7 +2148,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountRev, as1),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2158,7 +2158,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2168,17 +2168,17 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //        //                }
 //        //            }
-//        //            else if (line.GetC_CashLine_ID() != 0)
+//        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //        //            {
-//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
-//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //        //                if (fl != null && cashLine.Get_ID() != 0)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -2213,8 +2213,8 @@ namespace VAdvantage.Acct
 
 //        //        //	Realized Gain & Loss
 //        //        if (invoice != null
-//        //            && (GetC_Currency_ID() != as1.GetC_Currency_ID()			//	payment allocation in foreign currency
-//        //                || GetC_Currency_ID() != line.GetInvoiceC_Currency_ID()))	//	allocation <> invoice currency
+//        //            && (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID()			//	payment allocation in foreign currency
+//        //                || GetVAB_Currency_ID() != line.GetInvoiceVAB_Currency_ID()))	//	allocation <> invoice currency
 //        //        {
 //        //            _error = CreateRealizedGainLoss(as1, fact, bpAcct, invoice, allocationSource, allocationAccounted);
 //        //            if (_error != null)
@@ -2226,7 +2226,7 @@ namespace VAdvantage.Acct
 //        //    }	//	for all lines
 
 //        //    //	reset line info
-//        //    SetC_BPartner_ID(0);
+//        //    SetVAB_BusinessPartner_ID(0);
 //        //    //
 //        //    _facts.Add(fact);
 //        //    return _facts;
@@ -2242,12 +2242,12 @@ namespace VAdvantage.Acct
 //        //    for (int i = 0; i < _lines.Length; i++)
 //        //    {
 //        //        DocLine_Allocation line = (DocLine_Allocation)_lines[i];
-//        //        SetC_BPartner_ID(line.GetC_BPartner_ID());
+//        //        SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
 
 //        //        //  CashBankTransfer - all references null and Discount/WriteOff = 0
 //        //        if (line.GetC_Payment_ID() != 0
 //        //            && line.GetC_Invoice_ID() == 0 && line.GetC_Order_ID() == 0
-//        //            && line.GetC_CashLine_ID() == 0 && line.GetC_BPartner_ID() == 0
+//        //            && line.GetVAB_CashJRNLLine_ID() == 0 && line.GetVAB_BusinessPartner_ID() == 0
 //        //            && Env.ZERO.CompareTo(line.GetDiscountAmt()) == 0
 //        //            && Env.ZERO.CompareTo(line.GetWriteOffAmt()) == 0)
 //        //        {
@@ -2279,7 +2279,7 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Invoice_ID() == 0 && line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2301,17 +2301,17 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //        //                }
 //        //            }
-//        //            else if (line.GetC_CashLine_ID() != 0)
+//        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //        //            {
-//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//        //                    GetC_Currency_ID(), line.GetAmtSource(), null);
-//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//        //                    GetVAB_Currency_ID(), line.GetAmtSource(), null);
+//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //        //                if (fl != null && cashLine.Get_ID() != 0)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -2321,7 +2321,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountExp, as1),
-//        //                    GetC_Currency_ID(), line.GetDiscountAmt(), null);
+//        //                    GetVAB_Currency_ID(), line.GetDiscountAmt(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2331,7 +2331,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//        //                    GetC_Currency_ID(), line.GetWriteOffAmt(), null);
+//        //                    GetVAB_Currency_ID(), line.GetWriteOffAmt(), null);
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2362,12 +2362,12 @@ namespace VAdvantage.Acct
 //        //                    if (idr[1].ToString().ToUpper() == "S" || idr[1].ToString().ToUpper() == "R" || idr[1].ToString().ToUpper() == "E")
 //        //                    {
 //        //                        fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-//        //                             GetC_Currency_ID(), null, Util.GetValueOfDecimal(idr[0]));
+//        //                             GetVAB_Currency_ID(), null, Util.GetValueOfDecimal(idr[0]));
 //        //                    }
 //        //                    else
 //        //                    {
 //        //                        fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-//        //                             GetC_Currency_ID(), null, Util.GetValueOfDecimal(idr[0]));
+//        //                             GetVAB_Currency_ID(), null, Util.GetValueOfDecimal(idr[0]));
 //        //                    }
 
 //        //                }
@@ -2380,19 +2380,19 @@ namespace VAdvantage.Acct
 //        //                //{
 //        //                //    //here we have to diffrent entries of amount
 //        //                //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
-//        //                //       GetC_Currency_ID(), null, allocationSource);
+//        //                //       GetVAB_Currency_ID(), null, allocationSource);
 //        //                //}
 //        //                //if (_allLinesService)
 //        //                //{
 //        //                //    fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
-//        //                //         GetC_Currency_ID(), null, allocationSource);
+//        //                //         GetVAB_Currency_ID(), null, allocationSource);
 //        //                //}
 
 //        //                #endregion
 
 //        //                //Old code comment by raghu on 21March
 //        //                //bpAcct = GetAccount(Doc.ACCTTYPE_C_Receivable, as1);
-//        //                //fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), null, allocationSource);  // payment currency 
+//        //                //fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), null, allocationSource);  // payment currency 
 //        //                if (fl != null)
 //        //                {
 //        //                    allocationAccounted = Decimal.Negate(fl.GetAcctBalance());
@@ -2417,7 +2417,7 @@ namespace VAdvantage.Acct
 //        //            if (as1.IsAccrual())
 //        //            {
 //        //                bpAcct = GetAccount(Doc.ACCTTYPE_V_Liability, as1);
-//        //                fl = fact.CreateLine(line, bpAcct, GetC_Currency_ID(), allocationSource, null);  // payment currency
+//        //                fl = fact.CreateLine(line, bpAcct, GetVAB_Currency_ID(), allocationSource, null);  // payment currency
 //        //                if (fl != null)
 //        //                {
 //        //                    allocationAccounted = fl.GetAcctBalance();
@@ -2437,7 +2437,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetDiscountAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_DiscountRev, as1),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetDiscountAmt()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2447,7 +2447,7 @@ namespace VAdvantage.Acct
 //        //            if (Env.ZERO.CompareTo(line.GetWriteOffAmt()) != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_WriteOff, as1),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetWriteOffAmt()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
@@ -2457,17 +2457,17 @@ namespace VAdvantage.Acct
 //        //            if (line.GetC_Payment_ID() != 0)
 //        //            {
 //        //                fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetC_Payment_ID()),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
 //        //                if (fl != null && payment != null)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(payment.GetVAF_Org_ID());
 //        //                }
 //        //            }
-//        //            else if (line.GetC_CashLine_ID() != 0)
+//        //            else if (line.GetVAB_CashJRNLLine_ID() != 0)
 //        //            {
-//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetC_CashLine_ID()),
-//        //                    GetC_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
-//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetC_CashLine_ID(), GetTrxName());
+//        //                fl = fact.CreateLine(line, GetCashAcct(as1, line.GetVAB_CashJRNLLine_ID()),
+//        //                    GetVAB_Currency_ID(), null, Decimal.Negate(line.GetAmtSource()));
+//        //                MCashLine cashLine = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), GetTrxName());
 //        //                if (fl != null && cashLine.Get_ID() != 0)
 //        //                {
 //        //                    fl.SetVAF_Org_ID(cashLine.GetVAF_Org_ID());
@@ -2502,8 +2502,8 @@ namespace VAdvantage.Acct
 
 //        //        // Realized Gain & Loss
 //        //        if (invoice != null
-//        //            && (GetC_Currency_ID() != as1.GetC_Currency_ID()   // payment allocation in foreign currency
-//        //                || GetC_Currency_ID() != line.GetInvoiceC_Currency_ID())) // allocation <> invoice currency
+//        //            && (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID()   // payment allocation in foreign currency
+//        //                || GetVAB_Currency_ID() != line.GetInvoiceVAB_Currency_ID())) // allocation <> invoice currency
 //        //        {
 //        //            _error = CreateRealizedGainLoss(as1, fact, bpAcct, invoice, allocationSource, allocationAccounted);
 //        //            if (_error != null)
@@ -2515,7 +2515,7 @@ namespace VAdvantage.Acct
 //        //    } // for all lines
 
 //        //    // reset line info
-//        //    SetC_BPartner_ID(0);
+//        //    SetVAB_BusinessPartner_ID(0);
 //        //    //
 //        //    _facts.Add(fact);
 //        //    return _facts;
@@ -2575,13 +2575,13 @@ namespace VAdvantage.Acct
 //        /// <returns>acct</returns>
 //        private MAccount GetPaymentAcct(MAcctSchema as1, int C_Payment_ID)
 //        {
-//            SetC_BankAccount_ID(0);
+//            SetVAB_Bank_Acct_ID(0);
 //            //	Doc.ACCTTYPE_UnallocatedCash (AR) or C_Prepayment 
 //            //	or Doc.ACCTTYPE_PaymentSelect (AP) or V_Prepayment
 //            int accountType = Doc.ACCTTYPE_UnallocatedCash;
 //            //
-//            String sql = "SELECT p.C_BankAccount_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment "
-//                + "FROM C_Payment p INNER JOIN C_DocType d ON (p.C_DocType_ID=d.C_DocType_ID) "
+//            String sql = "SELECT p.VAB_Bank_Acct_ID, d.DocBaseType, p.IsReceipt, p.IsPrepayment "
+//                + "FROM C_Payment p INNER JOIN VAB_DocTypes d ON (p.VAB_DocTypes_ID=d.VAB_DocTypes_ID) "
 //                + "WHERE C_Payment_ID=" + C_Payment_ID;
 //            IDataReader idr = null;
 //            try
@@ -2589,7 +2589,7 @@ namespace VAdvantage.Acct
 //                idr = DataBase.DB.ExecuteReader(sql, null, GetTrxName());
 //                if (idr.Read())
 //                {
-//                    SetC_BankAccount_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
+//                    SetVAB_Bank_Acct_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
 //                    if (MDocBaseType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
 //                    {
 //                        accountType = Doc.ACCTTYPE_PaymentSelect;
@@ -2619,7 +2619,7 @@ namespace VAdvantage.Acct
 //                log.Log(Level.SEVERE, sql, e);
 //            }
 
-//            if (GetC_BankAccount_ID() <= 0)
+//            if (GetVAB_Bank_Acct_ID() <= 0)
 //            {
 //                log.Log(Level.SEVERE, "NONE for C_Payment_ID=" + C_Payment_ID);
 //                return null;
@@ -2631,17 +2631,17 @@ namespace VAdvantage.Acct
 //        /// 	Get Cash (Transfer) Acct of CashBook
 //        /// </summary>
 //        /// <param name="as1">accounting schema</param>
-//        /// <param name="C_CashLine_ID"></param>
+//        /// <param name="VAB_CashJRNLLine_ID"></param>
 //        /// <returns>acct</returns>
-//        private MAccount GetCashAcct(MAcctSchema as1, int C_CashLine_ID)
+//        private MAccount GetCashAcct(MAcctSchema as1, int VAB_CashJRNLLine_ID)
 //        {
-//            String sql = "SELECT c.C_CashBook_ID "
-//                + "FROM C_Cash c, C_CashLine cl "
-//                + "WHERE c.C_Cash_ID=cl.C_Cash_ID AND cl.C_CashLine_ID=@param1";
-//            SetC_CashBook_ID(DataBase.DB.GetSQLValue(null, sql, C_CashLine_ID));
-//            if (GetC_CashBook_ID() <= 0)
+//            String sql = "SELECT c.VAB_CashBook_ID "
+//                + "FROM VAB_CashJRNL c, VAB_CashJRNLLine cl "
+//                + "WHERE c.VAB_CashJRNL_ID=cl.VAB_CashJRNL_ID AND cl.VAB_CashJRNLLine_ID=@param1";
+//            SetVAB_CashBook_ID(DataBase.DB.GetSQLValue(null, sql, VAB_CashJRNLLine_ID));
+//            if (GetVAB_CashBook_ID() <= 0)
 //            {
-//                log.Log(Level.SEVERE, "NONE for C_CashLine_ID=" + C_CashLine_ID);
+//                log.Log(Level.SEVERE, "NONE for VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID);
 //                return null;
 //            }
 //            return GetAccount(Doc.ACCTTYPE_CashTransfer, as1);
@@ -2671,9 +2671,9 @@ namespace VAdvantage.Acct
 //                    : "SUM(AmtSourceCr), SUM(AmtAcctCr)")	//	po
 //                + " FROM Fact_Acct "
 //                + "WHERE VAF_TableView_ID=318 AND Record_ID=" + invoice.GetC_Invoice_ID()	//	Invoice
-//                + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
+//                + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
 //                + " AND PostingType='A'";
-//            //AND C_Currency_ID=102
+//            //AND VAB_Currency_ID=102
 //            IDataReader idr = null;
 //            try
 //            {
@@ -2701,22 +2701,22 @@ namespace VAdvantage.Acct
 //                return "Gain/Loss - Invoice not posted yet";
 //            }
 //            //
-//            String description = "Invoice=(" + invoice.GetC_Currency_ID() + ")" + invoiceSource + "/" + invoiceAccounted
-//                + " - Allocation=(" + GetC_Currency_ID() + ")" + allocationSource + "/" + allocationAccounted;
+//            String description = "Invoice=(" + invoice.GetVAB_Currency_ID() + ")" + invoiceSource + "/" + invoiceAccounted
+//                + " - Allocation=(" + GetVAB_Currency_ID() + ")" + allocationSource + "/" + allocationAccounted;
 //            log.Fine(description);
 //            //	Allocation not Invoice Currency
-//            if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
+//            if (GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
 //            {
 //                Decimal allocationSourceNew = MConversionRate.Convert(GetCtx(),
-//                    allocationSource.Value, GetC_Currency_ID(),
-//                    invoice.GetC_Currency_ID(), GetDateAcct(),
-//                    invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+//                    allocationSource.Value, GetVAB_Currency_ID(),
+//                    invoice.GetVAB_Currency_ID(), GetDateAcct(),
+//                    invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
 //                if (allocationSourceNew == null)
 //                {
 //                    return "Gain/Loss - No Conversion from Allocation->Invoice";
 //                }
-//                String d2 = "Allocation=(" + GetC_Currency_ID() + ")" + allocationSource
-//                    + "->(" + invoice.GetC_Currency_ID() + ")" + allocationSourceNew;
+//                String d2 = "Allocation=(" + GetVAB_Currency_ID() + ")" + allocationSource
+//                    + "->(" + invoice.GetVAB_Currency_ID() + ")" + allocationSourceNew;
 //                log.Fine(d2);
 //                description += " - " + d2;
 //                allocationSource = allocationSourceNew;
@@ -2767,18 +2767,18 @@ namespace VAdvantage.Acct
 //            if (invoice.IsSOTrx())
 //            {
 //                FactLine fl = fact.CreateLine(null, loss, gain,
-//                    as1.GetC_Currency_ID(), acctDifference);
+//                    as1.GetVAB_Currency_ID(), acctDifference);
 //                fl.SetDescription(description);
 //                fact.CreateLine(null, acct,
-//                    as1.GetC_Currency_ID(), Decimal.Negate(acctDifference.Value));
+//                    as1.GetVAB_Currency_ID(), Decimal.Negate(acctDifference.Value));
 //                fl.SetDescription(description);
 //            }
 //            else
 //            {
 //                fact.CreateLine(null, acct,
-//                    as1.GetC_Currency_ID(), acctDifference);
+//                    as1.GetVAB_Currency_ID(), acctDifference);
 //                fact.CreateLine(null, loss, gain,
-//                    as1.GetC_Currency_ID(), Decimal.Negate(acctDifference.Value));
+//                    as1.GetVAB_Currency_ID(), Decimal.Negate(acctDifference.Value));
 //            }
 //            return null;
 //        }
@@ -2823,7 +2823,7 @@ namespace VAdvantage.Acct
 //            String sql = "SELECT * "
 //                + "FROM Fact_Acct "
 //                + "WHERE VAF_TableView_ID=318 AND Record_ID=" + line.GetC_Invoice_ID()	//	Invoice
-//                + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID()
+//                + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
 //                + " AND Line_ID IS NULL";	//	header lines like tax or total
 
 //            IDataReader idr = null;

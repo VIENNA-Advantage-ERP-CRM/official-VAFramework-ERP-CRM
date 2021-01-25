@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDocBaseType
  * Purpose        : Document Base Type Model
- * Class Used     : X_C_DocBaseType
+ * Class Used     : X_VAB_MasterDocType
  * Chronological    Development
  * Raghunandan      7-May-2009 
   ******************************************************/
@@ -26,7 +26,7 @@ using System.Reflection;
 namespace VAdvantage.Model
 {
 
-    public class MDocBaseType : X_C_DocBaseType
+    public class MDocBaseType : X_VAB_MasterDocType
     {
         #region Private variables
         // AP Credit Memo = APC 
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                 return s_docBaseTypes;
             //
             List<MDocBaseType> list = new List<MDocBaseType>();
-            String sql = "SELECT * FROM C_DocbaseType WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAB_MasterDocType WHERE IsActive='Y'";
             DataSet ds = null;
             try
             {
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
                 return s_docBaseTypes;
             //
             List<MDocBaseType> list = new List<MDocBaseType>();
-            String sql = "SELECT * FROM C_DocbaseType WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAB_MasterDocType WHERE IsActive='Y'";
             DataSet ds = null;
             try
             {
@@ -203,10 +203,10 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_DocBaseType_ID">id</param>
+        /// <param name="VAB_MasterDocType_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MDocBaseType(Ctx ctx, int C_DocBaseType_ID, Trx trxName)
-            : base(ctx, C_DocBaseType_ID, trxName)
+        public MDocBaseType(Ctx ctx, int VAB_MasterDocType_ID, Trx trxName)
+            : base(ctx, VAB_MasterDocType_ID, trxName)
         {
 
         }
@@ -269,11 +269,11 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_APPAYMENT) || dbt.Equals(DOCBASETYPE_ARRECEIPT))
                 return X_C_Payment.Table_ID;
             if (dbt.Equals(DOCBASETYPE_PAYMENTALLOCATION))
-                return X_C_AllocationHdr.Table_ID;
+                return X_VAB_DocAllocation.Table_ID;
             if (dbt.Equals(DOCBASETYPE_CASHJOURNAL))
-                return X_C_Cash.Table_ID;
+                return X_VAB_CashJRNL.Table_ID;
             if (dbt.Equals(DOCBASETYPE_BANKSTATEMENT))
-                return X_C_BankStatement.Table_ID;
+                return X_VAB_BankingJRNL.Table_ID;
             if (dbt.Equals(DOCBASETYPE_MATERIALPHYSICALINVENTORY))
                 return X_M_Inventory.Table_ID;
             if (dbt.Equals(DOCBASETYPE_MATERIALMOVEMENT))
@@ -326,12 +326,12 @@ namespace VAdvantage.Model
                 return X_C_Invoice.Table_Name;
             if (VAF_TableView_ID == X_C_Payment.Table_ID)
                 return X_C_Payment.Table_Name;
-            if (VAF_TableView_ID == X_C_AllocationHdr.Table_ID)
-                return X_C_AllocationHdr.Table_Name;
-            if (VAF_TableView_ID == X_C_Cash.Table_ID)
-                return X_C_Cash.Table_Name;
-            if (VAF_TableView_ID == X_C_BankStatement.Table_ID)
-                return X_C_BankStatement.Table_Name;
+            if (VAF_TableView_ID == X_VAB_DocAllocation.Table_ID)
+                return X_VAB_DocAllocation.Table_Name;
+            if (VAF_TableView_ID == X_VAB_CashJRNL.Table_ID)
+                return X_VAB_CashJRNL.Table_Name;
+            if (VAF_TableView_ID == X_VAB_BankingJRNL.Table_ID)
+                return X_VAB_BankingJRNL.Table_Name;
             if (VAF_TableView_ID == X_M_Inventory.Table_ID)
                 return X_M_Inventory.Table_Name;
             if (VAF_TableView_ID == X_M_Movement.Table_ID)
@@ -408,7 +408,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_CASHJOURNAL))
             {
                 
-                return "VAdvantage.Acct.Doc_Cash";
+                return "VAdvantage.Acct.DoVAB_CashBook";
             }
             if (dbt.Equals(DOCBASETYPE_BANKSTATEMENT))
             {

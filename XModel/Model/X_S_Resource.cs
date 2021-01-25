@@ -348,34 +348,34 @@ using System.Data;
             return (String)Get_Value("ActivateForAssignment");
         }
         /** Set Customer/Prospect Group.
-        @param C_BP_Group_ID Customer/Prospect Group */
-        public void SetC_BP_Group_ID(int C_BP_Group_ID)
+        @param VAB_BPart_Category_ID Customer/Prospect Group */
+        public void SetVAB_BPart_Category_ID(int VAB_BPart_Category_ID)
         {
-            if (C_BP_Group_ID <= 0) Set_Value("C_BP_Group_ID", null);
+            if (VAB_BPart_Category_ID <= 0) Set_Value("VAB_BPart_Category_ID", null);
             else
-                Set_Value("C_BP_Group_ID", C_BP_Group_ID);
+                Set_Value("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
         }
         /** Get Customer/Prospect Group.
         @return Customer/Prospect Group */
-        public int GetC_BP_Group_ID()
+        public int GetVAB_BPart_Category_ID()
         {
-            Object ii = Get_Value("C_BP_Group_ID");
+            Object ii = Get_Value("VAB_BPart_Category_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Customer/Prospect.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Customer/Prospect.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -29,7 +29,7 @@
         var $cashPayType = $('<select class="sel-allocation"></select>');
         var $invDocbaseType = $('<select class="sel-allocation"></select>');
         var $payDocbaseType = $('<select class="sel-allocation"></select>');
-        var $txtDocNo, fromDate, toDate, docNo, c_docType_ID = null;
+        var $txtDocNo, fromDate, toDate, docNo, VAB_DocTypes_ID = null;
         var $fromDate = $('<input class="date-allocation" type="date" max="9999-12-31"></input>');
         var $toDate = $('<input class="date-allocation" type="date" max="9999-12-31"></input>');
         var $pfromDate = $('<input class="date-allocation" type="date" max="9999-12-31"></input>');
@@ -39,7 +39,7 @@
         var $gfromDate = $('<input class="date-allocation" type="date" max="9999-12-31"></input>');
         var $gtoDate = $('<input class="date-allocation" type="date" max="9999-12-31"></input>');
         var $srchInv = $('<input value = "" placeholder = "Search..." type = "text" id = _SrchTxtbx_"' + $self.windowNo + '>');
-        var docType, c_DocType_ID = null;
+        var docType, VAB_DocTypes_ID = null;
         //---------------------
         var $divPayment = null;
         var $divCashline = null;
@@ -87,8 +87,8 @@
         var $conversionDate = null;
         var $conversionDiv = null;
 
-        var _C_BPartner_ID = 0;
-        var _C_Currency_ID = 0;
+        var _VAB_BusinessPartner_ID = 0;
+        var _VAB_Currency_ID = 0;
         var _payment = 10;
         var _paymentCash = 8;
         var date = null;
@@ -175,7 +175,7 @@
         var pageNoPayment = 1, gridPgnoPayment = 1, paymentRecord = 0;
         var pageNoGL = 1, gridPgnoGL = 1, glRecord = 0;
         var isPaymentGridLoaded = false, isCashGridLoaded = false, isInvoiceGridLoaded = false, isGLGridLoaded = false;
-        var C_ConversionType_ID = 0;
+        var VAB_CurrencyType_ID = 0;
 
         //array to get all the date of selected grid records
         var _allDates = [];
@@ -213,22 +213,22 @@
 
         var elements = [
             "VAF_Org_ID",
-            "C_BPartner_ID",
-            "C_Currency_ID",
+            "VAB_BusinessPartner_ID",
+            "VAB_Currency_ID",
             "C_Payment_ID ",
-            "C_CashLine_ID",
-            "C_Cash_ID",
+            "VAB_CashJRNLLine_ID",
+            "VAB_CashJRNL_ID",
             "C_Invoice_ID ",
             "Date",
             "DocumentNo",
             "TrxCurrency",
-            "C_ConversionType_ID",
+            "VAB_CurrencyType_ID",
             "Amount",
             "ConvertedAmount",
             "OpenAmount",
             "multiplierap",
             "AppliedAmount",
-            "C_ConversionType_ID",
+            "VAB_CurrencyType_ID",
             "RECEIPTNO",
             "PaymentType",
             "ccashlineid",
@@ -277,7 +277,7 @@
         initialize();
 
         function initialize() {
-            _C_Currency_ID = ctx.getContextAsInt("$C_Currency_ID");   //  default
+            _VAB_Currency_ID = ctx.getContextAsInt("$VAB_Currency_ID");   //  default
             countVA009 = executeScalar("VIS_131");
             fillLookups();
             loadDocType();
@@ -394,7 +394,7 @@
             });
             $vSearchBPartner.fireValueChanged = bpValueChanged;
             $cmbCurrency.on("change", function (e) {
-                vetoableChange("C_Currency_ID", $cmbCurrency.val());
+                vetoableChange("VAB_Currency_ID", $cmbCurrency.val());
                 //when select MultiCurrency without selecting conversionDate it will clear the grid's
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     blankAllGrids();
@@ -1631,7 +1631,7 @@
         //            },
         //            { field: "DOCUMENTNO", caption: VIS.translatedTexts.DocumentNo, size: '120px', hidden: false, sortable: false },
         //            { field: "Isocode", caption: VIS.translatedTexts.TrxCurrency, size: '105px', hidden: false },
-        //            { field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '105px', hidden: false, sortable: false },
+        //            { field: "ConversionName", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '105px', hidden: false, sortable: false },
         //            {
         //                field: "ConvertedAmount", caption: VIS.Msg.getMsg("Amount"), size: '150px', hidden: false, sortable: false, render: function (record, index, col_index) {
         //                    var val = record["ConvertedAmount"];
@@ -1657,8 +1657,8 @@
         //                }, size: '80px', hidden: true
         //            },
         //            { field: "GL_JOURNALLINE_ID", caption: VIS.translatedTexts.GL_JOURNALLINE_ID, size: '150px', hidden: true },
-        //            { field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true },
-        //            { field: "GL_Journal_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true }
+        //            { field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true },
+        //            { field: "GL_Journal_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true }
 
         //        ],
         //        onClick: function (event) {
@@ -1962,14 +1962,14 @@
         function fillLookups() {
             var data = null;
             //var value = VIS.MLookupFactory.getMLookUp(ctx, self.windowNo, 3505, VIS.DisplayType.TableDir);
-            var value = VIS.MLookupFactory.get(ctx, self.windowNo, 0, VIS.DisplayType.TableDir, "C_Currency_ID", 0, false, "IsMyCurrency='Y'"); //shown the records only IsMycurrency is true.
+            var value = VIS.MLookupFactory.get(ctx, self.windowNo, 0, VIS.DisplayType.TableDir, "VAB_Currency_ID", 0, false, "IsMyCurrency='Y'"); //shown the records only IsMycurrency is true.
             data = value.getData(true, true, false, false);
             var flag = 0;
             if (data != null && data != undefined && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     $cmbCurrency.append('<option value=' + data[i].Key + '>' + data[i].Name + '</option>');
-                    if (data[i].Key == _C_Currency_ID) {
-                        $cmbCurrency.val(_C_Currency_ID);
+                    if (data[i].Key == _VAB_Currency_ID) {
+                        $cmbCurrency.val(_VAB_Currency_ID);
                         flag = 1;
                     }
                 }
@@ -1980,7 +1980,7 @@
             }
 
             value = VIS.MLookupFactory.getMLookUp(ctx, self.windowNo, 3499, VIS.DisplayType.Search);
-            $vSearchBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
+            $vSearchBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, value);
         };
 
         // Set Mandatory and non mandatory---Neha
@@ -2086,8 +2086,8 @@
                         $payDocType.append("<option value='0'>Select</option>");
                         for (var i = 0; i < result.length; i++) {
                             docType = VIS.Utility.Util.getValueOfString(result[i].DocType);
-                            c_DocType_ID = VIS.Utility.Util.getValueOfInt(result[i].C_DocType_ID);
-                            $payDocType.append(" <option value=" + c_DocType_ID + ">" + docType + "</option>");
+                            VAB_DocTypes_ID = VIS.Utility.Util.getValueOfInt(result[i].VAB_DocTypes_ID);
+                            $payDocType.append(" <option value=" + VAB_DocTypes_ID + ">" + docType + "</option>");
                         }
                     }
                     else {
@@ -2113,8 +2113,8 @@
                         $cmbDocType.append("<option value= 0 >Select</option>");
                         for (var i = 0; i < result.length; i++) {
                             docType = VIS.Utility.Util.getValueOfString(result[i].DocType);
-                            c_DocType_ID = VIS.Utility.Util.getValueOfInt(result[i].C_DocType_ID);
-                            $cmbDocType.append(" <option value=" + c_DocType_ID + ">" + docType + "</option>");
+                            VAB_DocTypes_ID = VIS.Utility.Util.getValueOfInt(result[i].VAB_DocTypes_ID);
+                            $cmbDocType.append(" <option value=" + VAB_DocTypes_ID + ">" + docType + "</option>");
                         }
                     }
                     else {
@@ -2130,10 +2130,10 @@
 
         //-----Load Invoice Grid----Neha
         function loadInvoice() {
-            if (_C_BPartner_ID > 0) {
+            if (_VAB_BusinessPartner_ID > 0) {
                 VAF_Org_ID = $OrgFilter.val();
-                _C_Currency_ID = $cmbCurrency.val();
-                if (_C_Currency_ID == 0) {
+                _VAB_Currency_ID = $cmbCurrency.val();
+                if (_VAB_Currency_ID == 0) {
                     return VIS.ADialog.info("Message", true, "select currency", "");
                 }
                 fromDate = $fromDate.val();
@@ -2148,7 +2148,7 @@
                 $bsyDiv[0].style.visibility = "visible";
                 pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
                 isInvoiceGridLoaded = false;
-                C_ConversionType_ID = 0;
+                VAB_CurrencyType_ID = 0;
                 var chk = $vchkMultiCurrency.is(':checked');
                 var getDate = null;
                 date = $date.val();
@@ -2159,7 +2159,7 @@
                     getDate = VIS.DB.to_date(new Date());
                 //---Get values and pass values to the controller----Neha
                 docNo = $txtDocNo.val();
-                c_docType_ID = $cmbDocType.val();
+                VAB_DocTypes_ID = $cmbDocType.val();
                 docBaseType = $invDocbaseType.val();
                 srchText = $srchInvoice.val();
                 if (fromDate != null && fromDate != undefined && fromDate != "") {
@@ -2171,7 +2171,7 @@
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                    data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
+                    data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, VAB_DocTypes_ID: VAB_DocTypes_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
                     async: true,
                     success: function (result) {
                         var data = JSON.parse(result);
@@ -2227,8 +2227,8 @@
             $allocationTo.empty();
             $allocationFrom.append("<option value=0></option>");
             $allocationTo.append("<option value=0></option>");
-            $allocationFrom.append('<option value="C">' + VIS.translatedTexts.C_Cash_ID + '</option>');
-            $allocationTo.append('<option value="C">' + VIS.translatedTexts.C_Cash_ID + '</option>');
+            $allocationFrom.append('<option value="C">' + VIS.translatedTexts.VAB_CashJRNL_ID + '</option>');
+            $allocationTo.append('<option value="C">' + VIS.translatedTexts.VAB_CashJRNL_ID + '</option>');
             $allocationFrom.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
             $allocationTo.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
             $allocationFrom.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
@@ -2250,7 +2250,7 @@
             $divBp.append($Leftformfieldwrp);
             $Leftformfieldwrp.append($Leftformfieldctrlwrp);
             $Leftformfieldwrp.append($Leftformfieldbtnwrap);
-            $Leftformfieldctrlwrp.append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner").attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.C_BPartner_ID + '</label>');
+            $Leftformfieldctrlwrp.append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner").attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' ')).append('<label>' + VIS.translatedTexts.VAB_BusinessPartner_ID + '</label>');
             $Leftformfieldbtnwrap.append($vSearchBPartner.getBtn(0));
 
             var $divCu = $('<div class="vis-allocation-leftControls">');
@@ -2258,7 +2258,7 @@
             var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             $divCu.append($Leftformfieldwrp);
             $Leftformfieldwrp.append($Leftformfieldctrlwrp);
-            $Leftformfieldctrlwrp.append($cmbCurrency).append('<label>' + VIS.translatedTexts.C_Currency_ID + '</label>');
+            $Leftformfieldctrlwrp.append($cmbCurrency).append('<label>' + VIS.translatedTexts.VAB_Currency_ID + '</label>');
             $innerRow.append($divOrg).append($divBp).append($divCu);
 
             //added for sequence of multicurrency checkbox
@@ -2431,7 +2431,7 @@
         };
 
         function createRow3() {
-            $row3.append('<div class="d-flex cash-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 4px;"></p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-cashSum"> 0 ' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="cashSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchcBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap payType" id="_paymentType' + $self.windowNo + '"></div><div class="input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
+            $row3.append('<div class="d-flex cash-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.VAB_CashJRNLLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 4px;"></p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-cashSum"> 0 ' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="cashSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchcBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap payType" id="_paymentType' + $self.windowNo + '"></div><div class="input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
             $divCashline = $row3.find('.vis-allocation-cashLine-grid');
             $lblCashSum = $row3.find('.vis-allocate-cashSum');
             $cashSelctAll = $row3.find('#cashselectall');
@@ -2567,7 +2567,7 @@
         ///  - Invoices
         /// </summary>
         function loadBPartner() {
-            if (_C_BPartner_ID == 0 || _C_Currency_ID == 0) {
+            if (_VAB_BusinessPartner_ID == 0 || _VAB_Currency_ID == 0) {
                 return;
             }
             // If BP is selected then  set mandatory false---Neha
@@ -2587,7 +2587,7 @@
                 isPaymentGridLoaded = false, isCashGridLoaded = false, isInvoiceGridLoaded = false, isGLGridLoaded = false;
             }
 
-            C_ConversionType_ID = 0;
+            VAB_CurrencyType_ID = 0;
             var getDate = null;
             date = $date.val();
             if (date != null && date != undefined && date != "") {
@@ -2602,7 +2602,7 @@
             var role = VIS.MRole.getDefault();
             //  Need to have both values
             //	Async BPartner Test
-            var key = _C_BPartner_ID;
+            var key = _VAB_BusinessPartner_ID;
             /********************************
          *  Load unallocated Payments
          *      1-TrxDate, 2-DocumentNo, (3-Currency, 4-PayAmt,)
@@ -2642,8 +2642,8 @@
 */
         function loadUnallocatedPayments() {
             VAF_Org_ID = $OrgFilter.val();
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_BPartner_ID == 0 || _C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_BusinessPartner_ID == 0 || _VAB_Currency_ID == 0) {
                 return;
             }
             fromDate = $pfromDate.val();
@@ -2658,7 +2658,7 @@
             pageNoPayment = 1, gridPgnoPayment = 1, paymentRecord = 0;
             isPaymentGridLoaded = false;
             var chk = $vchkMultiCurrency.is(':checked');
-            c_docType_ID = $payDocType.val();
+            VAB_DocTypes_ID = $payDocType.val();
             docBaseType = $payDocbaseType.val();
             srchText = $srchPayment.val();
             $bsyDiv[0].style.visibility = "visible";
@@ -2671,7 +2671,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetPayments",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, VAB_DocTypes_ID: VAB_DocTypes_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2718,8 +2718,8 @@
     *      5-ConvAmt, 6-ConvOpen, 7-Allocated
     */
         function loadUnallocatedCashLines() {
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_BPartner_ID == 0 || _C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_BusinessPartner_ID == 0 || _VAB_Currency_ID == 0) {
                 return;
             }
             pageNoCashJournal = 1, gridPgnoCashJounal = 1, CashRecord = 0;
@@ -2746,7 +2746,7 @@
             $bsyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetCashJounral",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2791,7 +2791,7 @@
         function loadCurrencyPrecision() {
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetCurrencyPrecision",
-                data: { _C_Currency_ID: _C_Currency_ID },
+                data: { _VAB_Currency_ID: _VAB_Currency_ID },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2830,8 +2830,8 @@
         };
         function getGLDataOnScroll(pageNoGL, PAGESIZE) {
             var chk = $vchkMultiCurrency.is(':checked');
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_Currency_ID == 0) {
                 return VIS.ADialog.info("Message", true, "select currency", "");
             }
             var getDate = null;
@@ -2842,8 +2842,8 @@
             else
                 getDate = VIS.DB.to_date(new Date());
 
-            //c_docType_ID = $payDocType.val();
-            //c_docbaseType_ID = $payDocbaseType.name;
+            //VAB_DocTypes_ID = $payDocType.val();
+            //VAB_MasterDocType_ID = $payDocbaseType.name;
             if (fromDate != null && fromDate != undefined && fromDate != "") {
                 VIS.DB.to_date(fromDate);
             }
@@ -2853,7 +2853,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/GetGLData",
                 dataType: "json",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2902,8 +2902,8 @@
             }
         };
         function getPaymentDataOnScroll(pageNoPayment, PAGESIZE) {
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_Currency_ID == 0) {
                 return VIS.ADialog.info("Message", true, "select currency", "");
             }
             var chk = $vchkMultiCurrency.is(':checked');
@@ -2915,7 +2915,7 @@
             else
                 getDate = VIS.DB.to_date(new Date());
 
-            c_docType_ID = $payDocType.val();
+            VAB_DocTypes_ID = $payDocType.val();
             docBaseType = $payDocbaseType.val();
             srchText = $srchPayment.val();
             if (fromDate != null && fromDate != undefined && fromDate != "") {
@@ -2926,7 +2926,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetPayments",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, VAB_DocTypes_ID: VAB_DocTypes_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2972,8 +2972,8 @@
             }
         };
         function getCashDataOnScroll(pageNoCashJournal, PAGESIZE) {
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_Currency_ID == 0) {
                 return VIS.ADialog.info("Message", true, "select currency", "");
             }
             var chk = $vchkMultiCurrency.is(':checked');
@@ -2995,7 +2995,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetCashJounral",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -3051,11 +3051,11 @@
 
             //---Get values and pass values to the controller----Neha
             docNo = $txtDocNo.val();
-            _C_Currency_ID = $cmbCurrency.val();
-            if (_C_Currency_ID == 0) {
+            _VAB_Currency_ID = $cmbCurrency.val();
+            if (_VAB_Currency_ID == 0) {
                 return VIS.ADialog.info("Message", true, "select currency", "");
             }
-            c_docType_ID = $cmbDocType.val();
+            VAB_DocTypes_ID = $cmbDocType.val();
             docBaseType = $invDocbaseType.val();
             srchText = $srchInvoice.val();
             if (fromDate != null && fromDate != undefined && fromDate != "") {
@@ -3067,7 +3067,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, VAB_DocTypes_ID: VAB_DocTypes_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -3177,7 +3177,7 @@
             //added new Column Account - on 24/09/2020
             columns.push({ field: "Account", caption: VIS.translatedTexts.Account, size: '150px', hidden: false, sortable: false });
             columns.push({ field: "Isocode", caption: VIS.translatedTexts.TrxCurrency, size: '105px', hidden: false });
-            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '105px', hidden: false, sortable: false });
+            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '105px', hidden: false, sortable: false });
             columns.push({
                 field: "ConvertedAmount", caption: VIS.Msg.getMsg("Amount"), attr: 'align=right', size: '150px', hidden: false, sortable: false, render: function (record, index, col_index) {
                     var val = record["ConvertedAmount"];
@@ -3203,8 +3203,8 @@
                 }, size: '80px', hidden: true
             });
             columns.push({ field: "GL_JOURNALLINE_ID", caption: VIS.translatedTexts.GL_JOURNALLINE_ID, size: '150px', hidden: true });
-            columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
-            columns.push({ field: "GL_Journal_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
+            columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
+            columns.push({ field: "GL_Journal_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
             var rows = [];
 
@@ -3334,7 +3334,7 @@
             //else {
             columns.push({ field: "Isocode", caption: VIS.translatedTexts.TrxCurrency, size: '85px', hidden: false });
             //}
-            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
+            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: false });
             if (chk) {
                 //render column into float with culture format
                 columns.push({
@@ -3378,7 +3378,7 @@
                 }
             });
             columns.push({ field: "CpaymentID", caption: VIS.translatedTexts.c_payment_id, size: '150px', hidden: true });
-            columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
+            columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
             var rows = [];
 
@@ -3547,7 +3547,7 @@
             columns.push({ field: "VSS_paymenttype", caption: "Payment ID", size: '120px', hidden: true });
             columns.push({ field: "Payment", caption: "Payment Type", size: '120px', hidden: false });
             columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '105px', hidden: false });
-            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '105px', hidden: false });
+            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '105px', hidden: false });
             if (chk) {
                 //render column into float with culture format
                 columns.push({
@@ -3608,7 +3608,7 @@
             //}
             columns.push({ field: "CcashlineiID", caption: VIS.translatedTexts.ccashlineid, size: '150px', hidden: true });
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, hidden: true });
-            columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
+            columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
             var rows = [];
 
             var colkeys = [];
@@ -3770,7 +3770,7 @@
             });
             columns.push({ field: "DocBaseType", caption: VIS.translatedTexts.DocBaseType, size: '150px', hidden: false });
             columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '85px', hidden: false });
-            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
+            columns.push({ field: "ConversionName", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: false });
             if (chk) {
                 //render column into float with culture format
                 columns.push({
@@ -3838,7 +3838,7 @@
             if (countVA009 > 0) {
                 columns.push({ field: "C_InvoicePaySchedule_ID", caption: VIS.translatedTexts.C_InvoicePaySchedule_ID, size: '100px', hidden: true });
             }
-            columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
+            columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
             var rows = [];
 
@@ -4555,10 +4555,10 @@
                     if (element[0].SelectRow == true) {
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
-                        if (C_ConversionType_ID == 0) {
-                            C_ConversionType_ID = $gridInvoice.get(event.recid).C_ConversionType_ID;
+                        if (VAB_CurrencyType_ID == 0) {
+                            VAB_CurrencyType_ID = $gridInvoice.get(event.recid).VAB_CurrencyType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridInvoice.get(event.recid).C_ConversionType_ID) {
+                        else if (VAB_CurrencyType_ID != $gridInvoice.get(event.recid).VAB_CurrencyType_ID) {
 
                             var $x = document.getElementsByName(event.target);
                             if ($x.length > 0)
@@ -4651,10 +4651,10 @@
                     if (element[0].SelectRow == true) {
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
-                        if (C_ConversionType_ID == 0) {
-                            C_ConversionType_ID = $gridPayment.get(event.recid).C_ConversionType_ID;
+                        if (VAB_CurrencyType_ID == 0) {
+                            VAB_CurrencyType_ID = $gridPayment.get(event.recid).VAB_CurrencyType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridPayment.get(event.recid).C_ConversionType_ID) {
+                        else if (VAB_CurrencyType_ID != $gridPayment.get(event.recid).VAB_CurrencyType_ID) {
 
                             var $x = document.getElementsByName(event.target);
                             if ($x.length > 0)
@@ -4750,10 +4750,10 @@
                     if (element[0].SelectRow == true) {
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
-                        if (C_ConversionType_ID == 0) {
-                            C_ConversionType_ID = $gridCashline.get(event.recid).C_ConversionType_ID;
+                        if (VAB_CurrencyType_ID == 0) {
+                            VAB_CurrencyType_ID = $gridCashline.get(event.recid).VAB_CurrencyType_ID;
                         }
-                        else if (C_ConversionType_ID != $gridCashline.get(event.recid).C_ConversionType_ID) {
+                        else if (VAB_CurrencyType_ID != $gridCashline.get(event.recid).VAB_CurrencyType_ID) {
 
                             var $x = document.getElementsByName(event.target);
                             if ($x.length > 0)
@@ -4853,10 +4853,10 @@
                     if (element[0].SelectRow == true) {
                         // when we select a record, check conversion type is same or not.
                         // if not then not to select this record
-                        if (C_ConversionType_ID == 0) {
-                            C_ConversionType_ID = $glLineGrid.get(event.recid).C_ConversionType_ID;
+                        if (VAB_CurrencyType_ID == 0) {
+                            VAB_CurrencyType_ID = $glLineGrid.get(event.recid).VAB_CurrencyType_ID;
                         }
-                        else if (C_ConversionType_ID != $glLineGrid.get(event.recid).C_ConversionType_ID) {
+                        else if (VAB_CurrencyType_ID != $glLineGrid.get(event.recid).VAB_CurrencyType_ID) {
 
                             var $x = document.getElementsByName(event.target);
                             if ($x.length > 0)
@@ -5446,7 +5446,7 @@
                             AppliedAmt: record.AppliedAmt,
                             //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
                             //InvoiceScheduleDate: record.InvoiceScheduleDate,
-                            C_ConversionType_ID: record.C_ConversionType_ID,
+                            VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                             ConversionName: record.ConversionName,
                             DATEACCT: record.DATEACCT,
                             VAF_Org_ID: record.VAF_Org_ID,
@@ -5523,7 +5523,7 @@
                         }
 
                         if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
-                            C_ConversionType_ID = 0;
+                            VAB_CurrencyType_ID = 0;
 
                         $gridPayment.columns[_payment].editable = false;
                     }
@@ -5565,7 +5565,7 @@
                             AppliedAmt: record.AppliedAmt,
                             //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
                             //InvoiceScheduleDate: record.InvoiceScheduleDate,
-                            C_ConversionType_ID: record.C_ConversionType_ID,
+                            VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                             ConversionName: record.ConversionName,
                             DATEACCT: record.DATEACCT,
                             VAF_Org_ID: record.VAF_Org_ID,
@@ -5638,7 +5638,7 @@
                         }
 
                         if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
-                            C_ConversionType_ID = 0;
+                            VAB_CurrencyType_ID = 0;
 
                         $gridCashline.columns[_paymentCash].editable = false;
                     }
@@ -5679,7 +5679,7 @@
                         AppliedAmt: record.AppliedAmt,
                         C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
                         InvoiceScheduleDate: record.InvoiceScheduleDate,
-                        C_ConversionType_ID: record.C_ConversionType_ID,
+                        VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                         ConversionName: record.ConversionName,
                         DATEACCT: record.DATEACCT,
                         VAF_Org_ID: record.VAF_Org_ID,
@@ -5766,7 +5766,7 @@
                     }
 
                     if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
-                        C_ConversionType_ID = 0;
+                        VAB_CurrencyType_ID = 0;
 
                     $gridInvoice.columns[_applied].editable = false;
                 }
@@ -5841,7 +5841,7 @@
                         AppliedAmt: record.AppliedAmt,
                         //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
                         //InvoiceScheduleDate: record.InvoiceScheduleDate,
-                        C_ConversionType_ID: record.C_ConversionType_ID,
+                        VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                         ConversionName: record.ConversionName,
                         DATEACCT: record.DATEACCT,
                         VAF_Org_ID: record.VAF_Org_ID,
@@ -5902,7 +5902,7 @@
                             isAllUncheckedGL = true;
                     }
                     if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment) {
-                        C_ConversionType_ID = 0;
+                        VAB_CurrencyType_ID = 0;
                     }
                 }
             }
@@ -6072,10 +6072,10 @@
         //load unallocated GL Journal Lines
         //added for gl-allocation
         function loadGLVoucher() {
-            if (_C_BPartner_ID > 0) {
+            if (_VAB_BusinessPartner_ID > 0) {
                 var chk = $vchkMultiCurrency.is(':checked');
-                _C_Currency_ID = $cmbCurrency.val();
-                if (_C_Currency_ID == 0) {
+                _VAB_Currency_ID = $cmbCurrency.val();
+                if (_VAB_Currency_ID == 0) {
                     return VIS.ADialog.info("Message", true, "select currency", "");
                 }
                 VAF_Org_ID = $OrgFilter.val();
@@ -6101,7 +6101,7 @@
                 $.ajax({
                     url: VIS.Application.contextUrl + "VIS/PaymentAllocation/GetGLData",
                     dataType: "json",
-                    data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
+                    data: { VAF_Org_ID: VAF_Org_ID, _VAB_Currency_ID: _VAB_Currency_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
                     async: true,
                     success: function (result) {
                         //if (result) {
@@ -6267,23 +6267,23 @@
             }
 
             //  BPartner
-            if (name == "C_BPartner_ID") {
-                if (_C_BPartner_ID != value) {
+            if (name == "VAB_BusinessPartner_ID") {
+                if (_VAB_BusinessPartner_ID != value) {
                     //clear right side  filters and selected records
                     clearRightPanelFilters();
                     //added to load all blank grids
                     blankAllGrids();
                 }
-                _C_BPartner_ID = value;
-                if (_C_BPartner_ID > 0) {
+                _VAB_BusinessPartner_ID = value;
+                if (_VAB_BusinessPartner_ID > 0) {
                     // If BP is selected then  set mandatory false---Neha
                     $vSearchBPartner.getControl().removeClass('vis-ev-col-mandatory');
                 }
                 //////loadBPartner();
             }
             //	Currency
-            else if (name == "C_Currency_ID") {
-                _C_Currency_ID = parseInt(value);
+            else if (name == "VAB_Currency_ID") {
+                _VAB_Currency_ID = parseInt(value);
                 ////////loadBPartner();
             }
             //	Date for Multi-Currency
@@ -6647,7 +6647,7 @@
                         var discount = "";
                         var writeOff = "";
                         var open = "";
-                        var C_CurrencyType_ID = 0;
+                        var VAB_CurrencyType_ID = 0;
 
                         //var paymentData = [];
                         var cashData = [];
@@ -6662,7 +6662,7 @@
                         }
                         //for (var i = 0; i < rowsPayment.length; i++) {
                         //    var row = $gridPayment.get(rowsPayment[i].recid);
-                        //    C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                        //    VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                         //    paymentData.push({
                         //        AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, CpaymentID: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                         //        Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val())
@@ -6675,7 +6675,7 @@
                             applied = keys[keys.indexOf("AppliedAmt")];
                             for (var i = 0; i < rowsCash.length; i++) {
                                 var row = $gridCashline.get(rowsCash[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     var appliedAmt = rowsCash[i].AppliedAmt;
                                     appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
@@ -6695,7 +6695,7 @@
                             open = keys[keys.indexOf("Amount")];
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -6741,8 +6741,8 @@
                             type: 'POST',
                             data: ({
                                 cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
-                                isCash: true, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
+                                isCash: true, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: VAB_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -6792,7 +6792,7 @@
                         var discount = "";
                         var writeOff = "";
                         var open = "";
-                        var C_CurrencyType_ID = 0;
+                        var VAB_CurrencyType_ID = 0;
 
                         var paymentData = [];
                         //var cashData = [];
@@ -6809,7 +6809,7 @@
                             var row = $gridPayment.get(rowsPayment[i].recid);
                             var keys = Object.keys($gridPayment.get(0));
                             payment = keys[keys.indexOf("AppliedAmt")];
-                            C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                            VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                             payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                 var appliedAmt = rowsPayment[i].AppliedAmt;
@@ -6841,7 +6841,7 @@
                             open = keys[keys.indexOf("Amount")];
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -6892,8 +6892,8 @@
                             type: 'POST',
                             data: ({
                                 paymentData: JSON.stringify(paymentData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
-                                _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
+                                _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: VAB_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -6941,7 +6941,7 @@
                         var discount = "";
                         var writeOff = "";
                         var open = "";
-                        var C_CurrencyType_ID = 0;
+                        var VAB_CurrencyType_ID = 0;
                         var paymentData = [];
                         var cashData = [];
                         var glData = [];
@@ -6960,7 +6960,7 @@
                             payment = keys[keys.indexOf("AppliedAmt")];
                             for (var i = 0; i < rowsPayment.length; i++) {
                                 var row = $gridPayment.get(rowsPayment[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                     var appliedAmt = rowsPayment[i].AppliedAmt;
                                     appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
@@ -6978,7 +6978,7 @@
                             payment = keys[keys.indexOf("AppliedAmt")];
                             for (var i = 0; i < rowsCash.length; i++) {
                                 var row = $gridCashline.get(rowsCash[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     var appliedAmt = rowsCash[i].AppliedAmt;
                                     appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
@@ -6998,7 +6998,7 @@
                             open = keys[keys.indexOf("Amount")];
                             for (var i = 0; i < rowsInvoice.length; i++) {
                                 var row = $gridInvoice.get(rowsInvoice[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 var discounts = rowsInvoice[i].Discount;
                                 if (discounts == undefined) {
                                     discounts = row.Discount;
@@ -7042,7 +7042,7 @@
 
                             for (var i = 0; i < rowsGLVoucher.length; i++) {
                                 var row = $glLineGrid.get(rowsGLVoucher[i].recid);
-                                C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                                VAB_CurrencyType_ID = parseInt(row.VAB_CurrencyType_ID);
                                 if (rowsGLVoucher[i].AppliedAmt != undefined && rowsGLVoucher[i].AppliedAmt != 0) {
                                     glData.push({
                                         AppliedAmt: rowsGLVoucher[i].AppliedAmt, Date: row.DATEACCT, DateDoc: row.DATEDOC, DocumentNo: row.DOCUMENTNO,
@@ -7052,7 +7052,7 @@
                                 }
                             }
                         }
-                        saveGLData(JSON.stringify(paymentData), JSON.stringify(invoiceData), JSON.stringify(cashData), JSON.stringify(glData), $date.val(), C_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk);
+                        saveGLData(JSON.stringify(paymentData), JSON.stringify(invoiceData), JSON.stringify(cashData), JSON.stringify(glData), $date.val(), VAB_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk);
                     }
                 },
                 error: function (result) {
@@ -7062,13 +7062,13 @@
             });
         };
 
-        function saveGLData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, C_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk) {
+        function saveGLData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, VAB_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/saveGLJData",
                 type: 'POST',
                 data: {
                     paymentData: rowsPayment, invoiceData: rowsInvoice, cashData: rowsCash, glData: rowsGLVoucher, DateTrx: DateTrx, _windowNo: self.windowNo,
-                    C_Currency_ID: _C_Currency_ID, C_BPartner_ID: _C_BPartner_ID, VAF_Org_ID: $cmbOrg.val(), C_CurrencyType_ID: C_CurrencyType_ID,
+                    VAB_Currency_ID: _VAB_Currency_ID, VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, VAF_Org_ID: $cmbOrg.val(), VAB_CurrencyType_ID: VAB_CurrencyType_ID,
                     DateAcct: $dateAcct.val(), applied: applied, discount: discount, open: open, payment: payment, writeOff: writeOff, conversionDate: conversionDate, chk: chk
                 },
                 async: false,
@@ -7127,7 +7127,7 @@
             pageNoPayment = 1, gridPgnoPayment = 1, paymentRecord = 0;
             pageNoGL = 1, gridPgnoGL = 1, glRecord = 0;
             isPaymentGridLoaded = false, isCashGridLoaded = false, isInvoiceGridLoaded = false, isGLGridLoaded = false;
-            C_ConversionType_ID = 0;
+            VAB_CurrencyType_ID = 0;
             /********************************
          *  Load unallocated Payments
          *      1-TrxDate, 2-DocumentNo, (3-Currency, 4-PayAmt,)

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_AllocationLine
+ * Class Used     : X_VAB_DocAllocationLine
  * Chronological Development
  * Veena Pandey     23-June-2009
  ******************************************************/
@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAllocationLine : X_C_AllocationLine
+    public class MAllocationLine : X_VAB_DocAllocationLine
     {
         /**	Invoice info			*/
         private MInvoice _invoice = null;
@@ -31,14 +31,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AllocationLine_ID">id</param>
+        /// <param name="VAB_DocAllocationLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAllocationLine(Ctx ctx, int C_AllocationLine_ID, Trx trxName)
-            : base(ctx, C_AllocationLine_ID, trxName)
+        public MAllocationLine(Ctx ctx, int VAB_DocAllocationLine_ID, Trx trxName)
+            : base(ctx, VAB_DocAllocationLine_ID, trxName)
         {
-            if (C_AllocationLine_ID == 0)
+            if (VAB_DocAllocationLine_ID == 0)
             {
-                //	setC_AllocationHdr_ID (0);
+                //	setVAB_DocAllocation_ID (0);
                 SetAmount(Env.ZERO);
                 SetDiscountAmt(Env.ZERO);
                 SetWriteOffAmt(Env.ZERO);
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetC_AllocationHdr_ID(parent.GetC_AllocationHdr_ID());
+            SetVAB_DocAllocation_ID(parent.GetVAB_DocAllocation_ID());
             _parent = parent;
             Set_TrxName(parent.Get_TrxName());
         }
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         public MAllocationHdr GetParent()
         {
             if (_parent == null)
-                _parent = new MAllocationHdr(GetCtx(), GetC_AllocationHdr_ID(), Get_TrxName());
+                _parent = new MAllocationHdr(GetCtx(), GetVAB_DocAllocation_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -120,12 +120,12 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Document Info
         /// </summary>
-        /// <param name="C_BPartner_ID">partner</param>
+        /// <param name="VAB_BusinessPartner_ID">partner</param>
         /// <param name="C_Order_ID">order</param>
         /// <param name="C_Invoice_ID">invoice</param>
-        public void SetDocInfo(int C_BPartner_ID, int C_Order_ID, int C_Invoice_ID)
+        public void SetDocInfo(int VAB_BusinessPartner_ID, int C_Order_ID, int C_Invoice_ID)
         {
-            SetC_BPartner_ID(C_BPartner_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             SetC_Order_ID(C_Order_ID);
             SetC_Invoice_ID(C_Invoice_ID);
         }
@@ -134,13 +134,13 @@ namespace VAdvantage.Model
         /// Set Payment Info
         /// </summary>
         /// <param name="C_Payment_ID">payment</param>
-        /// <param name="C_CashLine_ID">cash line</param>
-        public void SetPaymentInfo(int C_Payment_ID, int C_CashLine_ID)
+        /// <param name="VAB_CashJRNLLine_ID">cash line</param>
+        public void SetPaymentInfo(int C_Payment_ID, int VAB_CashJRNLLine_ID)
         {
             if (C_Payment_ID != 0)
                 SetC_Payment_ID(C_Payment_ID);
-            if (C_CashLine_ID != 0)
-                SetC_CashLine_ID(C_CashLine_ID);
+            if (VAB_CashJRNLLine_ID != 0)
+                SetVAB_CashJRNLLine_ID(VAB_CashJRNLLine_ID);
         }
 
         /// <summary>
@@ -163,15 +163,15 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             if (!newRecord
-                && (Is_ValueChanged("C_BPartner_ID") || Is_ValueChanged("C_Invoice_ID")))
+                && (Is_ValueChanged("VAB_BusinessPartner_ID") || Is_ValueChanged("C_Invoice_ID")))
             {
                 log.Severe("Cannot Change Business Partner or Invoice");
                 return false;
             }
 
             //	Set BPartner/Order from Invoice
-            if (GetC_BPartner_ID() == 0 && GetInvoice() != null)
-                SetC_BPartner_ID(GetInvoice().GetC_BPartner_ID());
+            if (GetVAB_BusinessPartner_ID() == 0 && GetInvoice() != null)
+                SetVAB_BusinessPartner_ID(GetInvoice().GetVAB_BusinessPartner_ID());
             if (GetC_Order_ID() == 0 && GetInvoice() != null)
                 SetC_Order_ID(GetInvoice().GetC_Order_ID());
             //
@@ -200,12 +200,12 @@ namespace VAdvantage.Model
             sb.Append(Get_ID());
             if (GetC_Payment_ID() != 0)
                 sb.Append(",C_Payment_ID=").Append(GetC_Payment_ID());
-            if (GetC_CashLine_ID() != 0)
-                sb.Append(",C_CashLine_ID=").Append(GetC_CashLine_ID());
+            if (GetVAB_CashJRNLLine_ID() != 0)
+                sb.Append(",VAB_CashJRNLLine_ID=").Append(GetVAB_CashJRNLLine_ID());
             if (GetC_Invoice_ID() != 0)
                 sb.Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());
-            if (GetC_BPartner_ID() != 0)
-                sb.Append(",C_BPartner_ID=").Append(GetC_BPartner_ID());
+            if (GetVAB_BusinessPartner_ID() != 0)
+                sb.Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID());
             sb.Append(", Amount=").Append(GetAmount())
                 .Append(",Discount=").Append(GetDiscountAmt())
                 .Append(",WriteOff=").Append(GetWriteOffAmt())
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
         /// - Update and Link Invoice/Payment/Cash
         /// </summary>
         /// <param name="reverse">reverse if true allocation is reversed</param>
-        /// <returns>C_BPartner_ID</returns>
+        /// <returns>VAB_BusinessPartner_ID</returns>
         public int ProcessIt(bool reverse)
         {
             log.Fine("Reverse=" + reverse + " - " + ToString());
@@ -229,19 +229,19 @@ namespace VAdvantage.Model
             MCashLine cashLine = null;
             MInvoice invoice = GetInvoice();
             if (invoice != null
-                && GetC_BPartner_ID() != invoice.GetC_BPartner_ID())
-                SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                && GetVAB_BusinessPartner_ID() != invoice.GetVAB_BusinessPartner_ID())
+                SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             //
             int C_Payment_ID = GetC_Payment_ID();
-            int C_CashLine_ID = GetC_CashLine_ID();
+            int VAB_CashJRNLLine_ID = GetVAB_CashJRNLLine_ID();
 
             //	Update Payment
             if (C_Payment_ID != 0)
             {
                 payment = new MPayment(GetCtx(), C_Payment_ID, Get_TrxName());
-                if (GetC_BPartner_ID() != payment.GetC_BPartner_ID())
+                if (GetVAB_BusinessPartner_ID() != payment.GetVAB_BusinessPartner_ID())
                 {
-                    log.Warning("C_BPartner_ID different - Invoice=" + GetC_BPartner_ID() + " - Payment=" + payment.GetC_BPartner_ID());
+                    log.Warning("VAB_BusinessPartner_ID different - Invoice=" + GetVAB_BusinessPartner_ID() + " - Payment=" + payment.GetVAB_BusinessPartner_ID());
                 }
                 if (reverse)
                 {
@@ -259,12 +259,12 @@ namespace VAdvantage.Model
             }
 
             //	Update Cash Journal
-            if (C_CashLine_ID != 0)
+            if (VAB_CashJRNLLine_ID != 0)
             {
-                cashLine = new MCashLine(GetCtx(), C_CashLine_ID, Get_TrxName());
-                if (GetC_BPartner_ID() != cashLine.GetC_BPartner_ID())
+                cashLine = new MCashLine(GetCtx(), VAB_CashJRNLLine_ID, Get_TrxName());
+                if (GetVAB_BusinessPartner_ID() != cashLine.GetVAB_BusinessPartner_ID())
                 {
-                    log.Warning("C_BPartner_ID different - Invoice=" + GetC_BPartner_ID() + " - CashJournal=" + cashLine.GetC_BPartner_ID());
+                    log.Warning("VAB_BusinessPartner_ID different - Invoice=" + GetVAB_BusinessPartner_ID() + " - CashJournal=" + cashLine.GetVAB_BusinessPartner_ID());
                 }
                 if (reverse)
                 {
@@ -272,7 +272,7 @@ namespace VAdvantage.Model
                     if (!cashLine.Save(Get_Trx()))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
-                        log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetC_CashLine_ID() +
+                        log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetVAB_CashJRNLLine_ID() +
                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                     }
                 }
@@ -310,35 +310,35 @@ namespace VAdvantage.Model
             }
 
             //	Cash - Invoice
-            if (C_CashLine_ID != 0 && invoice != null)
+            if (VAB_CashJRNLLine_ID != 0 && invoice != null)
             {
                 //	Link to Invoice
                 if (reverse)
                 {
-                    invoice.SetC_CashLine_ID(0);
-                    log.Fine("C_CashLine_ID=" + C_CashLine_ID
+                    invoice.SetVAB_CashJRNLLine_ID(0);
+                    log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
                         + " Unlinked from C_Invoice_ID=" + C_Invoice_ID);
                     // Set isallocated false on cashline while allocation gets deallocated assigned by Mukesh sir on 27/12/2017
-                    //MCashLine cashline = new MCashLine(GetCtx(), GetC_CashLine_ID(), Get_TrxName());
+                    //MCashLine cashline = new MCashLine(GetCtx(), GetVAB_CashJRNLLine_ID(), Get_TrxName());
                     //cashline.SetIsAllocated(false);
                     //cashline.Save();
                 }
                 else
                 {
-                    invoice.SetC_CashLine_ID(C_CashLine_ID);
-                    log.Fine("C_CashLine_ID=" + C_CashLine_ID
+                    invoice.SetVAB_CashJRNLLine_ID(VAB_CashJRNLLine_ID);
+                    log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
                         + " Linked to C_Invoice_ID=" + C_Invoice_ID);
                 }
 
                 //	Link to Order
                 String update = "UPDATE C_Order o "
-                    + "SET C_CashLine_ID="
-                        + (reverse ? "NULL " : "(SELECT C_CashLine_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID + ") ")
+                    + "SET VAB_CashJRNLLine_ID="
+                        + (reverse ? "NULL " : "(SELECT VAB_CashJRNLLine_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID + ") ")
                     + "WHERE EXISTS (SELECT * FROM C_Invoice i "
                         + "WHERE o.C_Order_ID=i.C_Order_ID AND i.C_Invoice_ID=" + C_Invoice_ID + ")";
                 if (DataBase.DB.ExecuteQuery(update, null, Get_TrxName()) > 0)
                 {
-                    log.Fine("C_CashLine_ID=" + C_CashLine_ID
+                    log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
                         + (reverse ? " UnLinked from" : " Linked to")
                         + " order of C_Invoice_ID=" + C_Invoice_ID);
                 }
@@ -351,7 +351,7 @@ namespace VAdvantage.Model
             }
             // Added by Bharat- Update Discrepancy amount on Invoice.
 
-            if (C_Payment_ID == 0 && C_CashLine_ID == 0 && invoice != null)
+            if (C_Payment_ID == 0 && VAB_CashJRNLLine_ID == 0 && invoice != null)
             {
                 if (invoice.Get_ColumnIndex("DiscrepancyAmt") >= 0)
                 {
@@ -417,10 +417,10 @@ namespace VAdvantage.Model
                     // if payment Management module downloaded and Invoice Schedule id available on Allocation then mark ispaid on schedule as false
                     if (Env.IsModuleInstalled("VA009_"))
                     {
-                        MAllocationHdr allocHdr = new MAllocationHdr(GetCtx(), GetC_AllocationHdr_ID(), Get_Trx());
+                        MAllocationHdr allocHdr = new MAllocationHdr(GetCtx(), GetVAB_DocAllocation_ID(), Get_Trx());
                         decimal payAmt = 0;
                         MDocType doctype = null;
-                        MCurrency currency = new MCurrency(GetCtx(), invoice.GetC_Currency_ID(), null);
+                        MCurrency currency = new MCurrency(GetCtx(), invoice.GetVAB_Currency_ID(), null);
                         if (GetC_InvoicePaySchedule_ID() != 0 && !invoice.IsPaid())
                         {
                             invoiceSchedule = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_TrxName());
@@ -444,7 +444,7 @@ namespace VAdvantage.Model
                             if (reverse && payment != null)
                             {
                                 #region Handle for Payment & Invoice Allocation
-                                doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
+                                doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
 
                                 // convert (payment amount / Amount from View Allocation) to invoice currency amount then subtract Paid invoice amount to calculated amount
                                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
@@ -455,8 +455,8 @@ namespace VAdvantage.Model
                                         // convert payment amount in invoice amt with payment date and payment conversion type
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add((payment.GetPayAmt() +
                                             (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
-                                            payment.GetWriteOffAmt())), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
-                                            payment.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                                            payment.GetWriteOffAmt())), payment.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), payment.GetDateAcct(),
+                                            payment.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     }
                                     else
                                     {
@@ -464,8 +464,8 @@ namespace VAdvantage.Model
                                         // when we match payment with invoice through Payment Allocation form
                                         // convert payment amount in invoice amt with view allocation date 
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()),
-                                            GetWriteOffAmt())), allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                            invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                                            GetWriteOffAmt())), allocHdr.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), allocHdr.GetDateAcct(),
+                                            invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                         if (doctype.GetDocBaseType() == "APC")
                                         {
                                             payAmt = Decimal.Negate(payAmt);
@@ -480,8 +480,8 @@ namespace VAdvantage.Model
                                         // convert payment amount in invoice amt with payment date and payment conversion type
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add((payment.GetPayAmt() +
                                             (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
-                                            payment.GetWriteOffAmt()), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
-                                            payment.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                                            payment.GetWriteOffAmt()), payment.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), payment.GetDateAcct(),
+                                            payment.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     }
                                     else
                                     {
@@ -489,7 +489,7 @@ namespace VAdvantage.Model
                                         // when we match payment with invoice through Payment Allocation form
                                         // convert payment amount in invoice amt with view allocation date 
                                         payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt()),
-                                        allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                                        allocHdr.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), allocHdr.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(),
                                         GetVAF_Client_ID(), GetVAF_Org_ID());
                                         if (doctype.GetDocBaseType() == "API")
                                         {
@@ -507,7 +507,7 @@ namespace VAdvantage.Model
                                     {
                                         int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
-                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
+                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
                                          @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
                                                                  AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
                                          @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
@@ -523,7 +523,7 @@ namespace VAdvantage.Model
 
                                 // convert invoice paid amount to base currency amount
                                 invoiceSchedule.SetVA009_PaidAmnt(Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(),
-                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
+                                 invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
                                  currency.GetStdPrecision()));
 
                                 // set Currency Variance amount as 0, when we reverse paymnet/ cash journalor allocation against this schedule
@@ -534,27 +534,27 @@ namespace VAdvantage.Model
 
                                 #endregion
                             }
-                            else if (reverse && C_CashLine_ID > 0)
+                            else if (reverse && VAB_CashJRNLLine_ID > 0)
                             {
                                 #region Handle fo Cash Journal & Invoice Allocation
 
-                                doctype = new MDocType(GetCtx(), invoice.GetC_DocType_ID(), null);
-                                cashLine = new MCashLine(GetCtx(), C_CashLine_ID, Get_Trx());
+                                doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
+                                cashLine = new MCashLine(GetCtx(), VAB_CashJRNLLine_ID, Get_Trx());
 
                                 // convert cash amount to invoice currency amount with allocation date then subtract Paid invoice amount to calculated amount
                                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                                 {
                                     payAmt = Decimal.Negate(Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt()));
-                                    payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                        invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                                    payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), allocHdr.GetDateAcct(),
+                                        invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     invoiceSchedule.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(invoiceSchedule.GetVA009_PaidAmntInvce(), payAmt),
                                         currency.GetStdPrecision()));
                                 }
                                 else
                                 {
                                     payAmt = Decimal.Add(Decimal.Add(GetAmount(), GetDiscountAmt()), GetWriteOffAmt());
-                                    payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetC_Currency_ID(), invoice.GetC_Currency_ID(), allocHdr.GetDateAcct(),
-                                        invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                                    payAmt = MConversionRate.Convert(GetCtx(), payAmt, allocHdr.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), allocHdr.GetDateAcct(),
+                                        invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     invoiceSchedule.SetVA009_PaidAmntInvce(Decimal.Round(Decimal.Subtract(invoiceSchedule.GetVA009_PaidAmntInvce(), payAmt),
                                         currency.GetStdPrecision()));
                                 }
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
                                     {
                                         int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
-                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
+                                         @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
                                          @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
                                                                  AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
                                          @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
@@ -582,14 +582,14 @@ namespace VAdvantage.Model
 
                                 // convert invoice paid amount to base currency amount
                                 invoiceSchedule.SetVA009_PaidAmnt(Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(),
-                                 invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
+                                 invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()),
                                  currency.GetStdPrecision()));
 
                                 // set Currency Variance amount as 0, when we reverse paymnet/ cash journalor allocation against this schedule
                                 invoiceSchedule.SetVA009_Variance(0);
 
                                 // remove linking of cash line from schedule
-                                invoiceSchedule.SetC_CashLine_ID(0);
+                                invoiceSchedule.SetVAB_CashJRNLLine_ID(0);
 
                                 #endregion
                             }
@@ -609,7 +609,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            return GetC_BPartner_ID();
+            return GetVAB_BusinessPartner_ID();
         }
 
     }

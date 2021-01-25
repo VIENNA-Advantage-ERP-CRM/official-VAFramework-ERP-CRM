@@ -11,16 +11,16 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_AcctSchema_Default
+    /** Generated Model for VAB_AccountBook_Default
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_AcctSchema_Default : PO
+    public class X_VAB_AccountBook_Default : PO
     {
 
-        public X_C_AcctSchema_Default(Context ctx, int C_AcctSchema_Default_ID, Trx trxName)
-            : base(ctx, C_AcctSchema_Default_ID, trxName)
+        public X_VAB_AccountBook_Default(Context ctx, int VAB_AccountBook_Default_ID, Trx trxName)
+            : base(ctx, VAB_AccountBook_Default_ID, trxName)
         {
-            /** if (C_AcctSchema_Default_ID == 0)
+            /** if (VAB_AccountBook_Default_ID == 0)
             {
             SetB_Asset_Acct (0);
             SetB_Expense_Acct (0);
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             SetCB_Differences_Acct (0);
             SetCB_Expense_Acct (0);
             SetCB_Receipt_Acct (0);
-            SetC_AcctSchema_ID (0);
+            SetVAB_AccountBook_ID (0);
             SetC_Prepayment_Acct (0);
             SetC_Receivable_Acct (0);
             SetC_Receivable_Services_Acct (0);
@@ -86,10 +86,10 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_AcctSchema_Default(Ctx ctx, int C_AcctSchema_Default_ID, Trx trxName)
-            : base(ctx, C_AcctSchema_Default_ID, trxName)
+        public X_VAB_AccountBook_Default(Ctx ctx, int VAB_AccountBook_Default_ID, Trx trxName)
+            : base(ctx, VAB_AccountBook_Default_ID, trxName)
         {
-            /** if (C_AcctSchema_Default_ID == 0)
+            /** if (VAB_AccountBook_Default_ID == 0)
             {
             SetB_Asset_Acct (0);
             SetB_Expense_Acct (0);
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
             SetCB_Differences_Acct (0);
             SetCB_Expense_Acct (0);
             SetCB_Receipt_Acct (0);
-            SetC_AcctSchema_ID (0);
+            SetVAB_AccountBook_ID (0);
             SetC_Prepayment_Acct (0);
             SetC_Receivable_Acct (0);
             SetC_Receivable_Services_Acct (0);
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_AcctSchema_Default(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_AccountBook_Default(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_AcctSchema_Default(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_AccountBook_Default(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -178,14 +178,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_AcctSchema_Default(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_AccountBook_Default(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_AcctSchema_Default()
+        static X_VAB_AccountBook_Default()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -198,8 +198,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =315;
 
-        /** TableName=C_AcctSchema_Default */
-        public static String Table_Name = "C_AcctSchema_Default";
+        /** TableName=VAB_AccountBook_Default */
+        public static String Table_Name = "VAB_AccountBook_Default";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_AcctSchema_Default[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_AccountBook_Default[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Bank Asset.
@@ -475,17 +475,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Accounting Schema.
-        @param C_AcctSchema_ID Rules for accounting */
-        public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+        @param VAB_AccountBook_ID Rules for accounting */
+        public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID)
         {
-            if (C_AcctSchema_ID < 1) throw new ArgumentException("C_AcctSchema_ID is mandatory.");
-            Set_ValueNoCheck("C_AcctSchema_ID", C_AcctSchema_ID);
+            if (VAB_AccountBook_ID < 1) throw new ArgumentException("VAB_AccountBook_ID is mandatory.");
+            Set_ValueNoCheck("VAB_AccountBook_ID", VAB_AccountBook_ID);
         }
         /** Get Accounting Schema.
         @return Rules for accounting */
-        public int GetC_AcctSchema_ID()
+        public int GetVAB_AccountBook_ID()
         {
-            Object ii = Get_Value("C_AcctSchema_ID");
+            Object ii = Get_Value("VAB_AccountBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -493,7 +493,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
         }
         /** Set Customer Prepayment.
         @param C_Prepayment_Acct Account for customer prepayments */

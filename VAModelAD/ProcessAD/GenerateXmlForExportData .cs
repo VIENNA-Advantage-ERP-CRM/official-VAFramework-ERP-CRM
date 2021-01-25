@@ -453,7 +453,7 @@ namespace VAdvantage.Process
                                     int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
-                                    if (tableName == "AD_Workflow" && colName == "VAF_WFlow_Node_ID")
+                                    if (tableName == "VAF_Workflow" && colName == "VAF_WFlow_Node_ID")
                                     {
                                         continue;
                                     }

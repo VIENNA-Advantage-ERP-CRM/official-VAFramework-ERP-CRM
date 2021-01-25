@@ -379,7 +379,7 @@
                     Name: queryInfo[0],
                     VAF_TableView_ID: vaf_tableview_ID,
                     Record_ID: 0,
-                    C_BPartner_ID: 0,
+                    VAB_BusinessPartner_ID: 0,
                     isReport: true,
                     binaryData: reportBytes
                 },
@@ -826,7 +826,7 @@
                 //        Name: queryInfo[0],
                 //        VAF_TableView_ID: vaf_tableview_ID,
                 //        Record_ID: 0,
-                //        C_BPartner_ID: 0,
+                //        VAB_BusinessPartner_ID: 0,
                 //        isReport: true,
                 //        binaryData: reportBytes
                 //    },

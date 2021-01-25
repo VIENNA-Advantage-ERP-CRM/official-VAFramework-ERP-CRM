@@ -115,13 +115,13 @@ namespace VAdvantage.Model
          * 	Get BPartner of Invoice
          *	@return bp
          */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
             if (_invoice == null)
                 GetInvoice();
             if (_invoice == null)
                 return 0;
-            return _invoice.GetC_BPartner_ID();
+            return _invoice.GetVAB_BusinessPartner_ID();
         }
 
         /**
@@ -142,7 +142,7 @@ namespace VAdvantage.Model
             //	Check Payment
             int C_Payment_ID = GetC_Payment_ID();
             MPayment payment = new MPayment(GetCtx(), C_Payment_ID, null);
-            if (payment.GetC_Charge_ID() != 0
+            if (payment.GetVAB_Charge_ID() != 0
                 || payment.GetC_Invoice_ID() != 0
                 || payment.GetC_Order_ID() != 0)
             {
@@ -164,11 +164,11 @@ namespace VAdvantage.Model
             if (ts == null)
                 ts = DateTime.Now;
             //
-            String sql = "SELECT C_BPartner_ID,C_Currency_ID,"		        //	1..2
+            String sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		        //	1..2
                 + " invoiceOpen(C_Invoice_ID, @paysch),"					//	3		#1
                 + " invoiceDiscount(C_Invoice_ID,@tsdt,@paysch1), IsSOTrx "	//	4..5	#2/3
                 + "FROM C_Invoice WHERE C_Invoice_ID=@invid";			    //			#4
-            int C_Currency_ID = 0;		//	Invoice Currency
+            int VAB_Currency_ID = 0;		//	Invoice Currency
             IDataReader idr = null;
             try
             {
@@ -181,9 +181,9 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
                 {
-                    //	SetC_BPartner_ID(rs.GetInt(1));
-                    C_Currency_ID = Utility.Util.GetValueOfInt(idr[1].ToString());	//	Set Invoice Currency
-                    //	SetC_Currency_ID(C_Currency_ID);
+                    //	SetVAB_BusinessPartner_ID(rs.GetInt(1));
+                    VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[1].ToString());	//	Set Invoice Currency
+                    //	SetVAB_Currency_ID(VAB_Currency_ID);
                     //
                     Decimal? invoiceOpen = null;
                     if (!idr.IsDBNull(2))
@@ -214,12 +214,12 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
             //	Check Invoice/Payment Currency - may not be an issue(??)
-            if (C_Currency_ID != 0)
+            if (VAB_Currency_ID != 0)
             {
-                int currency_ID = GetCtx().GetContextAsInt(windowNo, "C_Currency_ID");
-                if (currency_ID != C_Currency_ID)
+                int currency_ID = GetCtx().GetContextAsInt(windowNo, "VAB_Currency_ID");
+                if (currency_ID != VAB_Currency_ID)
                 {
-                    String msg = Msg.ParseTranslation(GetCtx(), "@C_Currency_ID@: @C_Invoice_ID@ <> @C_Payment_ID@");
+                    String msg = Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@: @C_Invoice_ID@ <> @C_Payment_ID@");
                     //p_changeVO.addError(msg);
                 }
             }
@@ -338,7 +338,7 @@ namespace VAdvantage.Model
         {
             MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
             if ((newRecord || Is_ValueChanged("C_Invoice_ID"))
-                && (payment.GetC_Charge_ID() != 0
+                && (payment.GetVAB_Charge_ID() != 0
                     || payment.GetC_Invoice_ID() != 0
                     || payment.GetC_Order_ID() != 0))
             {

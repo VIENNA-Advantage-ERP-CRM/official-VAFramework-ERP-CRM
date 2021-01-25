@@ -177,7 +177,7 @@ and ai.record_id = " + _Record_ID;
 //FROM VA048_CallDetails cd 
 //left join VAF_UserContact au on au.VAF_UserContact_ID = cd.VA048_RefRecordID 
 //where cd.VA048_To is not null 
-//and au.C_BPartner_ID = " + _Record_ID + @" 
+//and au.VAB_BusinessPartner_ID = " + _Record_ID + @" 
 //and cd.Record_ID = " + _Record_ID;
 //                }
 //                else
@@ -529,7 +529,7 @@ and ai.record_id = " + _Record_ID;
         /// </summary>
         List<UserInfoForWhereClause> userQuery = new List<UserInfoForWhereClause>();
 
-        public void GetHistoryOfUserTable(int C_BPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
+        public void GetHistoryOfUserTable(int VAB_BusinessPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
         {
             RealtedHistoryInfoDetails hDetails = new RealtedHistoryInfoDetails();
 
@@ -544,7 +544,7 @@ and ai.record_id = " + _Record_ID;
 
 
             //get all users of bpartner
-            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
+            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
             DataSet dsUsers = DB.ExecuteDataset(sql);
 
             if (dsUsers != null && dsUsers.Tables[0].Rows.Count == 0)
@@ -889,9 +889,9 @@ and ai.record_id = " + _Record_ID;
         /// <param name="ctx"></param>
         /// <param name="searchText"></param>
         /// <returns></returns>
-        public RealtedHistoryInfoDetails Userhistory(int C_BPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
+        public RealtedHistoryInfoDetails Userhistory(int VAB_BusinessPartner_ID, int pageSize, int pageNo, Ctx ctx, string searchText)
         {
-            GetHistoryOfUserTable(C_BPartner_ID, pageSize, pageNo, ctx, searchText);
+            GetHistoryOfUserTable(VAB_BusinessPartner_ID, pageSize, pageNo, ctx, searchText);
 
             RealtedHistoryInfoDetails hDetails = new RealtedHistoryInfoDetails();
             List<RelatedHistoryInfo> histo = new List<RelatedHistoryInfo>();
@@ -908,7 +908,7 @@ and ai.record_id = " + _Record_ID;
 
 
             //get all users of bpartner
-            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE C_Bpartner_ID=" + C_BPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
+            sql = "SELECT VAF_UserContact_ID  FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND IsActive='Y' ORDER BY VAF_UserContact_ID";
             DataSet dsUsers = DB.ExecuteDataset(sql);
 
             if (dsUsers != null && dsUsers.Tables[0].Rows.Count == 0)
@@ -1489,10 +1489,10 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
         // Updated for fetching call chat for history by vinay
         public List<ChatInfos> ViewChatonHistory(Ctx ctx, int record_ID, bool isAppointment, bool isCall = false)
         {
-            string sql = @"SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
-                    FROM (SELECT * FROM (SELECT CH.cm_chat_id    AS ChatID,MAX(CE.cm_chatentry_id)AS EntryID FROM cm_chatentry CE
-                        JOIN cm_chat CH ON CE.cm_chat_id= CH.cm_chat_id GROUP BY CH.cm_chat_id ORDER BY entryID )inn1  ) inn
-                    JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)
+            string sql = @"SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.VACM_ChatLine,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
+                    FROM (SELECT * FROM (SELECT CH.VACM_Chat_ID    AS ChatID,MAX(CE.VACM_ChatLine)AS EntryID FROM VACM_ChatLine CE
+                        JOIN VACM_Chat CH ON CE.VACM_Chat_ID= CH.VACM_Chat_ID GROUP BY CH.VACM_Chat_ID ORDER BY entryID )inn1  ) inn
+                    JOIN VACM_ChatLine CH ON inn.ChatID= ch.VACM_Chat_ID JOIN VACM_Chat CMH ON (cmh.VACM_Chat_ID= inn.chatid)
                     JOIN VAF_UserContact Au ON au.VAF_UserContact_id= CH.createdBy LEFT OUTER JOIN VAF_Image AI ON(ai.VAF_Image_id=au.VAF_Image_id)";
             if (isAppointment)
             {
@@ -1509,7 +1509,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
 
 
             sql += @" AND Record_ID=" + record_ID + @" 
-                    ORDER BY inn.EntryID DESC,ch.cm_chatentry_id ASC";
+                    ORDER BY inn.EntryID DESC,ch.VACM_ChatLine ASC";
 
             List<ChatInfos> cInfo = new List<ChatInfos>();
 
@@ -1552,10 +1552,10 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
         // Updated for fetching call chat for history by vinay
         public List<ChatInfos> ViewChatonLastHistory(Ctx ctx, int record_ID, bool isAppointment, bool isCall = false)
         {
-            string sql = @"SELECT * FROM (SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.cm_chatentry_id,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
-                    FROM (SELECT * FROM (SELECT CH.cm_chat_id    AS ChatID,MAX(CE.cm_chatentry_id)AS EntryID FROM cm_chatentry CE
-                        JOIN cm_chat CH ON CE.cm_chat_id= CH.cm_chat_id GROUP BY CH.cm_chat_id ORDER BY entryID )inn1  ) inn
-                    JOIN cm_chatentry CH ON inn.ChatID= ch.cm_chat_id JOIN cm_chat CMH ON (cmh.cm_chat_id= inn.chatid)
+            string sql = @"SELECT * FROM (SELECT inn.ChatID,inn.EntryID,CH.characterdata,ch.VACM_ChatLine,au.Name AS NAME,ch.created, ai.VAF_Image_id ,ai.binarydata  AS UsrImg,CH.createdby
+                    FROM (SELECT * FROM (SELECT CH.VACM_Chat_ID    AS ChatID,MAX(CE.VACM_ChatLine)AS EntryID FROM VACM_ChatLine CE
+                        JOIN VACM_Chat CH ON CE.VACM_Chat_ID= CH.VACM_Chat_ID GROUP BY CH.VACM_Chat_ID ORDER BY entryID )inn1  ) inn
+                    JOIN VACM_ChatLine CH ON inn.ChatID= ch.VACM_Chat_ID JOIN VACM_Chat CMH ON (cmh.VACM_Chat_ID= inn.chatid)
                     JOIN VAF_UserContact Au ON au.VAF_UserContact_id= CH.createdBy LEFT OUTER JOIN VAF_Image AI ON(ai.VAF_Image_id=au.VAF_Image_id)";
             if (isAppointment)
             {
@@ -1572,7 +1572,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
 
 
             sql += @" AND Record_ID=" + record_ID + @" 
-                    ORDER BY inn.EntryID DESC,ch.cm_chatentry_id DESC ) WHERE rownum=1 ";
+                    ORDER BY inn.EntryID DESC,ch.VACM_ChatLine DESC ) WHERE rownum=1 ";
 
             List<ChatInfos> cInfo = new List<ChatInfos>();
 
@@ -1626,7 +1626,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
             object chatID = 0;
             if (isAppointment)
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo') and Record_ID=" + ID;
+                string sql = "SELECT VACM_Chat_ID FROM VACM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {
@@ -1643,7 +1643,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
             }
             else if (isCall) // Updated for fetching call comments for history by vinay
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails') and Record_ID=" + ID;
+                string sql = "SELECT VACM_Chat_ID FROM VACM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {
@@ -1659,7 +1659,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
             }
             else
             {
-                string sql = "SELECT CM_Chat_ID FROM CM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1') and Record_ID=" + ID;
+                string sql = "SELECT VACM_Chat_ID FROM VACM_Chat WHERE VAF_TableView_ID=(SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1') and Record_ID=" + ID;
                 chatID = DB.ExecuteScalar(sql, null, null);
                 if (chatID == null || chatID == DBNull.Value)
                 {

@@ -264,23 +264,23 @@ namespace VAdvantage.Model
             bool documentLevel = GetTax().IsDocumentLevel();
             MTax tax = GetTax();
             // Calculate Tax on TaxAble Amount
-            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID "
+            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID "
                 + "FROM C_InvoiceLine il"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
                 + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
-            int c_Currency_ID = 0;
+            int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
-            int c_ConversionType_ID = 0;
+            int VAB_CurrencyType_ID = 0;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (idr.Read())
                 {
                     //Get References from invoiice header
-                    c_Currency_ID = Utility.Util.GetValueOfInt(idr[3]);
+                    VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[3]);
                     dateAcct = Utility.Util.GetValueOfDateTime(idr[4]);
-                    c_ConversionType_ID = Utility.Util.GetValueOfInt(idr[5]);
+                    VAB_CurrencyType_ID = Utility.Util.GetValueOfInt(idr[5]);
                     //	BaseAmt
                     Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
                     taxBaseAmt = Decimal.Add((Decimal)taxBaseAmt, baseAmt);
@@ -329,12 +329,12 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
             {
                 decimal taxAmtBaseCurrency = GetTaxAmt();
-                int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID = 
-                                            (SELECT c_acctschema1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
-                if (c_Currency_ID != primaryAcctSchemaCurrency)
+                int primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE VAB_AccountBook_ID = 
+                                            (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
+                if (VAB_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,
-                                                                               dateAcct, c_ConversionType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
+                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
+                                                                               dateAcct, VAB_CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);
             }
@@ -359,24 +359,24 @@ namespace VAdvantage.Model
             MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
             //
-            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.C_Currency_ID , i.DateAcct , i.C_ConversionType_ID, tax.SurchargeType "
+            String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID, tax.SurchargeType "
                 + "FROM C_InvoiceLine il"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
                 + " INNER JOIN C_Tax tax ON il.C_Tax_ID=tax.C_Tax_ID "
                 + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
-            int c_Currency_ID = 0;
+            int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
-            int c_ConversionType_ID = 0;
+            int VAB_CurrencyType_ID = 0;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (idr.Read())
                 {
                     //Get References from invoiice header
-                    c_Currency_ID = Utility.Util.GetValueOfInt(idr[3]);
+                    VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[3]);
                     dateAcct = Utility.Util.GetValueOfDateTime(idr[4]);
-                    c_ConversionType_ID = Utility.Util.GetValueOfInt(idr[5]);
+                    VAB_CurrencyType_ID = Utility.Util.GetValueOfInt(idr[5]);
                     //	BaseAmt
                     Decimal baseAmt = Utility.Util.GetValueOfDecimal(idr[0]);
                     //	TaxAmt
@@ -441,11 +441,11 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("TaxBaseCurrencyAmt") >= 0)
             {
                 decimal taxAmtBaseCurrency = GetTaxAmt();
-                int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$C_Currency_ID");
-                if (c_Currency_ID != primaryAcctSchemaCurrency)
+                int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$VAB_Currency_ID");
+                if (VAB_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, c_Currency_ID,
-                                                                               dateAcct, c_ConversionType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
+                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
+                                                                               dateAcct, VAB_CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);
             }

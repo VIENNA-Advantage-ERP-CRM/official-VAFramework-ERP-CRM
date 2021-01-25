@@ -304,10 +304,10 @@ namespace VAdvantage.Model
                         newSchedule.SetVA009_IsPaid(false);
 
                         Decimal baseCurencyAmt = 0;
-                        if (invoice.GetC_Currency_ID() != GetCtx().GetContextAsInt("$C_Currency_ID")) //(invoice currency != base Currency)
+                        if (invoice.GetVAB_Currency_ID() != GetCtx().GetContextAsInt("$VAB_Currency_ID")) //(invoice currency != base Currency)
                         {
-                            baseCurencyAmt = MConversionRate.Convert(GetCtx(), remainder, invoice.GetC_Currency_ID(),
-                                GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                            baseCurencyAmt = MConversionRate.Convert(GetCtx(), remainder, invoice.GetVAB_Currency_ID(),
+                                GetCtx().GetContextAsInt("$VAB_Currency_ID"), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(),
                                 invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                         }
 
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
                                     LineTotalAmt = Math.Abs(Util.GetValueOfDecimal(_dsInvoice.Tables[0].Rows[K]["LineTotalAmt"]));
                                     // percentage of order amount which is to be distribute
                                     LineTotalAmt = Decimal.Multiply(LineTotalAmt, Decimal.Divide(_sch.GetPercentage(),
-                                                   Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID()), MidpointRounding.AwayFromZero)));
+                                                   Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID()), MidpointRounding.AwayFromZero)));
 
                                     sql = "SELECT * FROM VA009_OrderPaySchedule WHERE C_Order_ID=" + order_Id + " AND VA009_IsPaid='Y'  AND NVL(VA009_AllocatedAmt,0) != DueAmt AND C_PaySchedule_ID="
                                        + _sch.GetC_PaySchedule_ID() + " ORDER BY Created";
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
         {
             var runForBaseCurrency = true;
             Dictionary<string, int> baseTypeIds = new Dictionary<string, int>();
-            var dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND C_Currency_ID IS NULL AND VAF_Client_ID=" + order.GetVAF_Client_ID()
+            var dr = DB.ExecuteReader("SELECT VA009_PaymentBaseType,VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE IsActive='Y' AND VAB_Currency_ID IS NULL AND VAF_Client_ID=" + order.GetVAF_Client_ID()
                        + " AND VA009_PaymentBaseType IN ('" + X_C_Order.PAYMENTRULE_Cash + "','" + X_C_Order.PAYMENTRULE_OnCredit + "','" + X_C_Order.PAYMENTRULE_CreditCard + "','" + X_C_Order.PAYMENTRULE_ThirdPartyPayment + "')");
             ///currency id null
             while (dr.Read())
@@ -668,7 +668,7 @@ namespace VAdvantage.Model
                         else
                         {
 
-                            if (!InsertSchedulePOS(invoice, tppid, tppAmount, invoice.GetC_Currency_ID()))
+                            if (!InsertSchedulePOS(invoice, tppid, tppAmount, invoice.GetVAB_Currency_ID()))
                             {
                                 log.Severe("(POS)error creating scheule for card  Amount " + cardAmount);
                                 return false;
@@ -683,7 +683,7 @@ namespace VAdvantage.Model
                 if (order.GetVAPOS_CashPaid() > 0)
                 {
                     var cAmount = order.GetVAPOS_CashPaid(); //cash
-                    if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_Cash], cAmount, invoice.GetC_Currency_ID()))
+                    if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_Cash], cAmount, invoice.GetVAB_Currency_ID()))
                     {
                         log.Severe("(POS)error creating scheule for cash  Amount " + cAmount);
                         return false;
@@ -701,7 +701,7 @@ namespace VAdvantage.Model
                     {
                         if (int.TryParse(order.GetVAPOS_PaymentMethod(), out pmid))
                         {
-                            if (!InsertSchedulePOS(invoice, pmid, pAmount, invoice.GetC_Currency_ID()))
+                            if (!InsertSchedulePOS(invoice, pmid, pAmount, invoice.GetVAB_Currency_ID()))
                             {
                                 log.Severe("(POS)error creating scheule for Card  Amount " + pAmount);
                                 return false;
@@ -718,7 +718,7 @@ namespace VAdvantage.Model
                                 string[] vals = data.Split(','); // [0] amount [1] paymthdid,
                                 pmid = Util.GetValueOfInt(vals[1]);
 
-                                if (!InsertSchedulePOS(invoice, pmid, Util.GetValueOfDecimal(vals[0]), invoice.GetC_Currency_ID(), uIndex))
+                                if (!InsertSchedulePOS(invoice, pmid, Util.GetValueOfDecimal(vals[0]), invoice.GetVAB_Currency_ID(), uIndex))
                                 {
                                     log.Severe("(POS)error creating scheule for Card  Amount " + pAmount);
                                     return false;
@@ -730,7 +730,7 @@ namespace VAdvantage.Model
                     else
                     {
 
-                        if (!InsertSchedulePOS(invoice, pmid, pAmount, invoice.GetC_Currency_ID(), uIndex))
+                        if (!InsertSchedulePOS(invoice, pmid, pAmount, invoice.GetVAB_Currency_ID(), uIndex))
                         {
                             log.Severe("(POS)error creating scheule for Card  Amount " + pAmount);
                             return false;
@@ -755,7 +755,7 @@ namespace VAdvantage.Model
                             string[] vals = data.Split(','); // [0] amount [1] TPPMethod,
                             tppid = Util.GetValueOfInt(vals[1]);
 
-                            if (!InsertSchedulePOS(invoice, tppid, Util.GetValueOfDecimal(vals[0]), invoice.GetC_Currency_ID(), uIndex))
+                            if (!InsertSchedulePOS(invoice, tppid, Util.GetValueOfDecimal(vals[0]), invoice.GetVAB_Currency_ID(), uIndex))
                             {
                                 log.Severe("(POS)error creating scheule for Card  Amount " + tppAmount);
                                 return false;
@@ -766,7 +766,7 @@ namespace VAdvantage.Model
                     else
                     {
 
-                        if (!InsertSchedulePOS(invoice, tppid, tppAmount, invoice.GetC_Currency_ID(), uIndex))
+                        if (!InsertSchedulePOS(invoice, tppid, tppAmount, invoice.GetVAB_Currency_ID(), uIndex))
                         {
                             log.Severe("(POS)error creating scheule for Tpp  Amount " + tppAmount);
                             return false;
@@ -783,7 +783,7 @@ namespace VAdvantage.Model
             if (order.GetVAPOS_CreditAmt() > 0)
             {
                 var onCredit = order.GetVAPOS_CreditAmt();
-                if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_OnCredit], onCredit, invoice.GetC_Currency_ID()))
+                if (!InsertSchedulePOS(invoice, baseTypeIds[X_C_Order.PAYMENTRULE_OnCredit], onCredit, invoice.GetVAB_Currency_ID()))
                 {
                     log.Severe("(POS)error creating scheule for on Credit Amount " + onCredit);
                     return false;
@@ -793,7 +793,7 @@ namespace VAdvantage.Model
 
             if (order.GetVAPOS_CreditAmt() == 0 && order.GetVAPOS_PayAmt() == 0 && order.GetVAPOS_CashPaid() == 0 && order.GetVAPOS_TPPAmt() == 0)
             {
-                if (!InsertSchedulePOS(invoice, invoice.GetVA009_PaymentMethod_ID(), invoice.GetGrandTotal(), invoice.GetC_Currency_ID()))
+                if (!InsertSchedulePOS(invoice, invoice.GetVA009_PaymentMethod_ID(), invoice.GetGrandTotal(), invoice.GetVAB_Currency_ID()))
                 {
                     log.Severe("(POS)error creating scheule for on default Amount " + invoice.GetGrandTotal());
                     return false;
@@ -812,7 +812,7 @@ namespace VAdvantage.Model
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
+            schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
 
             MOrder order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
 
@@ -829,8 +829,8 @@ namespace VAdvantage.Model
             {
                 schedule.SetDueDate(invoice.GetDateAcct());
 
-                decimal dueAmt = MConversionRate.Convert(GetCtx(), payAmt ?? payAmt.Value, payCur, order.GetC_Currency_ID(),
-                                                                    order.GetDateAcct(), order.GetC_ConversionType_ID(), order.GetVAF_Client_ID(), order.GetVAF_Org_ID());
+                decimal dueAmt = MConversionRate.Convert(GetCtx(), payAmt ?? payAmt.Value, payCur, order.GetVAB_Currency_ID(),
+                                                                    order.GetDateAcct(), order.GetVAB_CurrencyType_ID(), order.GetVAF_Client_ID(), order.GetVAF_Org_ID());
 
                 if (invoice.GetGrandTotal() < 0)
                 {
@@ -856,9 +856,9 @@ namespace VAdvantage.Model
             // set open amount in base currency
             basecurrency(invoice, schedule);
 
-            schedule.SetC_Currency_ID(invoice.GetC_Currency_ID());
+            schedule.SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             schedule.SetVA009_OpnAmntInvce(schedule.GetDueAmt());
-            schedule.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+            schedule.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             //end
 
             //string _sqlPaymentMthd = "Select va009_paymentmode, va009_paymenttype, va009_paymenttrigger  From va009_paymentmethod where va009_paymentmethod_ID=" + invoice.GetVA009_PaymentMethod_ID() + "   AND IsActive = 'Y' AND VAF_Client_ID = " + invoice.GetVAF_Client_ID();
@@ -1118,7 +1118,7 @@ namespace VAdvantage.Model
                               @" UNION ALL 
                               SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM C_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                                " ) t";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (no > 0)
@@ -1163,7 +1163,7 @@ namespace VAdvantage.Model
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
+            schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
 
             //MOrder _Order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
             schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
@@ -1228,29 +1228,29 @@ namespace VAdvantage.Model
             // set open amount in base currency
             basecurrency(invoice, schedule);
 
-            schedule.SetC_Currency_ID(invoice.GetC_Currency_ID());
+            schedule.SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             schedule.SetVA009_OpnAmntInvce(schedule.GetDueAmt());
 
             //Set Business Partner on Invoice Payment Schedule from Invoicing Schedule in case of POC Construction Module installed 
             if (Env.IsModuleInstalled("VA052_"))
             {
-                int _bPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA052_INVOICESCHEDULE.c_bpartner_id
+                int _bPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA052_INVOICESCHEDULE.VAB_BusinessPartner_id
                     FROM C_INVOICELINE
                     INNER JOIN VA052_INVOICESCHEDULE
                     ON VA052_InvoiceSchedule.VA052_InvoiceSchedule_id=C_INVOICELINE.VA052_InvoiceSchedule_id WHERE C_INVOICELINE.C_Invoice_ID="
                     + invoice.GetC_Invoice_ID(), null, Get_Trx()));
                 if (_bPartner_ID > 0)
                 {
-                    schedule.SetC_BPartner_ID(_bPartner_ID);
+                    schedule.SetVAB_BusinessPartner_ID(_bPartner_ID);
                 }
                 else
                 {
-                    schedule.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                    schedule.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
                 }
             }
             else
             {
-                schedule.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                schedule.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
             //end
 
@@ -1280,14 +1280,14 @@ namespace VAdvantage.Model
         {
             int BaseCurrency = 0;
             //            StringBuilder _sqlBsCrrncy = new StringBuilder();
-            //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.C_Currency_ID FROM c_acctschema asch INNER JOIN VAF_ClientDetail ci ON ci.c_acctschema1_id = asch.c_acctschema_id
+            //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.VAB_Currency_ID FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id
             //                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN c_invoice i ON c.vaf_client_id    = i.vaf_client_id
             //                                 WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
             //            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetC_Currency_ID();
-            if (BaseCurrency != invoice.GetC_Currency_ID())
+            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetVAB_Currency_ID();
+            if (BaseCurrency != invoice.GetVAB_Currency_ID())
             {
-                decimal multiplyRate = MConversionRate.GetRate(invoice.GetC_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                decimal multiplyRate = MConversionRate.GetRate(invoice.GetVAB_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 schedule.SetVA009_OpenAmnt(schedule.GetDueAmt() * multiplyRate);
             }
             else
@@ -1309,7 +1309,7 @@ namespace VAdvantage.Model
             schedule.SetVAF_Org_ID(Util.GetValueOfInt(_ds["VAF_Org_ID"]));
             schedule.SetVA009_OrderPaySchedule_ID(Util.GetValueOfInt(_ds["VA009_OrderPaySchedule_ID"]));
             schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            schedule.SetC_DocType_ID(invoice.GetC_DocType_ID());
+            schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
             schedule.SetC_PaymentTerm_ID(Util.GetValueOfInt(_ds["C_PaymentTerm_ID"]));
             schedule.SetC_PaySchedule_ID(Util.GetValueOfInt(_ds["C_PaySchedule_ID"]));
 
@@ -1325,7 +1325,7 @@ namespace VAdvantage.Model
             Decimal remainingDueAmount = Decimal.Subtract(Util.GetValueOfDecimal(_ds["DueAmt"]), Util.GetValueOfDecimal(_ds["VA009_AllocatedAmt"]));
             // percentage of due amount which is to be distribute
             //remainingDueAmount = Decimal.Multiply(remainingDueAmount, Decimal.Divide(schedulePercentage,
-            //               Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetC_Currency_ID()), MidpointRounding.AwayFromZero)));
+            //               Decimal.Round(HUNDRED, MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID()), MidpointRounding.AwayFromZero)));
             if (remainingDueAmount > 0)
             {
                 // if invoice line having less amount then order schedule amount, than invoice schedule created with invoice line amount
@@ -1336,10 +1336,10 @@ namespace VAdvantage.Model
             }
 
             Decimal baseCurencyAmt = remainingDueAmount;
-            if (invoice.GetC_Currency_ID() != GetCtx().GetContextAsInt("$C_Currency_ID")) //(invoice currency != base Currency)
+            if (invoice.GetVAB_Currency_ID() != GetCtx().GetContextAsInt("$VAB_Currency_ID")) //(invoice currency != base Currency)
             {
-                baseCurencyAmt = MConversionRate.Convert(GetCtx(), baseCurencyAmt, invoice.GetC_Currency_ID(),
-                    GetCtx().GetContextAsInt("$C_Currency_ID"), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                baseCurencyAmt = MConversionRate.Convert(GetCtx(), baseCurencyAmt, invoice.GetVAB_Currency_ID(),
+                    GetCtx().GetContextAsInt("$VAB_Currency_ID"), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(),
                     invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
             }
 
@@ -1389,10 +1389,10 @@ namespace VAdvantage.Model
             schedule.SetDiscountDays2(Util.GetValueOfDateTime(_ds["DiscountDays2"]));
 
             schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(_ds["VA009_PlannedDueDate"]));
-            schedule.SetC_Currency_ID(Util.GetValueOfInt(_ds["C_Currency_ID"]));
+            schedule.SetVAB_Currency_ID(Util.GetValueOfInt(_ds["VAB_Currency_ID"]));
             schedule.SetVA009_BseCurrncy(Util.GetValueOfInt(_ds["VA009_bseCurrncy"]));
 
-            schedule.SetC_BPartner_ID(Util.GetValueOfInt(_ds["C_Bpartner_ID"]));
+            schedule.SetVAB_BusinessPartner_ID(Util.GetValueOfInt(_ds["VAB_BusinessPartner_ID"]));
             schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(_ds["VA009_FollowUpDate"]));
             schedule.SetVA009_PaymentMode(Util.GetValueOfString(_ds["va009_paymentmode"]));
             if (!String.IsNullOrEmpty(Convert.ToString(_ds["va009_paymenttype"])))

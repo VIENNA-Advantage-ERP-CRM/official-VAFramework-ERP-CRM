@@ -150,16 +150,16 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get C_Country_ID
-         *	@return C_Country_ID
+         * 	Get VAB_Country_ID
+         *	@return VAB_Country_ID
          */
-        public int GetC_Country_ID()
+        public int GetVAB_Country_ID()
         {
             if (_loc == null)
                 _loc = MLocation.Get(GetCtx(), GetC_Location_ID(), null);
             if (_loc == null)
                 return 0;
-            return _loc.GetC_Country_ID();
+            return _loc.GetVAB_Country_ID();
         }
 
         /**
@@ -183,7 +183,7 @@ namespace VAdvantage.Model
             BankVerificationInterface verify = GetVerificationClass();
             if (verify != null)
             {
-                String errorMsg = verify.VerifyRoutingNo(GetC_Country_ID(), GetRoutingNo());
+                String errorMsg = verify.VerifyRoutingNo(GetVAB_Country_ID(), GetRoutingNo());
                 if (errorMsg != null)
                 {
                     log.SaveError("Error", "@Invalid@ @RoutingNo@ " + errorMsg);

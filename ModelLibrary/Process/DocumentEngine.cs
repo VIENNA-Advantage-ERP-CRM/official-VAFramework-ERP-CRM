@@ -714,7 +714,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
         /// Get Document Currency
         /// </summary>
         /// <returns>throws exception</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             throw new Exception(EXCEPTION_MSG);
         }

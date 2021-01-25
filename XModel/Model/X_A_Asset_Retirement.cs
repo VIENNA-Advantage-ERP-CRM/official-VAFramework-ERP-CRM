@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for A_Asset_Retirement
+/** Generated Model for VAA_AssetRetirement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_A_Asset_Retirement : PO
+public class X_VAA_AssetRetirement : PO
 {
-public X_A_Asset_Retirement (Context ctx, int A_Asset_Retirement_ID, Trx trxName) : base (ctx, A_Asset_Retirement_ID, trxName)
+public X_VAA_AssetRetirement (Context ctx, int VAA_AssetRetirement_ID, Trx trxName) : base (ctx, VAA_AssetRetirement_ID, trxName)
 {
-/** if (A_Asset_Retirement_ID == 0)
+/** if (VAA_AssetRetirement_ID == 0)
 {
 SetA_Asset_ID (0);
-SetA_Asset_Retirement_ID (0);
+SetVAA_AssetRetirement_ID (0);
 SetAssetMarketValueAmt (0.0);
 SetAssetValueAmt (0.0);
 }
  */
 }
-public X_A_Asset_Retirement (Ctx ctx, int A_Asset_Retirement_ID, Trx trxName) : base (ctx, A_Asset_Retirement_ID, trxName)
+public X_VAA_AssetRetirement (Ctx ctx, int VAA_AssetRetirement_ID, Trx trxName) : base (ctx, VAA_AssetRetirement_ID, trxName)
 {
-/** if (A_Asset_Retirement_ID == 0)
+/** if (VAA_AssetRetirement_ID == 0)
 {
 SetA_Asset_ID (0);
-SetA_Asset_Retirement_ID (0);
+SetVAA_AssetRetirement_ID (0);
 SetAssetMarketValueAmt (0.0);
 SetAssetValueAmt (0.0);
 }
@@ -43,7 +43,7 @@ SetAssetValueAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Retirement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAA_AssetRetirement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_A_Asset_Retirement (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Retirement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAA_AssetRetirement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_A_Asset_Retirement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_A_Asset_Retirement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAA_AssetRetirement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_A_Asset_Retirement()
+static X_VAA_AssetRetirement()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389050305L;
 public static int Table_ID;
  // =540;
 
-/** TableName=A_Asset_Retirement */
-public static String Table_Name="A_Asset_Retirement";
+/** TableName=VAA_AssetRetirement */
+public static String Table_Name="VAA_AssetRetirement";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_A_Asset_Retirement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAA_AssetRetirement[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-public void SetA_Asset_ID (int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+public void SetA_Asset_ID (int VAA_Asset_ID)
 {
-if (A_Asset_ID < 1) throw new ArgumentException ("A_Asset_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_ID", A_Asset_ID);
+if (VAA_Asset_ID < 1) throw new ArgumentException ("VAA_Asset_ID is mandatory.");
+Set_ValueNoCheck ("VAA_Asset_ID", VAA_Asset_ID);
 }
 /** Get Asset.
 @return Asset used internally or by customers */
 public int GetA_Asset_ID() 
 {
-Object ii = Get_Value("A_Asset_ID");
+Object ii = Get_Value("VAA_Asset_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Asset Retirement.
-@param A_Asset_Retirement_ID Internally used asset is not longer used. */
-public void SetA_Asset_Retirement_ID (int A_Asset_Retirement_ID)
+@param VAA_AssetRetirement_ID Internally used asset is not longer used. */
+public void SetVAA_AssetRetirement_ID (int VAA_AssetRetirement_ID)
 {
-if (A_Asset_Retirement_ID < 1) throw new ArgumentException ("A_Asset_Retirement_ID is mandatory.");
-Set_ValueNoCheck ("A_Asset_Retirement_ID", A_Asset_Retirement_ID);
+if (VAA_AssetRetirement_ID < 1) throw new ArgumentException ("VAA_AssetRetirement_ID is mandatory.");
+Set_ValueNoCheck ("VAA_AssetRetirement_ID", VAA_AssetRetirement_ID);
 }
 /** Get Asset Retirement.
 @return Internally used asset is not longer used. */
-public int GetA_Asset_Retirement_ID() 
+public int GetVAA_AssetRetirement_ID() 
 {
-Object ii = Get_Value("A_Asset_Retirement_ID");
+Object ii = Get_Value("VAA_AssetRetirement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -150,7 +150,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetA_Asset_Retirement_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAA_AssetRetirement_ID().ToString());
 }
 /** Set Market value Amount.
 @param AssetMarketValueAmt Market value of the asset */

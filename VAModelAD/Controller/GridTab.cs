@@ -1305,9 +1305,9 @@ namespace VAdvantage.Model
             {
                 refColName = "R_Request_ID";
             }
-            else if (colName.StartsWith("C_DocType"))
+            else if (colName.StartsWith("VAB_DocTypes"))
             {
-                refColName = "C_DocType_ID";
+                refColName = "VAB_DocTypes_ID";
             }
             //Comment by raghu 18-Aug-2011
             //else if (colName.Equals("CreatedBy") || colName.Equals("UpdatedBy"))
@@ -1353,7 +1353,7 @@ namespace VAdvantage.Model
                 return query.GetWhereClause();
             }
 
-            //	Find Refernce Column e.g. BillTo_ID -> C_BPartner_Location_ID
+            //	Find Refernce Column e.g. BillTo_ID -> VAB_BPart_Location_ID
             string sql = "SELECT cc.ColumnName "
                 + "FROM VAF_Column c"
                 + " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
@@ -1763,23 +1763,23 @@ namespace VAdvantage.Model
         public void LoadDependentInfo()
         {
             /**
-             * Load Order Type from C_DocTypeTarget_ID
+             * Load Order Type from VAB_DocTypesTarget_ID
              */
             if (_vo.TableName.Equals("C_Order"))
             {
                 int C_DocTyp_ID = 0;
-                //int target = (Integer)GetValue("C_DocTypeTarget_ID");
+                //int target = (Integer)GetValue("VAB_DocTypesTarget_ID");
                 try
                 {
 
-                    int.TryParse(GetValue("C_DocTypeTarget_ID").ToString(), out C_DocTyp_ID);
+                    int.TryParse(GetValue("VAB_DocTypesTarget_ID").ToString(), out C_DocTyp_ID);
                 }
                 catch
                 { }
                 if (C_DocTyp_ID == 0)
                     return;
 
-                String sql = "SELECT DocSubTypeSO FROM C_DocType WHERE C_DocType_ID=" + C_DocTyp_ID;
+                String sql = "SELECT DocSubTypeSO FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + C_DocTyp_ID;
                 try
                 {
                     string orderType = DataBase.DB.ExecuteScalar(sql).ToString();
@@ -2007,7 +2007,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsChat)
             {
-                sql = (" SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID);
+                sql = (" SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID);
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2016,7 +2016,7 @@ namespace VAdvantage.Model
                     for (var i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         key = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["Record_ID"]);
-                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["CM_Chat_ID"]);
+                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VACM_Chat_ID"]);
                         _chats.Add(new AttachmentList() { ID = key, value = value });
                     }
 
@@ -2039,7 +2039,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsSubscribedRecord)
             {
-                sql = " Select cm_Subscribe_ID,Record_ID from CM_Subscribe where VAF_UserContact_ID=" + VAF_UserContact_ID + " AND vaf_tableview_ID=" + +_vo.VAF_TableView_ID;
+                sql = " Select VACM_Subscribe_ID,Record_ID from VACM_Subscribe where VAF_UserContact_ID=" + VAF_UserContact_ID + " AND vaf_tableview_ID=" + +_vo.VAF_TableView_ID;
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2048,7 +2048,7 @@ namespace VAdvantage.Model
                     for (var i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         key = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["Record_ID"]);
-                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["CM_Subscribe_ID"]);
+                        value = Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VACM_Subscribe_ID"]);
                         _subscribe.Add(new AttachmentList() { ID = key, value = value });
                     }
 
@@ -2130,7 +2130,7 @@ namespace VAdvantage.Model
             if (!CanHaveAttachment())
                 return;//return nothing
             //set query
-            string sql = "SELECT CM_Chat_ID, Record_ID FROM CM_Chat "
+            string sql = "SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat "
                 + "WHERE VAF_TableView_ID=" + _vo.VAF_TableView_ID;
             IDataReader dr = null;
             try
@@ -2150,7 +2150,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     key = Utility.Util.GetValueOfInt(dr["Record_ID"].ToString());
-                    value = Utility.Util.GetValueOfInt(dr["CM_Chat_ID"].ToString());
+                    value = Utility.Util.GetValueOfInt(dr["VACM_Chat_ID"].ToString());
                     _chats.Add(new AttachmentList() { ID = key, value = value });
                 }
 
@@ -3042,12 +3042,12 @@ namespace VAdvantage.Model
                 bool isOrder = _vo.TableName.StartsWith("C_Order");
                 //
                 StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
-                    + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.C_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) AS ConvAmt ");
+                    + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.VAB_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) AS ConvAmt ");
                 if (isOrder)
                 {
                     Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_Order_ID");
                     sql.Append("FROM C_Order o"
-                        + " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+                        + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
                         + " INNER JOIN C_OrderLine l ON (o.C_Order_ID=l.C_Order_ID) "
                         + "WHERE o.C_Order_ID=" + Record_ID);
                 }
@@ -3055,11 +3055,11 @@ namespace VAdvantage.Model
                 {
                     Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_Invoice_ID");
                     sql.Append("FROM C_Invoice o"
-                        + " INNER JOIN C_Currency c ON (o.C_Currency_ID=c.C_Currency_ID)"
+                        + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
                         + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
                         + "WHERE o.C_Invoice_ID= " + Record_ID);
                 }
-                sql.Append(" GROUP BY o.C_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID");
+                sql.Append(" GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID");
 
                 log.Fine(_vo.TableName + " - " + Record_ID);
 

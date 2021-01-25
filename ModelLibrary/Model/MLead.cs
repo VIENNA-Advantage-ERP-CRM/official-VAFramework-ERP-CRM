@@ -97,12 +97,12 @@ namespace VAdvantage.Model
                 if (_user != null)
                 {
                     base.SetVAF_UserContact_ID(_user.GetVAF_UserContact_ID());
-                    if (GetC_BPartner_ID() == 0)
-                        SetC_BPartner_ID(_user.GetC_BPartner_ID());
-                    else if (_user.GetC_BPartner_ID() != GetC_BPartner_ID())
+                    if (GetVAB_BusinessPartner_ID() == 0)
+                        SetVAB_BusinessPartner_ID(_user.GetVAB_BusinessPartner_ID());
+                    else if (_user.GetVAB_BusinessPartner_ID() != GetVAB_BusinessPartner_ID())
                     {
-                        log.Warning("@C_BPartner_ID@ (ID=" + GetC_BPartner_ID()
-                            + ") <> @VAF_UserContact_ID@ @C_BPartner_ID@ (ID=" + _user.GetC_BPartner_ID() + ")");
+                        log.Warning("@VAB_BusinessPartner_ID@ (ID=" + GetVAB_BusinessPartner_ID()
+                            + ") <> @VAF_UserContact_ID@ @VAB_BusinessPartner_ID@ (ID=" + _user.GetVAB_BusinessPartner_ID() + ")");
                     }
                 }
             }
@@ -133,12 +133,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set C_BPartner_ID
-         *	@param C_BPartner_ID bp
+         * 	Set VAB_BusinessPartner_ID
+         *	@param VAB_BusinessPartner_ID bp
          */
-        public new void SetC_BPartner_ID(int C_BPartner_ID)
+        public new void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            base.SetC_BPartner_ID(C_BPartner_ID);
+            base.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             GetBPartner();
         }
 
@@ -148,11 +148,11 @@ namespace VAdvantage.Model
          */
         public MBPartner GetBPartner()
         {
-            if (GetC_BPartner_ID() == 0)
+            if (GetVAB_BusinessPartner_ID() == 0)
                 _bp = null;
             else if (_bp == null
-                || _bp.GetC_BPartner_ID() != GetC_BPartner_ID())
-                _bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+                || _bp.GetVAB_BusinessPartner_ID() != GetVAB_BusinessPartner_ID())
+                _bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _bp;
         }
 
@@ -329,20 +329,20 @@ namespace VAdvantage.Model
          */
         public String CreateBP()
         {
-            if (GetC_BPartner_ID() != 0 && GetVAF_UserContact_ID() != 0 && GetC_BPartner_Location_ID() == 0)
-                return "@AlreadyExists@: @C_BPartner_ID@ (ID=" + GetC_BPartner_ID() + ")";
+            if (GetVAB_BusinessPartner_ID() != 0 && GetVAF_UserContact_ID() != 0 && GetVAB_BPart_Location_ID() == 0)
+                return "@AlreadyExists@: @VAB_BusinessPartner_ID@ (ID=" + GetVAB_BusinessPartner_ID() + ")";
 
             //	BPartner
-            if (GetC_BPartner_ID() == 0
+            if (GetVAB_BusinessPartner_ID() == 0
                 && (GetBPName() != null && GetBPName().Length > 0))
             {
                 //	Existing User
                 _user = GetUser();
                 if (_user != null)
                 {
-                    if (_user.GetC_BPartner_ID() != 0)
+                    if (_user.GetVAB_BusinessPartner_ID() != 0)
                     {
-                        SetRef_BPartner_ID(_user.GetC_BPartner_ID());
+                        SetRef_BPartner_ID(_user.GetVAB_BusinessPartner_ID());
                         log.Info("Set to BPartner of User - " + _user);
                         return CreateBPLocation();
                     }
@@ -357,9 +357,9 @@ namespace VAdvantage.Model
                 _bp.SetSOCreditStatus("O");
                 // Check Removed as per Surya Sir's Decision BY Lokesh
 
-                //_bp.SetC_Campaign_ID(GetC_Campaign_ID());
+                //_bp.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
                 //
-                if (GetC_BP_Group_ID() == 0)
+                if (GetVAB_BPart_Category_ID() == 0)
                 {
                     // ShowMessage.Info("First Select Customer Group Then process again", true, null, null);
                     return null;
@@ -367,16 +367,16 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    _bp.SetC_BP_Group_ID(GetC_BP_Group_ID());
+                    _bp.SetVAB_BPart_Category_ID(GetVAB_BPart_Category_ID());
                 }
-                MBPGroup gp = new MBPGroup(GetCtx(), GetC_BP_Group_ID(), Get_TrxName());
+                MBPGroup gp = new MBPGroup(GetCtx(), GetVAB_BPart_Category_ID(), Get_TrxName());
                 _bp.SetM_PriceList_ID(gp.GetM_PriceList_ID());
-                if (GetC_BP_Size_ID() != 0)
-                    _bp.SetC_BP_Size_ID(GetC_BP_Size_ID());
+                if (GetVAB_BPart_Strength_ID() != 0)
+                    _bp.SetVAB_BPart_Strength_ID(GetVAB_BPart_Strength_ID());
                 if (GetURL() != null)
                     _bp.SetURL(GetURL());
-                if (GetC_BP_Status_ID() != 0)
-                    _bp.SetC_BP_Status_ID(GetC_BP_Status_ID());
+                if (GetVAB_BPart_Status_ID() != 0)
+                    _bp.SetVAB_BPart_Status_ID(GetVAB_BPart_Status_ID());
                 if (GetC_IndustryCode_ID() != 0)
                     _bp.SetC_IndustryCode_ID(GetC_IndustryCode_ID());
                 if (GetNAICS() != null)
@@ -389,20 +389,20 @@ namespace VAdvantage.Model
                     _bp.SetSalesVolume(GetSalesVolume());
                 if (GetSalesRep_ID() != 0)
                     _bp.SetSalesRep_ID(GetSalesRep_ID());
-                if (GetC_Campaign_ID() != 0)
-                    _bp.SetC_Campaign_ID(GetC_Campaign_ID());
+                if (GetVAB_Promotion_ID() != 0)
+                    _bp.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
                 if (!_bp.Save())
                 {
                     return "@SaveError@";
                 }
                 //	Update User
-                if (_user != null && _user.GetC_BPartner_ID() == 0)
+                if (_user != null && _user.GetVAB_BusinessPartner_ID() == 0)
                 {
-                    _user.SetC_BPartner_ID(_bp.GetC_BPartner_ID());
+                    _user.SetVAB_BusinessPartner_ID(_bp.GetVAB_BusinessPartner_ID());
                     _user.Save();
                 }
                 //	Save BP
-                SetRef_BPartner_ID(_bp.GetC_BPartner_ID());
+                SetRef_BPartner_ID(_bp.GetVAB_BusinessPartner_ID());
             }
 
             String error = CreateBPContact();
@@ -412,11 +412,11 @@ namespace VAdvantage.Model
 
             try
             {
-                int id = _bp.GetC_BPartner_ID();
-                string qry = "Update c_bpartner set Description='' where c_bpartner_id=" + id;
+                int id = _bp.GetVAB_BusinessPartner_ID();
+                string qry = "Update VAB_BusinessPartner set Description='' where VAB_BusinessPartner_id=" + id;
                 int check = DB.ExecuteQuery(qry, null, Get_TrxName());
                 string val = _bp.GetValue();
-                qry = "Update c_bpartner set Value='" + val + GetBPName() + "' where c_bpartner_id=" + id;
+                qry = "Update VAB_BusinessPartner set Value='" + val + GetBPName() + "' where VAB_BusinessPartner_id=" + id;
                 check = DB.ExecuteQuery(qry, null, Get_TrxName());
 
                 if (GetR_InterestArea_ID() != 0)
@@ -427,15 +427,15 @@ namespace VAdvantage.Model
                     {
                         X_R_ContactInterest Prospect = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
                         Prospect.SetR_InterestArea_ID(Util.GetValueOfInt(dr[0]));
-                        Prospect.SetC_BPartner_ID(GetRef_BPartner_ID());
-                        String query = "Select VAF_UserContact_id from VAF_UserContact where c_bpartner_id= " + GetRef_BPartner_ID();
+                        Prospect.SetVAB_BusinessPartner_ID(GetRef_BPartner_ID());
+                        String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + GetRef_BPartner_ID();
                         int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_TrxName()));
                         Prospect.SetVAF_UserContact_ID(UserId);
-                        query = "Select C_BPartner_Location_id from C_BPartner_Location where c_bpartner_id= " + GetRef_BPartner_ID();
+                        query = "Select VAB_BPart_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id= " + GetRef_BPartner_ID();
 
                         int Id = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_TrxName()));
-                        X_C_BPartner_Location loc = new X_C_BPartner_Location(GetCtx(), Id, Get_TrxName());
-                        Prospect.SetC_BPartner_Location_ID(Id);
+                        X_VAB_BPart_Location loc = new X_VAB_BPart_Location(GetCtx(), Id, Get_TrxName());
+                        Prospect.SetVAB_BPart_Location_ID(Id);
                         Prospect.SetPhone(loc.GetPhone());
                         Prospect.SetFax(loc.GetFax());
 
@@ -494,8 +494,8 @@ namespace VAdvantage.Model
                 _user.SetC_Job_ID(GetC_Job_ID());
             if (GetEMail() != null)
                 _user.SetEMail(GetEMail());
-            if (GetC_Greeting_ID() != 0)
-                _user.SetC_Greeting_ID(GetC_Greeting_ID());
+            if (GetVAB_Greeting_ID() != 0)
+                _user.SetVAB_Greeting_ID(GetVAB_Greeting_ID());
             if (GetPhone() != null)
                 _user.SetPhone(GetPhone());
             if (GetPhone2() != null)
@@ -520,8 +520,8 @@ namespace VAdvantage.Model
          */
         private String CreateBPLocation()
         {
-            if (GetC_BPartner_Location_ID() != 0
-                || GetC_Country_ID() == 0)	//	mandatory
+            if (GetVAB_BPart_Location_ID() != 0
+                || GetVAB_Country_ID() == 0)	//	mandatory
                 return null;
 
             //	Something to save
@@ -540,7 +540,7 @@ namespace VAdvantage.Model
             }
 
             //	Address
-            MLocation location = new MLocation(GetCtx(), GetC_Country_ID(),
+            MLocation location = new MLocation(GetCtx(), GetVAB_Country_ID(),
                 GetC_Region_ID(), GetCity(), Get_TrxName());
             location.SetAddress1(GetAddress1());
             location.SetAddress2(GetAddress2());
@@ -556,7 +556,7 @@ namespace VAdvantage.Model
                 bpl.SetFax(GetFax());
                 bpl.SetC_SalesRegion_ID(GetC_SalesRegion_ID());
                 if (bpl.Save())
-                    SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
+                    SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
             }
             return null;
         }
@@ -569,7 +569,7 @@ namespace VAdvantage.Model
         {
             if (GetC_Project_ID() != 0)
                 return "@AlreadyExists@: @C_Project_ID@ (ID=" + GetC_Project_ID() + ")";
-            if (GetC_BPartner_ID() == 0)
+            if (GetVAB_BusinessPartner_ID() == 0)
             {
                 String retValue = CreateBP();
                 if (retValue != null)
@@ -582,11 +582,11 @@ namespace VAdvantage.Model
             _project.SetDescription(GetDescription());
             _project.SetNote(GetHelp());
             //
-            _project.SetC_BPartner_ID(GetC_BPartner_ID());
-            _project.SetC_BPartner_Location_ID(GetC_BPartner_Location_ID());
+            _project.SetVAB_BusinessPartner_ID(GetVAB_BusinessPartner_ID());
+            _project.SetVAB_BPart_Location_ID(GetVAB_BPart_Location_ID());
             _project.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
-            _project.SetC_BPartnerSR_ID(GetC_BPartnerSR_ID());
-            _project.SetC_Campaign_ID(GetC_Campaign_ID());
+            _project.SetVAB_BusinessPartnerSR_ID(GetVAB_BusinessPartnerSR_ID());
+            _project.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
 
             _project.SetC_ProjectType_ID(C_ProjectType_ID);
             _project.SetSalesRep_ID(GetSalesRep_ID());
@@ -626,7 +626,7 @@ namespace VAdvantage.Model
         {
             if (GetR_Request_ID() != 0)
                 return "@AlreadyExists@: @R_Request_ID@ (ID=" + GetR_Request_ID() + ")";
-            if (GetC_BPartner_ID() == 0)
+            if (GetVAB_BusinessPartner_ID() == 0)
             {
                 String retValue = CreateBP();
                 if (retValue != null)
@@ -651,12 +651,12 @@ namespace VAdvantage.Model
             //
             _request.SetC_Lead_ID(GetC_Lead_ID());
             //
-            _request.SetC_BPartner_ID(GetC_BPartner_ID());
+            _request.SetVAB_BusinessPartner_ID(GetVAB_BusinessPartner_ID());
             _request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
             _request.SetC_Project_ID(GetC_Project_ID());
-            _request.SetC_Campaign_ID(GetC_Campaign_ID());
+            _request.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
             _request.SetR_Source_ID(GetR_Source_ID());
-            _request.SetC_BPartnerSR_ID(GetC_BPartnerSR_ID());
+            _request.SetVAB_BusinessPartnerSR_ID(GetVAB_BusinessPartnerSR_ID());
             _request.SetC_SalesRegion_ID(GetC_SalesRegion_ID());
 
             _request.SetSalesRep_ID(GetSalesRep_ID());

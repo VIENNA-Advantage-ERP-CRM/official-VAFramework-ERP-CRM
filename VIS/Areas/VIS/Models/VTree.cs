@@ -237,7 +237,7 @@ namespace VAdvantage.Classes
             int VAF_Screen_ID = 0;
             int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
-            int AD_Workflow_ID = 0;
+            int VAF_Workflow_ID = 0;
             int AD_Task_ID = 0;
             int AD_Workbench_ID = 0;
 
@@ -285,7 +285,7 @@ namespace VAdvantage.Classes
                         index++;
                         VAF_Page_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        AD_Workflow_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Workflow_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
                         AD_Task_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
@@ -307,7 +307,7 @@ namespace VAdvantage.Classes
                         }
                         else if (VTreeNode.ACTION_WORKFLOW.Equals(actionColor))
                         {
-                            blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
+                            blnAccess = role.GetWorkflowAccess(VAF_Workflow_ID);
                         }
                         else if (VTreeNode.ACTION_TASK.Equals(actionColor))
                         {
@@ -337,7 +337,7 @@ namespace VAdvantage.Classes
                 retValue.VAF_Screen_ID = VAF_Screen_ID;
                 retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
-                retValue.AD_Workflow_ID = AD_Workflow_ID;
+                retValue.VAF_Workflow_ID = VAF_Workflow_ID;
                 retValue.AD_Task_ID = AD_Task_ID;
                 retValue.AD_Workbench_ID = AD_Workbench_ID;
             }
@@ -405,13 +405,13 @@ namespace VAdvantage.Classes
                  if (isBase)
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
-                       m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                       m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                        FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.VAF_Screen_ID,
-                        m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                        m.VAF_Job_ID, m.VAF_Page_ID, m.VAF_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                       FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
                  if (!_editable)
@@ -664,7 +664,7 @@ namespace VAdvantage.Classes
     //           index++;
     //           VAF_Page_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
-    //           AD_Workflow_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
+    //           VAF_Workflow_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
     //           AD_Task_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
@@ -690,7 +690,7 @@ namespace VAdvantage.Classes
     //               }
     //               else if (VTreeNode.ACTION_WORKFLOW.Equals(actionColor))
     //               {
-    //                   blnAccess = VAF_ROLE.GetWorkflowAccess(AD_Workflow_ID);
+    //                   blnAccess = VAF_ROLE.GetWorkflowAccess(VAF_Workflow_ID);
     //               }
     //               else if (VTreeNode.ACTION_TASK.Equals(actionColor))
     //               {

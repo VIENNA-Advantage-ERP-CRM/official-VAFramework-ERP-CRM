@@ -8,10 +8,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    class MCurrencySource:X_C_CurrencySource
+    class MCurrencySource:X_VAB_CurrencySource
     {
-        public MCurrencySource(Ctx ctx, int C_CurrencySource_ID, Trx trx)
-            : base(ctx, C_CurrencySource_ID, trx)
+        public MCurrencySource(Ctx ctx, int VAB_CurrencySource_ID, Trx trx)
+            : base(ctx, VAB_CurrencySource_ID, trx)
         {
         }
         public MCurrencySource(Ctx ctx, DataRow rs, Trx trx)

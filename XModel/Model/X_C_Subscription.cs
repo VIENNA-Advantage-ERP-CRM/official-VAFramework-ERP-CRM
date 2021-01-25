@@ -20,7 +20,7 @@ public X_C_Subscription (Context ctx, int C_Subscription_ID, Trx trxName) : base
 {
 /** if (C_Subscription_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetC_SubscriptionType_ID (0);
 SetC_Subscription_ID (0);
 SetIsDue (false);
@@ -36,7 +36,7 @@ public X_C_Subscription (Ctx ctx, int C_Subscription_ID, Trx trxName) : base (ct
 {
 /** if (C_Subscription_ID == 0)
 {
-SetC_BPartner_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetC_SubscriptionType_ID (0);
 SetC_Subscription_ID (0);
 SetIsDue (false);
@@ -127,17 +127,17 @@ StringBuilder sb = new StringBuilder ("X_C_Subscription[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

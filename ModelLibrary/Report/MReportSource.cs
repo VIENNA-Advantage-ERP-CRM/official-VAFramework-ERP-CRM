@@ -63,19 +63,19 @@ namespace VAdvantage.Report
             //
             if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et))
             {
-                ID = GetC_ElementValue_ID();
+                ID = GetVAB_Acct_Element_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et))
             {
-                ID = GetC_Activity_ID();
+                ID = GetVAB_BillingCode_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et))
             {
-                ID = GetC_BPartner_ID();
+                ID = GetVAB_BusinessPartner_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et))
             {
-                ID = GetC_Campaign_ID();
+                ID = GetVAB_Promotion_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_LocationFrom.Equals(et))
             {
@@ -107,11 +107,11 @@ namespace VAdvantage.Report
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(et))
             {
-                ID = GetC_ElementValue_ID();
+                ID = GetVAB_Acct_Element_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(et))
             {
-                ID = GetC_ElementValue_ID();
+                ID = GetVAB_Acct_Element_ID();
             }
             //		else if (MAcctSchemaElement.ELEMENTTYPE_UserElement1.equals(et))
             //			ID = getUserElement1_ID ();

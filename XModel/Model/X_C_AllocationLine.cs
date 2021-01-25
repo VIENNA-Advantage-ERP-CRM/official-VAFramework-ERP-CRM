@@ -9,40 +9,40 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_AllocationLine
+    using System.Data;/** Generated Model for VAB_DocAllocationLine
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_AllocationLine : PO
+    public class X_VAB_DocAllocationLine : PO
     {
-        public X_C_AllocationLine(Context ctx, int C_AllocationLine_ID, Trx trxName) : base(ctx, C_AllocationLine_ID, trxName)
-        {/** if (C_AllocationLine_ID == 0){SetAmount (0.0);SetC_AllocationHdr_ID (0);SetC_AllocationLine_ID (0);SetDiscountAmt (0.0);SetWriteOffAmt (0.0);} */
+        public X_VAB_DocAllocationLine(Context ctx, int VAB_DocAllocationLine_ID, Trx trxName) : base(ctx, VAB_DocAllocationLine_ID, trxName)
+        {/** if (VAB_DocAllocationLine_ID == 0){SetAmount (0.0);SetVAB_DocAllocation_ID (0);SetVAB_DocAllocationLine_ID (0);SetDiscountAmt (0.0);SetWriteOffAmt (0.0);} */
         }
-        public X_C_AllocationLine(Ctx ctx, int C_AllocationLine_ID, Trx trxName) : base(ctx, C_AllocationLine_ID, trxName)
-        {/** if (C_AllocationLine_ID == 0){SetAmount (0.0);SetC_AllocationHdr_ID (0);SetC_AllocationLine_ID (0);SetDiscountAmt (0.0);SetWriteOffAmt (0.0);} */
+        public X_VAB_DocAllocationLine(Ctx ctx, int VAB_DocAllocationLine_ID, Trx trxName) : base(ctx, VAB_DocAllocationLine_ID, trxName)
+        {/** if (VAB_DocAllocationLine_ID == 0){SetAmount (0.0);SetVAB_DocAllocation_ID (0);SetVAB_DocAllocationLine_ID (0);SetDiscountAmt (0.0);SetWriteOffAmt (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationLine(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_DocAllocationLine(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationLine(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_DocAllocationLine(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationLine(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_DocAllocationLine(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_AllocationLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_DocAllocationLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27884379430766L;/** Last Updated Timestamp 10/9/2020 2:35:14 PM */
         public static long updatedMS = 1602254113977L;/** VAF_TableView_ID=390 */
         public static int Table_ID; // =390;
-        /** TableName=C_AllocationLine */
-        public static String Table_Name = "C_AllocationLine";
+        /** TableName=VAB_DocAllocationLine */
+        public static String Table_Name = "VAB_DocAllocationLine";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_AllocationLine[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Amount.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_DocAllocationLine[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Amount.
 @param Amount Amount in a defined currency */
         public void SetAmount(Decimal? Amount) { if (Amount == null) throw new ArgumentException("Amount is mandatory."); Set_ValueNoCheck("Amount", (Decimal?)Amount); }/** Get Amount.
 @return Amount in a defined currency */
@@ -66,36 +66,36 @@ namespace VAdvantage.Model
         public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
 @return Backup Withholding Amount */
         public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Allocation.
-@param C_AllocationHdr_ID Payment allocation */
-        public void SetC_AllocationHdr_ID(int C_AllocationHdr_ID) { if (C_AllocationHdr_ID < 1) throw new ArgumentException("C_AllocationHdr_ID is mandatory."); Set_ValueNoCheck("C_AllocationHdr_ID", C_AllocationHdr_ID); }/** Get Allocation.
+@param VAB_DocAllocation_ID Payment allocation */
+        public void SetVAB_DocAllocation_ID(int VAB_DocAllocation_ID) { if (VAB_DocAllocation_ID < 1) throw new ArgumentException("VAB_DocAllocation_ID is mandatory."); Set_ValueNoCheck("VAB_DocAllocation_ID", VAB_DocAllocation_ID); }/** Get Allocation.
 @return Payment allocation */
-        public int GetC_AllocationHdr_ID() { Object ii = Get_Value("C_AllocationHdr_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Allocation Line.
-@param C_AllocationLine_ID Allocation Line */
-        public void SetC_AllocationLine_ID(int C_AllocationLine_ID) { if (C_AllocationLine_ID < 1) throw new ArgumentException("C_AllocationLine_ID is mandatory."); Set_ValueNoCheck("C_AllocationLine_ID", C_AllocationLine_ID); }/** Get Allocation Line.
+        public int GetVAB_DocAllocation_ID() { Object ii = Get_Value("VAB_DocAllocation_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Allocation Line.
+@param VAB_DocAllocationLine_ID Allocation Line */
+        public void SetVAB_DocAllocationLine_ID(int VAB_DocAllocationLine_ID) { if (VAB_DocAllocationLine_ID < 1) throw new ArgumentException("VAB_DocAllocationLine_ID is mandatory."); Set_ValueNoCheck("VAB_DocAllocationLine_ID", VAB_DocAllocationLine_ID); }/** Get Allocation Line.
 @return Allocation Line */
-        public int GetC_AllocationLine_ID() { Object ii = Get_Value("C_AllocationLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        public int GetVAB_DocAllocationLine_ID() { Object ii = Get_Value("VAB_DocAllocationLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_ValueNoCheck("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_ValueNoCheck("VAB_BusinessPartner_ID", null);
             else
-                Set_ValueNoCheck("C_BPartner_ID", C_BPartner_ID);
+                Set_ValueNoCheck("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID() { Object ii = Get_Value("C_BPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cash Book.
-@param C_CashBook_ID Cash Book for recording petty cash transactions */
-        public void SetC_CashBook_ID(int C_CashBook_ID) { throw new ArgumentException("C_CashBook_ID Is virtual column"); }/** Get Cash Book.
+        public int GetVAB_BusinessPartner_ID() { Object ii = Get_Value("VAB_BusinessPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cash Book.
+@param VAB_CashBook_ID Cash Book for recording petty cash transactions */
+        public void SetVAB_CashBook_ID(int VAB_CashBook_ID) { throw new ArgumentException("VAB_CashBook_ID Is virtual column"); }/** Get Cash Book.
 @return Cash Book for recording petty cash transactions */
-        public int GetC_CashBook_ID() { Object ii = Get_Value("C_CashBook_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cash Journal Line.
-@param C_CashLine_ID Cash Journal Line */
-        public void SetC_CashLine_ID(int C_CashLine_ID)
+        public int GetVAB_CashBook_ID() { Object ii = Get_Value("VAB_CashBook_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cash Journal Line.
+@param VAB_CashJRNLLine_ID Cash Journal Line */
+        public void SetVAB_CashJRNLLine_ID(int VAB_CashJRNLLine_ID)
         {
-            if (C_CashLine_ID <= 0) Set_ValueNoCheck("C_CashLine_ID", null);
+            if (VAB_CashJRNLLine_ID <= 0) Set_ValueNoCheck("VAB_CashJRNLLine_ID", null);
             else
-                Set_ValueNoCheck("C_CashLine_ID", C_CashLine_ID);
+                Set_ValueNoCheck("VAB_CashJRNLLine_ID", VAB_CashJRNLLine_ID);
         }/** Get Cash Journal Line.
 @return Cash Journal Line */
-        public int GetC_CashLine_ID() { Object ii = Get_Value("C_CashLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Payment Schedule.
+        public int GetVAB_CashJRNLLine_ID() { Object ii = Get_Value("VAB_CashJRNLLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Payment Schedule.
 @param C_InvoicePaySchedule_ID Invoice Payment Schedule */
         public void SetC_InvoicePaySchedule_ID(int C_InvoicePaySchedule_ID)
         {

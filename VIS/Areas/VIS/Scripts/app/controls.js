@@ -2203,8 +2203,8 @@
             src += "vis vis-locator";
         }
         else if (displayType == VIS.DisplayType.Search) {
-            if (columnName.equals("C_BPartner_ID")
-                || (columnName.equals("C_BPartner_To_ID") && lookup.getColumnName().equals("C_BPartner.C_BPartner_ID"))) {
+            if (columnName.equals("VAB_BusinessPartner_ID")
+                || (columnName.equals("VAB_BusinessPartner_To_ID") && lookup.getColumnName().equals("VAB_BusinessPartner.VAB_BusinessPartner_ID"))) {
                 src += "fa fa-handshake-o";
             }
             else if (columnName.equals("M_Product_ID")
@@ -2248,7 +2248,7 @@
             $btnPop = $('<button  tabindex="-1" class="input-group-text"><i tabindex="-1" Class="fa fa-ellipsis-v" /></button>');
             //	VBPartner quick entry link
             var isBP = false;
-            if (columnName === "C_BPartner_ID") {
+            if (columnName === "VAB_BusinessPartner_ID") {
                 options[VIS.Actions.add] = true;
                 options[VIS.Actions.update] = true;
             }
@@ -4350,8 +4350,8 @@
         var focus = false;
 
         //For genral attribute variable settings
-        this.C_GenAttributeSet_ID = 0;
-        this.C_GenAttributeSetInstance_ID = 0;
+        this.VAB_GenFeatureSet_ID = 0;
+        this.VAB_GenFeatureSetInstance_ID = 0;
         this.M_Locator_ID = 0;
         colName = columnName;
         this.value = null;
@@ -4361,7 +4361,7 @@
         //set lookup into current object from pttribute/gattribute lookup
         this.lookup = lookup;
 
-        this.C_BPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_BPartner_ID");
+        this.VAB_BusinessPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_BusinessPartner_ID");
 
 
         /**	Logger			*/
@@ -4443,19 +4443,19 @@
         //Open Genral attribute Dialog form
         function OpenGeneralAttributeDialog(VADMS_AttributeSet_ID, oldValue) {
             var valueChange = false;
-            var C_GenAttributeSetInstance_IDWin = VIS.Env.getCtx().getContextAsInt(self.windowNo, "C_GenAttributeSetInstance_ID");
+            var VAB_GenFeatureSetInstance_IDWin = VIS.Env.getCtx().getContextAsInt(self.windowNo, "VAB_GenFeatureSetInstance_ID");
             if (self.isFromActivityForm) {
-                C_GenAttributeSetInstance_IDWin = self.C_GenAttributeSetInstance_ID;
+                VAB_GenFeatureSetInstance_IDWin = self.VAB_GenFeatureSetInstance_ID;
             }
 
-            if (C_GenAttributeSetInstance_IDWin == 0) {
+            if (VAB_GenFeatureSetInstance_IDWin == 0) {
                 //txtAttribute.Text = string.Empty;
             }
 
-            var obj = new VIS.GenralAttributeForm(C_GenAttributeSetInstance_IDWin, VADMS_AttributeSet_ID, self.windowNo, self.isSearch, self.getCanSaveRecord(), self.isFromDMS);
+            var obj = new VIS.GenralAttributeForm(VAB_GenFeatureSetInstance_IDWin, VADMS_AttributeSet_ID, self.windowNo, self.isSearch, self.getCanSaveRecord(), self.isFromDMS);
             obj.showDialog();
             obj.onClose = function (mGenAttributeSetInstanceId, name, instanceIDs) {
-                VIS.Env.getCtx().setContext(windowNop, "C_GenAttributeSetInstance_ID", mGenAttributeSetInstanceId);
+                VIS.Env.getCtx().setContext(windowNop, "VAB_GenFeatureSetInstance_ID", mGenAttributeSetInstanceId);
                 setValueInControl(mGenAttributeSetInstanceId, name);
                 if (instanceIDs != null)
                     self.setInstanceIDs = instanceIDs;
@@ -4522,7 +4522,7 @@
                 VIS.ADialog.info("VIS_PAttributeNotFound", null, null, null);
             }
             else {
-                var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.C_BPartner_ID, productWindow, self.VAF_Column_ID, windowNop);
+                var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.VAB_BusinessPartner_ID, productWindow, self.VAF_Column_ID, windowNop);
                 if (obj.hasAttribute) {
                     obj.showDialog();
                 }
@@ -4542,10 +4542,10 @@
             //Genral Attribute Logic
             if (!self.isPAttribute) {
                 var genAttributeSetId = 0;
-                genAttributeSetId = VIS.Env.getCtx().getContextAsInt(self.windowNo, "C_GenAttributeSet_ID");
+                genAttributeSetId = VIS.Env.getCtx().getContextAsInt(self.windowNo, "VAB_GenFeatureSet_ID");
 
                 if (genAttributeSetId == 0) {
-                    genAttributeSetId = self.C_GenAttributeSet_ID;
+                    genAttributeSetId = self.VAB_GenFeatureSet_ID;
                     if (genAttributeSetId == 0) {
                         VIS.ADialog.info("NoAttributeSet", null, null, null);
                         return;
@@ -4558,8 +4558,8 @@
             OpenPAttributeDialog(oldValue);
         });
 
-        this.SetC_GenAttributeSet_ID = function (instanceID) {
-            this.C_GenAttributeSet_ID = instanceID;
+        this.SetVAB_GenFeatureSet_ID = function (instanceID) {
+            this.VAB_GenFeatureSet_ID = instanceID;
         }
 
         //dispose
@@ -4702,7 +4702,7 @@
             if (self.isReadOnly) {
                 return;
             }
-            var C_AcctSchema_ID = VIS.Env.getCtx().getContextAsInt(self.windowNo, "C_AcctSchema_ID");
+            var VAB_AccountBook_ID = VIS.Env.getCtx().getContextAsInt(self.windowNo, "VAB_AccountBook_ID");
 
 
             var getTbID_s = 0;
@@ -4711,11 +4711,11 @@
                 getTbID_s = self.getField().vo.VAF_TableView_ID;
             }
 
-            var obj = new VIS.AccountForm(self.title, self.lookup, C_AcctSchema_ID, getTbID_s);
+            var obj = new VIS.AccountForm(self.title, self.lookup, VAB_AccountBook_ID, getTbID_s);
 
 
 
-            //var obj = new VIS.AccountForm(self.title, self.lookup, C_AcctSchema_ID);
+            //var obj = new VIS.AccountForm(self.title, self.lookup, VAB_AccountBook_ID);
             obj.load();
             obj.showDialog();
             obj.onClose = function (location) {

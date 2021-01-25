@@ -155,18 +155,18 @@ namespace VIS.Helpers
                 StringBuilder SqlQuery = new StringBuilder();
                 SqlQuery.Append("select COUNT(inn.ChatID) As Count");
 
-                SqlQuery.Append(" from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                         .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
-                         .Append("  JOIN cm_subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
-                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                         .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                         .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                         .Append("  JOIN cm_subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
+                SqlQuery.Append(" from (select * from (select CH.VACM_Chat_ID as ChatID,  max(CE.VACM_ChatLine_ID)as EntryID")
+                         .Append("  from VACM_ChatLine CE join VACM_Chat CH on CE.VACM_Chat_ID= CH.VACM_Chat_ID ")
+                         .Append("  JOIN VACM_Subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
+                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.VACM_Chat_ID order by entryID )inn1) inn ")
+                         .Append("  JOIN VACM_ChatLine CH on inn.ChatID= ch.VACM_Chat_ID ")
+                         .Append("  JOIN VACM_Chat CMH on (cmh.VACM_Chat_ID= inn.chatid)")
+                         .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                          .Append(" Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                          .Append(" left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
                          .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
-                         .Append(" and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)")
-                         .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                         .Append(" and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
+                         .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(SqlQuery.ToString());
                 int nTotalFollow = 0;
@@ -447,18 +447,18 @@ namespace VIS.Helpers
             StringBuilder SqlQuery = new StringBuilder();
             SqlQuery.Append("select COUNT(inn.ChatID) As Count");
 
-            SqlQuery.Append(" from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                     .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
-                     .Append("  JOIN cm_subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
-                     .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                     .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                     .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                     .Append("  JOIN cm_subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
+            SqlQuery.Append(" from (select * from (select CH.VACM_Chat_ID as ChatID,  max(CE.VACM_ChatLine_ID)as EntryID")
+                     .Append("  from VACM_ChatLine CE join VACM_Chat CH on CE.VACM_Chat_ID= CH.VACM_Chat_ID ")
+                     .Append("  JOIN VACM_Subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
+                     .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.VACM_Chat_ID order by entryID )inn1) inn ")
+                     .Append("  JOIN VACM_ChatLine CH on inn.ChatID= ch.VACM_Chat_ID ")
+                     .Append("  JOIN VACM_Chat CMH on (cmh.VACM_Chat_ID= inn.chatid)")
+                     .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                      .Append(" Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                      .Append(" left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
                      .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
-                     .Append(" and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)")
-                     .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                     .Append(" and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
+                     .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
             try
             {
                 int nTotalFollow = Util.GetValueOfInt(DB.ExecuteScalar(SqlQuery.ToString()));
@@ -483,7 +483,7 @@ namespace VIS.Helpers
             {
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
-                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
+                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.VACM_ChatLine_ID,");
                 if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
                     SqlQuery.Append("(Select name from VAF_Screen_TL where VAF_Screen_ID= Aw.VAF_Screen_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
@@ -492,20 +492,20 @@ namespace VIS.Helpers
                 {
                     SqlQuery.Append("aw.DisplayName as WINNAME,");
                 }
-                SqlQuery.Append("  At.TableName, aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.VAF_Image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg,CH.createdby  from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
-                        .Append("  JOIN cm_subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
-                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                        .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                        .Append("  JOIN cm_subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
+                SqlQuery.Append("  At.TableName, aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.VACM_Subscribe_ID, ch.created,ai.VAF_Image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg,CH.createdby  from (select * from (select CH.VACM_Chat_ID as ChatID,  max(CE.VACM_ChatLine_ID)as EntryID")
+                        .Append("  from VACM_ChatLine CE join VACM_Chat CH on CE.VACM_Chat_ID= CH.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
+                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.VACM_Chat_ID order by entryID )inn1) inn ")
+                        .Append("  JOIN VACM_ChatLine CH on inn.ChatID= ch.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Chat CMH on (cmh.VACM_Chat_ID= inn.chatid)")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  Join vaf_tableview At on at.vaf_tableview_id= CS.vaf_tableview_id")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
-                        .Append("  and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)")
-                        .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                        .Append("  and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
+                        .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
 
                 SqlParamsIn objSP = new SqlParamsIn();
                 dsData = new DataSet();
@@ -519,12 +519,12 @@ namespace VIS.Helpers
                     {
                         var Fllps = new HomeFolloUps();
                         Fllps.ChatID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["ChatID"].ToString());
-                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_chatentry_id"].ToString());
+                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_ChatLine_ID"].ToString());
                         Fllps.EntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["EntryID"].ToString());
                         Fllps.WinID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_Screen_ID"].ToString());
                         Fllps.TableID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_TableView_ID"].ToString());
                         Fllps.RecordID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["Record_ID"].ToString());
-                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_subscribe_ID"].ToString());
+                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_Subscribe_ID"].ToString());
                         Fllps.ChatData = dsData.Tables[0].Rows[i]["characterdata"].ToString();
                         Fllps.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
                         Fllps.Name = dsData.Tables[0].Rows[i]["NAME"].ToString();
@@ -621,7 +621,7 @@ namespace VIS.Helpers
             {
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
-                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
+                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.VACM_ChatLine_ID,");
                 if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
                     SqlQuery.Append("(Select name from VAF_Screen_TL where VAF_Screen_ID= Aw.VAF_Screen_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
@@ -630,20 +630,20 @@ namespace VIS.Helpers
                 {
                     SqlQuery.Append("aw.DisplayName as WINNAME,");
                 }
-                SqlQuery.Append("  At.TableName, aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.VAF_Image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg  from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
-                        .Append("  JOIN cm_subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
-                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.cm_chat_id order by entryID )inn1) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                        .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                        .Append("  JOIN cm_subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
+                SqlQuery.Append("  At.TableName, aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.VACM_Subscribe_ID, ch.created,ai.VAF_Image_id ,ai.binarydata as UsrImg,  adi.binarydata as WinImg  from (select * from (select CH.VACM_Chat_ID as ChatID,  max(CE.VACM_ChatLine_ID)as EntryID")
+                        .Append("  from VACM_ChatLine CE join VACM_Chat CH on CE.VACM_Chat_ID= CH.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
+                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.VACM_Chat_ID order by entryID )inn1) inn ")
+                        .Append("  JOIN VACM_ChatLine CH on inn.ChatID= ch.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Chat CMH on (cmh.VACM_Chat_ID= inn.chatid)")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  Join vaf_tableview At on at.vaf_tableview_id= CS.vaf_tableview_id")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)")
                         .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
-                        .Append("  and ch.cm_chatentry_ID =(Select max(cm_chatentry_ID) from cm_chatentry where CM_Chat_ID= ch.cm_chat_id)")
-                        .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                        .Append("  and ch.VACM_ChatLine_ID =(Select max(VACM_ChatLine_ID) from VACM_ChatLine where VACM_Chat_ID= ch.VACM_Chat_ID)")
+                        .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
 
                 SqlParamsIn objSP = new SqlParamsIn();
                 dsData = new DataSet();
@@ -655,12 +655,12 @@ namespace VIS.Helpers
                     {
                         var Fllps = new HomeFolloUps();
                         Fllps.ChatID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["ChatID"].ToString());
-                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_chatentry_id"].ToString());
+                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_ChatLine_ID"].ToString());
                         Fllps.EntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["EntryID"].ToString());
                         Fllps.WinID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_Screen_ID"].ToString());
                         Fllps.TableID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_TableView_ID"].ToString());
                         Fllps.RecordID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["Record_ID"].ToString());
-                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_subscribe_ID"].ToString());
+                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_Subscribe_ID"].ToString());
                         Fllps.ChatData = dsData.Tables[0].Rows[i]["characterdata"].ToString();
                         Fllps.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
                         Fllps.Name = dsData.Tables[0].Rows[i]["NAME"].ToString();
@@ -720,7 +720,7 @@ namespace VIS.Helpers
             {
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
-                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
+                SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.VACM_ChatLine_ID,");
                 if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
                     SqlQuery.Append("(Select name from VAF_Screen_TL where VAF_Screen_ID= Aw.VAF_Screen_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
@@ -730,18 +730,18 @@ namespace VIS.Helpers
                     SqlQuery.Append("aw.DisplayName as WINNAME,");
                 }
 
-                SqlQuery.Append("  aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.cm_subscribe_ID, ch.created,ai.VAF_Image_id, ai.binarydata as UsrImg,  adi.binarydata as WinImg ,CH.createdby from (select * from (select CH.cm_chat_id as ChatID,  max(CE.cm_chatentry_id)as EntryID")
-                        .Append("  from cm_chatentry CE join cm_chat CH on CE.cm_chat_id= CH.cm_chat_id ")
-                        .Append("  JOIN cm_subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
-                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.cm_chat_id order by entryID )inn1 ) inn ")
-                        .Append("  JOIN cm_chatentry CH on inn.ChatID= ch.cm_chat_id ")
-                        .Append("  JOIN cm_chat CMH on (cmh.cm_chat_id= inn.chatid)")
-                        .Append("  JOIN cm_subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
+                SqlQuery.Append("  aw.VAF_Screen_ID,cs.VAF_TableView_ID,cs.RECOrd_ID, aw.help,au.Name AS NAME,cs.VACM_Subscribe_ID, ch.created,ai.VAF_Image_id, ai.binarydata as UsrImg,  adi.binarydata as WinImg ,CH.createdby from (select * from (select CH.VACM_Chat_ID as ChatID,  max(CE.VACM_ChatLine_ID)as EntryID")
+                        .Append("  from VACM_ChatLine CE join VACM_Chat CH on CE.VACM_Chat_ID= CH.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CH.vaf_tableview_id= CS.vaf_tableview_id) AND (CH.record_id = CS.record_id)")
+                        .Append("  where cs.createdby=" + ctx.GetVAF_UserContact_ID() + " group by CH.VACM_Chat_ID order by entryID )inn1 ) inn ")
+                        .Append("  JOIN VACM_ChatLine CH on inn.ChatID= ch.VACM_Chat_ID ")
+                        .Append("  JOIN VACM_Chat CMH on (cmh.VACM_Chat_ID= inn.chatid)")
+                        .Append("  JOIN VACM_Subscribe CS  ON (CMH.vaf_tableview_id= CS.vaf_tableview_id) AND (CMH.record_id = CS.record_id)")
                         .Append("  Join VAF_UserContact Au on au.VAF_UserContact_id= CH.createdBy")
                         .Append("  left outer JOIN VAF_Image AI on(ai.VAF_Image_id=au.VAF_Image_id)")
                         .Append("  join ad_window AW on(cs.ad_window_id= aw.ad_window_id) left outer  JOIN VAF_Image adi on(adi.VAF_Image_id= aw.VAF_Image_id)  where cs.createdby=" + ctx.GetVAF_UserContact_ID())
-                        .Append("  AND cmh.cm_chat_id=" + ChatID)
-                        .Append("  order by inn.EntryID desc,ch.cm_chatentry_id asc");
+                        .Append("  AND cmh.VACM_Chat_ID=" + ChatID)
+                        .Append("  order by inn.EntryID desc,ch.VACM_ChatLine_ID asc");
 
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(SqlQuery.ToString());
@@ -751,12 +751,12 @@ namespace VIS.Helpers
                     {
                         var Fllps = new HomeFolloUps();
                         Fllps.ChatID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["ChatID"].ToString());
-                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_chatentry_id"].ToString());
+                        Fllps.ChatEntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_ChatLine_ID"].ToString());
                         Fllps.EntryID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["EntryID"].ToString());
                         Fllps.WinID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_Screen_ID"].ToString());
                         Fllps.TableID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_TableView_ID"].ToString());
                         Fllps.RecordID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["Record_ID"].ToString());
-                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["cm_subscribe_ID"].ToString());
+                        Fllps.SubscriberID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VACM_Subscribe_ID"].ToString());
                         Fllps.ChatData = dsData.Tables[0].Rows[i]["characterdata"].ToString();
                         Fllps.Name = dsData.Tables[0].Rows[i]["NAME"].ToString();
                         Fllps.WinName = dsData.Tables[0].Rows[i]["WINNAME"].ToString();
@@ -828,7 +828,7 @@ namespace VIS.Helpers
             MChatEntry entry = new MChatEntry(_chat, txt);
             if (entry.Save())
             {
-                //strQuery = "  UPDATE cm_subscribe SET isRead='N' WHERE isRead='Y' AND cm_subscribe_id=" + SubscriberID;
+                //strQuery = "  UPDATE VACM_Subscribe SET isRead='N' WHERE isRead='Y' AND VACM_Subscribe_id=" + SubscriberID;
                 //DB.ExecuteQuery(strQuery);
             }
 
@@ -975,8 +975,8 @@ namespace VIS.Helpers
                 //To Get Request count
                 //strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
                 strQuery = @" SELECT  count(R_Request.r_request_id) FROM R_Request
-                        LEFT OUTER JOIN C_BPartner
-                        ON R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID
+                        LEFT OUTER JOIN VAB_BusinessPartner
+                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
                         LEFT OUTER JOIN r_requesttype rt
                         ON R_Request.r_requesttype_id = rt.r_requesttype_ID
                         LEFT OUTER JOIN R_Status rs
@@ -1008,17 +1008,17 @@ namespace VIS.Helpers
             List<HomeRequest> lstAlerts = new List<HomeRequest>();
 
 
-            //strQuery = "SELECT C_BPartner.Name ,rt.Name As CaseType,R_Request.DocumentNo , R_Request.Summary ,R_Request.StartDate ,R_Request.DateNextAction,R_Request.Created,"
+            //strQuery = "SELECT VAB_BusinessPartner.Name ,rt.Name As CaseType,R_Request.DocumentNo , R_Request.Summary ,R_Request.StartDate ,R_Request.DateNextAction,R_Request.Created,"
             //+ "R_Request.R_Request_ID,R_Request.Priority as PriorityID,adl.Name as Priority,rs.name As Status,"
             //+ "(SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='R_Request') TableName,"
             //+ "(SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='R_Request') VAF_Screen_ID  FROM R_Request"
-            //+ " INNER JOIN C_BPartner on R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID"
+            //+ " INNER JOIN VAB_BusinessPartner on R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID"
             //+ " INNER JOIN r_requesttype rt ON R_Request.r_requesttype_id = rt.r_requesttype_ID"
             //+ " Left outer JOIN  R_Status rs on rs.R_Status_ID=R_request.R_Status_ID"
             //+ " Left Outer JOIN  VAF_CtrlRef_List adl on adl.Value=R_Request.Priority"
             //+ " JOIN  VAF_Control_Ref adr on adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID";
 
-            //            strQuery = @" SELECT C_BPartner.Name ,
+            //            strQuery = @" SELECT VAB_BusinessPartner.Name ,
             //                          rt.Name AS CaseType,
             //                          R_Request.DocumentNo ,
             //                          R_Request.Summary ,
@@ -1036,8 +1036,8 @@ namespace VIS.Helpers
             //                          WHERE VAF_TableView.TableName='R_Request'
             //                          ) VAF_Screen_ID
             //                        FROM R_Request
-            //                        INNER JOIN C_BPartner
-            //                        ON R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID
+            //                        INNER JOIN VAB_BusinessPartner
+            //                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
             //                        INNER JOIN r_requesttype rt
             //                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
             //                        LEFT OUTER JOIN R_Status rs
@@ -1048,7 +1048,7 @@ namespace VIS.Helpers
             //                        ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
 
-            strQuery = @" SELECT C_BPartner.Name ,
+            strQuery = @" SELECT VAB_BusinessPartner.Name ,
                           rt.Name AS CaseType,
                           R_Request.DocumentNo ,
                           R_Request.Summary ,
@@ -1066,8 +1066,8 @@ namespace VIS.Helpers
                           WHERE VAF_TableView.TableName='R_Request'
                           ) VAF_Screen_ID
                         FROM R_Request
-                        LEFT OUTER JOIN C_BPartner
-                        ON R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID
+                        LEFT OUTER JOIN VAB_BusinessPartner
+                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
                         LEFT OUTER JOIN r_requesttype rt
                         ON R_Request.r_requesttype_id = rt.r_requesttype_ID
                         LEFT OUTER JOIN R_Status rs

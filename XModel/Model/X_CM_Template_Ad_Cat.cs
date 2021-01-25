@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_Template_Ad_Cat
+/** Generated Model for VACM_Layout_Ad_Group
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_Template_Ad_Cat : PO
+public class X_VACM_Layout_Ad_Group : PO
 {
-public X_CM_Template_Ad_Cat (Context ctx, int CM_Template_Ad_Cat_ID, Trx trxName) : base (ctx, CM_Template_Ad_Cat_ID, trxName)
+public X_VACM_Layout_Ad_Group (Context ctx, int VACM_Layout_Ad_Group_ID, Trx trxName) : base (ctx, VACM_Layout_Ad_Group_ID, trxName)
 {
-/** if (CM_Template_Ad_Cat_ID == 0)
+/** if (VACM_Layout_Ad_Group_ID == 0)
 {
 SetCM_Ad_Cat_ID (0);
-SetCM_Template_ID (0);
+SetVACM_Layout_ID (0);
 SetName (null);
 }
  */
 }
-public X_CM_Template_Ad_Cat (Ctx ctx, int CM_Template_Ad_Cat_ID, Trx trxName) : base (ctx, CM_Template_Ad_Cat_ID, trxName)
+public X_VACM_Layout_Ad_Group (Ctx ctx, int VACM_Layout_Ad_Group_ID, Trx trxName) : base (ctx, VACM_Layout_Ad_Group_ID, trxName)
 {
-/** if (CM_Template_Ad_Cat_ID == 0)
+/** if (VACM_Layout_Ad_Group_ID == 0)
 {
 SetCM_Ad_Cat_ID (0);
-SetCM_Template_ID (0);
+SetVACM_Layout_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template_Ad_Cat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Layout_Ad_Group (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_CM_Template_Ad_Cat (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template_Ad_Cat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Layout_Ad_Group (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_CM_Template_Ad_Cat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template_Ad_Cat (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_Layout_Ad_Group (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_Template_Ad_Cat()
+static X_VACM_Layout_Ad_Group()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389052436L;
 public static int Table_ID;
  // =872;
 
-/** TableName=CM_Template_Ad_Cat */
-public static String Table_Name="CM_Template_Ad_Cat";
+/** TableName=VACM_Layout_Ad_Group */
+public static String Table_Name="VACM_Layout_Ad_Group";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_Template_Ad_Cat[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_Layout_Ad_Group[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Advertisement Category.
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Template.
-@param CM_Template_ID Template defines how content is displayed */
-public void SetCM_Template_ID (int CM_Template_ID)
+@param VACM_Layout_ID Template defines how content is displayed */
+public void SetVACM_Layout_ID (int VACM_Layout_ID)
 {
-if (CM_Template_ID < 1) throw new ArgumentException ("CM_Template_ID is mandatory.");
-Set_ValueNoCheck ("CM_Template_ID", CM_Template_ID);
+if (VACM_Layout_ID < 1) throw new ArgumentException ("VACM_Layout_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Layout_ID", VACM_Layout_ID);
 }
 /** Get Template.
 @return Template defines how content is displayed */
-public int GetCM_Template_ID() 
+public int GetVACM_Layout_ID() 
 {
-Object ii = Get_Value("CM_Template_ID");
+Object ii = Get_Value("VACM_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetCM_Template_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVACM_Layout_ID().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */

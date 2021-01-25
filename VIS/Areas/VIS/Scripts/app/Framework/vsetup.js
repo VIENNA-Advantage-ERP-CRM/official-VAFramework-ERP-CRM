@@ -112,7 +112,7 @@
             cmbCurr = $('<select placeholder="Currency">');
             dCurr.append(dCurrInner);
             dCurrInner.append(cmbCurr);
-            dCurrInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Currency_ID")));
+            dCurrInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_Currency_ID")));
             dTForm.append(dCurr);
 
             var dCou = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo'>");
@@ -120,7 +120,7 @@
             cmbCou = $('<select placeholder="Country">');
             dCou.append(dCouInner);
             dCouInner.append(cmbCou);
-            dCouInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Country_ID")));
+            dCouInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_Country_ID")));
             dTForm.append(dCou);
 
             var dCity = $("<div class='input-group vis-input-wrap vis-intial-form-dataCombo'>");
@@ -146,7 +146,7 @@
             //ulCase.append(liCurr);
             //var dCurr = $('<div class="intial-form-dataCombo">');
             //liCurr.append(dCurr);
-            //dCurr.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Currency_ID")));
+            //dCurr.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_Currency_ID")));
             //cmbCurr = $('<select placeholder="Currency">');
             //dCurr.append(cmbCurr);
 
@@ -154,7 +154,7 @@
             //ulCase.append(liCou);
             //var dCou = $('<div class="intial-form-dataCombo">');
             //liCou.append(dCou);
-            //dCou.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Country_ID")));
+            //dCou.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_Country_ID")));
             //cmbCou = $('<select placeholder="Country">');
             //dCou.append(cmbCou);
 
@@ -206,13 +206,13 @@
             var dCam = $('<div class="vis-initial-form-checkbox">');
             chkCam = $('<input type="checkbox">');
             dCam.append(chkCam);
-            dCam.append($("<label>").append(VIS.Msg.translate(VIS.context, "C_Campaign_ID")));
+            dCam.append($("<label>").append(VIS.Msg.translate(VIS.context, "VAB_Promotion_ID")));
             dChkBox.append(dCam);
 
             var dBP = $('<div class="vis-initial-form-checkbox">');
             chkBP = $('<input type="checkbox" checked disabled>');
             dBP.append(chkBP);
-            dBP.append($("<label>").append(VIS.Msg.translate(VIS.context, "C_BPartner_ID")));
+            dBP.append($("<label>").append(VIS.Msg.translate(VIS.context, "VAB_BusinessPartner_ID")));
             dChkBox.append(dBP);
 
             //var liBtns= $("<li>");

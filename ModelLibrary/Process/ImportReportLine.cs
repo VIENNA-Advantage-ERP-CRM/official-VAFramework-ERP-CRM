@@ -145,17 +145,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Validate ElementValue
             sql = new StringBuilder("UPDATE I_ReportLine i "
-                + "SET C_ElementValue_ID=(SELECT C_ElementValue_ID FROM C_ElementValue e"
+                + "SET VAB_Acct_Element_ID=(SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element e"
                 + " WHERE i.ElementValue=e.Value AND i.VAF_Client_ID=e.VAF_Client_ID) "
-                + "WHERE C_ElementValue_ID IS NULL AND ElementValue IS NOT NULL"
+                + "WHERE VAB_Acct_Element_ID IS NULL AND ElementValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            log.Fine("Set C_ElementValue_ID=" + no);
+            log.Fine("Set VAB_Acct_Element_ID=" + no);
 
-            //	Validate C_ElementValue_ID
+            //	Validate VAB_Acct_Element_ID
             sql = new StringBuilder("UPDATE I_ReportLine "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ElementValue, ' "
-                + "WHERE C_ElementValue_ID IS NULL AND LineType<>'C'" // MReportLine.LINETYPE_Calculation
+                + "WHERE VAB_Acct_Element_ID IS NULL AND LineType<>'C'" // MReportLine.LINETYPE_Calculation
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Config("Invalid AccountType=" + no);
@@ -358,10 +358,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 String _insertSource = "INSERT INTO PA_ReportSource "
                     + "(PA_ReportSource_ID,"
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
-                    + "PA_ReportLine_ID,ElementType,C_ElementValue_ID) "
+                    + "PA_ReportLine_ID,ElementType,VAB_Acct_Element_ID) "
                     + "SELECT @param1,"
                     + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
-                    + "PA_ReportLine_ID,'AC',C_ElementValue_ID "
+                    + "PA_ReportLine_ID,'AC',VAB_Acct_Element_ID "
                     + "FROM I_ReportLine "
                     + "WHERE I_ReportLine_ID=@param2"
                     + " AND I_IsImported='N'"
@@ -371,8 +371,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //jz 
                 /*
                 String sqlt="UPDATE PA_ReportSource "
-                    + "SET (ElementType,C_ElementValue_ID,Updated,UpdatedBy)="
-                    + " (SELECT 'AC',C_ElementValue_ID,SysDate,UpdatedBy"
+                    + "SET (ElementType,VAB_Acct_Element_ID,Updated,UpdatedBy)="
+                    + " (SELECT 'AC',VAB_Acct_Element_ID,SysDate,UpdatedBy"
                     + " FROM I_ReportLine"
                     + " WHERE I_ReportLine_ID=?) "
                     + "WHERE PA_ReportSource_ID=?"
@@ -434,8 +434,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         //jz
                         String sqlt = "UPDATE PA_ReportSource "
-                            + "SET (ElementType,C_ElementValue_ID,Updated,UpdatedBy)="
-                            + " (SELECT CAST('AC' AS CHAR(2)),C_ElementValue_ID,SysDate,UpdatedBy"  //jz
+                            + "SET (ElementType,VAB_Acct_Element_ID,Updated,UpdatedBy)="
+                            + " (SELECT CAST('AC' AS CHAR(2)),VAB_Acct_Element_ID,SysDate,UpdatedBy"  //jz
                             + " FROM I_ReportLine"
                             + " WHERE I_ReportLine_ID=" + I_ReportLine_ID + ") "
                             + "WHERE PA_ReportSource_ID=" + PA_ReportSource_ID + " "

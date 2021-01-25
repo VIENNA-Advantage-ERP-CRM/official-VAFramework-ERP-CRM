@@ -69,17 +69,17 @@ namespace VAdvantage.Model
         /// Load Location with ID if Business Partner Location
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BPartner_Location_ID">Business Partner Location</param>
+        /// <param name="VAB_BPart_Location_ID">Business Partner Location</param>
         /// <param name="trxName">transaction</param>
         /// <returns>location or null</returns>
-        public static MLocation GetBPLocation(Ctx ctx, int C_BPartner_Location_ID, Trx trxName)
+        public static MLocation GetBPLocation(Ctx ctx, int VAB_BPart_Location_ID, Trx trxName)
         {
-            if (C_BPartner_Location_ID == 0)					//	load default
+            if (VAB_BPart_Location_ID == 0)					//	load default
                 return null;
 
             MLocation loc = null;
             String sql = "SELECT * FROM C_Location l "
-                + "WHERE C_Location_ID IN (SELECT C_Location_ID FROM C_BPartner_Location WHERE C_BPartner_Location_ID=" + C_BPartner_Location_ID + ")";
+                + "WHERE C_Location_ID IN (SELECT C_Location_ID FROM VAB_BPart_Location WHERE VAB_BPart_Location_ID=" + VAB_BPart_Location_ID + ")";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
-                _log.Log(Level.SEVERE, sql + " - " + C_BPartner_Location_ID, e);
+                _log.Log(Level.SEVERE, sql + " - " + VAB_BPart_Location_ID, e);
                 loc = null;
             }
             return loc;
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
                 SetCountry(defaultCountry);
                 MRegion defaultRegion = MRegion.GetDefault(GetCtx());
                 if (defaultRegion != null
-                    && defaultRegion.GetC_Country_ID() == defaultCountry.GetC_Country_ID())
+                    && defaultRegion.GetVAB_Country_ID() == defaultCountry.GetVAB_Country_ID())
                     SetRegion(defaultRegion);
             }
         }
@@ -133,15 +133,15 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Country_ID">country</param>
+        /// <param name="VAB_Country_ID">country</param>
         /// <param name="C_Region_ID">region</param>
         /// <param name="city">city</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, int C_Country_ID, int C_Region_ID, String city, Trx trxName)
+        public MLocation(Ctx ctx, int VAB_Country_ID, int C_Region_ID, String city, Trx trxName)
             : this(ctx, 0, trxName)
         {
-            if (C_Country_ID != 0)
-                SetC_Country_ID(C_Country_ID);
+            if (VAB_Country_ID != 0)
+                SetVAB_Country_ID(VAB_Country_ID);
             if (C_Region_ID != 0)
                 SetC_Region_ID(C_Region_ID);
             SetCity(city);
@@ -173,20 +173,20 @@ namespace VAdvantage.Model
             {
                 _country = MCountry.GetDefault(GetCtx());
             }
-            base.SetC_Country_ID(_country.GetC_Country_ID());
+            base.SetVAB_Country_ID(_country.GetVAB_Country_ID());
         }
 
         /// <summary>
-        /// Set C_Country_ID
+        /// Set VAB_Country_ID
         /// </summary>
-        /// <param name="C_Country_ID"></param>
-        public new void SetC_Country_ID(int C_Country_ID)
+        /// <param name="VAB_Country_ID"></param>
+        public new void SetVAB_Country_ID(int VAB_Country_ID)
         {
-            if (GetC_Country_ID() != C_Country_ID)
+            if (GetVAB_Country_ID() != VAB_Country_ID)
             {
                 SetRegion(null);
             }
-            SetCountry(MCountry.Get(GetCtx(), C_Country_ID));
+            SetCountry(MCountry.Get(GetCtx(), VAB_Country_ID));
         }
 
         /// <summary>
@@ -196,8 +196,8 @@ namespace VAdvantage.Model
         {
             if (_country == null)
             {
-                if (GetC_Country_ID() != 0)
-                    _country = MCountry.Get(GetCtx(), GetC_Country_ID());
+                if (GetVAB_Country_ID() != 0)
+                    _country = MCountry.Get(GetCtx(), GetVAB_Country_ID());
                 else
                     _country = MCountry.GetDefault(GetCtx());
             }
@@ -220,7 +220,7 @@ namespace VAdvantage.Model
          */
         public String GetCountry(bool local)
         {
-            if (local && GetC_Country_ID() == MCountry.GetDefault(GetCtx()).GetC_Country_ID())
+            if (local && GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
                 return null;
             return GetCountryName();
         }
@@ -237,11 +237,11 @@ namespace VAdvantage.Model
             else
             {
                 base.SetC_Region_ID(_region.GetC_Region_ID());
-                if (_region.GetC_Country_ID() != GetC_Country_ID())
+                if (_region.GetVAB_Country_ID() != GetVAB_Country_ID())
                 {
-                    log.Info("Region(" + region + ") C_Country_ID=" + region.GetC_Country_ID()
-                  + " - From  C_Country_ID=" + GetC_Country_ID());
-                    SetC_Country_ID(region.GetC_Country_ID());
+                    log.Info("Region(" + region + ") VAB_Country_ID=" + region.GetVAB_Country_ID()
+                  + " - From  VAB_Country_ID=" + GetVAB_Country_ID());
+                    SetVAB_Country_ID(region.GetVAB_Country_ID());
                 }
             }
         }
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
             if (C_Region_ID == 0)
                 SetRegion(null);
             //	Country defined
-            else if (GetC_Country_ID() != 0)
+            else if (GetVAB_Country_ID() != 0)
             {
                 MCountry cc = GetCountry();
                 if (cc.IsValidRegion(C_Region_ID))
@@ -309,7 +309,7 @@ namespace VAdvantage.Model
 
         /**
          * 	Compares to current record
-         *	@param C_Country_ID if 0 ignored
+         *	@param VAB_Country_ID if 0 ignored
          *	@param C_Region_ID if 0 ignored
          *	@param Postal match postal
          *	@param Postal_Add match postal add
@@ -318,10 +318,10 @@ namespace VAdvantage.Model
          *	@param Address2 match addtess 2
          *	@return true if equals
          */
-        public bool Equals(int C_Country_ID, int C_Region_ID,
+        public bool Equals(int VAB_Country_ID, int C_Region_ID,
             String Postal, String Postal_Add, String City, String Address1, String Address2)
         {
-            if (C_Country_ID != 0 && GetC_Country_ID() != C_Country_ID)
+            if (VAB_Country_ID != 0 && GetVAB_Country_ID() != VAB_Country_ID)
                 return false;
             if (C_Region_ID != 0 && GetC_Region_ID() != C_Region_ID)
                 return false;
@@ -391,7 +391,7 @@ namespace VAdvantage.Model
         public bool IsAddressLinesReverse()
         {
             //	Local
-            if (GetC_Country_ID() == MCountry.GetDefault(GetCtx()).GetC_Country_ID())
+            if (GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
                 return GetCountry().IsAddressLinesLocalReverse();
             return GetCountry().IsAddressLinesReverse();
         }
@@ -417,7 +417,7 @@ namespace VAdvantage.Model
             {
                 return "CountryNotFound";
             }
-            bool local = GetC_Country_ID() == MCountry.GetDefault(GetCtx()).GetC_Country_ID();
+            bool local = GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID();
             String inStr = local ? c.GetDisplaySequenceLocal() : c.GetDisplaySequence();
             StringBuilder outStr = new StringBuilder();
 
@@ -571,7 +571,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MLocation=[");
             sb.Append(Get_ID())
-                .Append(",C_Country_ID=").Append(GetC_Country_ID())
+                .Append(",VAB_Country_ID=").Append(GetVAB_Country_ID())
                 .Append(",C_Region_ID=").Append(GetC_Region_ID())
                 .Append(",Postal=").Append(GetPostal())
                 .Append("]");
@@ -590,7 +590,7 @@ namespace VAdvantage.Model
             //	Region Check
             if (GetC_Region_ID() != 0)
             {
-                if (_country == null || _country.GetC_Country_ID() != GetC_Country_ID())
+                if (_country == null || _country.GetVAB_Country_ID() != GetVAB_Country_ID())
                     GetCountry();
                 if (!_country.IsHasRegion())
                     SetC_Region_ID(0);

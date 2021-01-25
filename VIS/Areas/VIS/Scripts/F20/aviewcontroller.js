@@ -1094,7 +1094,7 @@
                         treeName = "VAF_TreeInfoCMC_ID";
                     else if (keyColumnName.equals("CM_CStage_ID"))
                         treeName = "VAF_TreeInfoCMS_ID";
-                    else if (keyColumnName.equals("CM_Template_ID"))
+                    else if (keyColumnName.equals("VACM_Layout_ID"))
                         treeName = "VAF_TreeInfoCMT_ID";
                     else if (keyColumnName.equals("CM_Media_ID"))
                         treeName = "VAF_TreeInfoCMM_ID";

@@ -86,11 +86,11 @@ namespace ViennaAdvantageServer.Process
                 }
                 dr.Close();
 
-                Sql = "Select C_BPartner_ID From C_BPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
+                Sql = "Select VAB_BusinessPartner_ID From VAB_BusinessPartner where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {
-                    VAdvantage.Model.X_C_BPartner BP = new VAdvantage.Model.X_C_BPartner(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    VAdvantage.Model.X_VAB_BusinessPartner BP = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), Util.GetValueOfInt(dr[0]), null);
                     BP.SetSalesRep_ID(ToSalesRep_ID);
                     BP.Save();
                     {

@@ -380,7 +380,7 @@ namespace VIS.Models
 
             int VAF_Client_ID = 0;
             int VAF_Org_ID = 0;
-            int C_BPartner_ID = 0;
+            int VAB_BusinessPartner_ID = 0;
             int M_DiscountSchema_ID = 0;
             Decimal? bpFlatDiscount = 0;
             MBPartner bp = null;
@@ -401,7 +401,7 @@ namespace VIS.Models
                     VAF_Client_ID = ord.GetVAF_Client_ID();
                     VAF_Org_ID = ord.GetVAF_Org_ID();
                     isSOTrx = ord.IsSOTrx();
-                    C_BPartner_ID = ord.GetC_BPartner_ID();
+                    VAB_BusinessPartner_ID = ord.GetVAB_BusinessPartner_ID();
                 }
                 else if (keyColName.ToUpper().Trim() == "C_INVOICE_ID")
                 {
@@ -410,7 +410,7 @@ namespace VIS.Models
                     VAF_Client_ID = inv.GetVAF_Client_ID();
                     VAF_Org_ID = inv.GetVAF_Org_ID();
                     isSOTrx = inv.IsSOTrx();
-                    C_BPartner_ID = inv.GetC_BPartner_ID();
+                    VAB_BusinessPartner_ID = inv.GetVAB_BusinessPartner_ID();
                 }
                 else if (keyColName.ToUpper().Trim() == "M_REQUISITION_ID")
                 {
@@ -418,9 +418,9 @@ namespace VIS.Models
                     _Version_ID = GetPLVID(req.GetM_PriceList_ID());
                     VAF_Client_ID = req.GetVAF_Client_ID();
                     VAF_Org_ID = req.GetVAF_Org_ID();
-                    if (req.Get_ColumnIndex("C_BPartner_ID") > 0 && Util.GetValueOfInt(req.Get_Value("C_BPartner_ID")) > 0)
+                    if (req.Get_ColumnIndex("VAB_BusinessPartner_ID") > 0 && Util.GetValueOfInt(req.Get_Value("VAB_BusinessPartner_ID")) > 0)
                     {
-                        C_BPartner_ID = Util.GetValueOfInt(req.Get_Value("C_BPartner_ID"));
+                        VAB_BusinessPartner_ID = Util.GetValueOfInt(req.Get_Value("VAB_BusinessPartner_ID"));
                     }
                 }
                 else if (keyColName.ToUpper().Trim() == "C_PROJECT_ID")
@@ -429,13 +429,13 @@ namespace VIS.Models
                     VAF_Client_ID = proj.GetVAF_Client_ID();
                     _Version_ID = proj.GetM_PriceList_Version_ID();
                     VAF_Org_ID = proj.GetVAF_Org_ID();
-                    C_BPartner_ID = proj.GetC_BPartner_ID();
+                    VAB_BusinessPartner_ID = proj.GetVAB_BusinessPartner_ID();
                 }
 
                 // if business partner found on parent then get Discount Schema ID and Flat Discount amount
-                if (C_BPartner_ID > 0)
+                if (VAB_BusinessPartner_ID > 0)
                 {
-                    bp = new MBPartner(ctx, C_BPartner_ID, null);
+                    bp = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
                     M_DiscountSchema_ID = bp.GetM_DiscountSchema_ID();
                     bpFlatDiscount = bp.GetFlatDiscount();
                 }
@@ -503,7 +503,7 @@ namespace VIS.Models
 
                         if (hasProdsPurch)
                         {
-                            DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + _m_Product_ID + " AND C_BPartner_ID = " + C_BPartner_ID);
+                            DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + _m_Product_ID + " AND VAB_BusinessPartner_ID = " + VAB_BusinessPartner_ID);
                             if (dr != null && dr.Length > 0)
                                 uom = Util.GetValueOfInt(dr[0]["C_UOM_ID"]);
                         }
@@ -561,7 +561,7 @@ namespace VIS.Models
 
                         if (hasProdsPurch)
                         {
-                            DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + _m_Product_ID + " AND C_BPartner_ID = " + C_BPartner_ID);
+                            DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + _m_Product_ID + " AND VAB_BusinessPartner_ID = " + VAB_BusinessPartner_ID);
                             if (dr != null && dr.Length > 0)
                                 uom = Util.GetValueOfInt(dr[0]["C_UOM_ID"]);
                         }
@@ -755,7 +755,7 @@ namespace VIS.Models
                                 int uom = 0;
                                 if (hasProdsPurch)
                                 {
-                                    DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]) + " AND C_BPartner_ID = " + io.GetC_BPartner_ID());
+                                    DataRow[] dr = dsProPO.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]) + " AND VAB_BusinessPartner_ID = " + io.GetVAB_BusinessPartner_ID());
                                     if (dr != null && dr.Length > 0)
                                         uom = Util.GetValueOfInt(dr[0]["C_UOM_ID"]);
                                 }
@@ -941,7 +941,7 @@ namespace VIS.Models
                     else if (WindowID == Util.GetValueOfInt(Windows.InternalUse))
                     {
                         _sqlQuery.Clear();
-                        _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
+                        _sqlQuery.Append("SELECT VAB_Charge_ID FROM VAB_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
                         Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
                         if (Util.GetValueOfString(RefNo) != "")
@@ -1044,7 +1044,7 @@ namespace VIS.Models
 
                                 po.Set_Value("QtyInternalUse", Util.GetValueOfDecimal(qty[i]));
                                 if (Asset_ID > 0)
-                                    po.Set_Value("C_Charge_ID", Asset_ID);
+                                    po.Set_Value("VAB_Charge_ID", Asset_ID);
                                 po.Set_Value("IsInternalUse", true);
                                 if (hasReqLines)
                                 {
@@ -1264,7 +1264,7 @@ namespace VIS.Models
                     if (Util.GetValueOfString(RefNo) != "")
                     {
                         _sqlQuery.Clear();
-                        _sqlQuery.Append("SELECT A_Asset_ID, M_Product_ID, NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID FROM A_Asset WHERE IsActive = 'Y' AND VAF_Client_ID = "
+                        _sqlQuery.Append("SELECT VAA_Asset_ID, M_Product_ID, NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID FROM VAA_Asset WHERE IsActive = 'Y' AND VAF_Client_ID = "
                             + ctx.GetVAF_Client_ID());
                         dsAssets = DB.ExecuteDataset(_sqlQuery.ToString());
                         if (dsAssets != null && dsAssets.Tables[0].Rows.Count > 0)
@@ -1356,8 +1356,8 @@ namespace VIS.Models
                                 DataRow[] drAst = dsAssets.Tables[0].Select(" M_Product_ID = " + M_Product_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID);
                                 if (drAst != null && drAst.Length > 0)
                                 {
-                                    if (Util.GetValueOfInt(drAst[0]["A_Asset_ID"]) > 0)
-                                        po.Set_Value("A_Asset_ID", Util.GetValueOfInt(drAst[0]["A_Asset_ID"]));
+                                    if (Util.GetValueOfInt(drAst[0]["VAA_Asset_ID"]) > 0)
+                                        po.Set_Value("VAA_Asset_ID", Util.GetValueOfInt(drAst[0]["VAA_Asset_ID"]));
                                 }
                             }
                         }
@@ -1481,7 +1481,7 @@ namespace VIS.Models
         //            if (keyColName.ToUpper().Trim() == "M_INVENTORY_ID")
         //            {
         //                _sqlQuery.Clear();
-        //                _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
+        //                _sqlQuery.Append("SELECT VAB_Charge_ID FROM VAB_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
 
         //                int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
@@ -1526,7 +1526,7 @@ namespace VIS.Models
         //                        po.Set_Value("QtyInternalUse", Util.GetValueOfDecimal(qty[i]));
         //                        po.Set_Value("M_Locator_ID", Util.GetValueOfInt(Locator_ID));
         //                        if (Asset_ID > 0)
-        //                            po.Set_Value("C_Charge_ID", Asset_ID);
+        //                            po.Set_Value("VAB_Charge_ID", Asset_ID);
         //                        po.Set_ValueNoCheck("M_Inventory_ID", recordID);
         //                        po.Set_Value("IsInternalUse", true);
         //                        po.Set_Value("C_UOM_ID", Util.GetValueOfInt(uom[i]));
@@ -1592,7 +1592,7 @@ namespace VIS.Models
                 po.Set_Value("MovementQty", Util.GetValueOfDecimal(qty[i]));
                 po.Set_ValueNoCheck(keyColName, recordID);
                 //if (Util.GetValueOfInt(AssetID[i]) > 0)
-                //    po.Set_Value("A_Asset_ID", Util.GetValueOfInt(AssetID[i]));
+                //    po.Set_Value("VAA_Asset_ID", Util.GetValueOfInt(AssetID[i]));
                 //if (Util.GetValueOfInt(oline_ID[i]) > 0)
                 //    po.Set_Value("M_RequisitionLine_ID", Util.GetValueOfInt(oline_ID[i]));
                 if (Util.GetValueOfInt(attribute[i]) != 0)
@@ -1998,8 +1998,8 @@ namespace VIS.Models
             List<Dictionary<string, object>> retPriceList = null;
             string sql = "SELECT plv.M_PriceList_Version_ID,"
                      + " plv.Name || ' (' || c.ISO_Code || ')' AS ValueName "
-                     + "FROM M_PriceList_Version plv, M_PriceList pl, C_Currency c "
-                     + "WHERE plv.M_PriceList_ID=pl.M_PriceList_ID" + " AND pl.C_Currency_ID=c.C_Currency_ID"
+                     + "FROM M_PriceList_Version plv, M_PriceList pl, VAB_Currency c "
+                     + "WHERE plv.M_PriceList_ID=pl.M_PriceList_ID" + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
                      + " AND plv.IsActive='Y' AND pl.IsActive='Y'";
 
             if (PriceList != 0)
@@ -2178,7 +2178,7 @@ namespace VIS.Models
         {
             DataSet dsProPurch = null;
             _sqlQuery.Clear();
-            _sqlQuery.Append(@"SELECT vdr.C_UOM_ID, vdr.C_BPartner_ID, p.M_Product_ID FROM M_Product p LEFT JOIN 
+            _sqlQuery.Append(@"SELECT vdr.C_UOM_ID, vdr.VAB_BusinessPartner_ID, p.M_Product_ID FROM M_Product p LEFT JOIN 
                             M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID);
             dsProPurch = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsProPurch;

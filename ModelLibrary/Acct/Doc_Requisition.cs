@@ -55,7 +55,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             MRequisition req = (MRequisition)GetPO();
             SetDateDoc(req.GetDateDoc());
             SetDateAcct(req.GetDateDoc());
@@ -120,7 +120,7 @@ namespace VAdvantage.Acct
         {
             List<Fact> facts = new List<Fact>();
             Fact fact = new Fact(this, as1, Fact.POST_Reservation);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
             //
             //	Decimal grossAmt = 
             GetAmount(Doc.AMTTYPE_Gross);
@@ -136,7 +136,7 @@ namespace VAdvantage.Acct
                     // Account
                     MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                     //
-                    fact.CreateLine(line, expense, as1.GetC_Currency_ID(), cost, null);
+                    fact.CreateLine(line, expense, as1.GetVAB_Currency_ID(), cost, null);
                 }
                 // Offset
                 MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
@@ -146,7 +146,7 @@ namespace VAdvantage.Acct
                     log.Log(Level.SEVERE, _error);
                     return null;
                 }
-                fact.CreateLine(null, offset, GetC_Currency_ID(), null, total);
+                fact.CreateLine(null, offset, GetVAB_Currency_ID(), null, total);
                 facts.Add(fact);
             }
 

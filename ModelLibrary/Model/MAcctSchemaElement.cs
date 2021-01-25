@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MAcctSchemaElement
- * Purpose        : used for C_AcctSchema_Element table 
- * Class Used     : X_C_AcctSchema_Element
+ * Purpose        : used for VAB_AccountBook_Element table 
+ * Class Used     : X_VAB_AccountBook_Element
  * Chronological    Development
  * Raghunandan     10-Jun-2009
   ******************************************************/
@@ -22,13 +22,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAcctSchemaElement : X_C_AcctSchema_Element
+    public class MAcctSchemaElement : X_VAB_AccountBook_Element
     {
         #region Private variable
         //Logger						
         private static VLogger	_log = VLogger.GetVLogger (typeof(MAcctSchemaElement).FullName);
         //	Cache						
-        private static CCache<int, MAcctSchemaElement[]> s_cache = new CCache<int, MAcctSchemaElement[]>("C_AcctSchema_Element", 10);
+        private static CCache<int, MAcctSchemaElement[]> s_cache = new CCache<int, MAcctSchemaElement[]>("VAB_AccountBook_Element", 10);
         // User Element Column Name		
         private String _ColumnName = null;
         #endregion
@@ -40,16 +40,16 @@ namespace VAdvantage.Model
         /// <returns>ArrayList with Elements</returns>
         public static MAcctSchemaElement[] GetAcctSchemaElements(MAcctSchema as1)
         {
-            int key = as1.GetC_AcctSchema_ID();
+            int key = as1.GetVAB_AccountBook_ID();
             MAcctSchemaElement[] retValue = (MAcctSchemaElement[])s_cache[key];
             if (retValue != null)
                 return retValue;
 
-            _log.Fine("C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID());
+            _log.Fine("VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID());
             List<MAcctSchemaElement> list = new List<MAcctSchemaElement>();
             //
-            String sql = "SELECT * FROM C_AcctSchema_Element "
-                + "WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND IsActive='Y' ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAB_AccountBook_Element "
+                + "WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND IsActive='Y' ORDER BY SeqNo";
 
             try
             {
@@ -89,17 +89,17 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Account))
                 return "Account_ID";
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
-                return "C_BPartner_ID";
+                return "VAB_BusinessPartner_ID";
             else if (elementType.Equals(ELEMENTTYPE_Product))
                 return "M_Product_ID";
             else if (elementType.Equals(ELEMENTTYPE_Activity))
-                return "C_Activity_ID";
+                return "VAB_BillingCode_ID";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
                 return "C_LocFrom_ID";
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
                 return "C_LocTo_ID";
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
-                return "C_Campaign_ID";
+                return "VAB_Promotion_ID";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 return "VAF_OrgTrx_ID";
             else if (elementType.Equals(ELEMENTTYPE_Project))
@@ -142,21 +142,21 @@ namespace VAdvantage.Model
             if (elementType.Equals(ELEMENTTYPE_Organization))
                 return "SELECT Value,Name FROM VAF_Org WHERE VAF_Org_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Account))
-                return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
+                return "SELECT Value,Name FROM VAB_Acct_Element WHERE VAB_Acct_Element_ID=";
             else if (elementType.Equals(ELEMENTTYPE_SubAccount))
                 return "SELECT Value,Name FROM C_SubAccount WHERE C_SubAccount_ID=";
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
-                return "SELECT Value,Name FROM C_BPartner WHERE C_BPartner_ID=";
+                return "SELECT Value,Name FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Product))
                 return "SELECT Value,Name FROM M_Product WHERE M_Product_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Activity))
-                return "SELECT Value,Name FROM C_Activity WHERE C_Activity_ID=";
+                return "SELECT Value,Name FROM VAB_BillingCode WHERE VAB_BillingCode_ID=";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
                 return "SELECT City,Address1 FROM C_Location WHERE C_Location_ID=";
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
                 return "SELECT City,Address1 FROM C_Location WHERE C_Location_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
-                return "SELECT Value,Name FROM C_Campaign WHERE C_Campaign_ID=";
+                return "SELECT Value,Name FROM VAB_Promotion WHERE VAB_Promotion_ID=";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 return "SELECT Value,Name FROM VAF_Org WHERE VAF_Org_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Project))
@@ -164,9 +164,9 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
                 return "SELECT Value,Name FROM C_SalesRegion WHERE C_SalesRegion_ID";
             else if (elementType.Equals(ELEMENTTYPE_UserList1))
-                return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
+                return "SELECT Value,Name FROM VAB_Acct_Element WHERE VAB_Acct_Element_ID=";
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
-                return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
+                return "SELECT Value,Name FROM VAB_Acct_Element WHERE VAB_Acct_Element_ID=";
             //User Element
             else if (elementType.Equals(ELEMENTTYPE_UserElement1) || elementType.Equals(ELEMENTTYPE_UserElement2) || elementType.Equals(ELEMENTTYPE_UserElement3)
                 || elementType.Equals(ELEMENTTYPE_UserElement4) || elementType.Equals(ELEMENTTYPE_UserElement5)
@@ -181,16 +181,16 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_AcctSchema_Element_ID"></param>
+        /// <param name="VAB_AccountBook_Element_ID"></param>
         /// <param name="trxName"></param>
-        public MAcctSchemaElement(Ctx ctx, int C_AcctSchema_Element_ID, Trx trxName)
-            : base(ctx, C_AcctSchema_Element_ID, trxName)
+        public MAcctSchemaElement(Ctx ctx, int VAB_AccountBook_Element_ID, Trx trxName)
+            : base(ctx, VAB_AccountBook_Element_ID, trxName)
         {
-            if (C_AcctSchema_Element_ID == 0)
+            if (VAB_AccountBook_Element_ID == 0)
             {
-                //	setC_AcctSchema_Element_ID (0);
-                //	setC_AcctSchema_ID (0);
-                //	setC_Element_ID (0);
+                //	setVAB_AccountBook_Element_ID (0);
+                //	setVAB_AccountBook_ID (0);
+                //	setVAB_Element_ID (0);
                 //	setElementType (null);
                 SetIsBalanced(false);
                 SetIsMandatory(false);
@@ -220,9 +220,9 @@ namespace VAdvantage.Model
             : this(as1.GetCtx(), 0, as1.Get_TrxName())
         {
             SetClientOrg(as1);
-            SetC_AcctSchema_ID(as1.GetC_AcctSchema_ID());
+            SetVAB_AccountBook_ID(as1.GetVAB_AccountBook_ID());
 
-            //	setC_Element_ID (0);
+            //	setVAB_Element_ID (0);
             //	setElementType (null);
             //	setName (null);
             //	setSeqNo (0);
@@ -248,15 +248,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="SeqNo">squence</param>
         /// <param name="Name">name</param>
-        /// <param name="C_Element_ID">element</param>
-        /// <param name="C_ElementValue_ID">element value</param>
-        public void SetTypeAccount(int SeqNo, String Name, int C_Element_ID, int C_ElementValue_ID)
+        /// <param name="VAB_Element_ID">element</param>
+        /// <param name="VAB_Acct_Element_ID">element value</param>
+        public void SetTypeAccount(int SeqNo, String Name, int VAB_Element_ID, int VAB_Acct_Element_ID)
         {
             SetElementType(ELEMENTTYPE_Account);
             SetSeqNo(SeqNo);
             SetName(Name);
-            SetC_Element_ID(C_Element_ID);
-            SetC_ElementValue_ID(C_ElementValue_ID);
+            SetVAB_Element_ID(VAB_Element_ID);
+            SetVAB_Acct_Element_ID(VAB_Acct_Element_ID);
         }
 
         /// <summary>
@@ -264,13 +264,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="SeqNo">sequence</param>
         /// <param name="Name">SeqNo</param>
-        /// <param name="C_BPartner_ID">id</param>
-        public void SetTypeBPartner(int SeqNo, String Name, int C_BPartner_ID)
+        /// <param name="VAB_BusinessPartner_ID">id</param>
+        public void SetTypeBPartner(int SeqNo, String Name, int VAB_BusinessPartner_ID)
         {
             SetElementType(ELEMENTTYPE_BPartner);
             SetSeqNo(SeqNo);
             SetName(Name);
-            SetC_BPartner_ID(C_BPartner_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
         }
 
         /// <summary>
@@ -324,19 +324,19 @@ namespace VAdvantage.Model
             if (elementType.Equals(ELEMENTTYPE_Organization))
                 defaultValue = GetOrg_ID();
             else if (elementType.Equals(ELEMENTTYPE_Account))
-                defaultValue = GetC_ElementValue_ID();
+                defaultValue = GetVAB_Acct_Element_ID();
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
-                defaultValue = GetC_BPartner_ID();
+                defaultValue = GetVAB_BusinessPartner_ID();
             else if (elementType.Equals(ELEMENTTYPE_Product))
                 defaultValue = GetM_Product_ID();
             else if (elementType.Equals(ELEMENTTYPE_Activity))
-                defaultValue = GetC_Activity_ID();
+                defaultValue = GetVAB_BillingCode_ID();
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
                 defaultValue = GetC_Location_ID();
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
                 defaultValue = GetC_Location_ID();
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
-                defaultValue = GetC_Campaign_ID();
+                defaultValue = GetVAB_Promotion_ID();
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 defaultValue = GetOrg_ID();
             else if (elementType.Equals(ELEMENTTYPE_Project))
@@ -344,9 +344,9 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
                 defaultValue = GetC_SalesRegion_ID();
             else if (elementType.Equals(ELEMENTTYPE_UserList1))
-                defaultValue = GetC_ElementValue_ID();
+                defaultValue = GetVAB_Acct_Element_ID();
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
-                defaultValue = GetC_ElementValue_ID();
+                defaultValue = GetVAB_Acct_Element_ID();
             else if (elementType.Equals(ELEMENTTYPE_UserElement1))
                 defaultValue = 0;
             else if (elementType.Equals(ELEMENTTYPE_UserElement2))
@@ -435,14 +435,14 @@ namespace VAdvantage.Model
             else if (IsMandatory())
             {
                 String errorField = null;
-                if (ELEMENTTYPE_Account.Equals(et) && GetC_ElementValue_ID() == 0)
-                    errorField = "C_ElementValue_ID";
-                else if (ELEMENTTYPE_Activity.Equals(et) && GetC_Activity_ID() == 0)
-                    errorField = "C_Activity_ID";
-                else if (ELEMENTTYPE_BPartner.Equals(et) && GetC_BPartner_ID() == 0)
-                    errorField = "C_BPartner_ID";
-                else if (ELEMENTTYPE_Campaign.Equals(et) && GetC_Campaign_ID() == 0)
-                    errorField = "C_Campaign_ID";
+                if (ELEMENTTYPE_Account.Equals(et) && GetVAB_Acct_Element_ID() == 0)
+                    errorField = "VAB_Acct_Element_ID";
+                else if (ELEMENTTYPE_Activity.Equals(et) && GetVAB_BillingCode_ID() == 0)
+                    errorField = "VAB_BillingCode_ID";
+                else if (ELEMENTTYPE_BPartner.Equals(et) && GetVAB_BusinessPartner_ID() == 0)
+                    errorField = "VAB_BusinessPartner_ID";
+                else if (ELEMENTTYPE_Campaign.Equals(et) && GetVAB_Promotion_ID() == 0)
+                    errorField = "VAB_Promotion_ID";
                 else if (ELEMENTTYPE_LocationFrom.Equals(et) && GetC_Location_ID() == 0)
                     errorField = "C_Location_ID";
                 else if (ELEMENTTYPE_LocationTo.Equals(et) && GetC_Location_ID() == 0)
@@ -485,9 +485,9 @@ namespace VAdvantage.Model
             if (IsMandatory() && Is_ValueChanged("IsMandatory"))
             {
                 if (ELEMENTTYPE_Activity.Equals(GetElementType()))
-                    UpdateData("C_Activity_ID", GetC_Activity_ID());
+                    UpdateData("VAB_BillingCode_ID", GetVAB_BillingCode_ID());
                 else if (ELEMENTTYPE_BPartner.Equals(GetElementType()))
-                    UpdateData("C_BPartner_ID", GetC_BPartner_ID());
+                    UpdateData("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
                 else if (ELEMENTTYPE_Product.Equals(GetElementType()))
                     UpdateData("M_Product_ID", GetM_Product_ID());
                 else if (ELEMENTTYPE_Project.Equals(GetElementType()))
@@ -515,7 +515,7 @@ namespace VAdvantage.Model
             int noC = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             //
             sql = "UPDATE Fact_Acct SET " + element + "=" + id
-                + " WHERE " + element + " IS NULL AND C_AcctSchema_ID=" + GetC_AcctSchema_ID();
+                + " WHERE " + element + " IS NULL AND VAB_AccountBook_ID=" + GetVAB_AccountBook_ID();
             int noF = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             //
             log.Fine("ValidCombination=" + noC + ", Fact=" + noF);

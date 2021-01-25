@@ -113,69 +113,69 @@ StringBuilder sb = new StringBuilder ("X_I_Conversion_Rate[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-public void SetC_ConversionType_ID (int C_ConversionType_ID)
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+public void SetVAB_CurrencyType_ID (int VAB_CurrencyType_ID)
 {
-if (C_ConversionType_ID <= 0) Set_Value ("C_ConversionType_ID", null);
+if (VAB_CurrencyType_ID <= 0) Set_Value ("VAB_CurrencyType_ID", null);
 else
-Set_Value ("C_ConversionType_ID", C_ConversionType_ID);
+Set_Value ("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
 }
 /** Get Currency Type.
 @return Currency Conversion Rate Type */
-public int GetC_ConversionType_ID() 
+public int GetVAB_CurrencyType_ID() 
 {
-Object ii = Get_Value("C_ConversionType_ID");
+Object ii = Get_Value("VAB_CurrencyType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Conversion Rate.
-@param C_Conversion_Rate_ID Rate used for converting currencies */
-public void SetC_Conversion_Rate_ID (int C_Conversion_Rate_ID)
+@param VAB_ExchangeRate_ID Rate used for converting currencies */
+public void SetVAB_ExchangeRate_ID (int VAB_ExchangeRate_ID)
 {
-if (C_Conversion_Rate_ID <= 0) Set_Value ("C_Conversion_Rate_ID", null);
+if (VAB_ExchangeRate_ID <= 0) Set_Value ("VAB_ExchangeRate_ID", null);
 else
-Set_Value ("C_Conversion_Rate_ID", C_Conversion_Rate_ID);
+Set_Value ("VAB_ExchangeRate_ID", VAB_ExchangeRate_ID);
 }
 /** Get Conversion Rate.
 @return Rate used for converting currencies */
-public int GetC_Conversion_Rate_ID() 
+public int GetVAB_ExchangeRate_ID() 
 {
-Object ii = Get_Value("C_Conversion_Rate_ID");
+Object ii = Get_Value("VAB_ExchangeRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);
+if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);
 else
-Set_Value ("C_Currency_ID", C_Currency_ID);
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Currency_To_ID VAF_Control_Ref_ID=112 */
-public static int C_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
+/** VAB_Currency_To_ID VAF_Control_Ref_ID=112 */
+public static int VAB_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
 /** Set Currency To.
-@param C_Currency_To_ID Target currency */
-public void SetC_Currency_To_ID (int C_Currency_To_ID)
+@param VAB_Currency_To_ID Target currency */
+public void SetVAB_Currency_To_ID (int VAB_Currency_To_ID)
 {
-if (C_Currency_To_ID <= 0) Set_Value ("C_Currency_To_ID", null);
+if (VAB_Currency_To_ID <= 0) Set_Value ("VAB_Currency_To_ID", null);
 else
-Set_Value ("C_Currency_To_ID", C_Currency_To_ID);
+Set_Value ("VAB_Currency_To_ID", VAB_Currency_To_ID);
 }
 /** Get Currency To.
 @return Target currency */
-public int GetC_Currency_To_ID() 
+public int GetVAB_Currency_To_ID() 
 {
-Object ii = Get_Value("C_Currency_To_ID");
+Object ii = Get_Value("VAB_Currency_To_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

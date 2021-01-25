@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_Calendar
+ * Class Used     : X_VAB_Calender
  * Chronological Development
  * Veena Pandey     07-May-2009
  ******************************************************/
@@ -19,19 +19,19 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MCalendar : X_C_Calendar
+    public class MCalendar : X_VAB_Calender
     {
         //	Cache
-        private static CCache<int, MCalendar> cache = new CCache<int, MCalendar>("C_Calendar", 20);
+        private static CCache<int, MCalendar> cache = new CCache<int, MCalendar>("VAB_Calender", 20);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Calendar_ID">id</param>
+        /// <param name="VAB_Calender_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCalendar (Ctx ctx, int C_Calendar_ID, Trx trxName)
-            : base(ctx, C_Calendar_ID, trxName)
+        public MCalendar (Ctx ctx, int VAB_Calender_ID, Trx trxName)
+            : base(ctx, VAB_Calender_ID, trxName)
 	    {
 	    }
 
@@ -54,22 +54,22 @@ namespace VAdvantage.Model
             : base(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
-            SetName(client.GetName() + " " + Utility.Msg.Translate(client.GetCtx(), "C_Calendar_ID"));
+            SetName(client.GetName() + " " + Utility.Msg.Translate(client.GetCtx(), "VAB_Calender_ID"));
         }
 
         /// <summary>
         /// Get MCalendar from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Calendar_ID">id</param>
+        /// <param name="VAB_Calender_ID">id</param>
         /// <returns>MCalendar</returns>
-        public static MCalendar Get(Context ctx, int C_Calendar_ID)
+        public static MCalendar Get(Context ctx, int VAB_Calender_ID)
         {
-            int key = C_Calendar_ID;
+            int key = VAB_Calender_ID;
             MCalendar retValue = (MCalendar)cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCalendar(ctx, C_Calendar_ID, null);
+            retValue = new MCalendar(ctx, VAB_Calender_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -78,15 +78,15 @@ namespace VAdvantage.Model
         /// Get MCalendar from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Calendar_ID">id</param>
+        /// <param name="VAB_Calender_ID">id</param>
         /// <returns>MCalendar</returns>
-        public static MCalendar Get(Ctx ctx, int C_Calendar_ID)
+        public static MCalendar Get(Ctx ctx, int VAB_Calender_ID)
         {
-            int key = C_Calendar_ID;
+            int key = VAB_Calender_ID;
             MCalendar retValue = (MCalendar)cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCalendar(ctx, C_Calendar_ID, null);
+            retValue = new MCalendar(ctx, VAB_Calender_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         public static MCalendar GetDefault(Context ctx, int VAF_Client_ID)
         {
             MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID);
-            return Get(ctx, info.GetC_Calendar_ID());
+            return Get(ctx, info.GetVAB_Calender_ID());
         }
 
         /// <summary>

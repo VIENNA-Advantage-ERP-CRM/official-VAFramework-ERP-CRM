@@ -29,9 +29,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private DateTime? _StatementDate = null;
         private Boolean _IsSOTrx = false;
         private int _VAF_Org_ID = 0;
-        private int _C_Currency_ID = 0;
-        private int _C_BP_Group_ID = 0;
-        private int _C_BPartner_ID = 0;
+        private int _VAB_Currency_ID = 0;
+        private int _VAB_BPart_Category_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private Boolean _IsListInvoices = false;
         /** Number of days between today and statement date	*/
         private int _statementOffset = 0;
@@ -57,21 +57,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _IsSOTrx = "Y".Equals(para[i].GetParameter());
                 }
-                else if (name.Equals("C_Currency_ID"))
+                else if (name.Equals("VAB_Currency_ID"))
                 {
-                    _C_Currency_ID = para[i].GetParameterAsInt();
+                    _VAB_Currency_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAF_Org_ID"))
                 {
                     _VAF_Org_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BP_Group_ID"))
+                else if (name.Equals("VAB_BPart_Category_ID"))
                 {
-                    _C_BP_Group_ID = para[i].GetParameterAsInt();
+                    _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("IsListInvoices"))
                 {
@@ -102,42 +102,42 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("StatementDate=" + _StatementDate + ", IsSOTrx=" + _IsSOTrx
-                + ", C_Currency_ID=" + _C_Currency_ID + ",VAF_Org_ID=" + _VAF_Org_ID
-                + ", C_BP_Group_ID=" + _C_BP_Group_ID + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", VAB_Currency_ID=" + _VAB_Currency_ID + ",VAF_Org_ID=" + _VAF_Org_ID
+                + ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", IsListInvoices=" + _IsListInvoices);
             //
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT bp.C_BP_Group_ID, oi.C_BPartner_ID,oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID, "
-                + "oi.C_Currency_ID, oi.IsSOTrx, "								//	5..6
+            sql.Append("SELECT bp.VAB_BPart_Category_ID, oi.VAB_BusinessPartner_ID,oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID, "
+                + "oi.VAB_Currency_ID, oi.IsSOTrx, "								//	5..6
                 + "oi.DateInvoiced, oi.NetDays,oi.DueDate,oi.DaysDue, ");		//	7..10
-            if (_C_Currency_ID == 0 || _C_Currency_ID == -1)
+            if (_VAB_Currency_ID == 0 || _VAB_Currency_ID == -1)
             {
                 sql.Append("oi.GrandTotal, oi.PaidAmt, oi.OpenAmt ");			//	11..13
             }
             else
             {
-                String s = ",oi.C_Currency_ID," + _C_Currency_ID + ",oi.DateAcct,oi.C_ConversionType_ID,oi.VAF_Client_ID,oi.VAF_Org_ID)";
+                String s = ",oi.VAB_Currency_ID," + _VAB_Currency_ID + ",oi.DateAcct,oi.VAB_CurrencyType_ID,oi.VAF_Client_ID,oi.VAF_Org_ID)";
                 sql.Append("currencyConvert(oi.GrandTotal").Append(s)		//	11..
                     .Append(", currencyConvert(oi.PaidAmt").Append(s)
                     .Append(", currencyConvert(oi.OpenAmt").Append(s);
             }
-            sql.Append(",oi.C_Activity_ID,oi.C_Campaign_ID,oi.C_Project_ID "	//	14
+            sql.Append(",oi.VAB_BillingCode_ID,oi.VAB_Promotion_ID,oi.C_Project_ID "	//	14
                 + "FROM RV_OpenItem oi"
-                + " INNER JOIN C_BPartner bp ON (oi.C_BPartner_ID=bp.C_BPartner_ID) "
+                + " INNER JOIN VAB_BusinessPartner bp ON (oi.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                 + "WHERE oi.ISSoTrx=").Append(_IsSOTrx ? "'Y'" : "'N'");
             if (_VAF_Org_ID > 0)
             {
                 sql.Append(" AND oi.VAF_Org_ID=").Append(_VAF_Org_ID);
             }
-            if (_C_BPartner_ID > 0)
+            if (_VAB_BusinessPartner_ID > 0)
             {
-                sql.Append(" AND oi.C_BPartner_ID=").Append(_C_BPartner_ID);
+                sql.Append(" AND oi.VAB_BusinessPartner_ID=").Append(_VAB_BusinessPartner_ID);
             }
-            else if (_C_BP_Group_ID > 0)
+            else if (_VAB_BPart_Category_ID > 0)
             {
-                sql.Append(" AND bp.C_BP_Group_ID=").Append(_C_BP_Group_ID);
+                sql.Append(" AND bp.VAB_BPart_Category_ID=").Append(_VAB_BPart_Category_ID);
             }
-            sql.Append(" ORDER BY oi.C_BPartner_ID, oi.C_Currency_ID, oi.C_Invoice_ID");
+            sql.Append(" ORDER BY oi.VAB_BusinessPartner_ID, oi.VAB_Currency_ID, oi.C_Invoice_ID");
 
             log.Finest(sql.ToString());
             String finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(
@@ -161,11 +161,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //while (idr.Read())
                 foreach (DataRow idr in ds.Tables[0].Rows)
                 {
-                    int C_BP_Group_ID = Utility.Util.GetValueOfInt(idr[0]);// Utility. rs.getInt(1);
-                    int C_BPartner_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
+                    int VAB_BPart_Category_ID = Utility.Util.GetValueOfInt(idr[0]);// Utility. rs.getInt(1);
+                    int VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
                     int C_Invoice_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[2]) : 0;
                     int C_InvoicePaySchedule_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[3]) : 0;
-                    int C_Currency_ID = Utility.Util.GetValueOfInt(idr[4]);// rs.getInt(5);
+                    int VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[4]);// rs.getInt(5);
                     Boolean IsSOTrx = "Y".Equals(Utility.Util.GetValueOfString(idr[5]));
                     //
                     //	Timestamp DateInvoiced = rs.getTimestamp(7);
@@ -179,16 +179,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	BigDecimal PaidAmt = rs.getBigDecimal(12);
                     Decimal? OpenAmt = Utility.Util.GetValueOfDecimal(idr[12]);// rs.getBigDecimal(13);
                     //
-                    int C_Activity_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[13]) : 0;
-                    int C_Campaign_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[14]) : 0;
+                    int VAB_BillingCode_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[13]) : 0;
+                    int VAB_Promotion_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[14]) : 0;
                     int C_Project_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[15]) : 0;
 
                     rows++;
                     //	New Aging Row
                     if (aging == null 		//	Key
                         || VAF_JInstance_ID != aging.GetVAF_JInstance_ID()
-                        || C_BPartner_ID != aging.GetC_BPartner_ID()
-                        || C_Currency_ID != aging.GetC_Currency_ID()
+                        || VAB_BusinessPartner_ID != aging.GetVAB_BusinessPartner_ID()
+                        || VAB_Currency_ID != aging.GetVAB_Currency_ID()
                         || C_Invoice_ID != aging.GetC_Invoice_ID()
                         || C_InvoicePaySchedule_ID != aging.GetC_InvoicePaySchedule_ID())
                     {
@@ -205,15 +205,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             }
                         }
                         aging = new MAging(GetCtx(), VAF_JInstance_ID, _StatementDate,
-                            C_BPartner_ID, C_Currency_ID,
+                            VAB_BusinessPartner_ID, VAB_Currency_ID,
                             C_Invoice_ID, C_InvoicePaySchedule_ID,
-                            C_BP_Group_ID, DueDate, IsSOTrx, Get_Trx());
+                            VAB_BPart_Category_ID, DueDate, IsSOTrx, Get_Trx());
                         if (_VAF_Org_ID > 0)
                         {
                             aging.SetVAF_Org_ID(_VAF_Org_ID);
                         }
-                        aging.SetC_Activity_ID(C_Activity_ID);
-                        aging.SetC_Campaign_ID(C_Campaign_ID);
+                        aging.SetVAB_BillingCode_ID(VAB_BillingCode_ID);
+                        aging.SetVAB_Promotion_ID(VAB_Promotion_ID);
                         aging.SetC_Project_ID(C_Project_ID);
                     }
                     //	Fill Buckets

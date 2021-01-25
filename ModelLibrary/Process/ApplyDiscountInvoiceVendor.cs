@@ -70,7 +70,7 @@ namespace VAdvantage.Process
             MInvoice obj = new MInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
-            MCurrency currency = new MCurrency(GetCtx(), obj.GetC_Currency_ID(), Get_Trx());
+            MCurrency currency = new MCurrency(GetCtx(), obj.GetVAB_Currency_ID(), Get_Trx());
             precision = currency.GetStdPrecision();
 
             MInvoiceLine[] lines = obj.GetLines();

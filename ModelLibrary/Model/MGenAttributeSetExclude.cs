@@ -7,10 +7,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeSetExclude: X_C_GenAttributeSetExclude
+    public class MGenAttributeSetExclude: X_VAB_GenFeatureSetExclude
     {
-        public MGenAttributeSetExclude(Ctx ctx, int C_GenAttributeSetExclude_ID, Trx trxName)
-            : base(ctx, C_GenAttributeSetExclude_ID, trxName)
+        public MGenAttributeSetExclude(Ctx ctx, int VAB_GenFeatureSetExclude_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureSetExclude_ID, trxName)
         {
 
 

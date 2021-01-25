@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         {
             if (M_Movement_ID == 0)
             {
-                //	SetC_DocType_ID (0);
+                //	SetVAB_DocTypes_ID (0);
                 SetDocAction(DOCACTION_Complete);	// CO
                 SetDocStatus(DOCSTATUS_Drafted);	// DR
                 SetIsApproved(false);
@@ -176,7 +176,7 @@ namespace VAdvantage.Model
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -225,14 +225,14 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            if (GetC_DocType_ID() == 0)
+            if (GetVAB_DocTypes_ID() == 0)
             {
                 MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT);
                 if (types.Length > 0)	//	Get first
-                    SetC_DocType_ID(types[0].GetC_DocType_ID());
+                    SetVAB_DocTypes_ID(types[0].GetVAB_DocTypes_ID());
                 else
                 {
-                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @C_DocType_ID@"));
+                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@ @VAB_DocTypes_ID@"));
                     return false;
                 }
             }
@@ -315,7 +315,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
@@ -1012,7 +1012,7 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(DB.ExecuteScalar(sql)) == "N")
                             {
 
-                                //sql = "SELECT pcat.A_Asset_Group_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
+                                //sql = "SELECT pcat.VAA_AssetGroup_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
                                 //if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
 
                                 // Check Asset ID instead of Asset Group to consider Asset Movement.
@@ -1035,7 +1035,7 @@ namespace VAdvantage.Model
                                 DataSet DSReq = null;
                                 if (line.GetM_RequisitionLine_ID() > 0)
                                 {
-                                    string NEWStr = "SELECT req.c_bpartner_id FROM m_requisitionline rqln INNER JOIN m_requisition req  ON req.m_requisition_id  = rqln.m_requisition_id  WHERE rqln.m_requisitionline_id=" + line.GetM_RequisitionLine_ID();
+                                    string NEWStr = "SELECT req.VAB_BusinessPartner_id FROM m_requisitionline rqln INNER JOIN m_requisition req  ON req.m_requisition_id  = rqln.m_requisition_id  WHERE rqln.m_requisitionline_id=" + line.GetM_RequisitionLine_ID();
                                     DSReq = DB.ExecuteDataset(NEWStr, null, null);
                                 }
                                 if (line.GetA_Asset_ID() > 0)
@@ -1053,12 +1053,12 @@ namespace VAdvantage.Model
                                             return DocActionVariables.STATUS_INVALID;
                                         }
                                     }
-                                    ast.SetC_BPartner_ID(line.GetC_BPartner_ID());
+                                    ast.SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
                                     if (DSReq != null)
                                     {
                                         if (DSReq.Tables[0].Rows.Count > 0)
                                         {
-                                            ast.SetC_BPartner_ID(Util.GetValueOfInt(DSReq.Tables[0].Rows[0]["c_bpartner_id"]));
+                                            ast.SetVAB_BusinessPartner_ID(Util.GetValueOfInt(DSReq.Tables[0].Rows[0]["VAB_BusinessPartner_id"]));
                                         }
                                     }
 
@@ -1523,7 +1523,7 @@ namespace VAdvantage.Model
                         string sql = "SELECT DTD001_ISCONSUMABLE FROM M_Product WHERE M_Product_ID=" + line.GetM_Product_ID();
                         if (Util.GetValueOfString(DB.ExecuteScalar(sql)) != "Y")
                         {
-                            sql = "SELECT pcat.A_Asset_Group_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
+                            sql = "SELECT pcat.VAA_AssetGroup_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
                             if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
                             {
                                 isAsset = true;
@@ -1556,7 +1556,7 @@ namespace VAdvantage.Model
                                         return DocActionVariables.STATUS_INVALID;
                                     }
                                 }
-                                ast.SetC_BPartner_ID(line.GetC_BPartner_ID());
+                                ast.SetVAB_BusinessPartner_ID(line.GetVAB_BusinessPartner_ID());
                                 ast.SetM_Locator_ID(line.GetM_LocatorTo_ID());
                                 ast.Save();
                             }
@@ -1859,7 +1859,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -1883,7 +1883,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -3098,7 +3098,7 @@ namespace VAdvantage.Model
                 _processMsg = "Document Closed: " + GetDocStatus();
                 return false;
             }
-            MDocType doctype = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+            MDocType doctype = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             bool InTransit = (bool)doctype.Get_Value("IsInTransit");
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
@@ -3140,7 +3140,7 @@ namespace VAdvantage.Model
                 }
                 // Added By Arpit on 9th Dec,2016 to set Void the document of Move Confirmation if found on the following conditions
                 //  MMovement InvMove = new MMovement(GetCtx(), Get_ID(), Get_Trx());
-                //  MDocType doctype = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+                //  MDocType doctype = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
                 // bool InTransit = (bool)doctype.Get_Value("IsInTransit");
                 if (InTransit == true)
                 {
@@ -3212,7 +3212,7 @@ namespace VAdvantage.Model
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -3236,7 +3236,7 @@ namespace VAdvantage.Model
             }
 
             //start Added by Arpit Rai on 9th Dec,2016
-            //  MDocType DocType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+            //  MDocType DocType = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             bool InTransit = (bool)dt.Get_Value("IsInTransit");
             if (InTransit == true)
             {
@@ -3388,7 +3388,7 @@ namespace VAdvantage.Model
             SetProcessed(true);
             Save(Get_Trx());
             ////start Added by Arpit Rai on 9th Dec,2016
-            //MDocType DocType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+            //MDocType DocType = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             //bool InTransit = (bool)DocType.Get_Value("IsInTransit");
             //if (InTransit == true)
             //{
@@ -3480,11 +3480,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Document Currency
         /// </summary>
-        /// <returns>C_Currency_ID</returns>
-        public int GetC_Currency_ID()
+        /// <returns>VAB_Currency_ID</returns>
+        public int GetVAB_Currency_ID()
         {
             //	MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID());
-            //	return pl.GetC_Currency_ID();
+            //	return pl.GetVAB_Currency_ID();
             return 0;
         }
 

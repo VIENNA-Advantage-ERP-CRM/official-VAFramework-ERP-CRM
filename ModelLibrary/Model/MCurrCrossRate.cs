@@ -48,19 +48,19 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //	Common - From is the same
-            if (GetC_Currency_ID() == GetC_Currency_From_ID())
+            if (GetVAB_Currency_ID() == GetVAB_Currency_From_ID())
             {
                 log.SaveError("VIS_ComFromCurr","");
                 return false;
             }
             //	Common - To is the same
-            if (GetC_Currency_ID() == GetC_Currency_To_ID())
+            if (GetVAB_Currency_ID() == GetVAB_Currency_To_ID())
             {
                 log.SaveError("VIS_ComToCurr","");
                 return false;
             }
             //	From - To is the same
-            if (GetC_Currency_From_ID() == GetC_Currency_To_ID())
+            if (GetVAB_Currency_From_ID() == GetVAB_Currency_To_ID())
             {
                 log.SaveError("VIS_FromToCurr","");
                 return false;

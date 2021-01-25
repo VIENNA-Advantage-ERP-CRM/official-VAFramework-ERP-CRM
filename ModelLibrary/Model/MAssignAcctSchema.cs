@@ -48,14 +48,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">currenct context</param>
         /// <param name="GL_Journal_ID">journal ID</param>
-        /// <param name="C_AcctSchema_ID">Accounting Schema ID</param>
+        /// <param name="VAB_AccountBook_ID">Accounting Schema ID</param>
         /// <param name="trxName">Trx</param>
         /// <returns>object of AssignAcctSchema Class</returns>
-        public static MAssignAcctSchema GetOrCreate(Ctx ctx, int GL_Journal_ID, int C_AcctSchema_ID, Trx trxName)
+        public static MAssignAcctSchema GetOrCreate(Ctx ctx, int GL_Journal_ID, int VAB_AccountBook_ID, Trx trxName)
         {
             MAssignAcctSchema retValue = null;
             String sql = "SELECT GL_AssignAcctSchema_ID FROM GL_AssignAcctSchema WHERE IsActive = 'Y' AND GL_Journal_ID = " + GL_Journal_ID +
-                         @" AND C_AcctSchema_ID = " + C_AcctSchema_ID;
+                         @" AND VAB_AccountBook_ID = " + VAB_AccountBook_ID;
             int recordId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, trxName));
             retValue = new MAssignAcctSchema(ctx, recordId, trxName);
             return retValue;

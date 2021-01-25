@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_AccountGroupBatch
+/** Generated Model for VAB_AccountGroupBatch
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_AccountGroupBatch : PO
+public class X_VAB_AccountGroupBatch : PO
 {
-public X_C_AccountGroupBatch (Context ctx, int C_AccountGroupBatch_ID, Trx trxName) : base (ctx, C_AccountGroupBatch_ID, trxName)
+public X_VAB_AccountGroupBatch (Context ctx, int VAB_AccountGroupBatch_ID, Trx trxName) : base (ctx, VAB_AccountGroupBatch_ID, trxName)
 {
-/** if (C_AccountGroupBatch_ID == 0)
+/** if (VAB_AccountGroupBatch_ID == 0)
 {
-SetC_AccountGroupBatch_ID (0);
+SetVAB_AccountGroupBatch_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_AccountGroupBatch (Ctx ctx, int C_AccountGroupBatch_ID, Trx trxName) : base (ctx, C_AccountGroupBatch_ID, trxName)
+public X_VAB_AccountGroupBatch (Ctx ctx, int VAB_AccountGroupBatch_ID, Trx trxName) : base (ctx, VAB_AccountGroupBatch_ID, trxName)
 {
-/** if (C_AccountGroupBatch_ID == 0)
+/** if (VAB_AccountGroupBatch_ID == 0)
 {
-SetC_AccountGroupBatch_ID (0);
+SetVAB_AccountGroupBatch_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroupBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountGroupBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_AccountGroupBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroupBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountGroupBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_AccountGroupBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroupBatch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AccountGroupBatch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_AccountGroupBatch()
+static X_VAB_AccountGroupBatch()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1358749977361L;
 public static int Table_ID;
  // =1000412;
 
-/** TableName=C_AccountGroupBatch */
-public static String Table_Name="C_AccountGroupBatch";
+/** TableName=VAB_AccountGroupBatch */
+public static String Table_Name="VAB_AccountGroupBatch";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_AccountGroupBatch[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AccountGroupBatch[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_AccountGroupBatch_ID.
-@param C_AccountGroupBatch_ID C_AccountGroupBatch_ID */
-public void SetC_AccountGroupBatch_ID (int C_AccountGroupBatch_ID)
+/** Set VAB_AccountGroupBatch_ID.
+@param VAB_AccountGroupBatch_ID VAB_AccountGroupBatch_ID */
+public void SetVAB_AccountGroupBatch_ID (int VAB_AccountGroupBatch_ID)
 {
-if (C_AccountGroupBatch_ID < 1) throw new ArgumentException ("C_AccountGroupBatch_ID is mandatory.");
-Set_ValueNoCheck ("C_AccountGroupBatch_ID", C_AccountGroupBatch_ID);
+if (VAB_AccountGroupBatch_ID < 1) throw new ArgumentException ("VAB_AccountGroupBatch_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountGroupBatch_ID", VAB_AccountGroupBatch_ID);
 }
-/** Get C_AccountGroupBatch_ID.
-@return C_AccountGroupBatch_ID */
-public int GetC_AccountGroupBatch_ID() 
+/** Get VAB_AccountGroupBatch_ID.
+@return VAB_AccountGroupBatch_ID */
+public int GetVAB_AccountGroupBatch_ID() 
 {
-Object ii = Get_Value("C_AccountGroupBatch_ID");
+Object ii = Get_Value("VAB_AccountGroupBatch_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

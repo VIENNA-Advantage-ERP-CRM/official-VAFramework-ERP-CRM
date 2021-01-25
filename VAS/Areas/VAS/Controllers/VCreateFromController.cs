@@ -19,7 +19,7 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="displays">Display Columns</param>
         /// <param name="columns">Column Name</param>
-        /// <param name="C_BPartner_IDs">Business Partner</param>
+        /// <param name="VAB_BusinessPartner_IDs">Business Partner</param>
         /// <param name="isReturnTrxs">Return Transaction</param>
         /// <param name="OrgIds">Organization</param>
         /// <param name="IsDrop">Drop Shipment</param>
@@ -27,11 +27,11 @@ namespace VIS.Controllers
         /// <param name="forInvoices">For Invoice</param>
         ///  <param name="recordID">C_Invoice_ID</param>
         /// <returns>List of Orders in Json Format</returns>
-        public JsonResult VCreateGetOrders(string displays, string columns, int C_BPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices , int recordID)
+        public JsonResult VCreateGetOrders(string displays, string columns, int VAB_BusinessPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices , int recordID)
         {
             var ctx = Session["ctx"] as Ctx;
             VCreateFromModel obj = new VCreateFromModel();
-            var value = obj.VCreateGetOrders(ctx, displays, columns, C_BPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices , recordID);
+            var value = obj.VCreateGetOrders(ctx, displays, columns, VAB_BusinessPartner_IDs, isReturnTrxs, OrgIds, IsDrop, IsSOTrx, forInvoices , recordID);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 
@@ -81,7 +81,7 @@ namespace VIS.Controllers
                         + " LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)"
                         + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                         + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
-                        + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)";
+                        + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)";
 
             if (isBaseLangess != "")
             {
@@ -237,14 +237,14 @@ namespace VIS.Controllers
                   + " LEFT OUTER JOIN C_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
 
                 sql.Append(forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-                sql.Append(" IS NOT NULL LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+                sql.Append(" IS NOT NULL LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
                 if (isBaseLangess != "")
                 {
                     sql.Append(isBaseLangess);
                 }
 
-                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs + " AND C.C_Charge_ID >0 ");
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Order_ID=" + C_Ord_IDs + " AND C.VAB_Charge_ID >0 ");
 
                 if (DelivDates != "")
                 {
@@ -311,7 +311,7 @@ namespace VIS.Controllers
                + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
             sql += (forInvoices ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-            sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)";
+            sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)";
 
             if (isBaseLangs != "")
             {
@@ -380,7 +380,7 @@ namespace VIS.Controllers
                 + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ";
 
             sql += (forInvoices ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
-            sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)";
+            sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)";
 
             if (isBaseLangs != "")
             {
@@ -531,7 +531,7 @@ namespace VIS.Controllers
                     sql += isBaseLanguages + " ";
                 }
 
-                sql += "INNER JOIN C_charge c ON (l.C_charge_ID=c.C_charge_ID) "
+                sql += "INNER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID) "
                     + " LEFT JOIN C_OrderLine ol ON ol.C_OrderLine_ID = l.c_orderline_id "
                     + " LEFT JOIN c_order o ON o.c_order_id = ol.c_order_id LEFT JOIN c_paymentterm pt ON pt.C_Paymentterm_id = o.c_paymentterm_id "
                     //+ "LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
@@ -762,11 +762,11 @@ namespace VIS.Controllers
 
                 sql.Append(" LEFT OUTER JOIN C_Invoice i ON (i.C_Invoice_ID = l.C_Invoice_ID)"
                   + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = i.C_PaymentTerm_ID)"
-                  + " LEFT OUTER JOIN C_OrderLine m ON(m.C_OrderLine_ID = l.C_OrderLine_ID) AND m.C_OrderLine_ID IS NOT NULL LEFT OUTER JOIN C_Charge c ON (l.C_Charge_ID=c.C_Charge_ID)");
+                  + " LEFT OUTER JOIN C_OrderLine m ON(m.C_OrderLine_ID = l.C_OrderLine_ID) AND m.C_OrderLine_ID IS NOT NULL LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
 
 
-                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Invoice_ID=" + cInvoiceID + " AND C.C_Charge_ID>0 ");
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Invoice_ID=" + cInvoiceID + " AND C.VAB_Charge_ID>0 ");
 
                 sql.Append(" GROUP BY l.QtyInvoiced, l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
                       + "l.M_Product_ID,c.Name, c.Value, l.C_InvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, i.C_PaymentTerm_ID , t.Name");
@@ -843,23 +843,23 @@ namespace VIS.Controllers
             bool countVA034 = Env.IsModuleInstalled("VA034_"); //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
             StringBuilder sql = new StringBuilder();
             // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on payment.
-            sql.Append("SELECT p.DateAcct AS DateTrx, p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID, c.ISO_Code, p.PayAmt,"
+            sql.Append("SELECT p.DateAcct AS DateTrx, p.C_Payment_ID, p.DocumentNo, ba.VAB_Currency_ID, c.ISO_Code, p.PayAmt,"
                 // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                + " currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,p.DateAcct,p.C_ConversionType_ID,p.VAF_Client_ID,p.VAF_Org_ID) AS ConvertedAmt,"   //  #1
+                + " currencyConvert(p.PayAmt,p.VAB_Currency_ID,ba.VAB_Currency_ID,p.DateAcct,p.VAB_CurrencyType_ID,p.VAF_Client_ID,p.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " pay.Description, bp.Name, 'P' AS Type");
 
             if (countVA034)
                 sql.Append(", p.VA034_DepositSlipNo");
 
-            sql.Append(", p.TrxNo, p.CheckNo  FROM C_BankAccount ba"
-                + " INNER JOIN C_Payment_v p ON (p.C_BankAccount_ID=ba.C_BankAccount_ID)"
+            sql.Append(", p.TrxNo, p.CheckNo  FROM VAB_Bank_Acct ba"
+                + " INNER JOIN C_Payment_v p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
                 + " INNER JOIN C_Payment pay ON p.C_Payment_ID=pay.C_Payment_ID"
-                + " INNER JOIN C_Currency c ON (p.C_Currency_ID=c.C_Currency_ID)"
-                + " LEFT OUTER JOIN C_BPartner bp ON (p.C_BPartner_ID=bp.C_BPartner_ID) "
+                + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID)"
+                + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                 + "WHERE p.Processed='Y' AND p.IsReconciled='N'"
                 + " AND p.DocStatus IN ('CO','CL','RE','VO') AND p.PayAmt<>0"
                 + " AND p.DateAcct <= " + dates      //JID_1293: it should show only those payment having trx date less than Bank Statment date 
-                + " AND p.C_BankAccount_ID = " + cBankAccountId);                           	//  #2
+                + " AND p.VAB_Bank_Acct_ID = " + cBankAccountId);                           	//  #2
             if (cBPartnerIDs != "0")
             {
                 sql.Append(cBPartnerIDs);
@@ -888,29 +888,29 @@ namespace VIS.Controllers
             {
                 sql.Append(trxDatess);
             }
-            sql.Append(" AND NOT EXISTS (SELECT * FROM C_BankStatementLine l WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)");         //	Voided Bank Statements have 0 StmtAmt
+            sql.Append(" AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)");         //	Voided Bank Statements have 0 StmtAmt
 
             bool countVA012 = Env.IsModuleInstalled("VA012_");    //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012)
             {
                 // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on Cash Journal.
-                sql.Append(" UNION SELECT cs.DateAcct AS DateTrx, cl.C_CashLine_ID AS C_Payment_ID, cs.DocumentNo, ba.C_Currency_ID, c.ISO_Code, (-1)*cl.Amount AS PayAmt,"
-                + " currencyConvert((-1)*cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,cs.DateAcct,cl.C_ConversionType_ID,cs.VAF_Client_ID,cs.VAF_Org_ID) AS ConvertedAmt,"   //  #1
+                sql.Append(" UNION SELECT cs.DateAcct AS DateTrx, cl.VAB_CashJRNLLine_ID AS C_Payment_ID, cs.DocumentNo, ba.VAB_Currency_ID, c.ISO_Code, (-1)*cl.Amount AS PayAmt,"
+                + " currencyConvert((-1)*cl.Amount,cl.VAB_Currency_ID,ba.VAB_Currency_ID,cs.DateAcct,cl.VAB_CurrencyType_ID,cs.VAF_Client_ID,cs.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " cl.Description, Null AS Name, 'C' AS Type");
 
                 if (countVA034)
                     sql.Append(", NULL AS VA034_DepositSlipNo");
 
-                sql.Append(", null AS TrxNo, null AS CheckNo FROM C_BankAccount ba"
-                         + " INNER JOIN C_CashLine cl ON (cl.C_BankAccount_ID=ba.C_BankAccount_ID)"
-                         + " INNER JOIN C_Cash cs ON (cl.C_Cash_ID=cs.C_Cash_ID)"
-                         + " INNER JOIN C_Charge chrg ON chrg.C_Charge_ID=cl.C_Charge_ID"
-                         + " INNER JOIN C_Currency c ON (cl.C_Currency_ID=c.C_Currency_ID)"
+                sql.Append(", null AS TrxNo, null AS CheckNo FROM VAB_Bank_Acct ba"
+                         + " INNER JOIN VAB_CashJRNLLine cl ON (cl.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
+                         + " INNER JOIN VAB_CashJRNL cs ON (cl.VAB_CashJRNL_ID=cs.VAB_CashJRNL_ID)"
+                         + " INNER JOIN VAB_Charge chrg ON chrg.VAB_Charge_ID=cl.VAB_Charge_ID"
+                         + " INNER JOIN VAB_Currency c ON (cl.VAB_Currency_ID=c.VAB_Currency_ID)"
                          + " WHERE cs.Processed='Y' AND cl.VA012_IsReconciled='N'"
                          + " AND cl.CashType ='C' AND chrg.DTD001_ChargeType ='CON'"
                          + " AND cs.DocStatus IN ('CO','CL','RE','VO') AND cl.Amount<>0"
                          + " AND cs.DateAcct <= " + dates       // JID_1293: it should show only those Cash journal having statement date less than Bank Statment date 
-                         + " AND cl.C_BankAccount_ID = " + cBankAccountId);                             	//  #2            
+                         + " AND cl.VAB_Bank_Acct_ID = " + cBankAccountId);                             	//  #2            
                 if (DocumentNoUnions != "")
                 {
                     sql.Append(DocumentNoUnions);
@@ -919,7 +919,7 @@ namespace VIS.Controllers
                 {
                     sql.Append(trxDatesUnions);
                 }
-                sql.Append(" AND NOT EXISTS (SELECT * FROM C_BankStatementLine l WHERE cl.C_CashLine_ID=l.C_CashLine_ID AND l.StmtAmt <> 0)");      //	Voided Bank Statements have 0 StmtAmt
+                sql.Append(" AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l WHERE cl.VAB_CashJRNLLine_ID=l.VAB_CashJRNLLine_ID AND l.StmtAmt <> 0)");      //	Voided Bank Statements have 0 StmtAmt
             }
 
             return sql.ToString();

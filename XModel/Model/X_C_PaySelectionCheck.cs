@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (C_PaySelectionCheck_ID == 0)
             {
-            SetC_BPartner_ID (0);
+            SetVAB_BusinessPartner_ID (0);
             SetC_PaySelectionCheck_ID (0);
             SetC_PaySelection_ID (0);
             SetDiscountAmt (0.0);
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         {
             /** if (C_PaySelectionCheck_ID == 0)
             {
-            SetC_BPartner_ID (0);
+            SetVAB_BusinessPartner_ID (0);
             SetC_PaySelectionCheck_ID (0);
             SetC_PaySelection_ID (0);
             SetDiscountAmt (0.0);
@@ -134,33 +134,33 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Partner Bank Account.
-        @param C_BP_BankAccount_ID Bank Account of the Business Partner */
-        public void SetC_BP_BankAccount_ID(int C_BP_BankAccount_ID)
+        @param VAB_BPart_Bank_Acct_ID Bank Account of the Business Partner */
+        public void SetVAB_BPart_Bank_Acct_ID(int VAB_BPart_Bank_Acct_ID)
         {
-            if (C_BP_BankAccount_ID <= 0) Set_Value("C_BP_BankAccount_ID", null);
+            if (VAB_BPart_Bank_Acct_ID <= 0) Set_Value("VAB_BPart_Bank_Acct_ID", null);
             else
-                Set_Value("C_BP_BankAccount_ID", C_BP_BankAccount_ID);
+                Set_Value("VAB_BPart_Bank_Acct_ID", VAB_BPart_Bank_Acct_ID);
         }
         /** Get Partner Bank Account.
         @return Bank Account of the Business Partner */
-        public int GetC_BP_BankAccount_ID()
+        public int GetVAB_BPart_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BP_BankAccount_ID");
+            Object ii = Get_Value("VAB_BPart_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Business Partner */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Business Partner */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID < 1) throw new ArgumentException("C_BPartner_ID is mandatory.");
-            Set_Value("C_BPartner_ID", C_BPartner_ID);
+            if (VAB_BusinessPartner_ID < 1) throw new ArgumentException("VAB_BusinessPartner_ID is mandatory.");
+            Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Business Partner */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

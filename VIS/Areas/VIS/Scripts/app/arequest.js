@@ -42,7 +42,7 @@
     };
 
 
-    function ARequest(invoker, VAF_TableView_ID, Record_ID, C_BPartner_ID, iBusy, container) {
+    function ARequest(invoker, VAF_TableView_ID, Record_ID, VAB_BusinessPartner_ID, iBusy, container) {
         var VAF_Screen_ID = 232;
         var m_where = '';
         var window = null;
@@ -64,7 +64,7 @@
                 m_where += " OR VAF_UserContact_ID=" + Record_ID + " OR SalesRep_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 291) {//MBPartner.Table_ID){
-                m_where += " OR C_BPartner_ID=" + Record_ID;
+                m_where += " OR VAB_BusinessPartner_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 259) {// MOrder.Table_ID){
                 m_where += " OR C_Order_ID=" + Record_ID;
@@ -82,7 +82,7 @@
                 m_where += " OR C_Project_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 539) {// MAsset.Table_ID){
-                m_where += " OR A_Asset_ID=" + Record_ID;
+                m_where += " OR VAA_Asset_ID=" + Record_ID;
             }
             //sql = "SELECT Processed, COUNT(*) "
             //    + "FROM R_Request WHERE " + m_where
@@ -160,20 +160,20 @@
                     tab.setValue("VAF_TableView_ID", VAF_TableView_ID);
                     tab.setValue("Record_ID", Record_ID);
 
-                    if (C_BPartner_ID != null && C_BPartner_ID > 0)
+                    if (VAB_BusinessPartner_ID != null && VAB_BusinessPartner_ID > 0)
                     {
-                        tab.setValue("C_BPartner_ID", C_BPartner_ID);
+                        tab.setValue("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
                     }
 
                     if (VAF_TableView_ID == 291)// MBPartner.Table_ID)
-                        tab.setValue("C_BPartner_ID", Record_ID);
+                        tab.setValue("VAB_BusinessPartner_ID", Record_ID);
                     else if (VAF_TableView_ID == 114)//MUser.Table_ID)
                         tab.setValue("VAF_UserContact_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 203)// MProject.Table_ID)
                         tab.setValue("C_Project_ID", Record_ID);
                     else if (VAF_TableView_ID == 539)// MAsset.Table_ID)
-                        tab.setValue("A_Asset_ID", Record_ID);
+                        tab.setValue("VAA_Asset_ID", Record_ID);
 
                     else if (VAF_TableView_ID == 259)
                         tab.setValue("C_Order_ID", Record_ID);

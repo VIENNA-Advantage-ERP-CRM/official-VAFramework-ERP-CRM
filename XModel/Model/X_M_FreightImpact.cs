@@ -67,15 +67,15 @@ Set_Value ("Record_ID", Record_ID);}/** Get Record ID.
 @return Direct internal record ID */
 public int GetRecord_ID() {Object ii = Get_Value("Record_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID)
 {
-    if (C_AcctSchema_ID <= 0) Set_Value("C_AcctSchema_ID", null);
+    if (VAB_AccountBook_ID <= 0) Set_Value("VAB_AccountBook_ID", null);
     else
-        Set_Value("C_AcctSchema_ID", C_AcctSchema_ID);
+        Set_Value("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }/** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() { Object ii = Get_Value("C_AcctSchema_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+public int GetVAB_AccountBook_ID() { Object ii = Get_Value("VAB_AccountBook_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 /** Set Cost Element.
 @param M_CostElement_ID Product Cost Element */
 public void SetM_CostElement_ID(int M_CostElement_ID)

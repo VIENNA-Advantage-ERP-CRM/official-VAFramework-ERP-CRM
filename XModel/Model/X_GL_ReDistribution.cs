@@ -3,9 +3,9 @@ namespace VAdvantage.Model{
 using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for GL_ReDistribution
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_ReDistribution : PO{public X_GL_ReDistribution (Context ctx, int GL_ReDistribution_ID, Trx trxName) : base (ctx, GL_ReDistribution_ID, trxName){/** if (GL_ReDistribution_ID == 0){SetC_AcctSchema_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
+public class X_GL_ReDistribution : PO{public X_GL_ReDistribution (Context ctx, int GL_ReDistribution_ID, Trx trxName) : base (ctx, GL_ReDistribution_ID, trxName){/** if (GL_ReDistribution_ID == 0){SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
 SetGL_ReDistribution_ID (0);} */
-}public X_GL_ReDistribution (Ctx ctx, int GL_ReDistribution_ID, Trx trxName) : base (ctx, GL_ReDistribution_ID, trxName){/** if (GL_ReDistribution_ID == 0){SetC_AcctSchema_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
+}public X_GL_ReDistribution (Ctx ctx, int GL_ReDistribution_ID, Trx trxName) : base (ctx, GL_ReDistribution_ID, trxName){/** if (GL_ReDistribution_ID == 0){SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
 SetGL_ReDistribution_ID (0);} */
 }/** Load Constructor 
 @param ctx context
@@ -53,22 +53,22 @@ public void SetAccount_ID (int Account_ID){if (Account_ID <= 0) Set_Value ("Acco
 Set_Value ("Account_ID", Account_ID);}/** Get Account.
 @return Account used */
 public int GetAccount_ID() {Object ii = Get_Value("Account_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_AcctSchema1_ID VAF_Control_Ref_ID=136 */
-public static int C_ACCTSCHEMA1_ID_VAF_Control_Ref_ID=136;/** Set Primary Accounting Schema.
-@param C_AcctSchema1_ID Primary rules for accounting */
-public void SetC_AcctSchema1_ID (int C_AcctSchema1_ID){if (C_AcctSchema1_ID <= 0) Set_Value ("C_AcctSchema1_ID", null);else
-Set_Value ("C_AcctSchema1_ID", C_AcctSchema1_ID);}/** Get Primary Accounting Schema.
+/** VAB_AccountBook1_ID VAF_Control_Ref_ID=136 */
+public static int VAB_ACCOUNTBOOK1_ID_VAF_Control_Ref_ID=136;/** Set Primary Accounting Schema.
+@param VAB_AccountBook1_ID Primary rules for accounting */
+public void SetVAB_AccountBook1_ID (int VAB_AccountBook1_ID){if (VAB_AccountBook1_ID <= 0) Set_Value ("VAB_AccountBook1_ID", null);else
+Set_Value ("VAB_AccountBook1_ID", VAB_AccountBook1_ID);}/** Get Primary Accounting Schema.
 @return Primary rules for accounting */
-public int GetC_AcctSchema1_ID() {Object ii = Get_Value("C_AcctSchema1_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID){if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);}/** Get Accounting Schema.
+public int GetVAB_AccountBook1_ID() {Object ii = Get_Value("VAB_AccountBook1_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Accounting Schema.
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID){if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);}/** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() {Object ii = Get_Value("C_AcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID){if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);else
-Set_Value ("C_Currency_ID", C_Currency_ID);}/** Get Currency.
+public int GetVAB_AccountBook_ID() {Object ii = Get_Value("VAB_AccountBook_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID){if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);else
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() {Object ii = Get_Value("C_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Period.
+public int GetVAB_Currency_ID() {Object ii = Get_Value("VAB_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Period.
 @param C_Period_ID Period of the Calendar */
 public void SetC_Period_ID (int C_Period_ID){if (C_Period_ID <= 0) Set_Value ("C_Period_ID", null);else
 Set_Value ("C_Period_ID", C_Period_ID);}/** Get Period.

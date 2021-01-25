@@ -32,16 +32,16 @@ namespace VAdvantage.Model
   /// </summary>
   /// <param name="acct">account (ValidCombination)</param>
   /// <param name="PostingType">only posting type</param>
-  /// <param name="C_DocType_ID">only document type</param>
+  /// <param name="VAB_DocTypes_ID">only document type</param>
     /// <returns>array of distributions</returns>
 	public static MDistribution[] Get (MAccount acct,  
-		String PostingType, int C_DocType_ID)
+		String PostingType, int VAB_DocTypes_ID)
 	{
-		return Get (acct.GetCtx(), acct.GetC_AcctSchema_ID(), 
-			PostingType, C_DocType_ID,
+		return Get (acct.GetCtx(), acct.GetVAB_AccountBook_ID(), 
+			PostingType, VAB_DocTypes_ID,
 			acct.GetVAF_Org_ID(), acct.GetAccount_ID(),
-			acct.GetM_Product_ID(), acct.GetC_BPartner_ID(), acct.GetC_Project_ID(),
-			acct.GetC_Campaign_ID(), acct.GetC_Activity_ID(), acct.GetVAF_OrgTrx_ID(),
+			acct.GetM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetC_Project_ID(),
+			acct.GetVAB_Promotion_ID(), acct.GetVAB_BillingCode_ID(), acct.GetVAF_OrgTrx_ID(),
 			acct.GetC_SalesRegion_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
 			acct.GetUser1_ID(), acct.GetUser2_ID());
 	}	//	get
@@ -49,16 +49,16 @@ namespace VAdvantage.Model
         /// Get Distributions for combination 
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">schema</param>
+        /// <param name="VAB_AccountBook_ID">schema</param>
         /// <param name="PostingType">posting type</param>
-        /// <param name="C_DocType_ID">document type</param>
+        /// <param name="VAB_DocTypes_ID">document type</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="Account_ID">account</param>
         /// <param name="M_Product_ID">product</param>
-        /// <param name="C_BPartner_ID">partner</param>
+        /// <param name="VAB_BusinessPartner_ID">partner</param>
         /// <param name="C_Project_ID">project</param>
-        /// <param name="C_Campaign_ID">campaign</param>
-        /// <param name="C_Activity_ID">activity</param>
+        /// <param name="VAB_Promotion_ID">campaign</param>
+        /// <param name="VAB_BillingCode_ID">activity</param>
         /// <param name="VAF_OrgTrx_ID">trx org</param>
         /// <param name="C_SalesRegion_ID">C_SalesRegion_ID</param>
         /// <param name="C_LocTo_ID">location to</param>
@@ -66,11 +66,11 @@ namespace VAdvantage.Model
         /// <param name="User1_ID">user 1</param>
         /// <param name="User2_ID">user 2</param>
        /// <returns>array of distributions or null</returns>
-	public static MDistribution[] Get (Ctx ctx, int C_AcctSchema_ID, 
-		String PostingType, int C_DocType_ID,
+	public static MDistribution[] Get (Ctx ctx, int VAB_AccountBook_ID, 
+		String PostingType, int VAB_DocTypes_ID,
 		int VAF_Org_ID, int Account_ID,
-		int M_Product_ID, int C_BPartner_ID, int C_Project_ID,
-		int C_Campaign_ID, int C_Activity_ID, int VAF_OrgTrx_ID,
+		int M_Product_ID, int VAB_BusinessPartner_ID, int C_Project_ID,
+		int VAB_Promotion_ID, int VAB_BillingCode_ID, int VAF_OrgTrx_ID,
 		int C_SalesRegion_ID, int C_LocTo_ID, int C_LocFrom_ID,
 		int User1_ID, int User2_ID)
 	{
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
 				continue;
             }
 			//	Mandatory Acct Schema
-			if (distribution.GetC_AcctSchema_ID() != C_AcctSchema_ID)
+			if (distribution.GetVAB_AccountBook_ID() != VAB_AccountBook_ID)
             {
 				continue;
             }
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (distribution.GetC_DocType_ID() != 0 && distribution.GetC_DocType_ID() != C_DocType_ID)
+			if (distribution.GetVAB_DocTypes_ID() != 0 && distribution.GetVAB_DocTypes_ID() != VAB_DocTypes_ID)
             {
 				continue;
 			}
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyBPartner() && distribution.GetC_BPartner_ID() != C_BPartner_ID)
+			if (!distribution.IsAnyBPartner() && distribution.GetVAB_BusinessPartner_ID() != VAB_BusinessPartner_ID)
             {
 				continue;
             }
@@ -124,11 +124,11 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyCampaign() && distribution.GetC_Campaign_ID() != C_Campaign_ID)
+			if (!distribution.IsAnyCampaign() && distribution.GetVAB_Promotion_ID() != VAB_Promotion_ID)
             {
 				continue;
             }
-			if (!distribution.IsAnyActivity() && distribution.GetC_Activity_ID() != C_Activity_ID)
+			if (!distribution.IsAnyActivity() && distribution.GetVAB_BillingCode_ID() != VAB_BillingCode_ID)
             {
 				continue;
             }
@@ -242,7 +242,7 @@ namespace VAdvantage.Model
 		//super (ctx, GL_Distribution_ID, trxName);
 		if (GL_Distribution_ID == 0)
 		{
-		//	setC_AcctSchema_ID (0);
+		//	setVAB_AccountBook_ID (0);
 		//	setName (null);
 			//
 			SetAnyAcct (true);	// Y
@@ -401,12 +401,12 @@ namespace VAdvantage.Model
 	/// </summary>
 	/// <param name="acct">account</param>
 	/// <param name="Amt">amount</param>
-	/// <param name="C_Currency_ID">currency</param>
-	public void Distribute (MAccount acct, Decimal Amt, int C_Currency_ID)
+	/// <param name="VAB_Currency_ID">currency</param>
+	public void Distribute (MAccount acct, Decimal Amt, int VAB_Currency_ID)
 	{
 		log.Info("Amt=" + Amt + " - " + acct);
 		GetLines(false);
-		int precision = MCurrency.GetStdPrecision(GetCtx(), C_Currency_ID);
+		int precision = MCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
 		//	First Round
 		Decimal total = Env.ZERO;
 		int indexBiggest = -1;
@@ -486,17 +486,17 @@ namespace VAdvantage.Model
         {
 			SetAccount_ID(0);
         }
-		if (IsAnyActivity() && GetC_Activity_ID() != 0)
+		if (IsAnyActivity() && GetVAB_BillingCode_ID() != 0)
         {
-			SetC_Activity_ID(0);
+			SetVAB_BillingCode_ID(0);
         }
-		if (IsAnyBPartner() && GetC_BPartner_ID() != 0)
+		if (IsAnyBPartner() && GetVAB_BusinessPartner_ID() != 0)
         {
-			SetC_BPartner_ID(0);
+			SetVAB_BusinessPartner_ID(0);
         }
-		if (IsAnyCampaign() && GetC_Campaign_ID() != 0)
+		if (IsAnyCampaign() && GetVAB_Promotion_ID() != 0)
         {
-			SetC_Campaign_ID(0);
+			SetVAB_Promotion_ID(0);
         }
 		if (IsAnyLocFrom() && GetC_LocFrom_ID() != 0)
         {

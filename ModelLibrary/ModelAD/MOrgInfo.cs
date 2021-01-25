@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         /// <returns>acct schema</returns>
         public MAcctSchema GetMAcctSchema()
         {
-            if (_acctSchema == null && GetC_AcctSchema_ID() != 0)
-                _acctSchema = new MAcctSchema(GetCtx(), GetC_AcctSchema_ID(), null);
+            if (_acctSchema == null && GetVAB_AccountBook_ID() != 0)
+                _acctSchema = new MAcctSchema(GetCtx(), GetVAB_AccountBook_ID(), null);
             return _acctSchema;
         }
 
@@ -122,13 +122,13 @@ namespace VAdvantage.Model
         ///Get Default Accounting Currency
         /// </summary>
         /// <returns>currency or 0</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             if (_acctSchema == null)
                 GetMAcctSchema();
             if (_acctSchema != null)
-                return _acctSchema.GetC_Currency_ID();
+                return _acctSchema.GetVAB_Currency_ID();
             return 0;
-        }	//	getC_Currency_ID
+        }	//	getVAB_Currency_ID
     }
 }

@@ -67,7 +67,7 @@ namespace ViennaAdvantage.Process
                 throw new Exception("@C_Lead_ID@ ID=0");
             }
             MLead lead = new MLead(GetCtx(), _C_Lead_ID, Get_TrxName());
-            if (lead.GetC_BP_Group_ID() == 0)
+            if (lead.GetVAB_BPart_Category_ID() == 0)
             {
                 return Msg.GetMsg(GetCtx(), "SelectBPGroup");
             }
@@ -97,7 +97,7 @@ namespace ViennaAdvantage.Process
             //MBPartner bp = lead.GetBPartner();
             //if (bp != null)
             //{
-            //    return "@C_BPartner_ID@: " + bp.GetName();
+            //    return "@VAB_BusinessPartner_ID@: " + bp.GetName();
             //}
             //MUser user = lead.GetUser();
             //if (user != null)

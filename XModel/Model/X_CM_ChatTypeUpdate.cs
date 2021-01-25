@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_ChatTypeUpdate
+/** Generated Model for VACM_ChatTypeUpdateAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_ChatTypeUpdate : PO
+public class X_VACM_ChatTypeUpdateAlert : PO
 {
-public X_CM_ChatTypeUpdate (Context ctx, int CM_ChatTypeUpdate_ID, Trx trxName) : base (ctx, CM_ChatTypeUpdate_ID, trxName)
+public X_VACM_ChatTypeUpdateAlert (Context ctx, int VACM_ChatTypeUpdateAlert_ID, Trx trxName) : base (ctx, VACM_ChatTypeUpdateAlert_ID, trxName)
 {
-/** if (CM_ChatTypeUpdate_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetCM_ChatType_ID (0);
-SetIsSelfService (false);
-}
- */
-}
-public X_CM_ChatTypeUpdate (Ctx ctx, int CM_ChatTypeUpdate_ID, Trx trxName) : base (ctx, CM_ChatTypeUpdate_ID, trxName)
-{
-/** if (CM_ChatTypeUpdate_ID == 0)
+/** if (VACM_ChatTypeUpdateAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetCM_ChatType_ID (0);
@@ -36,12 +26,22 @@ SetIsSelfService (false);
 }
  */
 }
+public X_VACM_ChatTypeUpdateAlert (Ctx ctx, int VACM_ChatTypeUpdateAlert_ID, Trx trxName) : base (ctx, VACM_ChatTypeUpdateAlert_ID, trxName)
+{
+/** if (VACM_ChatTypeUpdateAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetCM_ChatType_ID (0);
+SetIsSelfService (false);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatTypeUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_ChatTypeUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_CM_ChatTypeUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatTypeUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_ChatTypeUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_CM_ChatTypeUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_ChatTypeUpdate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_ChatTypeUpdateAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_ChatTypeUpdate()
+static X_VACM_ChatTypeUpdateAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389051762L;
 public static int Table_ID;
  // =875;
 
-/** TableName=CM_ChatTypeUpdate */
-public static String Table_Name="CM_ChatTypeUpdate";
+/** TableName=VACM_ChatTypeUpdateAlert */
+public static String Table_Name="VACM_ChatTypeUpdateAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_ChatTypeUpdate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_ChatTypeUpdateAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Chat Type.
-@param CM_ChatType_ID Type of discussion / chat */
-public void SetCM_ChatType_ID (int CM_ChatType_ID)
+@param VACM_ChatType_ID Type of discussion / chat */
+public void SetCM_ChatType_ID (int VACM_ChatType_ID)
 {
-if (CM_ChatType_ID < 1) throw new ArgumentException ("CM_ChatType_ID is mandatory.");
-Set_ValueNoCheck ("CM_ChatType_ID", CM_ChatType_ID);
+if (VACM_ChatType_ID < 1) throw new ArgumentException ("VACM_ChatType_ID is mandatory.");
+Set_ValueNoCheck ("VACM_ChatType_ID", VACM_ChatType_ID);
 }
 /** Get Chat Type.
 @return Type of discussion / chat */
 public int GetCM_ChatType_ID() 
 {
-Object ii = Get_Value("CM_ChatType_ID");
+Object ii = Get_Value("VACM_ChatType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

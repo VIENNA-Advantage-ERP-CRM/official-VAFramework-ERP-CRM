@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BP_Status
+/** Generated Model for VAB_BPart_Status
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BP_Status : PO
+public class X_VAB_BPart_Status : PO
 {
-public X_C_BP_Status (Context ctx, int C_BP_Status_ID, Trx trxName) : base (ctx, C_BP_Status_ID, trxName)
+public X_VAB_BPart_Status (Context ctx, int VAB_BPart_Status_ID, Trx trxName) : base (ctx, VAB_BPart_Status_ID, trxName)
 {
-/** if (C_BP_Status_ID == 0)
+/** if (VAB_BPart_Status_ID == 0)
 {
-SetC_BP_Status_ID (0);
+SetVAB_BPart_Status_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_BP_Status (Ctx ctx, int C_BP_Status_ID, Trx trxName) : base (ctx, C_BP_Status_ID, trxName)
+public X_VAB_BPart_Status (Ctx ctx, int VAB_BPart_Status_ID, Trx trxName) : base (ctx, VAB_BPart_Status_ID, trxName)
 {
-/** if (C_BP_Status_ID == 0)
+/** if (VAB_BPart_Status_ID == 0)
 {
-SetC_BP_Status_ID (0);
+SetVAB_BPart_Status_ID (0);
 SetName (null);
 SetValue (null);
 }
@@ -41,7 +41,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_BP_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_BP_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_Status (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_Status (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BP_Status()
+static X_VAB_BPart_Status()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389053533L;
 public static int Table_ID;
  // =911;
 
-/** TableName=C_BP_Status */
-public static String Table_Name="C_BP_Status";
+/** TableName=VAB_BPart_Status */
+public static String Table_Name="VAB_BPart_Status";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BP_Status[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_Status[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set BP Status.
-@param C_BP_Status_ID Business Partner Status */
-public void SetC_BP_Status_ID (int C_BP_Status_ID)
+@param VAB_BPart_Status_ID Business Partner Status */
+public void SetVAB_BPart_Status_ID (int VAB_BPart_Status_ID)
 {
-if (C_BP_Status_ID < 1) throw new ArgumentException ("C_BP_Status_ID is mandatory.");
-Set_ValueNoCheck ("C_BP_Status_ID", C_BP_Status_ID);
+if (VAB_BPart_Status_ID < 1) throw new ArgumentException ("VAB_BPart_Status_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BPart_Status_ID", VAB_BPart_Status_ID);
 }
 /** Get BP Status.
 @return Business Partner Status */
-public int GetC_BP_Status_ID() 
+public int GetVAB_BPart_Status_ID() 
 {
-Object ii = Get_Value("C_BP_Status_ID");
+Object ii = Get_Value("VAB_BPart_Status_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

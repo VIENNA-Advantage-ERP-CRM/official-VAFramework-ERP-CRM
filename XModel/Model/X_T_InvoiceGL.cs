@@ -27,7 +27,7 @@ SetAmtRevalCrDiff (0.0);
 SetAmtRevalDr (0.0);
 SetAmtRevalDrDiff (0.0);
 SetAmtSourceBalance (0.0);
-SetC_ConversionTypeReval_ID (0);
+SetVAB_CurrencyTypeReval_ID (0);
 SetC_Invoice_ID (0);
 SetDateReval (DateTime.Now);
 SetFact_Acct_ID (0);
@@ -48,7 +48,7 @@ SetAmtRevalCrDiff (0.0);
 SetAmtRevalDr (0.0);
 SetAmtRevalDrDiff (0.0);
 SetAmtSourceBalance (0.0);
-SetC_ConversionTypeReval_ID (0);
+SetVAB_CurrencyTypeReval_ID (0);
 SetC_Invoice_ID (0);
 SetDateReval (DateTime.Now);
 SetFact_Acct_ID (0);
@@ -283,39 +283,39 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** C_ConversionTypeReval_ID VAF_Control_Ref_ID=352 */
-public static int C_CONVERSIONTYPEREVAL_ID_VAF_Control_Ref_ID=352;
+/** VAB_CurrencyTypeReval_ID VAF_Control_Ref_ID=352 */
+public static int VAB_CurrencyTypeREVAL_ID_VAF_Control_Ref_ID=352;
 /** Set Revaluation Conversion Type.
-@param C_ConversionTypeReval_ID Revaluation Currency Conversion Type */
-public void SetC_ConversionTypeReval_ID (int C_ConversionTypeReval_ID)
+@param VAB_CurrencyTypeReval_ID Revaluation Currency Conversion Type */
+public void SetVAB_CurrencyTypeReval_ID (int VAB_CurrencyTypeReval_ID)
 {
-if (C_ConversionTypeReval_ID < 1) throw new ArgumentException ("C_ConversionTypeReval_ID is mandatory.");
-Set_Value ("C_ConversionTypeReval_ID", C_ConversionTypeReval_ID);
+if (VAB_CurrencyTypeReval_ID < 1) throw new ArgumentException ("VAB_CurrencyTypeReval_ID is mandatory.");
+Set_Value ("VAB_CurrencyTypeReval_ID", VAB_CurrencyTypeReval_ID);
 }
 /** Get Revaluation Conversion Type.
 @return Revaluation Currency Conversion Type */
-public int GetC_ConversionTypeReval_ID() 
+public int GetVAB_CurrencyTypeReval_ID() 
 {
-Object ii = Get_Value("C_ConversionTypeReval_ID");
+Object ii = Get_Value("VAB_CurrencyTypeReval_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_DocTypeReval_ID VAF_Control_Ref_ID=170 */
-public static int C_DOCTYPEREVAL_ID_VAF_Control_Ref_ID=170;
+/** VAB_DocTypesReval_ID VAF_Control_Ref_ID=170 */
+public static int VAB_DocTypesREVAL_ID_VAF_Control_Ref_ID=170;
 /** Set Revaluation Document Type.
-@param C_DocTypeReval_ID Document Type for Revaluation Journal */
-public void SetC_DocTypeReval_ID (int C_DocTypeReval_ID)
+@param VAB_DocTypesReval_ID Document Type for Revaluation Journal */
+public void SetVAB_DocTypesReval_ID (int VAB_DocTypesReval_ID)
 {
-if (C_DocTypeReval_ID <= 0) Set_Value ("C_DocTypeReval_ID", null);
+if (VAB_DocTypesReval_ID <= 0) Set_Value ("VAB_DocTypesReval_ID", null);
 else
-Set_Value ("C_DocTypeReval_ID", C_DocTypeReval_ID);
+Set_Value ("VAB_DocTypesReval_ID", VAB_DocTypesReval_ID);
 }
 /** Get Revaluation Document Type.
 @return Document Type for Revaluation Journal */
-public int GetC_DocTypeReval_ID() 
+public int GetVAB_DocTypesReval_ID() 
 {
-Object ii = Get_Value("C_DocTypeReval_ID");
+Object ii = Get_Value("VAB_DocTypesReval_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

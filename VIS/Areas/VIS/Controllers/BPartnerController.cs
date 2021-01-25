@@ -29,11 +29,11 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = param.Split(',');
-                int C_BPartner_ID;
+                int VAB_BusinessPartner_ID;
 
                 //Assign parameter value
-                C_BPartner_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MBPartner bpartner = new MBPartner(ctx, C_BPartner_ID, null);
+                VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                MBPartner bpartner = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
 
 
 
@@ -68,7 +68,7 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(objBPModel), JsonRequestBehavior.AllowGet);
         }
         [HttpPost, ValidateInput(false)]
-        public JsonResult AddBPartnerInfo(int C_BPartner_ID, string searchKey, string name, string name2, string greeting, string bpGroup, string bpRelation, string bpLocation, 
+        public JsonResult AddBPartnerInfo(int VAB_BusinessPartner_ID, string searchKey, string name, string name2, string greeting, string bpGroup, string bpRelation, string bpLocation, 
             string contact, string greeting1, string title, string email, string address, string phoneNo, string phoneNo2, string fax, int windowNo, string BPtype, 
             bool isCustomer, bool isVendor, bool isProspect, string fileName, string mobile, string webUrl, bool isEmployee)
         {
@@ -85,13 +85,13 @@ namespace VIS.Controllers
 
              fileUrl = Path.Combine(Server.MapPath("~/Images/Temp"), fileName);
             }
-            if (C_BPartner_ID > 0)
+            if (VAB_BusinessPartner_ID > 0)
             {
-                resultMsg = objContactModel.AddBPartner(searchKey, name, name2, greeting, bpGroup, bpRelation, bpLocation, contact, greeting1, title, email, address, phoneNo, phoneNo2, fax, ctx, windowNo, BPtype, C_BPartner_ID, isCustomer, isVendor, isProspect, fileUrl, mobile, webUrl, isEmployee); // Update Business Partner
+                resultMsg = objContactModel.AddBPartner(searchKey, name, name2, greeting, bpGroup, bpRelation, bpLocation, contact, greeting1, title, email, address, phoneNo, phoneNo2, fax, ctx, windowNo, BPtype, VAB_BusinessPartner_ID, isCustomer, isVendor, isProspect, fileUrl, mobile, webUrl, isEmployee); // Update Business Partner
             }
             else
             {
-                resultMsg = objContactModel.AddBPartner(searchKey, name, name2, greeting, bpGroup, bpRelation, bpLocation, contact, greeting1, title, email, address, phoneNo, phoneNo2, fax, ctx, windowNo, BPtype, C_BPartner_ID, isCustomer, isVendor, isProspect, fileUrl, mobile, webUrl, isEmployee);// Add New Business Partner
+                resultMsg = objContactModel.AddBPartner(searchKey, name, name2, greeting, bpGroup, bpRelation, bpLocation, contact, greeting1, title, email, address, phoneNo, phoneNo2, fax, ctx, windowNo, BPtype, VAB_BusinessPartner_ID, isCustomer, isVendor, isProspect, fileUrl, mobile, webUrl, isEmployee);// Add New Business Partner
             }
             if (resultMsg != string.Empty)
             {

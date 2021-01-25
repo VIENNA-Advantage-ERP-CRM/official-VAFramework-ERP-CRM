@@ -114,21 +114,21 @@ namespace VAdvantage.Model
 	/// Get Stages by Template
 	/// </summary>
 	/// <param name="project">project</param>
-	/// <param name="CM_Template_ID">id</param>
+	/// <param name="VACM_Layout_ID">id</param>
 	/// <returns>stages</returns>
-	public static MCStage[] GetStagesByTemplate (MWebProject project, int CM_Template_ID)
+	public static MCStage[] GetStagesByTemplate (MWebProject project, int VACM_Layout_ID)
 	{
 		List<MCStage> list = new List<MCStage>();
 		SqlParameter[] param=new SqlParameter[2];
         IDataReader idr=null;
-		String sql = "SELECT * FROM CM_CStage WHERE CM_WebProject_ID=@param1 AND CM_Template_ID=@param2";
+		String sql = "SELECT * FROM CM_CStage WHERE CM_WebProject_ID=@param1 AND VACM_Layout_ID=@param2";
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, project.get_TrxName());
 			//pstmt.setInt (1, project.getCM_WebProject_ID());
             param[0]=new SqlParameter("@param1",Utility.Util.GetValueOfInt(project.GetCM_WebProject_ID()));
-			//pstmt.setInt (2, CM_Template_ID);
-            param[1]=new SqlParameter("@param2",CM_Template_ID);
+			//pstmt.setInt (2, VACM_Layout_ID);
+            param[1]=new SqlParameter("@param2",VACM_Layout_ID);
             idr=DataBase.DB.ExecuteReader(sql,param,project.Get_TrxName());
 			while (idr.Read())
 			{
@@ -163,8 +163,8 @@ namespace VAdvantage.Model
 	/// <returns>template</returns>
 	public MTemplate GetTemplate() 
 	{
-		if (GetCM_Template_ID()>0 && _template==null)
-			_template = MTemplate.Get(GetCtx(), GetCM_Template_ID(), null);
+		if (GetVACM_Layout_ID()>0 && _template==null)
+			_template = MTemplate.Get(GetCtx(), GetVACM_Layout_ID(), null);
 		return _template;
 	} // getTemplate
 	
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
 	protected override bool BeforeSave (bool newRecord)
 	{
 		//	Length >0 if not (Binary, Image, Text Long)
-		if ((!this.IsSummary() || this.GetContainerType().Equals ("L")) && GetCM_Template_ID()==0)
+		if ((!this.IsSummary() || this.GetContainerType().Equals ("L")) && GetVACM_Layout_ID()==0)
 		{
 			log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Template"));
 			return false;
@@ -344,7 +344,7 @@ namespace VAdvantage.Model
 	/// <returns>true if updated</returns>
 	public bool CheckElements () 
     {
-		MTemplate thisTemplate = new MTemplate(GetCtx(), this.GetCM_Template_ID(), Get_TrxName());
+		MTemplate thisTemplate = new MTemplate(GetCtx(), this.GetVACM_Layout_ID(), Get_TrxName());
 		StringBuilder thisElementList = new StringBuilder(thisTemplate.GetElements());
 		while (thisElementList.ToString().IndexOf("\n")>=0) 
         {
@@ -388,20 +388,20 @@ namespace VAdvantage.Model
 	/// </summary>
 	/// <returns>true if updated</returns>
 	public bool CheckTemplateTable () {
-		int [] tableKeys = X_CM_TemplateTable.GetAllIDs("CM_TemplateTable", "CM_Template_ID=" + this.GetCM_Template_ID(), Get_TrxName());
+		int [] tableKeys = X_VACM_LayoutTable.GetAllIDs("VACM_LayoutTable", "VACM_Layout_ID=" + this.GetVACM_Layout_ID(), Get_TrxName());
 		if (tableKeys!=null) 
         {
 			for (int i=0;i<tableKeys.Length;i++)
             {
-				X_CM_TemplateTable thisTemplateTable = new X_CM_TemplateTable(GetCtx(), tableKeys[i], Get_TrxName());
-				int [] existingKeys = X_CM_CStageTTable.GetAllIDs("CM_CStageTTable", "CM_TemplateTable_ID=" + thisTemplateTable.Get_ID(), Get_TrxName());
+				X_VACM_LayoutTable thisTemplateTable = new X_VACM_LayoutTable(GetCtx(), tableKeys[i], Get_TrxName());
+				int [] existingKeys = X_CM_CStageTTable.GetAllIDs("CM_CStageTTable", "VACM_LayoutTable_ID=" + thisTemplateTable.Get_ID(), Get_TrxName());
 				if (existingKeys==null || existingKeys.Length==0)
                 {
 					X_CM_CStageTTable newCStageTTable = new X_CM_CStageTTable(GetCtx(), 0, Get_TrxName());
 					newCStageTTable.SetVAF_Client_ID(GetVAF_Client_ID());
 					newCStageTTable.SetVAF_Org_ID(GetVAF_Org_ID());
 					newCStageTTable.SetCM_CStage_ID(Get_ID());
-					newCStageTTable.SetCM_TemplateTable_ID(thisTemplateTable.Get_ID());
+					newCStageTTable.SetVACM_LayoutTable_ID(thisTemplateTable.Get_ID());
 					newCStageTTable.SetDescription(thisTemplateTable.GetDescription());
 					newCStageTTable.SetName(thisTemplateTable.GetName());
 					newCStageTTable.SetOtherClause(thisTemplateTable.GetOtherClause());

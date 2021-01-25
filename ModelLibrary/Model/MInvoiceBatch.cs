@@ -42,7 +42,7 @@ namespace VAdvantage.Model
             if (C_InvoiceBatch_ID == 0)
             {
                 //	setDocumentNo (null);
-                //	setC_Currency_ID (0);	// @$C_Currency_ID@
+                //	setVAB_Currency_ID (0);	// @$VAB_Currency_ID@
                 SetControlAmt(Env.ZERO);	// 0
                 SetDateDoc(DateTime.Now);	// @#Date@
                 SetDocumentAmt(Env.ZERO);

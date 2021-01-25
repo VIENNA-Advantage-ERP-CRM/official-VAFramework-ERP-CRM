@@ -20,11 +20,11 @@ namespace VIS.Models
         public Dictionary<string, string> GetDocType(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_DocType_ID;
+            int VAB_DocTypes_ID;
             //Assign parameter value
-            C_DocType_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_DocTypes_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter
-            MDocType dt = MDocType.Get(ctx, C_DocType_ID);
+            MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["IsSOTrx"] = dt.IsSOTrx().ToString();
             result["IsReturnTrx"] = dt.IsReturnTrx().ToString();
@@ -40,15 +40,15 @@ namespace VIS.Models
         /// <returns></returns>
         public Dictionary<string, object> GetDocTypeData(Ctx ctx, string fields)
         {
-            int C_DocType_ID = 0;
-            C_DocType_ID = Util.GetValueOfInt(fields);
+            int VAB_DocTypes_ID = 0;
+            VAB_DocTypes_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> result = null;
             string sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',d.IsDocNoControlled,"
             + "s.CurrentNext, d.DocBaseType, s.CurrentNextSys, "
             + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx, d.TreatAsDiscount "
-            + "FROM C_DocType d "
+            + "FROM VAB_DocTypes d "
             + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
-            + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
+            + "WHERE VAB_DocTypes_ID=" + VAB_DocTypes_ID;		//	1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

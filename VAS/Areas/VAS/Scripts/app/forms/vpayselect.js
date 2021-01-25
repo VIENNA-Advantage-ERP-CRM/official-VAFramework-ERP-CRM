@@ -86,7 +86,7 @@
                              + " <div class='vis-paymentselect-field'>"  // div bankAccount starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbBankAccount_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Bank_Acct_ID") + " </label>"
                              + "</div></div> </div>" // div bankAccount ends here 
                              + " <div class='vis-paymentselect-field'>"  // div currentBalance starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
@@ -96,7 +96,7 @@
                              + " <div class='vis-paymentselect-field'>"  // div businessPartner starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbbusinessPartner_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID") + " </label>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID") + " </label>"
                              + "</div></div>  </div>" // div businessPartner ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div paymentDate starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
@@ -476,7 +476,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { C_BankAccount_ID: parseInt($cmbBankAccount.val()) },
+                data: { VAB_Bank_Acct_ID: parseInt($cmbBankAccount.val()) },
                 success: function (jsonResult) {
                     var data = JSON.parse(jsonResult);
                     if (data != null || data != undefined) {

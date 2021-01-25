@@ -55,7 +55,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             MInventory inventory = (MInventory)GetPO();
             SetDateDoc(inventory.GetMovementDate());
             SetDateAcct(inventory.GetMovementDate());
@@ -133,7 +133,7 @@ namespace VAdvantage.Acct
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             //  Line pointers
             FactLine dr = null;
@@ -151,7 +151,7 @@ namespace VAdvantage.Acct
                 //  Inventory       DR      CR
                 dr = fact.CreateLine(line,
                     line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                    as1.GetC_Currency_ID(), costs);
+                    as1.GetVAB_Currency_ID(), costs);
                 //  may be zero difference - no line created.
                 if (dr == null)
                 {
@@ -167,14 +167,14 @@ namespace VAdvantage.Acct
                     invDiff = GetAccount(Doc.ACCTTYPE_InvDifferences, as1);
                 }
                 cr = fact.CreateLine(line, invDiff,
-                    as1.GetC_Currency_ID(), Decimal.Negate(costs));
+                    as1.GetVAB_Currency_ID(), Decimal.Negate(costs));
                 if (cr == null)
                 {
                     continue;
                 }
                 cr.SetM_Locator_ID(line.GetM_Locator_ID());
                 cr.SetQty(Decimal.Negate(line.GetQty().Value));
-                if (line.GetC_Charge_ID() != 0)	//	explicit overwrite for charge
+                if (line.GetVAB_Charge_ID() != 0)	//	explicit overwrite for charge
                 {
                     cr.SetVAF_Org_ID(line.GetVAF_Org_ID());
                 }

@@ -20,7 +20,7 @@ public X_C_InviteeList (Context ctx, int C_InviteeList_ID, Trx trxName) : base (
 {
 /** if (C_InviteeList_ID == 0)
 {
-SetC_Campaign_ID (0);
+SetVAB_Promotion_ID (0);
 SetC_InviteeList_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_C_InviteeList (Ctx ctx, int C_InviteeList_ID, Trx trxName) : base (ctx,
 {
 /** if (C_InviteeList_ID == 0)
 {
-SetC_Campaign_ID (0);
+SetVAB_Promotion_ID (0);
 SetC_InviteeList_ID (0);
 }
  */
@@ -163,49 +163,49 @@ public String GetAddress2()
 return (String)Get_Value("Address2");
 }
 /** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID)
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID)
 {
-if (C_Campaign_ID < 1) throw new ArgumentException ("C_Campaign_ID is mandatory.");
-Set_ValueNoCheck ("C_Campaign_ID", C_Campaign_ID);
+if (VAB_Promotion_ID < 1) throw new ArgumentException ("VAB_Promotion_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Promotion_ID", VAB_Promotion_ID);
 }
 /** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() 
+public int GetVAB_Promotion_ID() 
 {
-Object ii = Get_Value("C_Campaign_ID");
+Object ii = Get_Value("VAB_Promotion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set City.
-@param C_City_ID City */
-public void SetC_City_ID (int C_City_ID)
+@param VAB_City_ID City */
+public void SetVAB_City_ID (int VAB_City_ID)
 {
-if (C_City_ID <= 0) Set_Value ("C_City_ID", null);
+if (VAB_City_ID <= 0) Set_Value ("VAB_City_ID", null);
 else
-Set_Value ("C_City_ID", C_City_ID);
+Set_Value ("VAB_City_ID", VAB_City_ID);
 }
 /** Get City.
 @return City */
-public int GetC_City_ID() 
+public int GetVAB_City_ID() 
 {
-Object ii = Get_Value("C_City_ID");
+Object ii = Get_Value("VAB_City_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Country.
-@param C_Country_ID Country  */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country  */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID <= 0) Set_Value ("C_Country_ID", null);
+if (VAB_Country_ID <= 0) Set_Value ("VAB_Country_ID", null);
 else
-Set_Value ("C_Country_ID", C_Country_ID);
+Set_Value ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country  */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

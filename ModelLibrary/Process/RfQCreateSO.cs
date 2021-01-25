@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     {
         //	RfQ 			
         private int _C_RfQ_ID = 0;
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         //Variable Declaration
         private int VA009_PaymentMethod_ID = 0;
         private string PaymentBaseType = "";
@@ -50,9 +50,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -83,25 +83,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             log.Info("doIt - " + rfq);
 
-            if (rfq.GetC_BPartner_ID() == 0 || rfq.GetC_BPartner_Location_ID() == 0)
+            if (rfq.GetVAB_BusinessPartner_ID() == 0 || rfq.GetVAB_BPart_Location_ID() == 0)
             {
                 throw new Exception("No Business Partner/Location");
             }
-            MBPartner bp = new MBPartner(GetCtx(), rfq.GetC_BPartner_ID(), Get_TrxName());
+            MBPartner bp = new MBPartner(GetCtx(), rfq.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
             MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
             order.SetIsSOTrx(true);
-            if (_C_DocType_ID != 0)
+            if (_VAB_DocTypes_ID != 0)
             {
-                order.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                order.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             }
             else
             {
-                order.SetC_DocTypeTarget_ID();
+                order.SetVAB_DocTypesTarget_ID();
             }
             order.SetVAF_Org_ID(rfq.GetVAF_Org_ID());
             order.SetBPartner(bp);
-            order.SetC_BPartner_Location_ID(rfq.GetC_BPartner_Location_ID());
+            order.SetVAB_BPart_Location_ID(rfq.GetVAB_BPart_Location_ID());
             order.SetSalesRep_ID(rfq.GetSalesRep_ID());
             //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
             if (bp.GetVA009_PaymentMethod_ID() == 0)

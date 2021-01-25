@@ -372,21 +372,21 @@ return (String)Get_Value("SmtpUsername");
 public static int TABLEATTACH_VAF_Control_Ref_ID=1000007;
 /** User Contact = VAF_UserContact */
 public static String TABLEATTACH_UserContact = "VAF_UserContact";
-/** Business Partner = C_BPartner */
-public static String TABLEATTACH_BusinessPartner = "C_BPartner";
+/** Business Partner = VAB_BusinessPartner */
+public static String TABLEATTACH_BusinessPartner = "VAB_BusinessPartner";
 /** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
 public bool IsTableAttachValid (String test)
 {
-return test == null || test.Equals("VAF_UserContact") || test.Equals("C_BPartner");
+return test == null || test.Equals("VAF_UserContact") || test.Equals("VAB_BusinessPartner");
 }
 /** Set TableAttach.
 @param TableAttach TableAttach */
 public void SetTableAttach (String TableAttach)
 {
 if (!IsTableAttachValid(TableAttach))
-throw new ArgumentException ("TableAttach Invalid value - " + TableAttach + " - Reference_ID=1000007 - VAF_UserContact - C_BPartner");
+throw new ArgumentException ("TableAttach Invalid value - " + TableAttach + " - Reference_ID=1000007 - VAF_UserContact - VAB_BusinessPartner");
 if (TableAttach != null && TableAttach.Length > 10)
 {
 log.Warning("Length > 10 - truncated");

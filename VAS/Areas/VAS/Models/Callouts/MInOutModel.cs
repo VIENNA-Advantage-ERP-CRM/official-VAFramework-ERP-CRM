@@ -31,8 +31,8 @@ namespace VIS.Models
             Dictionary<String, String> retDic = new Dictionary<string, string>();
             //retDic["MovementDate"] = io.GetMovementDate().ToString();
             retDic["C_Project_ID"] = io.GetC_Project_ID().ToString();
-            retDic["C_Campaign_ID"] = io.GetC_Campaign_ID().ToString();
-            retDic["C_Activity_ID"] = io.GetC_Activity_ID().ToString();
+            retDic["VAB_Promotion_ID"] = io.GetVAB_Promotion_ID().ToString();
+            retDic["VAB_BillingCode_ID"] = io.GetVAB_BillingCode_ID().ToString();
             retDic["VAF_OrgTrx_ID"] = io.GetVAF_OrgTrx_ID().ToString();
             retDic["User1_ID"] = io.GetUser1_ID().ToString();
             retDic["User2_ID"] = io.GetUser2_ID().ToString();
@@ -66,8 +66,8 @@ namespace VIS.Models
             Dictionary<string, object> retValue = null;
             DataSet _ds = null;
             string sql = "SELECT d.docBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-           + " FROM C_DocType d, VAF_Record_Seq s "
-           + " WHERE C_DocType_ID=" + Util.GetValueOfInt(fields)
+           + " FROM VAB_DocTypes d, VAF_Record_Seq s "
+           + " WHERE VAB_DocTypes_ID=" + Util.GetValueOfInt(fields)
            + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
             try
             {
@@ -108,7 +108,7 @@ namespace VIS.Models
             int C_UOM_ID = Util.GetValueOfInt(paramString[2]);
             try
             {
-                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.C_BPartner_ID = " + inout.GetC_BPartner_ID(), null, null));
+                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + inout.GetVAB_BusinessPartner_ID(), null, null));
 
                 if (C_UOM_ID != 0)
                 {

@@ -35,7 +35,7 @@ namespace VAdvantage.Process
         //Order Date To		
         private DateTime? _DateOrdered_To = null;
         //Customer			
-        private int _C_BPartner_ID;
+        private int _VAB_BusinessPartner_ID;
         //Vendor			
         private int _Vendor_ID;
         //Sales Order		
@@ -70,9 +70,9 @@ namespace VAdvantage.Process
                     _DateOrdered_From = (DateTime?)para[i].GetParameter();
                     _DateOrdered_To = (DateTime?)para[i].GetParameter_To();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                    _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("Vendor_ID"))
                 {
@@ -106,11 +106,11 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("DateOrdered=" + _DateOrdered_From + " - " + _DateOrdered_To
-                + " - C_BPartner_ID=" + _C_BPartner_ID + " - Vendor_ID=" + _Vendor_ID
+                + " - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID + " - Vendor_ID=" + _Vendor_ID
                 + " - IsDropShip=" + _IsDropShip + " - C_Order_ID=" + _C_Order_ID);
             if (string.IsNullOrEmpty(_C_Order_ID) && _IsDropShip == null
                 && _DateOrdered_From == null && _DateOrdered_To == null
-                && _C_BPartner_ID == 0 && _Vendor_ID == 0)
+                && _VAB_BusinessPartner_ID == 0 && _Vendor_ID == 0)
             {
                 throw new Exception("You need to restrict selection");
             }
@@ -132,9 +132,9 @@ namespace VAdvantage.Process
                     sql += " AND o.VAF_Org_ID=" + GetVAF_Org_ID();
                 }
 
-                if (_C_BPartner_ID != 0)
+                if (_VAB_BusinessPartner_ID != 0)
                 {
-                    sql += " AND o.C_BPartner_ID=" + _C_BPartner_ID;
+                    sql += " AND o.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
                 }
                 // Commented by Vivek on 20/09/2017 assigned by Pradeep
                 // not to check if dropship is true
@@ -146,7 +146,7 @@ namespace VAdvantage.Process
                 {
                     sql += " AND EXISTS (SELECT * FROM C_OrderLine ol"
                         + " INNER JOIN M_Product_PO po ON (ol.M_Product_ID=po.M_Product_ID) "
-                            + "WHERE o.C_Order_ID=ol.C_Order_ID AND po.C_BPartner_ID=" + _Vendor_ID + ")";
+                            + "WHERE o.C_Order_ID=ol.C_Order_ID AND po.VAB_BusinessPartner_ID=" + _Vendor_ID + ")";
                 }
                 if (_DateOrdered_From != null && _DateOrdered_To != null)
                 {
@@ -229,15 +229,15 @@ namespace VAdvantage.Process
             //
             int counter = 0;
             //	Order Lines with a Product which has a current vendor 
-            sql.Append(@"SELECT DISTINCT po.C_BPartner_ID, po.M_Product_ID ,ol.Isdropship, po.PriceList , po.PricePO , po.C_Currency_ID
+            sql.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, po.M_Product_ID ,ol.Isdropship, po.PriceList , po.PricePO , po.VAB_Currency_ID
                 FROM  M_Product_PO po
                 INNER JOIN M_Product prd ON po.M_Product_ID=prd.M_Product_ID
                 INNER JOIN C_OrderLine ol ON (po.M_Product_ID=ol.M_Product_ID ");       // changes done by bharat on 26 June 2018 If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
 
-            sqlErrorMessage.Append(@"SELECT DISTINCT po.C_BPartner_ID, bp.name AS BPName,  ol.M_Product_ID , p.Name,  ol.Isdropship,  po.C_Currency_ID,  bp.PO_PaymentTerm_ID,  bp.PO_PriceList_ID 
+            sqlErrorMessage.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, bp.name AS BPName,  ol.M_Product_ID , p.Name,  ol.Isdropship,  po.VAB_Currency_ID,  bp.PO_PaymentTerm_ID,  bp.PO_PriceList_ID 
                 FROM  C_OrderLine ol INNER JOIN m_product p ON (p.M_Product_ID =ol.M_Product_ID)
                 LEFT JOIN M_Product_PO po ON (po.M_Product_ID=ol.M_Product_ID  AND po.isactive = 'Y' AND po.IsCurrentVendor = 'Y' )
-                LEFT JOIN c_bpartner bp ON (bp.c_bpartner_id = po.c_bpartner_id ");
+                LEFT JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_id = po.VAB_BusinessPartner_id ");
 
             // Added by Vivek on  20/09/2017 Assigned By Pradeep for drop shipment
             // if drop ship parameter is true then get all records true drop ship lines
@@ -259,11 +259,11 @@ namespace VAdvantage.Process
 
             if (_Vendor_ID > 0)
             {
-                sql.Append(@" AND po.C_BPartner_ID = " + _Vendor_ID);
-                sqlErrorMessage.Append(@" AND po.C_BPartner_ID = " + _Vendor_ID);
+                sql.Append(@" AND po.VAB_BusinessPartner_ID = " + _Vendor_ID);
+                sqlErrorMessage.Append(@" AND po.VAB_BusinessPartner_ID = " + _Vendor_ID);
             }
-            sql.Append(@" ORDER BY po.c_bpartner_id,ol.Isdropship ");
-            sqlErrorMessage.Append(@" ORDER BY po.c_bpartner_id,ol.Isdropship ");
+            sql.Append(@" ORDER BY po.VAB_BusinessPartner_id,ol.Isdropship ");
+            sqlErrorMessage.Append(@" ORDER BY po.VAB_BusinessPartner_id,ol.Isdropship ");
 
             // get error or setting message
             GetErrorOrSetting(sqlErrorMessage.ToString(), Get_TrxName());
@@ -283,9 +283,9 @@ namespace VAdvantage.Process
                 {
                     //while (idr.Read())                {
                     //	New Order                    
-                    int C_BPartner_ID = Utility.Util.GetValueOfInt(dr[0]);//.getInt(1);
+                    int VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(dr[0]);//.getInt(1);
                     // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep for drop shipment
-                    //if (po == null || po.GetBill_BPartner_ID() != C_BPartner_ID)
+                    //if (po == null || po.GetBill_BPartner_ID() != VAB_BusinessPartner_ID)
                     //{
                     //    po = CreatePOForVendor(Utility.Util.GetValueOfInt(dr[0]), so);
                     //    AddLog(0, null, null, po.GetDocumentNo());
@@ -296,9 +296,9 @@ namespace VAdvantage.Process
                     if (_IsConsolidatedPO && listConsolidatePO.Count > 0)
                     {
                         ConsolidatePO poRecord;
-                        if (listConsolidatePO.Exists(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2]))))
+                        if (listConsolidatePO.Exists(x => (x.VAB_BusinessPartner_ID == VAB_BusinessPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2]))))
                         {
-                            poRecord = listConsolidatePO.Find(x => (x.C_BPartner_ID == C_BPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2])));
+                            poRecord = listConsolidatePO.Find(x => (x.VAB_BusinessPartner_ID == VAB_BusinessPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2])));
                             if (poRecord != null)
                             {
                                 po = new MOrder(GetCtx(), poRecord.C_Order_ID, Get_Trx());
@@ -308,7 +308,7 @@ namespace VAdvantage.Process
                     }
 
                     // Drop Shipment fucntionality added by Vivek on 20/09/2017 Assigned By Pradeep 
-                    if (po == null || po.GetBill_BPartner_ID() != C_BPartner_ID || _Dropship != Utility.Util.GetValueOfString(dr[2]))
+                    if (po == null || po.GetBill_BPartner_ID() != VAB_BusinessPartner_ID || _Dropship != Utility.Util.GetValueOfString(dr[2]))
                     {
                         po = CreatePOForVendor(Utility.Util.GetValueOfInt(dr[0]), so, Utility.Util.GetValueOfString(dr[2]));
                         if (po == null)
@@ -321,7 +321,7 @@ namespace VAdvantage.Process
                         {
                             consolidatePO = new ConsolidatePO();
                             consolidatePO.C_Order_ID = po.GetC_Order_ID();
-                            consolidatePO.C_BPartner_ID = C_BPartner_ID;
+                            consolidatePO.VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
                             consolidatePO.IsDropShip = Utility.Util.GetValueOfString(dr[2]);
                             listConsolidatePO.Add(consolidatePO);
                         }
@@ -414,17 +414,17 @@ namespace VAdvantage.Process
         /// <summary>
         /// Create PO for Vendor
         /// </summary>
-        /// <param name="C_BPartner_ID">vendor</param>
+        /// <param name="VAB_BusinessPartner_ID">vendor</param>
         /// <param name="so">sales order</param>
         /// <returns>MOrder</returns>
-        public MOrder CreatePOForVendor(int C_BPartner_ID, MOrder so, string _shipDrop)
+        public MOrder CreatePOForVendor(int VAB_BusinessPartner_ID, MOrder so, string _shipDrop)
         {
             MOrder po = new MOrder(GetCtx(), 0, Get_TrxName());
             po.SetClientOrg(so.GetVAF_Client_ID(), so.GetVAF_Org_ID());
             po.SetRef_Order_ID(so.GetC_Order_ID());
             po.SetIsSOTrx(false);
             // method edited to set unreleased document type for PO
-            po.SetC_DocTypeTarget_ID(false);
+            po.SetVAB_DocTypesTarget_ID(false);
             //
             po.SetDescription(so.GetDescription());
             po.SetPOReference(so.GetDocumentNo());
@@ -433,7 +433,7 @@ namespace VAdvantage.Process
             // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep for drop shipment
             //po.SetM_Warehouse_ID(so.GetM_Warehouse_ID());
             //	Set Vendor
-            MBPartner vendor = new MBPartner(GetCtx(), C_BPartner_ID, Get_TrxName());
+            MBPartner vendor = new MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // Set PO Payment Method from Vendor
@@ -501,16 +501,16 @@ namespace VAdvantage.Process
             //po.SetIsDropShip(so.IsDropShip());
             //if (so.IsDropShip())
             //{
-            //    po.SetShip_BPartner_ID(so.GetC_BPartner_ID());
-            //    po.SetShip_Location_ID(so.GetC_BPartner_Location_ID());
+            //    po.SetShip_BPartner_ID(so.GetVAB_BusinessPartner_ID());
+            //    po.SetShip_Location_ID(so.GetVAB_BPart_Location_ID());
             //    po.SetShip_User_ID(so.GetVAF_UserContact_ID());
             //}
 
             if (_shipDrop == "Y")
             {
                 po.SetIsDropShip(true);
-                po.SetShipToPartner_ID(so.GetC_BPartner_ID());
-                po.SetShipToLocation_ID(so.GetC_BPartner_Location_ID());
+                po.SetShipToPartner_ID(so.GetVAB_BusinessPartner_ID());
+                po.SetShipToLocation_ID(so.GetVAB_BPart_Location_ID());
                 int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From M_Warehouse Where VAF_Org_ID=" + so.GetVAF_Org_ID() + " AND Isdropship='Y' AND IsActive='Y'"));
                 if (_Warehouse_ID >= 0)
                 {
@@ -525,8 +525,8 @@ namespace VAdvantage.Process
                 po.SetC_IncoTerm_ID(so.GetC_IncoTerm_ID());
             }
             //	References
-            po.SetC_Activity_ID(so.GetC_Activity_ID());
-            po.SetC_Campaign_ID(so.GetC_Campaign_ID());
+            po.SetVAB_BillingCode_ID(so.GetVAB_BillingCode_ID());
+            po.SetVAB_Promotion_ID(so.GetVAB_Promotion_ID());
             po.SetC_Project_ID(so.GetC_Project_ID());
             po.SetUser1_ID(so.GetUser1_ID());
             po.SetUser2_ID(so.GetUser2_ID());
@@ -546,7 +546,7 @@ namespace VAdvantage.Process
                     for (int i = 0; i < dsRecod.Tables[0].Rows.Count; i++)
                     {
                         // check Current vendor available or not
-                        if (Util.GetValueOfInt(dsRecod.Tables[0].Rows[i]["C_BPartner_ID"]) == 0)
+                        if (Util.GetValueOfInt(dsRecod.Tables[0].Rows[i]["VAB_BusinessPartner_ID"]) == 0)
                         {
                             if (string.IsNullOrEmpty(messageErrorOrSetting.ToString()))
                             {
@@ -599,7 +599,7 @@ namespace VAdvantage.Process
     public class ConsolidatePO
     {
         public int C_Order_ID { get; set; }
-        public int C_BPartner_ID { get; set; }
+        public int VAB_BusinessPartner_ID { get; set; }
         public string IsDropShip { get; set; }
     }
 

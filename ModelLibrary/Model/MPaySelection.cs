@@ -30,7 +30,7 @@ namespace VAdvantage.Model
             
             if (C_PaySelection_ID == 0)
             {
-                //	SetC_BankAccount_ID (0);
+                //	SetVAB_Bank_Acct_ID (0);
                 //	SetName (null);	// @#Date@
                 //	SetPayDate (new Timestamp(System.currentTimeMillis()));	// @#Date@
                 SetTotalAmt(Env.ZERO);
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         /**	Lines						*/
         private MPaySelectionLine[] _lines = null;
         /**	Currency of Bank Account	*/
-        private int _C_Currency_ID = 0;
+        private int _VAB_Currency_ID = 0;
 
         /**
          * 	Get Lines
@@ -107,18 +107,18 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Currency of Bank Account
-         *	@return C_Currency_ID
+         *	@return VAB_Currency_ID
          */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            if (_C_Currency_ID == 0)
+            if (_VAB_Currency_ID == 0)
             {
-                String sql = "SELECT C_Currency_ID FROM C_BankAccount "
-                    + "WHERE C_BankAccount_ID=@param1";
-                _C_Currency_ID = DataBase.DB.GetSQLValue(null, sql, GetC_BankAccount_ID());
+                String sql = "SELECT VAB_Currency_ID FROM VAB_Bank_Acct "
+                    + "WHERE VAB_Bank_Acct_ID=@param1";
+                _VAB_Currency_ID = DataBase.DB.GetSQLValue(null, sql, GetVAB_Bank_Acct_ID());
             }
-            return _C_Currency_ID;
-        }	//	GetC_Currency_ID
+            return _VAB_Currency_ID;
+        }	//	GetVAB_Currency_ID
 
 
         /**

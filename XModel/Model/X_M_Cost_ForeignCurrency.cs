@@ -44,16 +44,16 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_M_Cost_ForeignCurrency[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-public void SetC_BPartner_ID (int C_BPartner_ID){if (C_BPartner_ID <= 0) Set_Value ("C_BPartner_ID", null);else
-Set_Value ("C_BPartner_ID", C_BPartner_ID);}/** Get Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID){if (VAB_BusinessPartner_ID <= 0) Set_Value ("VAB_BusinessPartner_ID", null);else
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);}/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-public int GetC_BPartner_ID() {Object ii = Get_Value("C_BPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID){if (C_Currency_ID <= 0) Set_Value ("C_Currency_ID", null);else
-Set_Value ("C_Currency_ID", C_Currency_ID);}/** Get Currency.
+public int GetVAB_BusinessPartner_ID() {Object ii = Get_Value("VAB_BusinessPartner_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Currency.
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID){if (VAB_Currency_ID <= 0) Set_Value ("VAB_Currency_ID", null);else
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() {Object ii = Get_Value("C_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Invoice.
+public int GetVAB_Currency_ID() {Object ii = Get_Value("VAB_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Invoice.
 @param C_Invoice_ID Invoice Identifier */
 public void SetC_Invoice_ID (int C_Invoice_ID){if (C_Invoice_ID <= 0) Set_Value ("C_Invoice_ID", null);else
 Set_Value ("C_Invoice_ID", C_Invoice_ID);}/** Get Invoice.

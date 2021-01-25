@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_GenAttributeSetExclude
+/** Generated Model for VAB_GenFeatureSetExclude
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_GenAttributeSetExclude : PO
+public class X_VAB_GenFeatureSetExclude : PO
 {
-public X_C_GenAttributeSetExclude (Context ctx, int C_GenAttributeSetExclude_ID, Trx trxName) : base (ctx, C_GenAttributeSetExclude_ID, trxName)
+public X_VAB_GenFeatureSetExclude (Context ctx, int VAB_GenFeatureSetExclude_ID, Trx trxName) : base (ctx, VAB_GenFeatureSetExclude_ID, trxName)
 {
-/** if (C_GenAttributeSetExclude_ID == 0)
+/** if (VAB_GenFeatureSetExclude_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetC_GenAttributeSetExclude_ID (0);
-SetC_GenAttributeSet_ID (0);
+SetVAB_GenFeatureSetExclude_ID (0);
+SetVAB_GenFeatureSet_ID (0);
 SetIsSOTrx (false);
 }
  */
 }
-public X_C_GenAttributeSetExclude (Ctx ctx, int C_GenAttributeSetExclude_ID, Trx trxName) : base (ctx, C_GenAttributeSetExclude_ID, trxName)
+public X_VAB_GenFeatureSetExclude (Ctx ctx, int VAB_GenFeatureSetExclude_ID, Trx trxName) : base (ctx, VAB_GenFeatureSetExclude_ID, trxName)
 {
-/** if (C_GenAttributeSetExclude_ID == 0)
+/** if (VAB_GenFeatureSetExclude_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetC_GenAttributeSetExclude_ID (0);
-SetC_GenAttributeSet_ID (0);
+SetVAB_GenFeatureSetExclude_ID (0);
+SetVAB_GenFeatureSet_ID (0);
 SetIsSOTrx (false);
 }
  */
@@ -43,7 +43,7 @@ SetIsSOTrx (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSetExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureSetExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_GenAttributeSetExclude (Context ctx, DataRow rs, Trx trxName) : base(
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSetExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_GenFeatureSetExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_GenAttributeSetExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_GenAttributeSetExclude (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_GenFeatureSetExclude (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_GenAttributeSetExclude()
+static X_VAB_GenFeatureSetExclude()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1385043788555L;
 public static int Table_ID;
  // =1000422;
 
-/** TableName=C_GenAttributeSetExclude */
-public static String Table_Name="C_GenAttributeSetExclude";
+/** TableName=VAB_GenFeatureSetExclude */
+public static String Table_Name="VAB_GenFeatureSetExclude";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_GenAttributeSetExclude[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_GenFeatureSetExclude[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -131,33 +131,33 @@ Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_GenAttributeSetExclude_ID.
-@param C_GenAttributeSetExclude_ID C_GenAttributeSetExclude_ID */
-public void SetC_GenAttributeSetExclude_ID (int C_GenAttributeSetExclude_ID)
+/** Set VAB_GenFeatureSetExclude_ID.
+@param VAB_GenFeatureSetExclude_ID VAB_GenFeatureSetExclude_ID */
+public void SetVAB_GenFeatureSetExclude_ID (int VAB_GenFeatureSetExclude_ID)
 {
-if (C_GenAttributeSetExclude_ID < 1) throw new ArgumentException ("C_GenAttributeSetExclude_ID is mandatory.");
-Set_ValueNoCheck ("C_GenAttributeSetExclude_ID", C_GenAttributeSetExclude_ID);
+if (VAB_GenFeatureSetExclude_ID < 1) throw new ArgumentException ("VAB_GenFeatureSetExclude_ID is mandatory.");
+Set_ValueNoCheck ("VAB_GenFeatureSetExclude_ID", VAB_GenFeatureSetExclude_ID);
 }
-/** Get C_GenAttributeSetExclude_ID.
-@return C_GenAttributeSetExclude_ID */
-public int GetC_GenAttributeSetExclude_ID() 
+/** Get VAB_GenFeatureSetExclude_ID.
+@return VAB_GenFeatureSetExclude_ID */
+public int GetVAB_GenFeatureSetExclude_ID() 
 {
-Object ii = Get_Value("C_GenAttributeSetExclude_ID");
+Object ii = Get_Value("VAB_GenFeatureSetExclude_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_GenAttributeSet_ID.
-@param C_GenAttributeSet_ID C_GenAttributeSet_ID */
-public void SetC_GenAttributeSet_ID (int C_GenAttributeSet_ID)
+/** Set VAB_GenFeatureSet_ID.
+@param VAB_GenFeatureSet_ID VAB_GenFeatureSet_ID */
+public void SetVAB_GenFeatureSet_ID (int VAB_GenFeatureSet_ID)
 {
-if (C_GenAttributeSet_ID < 1) throw new ArgumentException ("C_GenAttributeSet_ID is mandatory.");
-Set_ValueNoCheck ("C_GenAttributeSet_ID", C_GenAttributeSet_ID);
+if (VAB_GenFeatureSet_ID < 1) throw new ArgumentException ("VAB_GenFeatureSet_ID is mandatory.");
+Set_ValueNoCheck ("VAB_GenFeatureSet_ID", VAB_GenFeatureSet_ID);
 }
-/** Get C_GenAttributeSet_ID.
-@return C_GenAttributeSet_ID */
-public int GetC_GenAttributeSet_ID() 
+/** Get VAB_GenFeatureSet_ID.
+@return VAB_GenFeatureSet_ID */
+public int GetVAB_GenFeatureSet_ID() 
 {
-Object ii = Get_Value("C_GenAttributeSet_ID");
+Object ii = Get_Value("VAB_GenFeatureSet_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

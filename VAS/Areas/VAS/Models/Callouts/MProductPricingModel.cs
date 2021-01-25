@@ -22,13 +22,13 @@ namespace VIS.Models
         public ProductDataOut GetProductPricing(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID, C_BPartner_ID, M_PriceList_ID, M_PriceList_Version_ID, M_AttributeSetInstance_ID = 0, countED011 = 0, C_UOM_ID = 0;
+            int M_Product_ID, VAB_BusinessPartner_ID, M_PriceList_ID, M_PriceList_Version_ID, M_AttributeSetInstance_ID = 0, countED011 = 0, C_UOM_ID = 0;
             decimal Qty;
             bool isSOTrx;
 
             //Assign parameter value
             M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            C_BPartner_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[1].ToString());
             Qty = Util.GetValueOfDecimal(paramValue[2].ToString());
             isSOTrx = Convert.ToBoolean(paramValue[3]);
             M_PriceList_ID = Util.GetValueOfInt(paramValue[4].ToString());
@@ -59,7 +59,7 @@ namespace VIS.Models
             //End Assign parameter value
 
             MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
-                        M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+                        M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
             //var M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
             pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -95,7 +95,7 @@ namespace VIS.Models
                 PriceEntered = pp.GetPriceStd(),
                 PriceStd = pp.GetPriceStd(),
                 LineAmt = pp.GetLineAmt(2),
-                C_Currency_ID = System.Convert.ToInt32(pp.GetC_Currency_ID()),
+                VAB_Currency_ID = System.Convert.ToInt32(pp.GetVAB_Currency_ID()),
                 Discount = pp.GetDiscount(),
                 C_UOM_ID = System.Convert.ToInt32(pp.GetC_UOM_ID()),
                 //QtyOrdered= mTab.GetValue("QtyEntered"));

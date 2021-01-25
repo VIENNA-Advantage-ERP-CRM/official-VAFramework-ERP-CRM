@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_DunningLevel
+/** Generated Model for VAB_DunningStep
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_DunningLevel : PO
+public class X_VAB_DunningStep : PO
 {
-public X_C_DunningLevel (Context ctx, int C_DunningLevel_ID, Trx trxName) : base (ctx, C_DunningLevel_ID, trxName)
+public X_VAB_DunningStep (Context ctx, int VAB_DunningStep_ID, Trx trxName) : base (ctx, VAB_DunningStep_ID, trxName)
 {
-/** if (C_DunningLevel_ID == 0)
+/** if (VAB_DunningStep_ID == 0)
 {
-SetC_DunningLevel_ID (0);
-SetC_Dunning_ID (0);
+SetVAB_DunningStep_ID (0);
+SetVAB_Dunning_ID (0);
 SetChargeFee (false);
 SetChargeInterest (false);
 SetDaysAfterDue (0.0);
@@ -35,12 +35,12 @@ SetPrintName (null);
 }
  */
 }
-public X_C_DunningLevel (Ctx ctx, int C_DunningLevel_ID, Trx trxName) : base (ctx, C_DunningLevel_ID, trxName)
+public X_VAB_DunningStep (Ctx ctx, int VAB_DunningStep_ID, Trx trxName) : base (ctx, VAB_DunningStep_ID, trxName)
 {
-/** if (C_DunningLevel_ID == 0)
+/** if (VAB_DunningStep_ID == 0)
 {
-SetC_DunningLevel_ID (0);
-SetC_Dunning_ID (0);
+SetVAB_DunningStep_ID (0);
+SetVAB_Dunning_ID (0);
 SetChargeFee (false);
 SetChargeInterest (false);
 SetDaysAfterDue (0.0);
@@ -59,7 +59,7 @@ SetPrintName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningLevel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_DunningStep (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,7 +67,7 @@ public X_C_DunningLevel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningLevel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_DunningStep (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -75,13 +75,13 @@ public X_C_DunningLevel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_DunningLevel (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_DunningStep (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_DunningLevel()
+static X_VAB_DunningStep()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -94,8 +94,8 @@ public static long updatedMS = 1280389055194L;
 public static int Table_ID;
  // =331;
 
-/** TableName=C_DunningLevel */
-public static String Table_Name="C_DunningLevel";
+/** TableName=VAB_DunningStep */
+public static String Table_Name="VAB_DunningStep";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -129,36 +129,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_DunningLevel[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_DunningStep[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Dunning Level.
-@param C_DunningLevel_ID Dunning Level */
-public void SetC_DunningLevel_ID (int C_DunningLevel_ID)
+@param VAB_DunningStep_ID Dunning Level */
+public void SetVAB_DunningStep_ID (int VAB_DunningStep_ID)
 {
-if (C_DunningLevel_ID < 1) throw new ArgumentException ("C_DunningLevel_ID is mandatory.");
-Set_ValueNoCheck ("C_DunningLevel_ID", C_DunningLevel_ID);
+if (VAB_DunningStep_ID < 1) throw new ArgumentException ("VAB_DunningStep_ID is mandatory.");
+Set_ValueNoCheck ("VAB_DunningStep_ID", VAB_DunningStep_ID);
 }
 /** Get Dunning Level.
 @return Dunning Level */
-public int GetC_DunningLevel_ID() 
+public int GetVAB_DunningStep_ID() 
 {
-Object ii = Get_Value("C_DunningLevel_ID");
+Object ii = Get_Value("VAB_DunningStep_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dunning.
-@param C_Dunning_ID Dunning Rules for overdue invoices */
-public void SetC_Dunning_ID (int C_Dunning_ID)
+@param VAB_Dunning_ID Dunning Rules for overdue invoices */
+public void SetVAB_Dunning_ID (int VAB_Dunning_ID)
 {
-if (C_Dunning_ID < 1) throw new ArgumentException ("C_Dunning_ID is mandatory.");
-Set_ValueNoCheck ("C_Dunning_ID", C_Dunning_ID);
+if (VAB_Dunning_ID < 1) throw new ArgumentException ("VAB_Dunning_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Dunning_ID", VAB_Dunning_ID);
 }
 /** Get Dunning.
 @return Dunning Rules for overdue invoices */
-public int GetC_Dunning_ID() 
+public int GetVAB_Dunning_ID() 
 {
-Object ii = Get_Value("C_Dunning_ID");
+Object ii = Get_Value("VAB_Dunning_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

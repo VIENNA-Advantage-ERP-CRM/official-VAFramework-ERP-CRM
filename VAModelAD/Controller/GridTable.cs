@@ -2840,7 +2840,7 @@ namespace VAdvantage.Model
                         || columnName.Equals("Posted")
                         //	Order/Invoice
                         || columnName.Equals("GrandTotal") || columnName.Equals("TotalLines")
-                        || columnName.Equals("C_CashLine_ID") || columnName.Equals("C_Payment_ID")
+                        || columnName.Equals("VAB_CashJRNLLine_ID") || columnName.Equals("C_Payment_ID")
                         || columnName.Equals("IsPaid") || columnName.Equals("IsAllocated")
                     )
                     {

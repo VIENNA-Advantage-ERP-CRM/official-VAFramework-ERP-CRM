@@ -27,7 +27,7 @@ namespace VIS.Models
             result["M_Locator_ID"] = ioLine.GetM_Locator_ID().ToString();
             result["MovementQty"] = ioLine.GetMovementQty().ToString();
             result["C_Project_ID"] = ioLine.GetC_Project_ID().ToString();
-            result["C_Campaign_ID"] = ioLine.GetC_Campaign_ID().ToString();
+            result["VAB_Promotion_ID"] = ioLine.GetVAB_Promotion_ID().ToString();
             result["M_Product_ID"] = ioLine.GetM_Product_ID().ToString();
             result["M_AttributeSetInstance_ID"] = ioLine.GetM_AttributeSetInstance_ID().ToString();
             result["C_UOM_ID"] = ioLine.GetC_UOM_ID().ToString();

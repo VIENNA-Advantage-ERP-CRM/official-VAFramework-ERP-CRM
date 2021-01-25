@@ -16,11 +16,11 @@ namespace VAdvantage.Model
     {
         public X_M_CostElementDetail(Context ctx, int M_CostElementDetail_ID, Trx trxName)
             : base(ctx, M_CostElementDetail_ID, trxName)
-        {/** if (M_CostElementDetail_ID == 0){SetAmt (0.0);SetC_AcctSchema_ID (0);SetM_CostElementDetail_ID (0);SetM_CostElement_ID (0);SetM_Product_ID (0);SetQty (0.0);} */
+        {/** if (M_CostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetM_CostElementDetail_ID (0);SetM_CostElement_ID (0);SetM_Product_ID (0);SetQty (0.0);} */
         }
         public X_M_CostElementDetail(Ctx ctx, int M_CostElementDetail_ID, Trx trxName)
             : base(ctx, M_CostElementDetail_ID, trxName)
-        {/** if (M_CostElementDetail_ID == 0){SetAmt (0.0);SetC_AcctSchema_ID (0);SetM_CostElementDetail_ID (0);SetM_CostElement_ID (0);SetM_Product_ID (0);SetQty (0.0);} */
+        {/** if (M_CostElementDetail_ID == 0){SetAmt (0.0);SetVAB_AccountBook_ID (0);SetM_CostElementDetail_ID (0);SetM_CostElement_ID (0);SetM_Product_ID (0);SetQty (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
@@ -60,23 +60,23 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_M_CostElementDetail[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Asset.
-@param A_Asset_ID Asset used internally or by customers */
-        public void SetA_Asset_ID(int A_Asset_ID)
+@param VAA_Asset_ID Asset used internally or by customers */
+        public void SetA_Asset_ID(int VAA_Asset_ID)
         {
-            if (A_Asset_ID <= 0) Set_Value("A_Asset_ID", null);
+            if (VAA_Asset_ID <= 0) Set_Value("VAA_Asset_ID", null);
             else
-                Set_Value("A_Asset_ID", A_Asset_ID);
+                Set_Value("VAA_Asset_ID", VAA_Asset_ID);
         }/** Get Asset.
 @return Asset used internally or by customers */
-        public int GetA_Asset_ID() { Object ii = Get_Value("A_Asset_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Amount.
+        public int GetA_Asset_ID() { Object ii = Get_Value("VAA_Asset_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Amount.
 @param Amt Amount */
         public void SetAmt(Decimal? Amt) { if (Amt == null) throw new ArgumentException("Amt is mandatory."); Set_Value("Amt", (Decimal?)Amt); }/** Get Amount.
 @return Amount */
         public Decimal GetAmt() { Object bd = Get_Value("Amt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-        public void SetC_AcctSchema_ID(int C_AcctSchema_ID) { if (C_AcctSchema_ID < 1) throw new ArgumentException("C_AcctSchema_ID is mandatory."); Set_Value("C_AcctSchema_ID", C_AcctSchema_ID); }/** Get Accounting Schema.
+@param VAB_AccountBook_ID Rules for accounting */
+        public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID) { if (VAB_AccountBook_ID < 1) throw new ArgumentException("VAB_AccountBook_ID is mandatory."); Set_Value("VAB_AccountBook_ID", VAB_AccountBook_ID); }/** Get Accounting Schema.
 @return Rules for accounting */
-        public int GetC_AcctSchema_ID() { Object ii = Get_Value("C_AcctSchema_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Line.
+        public int GetVAB_AccountBook_ID() { Object ii = Get_Value("VAB_AccountBook_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Line.
 @param C_InvoiceLine_ID Invoice Detail Line */
         public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
         {

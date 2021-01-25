@@ -31,15 +31,15 @@ namespace VAdvantage.Process
     {
         #region Private variable
         // BP Group				
-        private int _C_BP_Group_ID = 0;
+        private int _VAB_BPart_Category_ID = 0;
         // BPartner				
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         // Date Acct From			
         private DateTime? _DateAcct_From = null;
         // Date Acct To			
         private DateTime? _DateAcct_To = null;
         // Allocation directly		
-        private int _C_AllocationHdr_ID = 0;
+        private int _VAB_DocAllocation_ID = 0;
         // Transaction				
         private Trx _m_trx = null;
 
@@ -59,17 +59,17 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_BP_Group_ID"))
+                else if (name.Equals("VAB_BPart_Category_ID"))
                 {
-                    _C_BP_Group_ID = para[i].GetParameterAsInt();
+                    _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_AllocationHdr_ID"))
+                else if (name.Equals("VAB_DocAllocation_ID"))
                 {
-                    _C_AllocationHdr_ID = para[i].GetParameterAsInt();
+                    _VAB_DocAllocation_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateAcct"))
                 {
@@ -89,16 +89,16 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("C_BP_Group_ID=" + _C_BP_Group_ID + ", C_BPartner_ID=" + _C_BPartner_ID
+            log.Info("VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", DateAcct= " + _DateAcct_From + " - " + _DateAcct_To
-                + ", C_AllocationHdr_ID=" + _C_AllocationHdr_ID);
+                + ", VAB_DocAllocation_ID=" + _VAB_DocAllocation_ID);
 
             _m_trx = Trx.Get("AllocReset");
             int count = 0;
 
-            if (_C_AllocationHdr_ID != 0)
+            if (_VAB_DocAllocation_ID != 0)
             {
-                MAllocationHdr hdr = new MAllocationHdr(GetCtx(), _C_AllocationHdr_ID, _m_trx);
+                MAllocationHdr hdr = new MAllocationHdr(GetCtx(), _VAB_DocAllocation_ID, _m_trx);
                 if (Delete(hdr))
                 {
                     count++;
@@ -108,17 +108,17 @@ namespace VAdvantage.Process
             }
 
             //	Selection
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_AllocationHdr ah "
-                + "WHERE EXISTS (SELECT * FROM C_AllocationLine al "
-                    + "WHERE ah.C_AllocationHdr_ID=al.C_AllocationHdr_ID");
-            if (_C_BPartner_ID != 0)
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_DocAllocation ah "
+                + "WHERE EXISTS (SELECT * FROM VAB_DocAllocationLine al "
+                    + "WHERE ah.VAB_DocAllocation_ID=al.VAB_DocAllocation_ID");
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql.Append(" AND al.C_BPartner_ID=" + _C_BPartner_ID);
+                sql.Append(" AND al.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
             }
-            else if (_C_BP_Group_ID != 0 && _C_BP_Group_ID != -1)
+            else if (_VAB_BPart_Category_ID != 0 && _VAB_BPart_Category_ID != -1)
             {
-                sql.Append(" AND EXISTS (SELECT * FROM C_BPartner bp "
-                    + "WHERE bp.C_BPartner_ID=al.C_BPartner_ID AND bp.C_BP_Group_ID=" + _C_BP_Group_ID + ")");
+                sql.Append(" AND EXISTS (SELECT * FROM VAB_BusinessPartner bp "
+                    + "WHERE bp.VAB_BusinessPartner_ID=al.VAB_BusinessPartner_ID AND bp.VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ")");
             }
             else
             {
@@ -133,7 +133,7 @@ namespace VAdvantage.Process
                 sql.Append(" AND TRIM(ah.DateAcct) <= " + GlobalVariable.TO_DATE(_DateAcct_To, true));
             }
             //	Do not delete Cash Trx
-            sql.Append(" AND al.C_CashLine_ID IS NULL)");
+            sql.Append(" AND al.VAB_CashJRNLLine_ID IS NULL)");
             //	Open Period
             sql.Append(" AND EXISTS (SELECT * FROM C_Period p"
                 + " INNER JOIN C_PeriodControl pc ON (p.C_Period_ID=pc.C_Period_ID AND pc.DocBaseType='CMA') "
@@ -219,15 +219,15 @@ namespace VAdvantage.Process
         private void SetBPartner()
         {
             /**
-            UPDATE C_AllocationLine al
-            SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_Payment p WHERE al.C_Payment_ID=p.C_Payment_ID)
-            WHERE C_BPartner_ID IS NULL AND C_Payment_ID IS NOT NULL;
-            UPDATE C_AllocationLine al
-            SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_Invoice i WHERE al.C_Invoice_ID=i.C_Invoice_ID)
-            WHERE C_BPartner_ID IS NULL AND C_Invoice_ID IS NOT NULL;
-            UPDATE C_AllocationLine al
-            SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_Order o WHERE al.C_Order_ID=o.C_Order_ID)
-            WHERE C_BPartner_ID IS NULL AND C_Order_ID IS NOT NULL;
+            UPDATE VAB_DocAllocationLine al
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Payment p WHERE al.C_Payment_ID=p.C_Payment_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND C_Payment_ID IS NOT NULL;
+            UPDATE VAB_DocAllocationLine al
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Invoice i WHERE al.C_Invoice_ID=i.C_Invoice_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND C_Invoice_ID IS NOT NULL;
+            UPDATE VAB_DocAllocationLine al
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Order o WHERE al.C_Order_ID=o.C_Order_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND C_Order_ID IS NOT NULL;
             COMMIT
             **/
         }

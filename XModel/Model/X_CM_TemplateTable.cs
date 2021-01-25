@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_TemplateTable
+/** Generated Model for VACM_LayoutTable
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_TemplateTable : PO
+public class X_VACM_LayoutTable : PO
 {
-public X_CM_TemplateTable (Context ctx, int CM_TemplateTable_ID, Trx trxName) : base (ctx, CM_TemplateTable_ID, trxName)
+public X_VACM_LayoutTable (Context ctx, int VACM_LayoutTable_ID, Trx trxName) : base (ctx, VACM_LayoutTable_ID, trxName)
 {
-/** if (CM_TemplateTable_ID == 0)
+/** if (VACM_LayoutTable_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetCM_TemplateTable_ID (0);
-SetCM_Template_ID (0);
+SetVACM_LayoutTable_ID (0);
+SetVACM_Layout_ID (0);
 SetName (null);
 }
  */
 }
-public X_CM_TemplateTable (Ctx ctx, int CM_TemplateTable_ID, Trx trxName) : base (ctx, CM_TemplateTable_ID, trxName)
+public X_VACM_LayoutTable (Ctx ctx, int VACM_LayoutTable_ID, Trx trxName) : base (ctx, VACM_LayoutTable_ID, trxName)
 {
-/** if (CM_TemplateTable_ID == 0)
+/** if (VACM_LayoutTable_ID == 0)
 {
 SetVAF_TableView_ID (0);
-SetCM_TemplateTable_ID (0);
-SetCM_Template_ID (0);
+SetVACM_LayoutTable_ID (0);
+SetVACM_Layout_ID (0);
 SetName (null);
 }
  */
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_TemplateTable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_LayoutTable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_CM_TemplateTable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_TemplateTable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_LayoutTable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_CM_TemplateTable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_TemplateTable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_LayoutTable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_TemplateTable()
+static X_VACM_LayoutTable()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389052420L;
 public static int Table_ID;
  // =879;
 
-/** TableName=CM_TemplateTable */
-public static String Table_Name="CM_TemplateTable";
+/** TableName=VACM_LayoutTable */
+public static String Table_Name="VACM_LayoutTable";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_TemplateTable[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_LayoutTable[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -132,32 +132,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Template Table.
-@param CM_TemplateTable_ID CM Template Table Link */
-public void SetCM_TemplateTable_ID (int CM_TemplateTable_ID)
+@param VACM_LayoutTable_ID CM Template Table Link */
+public void SetVACM_LayoutTable_ID (int VACM_LayoutTable_ID)
 {
-if (CM_TemplateTable_ID < 1) throw new ArgumentException ("CM_TemplateTable_ID is mandatory.");
-Set_ValueNoCheck ("CM_TemplateTable_ID", CM_TemplateTable_ID);
+if (VACM_LayoutTable_ID < 1) throw new ArgumentException ("VACM_LayoutTable_ID is mandatory.");
+Set_ValueNoCheck ("VACM_LayoutTable_ID", VACM_LayoutTable_ID);
 }
 /** Get Template Table.
 @return CM Template Table Link */
-public int GetCM_TemplateTable_ID() 
+public int GetVACM_LayoutTable_ID() 
 {
-Object ii = Get_Value("CM_TemplateTable_ID");
+Object ii = Get_Value("VACM_LayoutTable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Template.
-@param CM_Template_ID Template defines how content is displayed */
-public void SetCM_Template_ID (int CM_Template_ID)
+@param VACM_Layout_ID Template defines how content is displayed */
+public void SetVACM_Layout_ID (int VACM_Layout_ID)
 {
-if (CM_Template_ID < 1) throw new ArgumentException ("CM_Template_ID is mandatory.");
-Set_ValueNoCheck ("CM_Template_ID", CM_Template_ID);
+if (VACM_Layout_ID < 1) throw new ArgumentException ("VACM_Layout_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Layout_ID", VACM_Layout_ID);
 }
 /** Get Template.
 @return Template defines how content is displayed */
-public int GetCM_Template_ID() 
+public int GetVACM_Layout_ID() 
 {
-Object ii = Get_Value("CM_Template_ID");
+Object ii = Get_Value("VACM_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

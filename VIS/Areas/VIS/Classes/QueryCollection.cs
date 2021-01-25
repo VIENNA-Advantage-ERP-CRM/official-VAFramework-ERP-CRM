@@ -15,8 +15,8 @@ namespace VIS.Classes
 
         private static void AddQueries(Ctx ctx)
         {
-            queryList.VIS_1 = "SELECT dc.DocSubTypeSO FROM C_DocType dc INNER JOIN C_DocBaseType db on (dc.DocBaseType = db.DocBaseType)"
-                            + " WHERE C_DocType_ID = @Param AND db.DocBaseType = 'SOO' AND dc.DocSubTypeSO IN ('WR','WI')";
+            queryList.VIS_1 = "SELECT dc.DocSubTypeSO FROM VAB_DocTypes dc INNER JOIN VAB_MasterDocType db on (dc.DocBaseType = db.DocBaseType)"
+                            + " WHERE VAB_DocTypes_ID = @Param AND db.DocBaseType = 'SOO' AND dc.DocSubTypeSO IN ('WR','WI')";
 
             queryList.VIS_2 = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";
 
@@ -120,12 +120,12 @@ namespace VIS.Classes
             queryList.VIS_27 = "SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
                                       " AND con.C_UOM_ID = @param1  AND con.C_UOM_To_ID = @param2 ";
 
-            queryList.VIS_28 = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  C_BPartner_ID = @param1 "
+            queryList.VIS_28 = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = @param1 "
                                      + " AND M_Product_ID = @param2 ";
 
             queryList.VIS_29 = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = @param1 ";
 
-            queryList.VIS_30 = "Select NoOfMonths from C_Frequency where C_Frequency_ID=@param1 ";
+            queryList.VIS_30 = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=@param1 ";
 
             queryList.VIS_31 = "select rate from c_tax WHERE c_tax_id= @param1 ";
 
@@ -133,7 +133,7 @@ namespace VIS.Classes
                              + "WHERE DocumentNo = (SELECT DocumentNo FROM M_Requisition WHERE M_Requisition.M_Requisition_id = @Param1) "
                              + "AND VAF_Client_ID = @Param2) AND M_Product_ID = @Param3";
 
-            queryList.VIS_33 = "SELECT C_Currency_ID FROM M_PriceList where M_PriceList_ID = @Param";
+            queryList.VIS_33 = "SELECT VAB_Currency_ID FROM M_PriceList where M_PriceList_ID = @Param";
 
             queryList.VIS_34 = "SELECT COALESCE(MAX(C_InvoiceBatchLine_ID),0) FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID = @Param";
 
@@ -142,7 +142,7 @@ namespace VIS.Classes
             queryList.VIS_36 = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
                              + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
                              + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
-                             + "p.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
+                             + "p.C_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                              + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList_Version pv "
                              + "WHERE p.M_Product_ID=pp.M_Product_ID"
                              + " AND pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID"
@@ -153,7 +153,7 @@ namespace VIS.Classes
             queryList.VIS_37 = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
                              + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
                              + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
-                             + "p.C_UOM_ID,pv.ValidFrom,pl.C_Currency_ID "
+                             + "p.C_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
                              + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList bpl, M_PriceList_Version pv "
                              + "WHERE p.M_Product_ID=pp.M_Product_ID"
                              + " AND pp.M_PriceList_Version_ID = pv.M_PriceList_Version_ID"
@@ -163,8 +163,8 @@ namespace VIS.Classes
                              + " ORDER BY pv.ValidFrom DESC";
 
             queryList.VIS_38 = "SELECT C_Period_ID FROM C_Period WHERE C_Year_ID IN "
-                             + " (SELECT C_Year_ID FROM C_Year WHERE C_Calendar_ID = "
-                             + " (SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE VAF_Client_ID=@param1))"
+                             + " (SELECT C_Year_ID FROM C_Year WHERE VAB_Calender_ID = "
+                             + " (SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE VAF_Client_ID=@param1))"
                              + " AND @param2 BETWEEN StartDate AND EndDate AND PeriodType='S'";
 
             queryList.VIS_39 = "SELECT PeriodType, StartDate, EndDate FROM C_Period WHERE C_Period_ID=@param";
@@ -204,9 +204,9 @@ namespace VIS.Classes
 
             queryList.VIS_54 = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
 
-            queryList.VIS_55 = "SELECT VATAX_TaxType_ID FROM C_BPartner_Location WHERE C_BPartner_ID = @Param1 AND IsActive = 'Y' AND C_BPartner_Location_ID = @Param2";
+            queryList.VIS_55 = "SELECT VATAX_TaxType_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID = @Param1 AND IsActive = 'Y' AND VAB_BPart_Location_ID = @Param2";
 
-            queryList.VIS_56 = "SELECT VATAX_TaxType_ID FROM C_BPartner WHERE C_BPartner_ID = @Param1 AND IsActive = 'Y'";
+            queryList.VIS_56 = "SELECT VATAX_TaxType_ID FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID = @Param1 AND IsActive = 'Y'";
 
             queryList.VIS_57 = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = @Param1 AND IsActive ='Y' and VATAX_TaxType_ID =@Param2";
 
@@ -220,7 +220,7 @@ namespace VIS.Classes
 
             queryList.VIS_62 = "SELECT FO_PRICE_LIST_ID FROM FO_ADDRESS_PRICE WHERE FO_ADDRESS_ID=@Param";
 
-            queryList.VIS_63 = "SELECT NoOfDays FROM C_Frequency WHERE C_Frequency_ID=@Param";
+            queryList.VIS_63 = "SELECT NoOfDays FROM VAB_Frequency WHERE VAB_Frequency_ID=@Param";
 
             queryList.VIS_64 = "SELECT ProfileType FROM S_Resource WHERE VAF_UserContact_ID=@Param";
 
@@ -228,8 +228,8 @@ namespace VIS.Classes
 
             queryList.VIS_66 = "SELECT SUM(ConfirmedQty + ScrappedQty) FROM M_PackageLine WHERE M_Package_ID=@Param1 AND M_InOutLine_ID=@Param2";
 
-            queryList.VIS_67 = "SELECT EndingBalance FROM C_Cash WHERE C_CashBook_ID=@Param1 AND VAF_Client_ID=@Param2 AND VAF_Org_ID=@Param3 AND " +
-                            "C_Cash_ID IN (SELECT Max(C_Cash_ID) FROM C_Cash WHERE C_CashBook_ID=@Param4 AND VAF_Client_ID=@Param5 AND VAF_Org_ID=@Param6) AND Processed='Y'";
+            queryList.VIS_67 = "SELECT EndingBalance FROM VAB_CashJRNL WHERE VAB_CashBook_ID=@Param1 AND VAF_Client_ID=@Param2 AND VAF_Org_ID=@Param3 AND " +
+                            "VAB_CashJRNL_ID IN (SELECT Max(VAB_CashJRNL_ID) FROM VAB_CashJRNL WHERE VAB_CashBook_ID=@Param4 AND VAF_Client_ID=@Param5 AND VAF_Org_ID=@Param6) AND Processed='Y'";
 
             queryList.VIS_68 = "SELET Count(*) FROM M_Transaction WHERE M_Product_ID = @Param";
 
@@ -333,7 +333,7 @@ namespace VIS.Classes
 
             queryList.VIS_95 = "SELECT Description FROM M_AttributeSetInstance WHERE M_AttributeSetInstance_ID=@M_AttributeSetInstance_ID";
 
-            queryList.VIS_96 = "SELECT Description FROM C_GenattributeSetInstance WHERE C_GenattributeSetInstance_ID=@C_GenttributeSetInstance_ID";
+            queryList.VIS_96 = "SELECT Description FROM VAB_GenFeatureSetInstance WHERE VAB_GenFeatureSetInstance_ID=@C_GenttributeSetInstance_ID";
 
             queryList.VIS_97 = "SELECT c.ColumnName, c.VAF_Control_Ref_Value_ID, c.IsParent, vr.Code FROM VAF_Column c LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) WHERE c.VAF_Column_ID=@Column_ID";
 
@@ -344,14 +344,14 @@ namespace VIS.Classes
               + "ORDER BY c.SeqNo";
 
             queryList.VIS_99 = "SELECT Amount "
-                    + "FROM C_DimAmt "
-                    + "WHERE C_DimAmt_ID=@C_DimAmt_ID";
+                    + "FROM VAB_DimAmt "
+                    + "WHERE VAB_DimAmt_ID=@VAB_DimAmt_ID";
 
             queryList.VIS_100 = "SELECT VAF_Job_ID,name,CLASSNAME,ENTITYTYPE FROM VAF_Job WHERE value=@processName AND ISACTIVE='Y'";
 
             queryList.VIS_101 = "SELECT count(*) FROM VAF_TableView t "
         + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
-        + "WHERE t.TableName=@TableName AND c.ColumnName='C_BPartner_ID' ";
+        + "WHERE t.TableName=@TableName AND c.ColumnName='VAB_BusinessPartner_ID' ";
 
             queryList.VIS_102 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='N' WHERE IsDefault='Y' AND VAF_TableView_ID=@vaf_tableview_ID AND VAF_Tab_ID=@VAF_Tab_ID";
 
@@ -381,12 +381,12 @@ namespace VIS.Classes
             + "WHERE VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' "
             + "ORDER BY Record_ID";
 
-            queryList.VIS_109 = "SELECT CM_Subscribe_ID, Record_ID FROM CM_Subscribe WHERE VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_TableView_ID=@VAF_TableView_ID";
+            queryList.VIS_109 = "SELECT VACM_Subscribe_ID, Record_ID FROM VACM_Subscribe WHERE VAF_UserContact_ID=@VAF_UserContact_ID AND VAF_TableView_ID=@VAF_TableView_ID";
 
             queryList.VIS_110 = "SELECT vadms_windowdoclink_id,record_id FROM vadms_windowdoclink wdl JOIN vadms_document doc "
                  + " ON wdl.VADMS_Document_ID  =doc.VADMS_Document_ID  WHERE doc.vadms_docstatus!='DD' AND vaf_tableview_id=@vaf_tableview_id";
 
-            queryList.VIS_111 = "SELECT CM_Chat_ID, Record_ID FROM CM_Chat WHERE VAF_TableView_ID=@VAF_TableView_ID";
+            queryList.VIS_111 = "SELECT VACM_Chat_ID, Record_ID FROM VACM_Chat WHERE VAF_TableView_ID=@VAF_TableView_ID";
 
             queryList.VIS_112 = "SELECT distinct att.VAF_Attachment_ID, att.Record_ID FROM VAF_Attachment att"
                + " INNER JOIN VAF_Attachmentline al ON (al.VAF_Attachment_id=att.VAF_Attachment_id)"
@@ -460,7 +460,7 @@ namespace VIS.Classes
                 + " AND et.VAF_Language=@VAF_Language";
 
 
-            queryList.VIS_124 = "SELECT * FROM C_ValidCombination WHERE C_ValidCombination_ID=@C_ValidCombination_ID AND C_AcctSchema_ID=@C_AcctSchema_ID";
+            queryList.VIS_124 = "SELECT * FROM C_ValidCombination WHERE C_ValidCombination_ID=@C_ValidCombination_ID AND VAB_AccountBook_ID=@VAB_AccountBook_ID";
 
             queryList.VIS_125 = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = @VAF_Column_ID";
 
@@ -509,7 +509,7 @@ namespace VIS.Classes
 
             queryList.VIS_135 = "SELECT PaymentRule FROM C_PaySelectionCheck WHERE C_PaySelection_ID = @pSelectID";
 
-            queryList.VIS_136 = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and c_bankaccountdoc.isactive = 'Y' AND rownum =1)";
+            queryList.VIS_136 = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from VAB_Bank_Acctdoc where VAB_Bank_Acct_id = (select VAB_Bank_Acct_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and VAB_Bank_Acctdoc.isactive = 'Y' AND rownum =1)";
 
             queryList.VIS_137 = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
 
@@ -553,7 +553,7 @@ namespace VIS.Classes
 
             queryList.VIS_151 = "select VAF_Job_ID from VAF_Job where name='VARPT_RemittancePrint'";
 
-            queryList.VIS_152 = " SELECT VAF_Job_ID from C_BankAccountDoc WHERE C_BankAccount_ID=@BankAcct_ID AND rownum=1";
+            queryList.VIS_152 = " SELECT VAF_Job_ID from VAB_Bank_AcctDoc WHERE VAB_Bank_Acct_ID=@BankAcct_ID AND rownum=1";
         }
 
         public static string GetQuery(string code, Ctx ctx)

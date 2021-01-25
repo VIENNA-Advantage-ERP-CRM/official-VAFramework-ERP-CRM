@@ -64,24 +64,24 @@ SetQtyEntered (0.0);// 1
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_OrderlineHistory[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Charge.
-@param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+@param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }/** Get Charge.
 @return Additional document charges */
-        public int GetC_Charge_ID() { Object ii = Get_Value("C_Charge_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Billing Frequency.
-@param C_Frequency_ID Identifies the billing frequency i.e, monthly, quaterly etc. */
-        public void SetC_Frequency_ID(int C_Frequency_ID)
+        public int GetVAB_Charge_ID() { Object ii = Get_Value("VAB_Charge_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Billing Frequency.
+@param VAB_Frequency_ID Identifies the billing frequency i.e, monthly, quaterly etc. */
+        public void SetVAB_Frequency_ID(int VAB_Frequency_ID)
         {
-            if (C_Frequency_ID <= 0) Set_Value("C_Frequency_ID", null);
+            if (VAB_Frequency_ID <= 0) Set_Value("VAB_Frequency_ID", null);
             else
-                Set_Value("C_Frequency_ID", C_Frequency_ID);
+                Set_Value("VAB_Frequency_ID", VAB_Frequency_ID);
         }/** Get Billing Frequency.
 @return Identifies the billing frequency i.e, monthly, quaterly etc. */
-        public int GetC_Frequency_ID() { Object ii = Get_Value("C_Frequency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
+        public int GetVAB_Frequency_ID() { Object ii = Get_Value("VAB_Frequency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
 @param C_OrderLine_ID Order Line */
         public void SetC_OrderLine_ID(int C_OrderLine_ID) { if (C_OrderLine_ID < 1) throw new ArgumentException("C_OrderLine_ID is mandatory."); Set_ValueNoCheck("C_OrderLine_ID", C_OrderLine_ID); }/** Get Order Line.
 @return Order Line */

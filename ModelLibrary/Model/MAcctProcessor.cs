@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAcctProcessor
  * Purpose        : Accounting Processor Model
- * Class Used     : X_C_AcctProcessor and ViennaProcessor
+ * Class Used     : X_VAB_AccountHanlder and ViennaProcessor
  * Chronological    Development
  * Raghunandan     07-Jan-2010
   ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAcctProcessor : X_C_AcctProcessor, ViennaProcessor
+    public class MAcctProcessor : X_VAB_AccountHanlder, ViennaProcessor
     {
         //Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MAcctProcessor).FullName);
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         public static MAcctProcessor[] GetActive(Ctx ctx)
         {
             List<MAcctProcessor> list = new List<MAcctProcessor>();
-            String sql = "SELECT * FROM C_AcctProcessor WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAB_AccountHanlder WHERE IsActive='Y'";
             IDataReader idr = null;
 
             //Changed By Karan.....
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
                 while (idr.Read())
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
-                                                       VAF_Plan_ID = (SELECT VAF_Plan_ID FROM C_AcctProcessor WHERE C_AcctProcessor_ID =" + idr["C_AcctProcessor_ID"] + " )"));
+                                                       VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAB_AccountHanlder WHERE VAB_AccountHanlder_ID =" + idr["VAB_AccountHanlder_ID"] + " )"));
 
                     //list.Add(new MAcctProcessor(ctx, idr, null));
 
@@ -80,12 +80,12 @@ namespace VAdvantage.Model
         /// Standard Construvtor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_AcctProcessor_ID"></param>
+        /// <param name="VAB_AccountHanlder_ID"></param>
         /// <param name="trxName"></param>
-        public MAcctProcessor(Ctx ctx, int C_AcctProcessor_ID, Trx trxName)
-            : base(ctx, C_AcctProcessor_ID, trxName)
+        public MAcctProcessor(Ctx ctx, int VAB_AccountHanlder_ID, Trx trxName)
+            : base(ctx, VAB_AccountHanlder_ID, trxName)
         {
-            if (C_AcctProcessor_ID == 0)
+            if (VAB_AccountHanlder_ID == 0)
             {
                 //	setName (null);
                 //	setSupervisor_ID (0);
@@ -117,7 +117,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(client);
             SetName(client.GetName() + " - "
-                + Msg.Translate(GetCtx(), "C_AcctProcessor_ID"));
+                + Msg.Translate(GetCtx(), "VAB_AccountHanlder_ID"));
             SetSupervisor_ID(Supervisor_ID);
         }
 
@@ -154,14 +154,14 @@ namespace VAdvantage.Model
         {
             List<MAcctProcessorLog> list = new List<MAcctProcessorLog>();
             String sql = "SELECT * "
-                + "FROM C_AcctProcessorLog "
-                + "WHERE C_AcctProcessor_ID=@C_AcctProcessor_ID"
+                + "FROM VAB_AccountHanlderLog "
+                + "WHERE VAB_AccountHanlder_ID=@VAB_AccountHanlder_ID"
                 + "ORDER BY Created DESC";
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@C_AcctProcessor_ID", GetC_AcctProcessor_ID());
+                param[0] = new SqlParameter("@VAB_AccountHanlder_ID", GetVAB_AccountHanlder_ID());
                 while (idr.Read())
                 {
                     list.Add(new MAcctProcessorLog(GetCtx(), idr, Get_TrxName()));
@@ -192,8 +192,8 @@ namespace VAdvantage.Model
             {
                 return 0;
             }
-            String sql = "DELETE FROM C_AcctProcessorLog "
-                + "WHERE C_AcctProcessor_ID=" + GetC_AcctProcessor_ID()
+            String sql = "DELETE FROM VAB_AccountHanlderLog "
+                + "WHERE VAB_AccountHanlder_ID=" + GetVAB_AccountHanlder_ID()
                 //jz + " AND (Created+" + getKeepLogDays() + ") < SysDate";
                 + " AND addDays(Created," + GetKeepLogDays() + ") < SysDate";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());

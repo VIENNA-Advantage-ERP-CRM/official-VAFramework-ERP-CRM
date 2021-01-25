@@ -1064,9 +1064,9 @@ namespace VAdvantage.Process
                     CheckCtxArea(sProcess.GetVAF_ContextScope_ID());
                 }
 
-                if (sProcess.GetAD_Workflow_ID() != 0)
+                if (sProcess.GetVAF_Workflow_ID() != 0)
                 {
-                    GetWorkflow(sProcess.GetAD_Workflow_ID());
+                    GetWorkflow(sProcess.GetVAF_Workflow_ID());
                 }
 
                 if (sProcess.IsReport())
@@ -1313,25 +1313,25 @@ namespace VAdvantage.Process
 
         #region Workflow
 
-        private void GetWorkflow(int sAD_Workflow_ID)
+        private void GetWorkflow(int sVAF_Workflow_ID)
         {
-            //if (IsRecordExistInDBSchema(X_AD_Workflow.Table_ID, sAD_Workflow_ID))
+            //if (IsRecordExistInDBSchema(X_VAF_Workflow.Table_ID, sVAF_Workflow_ID))
             //{
             //    return;
             //}
 
             string name;
-            if (HasModulePrefix("Name", "AD_Workflow", "AD_Workflow_ID=" + sAD_Workflow_ID, out name))
+            if (HasModulePrefix("Name", "VAF_Workflow", "VAF_Workflow_ID=" + sVAF_Workflow_ID, out name))
             {
-                X_AD_Workflow sWFlow = new X_AD_Workflow(_ctx, sAD_Workflow_ID, null);
+                X_VAF_Workflow sWFlow = new X_VAF_Workflow(_ctx, sVAF_Workflow_ID, null);
 
                 if (sWFlow.GetVAF_WFlow_Incharge_ID() != 0)
                 {
                     GetWorkflowResponsible(sWFlow.GetVAF_WFlow_Incharge_ID());
                 }
-                if (sWFlow.GetAD_WorkflowProcessor_ID() != 0)
+                if (sWFlow.GetVAF_WFlowHandler_ID() != 0)
                 {
-                    GetWorkflowProcessor(sWFlow.GetAD_WorkflowProcessor_ID());
+                    GetWorkflowProcessor(sWFlow.GetVAF_WFlowHandler_ID());
                 }
 
                 if (sWFlow.GetVAF_TableView_ID() != 0)
@@ -1344,11 +1344,11 @@ namespace VAdvantage.Process
                     //GetWFNode(sWFlow.GetVAF_WFlow_Node_ID());
                 }
 
-                InsertIntoDBSchema(X_AD_Workflow.Table_ID, sAD_Workflow_ID, X_AD_Workflow.Table_Name, name, "AD_Workflow_ID=" + sAD_Workflow_ID);
+                InsertIntoDBSchema(X_VAF_Workflow.Table_ID, sVAF_Workflow_ID, X_VAF_Workflow.Table_Name, name, "VAF_Workflow_ID=" + sVAF_Workflow_ID);
 
                 //Check Workflow Nodes
 
-                DataSet ds = DataBase.DB.ExecuteDataset("Select * From VAF_WFlow_Node Where AD_WorkFlow_ID = " + sAD_Workflow_ID);
+                DataSet ds = DataBase.DB.ExecuteDataset("Select * From VAF_WFlow_Node Where VAF_Workflow_ID = " + sVAF_Workflow_ID);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     X_VAF_WFlow_Node sNode = new X_VAF_WFlow_Node(_ctx, dr, null);
@@ -1413,9 +1413,9 @@ namespace VAdvantage.Process
 
                     else if (sNode.GetAction() == X_VAF_WFlow_Node.ACTION_SubWorkflow)
                     {
-                        if (sNode.GetAD_Workflow_ID() != 0)
+                        if (sNode.GetVAF_Workflow_ID() != 0)
                         {
-                            GetWorkflow(sNode.GetAD_Workflow_ID());
+                            GetWorkflow(sNode.GetVAF_Workflow_ID());
                         }
                     }
 
@@ -1457,14 +1457,14 @@ namespace VAdvantage.Process
             }
         }
 
-        private void GetWorkflowProcessor(int sAD_WorkflowProcessor_ID)
+        private void GetWorkflowProcessor(int sVAF_WFlowHandler_ID)
         {
-            //Select AD_WorkflowProcessor_ID From AD_WorkflowProcessor Where Name = '" + sWFProcessor.GetName() + "'"));
+            //Select VAF_WFlowHandler_ID From VAF_WFlowHandler Where Name = '" + sWFProcessor.GetName() + "'"));
             string name;
-            if (HasModulePrefix("Name", "AD_WorkflowProcessor", "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID, out name))
+            if (HasModulePrefix("Name", "VAF_WFlowHandler", "VAF_WFlowHandler_ID =" + sVAF_WFlowHandler_ID, out name))
             {
 
-                int sVAF_JobRun_Plan_ID = GetID("AD_WorkflowProcessor", "VAF_Plan_ID", "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID);
+                int sVAF_JobRun_Plan_ID = GetID("VAF_WFlowHandler", "VAF_Plan_ID", "VAF_WFlowHandler_ID =" + sVAF_WFlowHandler_ID);
                 if (sVAF_JobRun_Plan_ID != 0)
                 {
                     //Select VAF_Plan_ID Form VAF_Plan Where Name = '" + sch.GetName() + "'"));
@@ -1473,7 +1473,7 @@ namespace VAdvantage.Process
                         InsertIntoDBSchema(X_VAF_Plan.Table_ID, sVAF_JobRun_Plan_ID, X_VAF_Plan.Table_Name, name, "VAF_Plan_ID=" + sVAF_JobRun_Plan_ID);
                     }
                 }
-                InsertIntoDBSchema(X_AD_WorkflowProcessor.Table_ID, sAD_WorkflowProcessor_ID, X_AD_WorkflowProcessor.Table_Name, name, "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID);
+                InsertIntoDBSchema(X_VAF_WFlowHandler.Table_ID, sVAF_WFlowHandler_ID, X_VAF_WFlowHandler.Table_Name, name, "VAF_WFlowHandler_ID =" + sVAF_WFlowHandler_ID);
             }
         }
 

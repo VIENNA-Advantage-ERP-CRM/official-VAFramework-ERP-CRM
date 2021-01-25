@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         }	//	MTimeExpenseLine
 
         /**	Currency of Report			*/
-        private int _C_Currency_Report_ID = 0;
+        private int _VAB_Currency_Report_ID = 0;
 
 
         /// <summary>
@@ -145,29 +145,29 @@ namespace VAdvantage.Model
         }	//	getApprovalAmt
 
         /// <summary>
-        /// Get C_Currency_ID of Report (Price List)
+        /// Get VAB_Currency_ID of Report (Price List)
         /// </summary>
         /// <returns>currency</returns>
-        public int GetC_Currency_Report_ID()
+        public int GetVAB_Currency_Report_ID()
         {
-            if (_C_Currency_Report_ID != 0)
+            if (_VAB_Currency_Report_ID != 0)
             {
-                return _C_Currency_Report_ID;
+                return _VAB_Currency_Report_ID;
             }
             //	Get it from header
             MTimeExpense te = new MTimeExpense(GetCtx(), GetS_TimeExpense_ID(), Get_TrxName());
-            _C_Currency_Report_ID = te.GetC_Currency_ID();
-            return _C_Currency_Report_ID;
-        }	//	getC_Currency_Report_ID
+            _VAB_Currency_Report_ID = te.GetVAB_Currency_ID();
+            return _VAB_Currency_Report_ID;
+        }	//	getVAB_Currency_Report_ID
 
         /// <summary>
-        /// Set C_Currency_ID of Report (Price List)
+        /// Set VAB_Currency_ID of Report (Price List)
         /// </summary>
-        /// <param name="C_Currency_ID">currency</param>
-        public void SetC_Currency_Report_ID(int C_Currency_ID)
+        /// <param name="VAB_Currency_ID">currency</param>
+        public void SetVAB_Currency_Report_ID(int VAB_Currency_ID)
         {
-            _C_Currency_Report_ID = C_Currency_ID;
-        }	//	getC_Currency_Report_ID
+            _VAB_Currency_Report_ID = VAB_Currency_ID;
+        }	//	getVAB_Currency_Report_ID
 
 
         /// <summary>
@@ -270,11 +270,11 @@ namespace VAdvantage.Model
 
             //	Employee
             MTimeExpense hdr = new MTimeExpense(GetCtx(), GetS_TimeExpense_ID(), null);
-            int C_BPartner_ID = hdr.GetC_BPartner_ID();
+            int VAB_BusinessPartner_ID = hdr.GetVAB_BusinessPartner_ID();
             Decimal Qty = GetQty();
             Boolean IsSOTrx = true;
             MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    M_Product_ID, C_BPartner_ID, Qty, IsSOTrx);
+                    M_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
             //
             int M_PriceList_ID = hdr.GetM_PriceList_ID();
             pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -282,27 +282,27 @@ namespace VAdvantage.Model
             pp.SetPriceDate(orderDate);
             //
             SetExpenseAmt(pp.GetPriceStd());
-            SetC_Currency_ID(pp.GetC_Currency_ID());
+            SetVAB_Currency_ID(pp.GetVAB_Currency_ID());
             SetAmt(windowNo, "M_Product_ID");
         }	//	setM_Product_ID
 
         /// <summary>
         /// Set Currency - Callout
         /// </summary>
-        /// <param name="oldC_Currency_ID">old value</param>
-        /// <param name="newC_Currency_ID">new value</param>
+        /// <param name="oldVAB_Currency_ID">old value</param>
+        /// <param name="newVAB_Currency_ID">new value</param>
         /// <param name="windowNo"> window</param>
-        public void SetC_Currency_ID(String oldC_Currency_ID,
-               String newC_Currency_ID, int windowNo)
+        public void SetVAB_Currency_ID(String oldVAB_Currency_ID,
+               String newVAB_Currency_ID, int windowNo)
         {
-            if (newC_Currency_ID == null || newC_Currency_ID.Length == 0)
+            if (newVAB_Currency_ID == null || newVAB_Currency_ID.Length == 0)
             {
                 return;
             }
-            int C_Currency_ID = Util.GetValueOfInt(newC_Currency_ID);
-            base.SetC_Currency_ID(C_Currency_ID);
-            SetAmt(windowNo, "C_Currency_ID");
-        }	//	setC_Currency_ID
+            int VAB_Currency_ID = Util.GetValueOfInt(newVAB_Currency_ID);
+            base.SetVAB_Currency_ID(VAB_Currency_ID);
+            SetAmt(windowNo, "VAB_Currency_ID");
+        }	//	setVAB_Currency_ID
 
         /// <summary>
         /// Set ExpenseAmt - Callout
@@ -332,19 +332,19 @@ namespace VAdvantage.Model
         {
             //	get values
             Decimal ExpenseAmt = GetExpenseAmt();
-            int C_Currency_From_ID = GetC_Currency_ID();
-            int C_Currency_To_ID = GetCtx().GetContextAsInt("$C_Currency_ID");
+            int VAB_Currency_From_ID = GetVAB_Currency_ID();
+            int VAB_Currency_To_ID = GetCtx().GetContextAsInt("$VAB_Currency_ID");
             DateTime? DateExpense = GetDateExpense();
             //
-            log.Fine("Amt=" + ExpenseAmt + ", C_Currency_ID=" + C_Currency_From_ID);
+            log.Fine("Amt=" + ExpenseAmt + ", VAB_Currency_ID=" + VAB_Currency_From_ID);
             //	Converted Amount = Unit price
             Decimal ConvertedAmt = ExpenseAmt;
             //	convert if required
-            //if (ConvertedAmt.signum() != 0 && C_Currency_To_ID != C_Currency_From_ID)
-            if (Env.Signum(ConvertedAmt) != 0 && C_Currency_To_ID != C_Currency_From_ID)
+            //if (ConvertedAmt.signum() != 0 && VAB_Currency_To_ID != VAB_Currency_From_ID)
+            if (Env.Signum(ConvertedAmt) != 0 && VAB_Currency_To_ID != VAB_Currency_From_ID)
             {
                 ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
-                    ConvertedAmt, C_Currency_From_ID, C_Currency_To_ID,
+                    ConvertedAmt, VAB_Currency_From_ID, VAB_Currency_To_ID,
                     DateExpense, 0, GetVAF_Client_ID(), GetVAF_Org_ID());
             }
             SetConvertedAmt(ConvertedAmt);
@@ -359,9 +359,9 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             //	Calculate Converted Amount
-            if (newRecord || Is_ValueChanged("ExpenseAmt") || Is_ValueChanged("C_Currency_ID") || Is_ValueChanged("DateExpense"))
+            if (newRecord || Is_ValueChanged("ExpenseAmt") || Is_ValueChanged("VAB_Currency_ID") || Is_ValueChanged("DateExpense"))
             {
-                if (GetC_Currency_ID() == GetC_Currency_Report_ID())
+                if (GetVAB_Currency_ID() == GetVAB_Currency_Report_ID())
                 {
                     SetConvertedAmt(GetExpenseAmt());
                 }
@@ -369,7 +369,7 @@ namespace VAdvantage.Model
                 {
                     // did changes to give error message when conversion is not found.-Mohit
                     decimal convertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
-                        GetExpenseAmt(), GetC_Currency_ID(), GetC_Currency_Report_ID(), 
+                        GetExpenseAmt(), GetVAB_Currency_ID(), GetVAB_Currency_Report_ID(), 
                         GetDateExpense(), 0, GetVAF_Client_ID(), GetVAF_Org_ID());
                     if (convertedAmt.Equals(0))
                     {
@@ -387,7 +387,7 @@ namespace VAdvantage.Model
 
             if (IsBillToCustomer())
             {
-                if (Util.GetValueOfInt(GetC_BPartner_ID()) == 0)
+                if (Util.GetValueOfInt(GetVAB_BusinessPartner_ID()) == 0)
                 {
                     //throw new Exception("SelectBusinessPartner");
                     // ShowMessage.Info("SelectBusinessPartner", true, null, null);

@@ -46,9 +46,9 @@ namespace VAdvantage.Process
                 {
                     Currobj = new MCurrCrossRate(GetCtx(), dr, Get_Trx());
                     // Getting records from currency rate based on conditions
-                    query.Append("SELECT VAF_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) +
-                        " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND VAF_Org_ID=" + Currobj.GetVAF_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() +
-                        " AND C_Currency_To_ID=" + Currobj.GetC_Currency_ID() + " AND C_Currency_ID IN ('" + Currobj.GetC_Currency_From_ID() + "','" + Currobj.GetC_Currency_To_ID() + "')");
+                    query.Append("SELECT VAF_Org_ID,VAB_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM VAB_ExchangeRate WHERE " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) +
+                        " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND VAF_Org_ID=" + Currobj.GetVAF_Org_ID() + " AND VAB_CurrencyType_ID=" + Currobj.GetVAB_CurrencyType_ID() +
+                        " AND VAB_Currency_To_ID=" + Currobj.GetVAB_Currency_ID() + " AND VAB_Currency_ID IN ('" + Currobj.GetVAB_Currency_From_ID() + "','" + Currobj.GetVAB_Currency_To_ID() + "')");
                     dsobj = DB.ExecuteDataset(query.ToString());
                     query.Clear();
                     if (dsobj != null && dsobj.Tables.Count > 0 && dsobj.Tables[0].Rows.Count == 2)
@@ -56,15 +56,15 @@ namespace VAdvantage.Process
                         for (int j = 0; j < dsobj.Tables[0].Rows.Count; j++)
                         {
                             //Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAF_Org_ID"]);
-                            FromCurr1 = Util.GetValueOfInt(dsobj.Tables[0].Rows[j]["C_Currency_ID"]);
+                            FromCurr1 = Util.GetValueOfInt(dsobj.Tables[0].Rows[j]["VAB_Currency_ID"]);
                             // Getting multiply rate from both records
-                            if (Currobj.GetC_Currency_From_ID() == FromCurr1)
+                            if (Currobj.GetVAB_Currency_From_ID() == FromCurr1)
                             {
                                 ValidFrom1 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidFrom"]);
                                 ValidTo1 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidTo"]);
                                 MulRate1 = Util.GetValueOfDecimal(dsobj.Tables[0].Rows[j]["MultiplyRate"]);
                             }
-                            else if (Currobj.GetC_Currency_To_ID() == FromCurr1)
+                            else if (Currobj.GetVAB_Currency_To_ID() == FromCurr1)
                             {
                                 ValidFrom2 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidFrom"]);
                                 ValidTo2 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidTo"]);
@@ -112,8 +112,8 @@ namespace VAdvantage.Process
                             retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_InvalidDate"));
                         }
                         query.Clear();
-                        //int ID = DB.GetNextID(0, "C_Conversion_Rate", null);
-                        //query.Append("INSERT INTO C_Conversion_Rate (VAF_Client_ID,VAF_Org_ID,C_Conversion_Rate_ID,C_Currency_ID,C_Currency_To_ID,C_ConversionType_ID,ValidFrom,ValidTo,MultiplyRate,DivideRate,CreatedBy,UpdatedBy) "
+                        //int ID = DB.GetNextID(0, "VAB_ExchangeRate", null);
+                        //query.Append("INSERT INTO VAB_ExchangeRate (VAF_Client_ID,VAF_Org_ID,VAB_ExchangeRate_ID,VAB_Currency_ID,VAB_Currency_To_ID,VAB_CurrencyType_ID,ValidFrom,ValidTo,MultiplyRate,DivideRate,CreatedBy,UpdatedBy) "
                         //    + "Values (" + Client_ID + ", " + Org_ID + ","+ ID +", " + FromCurr + ", " + ToCurr + ", " + CurrType + ", TO_DATE('" + newValidFrom.ToShortDateString() + "','MM-DD-YYYY'), TO_DATE('" + newValidTo.ToShortDateString() + "','MM-DD-YYYY') , " + newMulRate + ", " + newDivideRate + ", " + Client_ID + ", "+ Client_ID + ") ");
                         //int _updated = DB.ExecuteQuery(query.ToString(), null);
                         //if (_updated > 0)
@@ -124,9 +124,9 @@ namespace VAdvantage.Process
                         conobj = new MConversionRate(GetCtx(), 0, Get_Trx());
                         conobj.SetVAF_Client_ID(Currobj.GetVAF_Client_ID());
                         conobj.SetVAF_Org_ID(Currobj.GetVAF_Org_ID());
-                        conobj.SetC_Currency_ID(Currobj.GetC_Currency_From_ID());
-                        conobj.SetC_Currency_To_ID(Currobj.GetC_Currency_To_ID());
-                        conobj.SetC_ConversionType_ID(Currobj.GetC_ConversionType_ID());
+                        conobj.SetVAB_Currency_ID(Currobj.GetVAB_Currency_From_ID());
+                        conobj.SetVAB_Currency_To_ID(Currobj.GetVAB_Currency_To_ID());
+                        conobj.SetVAB_CurrencyType_ID(Currobj.GetVAB_CurrencyType_ID());
                         conobj.SetValidFrom(newValidFrom);
                         conobj.SetValidTo(newValidTo);
                         conobj.SetMultiplyRate(newMulRate);

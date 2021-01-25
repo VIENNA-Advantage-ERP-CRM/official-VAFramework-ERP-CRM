@@ -55,7 +55,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             MMovement move = (MMovement)GetPO();
             SetDateDoc(move.GetMovementDate());
             SetDateAcct(move.GetMovementDate());
@@ -115,7 +115,7 @@ namespace VAdvantage.Acct
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             //  Line pointers
             FactLine dr = null;
@@ -129,7 +129,7 @@ namespace VAdvantage.Acct
                 //  ** Inventory       DR      CR
                 dr = fact.CreateLine(line,
                     line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                    as1.GetC_Currency_ID(), Decimal.Negate(costs));		//	from (-) CR
+                    as1.GetVAB_Currency_ID(), Decimal.Negate(costs));		//	from (-) CR
                 if (dr == null)
                 {
                     continue;
@@ -140,7 +140,7 @@ namespace VAdvantage.Acct
                 //  ** InventoryTo     DR      CR
                 cr = fact.CreateLine(line,
                     line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                    as1.GetC_Currency_ID(), costs);			//	to (+) DR
+                    as1.GetVAB_Currency_ID(), costs);			//	to (+) DR
                 if (cr == null)
                 {
                     continue;
@@ -154,7 +154,7 @@ namespace VAdvantage.Acct
                     String costingLevel = as1.GetCostingLevel();
                     MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
                         line.GetProduct().GetM_Product_Category_ID(),
-                        as1.GetC_AcctSchema_ID(), GetTrx());
+                        as1.GetVAB_AccountBook_ID(), GetTrx());
                     if (pca.GetCostingLevel() != null)
                     {
                         costingLevel = pca.GetCostingLevel();

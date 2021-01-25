@@ -155,7 +155,7 @@
 
                     VAF_TableView_ID: VAF_TableView_ID, Record_ID: Record_ID, docStatus: docStatus, processing: processing, orderType: orderType, isSOTrx: isSOTrx, docAction: docAction,
 
-                    tableName: tabObj.getTableName(), values: JSON.stringify(_values), names: JSON.stringify(_names), C_DocType_ID: tabObj.getValue("C_DocType_ID"), C_DocTypeTarget_ID: tabObj.getValue("C_DocTypeTarget_ID")
+                    tableName: tabObj.getTableName(), values: JSON.stringify(_values), names: JSON.stringify(_names), VAB_DocTypes_ID: tabObj.getValue("VAB_DocTypes_ID"), VAB_DocTypesTarget_ID: tabObj.getValue("VAB_DocTypesTarget_ID")
                 },
                 success: function (data) {
                     var result = JSON.parse(data);

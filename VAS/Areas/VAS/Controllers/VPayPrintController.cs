@@ -28,19 +28,19 @@ namespace VIS.Controllers
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult LoadPaymentRuleInfo(string paymentMethod_ID, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule)
+        public JsonResult LoadPaymentRuleInfo(string paymentMethod_ID, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             VPayPrintModel objVPaySelect = new VPayPrintModel();
-            return Json(JsonConvert.SerializeObject(objVPaySelect.LoadPaymentRuleInfo(ctx,paymentMethod_ID,C_PaySelection_ID,m_C_BankAccount_ID,PaymentRule)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(objVPaySelect.LoadPaymentRuleInfo(ctx,paymentMethod_ID,C_PaySelection_ID,m_VAB_Bank_Acct_ID,PaymentRule)), JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult Cmd_Print(string paymentMethod_ID, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule,string checkNo)
+        public JsonResult Cmd_Print(string paymentMethod_ID, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule,string checkNo)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             VPayPrintModel objVPaySelect = new VPayPrintModel();
-            return Json(JsonConvert.SerializeObject(objVPaySelect.Cmd_Print(ctx, C_PaySelection_ID, m_C_BankAccount_ID, paymentMethod_ID, Util.GetValueOfInt(checkNo))), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(objVPaySelect.Cmd_Print(ctx, C_PaySelection_ID, m_VAB_Bank_Acct_ID, paymentMethod_ID, Util.GetValueOfInt(checkNo))), JsonRequestBehavior.AllowGet);
         }
 
         [AjaxAuthorizeAttribute]
@@ -51,7 +51,7 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             string paymentMethod_ID = Util.GetValueOfString(data[0]);
             int C_PaySelection_ID = Util.GetValueOfInt(data[1]);
-            int m_C_BankAccount_ID = Util.GetValueOfInt(data[2]);
+            int m_VAB_Bank_Acct_ID = Util.GetValueOfInt(data[2]);
             string PaymentRule = Util.GetValueOfString(data[3]);
             string checkNo = Util.GetValueOfString(data[4]);
             List<int> check_ID = JsonConvert.DeserializeObject<List<int>>(data[5]);
@@ -64,7 +64,7 @@ namespace VIS.Controllers
             }
             m_checks = list.ToArray();
             VPayPrintModel objVPaySelect = new VPayPrintModel();
-            return Json(JsonConvert.SerializeObject(objVPaySelect.ContinueCheckPrint(ctx, C_PaySelection_ID, m_C_BankAccount_ID, paymentMethod_ID, checkNo, check_ID, m_checks, m_batch)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(objVPaySelect.ContinueCheckPrint(ctx, C_PaySelection_ID, m_VAB_Bank_Acct_ID, paymentMethod_ID, checkNo, check_ID, m_checks, m_batch)), JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
@@ -80,11 +80,11 @@ namespace VIS.Controllers
         }
 
         [HttpPost]
-        public JsonResult Cmd_Export(string paymentMethod_ID, int C_PaySelection_ID, int m_C_BankAccount_ID, string PaymentRule, string checkNo)
+        public JsonResult Cmd_Export(string paymentMethod_ID, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, string checkNo)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             VPayPrintModel objVPaySelect = new VPayPrintModel();
-            return Json(JsonConvert.SerializeObject(objVPaySelect.Cmd_Export(ctx, C_PaySelection_ID, m_C_BankAccount_ID, paymentMethod_ID, Util.GetValueOfInt(checkNo))), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(objVPaySelect.Cmd_Export(ctx, C_PaySelection_ID, m_VAB_Bank_Acct_ID, paymentMethod_ID, Util.GetValueOfInt(checkNo))), JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]

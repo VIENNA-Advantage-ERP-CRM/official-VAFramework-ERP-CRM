@@ -21,7 +21,7 @@ using System.Data;
         {
             /** if (S_TimeExpense_ID == 0)
             {
-            SetC_BPartner_ID (0);
+            SetVAB_BusinessPartner_ID (0);
             SetDateReport (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -39,7 +39,7 @@ using System.Data;
         {
             /** if (S_TimeExpense_ID == 0)
             {
-            SetC_BPartner_ID (0);
+            SetVAB_BusinessPartner_ID (0);
             SetDateReport (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
@@ -164,20 +164,20 @@ using System.Data;
             return Convert.ToDecimal(bd);
         }
 
-        /** C_BPartner_ID VAF_Control_Ref_ID=277 */
-        public static int C_BPARTNER_ID_VAF_Control_Ref_ID = 277;
+        /** VAB_BusinessPartner_ID VAF_Control_Ref_ID=277 */
+        public static int VAB_BUSINESSPARTNER_ID_VAF_Control_Ref_ID = 277;
         /** Set Customer/Prospect.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID < 1) throw new ArgumentException("C_BPartner_ID is mandatory.");
-            Set_Value("C_BPartner_ID", C_BPartner_ID);
+            if (VAB_BusinessPartner_ID < 1) throw new ArgumentException("VAB_BusinessPartner_ID is mandatory.");
+            Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Customer/Prospect.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

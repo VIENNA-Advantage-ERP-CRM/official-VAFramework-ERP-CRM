@@ -30,7 +30,7 @@ namespace VAdvantage.Process
     public class CommissionAPInvoice : ProcessEngine.SvrProcess
     {
         //Document Type 
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -44,9 +44,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = para[i].GetParameterAsInt(); ;
+                    _VAB_DocTypes_ID = para[i].GetParameterAsInt(); ;
                 }
                 else
                 {
@@ -61,7 +61,7 @@ namespace VAdvantage.Process
         /// <returns>Message (variables are parsed)</returns>
         protected override String DoIt()
         {
-            log.Info("doIt - C_CommissionRun_ID=" + GetRecord_ID());
+            log.Info("doIt - VAB_WorkCommission_Calc_ID=" + GetRecord_ID());
             //	Load Data
             MCommissionRun comRun = new MCommissionRun(GetCtx(), GetRecord_ID(), Get_Trx());
             if (comRun.Get_ID() == 0)
@@ -72,16 +72,16 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("@GrandTotal@ = 0");
             }
-            MCommission com = new MCommission(GetCtx(), comRun.GetC_Commission_ID(), Get_Trx());
+            MCommission com = new MCommission(GetCtx(), comRun.GetVAB_WorkCommission_ID(), Get_Trx());
             if (com.Get_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No Commission");
             }
-            if (com.GetC_Charge_ID() == 0)
+            if (com.GetVAB_Charge_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No Charge on Commission");
             }
-            MBPartner bp = new MBPartner(GetCtx(), com.GetC_BPartner_ID(), Get_Trx());
+            MBPartner bp = new MBPartner(GetCtx(), com.GetVAB_BusinessPartner_ID(), Get_Trx());
             if (bp.Get_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No BPartner");
@@ -90,7 +90,7 @@ namespace VAdvantage.Process
             //	Create Expense Invoice 
             MInvoice invoice = new MInvoice(GetCtx(), 0, null);
             invoice.SetClientOrg(com.GetVAF_Client_ID(), com.GetVAF_Org_ID());
-            invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);   //	API
+            invoice.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);   //	API
             invoice.SetIsExpenseInvoice(true);
             invoice.SetIsSOTrx(false);
             invoice.SetBPartner(bp);
@@ -120,7 +120,7 @@ namespace VAdvantage.Process
             //	invoice.setDocumentNo (comRun.getDocumentNo());		//	may cause unique constraint
             invoice.SetSalesRep_ID(GetVAF_UserContact_ID());	//	caller
             //
-            if (com.GetC_Currency_ID() != invoice.GetC_Currency_ID())
+            if (com.GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
             {
                 throw new ArgumentException("CommissionAPInvoice - Currency of PO Price List not Commission Currency");
             }
@@ -133,7 +133,7 @@ namespace VAdvantage.Process
 
             //	Create Invoice Line
             MInvoiceLine iLine = new MInvoiceLine(invoice);
-            iLine.SetC_Charge_ID(com.GetC_Charge_ID());
+            iLine.SetVAB_Charge_ID(com.GetVAB_Charge_ID());
             iLine.SetQty(1);
             iLine.SetPrice(comRun.GetGrandTotal());
             iLine.SetTax();

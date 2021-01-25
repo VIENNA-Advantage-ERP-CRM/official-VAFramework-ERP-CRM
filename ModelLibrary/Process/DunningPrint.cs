@@ -42,7 +42,7 @@ namespace VAdvantage.Process
         // Mail Template			
         private int _R_MailText_ID = 0;
         // Dunning Run				
-        private int _C_DunningRun_ID = 0;
+        private int _VAB_DunningExe_ID = 0;
         // Print only Outstanding	
         private bool _IsOnlyIfBPBalance = true;
 
@@ -71,9 +71,9 @@ namespace VAdvantage.Process
                 {
                     _R_MailText_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_DunningRun_ID"))
+                else if (name.Equals("VAB_DunningExe_ID"))
                 {
-                    _C_DunningRun_ID = para[i].GetParameterAsInt();
+                    _VAB_DunningExe_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("IsOnlyIfBPBalance"))
                 {
@@ -92,7 +92,7 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("C_DunningRun_ID=" + _C_DunningRun_ID + ",R_MailText_ID=" + _R_MailText_ID
+            log.Info("VAB_DunningExe_ID=" + _VAB_DunningExe_ID + ",R_MailText_ID=" + _R_MailText_ID
                 + ", EmailPDF=" + _EMailPDF + ",IsOnlyIfBPBalance=" + _IsOnlyIfBPBalance);
 
             //	Need to have Template
@@ -112,13 +112,13 @@ namespace VAdvantage.Process
                 subject = mText.GetMailHeader();
             }
             //
-            MDunningRun run = new MDunningRun(GetCtx(), _C_DunningRun_ID, Get_TrxName());
+            MDunningRun run = new MDunningRun(GetCtx(), _VAB_DunningExe_ID, Get_TrxName());
             if (run.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@: @C_DunningRun_ID@ - " + _C_DunningRun_ID);
+                throw new Exception("@NotFound@: @VAB_DunningExe_ID@ - " + _VAB_DunningExe_ID);
             }
             //	Print Format on Dunning Level
-            MDunningLevel level = new MDunningLevel(GetCtx(), run.GetC_DunningLevel_ID(), Get_TrxName());
+            MDunningLevel level = new MDunningLevel(GetCtx(), run.GetVAB_DunningStep_ID(), Get_TrxName());
             MPrintFormat format = MPrintFormat.Get(GetCtx(), level.GetDunning_PrintFormat_ID(), false);
 
             MClient client = MClient.Get(GetCtx());
@@ -134,10 +134,10 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //	To BPartner
-                MBPartner bp = new MBPartner(GetCtx(), entry.GetC_BPartner_ID(), Get_TrxName());
+                MBPartner bp = new MBPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.Get_ID() == 0)
                 {
-                    AddLog(entry.Get_ID(), null, null, "@NotFound@: @C_BPartner_ID@ " + entry.GetC_BPartner_ID());
+                    AddLog(entry.Get_ID(), null, null, "@NotFound@: @VAB_BusinessPartner_ID@ " + entry.GetVAB_BusinessPartner_ID());
                     errors++;
                     continue;
                 }
@@ -162,7 +162,7 @@ namespace VAdvantage.Process
                 //Language language =Language.getLoginLanguage();		//	Base Language
                 Language language = Env.GetLoginLanguage(GetCtx());
 
-                String tableName = "C_Dunning_Header_v";
+                String tableName = "VAB_Dunning_Hdr_v";
                 if (client.IsMultiLingualDocument())
                 {
                     tableName += "t";
@@ -176,15 +176,15 @@ namespace VAdvantage.Process
                // format.SetTranslationLanguage(language);
                 //	query
                 Query query = new Query(tableName);
-                query.AddRestriction("C_DunningRunEntry_ID", Query.EQUAL,
-                    entry.GetC_DunningRunEntry_ID());
+                query.AddRestriction("VAB_DunningExeEntry_ID", Query.EQUAL,
+                    entry.GetVAB_DunningExeEntry_ID());
 
                 //	Engine
                 //PrintInfo info = new PrintInfo(
                 //    bp.GetName(),
-                //    X_C_DunningRunEntry.Table_ID,
-                //    entry.GetC_DunningRunEntry_ID(),
-                //    entry.GetC_BPartner_ID());
+                //    X_VAB_DunningExeEntry.Table_ID,
+                //    entry.GetVAB_DunningExeEntry_ID(),
+                //    entry.GetVAB_BusinessPartner_ID());
                 //info.SetDescription(bp.GetName() + ", Amt=" + entry.GetAmt());
                 //ReportEngine re = new ReportEngine(GetCtx(), format, query, info);
                 byte[] pdfReport;
@@ -226,10 +226,10 @@ namespace VAdvantage.Process
                     {
                         
                         Common.Common Com = new Common.Common();
-                        Dictionary<string, object> d = Com.GetReport(GetCtx(), ReportProcess_ID, "C_DunningRunEntry", X_C_DunningRunEntry.Table_ID, entry.GetC_DunningRunEntry_ID(), 0, "", FileType, out pdfReport, out reportPath);
+                        Dictionary<string, object> d = Com.GetReport(GetCtx(), ReportProcess_ID, "VAB_DunningExeEntry", X_VAB_DunningExeEntry.Table_ID, entry.GetVAB_DunningExeEntry_ID(), 0, "", FileType, out pdfReport, out reportPath);
                         if (pdfReport != null)
                         {
-                            email.AddAttachment(pdfReport, "Dunning" + entry.GetC_DunningRunEntry_ID() + ".pdf");
+                            email.AddAttachment(pdfReport, "Dunning" + entry.GetVAB_DunningExeEntry_ID() + ".pdf");
                         }
                     }
                     String msg = email.Send();
@@ -286,9 +286,9 @@ namespace VAdvantage.Process
             //	Update Business Partner based on Level
             if (level.IsSetCreditStop() || level.IsSetPaymentTerm())
             {
-                MBPartner thisBPartner = new MBPartner(GetCtx(), entry.GetC_BPartner_ID(), Get_TrxName());
+                MBPartner thisBPartner = new MBPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (level.IsSetCreditStop())
-                    thisBPartner.SetSOCreditStatus(X_C_BPartner.SOCREDITSTATUS_CreditStop);
+                    thisBPartner.SetSOCreditStatus(X_VAB_BusinessPartner.SOCREDITSTATUS_CreditStop);
                 if (level.IsSetPaymentTerm() && level.GetC_PaymentTerm_ID() != 0)
                 {
                     thisBPartner.SetC_PaymentTerm_ID(level.GetC_PaymentTerm_ID());

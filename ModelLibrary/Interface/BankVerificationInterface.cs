@@ -18,11 +18,11 @@ namespace VAdvantage.Model
     public interface BankVerificationInterface
     {
         /*	Verify Routing No
-        * 	@param C_Country_ID country
+        * 	@param VAB_Country_ID country
         *	@param RoutingNo Routing Number
         *	@return error message or null
         */
-        String VerifyRoutingNo(int C_Country_ID, String RoutingNo);
+        String VerifyRoutingNo(int VAB_Country_ID, String RoutingNo);
 
         /**
          * 	Verify Swift Code or BIC

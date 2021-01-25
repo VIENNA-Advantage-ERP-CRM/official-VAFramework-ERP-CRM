@@ -9,19 +9,19 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_AllocationHdr
+    using System.Data;/** Generated Model for VAB_DocAllocation
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_AllocationHdr : PO
+    public class X_VAB_DocAllocation : PO
     {
-        public X_C_AllocationHdr(Context ctx, int C_AllocationHdr_ID, Trx trxName) : base(ctx, C_AllocationHdr_ID, trxName)
-        {/** if (C_AllocationHdr_ID == 0){SetApprovalAmt (0.0);SetC_AllocationHdr_ID (0);SetC_Currency_ID (0);SetDateAcct (DateTime.Now);SetDateTrx (DateTime.Now);SetDocAction (null);// CO
+        public X_VAB_DocAllocation(Context ctx, int VAB_DocAllocation_ID, Trx trxName) : base(ctx, VAB_DocAllocation_ID, trxName)
+        {/** if (VAB_DocAllocation_ID == 0){SetApprovalAmt (0.0);SetVAB_DocAllocation_ID (0);SetVAB_Currency_ID (0);SetDateAcct (DateTime.Now);SetDateTrx (DateTime.Now);SetDocAction (null);// CO
 SetDocStatus (null);// DR
 SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false);SetProcessed (false);// N
 } */
         }
-        public X_C_AllocationHdr(Ctx ctx, int C_AllocationHdr_ID, Trx trxName) : base(ctx, C_AllocationHdr_ID, trxName)
-        {/** if (C_AllocationHdr_ID == 0){SetApprovalAmt (0.0);SetC_AllocationHdr_ID (0);SetC_Currency_ID (0);SetDateAcct (DateTime.Now);SetDateTrx (DateTime.Now);SetDocAction (null);// CO
+        public X_VAB_DocAllocation(Ctx ctx, int VAB_DocAllocation_ID, Trx trxName) : base(ctx, VAB_DocAllocation_ID, trxName)
+        {/** if (VAB_DocAllocation_ID == 0){SetApprovalAmt (0.0);SetVAB_DocAllocation_ID (0);SetVAB_Currency_ID (0);SetDateAcct (DateTime.Now);SetDateTrx (DateTime.Now);SetDocAction (null);// CO
 SetDocStatus (null);// DR
 SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false);SetProcessed (false);// N
 } */
@@ -30,25 +30,25 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationHdr(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_DocAllocation(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationHdr(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_DocAllocation(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_AllocationHdr(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_DocAllocation(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_AllocationHdr() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_DocAllocation() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27884379466138L;/** Last Updated Timestamp 10/9/2020 2:35:49 PM */
         public static long updatedMS = 1602254149349L;/** VAF_TableView_ID=735 */
         public static int Table_ID; // =735;
-        /** TableName=C_AllocationHdr */
-        public static String Table_Name = "C_AllocationHdr";
+        /** TableName=VAB_DocAllocation */
+        public static String Table_Name = "VAB_DocAllocation";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -63,7 +63,7 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_AllocationHdr[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Approval Amount.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_DocAllocation[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Approval Amount.
 @param ApprovalAmt Document Approval Amount */
         public void SetApprovalAmt(Decimal? ApprovalAmt) { if (ApprovalAmt == null) throw new ArgumentException("ApprovalAmt is mandatory."); Set_Value("ApprovalAmt", (Decimal?)ApprovalAmt); }/** Get Approval Amount.
 @return Document Approval Amount */
@@ -72,27 +72,27 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
         public void SetCMS01_IsApproved(Boolean CMS01_IsApproved) { Set_Value("CMS01_IsApproved", CMS01_IsApproved); }/** Get Approved.
 @return Approved */
         public Boolean IsCMS01_IsApproved() { Object oo = Get_Value("CMS01_IsApproved"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Allocation.
-@param C_AllocationHdr_ID Payment allocation */
-        public void SetC_AllocationHdr_ID(int C_AllocationHdr_ID) { if (C_AllocationHdr_ID < 1) throw new ArgumentException("C_AllocationHdr_ID is mandatory."); Set_ValueNoCheck("C_AllocationHdr_ID", C_AllocationHdr_ID); }/** Get Allocation.
+@param VAB_DocAllocation_ID Payment allocation */
+        public void SetVAB_DocAllocation_ID(int VAB_DocAllocation_ID) { if (VAB_DocAllocation_ID < 1) throw new ArgumentException("VAB_DocAllocation_ID is mandatory."); Set_ValueNoCheck("VAB_DocAllocation_ID", VAB_DocAllocation_ID); }/** Get Allocation.
 @return Payment allocation */
-        public int GetC_AllocationHdr_ID() { Object ii = Get_Value("C_AllocationHdr_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
-@param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID) { throw new ArgumentException("C_BPartner_ID Is virtual column"); }/** Get Business Partner.
+        public int GetVAB_DocAllocation_ID() { Object ii = Get_Value("VAB_DocAllocation_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Business Partner.
+@param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID) { throw new ArgumentException("VAB_BusinessPartner_ID Is virtual column"); }/** Get Business Partner.
 @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID() { Object ii = Get_Value("C_BPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        public int GetVAB_BusinessPartner_ID() { Object ii = Get_Value("VAB_BusinessPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency Type.
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID <= 0) Set_Value("C_ConversionType_ID", null);
+            if (VAB_CurrencyType_ID <= 0) Set_Value("VAB_CurrencyType_ID", null);
             else
-                Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+                Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }/** Get Currency Type.
 @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID() { Object ii = Get_Value("C_ConversionType_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency.
-@param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID) { if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory."); Set_Value("C_Currency_ID", C_Currency_ID); }/** Get Currency.
+        public int GetVAB_CurrencyType_ID() { Object ii = Get_Value("VAB_CurrencyType_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Currency.
+@param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID) { if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory."); Set_Value("VAB_Currency_ID", VAB_Currency_ID); }/** Get Currency.
 @return The Currency for this record */
-        public int GetC_Currency_ID() { Object ii = Get_Value("C_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Conversion Date.
+        public int GetVAB_Currency_ID() { Object ii = Get_Value("VAB_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Conversion Date.
 @param ConversionDate Date for selecting conversion rate */
         public void SetConversionDate(DateTime? ConversionDate) { Set_Value("ConversionDate", (DateTime?)ConversionDate); }/** Get Conversion Date.
 @return Date for selecting conversion rate */

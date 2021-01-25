@@ -20,7 +20,7 @@ public X_M_Product_Category_Acct (Context ctx, int M_Product_Category_Acct_ID, T
 {
 /** if (M_Product_Category_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetM_Product_Category_ID (0);
 SetP_Asset_Acct (0);
 SetP_COGS_Acct (0);
@@ -39,7 +39,7 @@ public X_M_Product_Category_Acct (Ctx ctx, int M_Product_Category_Acct_ID, Trx t
 {
 /** if (M_Product_Category_Acct_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetM_Product_Category_ID (0);
 SetP_Asset_Acct (0);
 SetP_COGS_Acct (0);
@@ -133,17 +133,17 @@ StringBuilder sb = new StringBuilder ("X_M_Product_Category_Acct[").Append(Get_I
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -151,7 +151,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 
 /** CostingLevel VAF_Control_Ref_ID=355 */

@@ -36,7 +36,7 @@ namespace ViennaAdvantage.Process
         /**	Org						*/
         private int _VAF_Org_ID = 0;
         /** BPartner				*/
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         /** Order					*/
         //private int _C_Order_ID = 0;
         private string _C_Order_ID = "";
@@ -86,9 +86,9 @@ namespace ViennaAdvantage.Process
                 {
                     _VAF_Org_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("C_Order_ID"))
                 {
@@ -129,7 +129,7 @@ namespace ViennaAdvantage.Process
         {
             defaultConversionType = MConversionType.GetDefault(GetVAF_Client_ID());
             log.Info("Selection=" + _Selection + ", DateInvoiced=" + _DateInvoiced
-                + ", VAF_Org_ID=" + _VAF_Org_ID + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", VAF_Org_ID=" + _VAF_Org_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", C_Order_ID=" + _C_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
                 + ", Consolidate=" + _ConsolidateDocument + ", Default Conversion Type = " + defaultConversionType);
             //
@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
             //{
             //    sql = "SELECT * FROM C_Order "
             //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()
-            //        + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //        + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, C_PaymentTerm_ID, C_Order_ID";
             //}
             //else
             //{
@@ -152,9 +152,9 @@ namespace ViennaAdvantage.Process
             {
                 sql += " AND VAF_Org_ID=" + _VAF_Org_ID;
             }
-            if (_C_BPartner_ID != 0)
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql += " AND C_BPartner_ID=" + _C_BPartner_ID;
+                sql += " AND VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
             }
             if (_C_Order_ID != null && _C_Order_ID != string.Empty)
             {
@@ -163,12 +163,12 @@ namespace ViennaAdvantage.Process
             // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
             sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
                     + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                + "ORDER BY VAF_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_ConversionType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
+                + "ORDER BY VAF_Org_ID, VAB_BusinessPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, VAB_CurrencyType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
 
             //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
             //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
             //     + "  AND ol.QtyOrdered <> ol.QtyInvoiced AND ol.Iscontract ='N') "
-            //  + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //  + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, C_PaymentTerm_ID, C_Order_ID";
             //}
             //	sql += " FOR UPDATE";
 
@@ -209,7 +209,7 @@ namespace ViennaAdvantage.Process
                 MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
-                MBPartner bp = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                MBPartner bp = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     decimal creditLimit = bp.GetSO_CreditLimit();
@@ -237,10 +237,10 @@ namespace ViennaAdvantage.Process
                     }
                 }
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
-                else if (bp.GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+                else if (bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
-                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetC_BPartner_Location_ID(), null);
-                    //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetC_BPartner_ID());
+                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
+                    //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                     //if (bpl.GetCreditStatusSettingOn() == "CL")
                     //{
                     decimal creditLimit = bpl.GetSO_CreditLimit();
@@ -274,12 +274,12 @@ namespace ViennaAdvantage.Process
                 // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
                 if (!_ConsolidateDocument
                     || (_invoice != null
-                    && (_invoice.GetC_BPartner_Location_ID() != order.GetBill_Location_ID()
+                    && (_invoice.GetVAB_BPart_Location_ID() != order.GetBill_Location_ID()
                         || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID()
                         || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
                         || _invoice.GetVAF_Org_ID() != order.GetVAF_Org_ID()
-                        || ((_invoice.GetC_ConversionType_ID() != 0 ? _invoice.GetC_ConversionType_ID() : defaultConversionType)
-                             != (order.GetC_ConversionType_ID() != 0 ? order.GetC_ConversionType_ID() : defaultConversionType))
+                        || ((_invoice.GetVAB_CurrencyType_ID() != 0 ? _invoice.GetVAB_CurrencyType_ID() : defaultConversionType)
+                             != (order.GetVAB_CurrencyType_ID() != 0 ? order.GetVAB_CurrencyType_ID() : defaultConversionType))
                        )))
                 {
                     CompleteInvoice();
@@ -347,7 +347,7 @@ namespace ViennaAdvantage.Process
                         for (int i = 0; i < oLines.Length; i++)
                         {
                             MOrderLine oLine = oLines[i];
-                            if (oLine.GetC_Charge_ID() > 0)
+                            if (oLine.GetVAB_Charge_ID() > 0)
                             {
                                 Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
                                 log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
@@ -385,10 +385,10 @@ namespace ViennaAdvantage.Process
                         //                            
                         bool fullyDelivered = oLine.GetQtyOrdered().CompareTo(oLine.GetQtyDelivered()) == 0;
                         //JID_1136: While creating the Invoices against the charge system should not check the Ordered qty= Delivered qty. need to check this only in case of products
-                        if (completeOrder && oLine.GetC_Charge_ID() > 0)
+                        if (completeOrder && oLine.GetVAB_Charge_ID() > 0)
                         {
                             fullyDelivered = true;
-                            if (oLine.GetC_Charge_ID() > 0)
+                            if (oLine.GetVAB_Charge_ID() > 0)
                             {
                                 log.Fine("After Order Delivery - ToInvoice=" + toInvoice + " - " + oLine);
                                 Decimal qtyEntered = toInvoice;
@@ -500,7 +500,7 @@ namespace ViennaAdvantage.Process
 
                     // Get Payment method from Business partner
                     int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (order.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
-                        @" FROM C_BPartner WHERE C_BPartner_ID = " + order.GetC_BPartner_ID(), null, Get_Trx()));
+                        @" FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID = " + order.GetVAB_BusinessPartner_ID(), null, Get_Trx()));
 
                     // during consolidation, payment method need to set that is defined on selected business partner. 
                     // If not defined on BP then it will set from order
@@ -574,7 +574,7 @@ namespace ViennaAdvantage.Process
                     // during sale cycle -- VA009_PaymentMethod_ID
                     // during purchase cycle -- VA009_PO_PaymentMethod_ID
                     int bpPamentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT " + (order.IsSOTrx() ? " VA009_PaymentMethod_ID " : " VA009_PO_PaymentMethod_ID ") +
-                        @" FROM C_BPartner WHERE C_BPartner_ID = " + order.GetC_BPartner_ID(), null, Get_Trx()));
+                        @" FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID = " + order.GetVAB_BusinessPartner_ID(), null, Get_Trx()));
 
                     if (_ConsolidateDocument && bpPamentMethod_ID != 0)
                     {
@@ -611,10 +611,10 @@ namespace ViennaAdvantage.Process
             //if (_ship == null
             //    || _ship.GetM_InOut_ID() != ship.GetM_InOut_ID())
             //{
-            //    MDocType dt = MDocType.Get(GetCtx(), ship.GetC_DocType_ID());
-            //    if (_bp == null || _bp.GetC_BPartner_ID() != ship.GetC_BPartner_ID())
+            //    MDocType dt = MDocType.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
+            //    if (_bp == null || _bp.GetVAB_BusinessPartner_ID() != ship.GetVAB_BusinessPartner_ID())
             //    {
-            //        _bp = new MBPartner(GetCtx(), ship.GetC_BPartner_ID(), Get_TrxName());
+            //        _bp = new MBPartner(GetCtx(), ship.GetVAB_BusinessPartner_ID(), Get_TrxName());
             //    }
 
             //    //	Reference: Delivery: 12345 - 12.12.12
@@ -649,9 +649,9 @@ namespace ViennaAdvantage.Process
             //        throw new Exception("Could not create Invoice Comment Line (sh)");
             //    }
             //    //	Optional Ship Address if not Bill Address
-            //    if (order.GetBill_Location_ID() != ship.GetC_BPartner_Location_ID())
+            //    if (order.GetBill_Location_ID() != ship.GetVAB_BPart_Location_ID())
             //    {
-            //        MLocation addr = MLocation.GetBPLocation(GetCtx(), ship.GetC_BPartner_Location_ID(), null);
+            //        MLocation addr = MLocation.GetBPLocation(GetCtx(), ship.GetVAB_BPart_Location_ID(), null);
             //        line = new MInvoiceLine(_invoice);
             //        line.SetIsDescription(true);
             //        line.SetDescription(addr.ToString());
@@ -680,15 +680,15 @@ namespace ViennaAdvantage.Process
                     MAcctSchema as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
                     if (as1 != null)
                     {
-                        PAcctSchema_ID = as1.GetC_AcctSchema_ID();
-                        pCurrency_ID = as1.GetC_Currency_ID();
+                        PAcctSchema_ID = as1.GetVAB_AccountBook_ID();
+                        pCurrency_ID = as1.GetVAB_Currency_ID();
                     }
                     decimal LineNetAmt = Decimal.Multiply(line1.GetPriceActual(), line1.GetQtyEntered());
                     decimal AssetCost = GetAssetCost(sLine.GetA_Asset_ID(), sLine.GetM_Product_ID(), PAcctSchema_ID);
                     AssetCost = Decimal.Multiply(AssetCost, line1.GetQtyEntered());
                     if (LineNetAmt > 0)
                     {
-                        LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt, _invoice.GetC_Currency_ID(), pCurrency_ID, _invoice.GetVAF_Client_ID(), _invoice.GetVAF_Org_ID());
+                        LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt, _invoice.GetVAB_Currency_ID(), pCurrency_ID, _invoice.GetVAF_Client_ID(), _invoice.GetVAF_Org_ID());
                     }
                     decimal Diff = LineNetAmt - AssetCost;
                     line1.Set_Value("VAFAM_AssetCost", AssetCost);
@@ -723,24 +723,24 @@ namespace ViennaAdvantage.Process
 
             _Sql.Append(@"SELECT cost.CurrentCostPrice,
                           cost.FutureCostPrice,cost.M_COSTELEMENT_ID ,
-                        cost.c_acctschema_id,cost.a_asset_id  , cost.m_product_id
+                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.m_product_id
                         FROM M_Cost cost
-                        INNER JOIN A_Asset ass
-                        ON(Ass.A_Asset_ID =cost.A_Asset_ID)
+                        INNER JOIN VAA_Asset ass
+                        ON(Ass.VAA_Asset_ID =cost.VAA_Asset_ID)
                         INNER JOIN m_product pro
                         ON(ass.m_product_id =pro.m_product_id AND pro.M_product_id=cost.m_Product_id)
                         INNER JOIN m_costelement costele
                         ON(costele.M_costelement_id =cost.m_costelement_id)
                         LEFT JOIN M_Product_Category acc
                         ON acc.M_Product_Category_ID=pro.M_Product_Category_ID
-                        WHERE ass.A_Asset_ID =" + Asset_ID + @" 
+                        WHERE ass.VAA_Asset_ID =" + Asset_ID + @" 
                         AND ass.M_Product_ID=" + Product_ID + @"
                         AND costele.costelementtype='M'
                         AND cost.IsAssetCost = 'Y' 
                         AND costele.CostingMethod=acc.CostingMethod");
             if (PAcctSchema_ID > 0)
             {
-                _Sql.Append(" AND cost.C_AcctSchema_ID = " + PAcctSchema_ID);
+                _Sql.Append(" AND cost.VAB_AccountBook_ID = " + PAcctSchema_ID);
             }
             AssetCost = Util.GetValueOfDecimal(DB.ExecuteScalar(_Sql.ToString()));
             if (AssetCost == 0)
@@ -749,24 +749,24 @@ namespace ViennaAdvantage.Process
                 _Sql.Clear();
                 _Sql.Append(@"SELECT cost.CurrentCostPrice,
                           cost.FutureCostPrice,cost.M_COSTELEMENT_ID ,
-                        cost.c_acctschema_id,cost.a_asset_id  , cost.m_product_id
+                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.m_product_id
                         FROM M_Cost cost
-                        INNER JOIN A_Asset ass
-                        ON(Ass.A_Asset_ID =cost.A_Asset_ID)
+                        INNER JOIN VAA_Asset ass
+                        ON(Ass.VAA_Asset_ID =cost.VAA_Asset_ID)
                         INNER JOIN m_product pro
                         ON(ass.m_product_id =pro.m_product_id AND pro.M_product_id=cost.m_Product_id)
                         INNER JOIN m_costelement costele
                         ON(costele.M_costelement_id =cost.m_costelement_id)
                         INNER JOIN VAF_ClientDetail ci ON ci.VAF_Client_ID = ass.VAF_Client_ID
-                        left join C_AcctSchema accSch on accsch.C_AcctSchema_ID=ci.C_AcctSchema1_ID
-                        WHERE ass.A_Asset_ID =" + Asset_ID + @" 
+                        left join VAB_AccountBook accSch on accsch.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID
+                        WHERE ass.VAA_Asset_ID =" + Asset_ID + @" 
                         AND ass.M_Product_ID=" + Product_ID + @"
                         AND costele.costelementtype='M'
                         AND cost.IsAssetCost = 'Y' 
                         AND costele.CostingMethod=accsch.CostingMethod");
                 if (PAcctSchema_ID > 0)
                 {
-                    _Sql.Append(" AND cost.C_AcctSchema_ID = " + PAcctSchema_ID);
+                    _Sql.Append(" AND cost.VAB_AccountBook_ID = " + PAcctSchema_ID);
                 }
                 AssetCost = Util.GetValueOfDecimal(DB.ExecuteScalar(_Sql.ToString()));
             }

@@ -163,7 +163,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Create BP
             if (imp.IsCreateBP())
             {
-                if (user.GetC_BPartner_ID() == 0)
+                if (user.GetVAB_BusinessPartner_ID() == 0)
                 {
                     MBPartner bp = new MBPartner(GetCtx(), 0, Get_TrxName());
                     bp.SetName(user.GetName());
@@ -171,12 +171,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         return ProcessFail(imp, "Cannot create BPartner");
                     else
                     {
-                        user.SetC_BPartner_ID(bp.GetC_BPartner_ID());
+                        user.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
                         if (!user.Save())
                             return ProcessFail(imp, "Cannot update User");
                     }
                 }
-                imp.SetC_BPartner_ID(user.GetC_BPartner_ID());
+                imp.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
             }
 
             //	Create Lead
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 lead.SetName(imp.GetContactName());
                 lead.SetDescription(imp.GetContactDescription());
                 lead.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
-                lead.SetC_BPartner_ID(user.GetC_BPartner_ID());
+                lead.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
                 lead.Save();
                 imp.SetC_Lead_ID(lead.GetC_Lead_ID());
             }

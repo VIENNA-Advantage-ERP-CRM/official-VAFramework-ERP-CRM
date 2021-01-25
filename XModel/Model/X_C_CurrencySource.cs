@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_CurrencySource
+/** Generated Model for VAB_CurrencySource
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_CurrencySource : PO
+public class X_VAB_CurrencySource : PO
 {
-public X_C_CurrencySource (Context ctx, int C_CurrencySource_ID, Trx trxName) : base (ctx, C_CurrencySource_ID, trxName)
+public X_VAB_CurrencySource (Context ctx, int VAB_CurrencySource_ID, Trx trxName) : base (ctx, VAB_CurrencySource_ID, trxName)
 {
-/** if (C_CurrencySource_ID == 0)
+/** if (VAB_CurrencySource_ID == 0)
 {
-SetC_CurrencySource_ID (0);
+SetVAB_CurrencySource_ID (0);
 SetName (null);
 SetURL (null);
 }
  */
 }
-public X_C_CurrencySource (Ctx ctx, int C_CurrencySource_ID, Trx trxName) : base (ctx, C_CurrencySource_ID, trxName)
+public X_VAB_CurrencySource (Ctx ctx, int VAB_CurrencySource_ID, Trx trxName) : base (ctx, VAB_CurrencySource_ID, trxName)
 {
-/** if (C_CurrencySource_ID == 0)
+/** if (VAB_CurrencySource_ID == 0)
 {
-SetC_CurrencySource_ID (0);
+SetVAB_CurrencySource_ID (0);
 SetName (null);
 SetURL (null);
 }
@@ -41,7 +41,7 @@ SetURL (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CurrencySource (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CurrencySource (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_CurrencySource (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CurrencySource (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_CurrencySource (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_CurrencySource (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_CurrencySource (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_CurrencySource (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_CurrencySource()
+static X_VAB_CurrencySource()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1346153245114L;
 public static int Table_ID;
  // =1000045;
 
-/** TableName=C_CurrencySource */
-public static String Table_Name="C_CurrencySource";
+/** TableName=VAB_CurrencySource */
+public static String Table_Name="VAB_CurrencySource";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_CurrencySource[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_CurrencySource[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_CurrencySource_ID.
-@param C_CurrencySource_ID C_CurrencySource_ID */
-public void SetC_CurrencySource_ID (int C_CurrencySource_ID)
+/** Set VAB_CurrencySource_ID.
+@param VAB_CurrencySource_ID VAB_CurrencySource_ID */
+public void SetVAB_CurrencySource_ID (int VAB_CurrencySource_ID)
 {
-if (C_CurrencySource_ID < 1) throw new ArgumentException ("C_CurrencySource_ID is mandatory.");
-Set_ValueNoCheck ("C_CurrencySource_ID", C_CurrencySource_ID);
+if (VAB_CurrencySource_ID < 1) throw new ArgumentException ("VAB_CurrencySource_ID is mandatory.");
+Set_ValueNoCheck ("VAB_CurrencySource_ID", VAB_CurrencySource_ID);
 }
-/** Get C_CurrencySource_ID.
-@return C_CurrencySource_ID */
-public int GetC_CurrencySource_ID() 
+/** Get VAB_CurrencySource_ID.
+@return VAB_CurrencySource_ID */
+public int GetVAB_CurrencySource_ID() 
 {
-Object ii = Get_Value("C_CurrencySource_ID");
+Object ii = Get_Value("VAB_CurrencySource_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

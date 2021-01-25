@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MLocation
- * Purpose        : used for C_AcctSchema
- * Class Used     : X_C_AcctSchema
+ * Purpose        : used for VAB_AccountBook
+ * Class Used     : X_VAB_AccountBook
  * Chronological    Development
  * Raghunandan     06-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using System.IO;
 
 namespace VAdvantage.Model
 {
-    public class MAcctSchema : X_C_AcctSchema
+    public class MAcctSchema : X_VAB_AccountBook
     {
         /** Costing Currency Precision		*/
         private int _costPrecision = -1;
@@ -56,11 +56,11 @@ namespace VAdvantage.Model
         /// Get AccountSchema of Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">schema id</param>
+        /// <param name="VAB_AccountBook_ID">schema id</param>
         /// <returns>Accounting schema</returns>
-        public static MAcctSchema Get(Ctx ctx, int C_AcctSchema_ID)
+        public static MAcctSchema Get(Ctx ctx, int VAB_AccountBook_ID)
         {
-            return Get(ctx, C_AcctSchema_ID, null);
+            return Get(ctx, VAB_AccountBook_ID, null);
         }	//	get
 
         /// <summary>
@@ -89,17 +89,17 @@ namespace VAdvantage.Model
         /// Get AccountSchema of Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">schema id</param>
+        /// <param name="VAB_AccountBook_ID">schema id</param>
         /// <param name="trxName">optional trx</param>
         /// <returns>Accounting schema</returns>
-        public static MAcctSchema Get(Ctx ctx, int C_AcctSchema_ID, Trx trxName)
+        public static MAcctSchema Get(Ctx ctx, int VAB_AccountBook_ID, Trx trxName)
         {
             //  Check Cache
-            int key = C_AcctSchema_ID;
+            int key = VAB_AccountBook_ID;
             MAcctSchema retValue = (MAcctSchema)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MAcctSchema(ctx, C_AcctSchema_ID, trxName);
+            retValue = new MAcctSchema(ctx, VAB_AccountBook_ID, trxName);
             if (trxName == null)
                 _cache.Add(key, retValue);
             return retValue;
@@ -133,20 +133,20 @@ namespace VAdvantage.Model
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
             MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
-            MAcctSchema ass = MAcctSchema.Get(ctx, info.GetC_AcctSchema1_ID(), trxName);
+            MAcctSchema ass = MAcctSchema.Get(ctx, info.GetVAB_AccountBook1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
 
             //	Other
-            String sql = "SELECT C_AcctSchema_ID FROM C_AcctSchema acs "
+            String sql = "SELECT VAB_AccountBook_ID FROM VAB_AccountBook acs "
                 + "WHERE IsActive='Y'"
-                + " AND EXISTS (SELECT * FROM C_AcctSchema_GL gl WHERE acs.C_AcctSchema_ID=gl.C_AcctSchema_ID)"
-                + " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
+                + " AND EXISTS (SELECT * FROM VAB_AccountBook_GL gl WHERE acs.VAB_AccountBook_ID=gl.VAB_AccountBook_ID)"
+                + " AND EXISTS (SELECT * FROM VAB_AccountBook_Default d WHERE acs.VAB_AccountBook_ID=d.VAB_AccountBook_ID)";
             if (VAF_Client_ID != 0)
             {
                 sql += " AND VAF_Client_ID=" + VAF_Client_ID;
             }
-            sql += " ORDER BY C_AcctSchema_ID";
+            sql += " ORDER BY VAB_AccountBook_ID";
 
             IDataReader dr = null;
             try
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     int id = Utility.Util.GetValueOfInt(dr[0].ToString());
-                    if (id != info.GetC_AcctSchema1_ID())	//	already in list
+                    if (id != info.GetVAB_AccountBook1_ID())	//	already in list
                     {
                         ass = MAcctSchema.Get(ctx, id, trxName);
                         if (ass.Get_ID() != 0 && trxName == null)
@@ -200,18 +200,18 @@ namespace VAdvantage.Model
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
             MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
-            MAcctSchema ass = MAcctSchema.Get(ctx, info.GetC_AcctSchema1_ID(), trxName);
+            MAcctSchema ass = MAcctSchema.Get(ctx, info.GetVAB_AccountBook1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
 
             //	Other
-            String sql = "SELECT C_AcctSchema_ID FROM C_AcctSchema acs "
+            String sql = "SELECT VAB_AccountBook_ID FROM VAB_AccountBook acs "
                 + "WHERE IsActive='Y'";
             if (VAF_Client_ID != 0)
             {
                 sql += " AND VAF_Client_ID=" + VAF_Client_ID;
             }
-            sql += " ORDER BY C_AcctSchema_ID";
+            sql += " ORDER BY VAB_AccountBook_ID";
 
             IDataReader dr = null;
             try
@@ -220,7 +220,7 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     int id = Utility.Util.GetValueOfInt(dr[0].ToString());
-                    if (id != info.GetC_AcctSchema1_ID())	//	already in list
+                    if (id != info.GetVAB_AccountBook1_ID())	//	already in list
                     {
                         ass = MAcctSchema.Get(ctx, id, trxName);
                         if (ass.Get_ID() != 0 && trxName == null)
@@ -258,7 +258,7 @@ namespace VAdvantage.Model
         /** Cache of Client AcctSchema Arrays		**/
         private static CCache<int, MAcctSchema[]> _schema = new CCache<int, MAcctSchema[]>("VAF_ClientDetail", 3);	//  3 clients
         /**	Cache of AcctSchemas 					**/
-        private static CCache<int, MAcctSchema> _cache = new CCache<int, MAcctSchema>("C_AcctSchema", 3);	//  3 accounting schemas
+        private static CCache<int, MAcctSchema> _cache = new CCache<int, MAcctSchema>("VAB_AccountBook", 3);	//  3 accounting schemas
         /**	Logger			*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MAcctSchema).FullName);
 
@@ -271,7 +271,7 @@ namespace VAdvantage.Model
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
-            SetC_Currency_ID(currency.GetKey());
+            SetVAB_Currency_ID(currency.GetKey());
             SetName(client.GetName() + " " + GetGAAP() + "/" + Get_ColumnCount() + " " + currency.GetName());
         }	//	MAcctSchema
 
@@ -279,15 +279,15 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">id</param>
+        /// <param name="VAB_AccountBook_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAcctSchema(Ctx ctx, int C_AcctSchema_ID, Trx trxName)
-            : base(ctx, C_AcctSchema_ID, trxName)
+        public MAcctSchema(Ctx ctx, int VAB_AccountBook_ID, Trx trxName)
+            : base(ctx, VAB_AccountBook_ID, trxName)
         {
-            //super (ctx, C_AcctSchema_ID, trxName);
-            if (C_AcctSchema_ID == 0)
+            //super (ctx, VAB_AccountBook_ID, trxName);
+            if (VAB_AccountBook_ID == 0)
             {
-                //	setC_Currency_ID (0);
+                //	setVAB_Currency_ID (0);
                 //	setName (null);
                 SetAutoPeriodControl(true);
                 SetPeriod_OpenFuture(2);
@@ -328,7 +328,7 @@ namespace VAdvantage.Model
         {
             if (_stdPrecision < 0)
             {
-                MCurrency cur = MCurrency.Get(GetCtx(), GetC_Currency_ID());
+                MCurrency cur = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 _stdPrecision = cur.GetStdPrecision();
                 _costPrecision = cur.GetCostingPrecision();
             }
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
             if (GetVAF_OrgOnly_ID() != 0)
             {
                 MClientInfo info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
-                if (info.GetC_AcctSchema1_ID() == GetC_AcctSchema_ID())
+                if (info.GetVAB_AccountBook1_ID() == GetVAB_AccountBook_ID())
                     SetVAF_OrgOnly_ID(0);
             }
             return true;
@@ -474,11 +474,11 @@ namespace VAdvantage.Model
         {
             if (_gl == null)
             {
-                _gl = MAcctSchemaGL.Get(GetCtx(), GetC_AcctSchema_ID());
+                _gl = MAcctSchemaGL.Get(GetCtx(), GetVAB_AccountBook_ID());
             }
             if (_gl == null)
             {
-                throw new Exception("No GL Definition for C_AcctSchema_ID=" + GetC_AcctSchema_ID());
+                throw new Exception("No GL Definition for VAB_AccountBook_ID=" + GetVAB_AccountBook_ID());
             }
             return _gl;
         }
@@ -687,11 +687,11 @@ namespace VAdvantage.Model
         {
             if (_default == null)
             {
-                _default = MAcctSchemaDefault.Get(GetCtx(), GetC_AcctSchema_ID());
+                _default = MAcctSchemaDefault.Get(GetCtx(), GetVAB_AccountBook_ID());
             }
             if (_default == null)
             {
-                throw new Exception("No Default Definition for C_AcctSchema_ID=" + GetC_AcctSchema_ID());
+                throw new Exception("No Default Definition for VAB_AccountBook_ID=" + GetVAB_AccountBook_ID());
             }
             return _default;
         }

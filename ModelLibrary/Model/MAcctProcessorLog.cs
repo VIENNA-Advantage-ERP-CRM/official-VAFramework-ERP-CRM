@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAcctProcessorLog
  * Purpose        : Accounting Processor Log
- * Class Used     : X_C_AcctProcessorLog, ViennaProcessorLog
+ * Class Used     : X_VAB_AccountHanlderLog, ViennaProcessorLog
  * Chronological    Development
  * Raghunandan     07-Jan-2010
   ******************************************************/
@@ -21,16 +21,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAcctProcessorLog : X_C_AcctProcessorLog, ViennaProcessorLog
+    public class MAcctProcessorLog : X_VAB_AccountHanlderLog, ViennaProcessorLog
     {
         /// <summary>
         /// Standard Constructo
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_AcctProcessorLog_ID"></param>
+        /// <param name="VAB_AccountHanlderLog_ID"></param>
         /// <param name="trxName"></param>
-        public MAcctProcessorLog(Ctx ctx, int C_AcctProcessorLog_ID, Trx trxName)
-            : base(ctx, C_AcctProcessorLog_ID, trxName)
+        public MAcctProcessorLog(Ctx ctx, int VAB_AccountHanlderLog_ID, Trx trxName)
+            : base(ctx, VAB_AccountHanlderLog_ID, trxName)
         {
             
         }	
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetC_AcctProcessor_ID(parent.GetC_AcctProcessor_ID());
+            SetVAB_AccountHanlder_ID(parent.GetVAB_AccountHanlder_ID());
             SetSummary(summary);
         }
     }

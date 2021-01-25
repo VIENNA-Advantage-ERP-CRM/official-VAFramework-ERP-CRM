@@ -38,13 +38,13 @@ namespace VAdvantage.Print
         /// <param name="Name">name</param>
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
-        /// <param name="C_BPartner_ID">BPartner ID</param>
-        public PrintInfo(String Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID)
+        /// <param name="VAB_BusinessPartner_ID">BPartner ID</param>
+        public PrintInfo(String Name, int VAF_TableView_ID, int Record_ID, int VAB_BusinessPartner_ID)
         {
             SetName(Name);
             SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
-            SetC_BPartner_ID(C_BPartner_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
         }	//	ArchiveInfo
 
 
@@ -72,7 +72,7 @@ namespace VAdvantage.Print
         private int _VAF_Job_ID = 0;
         private int _VAF_TableView_ID = 0;
         private int _Record_ID = 0;
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private int _VAF_JInstance_ID = 0;
 
 
@@ -83,7 +83,7 @@ namespace VAdvantage.Print
         public bool IsReport()
         {
             return _VAF_Job_ID != 0	//	Menu Report
-                || _C_BPartner_ID == 0;
+                || _VAB_BusinessPartner_ID == 0;
         }	//	isReport
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace VAdvantage.Print
         /// <returns></returns>
         public bool IsDocument()
         {
-            return _C_BPartner_ID != 0;
+            return _VAB_BusinessPartner_ID != 0;
         }	//	isDocument
 
 
@@ -212,18 +212,18 @@ namespace VAdvantage.Print
         /// Get B Partner ID
         /// </summary>
         /// <returns></returns>
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            return _C_BPartner_ID;
+            return _VAB_BusinessPartner_ID;
         }
 
         /// <summary>
-        /// Set C_BPartner_ID
+        /// Set VAB_BusinessPartner_ID
         /// </summary>
         /// <param name="partner_ID">partner ID</param>
-        public void SetC_BPartner_ID(int partner_ID)
+        public void SetVAB_BusinessPartner_ID(int partner_ID)
         {
-            _C_BPartner_ID = partner_ID;
+            _VAB_BusinessPartner_ID = partner_ID;
         }
 
 
@@ -313,8 +313,8 @@ namespace VAdvantage.Print
                 sb.Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID());
             if (GetRecord_ID() != 0)
                 sb.Append(",Record_ID=").Append(GetRecord_ID());
-            if (GetC_BPartner_ID() != 0)
-                sb.Append(",C_BPartner_ID=").Append(GetC_BPartner_ID());
+            if (GetVAB_BusinessPartner_ID() != 0)
+                sb.Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID());
 
             sb.Append("]");
             return sb.ToString();

@@ -291,50 +291,50 @@ namespace VAdvantage.Model
             return (String)Get_Value("COMPANY_NAME");
         }
         /** Set Customer/Prospect.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Customer/Prospect.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Location.
-        @param C_BPartner_Location_ID Identifies the address for this Account/Prospect. */
-        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        @param VAB_BPart_Location_ID Identifies the address for this Account/Prospect. */
+        public void SetVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            if (C_BPartner_Location_ID <= 0) Set_Value("C_BPartner_Location_ID", null);
+            if (VAB_BPart_Location_ID <= 0) Set_Value("VAB_BPart_Location_ID", null);
             else
-                Set_Value("C_BPartner_Location_ID", C_BPartner_Location_ID);
+                Set_Value("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
         }
         /** Get Location.
         @return Identifies the address for this Account/Prospect. */
-        public int GetC_BPartner_Location_ID()
+        public int GetVAB_BPart_Location_ID()
         {
-            Object ii = Get_Value("C_BPartner_Location_ID");
+            Object ii = Get_Value("VAB_BPart_Location_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Greeting.
-        @param C_Greeting_ID Greeting to print on correspondence */
-        public void SetC_Greeting_ID(int C_Greeting_ID)
+        @param VAB_Greeting_ID Greeting to print on correspondence */
+        public void SetVAB_Greeting_ID(int VAB_Greeting_ID)
         {
-            if (C_Greeting_ID <= 0) Set_Value("C_Greeting_ID", null);
+            if (VAB_Greeting_ID <= 0) Set_Value("VAB_Greeting_ID", null);
             else
-                Set_Value("C_Greeting_ID", C_Greeting_ID);
+                Set_Value("VAB_Greeting_ID", VAB_Greeting_ID);
         }
         /** Get Greeting.
         @return Greeting to print on correspondence */
-        public int GetC_Greeting_ID()
+        public int GetVAB_Greeting_ID()
         {
-            Object ii = Get_Value("C_Greeting_ID");
+            Object ii = Get_Value("VAB_Greeting_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

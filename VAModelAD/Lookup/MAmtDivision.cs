@@ -40,7 +40,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder(
-                    "SELECT C_DimAmt_ID,Amount from C_DimAmt WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
+                    "SELECT VAB_DimAmt_ID,Amount from VAB_DimAmt WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 1");
@@ -81,30 +81,30 @@ namespace VAdvantage.Model
 
         public override string GetColumnName()
         {
-            return "C_DimAmt_ID";
+            return "VAB_DimAmt_ID";
         }
 
         public override NamePair Get(object value)
         {
             if (value == null)
                 return null;
-            int C_DimAmt_ID = 0;
+            int VAB_DimAmt_ID = 0;
             if (value is int)
             {
-                C_DimAmt_ID = (int)value;
+                VAB_DimAmt_ID = (int)value;
             }
             else
             {
                 try
                 {
-                    C_DimAmt_ID = int.Parse(value.ToString());
+                    VAB_DimAmt_ID = int.Parse(value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.Log(Level.SEVERE, "Value=" + value, e);
                 }
             }
-            if (C_DimAmt_ID == 0)
+            if (VAB_DimAmt_ID == 0)
             {
                 return NO_INSTANCE;
             }
@@ -114,8 +114,8 @@ namespace VAdvantage.Model
             try
             {
                 dr = DataBase.DB.ExecuteReader("SELECT Amount "
-                    + "FROM C_DimAmt "
-                    + "WHERE C_DimAmt_ID=" + C_DimAmt_ID);
+                    + "FROM VAB_DimAmt "
+                    + "WHERE VAB_DimAmt_ID=" + VAB_DimAmt_ID);
 
                 if (dr.Read())
                 {
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                     {
                         if (VLogMgt.IsLevelFinest())
                         {
-                            description = "{" + C_DimAmt_ID.ToString() + "}";
+                            description = "{" + VAB_DimAmt_ID.ToString() + "}";
                         }
                         else
                         {
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            return new KeyNamePair(C_DimAmt_ID, description);
+            return new KeyNamePair(VAB_DimAmt_ID, description);
 
         }
 

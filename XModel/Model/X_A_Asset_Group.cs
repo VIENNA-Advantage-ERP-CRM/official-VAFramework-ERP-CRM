@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for A_Asset_Group
+    /** Generated Model for VAA_AssetGroup
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_A_Asset_Group : PO
+    public class X_VAA_AssetGroup : PO
     {
-        public X_A_Asset_Group(Context ctx, int A_Asset_Group_ID, Trx trxName)
-            : base(ctx, A_Asset_Group_ID, trxName)
+        public X_VAA_AssetGroup(Context ctx, int VAA_AssetGroup_ID, Trx trxName)
+            : base(ctx, VAA_AssetGroup_ID, trxName)
         {
-            /** if (A_Asset_Group_ID == 0)
+            /** if (VAA_AssetGroup_ID == 0)
             {
-            SetA_Asset_Group_ID (0);
+            SetVAA_AssetGroup_ID (0);
             SetIsCreateAsActive (true);	// Y
             SetIsDepreciated (false);
             SetIsOneAssetPerUOM (false);
@@ -31,12 +31,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_A_Asset_Group(Ctx ctx, int A_Asset_Group_ID, Trx trxName)
-            : base(ctx, A_Asset_Group_ID, trxName)
+        public X_VAA_AssetGroup(Ctx ctx, int VAA_AssetGroup_ID, Trx trxName)
+            : base(ctx, VAA_AssetGroup_ID, trxName)
         {
-            /** if (A_Asset_Group_ID == 0)
+            /** if (VAA_AssetGroup_ID == 0)
             {
-            SetA_Asset_Group_ID (0);
+            SetVAA_AssetGroup_ID (0);
             SetIsCreateAsActive (true);	// Y
             SetIsDepreciated (false);
             SetIsOneAssetPerUOM (false);
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_A_Asset_Group(Context ctx, DataRow rs, Trx trxName)
+        public X_VAA_AssetGroup(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_A_Asset_Group(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAA_AssetGroup(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_A_Asset_Group(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAA_AssetGroup(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_A_Asset_Group()
+        static X_VAA_AssetGroup()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =542;
 
-        /** TableName=A_Asset_Group */
-        public static String Table_Name = "A_Asset_Group";
+        /** TableName=VAA_AssetGroup */
+        public static String Table_Name = "VAA_AssetGroup";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -124,21 +124,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_A_Asset_Group[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAA_AssetGroup[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Asset Group.
-        @param A_Asset_Group_ID Group of Assets */
-        public void SetA_Asset_Group_ID(int A_Asset_Group_ID)
+        @param VAA_AssetGroup_ID Group of Assets */
+        public void SetVAA_AssetGroup_ID(int VAA_AssetGroup_ID)
         {
-            if (A_Asset_Group_ID < 1) throw new ArgumentException("A_Asset_Group_ID is mandatory.");
-            Set_ValueNoCheck("A_Asset_Group_ID", A_Asset_Group_ID);
+            if (VAA_AssetGroup_ID < 1) throw new ArgumentException("VAA_AssetGroup_ID is mandatory.");
+            Set_ValueNoCheck("VAA_AssetGroup_ID", VAA_AssetGroup_ID);
         }
         /** Get Asset Group.
         @return Group of Assets */
-        public int GetA_Asset_Group_ID()
+        public int GetVAA_AssetGroup_ID()
         {
-            Object ii = Get_Value("A_Asset_Group_ID");
+            Object ii = Get_Value("VAA_AssetGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

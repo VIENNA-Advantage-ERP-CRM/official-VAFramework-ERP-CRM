@@ -140,34 +140,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Activity.
-@param C_Activity_ID Business Activity */
-public void SetC_Activity_ID (int C_Activity_ID)
+@param VAB_BillingCode_ID Business Activity */
+public void SetVAB_BillingCode_ID (int VAB_BillingCode_ID)
 {
-if (C_Activity_ID <= 0) Set_Value ("C_Activity_ID", null);
+if (VAB_BillingCode_ID <= 0) Set_Value ("VAB_BillingCode_ID", null);
 else
-Set_Value ("C_Activity_ID", C_Activity_ID);
+Set_Value ("VAB_BillingCode_ID", VAB_BillingCode_ID);
 }
 /** Get Activity.
 @return Business Activity */
-public int GetC_Activity_ID() 
+public int GetVAB_BillingCode_ID() 
 {
-Object ii = Get_Value("C_Activity_ID");
+Object ii = Get_Value("VAB_BillingCode_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Campaign.
-@param C_Campaign_ID Marketing Campaign */
-public void SetC_Campaign_ID (int C_Campaign_ID)
+@param VAB_Promotion_ID Marketing Campaign */
+public void SetVAB_Promotion_ID (int VAB_Promotion_ID)
 {
-if (C_Campaign_ID <= 0) Set_Value ("C_Campaign_ID", null);
+if (VAB_Promotion_ID <= 0) Set_Value ("VAB_Promotion_ID", null);
 else
-Set_Value ("C_Campaign_ID", C_Campaign_ID);
+Set_Value ("VAB_Promotion_ID", VAB_Promotion_ID);
 }
 /** Get Campaign.
 @return Marketing Campaign */
-public int GetC_Campaign_ID() 
+public int GetVAB_Promotion_ID() 
 {
-Object ii = Get_Value("C_Campaign_ID");
+Object ii = Get_Value("VAB_Promotion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

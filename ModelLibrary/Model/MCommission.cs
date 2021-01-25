@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Model for Commission.
- * Class Used     : X_C_Commission
+ * Class Used     : X_VAB_WorkCommission
  * Chronological    Development
  * Veena        07-Nov-2009
 **********************************************************/
@@ -23,24 +23,24 @@ namespace VAdvantage.Model
     /// <summary>
     /// Model for Commission.
     /// </summary>
-    public class MCommission : X_C_Commission
+    public class MCommission : X_VAB_WorkCommission
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_CommissionAmt_ID">id</param>
+        /// <param name="VAB_WorkCommission_Amt_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCommission(Ctx ctx, int C_Commission_ID, Trx trxName)
-            : base(ctx, C_Commission_ID, trxName)
+        public MCommission(Ctx ctx, int VAB_WorkCommission_ID, Trx trxName)
+            : base(ctx, VAB_WorkCommission_ID, trxName)
         {
-            if (C_Commission_ID == 0)
+            if (VAB_WorkCommission_ID == 0)
             {
                 //	SetName (null);
-                //	SetC_BPartner_ID (0);
-                //	SetC_Charge_ID (0);
-                //	SetC_Commission_ID (0);
-                //	SetC_Currency_ID (0);
+                //	SetVAB_BusinessPartner_ID (0);
+                //	SetVAB_Charge_ID (0);
+                //	SetVAB_WorkCommission_ID (0);
+                //	SetVAB_Currency_ID (0);
                 //
                 SetDocBasisType(DOCBASISTYPE_Invoice);  // I
                 SetFrequencyType(FREQUENCYTYPE_Monthly);    // M
@@ -65,12 +65,12 @@ namespace VAdvantage.Model
         /// <returns>array of lines</returns>
         public MCommissionLine[] GetLines()
         {
-            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,VAF_Org_ID,C_SalesRegion_ID";
+            String sql = "SELECT * FROM VAB_WorkCommissionLine WHERE VAB_WorkCommission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,VAB_BusinessPartner_ID,VAB_BPart_Category_ID,VAF_Org_ID,C_SalesRegion_ID";
             List<MCommissionLine> list = new List<MCommissionLine>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@comid", GetC_Commission_ID());
+                param[0] = new SqlParameter("@comid", GetVAB_WorkCommission_ID());
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 if (ds.Tables.Count > 0)
@@ -117,8 +117,8 @@ namespace VAdvantage.Model
             {
                 MCommissionLine line = new MCommissionLine(GetCtx(), 0, Get_TrxName());
                 PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
-                line.Set_ValueNoCheck("C_CommissionLine_ID", null);	//	new
-                line.SetC_Commission_ID(GetC_Commission_ID());
+                line.Set_ValueNoCheck("VAB_WorkCommissionLine_ID", null);	//	new
+                line.SetVAB_WorkCommission_ID(GetVAB_WorkCommission_ID());
                 if (line.Save())
                     count++;
             }

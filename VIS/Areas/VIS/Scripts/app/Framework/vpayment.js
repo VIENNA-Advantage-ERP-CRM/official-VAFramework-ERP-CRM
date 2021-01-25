@@ -14,23 +14,23 @@
         // Start Payment Rule       
         var _PaymentRule = "";
         // Invoice Currency              
-        var _C_Currency_ID = 0;
+        var _VAB_Currency_ID = 0;
         // Start Acct Date          
         var _DateAcct = null;
         // Start Payment Term       
         var _C_PaymentTerm_ID = 0;
         // Start Payment            
         var _C_Payment_ID = 0;
-        var _C_CashLine_ID = 0;
+        var _VAB_CashJRNLLine_ID = 0;
         // Start CashBook           
-        var _C_CashBook_ID = 0;
+        var _VAB_CashBook_ID = 0;
         // Start CreditCard         
         var _CCType = "";
         //log
         this.log = VIS.Logging.VLogger.getVLogger("vPayment");
         var _VAF_Client_ID = 0;
         var _VAF_Org_ID = 0;
-        var _C_BPartner_ID = 0;
+        var _VAB_BusinessPartner_ID = 0;
 
         var inputProperties = {};
 
@@ -253,7 +253,7 @@
 
             //**************DircetDebit/Credit************************/
             // DirectDebit/Credit           
-            lblTAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BP_BankAccount_ID') + '</label>');
+            lblTAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_BPart_Bank_Acct_ID') + '</label>');
             lblTStatus = $('<p class="vis-payment-span"> </p>');
 
             tPanel = $('<table class="vis-payment-table"></table>');
@@ -280,13 +280,13 @@
 
             //**************Check************************/
             /// Check     
-            lblSBankAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_BankAccount_ID') + '</label>');
+            lblSBankAccountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_Bank_Acct_ID') + '</label>');
             lblSAmountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</label>');
             lblSAmountField = $('<label class="vis-payment-span vis-payment-AmountField"> </label>');
             lblSRoutingLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'RoutingNo') + '</label>');
             lblSNumberLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'AccountNo') + '</label>');
             lblSCheckLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'CheckNo') + '</label>');
-            lblSCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</label>');
+            lblSCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_Currency_ID') + '</label>');
             //txtSNumber.Width = 180;
             lblSStatus = $('<p class="vis-payment-span"> </p>');
             btnSOnline = $('<button class="vis-payment-inputs-buttons"  type="button">' + VIS.Msg.translate(ctx, 'Online') + '</button>');
@@ -425,10 +425,10 @@
 
             //**************Cash************************/
             // Cash            
-            lblBCashBookLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_CashBook_ID') + '</label>');
+            lblBCashBookLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_CashBook_ID') + '</label>');
 
 
-            lblBCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_Currency_ID') + '</label>');
+            lblBCurrencyLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_Currency_ID') + '</label>');
 
 
             lblBAmountLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'Amount') + '</label>');
@@ -519,7 +519,7 @@
             _DocStatus = mTab.getValue("DocStatus");
             //   this.log.config(_DocStatus);
 
-            if (mTab.getValue("C_BPartner_ID") == null) {
+            if (mTab.getValue("VAB_BusinessPartner_ID") == null) {
                 VIS.ADialog.error("0", true, VIS.Msg.getMsg("SaveErrorRowNotFound"));
                 retval = false;
                 return retval;
@@ -568,9 +568,9 @@
             //Get Data from Grid
             _VAF_Client_ID = parseInt(mTab.getValue("VAF_Client_ID"));
             _VAF_Org_ID = parseInt(mTab.getValue("VAF_Org_ID"));//.intValue();
-            _C_BPartner_ID = parseInt(mTab.getValue("C_BPartner_ID"));//.intValue();
+            _VAB_BusinessPartner_ID = parseInt(mTab.getValue("VAB_BusinessPartner_ID"));//.intValue();
             _PaymentRule = mTab.getValue("PaymentRule");
-            _C_Currency_ID = parseInt(mTab.getValue("C_Currency_ID"));//.intValue();
+            _VAB_Currency_ID = parseInt(mTab.getValue("VAB_Currency_ID"));//.intValue();
             _DateAcct = mTab.getValue("DateAcct");
 
             if (mTab.getValue("C_PaymentTerm_ID") != null || mTab.getValue("C_PaymentTerm_ID") != {}) {
@@ -579,13 +579,13 @@
             if (mTab.getValue("C_Payment_ID") != null && mTab.getValue("C_Payment_ID") != {}) {
                 _C_Payment_ID = parseInt(mTab.getValue("C_Payment_ID"));//.intValue();
             }
-            if (mTab.getValue("C_CashLine_ID") != null && mTab.getValue("C_CashLine_ID") != {}) {
-                _C_CashLine_ID = parseInt(mTab.getValue("C_CashLine_ID"));//.intValue();
+            if (mTab.getValue("VAB_CashJRNLLine_ID") != null && mTab.getValue("VAB_CashJRNLLine_ID") != {}) {
+                _VAB_CashJRNLLine_ID = parseInt(mTab.getValue("VAB_CashJRNLLine_ID"));//.intValue();
             }
 
             inputProperties = {
-                _DocStatus: _DocStatus, _isSOTrx: _isSOTrx, _VAF_Client_ID: _VAF_Client_ID, _VAF_Org_ID: _VAF_Org_ID, _C_BPartner_ID: _C_BPartner_ID, _PaymentRule: _PaymentRule, _C_Currency_ID: _C_Currency_ID,
-                _DateAcct: _DateAcct, _C_PaymentTerm_ID: _C_PaymentTerm_ID, _C_Payment_ID: _C_Payment_ID, _C_CashLine_ID: _C_CashLine_ID, values: JSON.stringify(values), _Amount: _Amount
+                _DocStatus: _DocStatus, _isSOTrx: _isSOTrx, _VAF_Client_ID: _VAF_Client_ID, _VAF_Org_ID: _VAF_Org_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, _PaymentRule: _PaymentRule, _VAB_Currency_ID: _VAB_Currency_ID,
+                _DateAcct: _DateAcct, _C_PaymentTerm_ID: _C_PaymentTerm_ID, _C_Payment_ID: _C_Payment_ID, _VAB_CashJRNLLine_ID: _VAB_CashJRNLLine_ID, values: JSON.stringify(values), _Amount: _Amount
             };
 
             $.ajax({
@@ -639,8 +639,8 @@
                         bDateField.Value = _DateAcct;
                     }
                     //	Is the currency an EMU currency?
-                    var C_Currency_ID = _C_Currency_ID;
-                    if (result._Currencies != null && result._Currencies != undefined && result._Currencies[_C_Currency_ID]) {
+                    var VAB_Currency_ID = _VAB_Currency_ID;
+                    if (result._Currencies != null && result._Currencies != undefined && result._Currencies[_VAB_Currency_ID]) {
                         //IEnumerator en = (IEnumerator)_Currencies.Keys.GetEnumerator();
                         //while (en.MoveNext())
                         //{
@@ -664,8 +664,8 @@
                                 .text(name.Name));
                         });
 
-                        //cmbSCurrency.SelectedItem = _Currencies[C_Currency_ID];
-                        //cmbBCurrency.SelectedItem = _Currencies[C_Currency_ID];
+                        //cmbSCurrency.SelectedItem = _Currencies[VAB_Currency_ID];
+                        //cmbBCurrency.SelectedItem = _Currencies[VAB_Currency_ID];
                     }
                     else	//	No EMU Currency
                     {
@@ -765,8 +765,8 @@
                     //	Set Selection
                     if (result.Checkbook_ID != null) {
                         cmbBCashBook.val(result.Checkbook_ID);
-                        if (_C_CashBook_ID == 0) {
-                            _C_CashBook_ID = result.Checkbook_ID;  //  set to default to avoid 'cashbook changed' message
+                        if (_VAB_CashBook_ID == 0) {
+                            _VAB_CashBook_ID = result.Checkbook_ID;  //  set to default to avoid 'cashbook changed' message
                         }
                     }
 
@@ -1052,12 +1052,12 @@
                         }
                     }
                     //	Set Cash
-                    if (result._C_CashLine_ID != _C_CashLine_ID) {
-                        if (result._C_CashLine_ID == 0) {
-                            mTab.setValue("C_CashLine_ID", null);
+                    if (result._VAB_CashJRNLLine_ID != _VAB_CashJRNLLine_ID) {
+                        if (result._VAB_CashJRNLLine_ID == 0) {
+                            mTab.setValue("VAB_CashJRNLLine_ID", null);
                         }
                         else {
-                            mTab.setValue("C_CashLine_ID", result._C_CashLine_ID);
+                            mTab.setValue("VAB_CashJRNLLine_ID", result._VAB_CashJRNLLine_ID);
                         }
                     }
 
@@ -1096,10 +1096,10 @@
 
                 var DateAcct = _DateAcct;
                 var C_PaymentTerm_ID = _C_PaymentTerm_ID;
-                var C_CashBook_ID = _C_CashBook_ID;
+                var VAB_CashBook_ID = _VAB_CashBook_ID;
                 var CCType = _CCType;
                 //
-                var C_BankAccount_ID = 0;
+                var VAB_Bank_Acct_ID = 0;
 
                 /***********************
                  *	Mandatory Data Check
@@ -1107,7 +1107,7 @@
 
                 //	B (Cash)		(Currency)
                 if (PaymentRule.equals(PAYMENTRULE_Cash)) {
-                    C_CashBook_ID = cmbBCashBook.val();
+                    VAB_CashBook_ID = cmbBCashBook.val();
 
                     DateAcct = bDateField.val();
                 }
@@ -1182,7 +1182,7 @@
                     //	cmbSCurrency.SelectedItem;
                     var kp = cmbSBankAccount.val();
                     if (kp != null) {
-                        C_BankAccount_ID = kp;
+                        VAB_Bank_Acct_ID = kp;
                     }
                     //String error = MPaymentValidate.ValidateRoutingNo(txtSRouting.Text);
                     if (txtSRouting.val() == null || txtSRouting.val() == "" || txtSRouting.val() == undefined) {
@@ -1215,7 +1215,7 @@
                 }
 
                 //  find Bank Account if not qualified yet
-                if ("KTSD".indexOf(PaymentRule) != -1 && C_BankAccount_ID == 0) {
+                if ("KTSD".indexOf(PaymentRule) != -1 && VAB_Bank_Acct_ID == 0) {
                     var tender = TENDERTYPE_CreditCard;
                     if (PaymentRule.equals(PAYMENTRULE_DirectDeposit)) {
                         tender = TENDERTYPE_DirectDeposit;
@@ -1227,7 +1227,7 @@
                         tender = TENDERTYPE_Check;
                     }
                     //	Check must have a bank account
-                    if (C_BankAccount_ID == 0 && "S".equals(PaymentRule)) {
+                    if (VAB_Bank_Acct_ID == 0 && "S".equals(PaymentRule)) {
                         //ADialog.error(_WindowNo, this, "PaymentNoProcessor");
                         VIS.ADialog.error("", true, VIS.Msg.getMsg("PaymentNoProcessor"));
                         dataOK = false;

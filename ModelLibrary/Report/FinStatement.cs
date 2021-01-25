@@ -27,7 +27,7 @@ namespace VAdvantage.Report
     public class FinStatement:ProcessEngine.SvrProcess
     {
         /** AcctSchame Parameter			*/
-        private int _C_AcctSchema_ID = 0;
+        private int _VAB_AccountBook_ID = 0;
         /** Posting Type					*/
         private String _PostingType = "A";
         /**	Period Parameter				*/
@@ -39,17 +39,17 @@ namespace VAdvantage.Report
         /**	Account Parameter				*/
         private int _Account_ID = 0;
         /**	BPartner Parameter				*/
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         /**	Product Parameter				*/
         private int _M_Product_ID = 0;
         /**	Project Parameter				*/
         private int _C_Project_ID = 0;
         /**	Activity Parameter				*/
-        private int _C_Activity_ID = 0;
+        private int _VAB_BillingCode_ID = 0;
         /**	SalesRegion Parameter			*/
         private int _C_SalesRegion_ID = 0;
         /**	Campaign Parameter				*/
-        private int _C_Campaign_ID = 0;
+        private int _VAB_Promotion_ID = 0;
         /** Update Balances Parameter		*/
         private Boolean _UpdateBalances = true;
         /** Hierarchy						*/
@@ -79,9 +79,9 @@ namespace VAdvantage.Report
                 {
                     ;
                 }
-                else if (name.Equals("C_AcctSchema_ID"))
+                else if (name.Equals("VAB_AccountBook_ID"))
                 {
-                    _C_AcctSchema_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAB_AccountBook_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else if (name.Equals("PostingType"))
                 {
@@ -108,9 +108,9 @@ namespace VAdvantage.Report
                 {
                     _Account_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
@@ -120,17 +120,17 @@ namespace VAdvantage.Report
                 {
                     _C_Project_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_Activity_ID"))
+                else if (name.Equals("VAB_BillingCode_ID"))
                 {
-                    _C_Activity_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_BillingCode_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("C_SalesRegion_ID"))
                 {
                     _C_SalesRegion_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_Campaign_ID"))
+                else if (name.Equals("VAB_Promotion_ID"))
                 {
-                    _C_Campaign_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_Promotion_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("UpdateBalances"))
                 {
@@ -141,8 +141,8 @@ namespace VAdvantage.Report
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            //	Mandatory C_AcctSchema_ID, PostingType
-            _parameterWhere.Append("C_AcctSchema_ID=").Append(_C_AcctSchema_ID)
+            //	Mandatory VAB_AccountBook_ID, PostingType
+            _parameterWhere.Append("VAB_AccountBook_ID=").Append(_VAB_AccountBook_ID)
                 .Append(" AND PostingType='").Append(_PostingType).Append("'");
             //	Optional Account_ID
             if (_Account_ID != 0 && _Account_ID != -1)
@@ -157,10 +157,10 @@ namespace VAdvantage.Report
                     _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
-            if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+            if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 _parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, _C_BPartner_ID));
+                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
             }
             //	Optional Product
             if (_M_Product_ID != 0 && _M_Product_ID != -1)
@@ -175,18 +175,18 @@ namespace VAdvantage.Report
                     _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Project, _C_Project_ID));
             }
             //	Optional Activity
-            if (_C_Activity_ID != 0 && _C_Activity_ID != -1)
+            if (_VAB_BillingCode_ID != 0 && _VAB_BillingCode_ID != -1)
             {
                 _parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Activity, _C_Activity_ID));
+                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Activity, _VAB_BillingCode_ID));
             }
             //	Optional Campaign
-            if (_C_Campaign_ID != 0 && _C_Campaign_ID != -1)
+            if (_VAB_Promotion_ID != 0 && _VAB_Promotion_ID != -1)
             {
-                _parameterWhere.Append(" AND C_Campaign_ID=").Append(_C_Campaign_ID);
+                _parameterWhere.Append(" AND VAB_Promotion_ID=").Append(_VAB_Promotion_ID);
             }
             //	_parameterWhere.append(" AND ").append(MReportTree.getWhereClause(getCtx(), 
-            //		MAcctSchemaElement.ELEMENTTYPE_Campaign, _C_Campaign_ID));
+            //		MAcctSchemaElement.ELEMENTTYPE_Campaign, _VAB_Promotion_ID));
             //	Optional Sales Region
             if (_C_SalesRegion_ID != 0 && _C_SalesRegion_ID != -1)
             {
@@ -273,8 +273,8 @@ namespace VAdvantage.Report
             //	Update AcctSchema Balances
             if (_UpdateBalances)
             {
-                //FinBalance.UpdateBalance(_C_AcctSchema_ID, false);
-                FinBalance.UpdateBalance(GetCtx(), _C_AcctSchema_ID,
+                //FinBalance.UpdateBalance(_VAB_AccountBook_ID, false);
+                FinBalance.UpdateBalance(GetCtx(), _VAB_AccountBook_ID,
                    _DateAcct_From, Get_TrxName(), 0, this);
 
             }

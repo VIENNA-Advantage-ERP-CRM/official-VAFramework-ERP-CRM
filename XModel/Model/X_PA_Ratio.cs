@@ -20,7 +20,7 @@ public X_PA_Ratio (Context ctx, int PA_Ratio_ID, Trx trxName) : base (ctx, PA_Ra
 {
 /** if (PA_Ratio_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetName (null);
 SetPA_Ratio_ID (0);
 }
@@ -30,7 +30,7 @@ public X_PA_Ratio (Ctx ctx, int PA_Ratio_ID, Trx trxName) : base (ctx, PA_Ratio_
 {
 /** if (PA_Ratio_ID == 0)
 {
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetName (null);
 SetPA_Ratio_ID (0);
 }
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_PA_Ratio[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

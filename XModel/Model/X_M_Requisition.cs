@@ -21,7 +21,7 @@ public X_M_Requisition (Context ctx, int M_Requisition_ID, Trx trxName) : base (
 /** if (M_Requisition_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_DocType_ID (0);
+SetVAB_DocTypes_ID (0);
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDateRequired (DateTime.Now);
 SetDocAction (null);	// CO
@@ -43,7 +43,7 @@ public X_M_Requisition (Ctx ctx, int M_Requisition_ID, Trx trxName) : base (ctx,
 /** if (M_Requisition_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_DocType_ID (0);
+SetVAB_DocTypes_ID (0);
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDateRequired (DateTime.Now);
 SetDocAction (null);	// CO
@@ -154,17 +154,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Document Type.
-@param C_DocType_ID Document type or rules */
-public void SetC_DocType_ID (int C_DocType_ID)
+@param VAB_DocTypes_ID Document type or rules */
+public void SetVAB_DocTypes_ID (int VAB_DocTypes_ID)
 {
-if (C_DocType_ID < 0) throw new ArgumentException ("C_DocType_ID is mandatory.");
-Set_Value ("C_DocType_ID", C_DocType_ID);
+if (VAB_DocTypes_ID < 0) throw new ArgumentException ("VAB_DocTypes_ID is mandatory.");
+Set_Value ("VAB_DocTypes_ID", VAB_DocTypes_ID);
 }
 /** Get Document Type.
 @return Document type or rules */
-public int GetC_DocType_ID() 
+public int GetVAB_DocTypes_ID() 
 {
-Object ii = Get_Value("C_DocType_ID");
+Object ii = Get_Value("VAB_DocTypes_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

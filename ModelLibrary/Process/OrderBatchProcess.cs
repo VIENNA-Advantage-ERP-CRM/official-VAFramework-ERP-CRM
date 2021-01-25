@@ -28,9 +28,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 {
     public class OrderBatchProcess : ProcessEngine.SvrProcess
     {
-        private int _C_DocTypeTarget_ID = 0;
+        private int _VAB_DocTypesTarget_ID = 0;
         private String _DocStatus = null;
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private String _IsSelfService = null;
         private DateTime? _DateOrdered_From = null;
         private DateTime? _DateOrdered_To = null;
@@ -49,9 +49,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_DocTypeTarget_ID"))
+                else if (name.Equals("VAB_DocTypesTarget_ID"))
                 {
-                    _C_DocTypeTarget_ID = para[i].GetParameterAsInt();
+                    _VAB_DocTypesTarget_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DocStatus"))
                 {
@@ -61,9 +61,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _IsSelfService = (String)para[i].GetParameter();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateOrdered"))
                 {
@@ -87,14 +87,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>msg</returns>
         protected override String DoIt()
         {
-            log.Info("C_DocTypeTarget_ID=" + _C_DocTypeTarget_ID + ", DocStatus=" + _DocStatus
-                + ", IsSelfService=" + _IsSelfService + ", C_BPartner_ID=" + _C_BPartner_ID
+            log.Info("VAB_DocTypesTarget_ID=" + _VAB_DocTypesTarget_ID + ", DocStatus=" + _DocStatus
+                + ", IsSelfService=" + _IsSelfService + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", DateOrdered=" + _DateOrdered_From + "->" + _DateOrdered_To
                 + ", DocAction=" + _DocAction);
 
-            if (_C_DocTypeTarget_ID == 0)
+            if (_VAB_DocTypesTarget_ID == 0)
             {
-                throw new Exception("@NotFound@: @C_DocTypeTarget_ID@");
+                throw new Exception("@NotFound@: @VAB_DocTypesTarget_ID@");
             }
             if (_DocStatus == null || _DocStatus.Length != 2)
             {
@@ -107,14 +107,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //
             StringBuilder sql = new StringBuilder("SELECT * FROM C_Order "
-                + "WHERE C_DocTypeTarget_ID=" + _C_DocTypeTarget_ID + " AND DocStatus='" + _DocStatus + "'");
+                + "WHERE VAB_DocTypesTarget_ID=" + _VAB_DocTypesTarget_ID + " AND DocStatus='" + _DocStatus + "'");
             if (_IsSelfService != null && _IsSelfService.Length == 1)
             {
                 sql.Append(" AND IsSelfService='").Append(_IsSelfService).Append("'");
             }
-            if (_C_BPartner_ID != 0)
+            if (_VAB_BusinessPartner_ID != 0)
             {
-                sql.Append(" AND C_BPartner_ID=").Append(_C_BPartner_ID);
+                sql.Append(" AND VAB_BusinessPartner_ID=").Append(_VAB_BusinessPartner_ID);
             }
             if (_DateOrdered_From != null)
             {

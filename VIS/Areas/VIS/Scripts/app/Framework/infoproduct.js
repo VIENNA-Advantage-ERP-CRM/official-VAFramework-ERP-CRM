@@ -813,13 +813,13 @@
         function GetPriceList(PriceList) {
             //var sql = "SELECT plv.M_PriceList_Version_ID,"
             //         + " plv.Name || ' (' || c.ISO_Code || ')' AS ValueName "
-            //         + "FROM M_PriceList_Version plv, M_PriceList pl, C_Currency c "
-            //         + "WHERE plv.M_PriceList_ID=pl.M_PriceList_ID" + " AND pl.C_Currency_ID=c.C_Currency_ID"
+            //         + "FROM M_PriceList_Version plv, M_PriceList pl, VAB_Currency c "
+            //         + "WHERE plv.M_PriceList_ID=pl.M_PriceList_ID" + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
             //         + " AND plv.IsActive='Y' AND pl.IsActive='Y'";
             //// Same PL currency as original one
             //if (PriceList != 0) {
             //    sql += " AND EXISTS (SELECT * FROM M_PriceList xp WHERE xp.M_PriceList_ID=" + PriceList + ")";
-            //    //   +" AND pl.C_Currency_ID=xp.C_Currency_ID)";
+            //    //   +" AND pl.VAB_Currency_ID=xp.VAB_Currency_ID)";
             //}
             //// Add Access & Order
             //var qry = VIS.MRole.getDefault().addAccessSQL(sql, "M_PriceList_Version", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO) // fully qualidfied - RO
@@ -1393,8 +1393,8 @@
                         //debugger;
                         //var productWindow = VAF_Column_ID == 8418;		//	HARDCODED
                         //var M_Locator_ID = VIS.context.getContextAsInt(WindowNo, "M_Locator_ID");
-                        //var C_BPartner_ID = VIS.context.getContextAsInt(WindowNo, "C_BPartner_ID");
-                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1), M_Locator_ID, C_BPartner_ID, productWindow, VAF_Column_ID, WindowNo);
+                        //var VAB_BusinessPartner_ID = VIS.context.getContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
+                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1), M_Locator_ID, VAB_BusinessPartner_ID, productWindow, VAF_Column_ID, WindowNo);
                         //if (obj.hasAttribute) {
                         //    obj.showDialog();
                         //}

@@ -21,7 +21,7 @@ public X_CM_AccessListBPGroup (Context ctx, int CM_AccessListBPGroup_ID, Trx trx
 /** if (CM_AccessListBPGroup_ID == 0)
 {
 SetCM_AccessProfile_ID (0);
-SetC_BP_Group_ID (0);
+SetVAB_BPart_Category_ID (0);
 }
  */
 }
@@ -30,7 +30,7 @@ public X_CM_AccessListBPGroup (Ctx ctx, int CM_AccessListBPGroup_ID, Trx trxName
 /** if (CM_AccessListBPGroup_ID == 0)
 {
 SetCM_AccessProfile_ID (0);
-SetC_BP_Group_ID (0);
+SetVAB_BPart_Category_ID (0);
 }
  */
 }
@@ -134,17 +134,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetCM_AccessProfile_ID().ToString());
 }
 /** Set Business Partner Group.
-@param C_BP_Group_ID Business Partner Group */
-public void SetC_BP_Group_ID (int C_BP_Group_ID)
+@param VAB_BPart_Category_ID Business Partner Group */
+public void SetVAB_BPart_Category_ID (int VAB_BPart_Category_ID)
 {
-if (C_BP_Group_ID < 1) throw new ArgumentException ("C_BP_Group_ID is mandatory.");
-Set_ValueNoCheck ("C_BP_Group_ID", C_BP_Group_ID);
+if (VAB_BPart_Category_ID < 1) throw new ArgumentException ("VAB_BPart_Category_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BPart_Category_ID", VAB_BPart_Category_ID);
 }
 /** Get Business Partner Group.
 @return Business Partner Group */
-public int GetC_BP_Group_ID() 
+public int GetVAB_BPart_Category_ID() 
 {
-Object ii = Get_Value("C_BP_Group_ID");
+Object ii = Get_Value("VAB_BPart_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

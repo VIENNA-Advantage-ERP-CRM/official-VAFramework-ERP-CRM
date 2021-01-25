@@ -29,7 +29,7 @@ namespace VIS.Models
             C_Payment_ID = Util.GetValueOfInt(paramValue[0].ToString());
             MPayment payment = new MPayment(ctx, C_Payment_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["C_Charge_ID"] = payment.GetC_Charge_ID().ToString();
+            result["VAB_Charge_ID"] = payment.GetVAB_Charge_ID().ToString();
             result["C_Invoice_ID"] = payment.GetC_Invoice_ID().ToString();
             result["C_Order_ID"] = payment.GetC_Order_ID().ToString();
             return result;
@@ -68,7 +68,7 @@ namespace VIS.Models
             string sql = "";
             if (Env.IsModuleInstalled("VA009_"))
             {
-                sql = "SELECT i.C_BPartner_ID, i.C_Currency_ID, i.C_ConversionType_ID, i.C_Bpartner_Location_Id,"
+                sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
                     //+ " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"
                      + " NVL(p.DueAmt , 0) - NVL(p.VA009_PaidAmntInvce , 0) as invoiceOpen,"
                      + " invoiceDiscount(" + C_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
@@ -78,7 +78,7 @@ namespace VIS.Models
             }
             else
             {
-                sql = "SELECT i.C_BPartner_ID, i.C_Currency_ID, i.C_ConversionType_ID, i.C_Bpartner_Location_Id,"
+                sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
                     //+ " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"
                     + " p.DueAmt as invoiceOpen,"
                     + " invoiceDiscount(" + C_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
@@ -95,12 +95,12 @@ namespace VIS.Models
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 retDic = new Dictionary<string, object>();
-                retDic["C_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
-                retDic["C_Bpartner_Location_Id"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Bpartner_Location_Id"]);
-                retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                retDic["VAB_BusinessPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BusinessPartner_ID"]);
+                retDic["VAB_BPart_Location_Id"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPart_Location_Id"]);
+                retDic["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
 
                 // JID_1208: System should set Currency Type that is defined on Invoice.
-                retDic["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
+                retDic["VAB_CurrencyType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_CurrencyType_ID"]);
                 retDic["invoiceOpen"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["invoiceOpen"]);
                 retDic["invoiceDiscount"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["invoiceDiscount"]);
                 retDic["IsSOTrx"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]);
@@ -133,16 +133,16 @@ namespace VIS.Models
                    "(SELECT ConvertPrice, ROW_NUMBER () OVER (ORDER BY ConvertPrice ) RN, COUNT (*) OVER () CNT FROM " +
                    "(SELECT iso_code || ':' || SUM(OpenAmt) AS ConvertPrice " +
                    "FROM ((SELECT c.iso_code,  invoiceOpen (i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)*MultiplierAP AS OpenAmt FROM C_Invoice_V i " +
-                   "LEFT JOIN C_Currency C ON C.C_Currency_ID=i.C_Currency_ID " +
+                   "LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=i.VAB_Currency_ID " +
                    "LEFT JOIN C_InvoicePaySchedule IPS ON IPS.c_invoice_ID = i.c_invoice_ID " +
                    "WHERE i.docstatus IN ('CO','CL') AND i.IsActive ='Y' AND i.ispaid ='N' " +
-                   "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.c_bpartner_id = " + bp_BusinessPartner + " AND i.VAF_Client_ID=" + Client_ID +
+                   "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.VAB_BusinessPartner_id = " + bp_BusinessPartner + " AND i.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(ips.duedate) <= (CASE WHEN  TRUNC(@param1) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param2) END ) " +
                    " AND TRUNC(ips.duedate) <= TRUNC(@param1) ) " +
                    "UNION SELECT c.iso_code, paymentAvailable(p.C_Payment_ID)*p.MultiplierAP*-1 AS OpenAmt " +
-                   "FROM C_Payment_v p LEFT JOIN C_Currency C ON C.C_Currency_ID=p.C_Currency_ID " +
+                   "FROM C_Payment_v p LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=p.VAB_Currency_ID " +
                    "LEFT JOIN c_payment pay ON (p.c_payment_id   =pay.c_payment_ID) WHERE p.IsAllocated  ='N' " +
-                   " AND p.C_BPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " + " AND p.VAF_Client_ID=" + Client_ID +
+                   " AND p.VAB_BUSINESSPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " + " AND p.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(pay.DateTrx) <= ( CASE WHEN TRUNC(@param3) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param4) END) " +
                    " AND TRUNC(pay.DateTrx) <= TRUNC(@param2) " +
                    ") GROUP BY iso_code ) ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
@@ -163,22 +163,22 @@ namespace VIS.Models
                     ELSE pdc.VA027_PayAmt END AS PdcDue 
                     FROM VA027_PostDatedCheck pdc LEFT JOIN VA027_ChequeDetails chk 
                     ON chk.VA027_PostDatedCheck_ID = pdc.VA027_PostDatedCheck_ID 
-                    INNER JOIN C_Currency C ON C.C_Currency_ID=PDC.C_Currency_ID 
-                    INNER JOIN C_DocType doc ON doc.C_DocType_ID = pdc.C_DocType_ID
+                    INNER JOIN VAB_Currency C ON C.VAB_Currency_ID=PDC.VAB_Currency_ID 
+                    INNER JOIN VAB_DocTypes doc ON doc.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID
                     WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDR'
                     AND pdc.DocStatus = 'CO' AND pdc.VA027_PAYMENTGENERATED ='N' AND pdc.VA027_PaymentStatus !=3
                     AND (CASE WHEN pdc.VA027_MultiCheque = 'Y' THEN TRUNC(chk.VA027_CheckDate)
-                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param1) AND PDC.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
+                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param1) AND PDC.VAB_BusinessPartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
                         @" UNION SELECT c.iso_code, CASE WHEN (pdc.VA027_MultiCheque = 'Y') THEN chk.VA027_ChequeAmount*-1 
                     ELSE pdc.VA027_PayAmt*-1 END AS PdcDue 
                     FROM VA027_PostDatedCheck pdc LEFT JOIN VA027_ChequeDetails chk 
                     ON chk.VA027_PostDatedCheck_ID = pdc.VA027_PostDatedCheck_ID 
-                    INNER JOIN C_Currency C ON C.C_Currency_ID=pdc.C_Currency_ID
-                    INNER JOIN C_DocType doc ON doc.C_DocType_ID = pdc.C_DocType_ID 
+                    INNER JOIN VAB_Currency C ON C.VAB_Currency_ID=pdc.VAB_Currency_ID
+                    INNER JOIN VAB_DocTypes doc ON doc.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID 
                     WHERE pdc.IsActive ='Y' AND doc.DocBaseType = 'PDP' 
                     AND pdc.VA027_PAYMENTGENERATED ='N' AND pdc.VA027_PaymentStatus !=3 
                     AND (CASE WHEN pdc.VA027_MultiCheque = 'Y' THEN TRUNC(chk.VA027_CheckDate)
-                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param2) AND pdc.c_bpartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
+                    ELSE TRUNC(pdc.VA027_CheckDate) END) <= TRUNC(@param2) AND pdc.VAB_BusinessPartner_id = " + bp_BusinessPartner + " AND PDC.VAF_Client_ID=" + Client_ID +
                         @") GROUP BY iso_code )) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1");
                     SqlParameter[] param1 = new SqlParameter[2];
                     param1[0] = new SqlParameter("@param1", asOnDate);
@@ -211,7 +211,7 @@ namespace VIS.Models
             {
                 sql += " VA009_PaymentMethod_ID,";
             }
-            sql += " C_BPartner_ID, C_Currency_ID, GrandTotal, C_Bpartner_Location_ID , C_ConversionType_ID"
+            sql += " VAB_BusinessPartner_ID, VAB_Currency_ID, GrandTotal, VAB_BPart_Location_ID , VAB_CurrencyType_ID"
                 + " FROM C_Order WHERE C_Order_ID = " + C_Order_ID;
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -222,13 +222,13 @@ namespace VIS.Models
                 {
                     retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
                 }
-                retDic["C_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
-                retDic["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
+                retDic["VAB_BusinessPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BusinessPartner_ID"]);
+                retDic["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
                 retDic["GrandTotal"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["GrandTotal"]);
-                retDic["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
-                retDic["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
+                retDic["VAB_BPart_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPart_Location_ID"]);
+                retDic["VAB_CurrencyType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_CurrencyType_ID"]);
                 //check weather it is PrePayment or not
-                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN C_DocType DT ON o.C_DocTypeTarget_ID = DT.C_DocType_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + C_Order_ID, null, null)).Equals(X_C_DocType.DOCSUBTYPESO_PrepayOrder))
+                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN VAB_DocTypes DT ON o.VAB_DocTypesTarget_ID = DT.VAB_DocTypes_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + C_Order_ID, null, null)).Equals(X_VAB_DocTypes.DOCSUBTYPESO_PrepayOrder))
                 {
                     retDic["IsPrePayOrder"] = true;
                 }
@@ -247,7 +247,7 @@ namespace VIS.Models
         /// <returns>Currency</returns>
         public int GetBankAcctCurrency(string fields)
         {
-            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
+            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID = " + Util.GetValueOfInt(fields)));
             return Currency_ID;
         }
     }

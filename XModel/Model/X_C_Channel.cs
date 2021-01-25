@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Channel
+/** Generated Model for VAB_MarketingChannel
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Channel : PO
+public class X_VAB_MarketingChannel : PO
 {
-public X_C_Channel (Context ctx, int C_Channel_ID, Trx trxName) : base (ctx, C_Channel_ID, trxName)
+public X_VAB_MarketingChannel (Context ctx, int VAB_MarketingChannel_ID, Trx trxName) : base (ctx, VAB_MarketingChannel_ID, trxName)
 {
-/** if (C_Channel_ID == 0)
+/** if (VAB_MarketingChannel_ID == 0)
 {
-SetC_Channel_ID (0);
+SetVAB_MarketingChannel_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_Channel (Ctx ctx, int C_Channel_ID, Trx trxName) : base (ctx, C_Channel_ID, trxName)
+public X_VAB_MarketingChannel (Ctx ctx, int VAB_MarketingChannel_ID, Trx trxName) : base (ctx, VAB_MarketingChannel_ID, trxName)
 {
-/** if (C_Channel_ID == 0)
+/** if (VAB_MarketingChannel_ID == 0)
 {
-SetC_Channel_ID (0);
+SetVAB_MarketingChannel_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Channel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MarketingChannel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_Channel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Channel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MarketingChannel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_Channel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Channel (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_MarketingChannel (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Channel()
+static X_VAB_MarketingChannel()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389054364L;
 public static int Table_ID;
  // =275;
 
-/** TableName=C_Channel */
-public static String Table_Name="C_Channel";
+/** TableName=VAB_MarketingChannel */
+public static String Table_Name="VAB_MarketingChannel";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Channel[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_MarketingChannel[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Print Color.
@@ -129,17 +129,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Channel.
-@param C_Channel_ID Sales Channel */
-public void SetC_Channel_ID (int C_Channel_ID)
+@param VAB_MarketingChannel_ID Sales Channel */
+public void SetVAB_MarketingChannel_ID (int VAB_MarketingChannel_ID)
 {
-if (C_Channel_ID < 1) throw new ArgumentException ("C_Channel_ID is mandatory.");
-Set_ValueNoCheck ("C_Channel_ID", C_Channel_ID);
+if (VAB_MarketingChannel_ID < 1) throw new ArgumentException ("VAB_MarketingChannel_ID is mandatory.");
+Set_ValueNoCheck ("VAB_MarketingChannel_ID", VAB_MarketingChannel_ID);
 }
 /** Get Channel.
 @return Sales Channel */
-public int GetC_Channel_ID() 
+public int GetVAB_MarketingChannel_ID() 
 {
-Object ii = Get_Value("C_Channel_ID");
+Object ii = Get_Value("VAB_MarketingChannel_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

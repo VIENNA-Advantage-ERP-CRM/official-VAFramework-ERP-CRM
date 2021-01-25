@@ -110,59 +110,59 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Document Type - PO - SO
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
+                  + "SET VAB_DocTypes_ID=(SELECT VAB_DocTypes_ID FROM VAB_DocTypes d WHERE d.Name=o.DocTypeName"
                   + " AND d.DocBaseType IN ('API','APC') AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                  + "WHERE C_DocType_ID IS NULL AND IsSOTrx='N' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx='N' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set PO DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
+                  + "SET VAB_DocTypes_ID=(SELECT VAB_DocTypes_ID FROM VAB_DocTypes d WHERE d.Name=o.DocTypeName"
                   + " AND d.DocBaseType IN ('ARI','ARC') AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                  + "WHERE C_DocType_ID IS NULL AND IsSOTrx='Y' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx='Y' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set SO DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
+                  + "SET VAB_DocTypes_ID=(SELECT VAB_DocTypes_ID FROM VAB_DocTypes d WHERE d.Name=o.DocTypeName"
                   + " AND d.DocBaseType IN ('API','ARI','APC','ARC') AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                //+ "WHERE C_DocType_ID IS NULL AND IsSOTrx IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append (clientCheck);
-                  + "WHERE C_DocType_ID IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                //+ "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append (clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid DocTypeName, ' "
-                  + "WHERE C_DocType_ID IS NULL AND DocTypeName IS NOT NULL"
+                  + "WHERE VAB_DocTypes_ID IS NULL AND DocTypeName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid DocTypeName=" + no);
             //	DocType Default
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
+                  + "SET VAB_DocTypes_ID=(SELECT MAX(VAB_DocTypes_ID) FROM VAB_DocTypes d WHERE d.IsDefault='Y'"
                   + " AND d.DocBaseType='API' AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                  + "WHERE C_DocType_ID IS NULL AND IsSOTrx='N' AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx='N' AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set PO Default DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
+                  + "SET VAB_DocTypes_ID=(SELECT MAX(VAB_DocTypes_ID) FROM VAB_DocTypes d WHERE d.IsDefault='Y'"
                   + " AND d.DocBaseType='ARI' AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                  + "WHERE C_DocType_ID IS NULL AND IsSOTrx='Y' AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx='Y' AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set SO Default DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
+                  + "SET VAB_DocTypes_ID=(SELECT MAX(VAB_DocTypes_ID) FROM VAB_DocTypes d WHERE d.IsDefault='Y'"
                   + " AND d.DocBaseType IN('ARI','API') AND o.VAF_Client_ID=d.VAF_Client_ID) "
-                  + "WHERE C_DocType_ID IS NULL AND IsSOTrx IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_DocTypes_ID IS NULL AND IsSOTrx IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Fine("Set Default DocType=" + no);
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No DocType, ' "
-                  + "WHERE C_DocType_ID IS NULL"
+                  + "WHERE VAB_DocTypes_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -170,14 +170,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set IsSOTrx
             sql = new StringBuilder("UPDATE I_Invoice o SET IsSOTrx='Y' "
-                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='ARI' AND o.VAF_Client_ID=d.VAF_Client_ID)"
-                  + " AND C_DocType_ID IS NOT NULL"
+                  + "WHERE EXISTS (SELECT * FROM VAB_DocTypes d WHERE o.VAB_DocTypes_ID=d.VAB_DocTypes_ID AND d.DocBaseType='ARI' AND o.VAF_Client_ID=d.VAF_Client_ID)"
+                  + " AND VAB_DocTypes_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set IsSOTrx=Y=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o SET IsSOTrx='N' "
-                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='API' AND o.VAF_Client_ID=d.VAF_Client_ID)"
-                  + " AND C_DocType_ID IS NOT NULL"
+                  + "WHERE EXISTS (SELECT * FROM VAB_DocTypes d WHERE o.VAB_DocTypes_ID=d.VAB_DocTypes_ID AND d.DocBaseType='API' AND o.VAF_Client_ID=d.VAF_Client_ID)"
+                  + " AND VAB_DocTypes_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set IsSOTrx=N=" + no);
@@ -185,26 +185,26 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Price List
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
-                  + " AND p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
+                  + " AND p.VAB_Currency_ID=o.VAB_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
                   + " AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND C_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE M_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
-                  + " WHERE p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
+                  + " WHERE p.VAB_Currency_ID=o.VAB_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
                   + " WHERE p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND C_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE M_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PriceList=" + no);
             //
@@ -259,64 +259,64 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	BP from EMail
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET (C_BPartner_ID,VAF_UserContact_ID)=(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
-                  + " WHERE o.EMail=u.EMail AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
-                  + "WHERE C_BPartner_ID IS NULL AND EMail IS NOT NULL"
+                  + "SET (VAB_BusinessPartner_ID,VAF_UserContact_ID)=(SELECT VAB_BusinessPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
+                  + " WHERE o.EMail=u.EMail AND o.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID IS NOT NULL) "
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND EMail IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from EMail=" + no);
             //	BP from ContactName
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET (C_BPartner_ID,VAF_UserContact_ID)=(SELECT C_BPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
-                  + " WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
-                  + "WHERE C_BPartner_ID IS NULL AND ContactName IS NOT NULL"
-                  + " AND EXISTS (SELECT Name FROM VAF_UserContact u WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
+                  + "SET (VAB_BusinessPartner_ID,VAF_UserContact_ID)=(SELECT VAB_BusinessPartner_ID,VAF_UserContact_ID FROM VAF_UserContact u"
+                  + " WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID IS NOT NULL) "
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND ContactName IS NOT NULL"
+                  + " AND EXISTS (SELECT Name FROM VAF_UserContact u WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.VAB_BusinessPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from ContactName=" + no);
             //	BP from Value
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_BPartner_ID=(SELECT MAX(C_BPartner_ID) FROM C_BPartner bp"
+                  + "SET VAB_BusinessPartner_ID=(SELECT MAX(VAB_BusinessPartner_ID) FROM VAB_BusinessPartner bp"
                   + " WHERE o.BPartnerValue=bp.Value AND o.VAF_Client_ID=bp.VAF_Client_ID) "
-                  + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from Value=" + no);
             //	Default BP
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_BPartner_ID=(SELECT C_BPartnerCashTrx_ID FROM VAF_ClientDetail c"
+                  + "SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartnerCashTrx_ID FROM VAF_ClientDetail c"
                   + " WHERE o.VAF_Client_ID=c.VAF_Client_ID) "
-                  + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NULL AND Name IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NULL AND Name IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default BP=" + no);
 
             //	Existing Location ? Exact Match
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_BPartner_Location_ID=(SELECT C_BPartner_Location_ID"
-                  + " FROM C_BPartner_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
-                  + " WHERE o.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.VAF_Client_ID=o.VAF_Client_ID"
+                  + "SET VAB_BPart_Location_ID=(SELECT VAB_BPart_Location_ID"
+                  + " FROM VAB_BPart_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
+                  + " WHERE o.VAB_BusinessPartner_ID=bpl.VAB_BusinessPartner_ID AND bpl.VAF_Client_ID=o.VAF_Client_ID"
                   + " AND DUMP(o.Address1)=DUMP(l.Address1) AND DUMP(o.Address2)=DUMP(l.Address2)"
                   + " AND DUMP(o.City)=DUMP(l.City) AND DUMP(o.Postal)=DUMP(l.Postal)"
-                  + " AND DUMP(o.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(o.C_Country_ID)=DUMP(l.C_Country_ID)) "
-                  + "WHERE C_BPartner_ID IS NOT NULL AND C_BPartner_Location_ID IS NULL"
+                  + " AND DUMP(o.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(o.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
+                  + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                   + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Found Location=" + no);
             //	Set Location from BPartner
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_BPartner_Location_ID=(SELECT MAX(C_BPartner_Location_ID) FROM C_BPartner_Location l"
-                  + " WHERE l.C_BPartner_ID=o.C_BPartner_ID AND o.VAF_Client_ID=l.VAF_Client_ID"
+                  + "SET VAB_BPart_Location_ID=(SELECT MAX(VAB_BPart_Location_ID) FROM VAB_BPart_Location l"
+                  + " WHERE l.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID AND o.VAF_Client_ID=l.VAF_Client_ID"
                   + " AND ((l.IsBillTo='Y' AND o.IsSOTrx='Y') OR o.IsSOTrx='N')"
                   + ") "
-                  + "WHERE C_BPartner_ID IS NOT NULL AND C_BPartner_Location_ID IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP Location from BP=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No BP Location, ' "
-                  + "WHERE C_BPartner_ID IS NOT NULL AND C_BPartner_Location_ID IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -325,24 +325,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Country
             /**
             sql = new StringBuilder ("UPDATE I_Invoice o "
-                  + "SET CountryCode=(SELECT CountryCode FROM C_Country c WHERE c.IsDefault='Y'"
+                  + "SET CountryCode=(SELECT CountryCode FROM VAB_Country c WHERE c.IsDefault='Y'"
                   + " AND c.VAF_Client_ID IN (0, o.VAF_Client_ID) AND ROWNUM=1) "
-                  + "WHERE C_BPartner_ID IS NULL AND CountryCode IS NULL AND C_Country_ID IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND CountryCode IS NULL AND VAB_Country_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append (clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
             log.Fine("Set Country Default=" + no);
             **/
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_Country_ID=(SELECT C_Country_ID FROM C_Country c"
+                  + "SET VAB_Country_ID=(SELECT VAB_Country_ID FROM VAB_Country c"
                   + " WHERE o.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
-                  + "WHERE C_BPartner_ID IS NULL AND C_Country_ID IS NULL AND CountryCode IS NOT NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Country_ID IS NULL AND CountryCode IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Country=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Country, ' "
-                  + "WHERE C_BPartner_ID IS NULL AND C_Country_ID IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Country_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -351,27 +351,27 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Region
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "Set RegionName=(SELECT MAX(Name) FROM C_Region r"
-                  + " WHERE r.IsDefault='Y' AND r.C_Country_ID=o.C_Country_ID"
+                  + " WHERE r.IsDefault='Y' AND r.VAB_Country_ID=o.VAB_Country_ID"
                   + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
-                  + "WHERE C_BPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
-                  + " WHERE r.Name=o.RegionName AND r.C_Country_ID=o.C_Country_ID"
+                  + " WHERE r.Name=o.RegionName AND r.VAB_Country_ID=o.VAB_Country_ID"
                   + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
-                  + "WHERE C_BPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NOT NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Region, ' "
-                  + "WHERE C_BPartner_ID IS NULL AND C_Region_ID IS NULL "
-                  + " AND EXISTS (SELECT * FROM C_Country c"
-                  + " WHERE c.C_Country_ID=o.C_Country_ID AND c.HasRegion='Y')"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL "
+                  + " AND EXISTS (SELECT * FROM VAB_Country c"
+                  + " WHERE c.VAB_Country_ID=o.VAB_Country_ID AND c.HasRegion='Y')"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -427,9 +427,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	-- New BPartner ---------------------------------------------------
 
-            //	Go through Invoice Records w/o C_BPartner_ID
+            //	Go through Invoice Records w/o VAB_BusinessPartner_ID
             sql = new StringBuilder("SELECT * FROM I_Invoice "
-                  + "WHERE I_IsImported='N' AND C_BPartner_ID IS NULL").Append(clientCheck);
+                  + "WHERE I_IsImported='N' AND VAB_BusinessPartner_ID IS NULL").Append(clientCheck);
             IDataReader idr = null;
             try
             {
@@ -465,14 +465,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (!bp.Save())
                             continue;
                     }
-                    imp.SetC_BPartner_ID(bp.GetC_BPartner_ID());
+                    imp.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
 
                     //	BP Location
                     MBPartnerLocation bpl = null;
                     MBPartnerLocation[] bpls = bp.GetLocations(true);
                     for (int i = 0; bpl == null && i < bpls.Length; i++)
                     {
-                        if (imp.GetC_BPartner_Location_ID() == bpls[i].GetC_BPartner_Location_ID())
+                        if (imp.GetVAB_BPart_Location_ID() == bpls[i].GetVAB_BPart_Location_ID())
                             bpl = bpls[i];
                         //	Same Location ID
                         else if (imp.GetC_Location_ID() == bpls[i].GetC_Location_ID())
@@ -481,7 +481,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         else if (imp.GetC_Location_ID() == 0)
                         {
                             MLocation loc = bpl.GetLocation(false);
-                            if (loc.Equals(imp.GetC_Country_ID(), imp.GetC_Region_ID(),
+                            if (loc.Equals(imp.GetVAB_Country_ID(), imp.GetC_Region_ID(),
                                     imp.GetPostal(), "", imp.GetCity(),
                                     imp.GetAddress1(), imp.GetAddress2()))
                                 bpl = bpls[i];
@@ -497,7 +497,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         loc.SetPostal(imp.GetPostal());
                         if (imp.GetC_Region_ID() != 0)
                             loc.SetC_Region_ID(imp.GetC_Region_ID());
-                        loc.SetC_Country_ID(imp.GetC_Country_ID());
+                        loc.SetVAB_Country_ID(imp.GetVAB_Country_ID());
                         if (!loc.Save())
                             continue;
                         //
@@ -507,7 +507,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             continue;
                     }
                     imp.SetC_Location_ID(bpl.GetC_Location_ID());
-                    imp.SetC_BPartner_Location_ID(bpl.GetC_BPartner_Location_ID());
+                    imp.SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
 
                     //	User/Contact
                     if (imp.GetContactName() != null
@@ -555,7 +555,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No BPartner, ' "
-                  + "WHERE C_BPartner_ID IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -571,14 +571,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Go through Invoice Records w/o
             sql = new StringBuilder("SELECT * FROM I_Invoice "
                   + "WHERE I_IsImported='N'").Append(clientCheck)
-                .Append(" ORDER BY C_BPartner_ID, C_BPartner_Location_ID, I_Invoice_ID");
+                .Append(" ORDER BY VAB_BusinessPartner_ID, VAB_BPart_Location_ID, I_Invoice_ID");
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement (sql.ToString(), Get_TrxName());
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 //	Group Change
-                int oldC_BPartner_ID = 0;
-                int oldC_BPartner_Location_ID = 0;
+                int oldVAB_BusinessPartner_ID = 0;
+                int oldVAB_BPart_Location_ID = 0;
                 String oldDocumentNo = "";
                 //
                 MInvoice invoice = null;
@@ -590,8 +590,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (cmpDocumentNo == null)
                         cmpDocumentNo = "";
                     //	New Invoice
-                    if (oldC_BPartner_ID != imp.GetC_BPartner_ID()
-                        || oldC_BPartner_Location_ID != imp.GetC_BPartner_Location_ID()
+                    if (oldVAB_BusinessPartner_ID != imp.GetVAB_BusinessPartner_ID()
+                        || oldVAB_BPart_Location_ID != imp.GetVAB_BPart_Location_ID()
                         || !oldDocumentNo.Equals(cmpDocumentNo))
                     {
                         if (invoice != null)
@@ -600,20 +600,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             invoice.Save();
                         }
                         //	Group Change
-                        oldC_BPartner_ID = imp.GetC_BPartner_ID();
-                        oldC_BPartner_Location_ID = imp.GetC_BPartner_Location_ID();
+                        oldVAB_BusinessPartner_ID = imp.GetVAB_BusinessPartner_ID();
+                        oldVAB_BPart_Location_ID = imp.GetVAB_BPart_Location_ID();
                         oldDocumentNo = imp.GetDocumentNo();
                         if (oldDocumentNo == null)
                             oldDocumentNo = "";
                         //
                         invoice = new MInvoice(GetCtx(), 0, null);
                         invoice.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
-                        invoice.SetC_DocTypeTarget_ID(imp.GetC_DocType_ID(), true);
+                        invoice.SetVAB_DocTypesTarget_ID(imp.GetVAB_DocTypes_ID(), true);
                         if (imp.GetDocumentNo() != null)
                             invoice.SetDocumentNo(imp.GetDocumentNo());
                         //
-                        invoice.SetC_BPartner_ID(imp.GetC_BPartner_ID());
-                        invoice.SetC_BPartner_Location_ID(imp.GetC_BPartner_Location_ID());
+                        invoice.SetVAB_BusinessPartner_ID(imp.GetVAB_BusinessPartner_ID());
+                        invoice.SetVAB_BPart_Location_ID(imp.GetVAB_BPart_Location_ID());
                         if (imp.GetVAF_UserContact_ID() != 0)
                             invoice.SetVAF_UserContact_ID(imp.GetVAF_UserContact_ID());
                         //
@@ -635,10 +635,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //
                         if (imp.GetVAF_OrgTrx_ID() != 0)
                             invoice.SetVAF_OrgTrx_ID(imp.GetVAF_OrgTrx_ID());
-                        if (imp.GetC_Activity_ID() != 0)
-                            invoice.SetC_Activity_ID(imp.GetC_Activity_ID());
-                        if (imp.GetC_Campaign_ID() != 0)
-                            invoice.SetC_Campaign_ID(imp.GetC_Campaign_ID());
+                        if (imp.GetVAB_BillingCode_ID() != 0)
+                            invoice.SetVAB_BillingCode_ID(imp.GetVAB_BillingCode_ID());
+                        if (imp.GetVAB_Promotion_ID() != 0)
+                            invoice.SetVAB_Promotion_ID(imp.GetVAB_Promotion_ID());
                         if (imp.GetC_Project_ID() != 0)
                             invoice.SetC_Project_ID(imp.GetC_Project_ID());
                         //

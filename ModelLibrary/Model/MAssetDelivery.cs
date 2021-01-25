@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAssetDelivery
  * Purpose        : Transaction perpose
- * Class Used     : X_A_Asset_Delivery
+ * Class Used     : X_VAA_AssetDelivery
  * Chronological    Development
  * Raghunandan     11-Jun-2009
   ******************************************************/
@@ -28,17 +28,17 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAssetDelivery : X_A_Asset_Delivery
+    public class MAssetDelivery : X_VAA_AssetDelivery
     {
         /* 	Constructor
         * 	@param ctx context
-        * 	@param A_Asset_Delivery_ID id or 0
+        * 	@param VAA_AssetDelivery_ID id or 0
         * 	@param trxName trx
         */
-        public MAssetDelivery(Ctx ctx, int A_Asset_Delivery_ID, Trx trxName)
-            : base(ctx, A_Asset_Delivery_ID, trxName)
+        public MAssetDelivery(Ctx ctx, int VAA_AssetDelivery_ID, Trx trxName)
+            : base(ctx, VAA_AssetDelivery_ID, trxName)
         {
-            if (A_Asset_Delivery_ID == 0)
+            if (VAA_AssetDelivery_ID == 0)
             {
                 SetMovementDate(new DateTime(CommonFunctions.CurrentTimeMillis()));
             }
@@ -125,7 +125,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAssetDelivery[")
                 .Append(Get_ID())
-                .Append(",A_Asset_ID=").Append(GetA_Asset_ID())
+                .Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
                 .Append(",MovementDate=").Append(GetMovementDate())
                 .Append("]");
             return sb.ToString();

@@ -16,30 +16,30 @@ namespace VIS.Models
         public InitialData GetInitialData(Ctx ctx)
         {
 
-            bool isBaseLanguage = VAdvantage.Utility.Env.IsBaseLanguage(ctx, "C_Currency");
+            bool isBaseLanguage = VAdvantage.Utility.Env.IsBaseLanguage(ctx, "VAB_Currency");
             string sqlCu = null;
             string sqlCo = null;
             string sqlRe = null;
             if (isBaseLanguage)
             {
-                sqlCu = "SELECT C_Currency_ID, Description FROM C_Currency ORDER BY 1";
-                sqlCo = "SELECT C_Country_ID, Name FROM C_Country WHERE IsSummary='N' ORDER BY 1";
-                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY C_Country_ID, Name";
+                sqlCu = "SELECT VAB_Currency_ID, Description FROM VAB_Currency ORDER BY 1";
+                sqlCo = "SELECT VAB_Country_ID, Name FROM VAB_Country WHERE IsSummary='N' ORDER BY 1";
+                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY VAB_Country_ID, Name";
             }
             else
             {
-                sqlCu = @"SELECT C.C_Currency_ID, CL.Description
-                            FROM C_Currency C
-                            INNER JOIN C_Currency_Trl CL
-                            ON (C.C_Currency_ID=CL.C_Currency_ID
+                sqlCu = @"SELECT C.VAB_Currency_ID, CL.Description
+                            FROM VAB_Currency C
+                            INNER JOIN VAB_Currency_TL CL
+                            ON (C.VAB_Currency_ID=CL.VAB_Currency_ID
                             AND CL.VAF_Language ='" + ctx.GetVAF_Language() + "') ORDER BY 1";
-               // sqlCo = "SELECT C_Country_ID, Name FROM C_Country WHERE IsSummary='N' ORDER BY 1";
-                sqlCo=@"SELECT C.C_Country_ID, CL.Name
-                            FROM C_Country C
-                            INNER JOIN C_Country_Trl CL
-                            ON (C.C_Country_ID=CL.C_Country_ID
+               // sqlCo = "SELECT VAB_Country_ID, Name FROM VAB_Country WHERE IsSummary='N' ORDER BY 1";
+                sqlCo=@"SELECT C.VAB_Country_ID, CL.Name
+                            FROM VAB_Country C
+                            INNER JOIN VAB_Country_TL CL
+                            ON (C.VAB_Country_ID=CL.VAB_Country_ID
                             AND CL.VAF_Language ='" + ctx.GetVAF_Language() + "') ORDER BY 1";
-                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY C_Country_ID, Name";
+                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY VAB_Country_ID, Name";
                 
             }
             InitialData ini = new InitialData();
@@ -150,11 +150,11 @@ namespace VIS.Models
                     // worker.ReportProgress(45);
                     //  Generate Entities
 
-                    int C_Country_ID = countryID;
+                    int VAB_Country_ID = countryID;
 
                     int C_Region_ID = regionID;
                     //  worker.ReportProgress(75);
-                    ms.CreateEntities(C_Country_ID, city, C_Region_ID, currencyID);
+                    ms.CreateEntities(VAB_Country_ID, city, C_Region_ID, currencyID);
                     //worker.ReportProgress(90);
                     info += ms.GetInfo();
                     //	Create Print Documents

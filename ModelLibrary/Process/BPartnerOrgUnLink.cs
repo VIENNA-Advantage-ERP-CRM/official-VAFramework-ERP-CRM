@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class BPartnerOrgUnLink : ProcessEngine.SvrProcess
     {
    /** Business Partner		*/
-	private int	_C_BPartner_ID;
+	private int	_VAB_BusinessPartner_ID;
 	/// <summary>
 	/// Prepare - e.g., get Parameters. 
 	/// </summary>
@@ -43,9 +43,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("C_BPartner_ID"))
+			else if (name.Equals("VAB_BusinessPartner_ID"))
             {
-				_C_BPartner_ID =Utility.Util.GetValueOfInt((Utility.Util.GetValueOfDecimal(para[i].GetParameter())));
+				_VAB_BusinessPartner_ID =Utility.Util.GetValueOfInt((Utility.Util.GetValueOfDecimal(para[i].GetParameter())));
             }
 			else
             {
@@ -60,15 +60,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>Message (text with variables)</returns>
 	protected override String DoIt()
 	{
-		log.Info("doIt - C_BPartner_ID=" + _C_BPartner_ID);
-        if (_C_BPartner_ID == 0)
+		log.Info("doIt - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
+        if (_VAB_BusinessPartner_ID == 0)
         {
             throw new ArgumentException("No Business Partner ID");
         }
-		MBPartner bp = new MBPartner (GetCtx(), _C_BPartner_ID, Get_Trx());
+		MBPartner bp = new MBPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
         if (bp.Get_ID() == 0)
         {
-            throw new ArgumentException("Business Partner not found - C_BPartner_ID=" + _C_BPartner_ID);
+            throw new ArgumentException("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
         }
 		//
         if (bp.GetVAF_OrgBP_ID_Int() == 0)

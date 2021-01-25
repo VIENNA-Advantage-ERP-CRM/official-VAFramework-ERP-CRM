@@ -95,11 +95,11 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="docLine">the document line or null</param>
         /// <param name="account">if null, line is not created</param>
-        /// <param name="C_Currency_ID">the currency</param>
+        /// <param name="VAB_Currency_ID">the currency</param>
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt)
         {
             //  Data Check
             if (account == null)
@@ -127,13 +127,13 @@ namespace VAdvantage.Acct
                 _doc.Get_ID(),
                 docLine == null ? 0 : (docLine.GetPrimaryKeyValue != 0 ? docLine.GetPrimaryKeyValue : docLine.Get_ID()), _trx);
             // set accounting schema reference 
-            line.SetC_AcctSchema_ID(_acctSchema.GetC_AcctSchema_ID());
+            line.SetVAB_AccountBook_ID(_acctSchema.GetVAB_AccountBook_ID());
             //  Set Info & Account
             line.SetDocumentInfo(_doc, docLine);
             line.SetPostingType(_postingType);
             line.SetAccount(_acctSchema, account);
             //  Amounts - one needs to not zero
-            if (!line.SetAmtSource(C_Currency_ID, debitAmt, creditAmt))
+            if (!line.SetAmtSource(VAB_Currency_ID, debitAmt, creditAmt))
             {
                 if (docLine == null || docLine.GetQty() == null || Env.Signum(Utility.Util.GetValueOfDecimal(docLine.GetQty())) == 0)
                 {
@@ -163,11 +163,11 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="docLine">the document line or null</param>
         /// <param name="account">if null, line is not created</param>
-        /// <param name="C_Currency_ID">the currency</param>
+        /// <param name="VAB_Currency_ID">the currency</param>
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int VAF_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int VAF_Org_ID)
         {
             //  Data Check
             if (account == null)
@@ -189,7 +189,7 @@ namespace VAdvantage.Acct
                 line.SetVAF_Org_ID(VAF_Org_ID);
             }
             //  Amounts - one needs to not zero
-            if (!line.SetAmtSource(C_Currency_ID, debitAmt, creditAmt))
+            if (!line.SetAmtSource(VAB_Currency_ID, debitAmt, creditAmt))
             {
                 if (docLine == null || docLine.GetQty() == null || Env.Signum(Utility.Util.GetValueOfDecimal(docLine.GetQty())) == 0)
                 {
@@ -228,18 +228,18 @@ namespace VAdvantage.Acct
         /// <param name="docLine">Document Line or null</param>
         /// <param name="accountDr">Account to be used if Amt is DR balance</param>
         /// <param name="accountCr">Account to be used if Amt is CR balance</param>
-        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount accountDr, MAccount accountCr, int C_Currency_ID, Decimal? Amt)
+        public FactLine CreateLine(DocLine docLine, MAccount accountDr, MAccount accountCr, int VAB_Currency_ID, Decimal? Amt)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
-                return CreateLine(docLine, accountCr, C_Currency_ID, null, Math.Abs(Amt.Value));
+                return CreateLine(docLine, accountCr, VAB_Currency_ID, null, Math.Abs(Amt.Value));
             }
             else
             {
-                return CreateLine(docLine, accountDr, C_Currency_ID, Amt.Value, null);
+                return CreateLine(docLine, accountDr, VAB_Currency_ID, Amt.Value, null);
             }
         }
 
@@ -249,18 +249,18 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="docLine">Document line or null</param>
         /// <param name="account">Account to be used</param>
-        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? Amt)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
-                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value));
+                return CreateLine(docLine, account, VAB_Currency_ID, null, Math.Abs(Amt.Value));
             }
             else
             {
-                return CreateLine(docLine, account, C_Currency_ID, Amt.Value, null);
+                return CreateLine(docLine, account, VAB_Currency_ID, Amt.Value, null);
             }
         }
 
@@ -270,19 +270,19 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="docLine">Document line or null</param>
         /// <param name="account">Account to be used</param>
-        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <param name ="VAF_Org_ID">Set Line Org</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int C_Currency_ID, Decimal? Amt, int VAF_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? Amt, int VAF_Org_ID)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
-                return CreateLine(docLine, account, C_Currency_ID, null, Math.Abs(Amt.Value), VAF_Org_ID);
+                return CreateLine(docLine, account, VAB_Currency_ID, null, Math.Abs(Amt.Value), VAF_Org_ID);
             }
             else
             {
-                return CreateLine(docLine, account, C_Currency_ID, Amt.Value, null, VAF_Org_ID);
+                return CreateLine(docLine, account, VAB_Currency_ID, Amt.Value, null, VAF_Org_ID);
             }
         }
         /// <summary>
@@ -377,11 +377,11 @@ namespace VAdvantage.Acct
             //  Amount
             if (Env.Signum(diff) < 0)   //  negative balance => DR
             {
-                line.SetAmtSource(_doc.GetC_Currency_ID(), Math.Abs(diff), Env.ZERO);
+                line.SetAmtSource(_doc.GetVAB_Currency_ID(), Math.Abs(diff), Env.ZERO);
             }
             else                                //  positive balance => CR
             {
-                line.SetAmtSource(_doc.GetC_Currency_ID(), Env.ZERO, diff);
+                line.SetAmtSource(_doc.GetVAB_Currency_ID(), Env.ZERO, diff);
             }
 
             //	Account
@@ -435,7 +435,7 @@ namespace VAdvantage.Acct
         /// <returns>true if segments are balanced</returns>
         public bool IsSegmentBalanced(String segmentType)
         {
-            if (segmentType.Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Organization))
+            if (segmentType.Equals(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization))
             {
                 Dictionary<int, Decimal?> map = new Dictionary<int, Decimal?>();
                 //  Add up values by key
@@ -534,7 +534,7 @@ namespace VAdvantage.Acct
             log.Fine("(" + elementType + ") - " + ToString());
 
             //  Org
-            if (elementType.Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Organization))
+            if (elementType.Equals(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization))
             {
                 Dictionary<int, Balance> map = new Dictionary<int, Balance>();
                 //  Add up values by key
@@ -583,12 +583,12 @@ namespace VAdvantage.Acct
                         {
                             if (difference.IsReversal())
                             {
-                                line.SetAmtSource(_doc.GetC_Currency_ID(), Env.ZERO, difference.GetPostBalance());
+                                line.SetAmtSource(_doc.GetVAB_Currency_ID(), Env.ZERO, difference.GetPostBalance());
                                 line.SetAccount(_acctSchema, _acctSchema.GetDueTo_Acct(elementType));
                             }
                             else
                             {
-                                line.SetAmtSource(_doc.GetC_Currency_ID(), difference.GetPostBalance(), Env.ZERO);
+                                line.SetAmtSource(_doc.GetVAB_Currency_ID(), difference.GetPostBalance(), Env.ZERO);
                                 line.SetAccount(_acctSchema, _acctSchema.GetDueFrom_Acct(elementType));
                             }
                         }
@@ -596,12 +596,12 @@ namespace VAdvantage.Acct
                         {
                             if (difference.IsReversal())
                             {
-                                line.SetAmtSource(_doc.GetC_Currency_ID(), difference.GetPostBalance(), Env.ZERO);
+                                line.SetAmtSource(_doc.GetVAB_Currency_ID(), difference.GetPostBalance(), Env.ZERO);
                                 line.SetAccount(_acctSchema, _acctSchema.GetDueFrom_Acct(elementType));
                             }
                             else
                             {
-                                line.SetAmtSource(_doc.GetC_Currency_ID(), Env.ZERO, difference.GetPostBalance());
+                                line.SetAmtSource(_doc.GetVAB_Currency_ID(), Env.ZERO, difference.GetPostBalance());
                                 line.SetAccount(_acctSchema, _acctSchema.GetDueTo_Acct(elementType));
                             }
                         }
@@ -706,7 +706,7 @@ namespace VAdvantage.Acct
                 line.SetAccount(_acctSchema, _acctSchema.GetCurrencyBalancing_Acct());
 
                 //  Amount
-                line.SetAmtSource(_doc.GetC_Currency_ID(), Env.ZERO, Env.ZERO);
+                line.SetAmtSource(_doc.GetVAB_Currency_ID(), Env.ZERO, Env.ZERO);
                 line.Convert();
                 //	Accounted
                 Decimal drAmt = Env.ZERO;
@@ -830,7 +830,7 @@ namespace VAdvantage.Acct
             {
                 FactLine dLine = (FactLine)_lines[i];
                 MDistribution[] distributions = MDistribution.Get(dLine.GetAccount(),
-                    _postingType, _doc.GetC_DocType_ID());
+                    _postingType, _doc.GetVAB_DocTypes_ID());
                 //	No Distribution for this line
                 if (distributions == null || distributions.Length == 0)
                 {
@@ -847,7 +847,7 @@ namespace VAdvantage.Acct
                 log.Info("Reversal=" + reversal);
                 newLines.Add(reversal);		//	saved in postCommit
                 //	Prepare
-                distribution.Distribute(dLine.GetAccount(), dLine.GetSourceBalance(), dLine.GetC_Currency_ID());
+                distribution.Distribute(dLine.GetAccount(), dLine.GetSourceBalance(), dLine.GetVAB_Currency_ID());
                 MDistributionLine[] lines = distribution.GetLines(false);
                 for (int j = 0; j < lines.Length; j++)
                 {
@@ -869,11 +869,11 @@ namespace VAdvantage.Acct
                     //
                     if (Env.Signum(dl.GetAmt()) < 0)
                     {
-                        factLine.SetAmtSource(dLine.GetC_Currency_ID(), null, Math.Abs(dl.GetAmt()));
+                        factLine.SetAmtSource(dLine.GetVAB_Currency_ID(), null, Math.Abs(dl.GetAmt()));
                     }
                     else
                     {
-                        factLine.SetAmtSource(dLine.GetC_Currency_ID(), dl.GetAmt(), null);
+                        factLine.SetAmtSource(dLine.GetVAB_Currency_ID(), dl.GetAmt(), null);
                     }
                     //  Convert
                     factLine.Convert();

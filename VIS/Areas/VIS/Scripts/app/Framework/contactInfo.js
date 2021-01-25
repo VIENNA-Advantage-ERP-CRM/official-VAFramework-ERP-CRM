@@ -15,7 +15,7 @@
     var windowWidth = $(document).width();
     var windowHeight = $(document).height();
     VIS.ContactInfo = function (userID, winNo) {
-        var sql = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='C_BPartner'";
+        var sql = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='VAB_BusinessPartner'";
         var dr = VIS.DB.executeReader(sql, null);
         while (dr.read()) {
             if (parseInt(dr.getString(0)) == 0) {
@@ -561,7 +561,7 @@
                                         var dd = JSON.parse(data);
                                         var zoomQuery = new VIS.Query();
 
-                                        zoomQuery.addRestriction("C_BPartner" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
+                                        zoomQuery.addRestriction("VAB_BusinessPartner" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
                                         VIS.viewManager.startWindow(dd[0], zoomQuery);
                                         $BPInfo.find("p").removeAttr("style");
                                         contactInfoDialog.close();
@@ -829,7 +829,7 @@
                                     var dd = JSON.parse(data);
                                     var zoomQuery = new VIS.Query();
                                     if (isEdit) {
-                                        zoomQuery.addRestriction("C_BPartner" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
+                                        zoomQuery.addRestriction("VAB_BusinessPartner" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
                                         VIS.viewManager.startWindow(dd[0], zoomQuery);
                                         $editContact.find("p").removeAttr("style");
                                         contactInfoDialog.close();
@@ -846,7 +846,7 @@
 
                                             gc.onRowInserted = function () {
                                                 tab = win.cPanel.curTab;
-                                                tab.setValue("C_BPartner_ID", $sliderBpID.text());
+                                                tab.setValue("VAB_BusinessPartner_ID", $sliderBpID.text());
 
                                             };
                                         };

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDunningRun
  * Purpose        : Dunning Run Model
- * Class Used     : X_C_DunningRun
+ * Class Used     : X_VAB_DunningExe
  * Chronological    Development
  * Deepak          10-Nov-2009
   ******************************************************/
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDunningRun : X_C_DunningRun
+    public class MDunningRun : X_VAB_DunningExe
     {
         #region Private variable
         private MDunningLevel _level = null;
@@ -38,12 +38,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_DunningRun_ID"></param>
+        /// <param name="VAB_DunningExe_ID"></param>
         /// <param name="trxName"></param>
-        public MDunningRun(Ctx ctx, int C_DunningRun_ID, Trx trxName)
-            : base(ctx, C_DunningRun_ID, trxName)
+        public MDunningRun(Ctx ctx, int VAB_DunningExe_ID, Trx trxName)
+            : base(ctx, VAB_DunningExe_ID, trxName)
         {
-            if (C_DunningRun_ID == 0)
+            if (VAB_DunningExe_ID == 0)
             {
                 SetDunningDate(new DateTime(CommonFunctions.CurrentTimeMillis()));
                 SetProcessed(false);
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         {
             if (_level == null)
             {
-                _level = new MDunningLevel(GetCtx(), GetC_DunningLevel_ID(), Get_TrxName());
+                _level = new MDunningLevel(GetCtx(), GetVAB_DunningStep_ID(), Get_TrxName());
             }
             return _level;
         }
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                 return _entries;
             }
 
-            String sql = "SELECT * FROM C_DunningRunEntry WHERE C_DunningRun_ID=" + GetC_DunningRun_ID();
+            String sql = "SELECT * FROM VAB_DunningExeEntry WHERE VAB_DunningExe_ID=" + GetVAB_DunningExe_ID();
             List<MDunningRunEntry> list = new List<MDunningRunEntry>();
             DataTable dt = null;
             IDataReader idr = null;
@@ -163,27 +163,27 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get/Create Entry for BPartner
         /// </summary>
-        /// <param name="C_BPartner_ID">business partner</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_BusinessPartner_ID">business partner</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="SalesRep_ID">sales rep</param>
         /// <returns>entry</returns>
-        public MDunningRunEntry GetEntry(int C_BPartner_ID, int C_Currency_ID, int SalesRep_ID)
+        public MDunningRunEntry GetEntry(int VAB_BusinessPartner_ID, int VAB_Currency_ID, int SalesRep_ID)
         {
             // TODO: Related BP
-            int C_BPartnerRelated_ID = C_BPartner_ID;
+            int VAB_BusinessPartnerRelated_ID = VAB_BusinessPartner_ID;
             //
             GetEntries(false);
             for (int i = 0; i < _entries.Length; i++)
             {
                 MDunningRunEntry entry = _entries[i];
-                if (entry.GetC_BPartner_ID() == C_BPartnerRelated_ID)
+                if (entry.GetVAB_BusinessPartner_ID() == VAB_BusinessPartnerRelated_ID)
                 {
                     return entry;
                 }
             }
             //	New Entry
             MDunningRunEntry entry1 = new MDunningRunEntry(this);
-            MBPartner bp = new MBPartner(GetCtx(), C_BPartnerRelated_ID, Get_TrxName());
+            MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartnerRelated_ID, Get_TrxName());
             entry1.SetBPartner(bp, true);	//	AR hardcoded
             //
             //if (entry1.GetSalesRep_ID() == 0)
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
             {
                 entry1.SetSalesRep_ID(SalesRep_ID);
             }
-            entry1.SetC_Currency_ID(C_Currency_ID);
+            entry1.SetVAB_Currency_ID(VAB_Currency_ID);
             //
             _entries = null;
             return entry1;

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MCountry
  * Purpose        : Contries notifications/display
- * Class Used     : X_C_Country
+ * Class Used     : X_VAB_Country
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     [Serializable]
-    public class MCountry : X_C_Country, IComparer<PO>
+    public class MCountry : X_VAB_Country, IComparer<PO>
     {
         #region Variables
         //	Translated Name			
@@ -47,20 +47,20 @@ namespace VAdvantage.Model
         /// Get Country (cached)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Country_ID">ID</param>
+        /// <param name="VAB_Country_ID">ID</param>
         /// <returns>Country</returns>
-        public static MCountry Get(Ctx ctx, int C_Country_ID)
+        public static MCountry Get(Ctx ctx, int VAB_Country_ID)
         {
             if (s_countries == null || s_countries.Count == 0)
             {
                 LoadAllCountries(ctx);
             }
-            String key = C_Country_ID.ToString();
+            String key = VAB_Country_ID.ToString();
             MCountry c = (MCountry)s_countries[key];
             if (c != null)
                 return c;
-            c = new MCountry(ctx, C_Country_ID, null);
-            if (c.GetC_Country_ID() == C_Country_ID)
+            c = new MCountry(ctx, VAB_Country_ID, null);
+            if (c.GetVAB_Country_ID() == VAB_Country_ID)
             {
                 s_countries.Add(key, c);
                 return c;
@@ -112,10 +112,10 @@ namespace VAdvantage.Model
             MCountry usa = null;
             //
 
-            int countryID = Util.GetValueOfInt(ctx.Get("P|C_Country_ID"));
+            int countryID = Util.GetValueOfInt(ctx.Get("P|VAB_Country_ID"));
 
-            s_countries = new CCache<String, MCountry>("C_Country", 250);
-            String sql = "SELECT * FROM C_Country WHERE IsActive='Y' AND IsSummary='N'";
+            s_countries = new CCache<String, MCountry>("VAB_Country", 250);
+            String sql = "SELECT * FROM VAB_Country WHERE IsActive='Y' AND IsSummary='N'";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -123,17 +123,17 @@ namespace VAdvantage.Model
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
                     MCountry c = new MCountry(ctx, dr, null);
-                    s_countries.Add(c.GetC_Country_ID().ToString(), c);
+                    s_countries.Add(c.GetVAB_Country_ID().ToString(), c);
                     //	Country code of Client Language
                     if (lang != null && lang.GetCountryCode().Equals(c.GetCountryCode()) && _default == null)
                     {
                         _default = c;
                     }
-                    else if (countryID == c.GetC_Country_ID())
+                    else if (countryID == c.GetVAB_Country_ID())
                     {
                         _default = c;
                     }
-                    if (c.GetC_Country_ID() == 100)		//	USA
+                    if (c.GetVAB_Country_ID() == 100)		//	USA
                     {
                         usa = c;
                     }
@@ -170,12 +170,12 @@ namespace VAdvantage.Model
         /// Create empty Country
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_Country_ID"></param>
+        /// <param name="VAB_Country_ID"></param>
         /// <param name="trxName"></param>
-        public MCountry(Ctx ctx, int C_Country_ID, Trx trxName)
-            : base(ctx, C_Country_ID, trxName)
+        public MCountry(Ctx ctx, int VAB_Country_ID, Trx trxName)
+            : base(ctx, VAB_Country_ID, trxName)
         {
-            if (C_Country_ID == 0)
+            if (VAB_Country_ID == 0)
             {
                 //	setName (null);
                 //	setCountryCode (null);
@@ -288,12 +288,12 @@ namespace VAdvantage.Model
         public bool IsValidRegion(int C_Region_ID)
         {
             if (C_Region_ID == 0
-                || GetC_Country_ID() == 0
+                || GetVAB_Country_ID() == 0
                 || !IsHasRegion())
             {
                 return false;
             }
-            MRegion[] regions = MRegion.GetRegions(GetCtx(), GetC_Country_ID());
+            MRegion[] regions = MRegion.GetRegions(GetCtx(), GetVAB_Country_ID());
             for (int i = 0; i < regions.Length; i++)
             {
                 if (C_Region_ID == regions[i].GetC_Region_ID())
@@ -310,9 +310,9 @@ namespace VAdvantage.Model
         //public static void main (String[] args)
         //{
         //    /**	Migration before
-        //    UPDATE C_Country SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
+        //    UPDATE VAB_Country SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
         //    UPDATE C_Region SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
-        //    IDs migration for C_Location, C_City, C_Tax (C_Country, C_Region)
+        //    IDs migration for C_Location, VAB_City, C_Tax (VAB_Country, C_Region)
         //    **
         //    //	from http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt
         //    String countries = "AFGHANISTAN;AF, ALBANIA;AL, ALGERIA;DZ, AMERICAN SAMOA;AS, ANDORRA;AD, ANGOLA;AO, ANGUILLA;AI, ANTARCTICA;AQ, ANTIGUA AND BARBUDA;AG, ARGENTINA;AR,"

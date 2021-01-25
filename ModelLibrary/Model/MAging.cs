@@ -38,9 +38,9 @@ namespace VAdvantage.Model
             if (T_Aging_ID == 0)
             {
                 //	setVAF_JInstance_ID (0);
-                //	setC_BP_Group_ID (0);
-                //	setC_BPartner_ID (0);
-                //	setC_Currency_ID (0);
+                //	setVAB_BPart_Category_ID (0);
+                //	setVAB_BusinessPartner_ID (0);
+                //	setVAB_Currency_ID (0);
                 //
                 SetDueAmt(Env.ZERO);
                 SetDue0(Env.ZERO);
@@ -80,27 +80,27 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAF_JInstance_ID">instance</param>
         /// <param name="StatementDate">statement date</param>
-        /// <param name="C_BPartner_ID">bpartner</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_BusinessPartner_ID">bpartner</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="C_Invoice_ID">invoice</param>
         /// <param name="C_InvoicePaySchedule_ID">invoice schedule</param>
-        /// <param name="C_BP_Group_ID">group</param>
+        /// <param name="VAB_BPart_Category_ID">group</param>
         /// <param name="DueDate">due date</param>
         /// <param name="IsSOTrx">so trx</param>
         /// <param name="trxName">transaction</param>
         public MAging(Ctx ctx, int VAF_JInstance_ID, DateTime? StatementDate,
-            int C_BPartner_ID, int C_Currency_ID,
+            int VAB_BusinessPartner_ID, int VAB_Currency_ID,
             int C_Invoice_ID, int C_InvoicePaySchedule_ID,
-            int C_BP_Group_ID, DateTime? DueDate, Boolean IsSOTrx, Trx trxName)
+            int VAB_BPart_Category_ID, DateTime? DueDate, Boolean IsSOTrx, Trx trxName)
             : this(ctx, 0, trxName)
         {
             //this(ctx, 0, trxName);
             SetVAF_JInstance_ID(VAF_JInstance_ID);
             SetStatementDate(StatementDate);
             //
-            SetC_BPartner_ID(C_BPartner_ID);
-            SetC_Currency_ID(C_Currency_ID);
-            SetC_BP_Group_ID(C_BP_Group_ID);
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
+            SetVAB_Currency_ID(VAB_Currency_ID);
+            SetVAB_BPart_Category_ID(VAB_BPart_Category_ID);
             SetIsSOTrx(IsSOTrx);
 
             //	Optional
@@ -290,8 +290,8 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAging[");
             sb.Append("VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
-                .Append(",C_BPartner_ID=").Append(GetC_BPartner_ID())
-                .Append(",C_Currency_ID=").Append(GetC_Currency_ID())
+                .Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID())
+                .Append(",VAB_Currency_ID=").Append(GetVAB_Currency_ID())
                 .Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());
             sb.Append("]");
             return sb.ToString();

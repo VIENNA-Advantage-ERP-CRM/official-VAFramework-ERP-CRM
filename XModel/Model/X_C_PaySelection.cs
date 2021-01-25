@@ -20,7 +20,7 @@ public X_C_PaySelection (Context ctx, int C_PaySelection_ID, Trx trxName) : base
 {
 /** if (C_PaySelection_ID == 0)
 {
-SetC_BankAccount_ID (0);
+SetVAB_Bank_Acct_ID (0);
 SetC_PaySelection_ID (0);
 SetIsApproved (false);
 SetName (null);	// @#Date@
@@ -34,7 +34,7 @@ public X_C_PaySelection (Ctx ctx, int C_PaySelection_ID, Trx trxName) : base (ct
 {
 /** if (C_PaySelection_ID == 0)
 {
-SetC_BankAccount_ID (0);
+SetVAB_Bank_Acct_ID (0);
 SetC_PaySelection_ID (0);
 SetIsApproved (false);
 SetName (null);	// @#Date@
@@ -123,17 +123,17 @@ StringBuilder sb = new StringBuilder ("X_C_PaySelection[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Bank Account.
-@param C_BankAccount_ID Account at the Bank */
-public void SetC_BankAccount_ID (int C_BankAccount_ID)
+@param VAB_Bank_Acct_ID Account at the Bank */
+public void SetVAB_Bank_Acct_ID (int VAB_Bank_Acct_ID)
 {
-if (C_BankAccount_ID < 1) throw new ArgumentException ("C_BankAccount_ID is mandatory.");
-Set_Value ("C_BankAccount_ID", C_BankAccount_ID);
+if (VAB_Bank_Acct_ID < 1) throw new ArgumentException ("VAB_Bank_Acct_ID is mandatory.");
+Set_Value ("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
 }
 /** Get Bank Account.
 @return Account at the Bank */
-public int GetC_BankAccount_ID() 
+public int GetVAB_Bank_Acct_ID() 
 {
-Object ii = Get_Value("C_BankAccount_ID");
+Object ii = Get_Value("VAB_Bank_Acct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

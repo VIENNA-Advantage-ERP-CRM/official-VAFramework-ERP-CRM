@@ -550,7 +550,7 @@ namespace VAdvantage.Model
             //	Query 2 - Validate Asset
             MAsset asset = null;
             String sql = "SELECT * "
-                + "FROM A_Asset "
+                + "FROM VAA_Asset "
                 + "WHERE M_Product_ID=@param1"
                 + " AND VAF_UserContact_ID=@param2";		//	only specific user
             //	Will have problems with multiple assets
@@ -587,7 +587,7 @@ namespace VAdvantage.Model
                 ldapUser.SetErrorString(error);
                 return ldapUser;
             }
-            int A_Asset_ID = 0;
+            int VAA_Asset_ID = 0;
             if (asset == null)
             {
                 error = "@UserNoAsset@ User=" + usr;
@@ -595,13 +595,13 @@ namespace VAdvantage.Model
             }
             else if (!asset.IsActive())
             {
-                A_Asset_ID = asset.GetA_Asset_ID();
+                VAA_Asset_ID = asset.GetA_Asset_ID();
                 error = "@UserNoAsset@ User=" + usr;
                 info = "Asset not active - " + usr;
             }
             else if (!asset.IsActive(true))
             {
-                A_Asset_ID = asset.GetA_Asset_ID();
+                VAA_Asset_ID = asset.GetA_Asset_ID();
                 error = "@UserNoAsset@ User=" + usr + " @GuaranteeDate@=" + asset.GetGuaranteeDate();
                 info = "Expired - " + usr + " - GuaranteeDate=" + asset.GetGuaranteeDate();
             }
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
 
             if (error != null)	//	should use Language of the User
             {
-                LogAccess(VAF_Client_ID, VAF_UserContact_ID, 0, A_Asset_ID, info, error,
+                LogAccess(VAF_Client_ID, VAF_UserContact_ID, 0, VAA_Asset_ID, info, error,
                             remoteHost, remoteAddr);
                 ldapUser.SetErrorString(Msg.Translate(GetCtx(), error));
                 return ldapUser;
@@ -676,14 +676,14 @@ namespace VAdvantage.Model
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="R_InterestArea_ID">interested area</param>
-        /// <param name="A_Asset_ID">id</param>
+        /// <param name="VAA_Asset_ID">id</param>
         /// <param name="info">info</param>
         /// <param name="error">error</param>
         /// <param name="remoteHost">remote info</param>
         /// <param name="remoteAddr">remote info</param>
         /// <returns></returns>
         private MLdapAccess LogAccess(int VAF_Client_ID,
-            int VAF_UserContact_ID, int R_InterestArea_ID, int A_Asset_ID,
+            int VAF_UserContact_ID, int R_InterestArea_ID, int VAA_Asset_ID,
             String info, String error,
             String remoteHost, String remoteAddr)
         {
@@ -704,7 +704,7 @@ namespace VAdvantage.Model
             access.SetVAF_LdapHandler_ID(GetVAF_LdapHandler_ID());
             access.SetVAF_UserContact_ID(VAF_UserContact_ID);
             access.SetR_InterestArea_ID(R_InterestArea_ID);
-            access.SetA_Asset_ID(A_Asset_ID);
+            access.SetA_Asset_ID(VAA_Asset_ID);
             access.SetRemote_Host(remoteHost);
             access.SetRemote_Addr(remoteAddr);
 

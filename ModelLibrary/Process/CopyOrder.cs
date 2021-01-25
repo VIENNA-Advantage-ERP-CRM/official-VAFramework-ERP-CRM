@@ -32,7 +32,7 @@ namespace VAdvantage.Process
         //Order to Copy				
         private int _C_Order_ID = 0;
         // Document Type of new Order	
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         // New Doc Date				
         private DateTime? _DateDoc = null;
         //Close/Process Old Order		
@@ -56,9 +56,9 @@ namespace VAdvantage.Process
                 {
                     _C_Order_ID =Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID =Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                    _VAB_DocTypes_ID =Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("DateDoc"))
                 {
@@ -82,13 +82,13 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.Info("C_Order_ID=" + _C_Order_ID
-            //    + ", C_DocType_ID=" + _C_DocType_ID
+            //    + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
             //    + ", CloseDocument=" + _IsCloseDocument);
             //if (_C_Order_ID == 0)
             //{
             //    throw new ArgumentException("No Order");
             //}
-            //MDocType dt = MDocType.Get(GetCtx(), _C_DocType_ID);
+            //MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
             //if (dt.Get_ID() == 0)
             //{
             //    throw new ArgumentException("No DocType");
@@ -101,8 +101,8 @@ namespace VAdvantage.Process
             ////
             //MOrder from = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
             //MOrder newOrder = MOrder.CopyFrom(from, _DateDoc,
-            //    dt.GetC_DocType_ID(), false, true, null);		//	copy ASI
-            //newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
+            //    dt.GetVAB_DocTypes_ID(), false, true, null);		//	copy ASI
+            //newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             //bool OK = newOrder.Save ();
             //if (!OK)
             //{
@@ -124,13 +124,13 @@ namespace VAdvantage.Process
 
 
             log.Info("C_Order_ID=" + _C_Order_ID
-                + ", C_DocType_ID=" + _C_DocType_ID
+                + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
                 + ", CloseDocument=" + _IsCloseDocument);
             if (_C_Order_ID == 0)
             {
                 throw new ArgumentException("No Order");
             }
-            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _C_DocType_ID);
+            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
             if (dt.Get_ID() == 0)
             {
                 throw new ArgumentException("No DocType");
@@ -142,11 +142,11 @@ namespace VAdvantage.Process
             //
             VAdvantage.Model.MOrder from = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
             MOrder newOrder = MOrder.CopyFrom(from, _DateDoc,
-                dt.GetC_DocType_ID(), false, true, null, true);//Pass optional parameter as True that we are going to create Order from Create Sales Order Process on Sales Quotation window---Neha
-            newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                dt.GetVAB_DocTypes_ID(), false, true, null, true);//Pass optional parameter as True that we are going to create Order from Create Sales Order Process on Sales Quotation window---Neha
+            newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             //Update New Order Refrence From Sales Qutation in Sales order
             newOrder.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
-            int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
+            int VAB_BusinessPartner_ID = newOrder.GetVAB_BusinessPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
 
             // Added by Bharat on 31 Jan 2018 to set Inco Term from Quotation
@@ -155,7 +155,7 @@ namespace VAdvantage.Process
             {
                 newOrder.SetC_IncoTerm_ID(from.GetC_IncoTerm_ID());
             }
-            String sqlbp = "update c_project set c_bpartner_id=" + C_Bpartner_ID + "  where ref_order_id=" + _C_Order_ID + "";
+            String sqlbp = "update c_project set VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "  where ref_order_id=" + _C_Order_ID + "";
             int value = DB.ExecuteQuery(sqlbp, null, Get_Trx());
             bool OK = newOrder.Save();
             if (!OK)
@@ -169,8 +169,8 @@ namespace VAdvantage.Process
                 if (C_Project_ID != 0)
                 {
                     VAdvantage.Model.X_C_Project project = new VAdvantage.Model.X_C_Project(GetCtx(), C_Project_ID, Get_Trx());
-                    project.SetC_BPartner_ID(project.GetC_BPartnerSR_ID());
-                    project.SetC_BPartnerSR_ID(0);
+                    project.SetVAB_BusinessPartner_ID(project.GetVAB_BusinessPartnerSR_ID());
+                    project.SetVAB_BusinessPartnerSR_ID(0);
                     if (!project.Save())
                     {
 
@@ -178,8 +178,8 @@ namespace VAdvantage.Process
                 }
                 from.SetRef_Order_ID(newOrder.GetC_Order_ID());
                 from.Save();
-                int bp = newOrder.GetC_BPartner_ID();
-                VAdvantage.Model.X_C_BPartner prosp = new VAdvantage.Model.X_C_BPartner(GetCtx(), bp, Get_Trx());
+                int bp = newOrder.GetVAB_BusinessPartner_ID();
+                VAdvantage.Model.X_VAB_BusinessPartner prosp = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), bp, Get_Trx());
                 prosp.SetIsCustomer(true);
                 prosp.SetIsProspect(false);
                 prosp.Save();

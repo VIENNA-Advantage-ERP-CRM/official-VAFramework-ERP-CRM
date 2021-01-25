@@ -11,35 +11,35 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_CashLine
+    /** Generated Model for VAB_CashJRNLLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_CashLine : PO
+    public class X_VAB_CashJRNLLine : PO
     {
-        public X_C_CashLine(Context ctx, int C_CashLine_ID, Trx trxName)
-            : base(ctx, C_CashLine_ID, trxName)
+        public X_VAB_CashJRNLLine(Context ctx, int VAB_CashJRNLLine_ID, Trx trxName)
+            : base(ctx, VAB_CashJRNLLine_ID, trxName)
         {
-            /** if (C_CashLine_ID == 0)
+            /** if (VAB_CashJRNLLine_ID == 0)
             {
             SetAmount (0.0);
-            SetC_CashLine_ID (0);
-            SetC_Cash_ID (0);
+            SetVAB_CashJRNLLine_ID (0);
+            SetVAB_CashJRNL_ID (0);
             SetCashType (null);	// E
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM C_CashLine WHERE C_Cash_ID=@C_Cash_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_CashJRNLLine WHERE VAB_CashJRNL_ID=@VAB_CashJRNL_ID@
             SetProcessed (false);	// N
             }
              */
         }
-        public X_C_CashLine(Ctx ctx, int C_CashLine_ID, Trx trxName)
-            : base(ctx, C_CashLine_ID, trxName)
+        public X_VAB_CashJRNLLine(Ctx ctx, int VAB_CashJRNLLine_ID, Trx trxName)
+            : base(ctx, VAB_CashJRNLLine_ID, trxName)
         {
-            /** if (C_CashLine_ID == 0)
+            /** if (VAB_CashJRNLLine_ID == 0)
             {
             SetAmount (0.0);
-            SetC_CashLine_ID (0);
-            SetC_Cash_ID (0);
+            SetVAB_CashJRNLLine_ID (0);
+            SetVAB_CashJRNL_ID (0);
             SetCashType (null);	// E
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM C_CashLine WHERE C_Cash_ID=@C_Cash_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_CashJRNLLine WHERE VAB_CashJRNL_ID=@VAB_CashJRNL_ID@
             SetProcessed (false);	// N
             }
              */
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashJRNLLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_CashJRNLLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_CashLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_CashJRNLLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_CashLine()
+        static X_VAB_CashJRNLLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =410;
 
-        /** TableName=C_CashLine */
-        public static String Table_Name = "C_CashLine";
+        /** TableName=VAB_CashJRNLLine */
+        public static String Table_Name = "VAB_CashJRNLLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_CashLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_CashJRNLLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Amount.
@@ -141,64 +141,64 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Business Partner.
-        @param C_BPartner_ID Identifies a Customer/Prospect */
-        public void SetC_BPartner_ID(int C_BPartner_ID)
+        @param VAB_BusinessPartner_ID Identifies a Customer/Prospect */
+        public void SetVAB_BusinessPartner_ID(int VAB_BusinessPartner_ID)
         {
-            if (C_BPartner_ID <= 0) Set_Value("C_BPartner_ID", null);
+            if (VAB_BusinessPartner_ID <= 0) Set_Value("VAB_BusinessPartner_ID", null);
             else
-                Set_Value("C_BPartner_ID", C_BPartner_ID);
+                Set_Value("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
         }
         /** Get Business Partner.
         @return Identifies a Customer/Prospect */
-        public int GetC_BPartner_ID()
+        public int GetVAB_BusinessPartner_ID()
         {
-            Object ii = Get_Value("C_BPartner_ID");
+            Object ii = Get_Value("VAB_BusinessPartner_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank Account.
-        @param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        @param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            if (C_BankAccount_ID <= 0) Set_Value("C_BankAccount_ID", null);
+            if (VAB_Bank_Acct_ID <= 0) Set_Value("VAB_Bank_Acct_ID", null);
             else
-                Set_Value("C_BankAccount_ID", C_BankAccount_ID);
+                Set_Value("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
         }
         /** Get Bank Account.
         @return Account at the Bank */
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BankAccount_ID");
+            Object ii = Get_Value("VAB_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cash Journal Line.
-        @param C_CashLine_ID Cash Journal Line */
-        public void SetC_CashLine_ID(int C_CashLine_ID)
+        @param VAB_CashJRNLLine_ID Cash Journal Line */
+        public void SetVAB_CashJRNLLine_ID(int VAB_CashJRNLLine_ID)
         {
-            if (C_CashLine_ID < 1) throw new ArgumentException("C_CashLine_ID is mandatory.");
-            Set_ValueNoCheck("C_CashLine_ID", C_CashLine_ID);
+            if (VAB_CashJRNLLine_ID < 1) throw new ArgumentException("VAB_CashJRNLLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_CashJRNLLine_ID", VAB_CashJRNLLine_ID);
         }
         /** Get Cash Journal Line.
         @return Cash Journal Line */
-        public int GetC_CashLine_ID()
+        public int GetVAB_CashJRNLLine_ID()
         {
-            Object ii = Get_Value("C_CashLine_ID");
+            Object ii = Get_Value("VAB_CashJRNLLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cash Journal.
-        @param C_Cash_ID Cash Journal */
-        public void SetC_Cash_ID(int C_Cash_ID)
+        @param VAB_CashJRNL_ID Cash Journal */
+        public void SetVAB_CashJRNL_ID(int VAB_CashJRNL_ID)
         {
-            if (C_Cash_ID < 1) throw new ArgumentException("C_Cash_ID is mandatory.");
-            Set_ValueNoCheck("C_Cash_ID", C_Cash_ID);
+            if (VAB_CashJRNL_ID < 1) throw new ArgumentException("VAB_CashJRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAB_CashJRNL_ID", VAB_CashJRNL_ID);
         }
         /** Get Cash Journal.
         @return Cash Journal */
-        public int GetC_Cash_ID()
+        public int GetVAB_CashJRNL_ID()
         {
-            Object ii = Get_Value("C_Cash_ID");
+            Object ii = Get_Value("VAB_CashJRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -206,37 +206,37 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetC_Cash_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAB_CashJRNL_ID().ToString());
         }
         /** Set Charge.
-        @param C_Charge_ID Additional document charges */
-        public void SetC_Charge_ID(int C_Charge_ID)
+        @param VAB_Charge_ID Additional document charges */
+        public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
-            if (C_Charge_ID <= 0) Set_Value("C_Charge_ID", null);
+            if (VAB_Charge_ID <= 0) Set_Value("VAB_Charge_ID", null);
             else
-                Set_Value("C_Charge_ID", C_Charge_ID);
+                Set_Value("VAB_Charge_ID", VAB_Charge_ID);
         }
         /** Get Charge.
         @return Additional document charges */
-        public int GetC_Charge_ID()
+        public int GetVAB_Charge_ID()
         {
-            Object ii = Get_Value("C_Charge_ID");
+            Object ii = Get_Value("VAB_Charge_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID <= 0) Set_ValueNoCheck("C_Currency_ID", null);
+            if (VAB_Currency_ID <= 0) Set_ValueNoCheck("VAB_Currency_ID", null);
             else
-                Set_ValueNoCheck("C_Currency_ID", C_Currency_ID);
+                Set_ValueNoCheck("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -556,38 +556,38 @@ namespace VAdvantage.Model
         }
 
 
-        /** Set C_CashBook_ID.
-       @param C_CashBook_ID for this record */
-        public void SetC_CashBook_ID(int C_CashBook_ID)
+        /** Set VAB_CashBook_ID.
+       @param VAB_CashBook_ID for this record */
+        public void SetVAB_CashBook_ID(int VAB_CashBook_ID)
         {
-            if (C_CashBook_ID <= 0) Set_ValueNoCheck("C_CashBook_ID", null);
+            if (VAB_CashBook_ID <= 0) Set_ValueNoCheck("VAB_CashBook_ID", null);
             else
-                Set_ValueNoCheck("C_CashBook_ID", C_CashBook_ID);
+                Set_ValueNoCheck("VAB_CashBook_ID", VAB_CashBook_ID);
         }
-        /** Get C_CashBook_ID.
-        @return The C_CashBook_ID for this record */
-        public int GetC_CashBook_ID()
+        /** Get VAB_CashBook_ID.
+        @return The VAB_CashBook_ID for this record */
+        public int GetVAB_CashBook_ID()
         {
-            Object ii = Get_Value("C_CashBook_ID");
+            Object ii = Get_Value("VAB_CashBook_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
 
 
-        /** C_CashLine_ID_1 VAF_Control_Ref_ID=1000168 */
-        public static int C_CASHLINE_ID_1_VAF_Control_Ref_ID = 1000168;
+        /** VAB_CashJRNLLine_ID_1 VAF_Control_Ref_ID=1000168 */
+        public static int VAB_CASHJRNLLINE_ID_1_VAF_Control_Ref_ID = 1000168;
         /** Set Cash Journal Transection.
-        @param C_CashLine_ID_1 Cash Journal Transection */
-        public void SetC_CashLine_ID_1(int C_CashLine_ID_1)
+        @param VAB_CashJRNLLine_ID_1 Cash Journal Transection */
+        public void SetVAB_CashJRNLLine_ID_1(int VAB_CashJRNLLine_ID_1)
         {
-            Set_Value("C_CashLine_ID_1", C_CashLine_ID_1);
+            Set_Value("VAB_CashJRNLLine_ID_1", VAB_CashJRNLLine_ID_1);
         }
         /** Get Cash Journal Transection.
         @return Cash Journal Transection */
-        public int GetC_CashLine_ID_1()
+        public int GetVAB_CashJRNLLine_ID_1()
         {
-            Object ii = Get_Value("C_CashLine_ID_1");
+            Object ii = Get_Value("VAB_CashJRNLLine_ID_1");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -918,18 +918,18 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Currency Type.
-        @param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        @param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID <= 0) Set_Value("C_ConversionType_ID", null);
+            if (VAB_CurrencyType_ID <= 0) Set_Value("VAB_CurrencyType_ID", null);
             else
-                Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+                Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }
         /** Get Currency Type.
         @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID()
+        public int GetVAB_CurrencyType_ID()
         {
-            Object ii = Get_Value("C_ConversionType_ID");
+            Object ii = Get_Value("VAB_CurrencyType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -937,15 +937,15 @@ namespace VAdvantage.Model
         // END
         //Arpit -For cash Journal Account setting on Location tab of Customer/Vendor
         /** Set Location.
-@param C_BPartner_Location_ID Identifies the address for this Account/Prospect. */
-        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the address for this Account/Prospect. */
+        public void SetVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            if (C_BPartner_Location_ID <= 0) Set_Value("C_BPartner_Location_ID", null);
+            if (VAB_BPart_Location_ID <= 0) Set_Value("VAB_BPart_Location_ID", null);
             else
-                Set_Value("C_BPartner_Location_ID", C_BPartner_Location_ID);
+                Set_Value("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
         }/** Get Location.
 @return Identifies the address for this Account/Prospect. */
-        public int GetC_BPartner_Location_ID() { Object ii = Get_Value("C_BPartner_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_BPart_Location_ID() { Object ii = Get_Value("VAB_BPart_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         //End Here
         //Added by Manjot suggested by Mukesh sir. reason for adding is need to lock this record while allocation from allocation form
         /** Set Process Now.

@@ -25,7 +25,7 @@ namespace VAdvantage.Process
 {
     public class ExpenseAPInvoice : ProcessEngine.SvrProcess
     {
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         private DateTime? _DateFrom = null;
         private DateTime? _DateTo = null;
         private int _noInvoices = 0;
@@ -55,9 +55,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateReport"))
                 {
@@ -83,10 +83,10 @@ namespace VAdvantage.Process
                 + "FROM S_TimeExpense e "
                 + "WHERE e.Processed='Y'"
                 + " AND e.VAF_Client_ID=@param1");				//	#1
-            if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+            if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 index++;
-                sql.Append(" AND e.C_BPartner_ID=@param2");	//	#2
+                sql.Append(" AND e.VAB_BusinessPartner_ID=@param2");	//	#2
             }
             if (_DateFrom != null)
             {
@@ -104,7 +104,7 @@ namespace VAdvantage.Process
                 + "WHERE e.S_TimeExpense_ID=el.S_TimeExpense_ID"
                 + " AND el.C_InvoiceLine_ID IS NULL"
                 + " AND el.ConvertedAmt<>0) "
-                + "ORDER BY e.C_BPartner_ID, e.S_TimeExpense_ID");
+                + "ORDER BY e.VAB_BusinessPartner_ID, e.S_TimeExpense_ID");
 
             //
             int old_BPartner_ID = -1;
@@ -121,11 +121,11 @@ namespace VAdvantage.Process
                 int par = 0;
                 //pstmt.setInt(par++, getVAF_Client_ID());
                 param[0] = new SqlParameter("@param1", GetVAF_Client_ID());
-                if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+                if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
                 {
                     par++;
-                    //pstmt.setInt (par++, _C_BPartner_ID);
-                    param[par] = new SqlParameter("@param2", _C_BPartner_ID);
+                    //pstmt.setInt (par++, _VAB_BusinessPartner_ID);
+                    param[par] = new SqlParameter("@param2", _VAB_BusinessPartner_ID);
                 }
                 if (_DateFrom != null)
                 {
@@ -153,11 +153,11 @@ namespace VAdvantage.Process
 
                         //	New BPartner - New Order
                         // 
-                        if (te.GetC_BPartner_ID() != old_BPartner_ID)
+                        if (te.GetVAB_BusinessPartner_ID() != old_BPartner_ID)
                         {
 
                             CompleteInvoice(invoice, te);
-                            MBPartner bp = new MBPartner(GetCtx(), te.GetC_BPartner_ID(), Get_TrxName());
+                            MBPartner bp = new MBPartner(GetCtx(), te.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
                             log.Info("New Invoice for " + bp);
                             invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
@@ -169,9 +169,9 @@ namespace VAdvantage.Process
                                 paymethod = GetPaymentMethod(te);
                                 if (paymethod <= 0)
                                 {
-                                    if (!noPayMethEmp.Contains(bp.GetC_BPartner_ID()))
+                                    if (!noPayMethEmp.Contains(bp.GetVAB_BusinessPartner_ID()))
                                     {
-                                        noPayMethEmp.Add(bp.GetC_BPartner_ID());
+                                        noPayMethEmp.Add(bp.GetVAB_BusinessPartner_ID());
                                         if (string.IsNullOrEmpty(bpNameNoPM))
                                         {
                                             bpNameNoPM = bp.GetName();
@@ -203,9 +203,9 @@ namespace VAdvantage.Process
                                 if (payterm <= 0)
                                 {
 
-                                    if (!PayTermEmp.Contains(bp.GetC_BPartner_ID()))
+                                    if (!PayTermEmp.Contains(bp.GetVAB_BusinessPartner_ID()))
                                     {
-                                        PayTermEmp.Add(bp.GetC_BPartner_ID());
+                                        PayTermEmp.Add(bp.GetVAB_BusinessPartner_ID());
                                         if (string.IsNullOrEmpty(bpNamePT))
                                         {
                                             bpNamePT = bp.GetName();
@@ -238,18 +238,18 @@ namespace VAdvantage.Process
                             //invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the document type where Expense Invoice checkbox is true.
-                            // String qry = "SELECT C_DocType_ID FROM C_DocType "
+                            // String qry = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
                             //+ "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2"
                             //+ " AND IsActive='Y' AND IsExpenseInvoice = 'Y' "
-                            //+ "ORDER BY C_DocType_ID DESC ,   IsDefault DESC";
-                            String qry = "SELECT C_DocType_ID FROM C_DocType "
+                            //+ "ORDER BY VAB_DocTypes_ID DESC ,   IsDefault DESC";
+                            String qry = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
                       + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
                       + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") "
-                      + " ORDER BY VAF_Org_ID Desc, C_DocType_ID DESC ,   IsDefault DESC";
+                      + " ORDER BY VAF_Org_ID Desc, VAB_DocTypes_ID DESC ,   IsDefault DESC";
 
-                            //int C_DocType_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
-                            int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
-                            if (C_DocType_ID <= 0)
+                            //int VAB_DocTypes_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
+                            int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
+                            if (VAB_DocTypes_ID <= 0)
                             {
                                 log.Log(Level.SEVERE, "Not found for AC_Client_ID="
                                     + GetVAF_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
@@ -259,14 +259,14 @@ namespace VAdvantage.Process
                             {
                                 log.Fine(MDocBaseType.DOCBASETYPE_APINVOICE);
                             }
-                            invoice.SetC_DocTypeTarget_ID(C_DocType_ID);
-                            //invoice.SetC_DocTypeTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);	//	API
+                            invoice.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
+                            //invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);	//	API
 
                             //commented by Arpit on Jan 4,2015       Mentis issue no.   0000310
                             //invoice.SetDocumentNo(te.GetDocumentNo());
                             //
                             invoice.SetBPartner(bp);
-                            if (invoice.GetC_BPartner_Location_ID() == 0)
+                            if (invoice.GetVAB_BPart_Location_ID() == 0)
                             {
                                 log.Log(Level.SEVERE, "No BP Location: " + bp);
                                 AddLog(0, te.GetDateReport(),
@@ -288,7 +288,7 @@ namespace VAdvantage.Process
                             //added by arpit asked by Surya Sir on 29/12/2015*******
                             else
                             {
-                                old_BPartner_ID = bp.GetC_BPartner_ID();
+                                old_BPartner_ID = bp.GetVAB_BusinessPartner_ID();
                             }
                             //end***************
                         }
@@ -314,13 +314,13 @@ namespace VAdvantage.Process
                                 continue;
                             }
                             //	Update Header info
-                            if (line.GetC_Activity_ID() != 0 && line.GetC_Activity_ID() != invoice.GetC_Activity_ID())
+                            if (line.GetVAB_BillingCode_ID() != 0 && line.GetVAB_BillingCode_ID() != invoice.GetVAB_BillingCode_ID())
                             {
-                                invoice.SetC_Activity_ID(line.GetC_Activity_ID());
+                                invoice.SetVAB_BillingCode_ID(line.GetVAB_BillingCode_ID());
                             }
-                            if (line.GetC_Campaign_ID() != 0 && line.GetC_Campaign_ID() != invoice.GetC_Campaign_ID())
+                            if (line.GetVAB_Promotion_ID() != 0 && line.GetVAB_Promotion_ID() != invoice.GetVAB_Promotion_ID())
                             {
-                                invoice.SetC_Campaign_ID(line.GetC_Campaign_ID());
+                                invoice.SetVAB_Promotion_ID(line.GetVAB_Promotion_ID());
                             }
                             if (line.GetC_Project_ID() != 0 && line.GetC_Project_ID() != invoice.GetC_Project_ID())
                             {
@@ -340,9 +340,9 @@ namespace VAdvantage.Process
                                 il.SetM_Product_ID(line.GetM_Product_ID(), true);
                             }
                             //added by arpit asked by Surya Sir on 28/12/2015_____***************************
-                            if (line.GetC_Charge_ID() != 0)
+                            if (line.GetVAB_Charge_ID() != 0)
                             {
-                                il.SetC_Charge_ID(line.GetC_Charge_ID());
+                                il.SetVAB_Charge_ID(line.GetVAB_Charge_ID());
                             }
                             //end here *****************************
                             il.SetQty(line.GetQtyReimbursed());     //	Entered/Invoiced
@@ -351,8 +351,8 @@ namespace VAdvantage.Process
                             il.SetC_Project_ID(line.GetC_Project_ID());
                             il.SetC_ProjectPhase_ID(line.GetC_ProjectPhase_ID());
                             il.SetC_ProjectTask_ID(line.GetC_ProjectTask_ID());
-                            il.SetC_Activity_ID(line.GetC_Activity_ID());
-                            il.SetC_Campaign_ID(line.GetC_Campaign_ID());
+                            il.SetVAB_BillingCode_ID(line.GetVAB_BillingCode_ID());
+                            il.SetVAB_Promotion_ID(line.GetVAB_Promotion_ID());
                             //
                             //	il.setPrice();	//	not really a list/limit price for reimbursements
                             il.SetPrice(line.GetPriceReimbursed()); //

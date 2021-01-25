@@ -9,10 +9,10 @@ using System.Collections.Generic;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttribute : X_C_GenAttribute
+    public class MGenAttribute : X_VAB_GenFeature
     {
-        public MGenAttribute(Ctx ctx, int C_GenAttribute_ID, Trx trxName)
-            : base(ctx, C_GenAttribute_ID, trxName)
+        public MGenAttribute(Ctx ctx, int VAB_GenFeature_ID, Trx trxName)
+            : base(ctx, VAB_GenFeature_ID, trxName)
         {
 
 
@@ -34,12 +34,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <returns>Attribute Instance or null</returns>
-        public MGenAttributeInstance GetCGenAttributeInstance(int C_GenAttributeSetInstance_ID)
+        public MGenAttributeInstance GetCGenAttributeInstance(int VAB_GenFeatureSetInstance_ID)
         {
             MGenAttributeInstance retValue = null;
             String sql = "SELECT * "
-                + "FROM C_GenAttributeInstance "
-                + "WHERE C_GenAttribute_ID=" + GetC_GenAttribute_ID() + " AND C_GenAttributeSetInstance_ID=" + C_GenAttributeSetInstance_ID;
+                + "FROM VAB_GenFeatureInstance "
+                + "WHERE VAB_GenFeature_ID=" + GetVAB_GenFeature_ID() + " AND VAB_GenFeatureSetInstance_ID=" + VAB_GenFeatureSetInstance_ID;
             DataSet ds = null;
             try
             {
@@ -74,10 +74,10 @@ namespace VAdvantage.Model
                 if (!IsMandatory())
                     list.Add(val);
                 //
-                String sql = "SELECT * FROM C_GenAttributeValue "
-                    + "WHERE C_GenAttribute_ID=" + GetC_GenAttribute_ID()
+                String sql = "SELECT * FROM VAB_GenFeatureValue "
+                    + "WHERE VAB_GenFeature_ID=" + GetVAB_GenFeature_ID()
                     + " ORDER BY Value";
-                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_GenAttributeValue", true, false);
+                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_GenFeatureValue", true, false);
 
                 DataSet ds = null;
                 try
@@ -115,13 +115,13 @@ namespace VAdvantage.Model
             {
                 if (value != null)
                 {
-                    instance = new MGenAttributeInstance(GetCtx(), GetC_GenAttribute_ID(),
-                      M_AttributeSetInstance_ID, value.GetC_GenAttributeValue_ID(),
+                    instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
+                      M_AttributeSetInstance_ID, value.GetVAB_GenFeatureValue_ID(),
                     value.GetName(), Get_TrxName()); 					//	Cached !!
                 }
                 else
                 {
-                    instance = new MGenAttributeInstance(GetCtx(), GetC_GenAttribute_ID(),
+                    instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
                         M_AttributeSetInstance_ID, 0, null, Get_TrxName());
                 }
             }
@@ -129,12 +129,12 @@ namespace VAdvantage.Model
             {
                 if (value != null)
                 {
-                    instance.SetC_GenAttributeValue_ID(value.GetC_GenAttributeValue_ID());
+                    instance.SetVAB_GenFeatureValue_ID(value.GetVAB_GenFeatureValue_ID());
                     instance.SetValue(value.GetName()); 	//	Cached !!
                 }
                 else
                 {
-                    instance.SetC_GenAttributeValue_ID(0);
+                    instance.SetVAB_GenFeatureValue_ID(0);
                     instance.SetValue(null);
                 }
             }
@@ -151,7 +151,7 @@ namespace VAdvantage.Model
             MGenAttributeInstance instance = GetCGenAttributeInstance(M_AttributeSetInstance_ID);
             if (instance == null)
             {
-                instance = new MGenAttributeInstance(GetCtx(), GetC_GenAttribute_ID(),
+                instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
                     M_AttributeSetInstance_ID, value, Get_TrxName());
             }
             else
@@ -166,13 +166,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="M_AttributeSetInstance_ID">id</param>
         /// <param name="value">string value</param>
-        public void SetCGenAttributeInstance(int C_GenAttributeSetInstance_ID, String value)
+        public void SetCGenAttributeInstance(int VAB_GenFeatureSetInstance_ID, String value)
         {
-            MGenAttributeInstance instance = GetCGenAttributeInstance(C_GenAttributeSetInstance_ID);
+            MGenAttributeInstance instance = GetCGenAttributeInstance(VAB_GenFeatureSetInstance_ID);
             if (instance == null)
             {
-                instance = new MGenAttributeInstance(GetCtx(), GetC_GenAttribute_ID(),
-                    C_GenAttributeSetInstance_ID, value, Get_TrxName());
+                instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
+                    VAB_GenFeatureSetInstance_ID, value, Get_TrxName());
             }
             else
             {

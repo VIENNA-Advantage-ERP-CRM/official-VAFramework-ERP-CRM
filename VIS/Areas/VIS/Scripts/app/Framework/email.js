@@ -8,7 +8,7 @@
         this.windowNo = VIS.Env.getWindowNo();
         var ctx = VIS.Env.getCtx();
         var ch = null;
-        var bpColumnName = "C_BPARTNER_ID";
+        var bpColumnName = "VAB_BUSINESSPARTNER_ID";
         var rowsSource = null;
         var rowsSingleView = null;
         var selectedTemplateID = 0;
@@ -602,7 +602,7 @@
 
             for (var i = 0; i < _curtab.gridTable.getFields().length; i++) {
 
-                var iskeyColumn = (_curtab.gridTable.getFields(0)[i].getColumnName().toUpper() == _curtab.getKeyColumnName().toUpper());// in case of custmer Master , C_BPartner is not displayed but it is required to show its user's email which have isEmail=Y
+                var iskeyColumn = (_curtab.gridTable.getFields(0)[i].getColumnName().toUpper() == _curtab.getKeyColumnName().toUpper());// in case of custmer Master , VAB_BusinessPartner is not displayed but it is required to show its user's email which have isEmail=Y
 
                 if (!_curtab.gridTable.getFields(0)[i].getIsDisplayed() && !iskeyColumn) {
                     continue;
@@ -698,7 +698,7 @@
 
             var pvID = 0;
             for (var i = 0; i < bpID.length; i++) {
-                //var sql = "Select VAF_UserContact_ID,email from VAF_UserContact where isEmail='Y' AND c_bpartner_ID=" + bpID[i];
+                //var sql = "Select VAF_UserContact_ID,email from VAF_UserContact where isEmail='Y' AND VAB_BusinessPartner_ID=" + bpID[i];
                 //var ds = VIS.DB.executeDataSet(sql);
                 var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Email/GetUser", { "BPartner_ID": bpID[i] }, null);
                 var isBroken = false;

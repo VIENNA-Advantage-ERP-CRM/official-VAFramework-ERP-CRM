@@ -114,8 +114,8 @@ namespace VAdvantage.Model
                 SetVAF_Screen_ID(0);
             if (GetVAF_Page_ID() != 0 && !action.Equals(ACTION_Form))
                 SetVAF_Page_ID(0);
-            if (GetAD_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))
-                SetAD_Workflow_ID(0);
+            if (GetVAF_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))
+                SetVAF_Workflow_ID(0);
             if (GetAD_Workbench_ID() != 0 && !action.Equals(ACTION_Workbench))
                 SetAD_Workbench_ID(0);
             if (GetAD_Task_ID() != 0 && !action.Equals(ACTION_Task))

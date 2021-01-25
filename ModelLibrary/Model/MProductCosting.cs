@@ -79,15 +79,15 @@ namespace VAdvantage.Model
          * 	Get Costing
          *	@param ctx context
          *	@param M_Product_ID product
-         *	@param C_AcctSchema_ID as
+         *	@param VAB_AccountBook_ID as
          *	@param trxName trx
          *	@return array of costs
          */
         public static MProductCosting Get(Ctx ctx, int M_Product_ID,
-            int C_AcctSchema_ID, Trx trxName)
+            int VAB_AccountBook_ID, Trx trxName)
         {
             MProductCosting retValue = null;
-            String sql = "SELECT * FROM M_Product_Costing WHERE M_Product_ID=" + M_Product_ID + " AND C_AcctSchema_ID=" + C_AcctSchema_ID;
+            String sql = "SELECT * FROM M_Product_Costing WHERE M_Product_ID=" + M_Product_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -139,7 +139,7 @@ namespace VAdvantage.Model
             else
             {
                 //	setM_Product_ID (0);
-                //	setC_AcctSchema_ID (0);
+                //	setVAB_AccountBook_ID (0);
                 //
                 SetCostAverage(Env.ZERO);
                 SetCostAverageCumAmt(Env.ZERO);
@@ -161,15 +161,15 @@ namespace VAdvantage.Model
         /**
          * 	Parent Constructor (old)
          *	@param product parent
-         *	@param C_AcctSchema_ID accounting schema
+         *	@param VAB_AccountBook_ID accounting schema
          */
-        public MProductCosting(MProduct product, int C_AcctSchema_ID)
+        public MProductCosting(MProduct product, int VAB_AccountBook_ID)
             : base(product.GetCtx(), 0, product.Get_TrxName())
         {
             
             SetClientOrg(product);
             SetM_Product_ID(product.GetM_Product_ID());
-            SetC_AcctSchema_ID(C_AcctSchema_ID);
+            SetVAB_AccountBook_ID(VAB_AccountBook_ID);
         }
 
 

@@ -64,7 +64,7 @@ namespace ViennaAdvantage.Process
                             periodendsAtDay,                           
                             period_openhistory,
                             period_openfuture
-                         FROM c_acctschema                            
+                         FROM VAB_AccountBook                            
                          WHERE IsActive='Y' 
                            AND IsActive='Y'
                            AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
@@ -124,7 +124,7 @@ namespace ViennaAdvantage.Process
                 isNextYear = true;
             }
             sql.Clear();
-            sql.Append(@"SELECT C_Calendar_ID FROM C_Calendar
+            sql.Append(@"SELECT VAB_Calender_ID FROM VAB_Calender
                                         WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetCtx().GetVAF_Client_ID() + @"
                                         AND VAF_ORG_ID=(SELECT VAF_ORG_ID FROM VAF_ORG WHERE NAME ='*' )");
             int calendarID = 0;
@@ -136,7 +136,7 @@ namespace ViennaAdvantage.Process
             if (calendarID > 0)
             {
                 sql.Clear();
-                sql.Append(@"SELECT C_YEAR_ID FROM C_YEAR WHERE ISACTIVE='Y' AND FiscalYear='" + YearName + "' AND C_CALENDAR_ID=" + calendarID);
+                sql.Append(@"SELECT C_YEAR_ID FROM C_YEAR WHERE ISACTIVE='Y' AND FiscalYear='" + YearName + "' AND VAB_Calender_ID=" + calendarID);
                 int yearID = 0;
                 try
                 {
@@ -144,7 +144,7 @@ namespace ViennaAdvantage.Process
                 }
                 catch { }
                 MYear year = new MYear(GetCtx(), yearID, trx);
-                year.SetC_Calendar_ID(calendarID);
+                year.SetVAB_Calender_ID(calendarID);
                 year.SetFiscalYear(YearName);
                 year.SetIsActive(true);
                 year.SetVAF_Org_ID(0);

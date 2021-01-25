@@ -411,7 +411,7 @@ namespace VIS.Helpers
             bool isBase = false;
             try
             {
-                string str = "SELECT Count(1) FROM VAF_TABLEVIEW WHERE upper(TableName) = 'C_BPARTNER' ";
+                string str = "SELECT Count(1) FROM VAF_TABLEVIEW WHERE upper(TableName) = 'VAB_BUSINESSPARTNER' ";
                 int count = Convert.ToInt32(DB.ExecuteScalar(str, null, null));
                 if (count <= 0)
                     isBase = true;

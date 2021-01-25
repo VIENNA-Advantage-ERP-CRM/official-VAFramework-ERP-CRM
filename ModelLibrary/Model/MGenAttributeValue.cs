@@ -7,10 +7,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGenAttributeValue: X_C_GenAttributeValue
+    public class MGenAttributeValue: X_VAB_GenFeatureValue
     {
-        public MGenAttributeValue(Ctx ctx, int C_GenAttributeValue_ID, Trx trxName)
-            : base(ctx, C_GenAttributeValue_ID, trxName)
+        public MGenAttributeValue(Ctx ctx, int VAB_GenFeatureValue_ID, Trx trxName)
+            : base(ctx, VAB_GenFeatureValue_ID, trxName)
         {
 
 

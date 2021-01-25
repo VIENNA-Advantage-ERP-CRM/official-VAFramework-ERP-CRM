@@ -20,8 +20,8 @@ public X_C_RfQ_TopicSubscriber (Context ctx, int C_RfQ_TopicSubscriber_ID, Trx t
 {
 /** if (C_RfQ_TopicSubscriber_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
 SetC_RfQ_TopicSubscriber_ID (0);
 SetC_RfQ_Topic_ID (0);
 }
@@ -31,8 +31,8 @@ public X_C_RfQ_TopicSubscriber (Ctx ctx, int C_RfQ_TopicSubscriber_ID, Trx trxNa
 {
 /** if (C_RfQ_TopicSubscriber_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
 SetC_RfQ_TopicSubscriber_ID (0);
 SetC_RfQ_Topic_ID (0);
 }
@@ -133,32 +133,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Partner Location.
-@param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-public void SetC_BPartner_Location_ID (int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+public void SetVAB_BPart_Location_ID (int VAB_BPart_Location_ID)
 {
-if (C_BPartner_Location_ID < 1) throw new ArgumentException ("C_BPartner_Location_ID is mandatory.");
-Set_Value ("C_BPartner_Location_ID", C_BPartner_Location_ID);
+if (VAB_BPart_Location_ID < 1) throw new ArgumentException ("VAB_BPart_Location_ID is mandatory.");
+Set_Value ("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
 }
 /** Get Partner Location.
 @return Identifies the (ship to) address for this Business Partner */
-public int GetC_BPartner_Location_ID() 
+public int GetVAB_BPart_Location_ID() 
 {
-Object ii = Get_Value("C_BPartner_Location_ID");
+Object ii = Get_Value("VAB_BPart_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

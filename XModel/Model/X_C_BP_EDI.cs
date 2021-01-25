@@ -11,18 +11,18 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BP_EDI
+/** Generated Model for VAB_BPart_EDI
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BP_EDI : PO
+public class X_VAB_BPart_EDI : PO
 {
-public X_C_BP_EDI (Context ctx, int C_BP_EDI_ID, Trx trxName) : base (ctx, C_BP_EDI_ID, trxName)
+public X_VAB_BPart_EDI (Context ctx, int VAB_BPart_EDI_ID, Trx trxName) : base (ctx, VAB_BPart_EDI_ID, trxName)
 {
-/** if (C_BP_EDI_ID == 0)
+/** if (VAB_BPart_EDI_ID == 0)
 {
 SetVAF_Record_Seq_ID (0);
-SetC_BP_EDI_ID (0);
-SetC_BPartner_ID (0);
+SetVAB_BPart_EDI_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetCustomerNo (null);
 SetEDIType (null);
 SetEMail_Error_To (null);
@@ -38,13 +38,13 @@ SetSendOrder (false);
 }
  */
 }
-public X_C_BP_EDI (Ctx ctx, int C_BP_EDI_ID, Trx trxName) : base (ctx, C_BP_EDI_ID, trxName)
+public X_VAB_BPart_EDI (Ctx ctx, int VAB_BPart_EDI_ID, Trx trxName) : base (ctx, VAB_BPart_EDI_ID, trxName)
 {
-/** if (C_BP_EDI_ID == 0)
+/** if (VAB_BPart_EDI_ID == 0)
 {
 SetVAF_Record_Seq_ID (0);
-SetC_BP_EDI_ID (0);
-SetC_BPartner_ID (0);
+SetVAB_BPart_EDI_ID (0);
+SetVAB_BusinessPartner_ID (0);
 SetCustomerNo (null);
 SetEDIType (null);
 SetEMail_Error_To (null);
@@ -65,7 +65,7 @@ SetSendOrder (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_EDI (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_EDI (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -73,7 +73,7 @@ public X_C_BP_EDI (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_EDI (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BPart_EDI (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -81,13 +81,13 @@ public X_C_BP_EDI (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BP_EDI (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BPart_EDI (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BP_EDI()
+static X_VAB_BPart_EDI()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -100,8 +100,8 @@ public static long updatedMS = 1280389053188L;
 public static int Table_ID;
  // =366;
 
-/** TableName=C_BP_EDI */
-public static String Table_Name="C_BP_EDI";
+/** TableName=VAB_BPart_EDI */
+public static String Table_Name="VAB_BPart_EDI";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -135,7 +135,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BP_EDI[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BPart_EDI[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -157,32 +157,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set EDI Definition.
-@param C_BP_EDI_ID Electronic Data Interchange */
-public void SetC_BP_EDI_ID (int C_BP_EDI_ID)
+@param VAB_BPart_EDI_ID Electronic Data Interchange */
+public void SetVAB_BPart_EDI_ID (int VAB_BPart_EDI_ID)
 {
-if (C_BP_EDI_ID < 1) throw new ArgumentException ("C_BP_EDI_ID is mandatory.");
-Set_ValueNoCheck ("C_BP_EDI_ID", C_BP_EDI_ID);
+if (VAB_BPart_EDI_ID < 1) throw new ArgumentException ("VAB_BPart_EDI_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BPart_EDI_ID", VAB_BPart_EDI_ID);
 }
 /** Get EDI Definition.
 @return Electronic Data Interchange */
-public int GetC_BP_EDI_ID() 
+public int GetVAB_BPart_EDI_ID() 
 {
-Object ii = Get_Value("C_BP_EDI_ID");
+Object ii = Get_Value("VAB_BPart_EDI_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

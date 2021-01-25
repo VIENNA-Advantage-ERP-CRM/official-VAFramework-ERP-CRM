@@ -34,7 +34,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "FROM VAF_CtrlRef_List rl "
                 + "WHERE rl.VAF_Control_Ref_ID=183"
                 + " AND rl.IsActive='Y' AND NOT EXISTS "
-                + " (SELECT * FROM C_DocType dt WHERE dt.VAF_Client_ID='" + VAF_Client_ID + "' AND rl.Value=dt.DocBaseType)";
+                + " (SELECT * FROM VAB_DocTypes dt WHERE dt.VAF_Client_ID='" + VAF_Client_ID + "' AND rl.Value=dt.DocBaseType)";
             IDataReader idr=null;
             try
             {
@@ -110,7 +110,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Insert Missing
             sql = "SELECT DISTINCT p.VAF_Client_ID, p.VAF_Org_ID, p.C_Period_ID, dt.DocBaseType "
                 + "FROM C_Period p"
-                + " FULL JOIN C_DocType dt ON (p.VAF_Client_ID=dt.VAF_Client_ID) "
+                + " FULL JOIN VAB_DocTypes dt ON (p.VAF_Client_ID=dt.VAF_Client_ID) "
                 + "WHERE p.VAF_Client_ID='" + VAF_Client_ID + "'"
                 + " AND NOT EXISTS"
                 + " (SELECT * FROM C_PeriodControl pc "

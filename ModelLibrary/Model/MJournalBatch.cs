@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 //	setGL_JournalBatch_ID (0);	PK
                 //	setDescription (null);
                 //	setDocumentNo (null);
-                //	setC_DocType_ID (0);
+                //	setVAB_DocTypes_ID (0);
                 SetPostingType(POSTINGTYPE_Actual);
                 SetDocAction(DOCACTION_Complete);
                 SetDocStatus(DOCSTATUS_Drafted);
@@ -120,16 +120,16 @@ namespace VAdvantage.Model
             SetClientOrg(original);
             SetGL_JournalBatch_ID(original.GetGL_JournalBatch_ID());
             //
-            //	setC_AcctSchema_ID(original.getC_AcctSchema_ID());
+            //	setVAB_AccountBook_ID(original.getVAB_AccountBook_ID());
             //	setGL_Budget_ID(original.getGL_Budget_ID());
             SetGL_Category_ID(original.GetGL_Category_ID());
             SetPostingType(original.GetPostingType());
             SetDescription(original.GetDescription());
-            SetC_DocType_ID(original.GetC_DocType_ID());
+            SetVAB_DocTypes_ID(original.GetVAB_DocTypes_ID());
             SetControlAmt(original.GetControlAmt());
             //
-            SetC_Currency_ID(original.GetC_Currency_ID());
-            //	setC_ConversionType_ID(original.getC_ConversionType_ID());
+            SetVAB_Currency_ID(original.GetVAB_Currency_ID());
+            //	setVAB_CurrencyType_ID(original.getVAB_CurrencyType_ID());
             //	setCurrencyRate(original.getCurrencyRate());
 
             //	SetDateDoc(original.getDateDoc());
@@ -411,7 +411,7 @@ namespace VAdvantage.Model
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
@@ -606,7 +606,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -634,7 +634,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetC_DocType_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -915,7 +915,7 @@ namespace VAdvantage.Model
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }	//	getDocumentInfo
 

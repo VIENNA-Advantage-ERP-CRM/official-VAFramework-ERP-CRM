@@ -860,13 +860,13 @@ namespace VIS.Helpers
         {
             try
             {
-                string colName = "C_DocTypeTarget_ID";
-                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
+                string colName = "VAB_DocTypesTarget_ID";
+                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='VAB_DocTypesTarget_ID'";
                 int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
                 {
-                    colName = "C_DocType_ID";
-                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
+                    colName = "VAB_DocTypes_ID";
+                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='VAB_DocTypes_ID'";
                     id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                     if (id < 1)
                     {
@@ -880,7 +880,7 @@ namespace VIS.Helpers
                 {
                     return;
                 }
-                sql = "SELECT VAF_ReportLayout_ID FROM C_DocType WHERE C_DocType_ID=" + id;
+                sql = "SELECT VAF_ReportLayout_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + id;
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id > 0)
                 {
@@ -948,12 +948,12 @@ namespace VIS.Helpers
         /// <param name="Name"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
-        /// <param name="C_BPartner_ID"></param>
+        /// <param name="VAB_BusinessPartner_ID"></param>
         /// <param name="isReport"></param>
         /// <param name="binaryData"></param>
         /// <param name="reportPath"></param>
         /// <returns></returns>
-        public static bool ArchiveDoc(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
+        public static bool ArchiveDoc(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int VAB_BusinessPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
             MArchive archive = new MArchive(ctx, 0, null);
             archive.SetName(Name);
@@ -961,7 +961,7 @@ namespace VIS.Helpers
             archive.SetVAF_Job_ID(VAF_Job_ID);
             archive.SetVAF_TableView_ID(VAF_TableView_ID);
             archive.SetRecord_ID(Record_ID);
-            archive.SetC_BPartner_ID(C_BPartner_ID);
+            archive.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
 
             if (!string.IsNullOrEmpty(reportPath))
             {
@@ -1147,7 +1147,7 @@ namespace VIS.Helpers
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, Convert.ToInt32(values[i]));
                         }
-                        else if (columnName.Equals("C_BPartner_ID", StringComparison.OrdinalIgnoreCase))
+                        else if (columnName.Equals("VAB_BusinessPartner_ID", StringComparison.OrdinalIgnoreCase))
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, Convert.ToInt32(values[i]));
                         }
@@ -1167,7 +1167,7 @@ namespace VIS.Helpers
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Account, Convert.ToInt32(values[i]));
                         }
-                        else if (columnName.Equals("C_Campaign_ID", StringComparison.OrdinalIgnoreCase))
+                        else if (columnName.Equals("VAB_Promotion_ID", StringComparison.OrdinalIgnoreCase))
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Campaign, Convert.ToInt32(values[i]));
                         }

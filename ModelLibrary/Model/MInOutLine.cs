@@ -249,15 +249,15 @@ namespace VAdvantage.Model
                     base.SetM_Locator_ID(0);
                 }
             }
-            SetC_Charge_ID(oLine.GetC_Charge_ID());
+            SetVAB_Charge_ID(oLine.GetVAB_Charge_ID());
             SetDescription(oLine.GetDescription());
             SetIsDescription(oLine.IsDescription());
             //
             SetC_Project_ID(oLine.GetC_Project_ID());
             SetC_ProjectPhase_ID(oLine.GetC_ProjectPhase_ID());
             SetC_ProjectTask_ID(oLine.GetC_ProjectTask_ID());
-            SetC_Activity_ID(oLine.GetC_Activity_ID());
-            SetC_Campaign_ID(oLine.GetC_Campaign_ID());
+            SetVAB_BillingCode_ID(oLine.GetVAB_BillingCode_ID());
+            SetVAB_Promotion_ID(oLine.GetVAB_Promotion_ID());
             SetVAF_OrgTrx_ID(oLine.GetVAF_OrgTrx_ID());
             SetUser1_ID(oLine.GetUser1_ID());
             SetUser2_ID(oLine.GetUser2_ID());
@@ -328,15 +328,15 @@ namespace VAdvantage.Model
                 else
                     SetM_Locator_ID(M_Locator_ID);
             }
-            SetC_Charge_ID(iLine.GetC_Charge_ID());
+            SetVAB_Charge_ID(iLine.GetVAB_Charge_ID());
             SetDescription(iLine.GetDescription());
             SetIsDescription(iLine.IsDescription());
             //
             SetC_Project_ID(iLine.GetC_Project_ID());
             SetC_ProjectPhase_ID(iLine.GetC_ProjectPhase_ID());
             SetC_ProjectTask_ID(iLine.GetC_ProjectTask_ID());
-            SetC_Activity_ID(iLine.GetC_Activity_ID());
-            SetC_Campaign_ID(iLine.GetC_Campaign_ID());
+            SetVAB_BillingCode_ID(iLine.GetVAB_BillingCode_ID());
+            SetVAB_Promotion_ID(iLine.GetVAB_Promotion_ID());
             SetVAF_OrgTrx_ID(iLine.GetVAF_OrgTrx_ID());
             SetUser1_ID(iLine.GetUser1_ID());
             SetUser2_ID(iLine.GetUser2_ID());
@@ -545,7 +545,7 @@ namespace VAdvantage.Model
             }
             //
             base.SetM_Product_ID(M_Product_ID);
-            SetC_Charge_ID(0);
+            SetVAB_Charge_ID(0);
 
             //	Set Attribute & Locator
             int M_Locator_ID = 0;
@@ -852,26 +852,26 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get C_Activity_ID
+         * 	Get VAB_BillingCode_ID
          *	@return Activity
          */
-        public int GetC_Activity_ID()
+        public int GetVAB_BillingCode_ID()
         {
-            int ii = base.GetC_Activity_ID();
+            int ii = base.GetVAB_BillingCode_ID();
             if (ii == 0)
-                ii = GetParent().GetC_Activity_ID();
+                ii = GetParent().GetVAB_BillingCode_ID();
             return ii;
         }
 
         /**
-         * 	Get C_Campaign_ID
+         * 	Get VAB_Promotion_ID
          *	@return Campaign
          */
-        public int GetC_Campaign_ID()
+        public int GetVAB_Promotion_ID()
         {
-            int ii = base.GetC_Campaign_ID();
+            int ii = base.GetVAB_Promotion_ID();
             if (ii == 0)
-                ii = GetParent().GetC_Campaign_ID();
+                ii = GetParent().GetVAB_Promotion_ID();
             return ii;
         }
 
@@ -1020,7 +1020,7 @@ namespace VAdvantage.Model
             log.Fine("");
 
             // JID_0899: If user do not select Product or Charge on Ship/Receipt Line, it will displayed the message "Please select the Product or charge
-            if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
+            if (GetVAB_Charge_ID() == 0 && GetM_Product_ID() == 0)
             {
                 log.SaveError("VIS_NOProductOrCharge", "");
                 return false;
@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
 
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
-            MDocType dt = new MDocType(GetCtx(), inO.GetC_DocType_ID(), Get_TrxName());
+            MDocType dt = new MDocType(GetCtx(), inO.GetVAB_DocTypes_ID(), Get_TrxName());
             MProduct _Product = null;
 
             // Check if Product_ID is non zero then only create the object
@@ -1108,7 +1108,7 @@ namespace VAdvantage.Model
             String qry1 = "";
 
             // for Service Type Product or Charge set value in Locator field
-            if (((_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item) || GetC_Charge_ID() > 0) && GetM_Locator_ID() == 0)
+            if (((_Product != null && _Product.GetProductType() != MProduct.PRODUCTTYPE_Item) || GetVAB_Charge_ID() > 0) && GetM_Locator_ID() == 0)
             {
                 qry1 = "SELECT M_Locator_ID FROM M_Locator WHERE M_Warehouse_ID=" + inO.GetM_Warehouse_ID() + " AND IsDefault = 'Y'";
                 int il = Util.GetValueOfInt(DB.ExecuteScalar(qry1, null, Get_TrxName()));

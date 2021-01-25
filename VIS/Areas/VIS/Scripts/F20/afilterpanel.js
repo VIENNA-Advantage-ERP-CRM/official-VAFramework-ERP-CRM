@@ -1203,7 +1203,7 @@
         }
         else {
 
-            var tabName = "C_DimAmt";
+            var tabName = "VAB_DimAmt";
             var isAct = "IsActive";
             var amt = "Amount";
             var S = "S";
@@ -1232,7 +1232,7 @@
                     return whereCondition;
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
                     var sqlAmount = S + E + L + elt + " " + tabName + "_ID " + F + R + OM + " " + tabName + " " + WH + E + R + E + " " + isAct + "='Y' AND " + amt + " " + optr + value + " AND " + value2;
-                    parsedValue = VIS.MRole.getDefault().addAccessSQL(sqlAmount.toString(), "C_DimAmt",
+                    parsedValue = VIS.MRole.getDefault().addAccessSQL(sqlAmount.toString(), "VAB_DimAmt",
                         VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
                     optr = VIS.Query.prototype.IN;
                 }
@@ -1243,7 +1243,7 @@
 
                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
                     var sqlAmount = S + E + L + elt + " " + tabName + "_ID " + F + R + OM + " " + tabName + " " + WH + E + R + E + " " + isAct + "='Y' AND " + amt + " " + optr + value;
-                    parsedValue = VIS.MRole.getDefault().addAccessSQL(sqlAmount.toString(), "C_DimAmt",
+                    parsedValue = VIS.MRole.getDefault().addAccessSQL(sqlAmount.toString(), "VAB_DimAmt",
                         VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
 
                     optr = VIS.Query.prototype.IN;

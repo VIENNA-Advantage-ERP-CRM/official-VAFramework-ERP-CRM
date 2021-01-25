@@ -24,7 +24,7 @@ namespace VIS.Models
 
         public int InsertSubscription(int win_ID, int rec_ID, int table_ID)
         {
-            X_CM_Subscribe subs = new X_CM_Subscribe(_ctx, 0, null);
+            X_VACM_Subscribe subs = new X_VACM_Subscribe(_ctx, 0, null);
             subs.SetVAF_Client_ID(_ctx.GetVAF_Client_ID());
             subs.SetVAF_Org_ID(_ctx.GetVAF_Org_ID());
             subs.SetVAF_Screen_ID(win_ID);
@@ -42,9 +42,9 @@ namespace VIS.Models
         public int DeleteSubscription(int VAF_Screen_ID, int Record_ID, int VAF_TableView_ID)
         {
 
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM CM_Subscribe WHERE  VAF_Screen_ID=" + VAF_Screen_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID)) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VACM_Subscribe WHERE  VAF_Screen_ID=" + VAF_Screen_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID)) > 0)
             {
-                if (DB.ExecuteQuery("delete from CM_Subscribe where  VAF_Screen_ID=" + VAF_Screen_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID) != 1)
+                if (DB.ExecuteQuery("delete from VACM_Subscribe where  VAF_Screen_ID=" + VAF_Screen_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID) != 1)
                 {
                     return 0;
                 }

@@ -475,7 +475,7 @@ namespace VAdvantage.Tool
                     {
                         int firstOK = 1;	//	Valid ID 0
                         if (columnName.Equals("VAF_Client_ID") || columnName.Equals("VAF_Org_ID")
-                            || columnName.Equals("Record_ID") || columnName.Equals("C_DocType_ID")
+                            || columnName.Equals("Record_ID") || columnName.Equals("VAB_DocTypes_ID")
                             || columnName.Equals("Node_ID") || columnName.Equals("VAF_Role_ID")
                             || columnName.Equals("M_AttributeSet_ID") || columnName.Equals("M_AttributeSetInstance_ID"))
                             firstOK = 0;
@@ -490,7 +490,7 @@ namespace VAdvantage.Tool
                             .Append("else\n");
                     }
                 }
-                //	set_Value ("C_BPartner_ID", new Integer(C_BPartner_ID));
+                //	set_Value ("VAB_BusinessPartner_ID", new Integer(VAB_BusinessPartner_ID));
                 sb.Append(setValue).Append(" (\"").Append(columnName).Append("\", ").Append(columnName).Append(");");
             }
             //	bool
@@ -542,7 +542,7 @@ namespace VAdvantage.Tool
                             .Append(columnName).Append(");");
                     }
                 }
-                //	set_Value ("C_BPartner_ID", new Integer(C_BPartner_ID));
+                //	set_Value ("VAB_BusinessPartner_ID", new Integer(VAB_BusinessPartner_ID));
             }
             //	set Method close
             sb.Append("}");

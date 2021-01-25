@@ -44,7 +44,7 @@ namespace ViennaAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Element_ID"))
+                else if (name.Equals("VAB_Element_ID"))
                 {
                     C_Elememt_ID = para[i].GetParameterAsInt();
                 }
@@ -99,7 +99,7 @@ namespace ViennaAdvantage.Process
             int client = Util.GetValueOfInt(GetVAF_Client_ID());
             int user = GetVAF_UserContact_ID();
 
-            sql = "select VAF_TreeInfo_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
+            sql = "select VAF_TreeInfo_id from VAB_Element where VAB_Element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
             int VAF_TreeInfo_id = 0;
             MTree tree = null;
 
@@ -156,32 +156,32 @@ namespace ViennaAdvantage.Process
                             key = Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]);
                             if (key != "")
                             {
-                                sql = " SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_ELEMENT_ID=" + C_Elememt_ID + " AND value = '" + key + "' AND vaf_client_id = " + client;
-                                int C_ElementValue_ID = 0;
+                                sql = " SELECT VAB_Acct_Element_id FROM VAB_Acct_Element WHERE IsActive='Y' AND VAB_ELEMENT_ID=" + C_Elememt_ID + " AND value = '" + key + "' AND vaf_client_id = " + client;
+                                int VAB_Acct_Element_ID = 0;
                                 try
                                 {
-                                    C_ElementValue_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                    VAB_Acct_Element_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                 }
                                 catch
                                 {
-                                    C_ElementValue_ID = 0;
+                                    VAB_Acct_Element_ID = 0;
                                 }
 
-                                eleValue = new MElementValue(GetCtx(), C_ElementValue_ID, null);
+                                eleValue = new MElementValue(GetCtx(), VAB_Acct_Element_ID, null);
 
                                 string parent_ID = Util.GetValueOfString(dt.Rows[i]["(Account_Parent)"]);
-                                sql = "SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_Element_ID=" + C_Elememt_ID + " AND value = '" + parent_ID + "' AND vaf_client_id = " + client;
-                                int C_ElementValue_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                sql = "SELECT VAB_Acct_Element_id FROM VAB_Acct_Element WHERE IsActive='Y' AND VAB_Element_ID=" + C_Elememt_ID + " AND value = '" + parent_ID + "' AND vaf_client_id = " + client;
+                                int VAB_Acct_Element_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                 try
                                 {
-                                    C_ElementValue_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                    VAB_Acct_Element_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                 }
                                 catch
                                 {
-                                    C_ElementValue_ID_Parent = 0;
+                                    VAB_Acct_Element_ID_Parent = 0;
                                 }
                                 //eleValue = new MElementValue(GetCtx(), 0, null);
-                                //int C_ElementValue_ID = DB.GetNextID(GetVAF_Client_ID(), "VACTWZ_ELEMENTVALUE", null);
+                                //int VAB_Acct_Element_ID = DB.GetNextID(GetVAF_Client_ID(), "VACTWZ_ELEMENTVALUE", null);
                                 string accSign = Util.GetValueOfString(dt.Rows[i]["(Account_Sign)"]);
                                 if (accSign == "")
                                 {
@@ -191,8 +191,8 @@ namespace ViennaAdvantage.Process
                                 {
                                     eleValue.SetAccountSign(accSign);
                                 }
-                                eleValue.SetC_Element_ID(C_Elememt_ID);
-                                // eleValue.SetC_ElementValue_ID(C_ElementValue_ID);
+                                eleValue.SetVAB_Element_ID(C_Elememt_ID);
+                                // eleValue.SetVAB_Acct_Element_ID(VAB_Acct_Element_ID);
                                 eleValue.SetValue(Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]));
                                 eleValue.SetName(Util.GetValueOfString(dt.Rows[i]["(Account_Name)"]));
                                 eleValue.SetDescription(Util.GetValueOfString(dt.Rows[i]["(Account_Description)"]));
@@ -227,15 +227,15 @@ namespace ViennaAdvantage.Process
                                 string primaryGroup = dt.Rows[i]["(Primary_Group)"].ToString();
                                 if (!string.IsNullOrEmpty(primaryGroup))
                                 {
-                                    int primaryGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountgroup_id from c_accountgroup where value='" + primaryGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
+                                    int primaryGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select VAB_AccountGroup_id from VAB_AccountGroup where value='" + primaryGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
                                     if (primaryGroupID > 0)
                                     {
-                                        eleValue.SetC_AccountGroup_ID(primaryGroupID);
+                                        eleValue.SetVAB_AccountGroup_ID(primaryGroupID);
                                     }
 
                                     //try
                                     //{
-                                    //    eleValue.SetRef_C_AccountGroup_ID(Util.GetValueOfInt(primaryGroup));
+                                    //    eleValue.SetRef_VAB_AccountGroup_ID(Util.GetValueOfInt(primaryGroup));
                                     //}
                                     //catch { }
                                 }
@@ -243,16 +243,16 @@ namespace ViennaAdvantage.Process
                                 string primarysubGroup = dt.Rows[i]["(Primary_Sub_Group)"].ToString();
                                 if (!string.IsNullOrEmpty(primarysubGroup))
                                 {
-                                    int primarysubGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountsubgroup_id from c_accountsubgroup where value='" + primarysubGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
+                                    int primarysubGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select VAB_AccountSubGroup_id from VAB_AccountSubGroup where value='" + primarysubGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
                                     if (primarysubGroupID > 0)
                                     {
-                                        eleValue.SetC_AccountSubGroup_ID(primarysubGroupID);
+                                        eleValue.SetVAB_AccountSubGroup_ID(primarysubGroupID);
                                     }
 
-                                    //eleValue.SetRef_C_AccountSubGroup_ID(Util.GetValueOfInt(primarysubGroup));
+                                    //eleValue.SetRef_VAB_AccountSubGroup_ID(Util.GetValueOfInt(primarysubGroup));
                                     //try
                                     //{
-                                    //    eleValue.SetRef_C_AccountSubGroup_ID(Util.GetValueOfInt(primarysubGroup));
+                                    //    eleValue.SetRef_VAB_AccountSubGroup_ID(Util.GetValueOfInt(primarysubGroup));
                                     //}
                                     //catch { }
 
@@ -325,14 +325,14 @@ namespace ViennaAdvantage.Process
                                 }
 
                                 // when Foreign Currency true, then only set Currency
-                                if (eleValue.IsForeignCurrency() && eleValue.Get_ColumnIndex("C_Currency_ID") >= 0)
+                                if (eleValue.IsForeignCurrency() && eleValue.Get_ColumnIndex("VAB_Currency_ID") >= 0)
                                 {
-                                    sql = "SELECT C_Currency_ID FROM C_Currency WHERE IsActive='Y' AND ISO_CODE='"
+                                    sql = "SELECT VAB_Currency_ID FROM VAB_Currency WHERE IsActive='Y' AND ISO_CODE='"
                                         + Util.GetValueOfString(dt.Rows[i]["(Currency)"]) + "'";
                                     result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                     if (result > 0)
                                     {
-                                        eleValue.Set_Value("C_Currency_ID", result);
+                                        eleValue.Set_Value("VAB_Currency_ID", result);
                                     }
                                 }
 
@@ -379,14 +379,14 @@ namespace ViennaAdvantage.Process
                                 }
 
                                 // Conversion Type
-                                if (eleValue.Get_ColumnIndex("C_ConversionType_ID") >= 0)
+                                if (eleValue.Get_ColumnIndex("VAB_CurrencyType_ID") >= 0)
                                 {
-                                    sql = "SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y' AND Value='"
+                                    sql = "SELECT VAB_CurrencyType_ID FROM VAB_CurrencyType WHERE IsActive='Y' AND Value='"
                                         + Util.GetValueOfString(dt.Rows[i]["(Currency_Type)"]) + "'";
                                     result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                     if (result > 0)
                                     {
-                                        eleValue.Set_Value("C_ConversionType_ID", result);
+                                        eleValue.Set_Value("VAB_CurrencyType_ID", result);
                                     }
                                 }
 
@@ -395,11 +395,11 @@ namespace ViennaAdvantage.Process
                                 //{
                                 //    try
                                 //    {
-                                //        eleValue.SetRef_C_ElementValue_ID(Util.GetValueOfInt(memo));
+                                //        eleValue.SetRef_VAB_Acct_Element_ID(Util.GetValueOfInt(memo));
                                 //    }
                                 //    catch { }
                                 //}
-                                //eleValue.SetParent_ID(C_ElementValue_ID_Parent);
+                                //eleValue.SetParent_ID(VAB_Acct_Element_ID_Parent);
                                 if (!string.IsNullOrEmpty(parent_ID))
                                 {
                                     ///******************** Commented
@@ -415,14 +415,14 @@ namespace ViennaAdvantage.Process
                                     //return msg;
                                 }
                                 VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
-                                //C_ElementValue_ID = C_ElementValue_ID + 1;                                   
+                                //VAB_Acct_Element_ID = VAB_Acct_Element_ID + 1;                                   
                                 VAdvantage.Model.MTreeNode mNode = VAdvantage.Model.MTreeNode.Get(obj, eleValue.Get_ID());
                                 if (mNode == null)
                                 {
                                     mNode = new VAdvantage.Model.MTreeNode(tree, eleValue.Get_ID());
                                 }
-                                mNode.SetParent_ID(C_ElementValue_ID_Parent);
-                                // ((PO)mNode).Set_Value("Parent_ID", C_ElementValue_ID_Parent);
+                                mNode.SetParent_ID(VAB_Acct_Element_ID_Parent);
+                                // ((PO)mNode).Set_Value("Parent_ID", VAB_Acct_Element_ID_Parent);
                                 if (!mNode.Save())
                                 {
                                     log.SaveError("NodeNotSaved", "");
@@ -447,7 +447,7 @@ namespace ViennaAdvantage.Process
                         //            {
                         //                tempElementID = Util.GetValueOfInt(DB.ExecuteScalar("Select vactwz_elementvalue_ID from vactwz_elementvalue WHERE Value='" + dt.Rows[i]["(Account_Value)"] + "'"));
                         //                eleValue = new MElementValue(GetCtx(), tempElementID, null);
-                        //                eleValue.SetRef_C_ElementValue_ID(refElementValID);
+                        //                eleValue.SetRef_VAB_Acct_Element_ID(refElementValID);
                         //                eleValue.Save();
                         //            }
                         //        }
@@ -457,7 +457,7 @@ namespace ViennaAdvantage.Process
                         //******************** Commented
                         //if (tree != null)
                         //{
-                        //    sql = "Update C_Element SET TreeID=" + tree.Get_ID() + " WHERE C_Element_ID=" + C_Elememt_ID;
+                        //    sql = "Update VAB_Element SET TreeID=" + tree.Get_ID() + " WHERE VAB_Element_ID=" + C_Elememt_ID;
                         //    DB.ExecuteQuery(sql);
                         //}
 

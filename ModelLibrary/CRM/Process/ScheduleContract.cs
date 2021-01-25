@@ -25,21 +25,21 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            VAdvantage.Model.X_C_Contract contract = new VAdvantage.Model.X_C_Contract(GetCtx(), contractID, null);
+            VAdvantage.Model.X_VAB_Contract contract = new VAdvantage.Model.X_VAB_Contract(GetCtx(), contractID, null);
             DateTime start = (DateTime)contract.GetBillStartDate();
             DateTime end = (DateTime)contract.GetEndDate();
-            int frequency = contract.GetC_Frequency_ID();
+            int frequency = contract.GetVAB_Frequency_ID();
 
-            string Sql = "Select NoofMonths from C_Frequency where C_Frequency_ID=" + frequency;
+            string Sql = "Select NoofMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
             int months = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
             int count = Util.GetValueOfInt(contract.GetTotalInvoice());
 
             for (int i = 1; i <= count; i++)
             {
 
-                VAdvantage.Model.X_C_ContractSchedule CSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), 0, null);
-                CSchedule.SetC_Contract_ID(contractID);
-                CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());
+                VAdvantage.Model.X_VAB_ContractSchedule CSchedule = new VAdvantage.Model.X_VAB_ContractSchedule(GetCtx(), 0, null);
+                CSchedule.SetVAB_Contract_ID(contractID);
+                CSchedule.SetVAB_BusinessPartner_ID(contract.GetVAB_BusinessPartner_ID());
 
                 CSchedule.SetFROMDATE(start);
                 CSchedule.SetProcessed(true);
@@ -81,12 +81,12 @@ namespace VAdvantage.Process
 
         //protected override String DoIt()
         //{
-        //    X_C_Contract contract = new X_C_Contract(GetCtx(), contractID, null);
+        //    X_VAB_Contract contract = new X_VAB_Contract(GetCtx(), contractID, null);
         //    DateTime start = (DateTime)contract.GetStartDate();
         //    DateTime end = (DateTime)contract.GetEndDate();
-        //    int frequency = contract.GetC_Frequency_ID();
+        //    int frequency = contract.GetVAB_Frequency_ID();
 
-        //    string Sql = "Select NoofDays from C_Frequency where C_Frequency_ID=" + frequency;
+        //    string Sql = "Select NoofDays from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         //    int days = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
        
         //    int count = Util.GetValueOfInt(contract.GetTotalInvoice());
@@ -94,9 +94,9 @@ namespace VAdvantage.Process
         //    for (int i = 1; i <= count; i++)
         //    {
 
-        //        X_C_ContractSchedule CSchedule = new X_C_ContractSchedule(GetCtx(), 0, null);
-        //        CSchedule.SetC_Contract_ID(contractID);
-        //        CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());
+        //        X_VAB_ContractSchedule CSchedule = new X_VAB_ContractSchedule(GetCtx(), 0, null);
+        //        CSchedule.SetVAB_Contract_ID(contractID);
+        //        CSchedule.SetVAB_BusinessPartner_ID(contract.GetVAB_BusinessPartner_ID());
 
         //        CSchedule.SetFROMDATE(start);
         //        CSchedule.SetProcessed(true);

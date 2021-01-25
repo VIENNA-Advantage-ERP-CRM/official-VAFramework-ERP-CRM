@@ -35,16 +35,16 @@
             baseObj.deliveryDate = new VIS.Controls.VDate("DeliveryDate", false, false, true, VIS.DisplayType.Date, "DeliveryDate");
             var lookupProd = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), baseObj.windowNo, 2221, VIS.DisplayType.Search);
             baseObj.vProduct = new VIS.Controls.VTextBoxButton("M_Product_ID", true, false, true, VIS.DisplayType.Search, lookupProd);
-            var C_BPartner_ID = baseObj.initBPartner(true);
+            var VAB_BusinessPartner_ID = baseObj.initBPartner(true);
             baseObj.vBPartner.setReadOnly(true);
-            initBPDetails(C_BPartner_ID);
+            initBPDetails(VAB_BusinessPartner_ID);
             baseObj.fromInvoice = true;
             return true;
         }
 
 
         // Checked
-        function getShipments(ctx, C_BPartner_ID) {
+        function getShipments(ctx, VAB_BusinessPartner_ID) {
             //var pairs = [];
 
             var display = ("s.DocumentNo||' - '||")
@@ -60,7 +60,7 @@
                 type: 'POST',
                 //async: false,
                 data: {
-                    displays: display, CBPartnerIDs: C_BPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx
+                    displays: display, CBPartnerIDs: VAB_BusinessPartner_ID, IsDrop: _isdrop, IsSOTrx: _isSoTrx
                 },
                 success: function (data) {
                     var ress = JSON.parse(data);
@@ -92,7 +92,7 @@
 
 
 
-        //function getShipments(ctx, C_BPartner_ID) {
+        //function getShipments(ctx, VAB_BusinessPartner_ID) {
         //    var pairs = [];
 
         //    //	Display
@@ -101,7 +101,7 @@
 
         //    //var sql = ("SELECT s.M_InOut_ID,").concat(display)
         //    //    .concat(" FROM M_InOut s "
-        //    //    + "WHERE s.C_BPartner_ID=" + C_BPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
+        //    //    + "WHERE s.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
         //    //    + " AND s.M_InOut_ID IN "
         //    //        + "(SELECT sl.M_InOut_ID FROM M_InOutLine sl"
         //    //        + " LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
@@ -113,7 +113,7 @@
         //    //Purpose -changed in query to pic only those shipment whose invoice not in completed /closed / drafted mode
         //    //code commented
         //    //var sql = ("SELECT s.M_InOut_ID,").concat(display).concat(" FROM M_InOut s "
-        //    //    + "WHERE s.C_BPartner_ID=" + C_BPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
+        //    //    + "WHERE s.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
         //    //    + " AND s.M_InOut_ID IN "
         //    //    + "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty FROM M_InOutLine sl "
         //    //    + "LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) WHERE (sl.MovementQty <> nvl(mi.Qty,0) "
@@ -121,7 +121,7 @@
         //    //    + "HAVING MovementQty > SUM(nvl(Qty,0))) ORDER BY s.MovementDate");
         //    //code added here
         //    var sql = ("SELECT s.M_InOut_ID,").concat(display).concat(" FROM M_InOut s "
-        //       + "WHERE s.C_BPartner_ID=" + C_BPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
+        //       + "WHERE s.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND s.IsSOTrx='N' AND s.DocStatus IN ('CL','CO')"
         //       + " AND s.M_InOut_ID IN "
         //       + "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty,IL.QtyInvoiced FROM M_InOutLine sl "
         //       + "LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
@@ -148,11 +148,11 @@
         //    return pairs;
         //}
 
-        function initBPDetails(C_BPartner_ID) {
+        function initBPDetails(VAB_BusinessPartner_ID) {
 
             baseObj.cmbShipment.getControl().html("");
             //var shipments = ;
-            getShipments(VIS.Env.getCtx(), C_BPartner_ID);
+            getShipments(VIS.Env.getCtx(), VAB_BusinessPartner_ID);
 
             //for (var i = 0; i < shipments.length; i++) {
             //    if (i == 0) {

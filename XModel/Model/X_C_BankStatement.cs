@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BankStatement
+/** Generated Model for VAB_BankingJRNL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BankStatement : PO
+public class X_VAB_BankingJRNL : PO
 {
-public X_C_BankStatement (Context ctx, int C_BankStatement_ID, Trx trxName) : base (ctx, C_BankStatement_ID, trxName)
+public X_VAB_BankingJRNL (Context ctx, int VAB_BankingJRNL_ID, Trx trxName) : base (ctx, VAB_BankingJRNL_ID, trxName)
 {
-/** if (C_BankStatement_ID == 0)
+/** if (VAB_BankingJRNL_ID == 0)
 {
-SetC_BankAccount_ID (0);
-SetC_BankStatement_ID (0);
+SetVAB_Bank_Acct_ID (0);
+SetVAB_BankingJRNL_ID (0);
 SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetEndingBalance (0.0);
@@ -34,12 +34,12 @@ SetStatementDate (DateTime.Now);	// @Date@
 }
  */
 }
-public X_C_BankStatement (Ctx ctx, int C_BankStatement_ID, Trx trxName) : base (ctx, C_BankStatement_ID, trxName)
+public X_VAB_BankingJRNL (Ctx ctx, int VAB_BankingJRNL_ID, Trx trxName) : base (ctx, VAB_BankingJRNL_ID, trxName)
 {
-/** if (C_BankStatement_ID == 0)
+/** if (VAB_BankingJRNL_ID == 0)
 {
-SetC_BankAccount_ID (0);
-SetC_BankStatement_ID (0);
+SetVAB_Bank_Acct_ID (0);
+SetVAB_BankingJRNL_ID (0);
 SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetEndingBalance (0.0);
@@ -57,7 +57,7 @@ SetStatementDate (DateTime.Now);	// @Date@
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BankingJRNL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,7 +65,7 @@ public X_C_BankStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BankingJRNL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -73,13 +73,13 @@ public X_C_BankStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankStatement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BankingJRNL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BankStatement()
+static X_VAB_BankingJRNL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -92,8 +92,8 @@ public static long updatedMS = 1280389054050L;
 public static int Table_ID;
  // =392;
 
-/** TableName=C_BankStatement */
-public static String Table_Name="C_BankStatement";
+/** TableName=VAB_BankingJRNL */
+public static String Table_Name="VAB_BankingJRNL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -127,7 +127,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BankStatement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BankingJRNL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Beginning Balance.
@@ -145,32 +145,32 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Bank Account.
-@param C_BankAccount_ID Account at the Bank */
-public void SetC_BankAccount_ID (int C_BankAccount_ID)
+@param VAB_Bank_Acct_ID Account at the Bank */
+public void SetVAB_Bank_Acct_ID (int VAB_Bank_Acct_ID)
 {
-if (C_BankAccount_ID < 1) throw new ArgumentException ("C_BankAccount_ID is mandatory.");
-Set_Value ("C_BankAccount_ID", C_BankAccount_ID);
+if (VAB_Bank_Acct_ID < 1) throw new ArgumentException ("VAB_Bank_Acct_ID is mandatory.");
+Set_Value ("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
 }
 /** Get Bank Account.
 @return Account at the Bank */
-public int GetC_BankAccount_ID() 
+public int GetVAB_Bank_Acct_ID() 
 {
-Object ii = Get_Value("C_BankAccount_ID");
+Object ii = Get_Value("VAB_Bank_Acct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Bank Statement.
-@param C_BankStatement_ID Bank Statement of account */
-public void SetC_BankStatement_ID (int C_BankStatement_ID)
+@param VAB_BankingJRNL_ID Bank Statement of account */
+public void SetVAB_BankingJRNL_ID (int VAB_BankingJRNL_ID)
 {
-if (C_BankStatement_ID < 1) throw new ArgumentException ("C_BankStatement_ID is mandatory.");
-Set_ValueNoCheck ("C_BankStatement_ID", C_BankStatement_ID);
+if (VAB_BankingJRNL_ID < 1) throw new ArgumentException ("VAB_BankingJRNL_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BankingJRNL_ID", VAB_BankingJRNL_ID);
 }
 /** Get Bank Statement.
 @return Bank Statement of account */
-public int GetC_BankStatement_ID() 
+public int GetVAB_BankingJRNL_ID() 
 {
-Object ii = Get_Value("C_BankStatement_ID");
+Object ii = Get_Value("VAB_BankingJRNL_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

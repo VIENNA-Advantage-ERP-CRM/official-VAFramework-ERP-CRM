@@ -44,7 +44,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SetDBRestore", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SetDBRestore(int A_Asset_ID, char value, string AccessKey);
+        string SetDBRestore(int VAA_Asset_ID, char value, string AccessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVUnBilledInfo", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -68,7 +68,7 @@ namespace BaseLibrary.CloudService {
                     string phone, 
                     string web_url, 
                     int no_of_emp, 
-                    int c_Currency_id, 
+                    int VAB_Currency_id, 
                     int r_source_id, 
                     int industry_ID, 
                     string city, 
@@ -79,7 +79,7 @@ namespace BaseLibrary.CloudService {
                     string year_sell_erp, 
                     string support, 
                     int bpgroup_ID, 
-                    int C_Campaign_ID, 
+                    int VAB_Promotion_ID, 
                     int R_STATUS_ID, 
                     int C_Region_ID, 
                     int CreatedBy, 
@@ -115,7 +115,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendNotice", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SendNotice(int[] A_Asset_ID, string accessKey);
+        string SendNotice(int[] VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendReminderExpMail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -144,7 +144,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerPServerInfo", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.CustomerPServerInfo GetCustomerPServerInfo(string ZoneCode, int A_Asset_ID, string accessKey);
+        BaseLibrary.CloudService.CustomerPServerInfo GetCustomerPServerInfo(string ZoneCode, int VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetSubscriptionDays", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -284,7 +284,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/NotifyServerCreated", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string NotifyServerCreated(int A_Asset_ID, int client_ID, string accessKey);
+        string NotifyServerCreated(int VAA_Asset_ID, int client_ID, string accessKey);
         
         // CODEGEN: Parameter 'CS_CustomerTenantInfo_ID' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveErrorLog", ReplyAction="*")]
@@ -326,7 +326,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/StartAndStopProcessor", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string StartAndStopProcessor(int A_Asset_ID, bool startServer, string accessKey);
+        string StartAndStopProcessor(int VAA_Asset_ID, bool startServer, string accessKey);
         
         // CODEGEN: Parameter 'DownloadDumpResult' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/DownloadDump", ReplyAction="*")]
@@ -351,7 +351,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AssignServerIPToCustomerTenant", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int A_Asset_ID, int VAF_UserContact_ID, string accessKey);
+        string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetIpAssignRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -363,7 +363,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SetAssetDeleted", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SetAssetDeleted(int A_Asset_ID, string accessKey);
+        string SetAssetDeleted(int VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetUserUrl", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -424,7 +424,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/MarkMailServerCreated", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string MarkMailServerCreated(int A_Asset_ID, bool isMailServerCreated, string accessKey);
+        string MarkMailServerCreated(int VAA_Asset_ID, bool isMailServerCreated, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetUserInfoOfTokenKey", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -634,7 +634,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVideosFromDMS", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey);
+        string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int C_Lead_ID, string accessKey);
         
         // CODEGEN: Parameter 'countryid' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegisterTempInfo", ReplyAction="*")]
@@ -693,11 +693,11 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerServerAndFTPInfo", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int A_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey);
+        BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerServerInfoM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM1(int A_Asset_ID, string accessKey);
+        BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM1(int VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerServerInfoM2", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -860,7 +860,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CreateTenant", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string CreateTenant(int A_Asset_ID, string zoneCode, string accessKey);
+        string CreateTenant(int VAA_Asset_ID, string zoneCode, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetAllDBBackupRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -880,11 +880,11 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerSpaceM2", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetCustomerSpaceM2(int A_Asset_ID, string accessKey);
+        string GetCustomerSpaceM2(int VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SetCustomerSpace", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SetCustomerSpace(int A_Asset_ID, int ASUsedSpace, int DBSUsedSpace, int PSUsedSpace, int DBBackupSize, string accessKey);
+        string SetCustomerSpace(int VAA_Asset_ID, int ASUsedSpace, int DBSUsedSpace, int PSUsedSpace, int DBBackupSize, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetAllDBDeleteRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -944,7 +944,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CheckCustomerUserSpaceM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string CheckCustomerUserSpaceM1(int A_Asset_ID, string accessKey);
+        string CheckCustomerUserSpaceM1(int VAA_Asset_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CheckCustomerUserSpaceM2", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -976,7 +976,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/UpdateDNSStatus", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string UpdateDNSStatus(int A_Asset_ID, string serverType, string accessKey);
+        string UpdateDNSStatus(int VAA_Asset_ID, string serverType, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/UpdateCustomerSpace", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -1295,13 +1295,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
-        public int[] A_Asset_ID {
+        public int[] VAA_Asset_ID {
             get {
                 return this.a_Asset_IDField;
             }
             set {
                 this.a_Asset_IDField = value;
-                this.RaisePropertyChanged("A_Asset_ID");
+                this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
         
@@ -2393,13 +2393,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=2)]
-        public int[] A_Asset_ID {
+        public int[] VAA_Asset_ID {
             get {
                 return this.a_Asset_IDField;
             }
             set {
                 this.a_Asset_IDField = value;
-                this.RaisePropertyChanged("A_Asset_ID");
+                this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
         
@@ -3459,13 +3459,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=4)]
-        public string[] A_Asset_ID {
+        public string[] VAA_Asset_ID {
             get {
                 return this.a_Asset_IDField;
             }
             set {
                 this.a_Asset_IDField = value;
-                this.RaisePropertyChanged("A_Asset_ID");
+                this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
         
@@ -5125,13 +5125,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public int A_Asset_ID {
+        public int VAA_Asset_ID {
             get {
                 return this.a_Asset_IDField;
             }
             set {
                 this.a_Asset_IDField = value;
-                this.RaisePropertyChanged("A_Asset_ID");
+                this.RaisePropertyChanged("VAA_Asset_ID");
             }
         }
         
@@ -5258,7 +5258,7 @@ namespace BaseLibrary.CloudService {
         public int VAF_UserContact_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
-        public int A_Asset_ID;
+        public int VAA_Asset_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -5280,9 +5280,9 @@ namespace BaseLibrary.CloudService {
         public SaveErrorLogRequest() {
         }
         
-        public SaveErrorLogRequest(int VAF_UserContact_ID, int A_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
+        public SaveErrorLogRequest(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
             this.VAF_UserContact_ID = VAF_UserContact_ID;
-            this.A_Asset_ID = A_Asset_ID;
+            this.VAA_Asset_ID = VAA_Asset_ID;
             this.CS_CustomerTenantInfo_ID = CS_CustomerTenantInfo_ID;
             this.errorNo = errorNo;
             this.R_Request_ID = R_Request_ID;
@@ -6160,7 +6160,7 @@ namespace BaseLibrary.CloudService {
     public partial class UpdateAssetRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
-        public int A_Asset_ID;
+        public int VAA_Asset_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
@@ -6182,8 +6182,8 @@ namespace BaseLibrary.CloudService {
         public UpdateAssetRequest() {
         }
         
-        public UpdateAssetRequest(int A_Asset_ID, System.Nullable<bool> isAppServerCreated, System.Nullable<bool> isDBServerCreated, bool ISPSServerCreated, string fileVersion, string accessKey) {
-            this.A_Asset_ID = A_Asset_ID;
+        public UpdateAssetRequest(int VAA_Asset_ID, System.Nullable<bool> isAppServerCreated, System.Nullable<bool> isDBServerCreated, bool ISPSServerCreated, string fileVersion, string accessKey) {
+            this.VAA_Asset_ID = VAA_Asset_ID;
             this.isAppServerCreated = isAppServerCreated;
             this.isDBServerCreated = isDBServerCreated;
             this.ISPSServerCreated = ISPSServerCreated;
@@ -6286,8 +6286,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetCustomerTicketDetails(DocNo, AccessKey);
         }
         
-        public string SetDBRestore(int A_Asset_ID, char value, string AccessKey) {
-            return base.Channel.SetDBRestore(A_Asset_ID, value, AccessKey);
+        public string SetDBRestore(int VAA_Asset_ID, char value, string AccessKey) {
+            return base.Channel.SetDBRestore(VAA_Asset_ID, value, AccessKey);
         }
         
         public string GetVUnBilledInfo(int VAF_UserContact_ID, string AccessKey) {
@@ -6310,7 +6310,7 @@ namespace BaseLibrary.CloudService {
                     string phone, 
                     string web_url, 
                     int no_of_emp, 
-                    int c_Currency_id, 
+                    int VAB_Currency_id, 
                     int r_source_id, 
                     int industry_ID, 
                     string city, 
@@ -6321,7 +6321,7 @@ namespace BaseLibrary.CloudService {
                     string year_sell_erp, 
                     string support, 
                     int bpgroup_ID, 
-                    int C_Campaign_ID, 
+                    int VAB_Promotion_ID, 
                     int R_STATUS_ID, 
                     int C_Region_ID, 
                     int CreatedBy, 
@@ -6330,7 +6330,7 @@ namespace BaseLibrary.CloudService {
                     int vaf_client_id, 
                     int UpdatedBy, 
                     string AccessKey) {
-            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, c_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, C_Campaign_ID, R_STATUS_ID, C_Region_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
+            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, VAB_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, VAB_Promotion_ID, R_STATUS_ID, C_Region_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
         }
         
         public System.Data.DataSet GetTopicInfo(out string error, string url, bool isInitConfig, string langCode, string searchText, string option) {
@@ -6357,8 +6357,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAssetNotInUse(zoneCode, accessKey);
         }
         
-        public string SendNotice(int[] A_Asset_ID, string accessKey) {
-            return base.Channel.SendNotice(A_Asset_ID, accessKey);
+        public string SendNotice(int[] VAA_Asset_ID, string accessKey) {
+            return base.Channel.SendNotice(VAA_Asset_ID, accessKey);
         }
         
         public string SendReminderExpMail(string RemindLoginAskExpdays, string accessKey) {
@@ -6395,8 +6395,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetRequestToInstallModule(ZoneCode, accessKey);
         }
         
-        public BaseLibrary.CloudService.CustomerPServerInfo GetCustomerPServerInfo(string ZoneCode, int A_Asset_ID, string accessKey) {
-            return base.Channel.GetCustomerPServerInfo(ZoneCode, A_Asset_ID, accessKey);
+        public BaseLibrary.CloudService.CustomerPServerInfo GetCustomerPServerInfo(string ZoneCode, int VAA_Asset_ID, string accessKey) {
+            return base.Channel.GetCustomerPServerInfo(ZoneCode, VAA_Asset_ID, accessKey);
         }
         
         public string GetSubscriptionDays(string url, string accessKey) {
@@ -6535,8 +6535,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.PForgotPortalPassword(userName, userEmail, accessKey);
         }
         
-        public string NotifyServerCreated(int A_Asset_ID, int client_ID, string accessKey) {
-            return base.Channel.NotifyServerCreated(A_Asset_ID, client_ID, accessKey);
+        public string NotifyServerCreated(int VAA_Asset_ID, int client_ID, string accessKey) {
+            return base.Channel.NotifyServerCreated(VAA_Asset_ID, client_ID, accessKey);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -6544,10 +6544,10 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SaveErrorLog(request);
         }
         
-        public string SaveErrorLog(int VAF_UserContact_ID, int A_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
+        public string SaveErrorLog(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
             BaseLibrary.CloudService.SaveErrorLogRequest inValue = new BaseLibrary.CloudService.SaveErrorLogRequest();
             inValue.VAF_UserContact_ID = VAF_UserContact_ID;
-            inValue.A_Asset_ID = A_Asset_ID;
+            inValue.VAA_Asset_ID = VAA_Asset_ID;
             inValue.CS_CustomerTenantInfo_ID = CS_CustomerTenantInfo_ID;
             inValue.errorNo = errorNo;
             inValue.R_Request_ID = R_Request_ID;
@@ -6600,8 +6600,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetCustomerDomainName(VAF_UserContact_ID, accessKey);
         }
         
-        public string StartAndStopProcessor(int A_Asset_ID, bool startServer, string accessKey) {
-            return base.Channel.StartAndStopProcessor(A_Asset_ID, startServer, accessKey);
+        public string StartAndStopProcessor(int VAA_Asset_ID, bool startServer, string accessKey) {
+            return base.Channel.StartAndStopProcessor(VAA_Asset_ID, startServer, accessKey);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -6634,8 +6634,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAllAppDeleteRequest(zoneCode, accessKey);
         }
         
-        public string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int A_Asset_ID, int VAF_UserContact_ID, string accessKey) {
-            return base.Channel.AssignServerIPToCustomerTenant(CS_CustomerTenentInfo_ID, value, CS_ZoneMasterServer_ID, M_Product_ID, A_Asset_ID, VAF_UserContact_ID, accessKey);
+        public string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey) {
+            return base.Channel.AssignServerIPToCustomerTenant(CS_CustomerTenentInfo_ID, value, CS_ZoneMasterServer_ID, M_Product_ID, VAA_Asset_ID, VAF_UserContact_ID, accessKey);
         }
         
         public BaseLibrary.CloudService.GetUnassignedIp GetIpAssignRequest(string zoneCode, string accessKey) {
@@ -6646,8 +6646,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.StartAndStopZoneServers(zoneCode, isStart, accessKey);
         }
         
-        public string SetAssetDeleted(int A_Asset_ID, string accessKey) {
-            return base.Channel.SetAssetDeleted(A_Asset_ID, accessKey);
+        public string SetAssetDeleted(int VAA_Asset_ID, string accessKey) {
+            return base.Channel.SetAssetDeleted(VAA_Asset_ID, accessKey);
         }
         
         public string GetUserUrl(int VAF_UserContact_ID, string accessKey) {
@@ -6707,8 +6707,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetRequestsToCreateDBWithFtpInfo(zoneCode, accessKey);
         }
         
-        public string MarkMailServerCreated(int A_Asset_ID, bool isMailServerCreated, string accessKey) {
-            return base.Channel.MarkMailServerCreated(A_Asset_ID, isMailServerCreated, accessKey);
+        public string MarkMailServerCreated(int VAA_Asset_ID, bool isMailServerCreated, string accessKey) {
+            return base.Channel.MarkMailServerCreated(VAA_Asset_ID, isMailServerCreated, accessKey);
         }
         
         public string GetUserInfoOfTokenKey(string tokenKey, string msg, string accessKey) {
@@ -7004,8 +7004,8 @@ namespace BaseLibrary.CloudService {
             return retVal.RegisterInfoFromModuleResult;
         }
         
-        public string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey) {
-            return base.Channel.GetVideosFromDMS(VAF_Client_ID, VAF_UserContact_ID, C_BPartner_ID, C_Lead_ID, accessKey);
+        public string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int C_Lead_ID, string accessKey) {
+            return base.Channel.GetVideosFromDMS(VAF_Client_ID, VAF_UserContact_ID, VAB_BusinessPartner_ID, C_Lead_ID, accessKey);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -7185,12 +7185,12 @@ namespace BaseLibrary.CloudService {
             return retVal.VRegisterInfoResult;
         }
         
-        public BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int A_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey) {
-            return base.Channel.GetCustomerServerAndFTPInfo(A_Asset_ID, CS_ZoneMasterServer_ID, M_Product_ID, accessKey);
+        public BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey) {
+            return base.Channel.GetCustomerServerAndFTPInfo(VAA_Asset_ID, CS_ZoneMasterServer_ID, M_Product_ID, accessKey);
         }
         
-        public BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM1(int A_Asset_ID, string accessKey) {
-            return base.Channel.GetCustomerServerInfoM1(A_Asset_ID, accessKey);
+        public BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM1(int VAA_Asset_ID, string accessKey) {
+            return base.Channel.GetCustomerServerInfoM1(VAA_Asset_ID, accessKey);
         }
         
         public BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM2(int tanent_ID, string url, string accessKey) {
@@ -7365,9 +7365,9 @@ namespace BaseLibrary.CloudService {
             return base.Channel.UpdateAsset(request);
         }
         
-        public string UpdateAsset(int A_Asset_ID, System.Nullable<bool> isAppServerCreated, System.Nullable<bool> isDBServerCreated, bool ISPSServerCreated, string fileVersion, string accessKey) {
+        public string UpdateAsset(int VAA_Asset_ID, System.Nullable<bool> isAppServerCreated, System.Nullable<bool> isDBServerCreated, bool ISPSServerCreated, string fileVersion, string accessKey) {
             BaseLibrary.CloudService.UpdateAssetRequest inValue = new BaseLibrary.CloudService.UpdateAssetRequest();
-            inValue.A_Asset_ID = A_Asset_ID;
+            inValue.VAA_Asset_ID = VAA_Asset_ID;
             inValue.isAppServerCreated = isAppServerCreated;
             inValue.isDBServerCreated = isDBServerCreated;
             inValue.ISPSServerCreated = ISPSServerCreated;
@@ -7385,8 +7385,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAllCurrencyFromMobile(accessKey);
         }
         
-        public string CreateTenant(int A_Asset_ID, string zoneCode, string accessKey) {
-            return base.Channel.CreateTenant(A_Asset_ID, zoneCode, accessKey);
+        public string CreateTenant(int VAA_Asset_ID, string zoneCode, string accessKey) {
+            return base.Channel.CreateTenant(VAA_Asset_ID, zoneCode, accessKey);
         }
         
         public BaseLibrary.CloudService.BackupInfo GetAllDBBackupRequest(string zoneCode, string accessKey) {
@@ -7405,12 +7405,12 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetCustomerSpaceM1(VAF_UserContact_ID, accessKey);
         }
         
-        public string GetCustomerSpaceM2(int A_Asset_ID, string accessKey) {
-            return base.Channel.GetCustomerSpaceM2(A_Asset_ID, accessKey);
+        public string GetCustomerSpaceM2(int VAA_Asset_ID, string accessKey) {
+            return base.Channel.GetCustomerSpaceM2(VAA_Asset_ID, accessKey);
         }
         
-        public string SetCustomerSpace(int A_Asset_ID, int ASUsedSpace, int DBSUsedSpace, int PSUsedSpace, int DBBackupSize, string accessKey) {
-            return base.Channel.SetCustomerSpace(A_Asset_ID, ASUsedSpace, DBSUsedSpace, PSUsedSpace, DBBackupSize, accessKey);
+        public string SetCustomerSpace(int VAA_Asset_ID, int ASUsedSpace, int DBSUsedSpace, int PSUsedSpace, int DBBackupSize, string accessKey) {
+            return base.Channel.SetCustomerSpace(VAA_Asset_ID, ASUsedSpace, DBSUsedSpace, PSUsedSpace, DBBackupSize, accessKey);
         }
         
         public BaseLibrary.CloudService.BackupInfo GetAllDBDeleteRequest(string zoneCode, string accessKey) {
@@ -7469,8 +7469,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SetLastLogin(tenant_ID, url, date, accessKey);
         }
         
-        public string CheckCustomerUserSpaceM1(int A_Asset_ID, string accessKey) {
-            return base.Channel.CheckCustomerUserSpaceM1(A_Asset_ID, accessKey);
+        public string CheckCustomerUserSpaceM1(int VAA_Asset_ID, string accessKey) {
+            return base.Channel.CheckCustomerUserSpaceM1(VAA_Asset_ID, accessKey);
         }
         
         public string CheckCustomerUserSpaceM2(int VAF_UserContact_ID, string accessKey) {
@@ -7501,8 +7501,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAllTenantforDNS(zoneCode, accessKey);
         }
         
-        public string UpdateDNSStatus(int A_Asset_ID, string serverType, string accessKey) {
-            return base.Channel.UpdateDNSStatus(A_Asset_ID, serverType, accessKey);
+        public string UpdateDNSStatus(int VAA_Asset_ID, string serverType, string accessKey) {
+            return base.Channel.UpdateDNSStatus(VAA_Asset_ID, serverType, accessKey);
         }
         
         public string UpdateCustomerSpace(string zoneCode, string accessKey) {

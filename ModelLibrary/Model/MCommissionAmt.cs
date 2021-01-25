@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Commission Run Amounts
- * Class Used     : X_C_CommissionAmt
+ * Class Used     : X_VAB_WorkCommission_Amt
  * Chronological    Development
  * Veena        09-Nov-2009
 **********************************************************/
@@ -23,21 +23,21 @@ namespace VAdvantage.Model
     /// <summary>
     /// Commission Run Amounts
     /// </summary>
-    public class MCommissionAmt : X_C_CommissionAmt
+    public class MCommissionAmt : X_VAB_WorkCommission_Amt
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_CommissionAmt_ID">id</param>
+        /// <param name="VAB_WorkCommission_Amt_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCommissionAmt(Ctx ctx, int C_CommissionAmt_ID, Trx trxName)
-            : base(ctx, C_CommissionAmt_ID, trxName)
+        public MCommissionAmt(Ctx ctx, int VAB_WorkCommission_Amt_ID, Trx trxName)
+            : base(ctx, VAB_WorkCommission_Amt_ID, trxName)
         {
-            if (C_CommissionAmt_ID == 0)
+            if (VAB_WorkCommission_Amt_ID == 0)
             {
-                //	SetC_CommissionRun_ID (0);
-                //	SetC_CommissionLine_ID (0);
+                //	SetVAB_WorkCommission_Calc_ID (0);
+                //	SetVAB_WorkCommissionLine_ID (0);
                 SetActualQty(Env.ZERO);
                 SetCommissionAmt(Env.ZERO);
                 SetConvertedAmt(Env.ZERO);
@@ -59,13 +59,13 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="run">parent</param>
-        /// <param name="C_CommissionLine_ID">line</param>
-        public MCommissionAmt(MCommissionRun run, int C_CommissionLine_ID)
+        /// <param name="VAB_WorkCommissionLine_ID">line</param>
+        public MCommissionAmt(MCommissionRun run, int VAB_WorkCommissionLine_ID)
             : this(run.GetCtx(), 0, run.Get_TrxName())
         {
             SetClientOrg(run);
-            SetC_CommissionRun_ID(run.GetC_CommissionRun_ID());
-            SetC_CommissionLine_ID(C_CommissionLine_ID);
+            SetVAB_WorkCommission_Calc_ID(run.GetVAB_WorkCommission_Calc_ID());
+            SetVAB_WorkCommissionLine_ID(VAB_WorkCommissionLine_ID);
         }
 
         /// <summary>
@@ -74,12 +74,12 @@ namespace VAdvantage.Model
         /// <returns>array of details</returns>
         public MCommissionDetail[] GetDetails()
         {
-            String sql = "SELECT * FROM C_CommissionDetail WHERE C_CommissionAmt_ID=@camtid";
+            String sql = "SELECT * FROM VAB_WorkCommissionDetail WHERE VAB_WorkCommission_Amt_ID=@camtid";
             List<MCommissionDetail> list = new List<MCommissionDetail>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@camtid", GetC_CommissionAmt_ID());
+                param[0] = new SqlParameter("@camtid", GetVAB_WorkCommission_Amt_ID());
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 if (ds.Tables.Count > 0)
@@ -121,7 +121,7 @@ namespace VAdvantage.Model
             SetConvertedAmt(convertedAmt);
             SetActualQty(actualQty);
             //
-            MCommissionLine cl = new MCommissionLine(GetCtx(), GetC_CommissionLine_ID(), Get_TrxName());
+            MCommissionLine cl = new MCommissionLine(GetCtx(), GetVAB_WorkCommissionLine_ID(), Get_TrxName());
             //	Qty
             Decimal qty = Decimal.Subtract(GetActualQty(), cl.GetQtySubtract());
             if (cl.IsPositiveOnly() && Env.Signum(qty) < 0)
@@ -151,13 +151,13 @@ namespace VAdvantage.Model
                     MCommissionDetail detail = details[i];
                     convertedAmt = Decimal.Add(convertedAmt, detail.GetConvertedAmt());
                     actualQty = Decimal.Add(actualQty, detail.GetActualQty());
-                    MCommissionAmt camt = new MCommissionAmt(GetCtx(), detail.GetC_CommissionAmt_ID(), Get_TrxName());
-                    MCommissionLine line = new MCommissionLine(GetCtx(), camt.GetC_CommissionLine_ID(), Get_TrxName());
+                    MCommissionAmt camt = new MCommissionAmt(GetCtx(), detail.GetVAB_WorkCommission_Amt_ID(), Get_TrxName());
+                    MCommissionLine line = new MCommissionLine(GetCtx(), camt.GetVAB_WorkCommissionLine_ID(), Get_TrxName());
 
                     SetConvertedAmt(convertedAmt);
                     SetActualQty(actualQty);
 
-                    if (line.GetC_CommissionType() == "A")
+                    if (line.GetVAB_WorkCommissionType() == "A")
                     {
                         if (line.IsPositiveOnly() && Env.Signum(detail.GetConvertedAmt()) < 0)
                             commCalcAmt = Env.ZERO;
@@ -175,7 +175,7 @@ namespace VAdvantage.Model
                             commCalcAmt = 0;
                         }
                     }
-                    else if (line.GetC_CommissionType() == "Q")
+                    else if (line.GetVAB_WorkCommissionType() == "Q")
                     {
                         if (line.IsPositiveOnly() && Env.Signum(detail.GetActualQty()) < 0)
                             actualQty = Env.ZERO;
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateRunHeader()
         {
-            MCommissionRun run = new MCommissionRun(GetCtx(), GetC_CommissionRun_ID(), Get_TrxName());
+            MCommissionRun run = new MCommissionRun(GetCtx(), GetVAB_WorkCommission_Calc_ID(), Get_TrxName());
             run.UpdateFromAmt();
             run.Save();
         }

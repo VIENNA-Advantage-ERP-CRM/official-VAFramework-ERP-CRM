@@ -64,7 +64,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(Doc.NO_CURRENCY);
+            SetVAB_Currency_ID(Doc.NO_CURRENCY);
             MMatchPO matchPO = (MMatchPO)GetPO();
             SetDateDoc(matchPO.GetDateTrx());
             //
@@ -119,7 +119,7 @@ namespace VAdvantage.Acct
 
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             //	Purchase Order Line
             Decimal poCost = _oLine.GetPriceCost();
@@ -129,12 +129,12 @@ namespace VAdvantage.Acct
             }
             poCost = Decimal.Multiply(poCost,Utility.Util.GetValueOfDecimal(GetQty()));			//	Delivered so far
             //	Different currency
-            if (_oLine.GetC_Currency_ID() != as1.GetC_Currency_ID())
+            if (_oLine.GetVAB_Currency_ID() != as1.GetVAB_Currency_ID())
             {
                 MOrder order = _oLine.GetParent();
                 Decimal rate = MConversionRate.GetRate(
-                    order.GetC_Currency_ID(), as1.GetC_Currency_ID(),
-                    order.GetDateAcct(), order.GetC_ConversionType_ID(),
+                    order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
+                    order.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                     _oLine.GetVAF_Client_ID(), _oLine.GetVAF_Org_ID());
                 if (rate.ToString() == null)
                 {
@@ -167,7 +167,7 @@ namespace VAdvantage.Acct
             String costingMethod = as1.GetCostingMethod();
             MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
             MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
-                product.GetM_Product_Category_ID(), as1.GetC_AcctSchema_ID(), GetTrx());
+                product.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), GetTrx());
             if (pca.GetCostingMethod() != null)
             {
                 costingMethod = pca.GetCostingMethod();
@@ -214,13 +214,13 @@ namespace VAdvantage.Acct
             //  Product PPV
             FactLine cr = fact.CreateLine(null,
                 _pc.GetAccount(ProductCost.ACCTTYPE_P_PPV, as1),
-                as1.GetC_Currency_ID(), difference);
+                as1.GetVAB_Currency_ID(), difference);
             if (cr != null)
             {
                 cr.SetQty(GetQty());
-                cr.SetC_BPartner_ID(_oLine.GetC_BPartner_ID());
-                cr.SetC_Activity_ID(_oLine.GetC_Activity_ID());
-                cr.SetC_Campaign_ID(_oLine.GetC_Campaign_ID());
+                cr.SetVAB_BusinessPartner_ID(_oLine.GetVAB_BusinessPartner_ID());
+                cr.SetVAB_BillingCode_ID(_oLine.GetVAB_BillingCode_ID());
+                cr.SetVAB_Promotion_ID(_oLine.GetVAB_Promotion_ID());
                 cr.SetC_Project_ID(_oLine.GetC_Project_ID());
                 cr.SetC_UOM_ID(_oLine.GetC_UOM_ID());
                 cr.SetUser1_ID(_oLine.GetUser1_ID());
@@ -230,14 +230,14 @@ namespace VAdvantage.Acct
             //  PPV Offset
             FactLine dr = fact.CreateLine(null,
                 GetAccount(Doc.ACCTTYPE_PPVOffset, as1),
-                as1.GetC_Currency_ID(), Decimal.Negate(difference));
+                as1.GetVAB_Currency_ID(), Decimal.Negate(difference));
             if (dr != null)
             {
                 dr.SetQty((Decimal?) Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())));
 
-                dr.SetC_BPartner_ID(_oLine.GetC_BPartner_ID());
-                dr.SetC_Activity_ID(_oLine.GetC_Activity_ID());
-                dr.SetC_Campaign_ID(_oLine.GetC_Campaign_ID());
+                dr.SetVAB_BusinessPartner_ID(_oLine.GetVAB_BusinessPartner_ID());
+                dr.SetVAB_BillingCode_ID(_oLine.GetVAB_BillingCode_ID());
+                dr.SetVAB_Promotion_ID(_oLine.GetVAB_Promotion_ID());
                 dr.SetC_Project_ID(_oLine.GetC_Project_ID());
                 dr.SetC_UOM_ID(_oLine.GetC_UOM_ID());
                 dr.SetUser1_ID(_oLine.GetUser1_ID());

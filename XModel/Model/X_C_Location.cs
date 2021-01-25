@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (C_Location_ID == 0)
             {
-            SetC_Country_ID (0);
+            SetVAB_Country_ID (0);
             SetC_Location_ID (0);
             }
              */
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         {
             /** if (C_Location_ID == 0)
             {
-            SetC_Country_ID (0);
+            SetVAB_Country_ID (0);
             SetC_Location_ID (0);
             }
              */
@@ -186,33 +186,33 @@ namespace VAdvantage.Model
             return (String)Get_Value("Address4");
         }
         /** Set City.
-        @param C_City_ID City */
-        public void SetC_City_ID(int C_City_ID)
+        @param VAB_City_ID City */
+        public void SetVAB_City_ID(int VAB_City_ID)
         {
-            if (C_City_ID <= 0) Set_Value("C_City_ID", null);
+            if (VAB_City_ID <= 0) Set_Value("VAB_City_ID", null);
             else
-                Set_Value("C_City_ID", C_City_ID);
+                Set_Value("VAB_City_ID", VAB_City_ID);
         }
         /** Get City.
         @return City */
-        public int GetC_City_ID()
+        public int GetVAB_City_ID()
         {
-            Object ii = Get_Value("C_City_ID");
+            Object ii = Get_Value("VAB_City_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Country.
-        @param C_Country_ID Country */
-        public void SetC_Country_ID(int C_Country_ID)
+        @param VAB_Country_ID Country */
+        public void SetVAB_Country_ID(int VAB_Country_ID)
         {
-            if (C_Country_ID < 1) throw new ArgumentException("C_Country_ID is mandatory.");
-            Set_Value("C_Country_ID", C_Country_ID);
+            if (VAB_Country_ID < 1) throw new ArgumentException("VAB_Country_ID is mandatory.");
+            Set_Value("VAB_Country_ID", VAB_Country_ID);
         }
         /** Get Country.
         @return Country */
-        public int GetC_Country_ID()
+        public int GetVAB_Country_ID()
         {
-            Object ii = Get_Value("C_Country_ID");
+            Object ii = Get_Value("VAB_Country_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

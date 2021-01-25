@@ -20,9 +20,9 @@ public X_C_RfQResponse (Context ctx, int C_RfQResponse_ID, Trx trxName) : base (
 {
 /** if (C_RfQResponse_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
-SetC_Currency_ID (0);	// @C_Currency_ID@
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
 SetC_RfQResponse_ID (0);
 SetC_RfQ_ID (0);
 SetIsComplete (false);
@@ -38,9 +38,9 @@ public X_C_RfQResponse (Ctx ctx, int C_RfQResponse_ID, Trx trxName) : base (ctx,
 {
 /** if (C_RfQResponse_ID == 0)
 {
-SetC_BPartner_ID (0);
-SetC_BPartner_Location_ID (0);
-SetC_Currency_ID (0);	// @C_Currency_ID@
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
 SetC_RfQResponse_ID (0);
 SetC_RfQ_ID (0);
 SetIsComplete (false);
@@ -147,47 +147,47 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Business Partner.
-@param C_BPartner_ID Identifies a Business Partner */
-public void SetC_BPartner_ID (int C_BPartner_ID)
+@param VAB_BusinessPartner_ID Identifies a Business Partner */
+public void SetVAB_BusinessPartner_ID (int VAB_BusinessPartner_ID)
 {
-if (C_BPartner_ID < 1) throw new ArgumentException ("C_BPartner_ID is mandatory.");
-Set_Value ("C_BPartner_ID", C_BPartner_ID);
+if (VAB_BusinessPartner_ID < 1) throw new ArgumentException ("VAB_BusinessPartner_ID is mandatory.");
+Set_Value ("VAB_BusinessPartner_ID", VAB_BusinessPartner_ID);
 }
 /** Get Business Partner.
 @return Identifies a Business Partner */
-public int GetC_BPartner_ID() 
+public int GetVAB_BusinessPartner_ID() 
 {
-Object ii = Get_Value("C_BPartner_ID");
+Object ii = Get_Value("VAB_BusinessPartner_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Partner Location.
-@param C_BPartner_Location_ID Identifies the (ship to) address for this Business Partner */
-public void SetC_BPartner_Location_ID (int C_BPartner_Location_ID)
+@param VAB_BPart_Location_ID Identifies the (ship to) address for this Business Partner */
+public void SetVAB_BPart_Location_ID (int VAB_BPart_Location_ID)
 {
-if (C_BPartner_Location_ID < 1) throw new ArgumentException ("C_BPartner_Location_ID is mandatory.");
-Set_Value ("C_BPartner_Location_ID", C_BPartner_Location_ID);
+if (VAB_BPart_Location_ID < 1) throw new ArgumentException ("VAB_BPart_Location_ID is mandatory.");
+Set_Value ("VAB_BPart_Location_ID", VAB_BPart_Location_ID);
 }
 /** Get Partner Location.
 @return Identifies the (ship to) address for this Business Partner */
-public int GetC_BPartner_Location_ID() 
+public int GetVAB_BPart_Location_ID() 
 {
-Object ii = Get_Value("C_BPartner_Location_ID");
+Object ii = Get_Value("VAB_BPart_Location_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

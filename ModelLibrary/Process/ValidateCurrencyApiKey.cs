@@ -26,14 +26,14 @@ namespace VAdvantage.Process
     public class ValidateCurrencyApiKey : SvrProcess
     {
         #region Variables       
-        int C_CurrencySource_ID = 0;
+        int VAB_CurrencySource_ID = 0;
         string sql = "";
         DataSet ds = null;
         #endregion
 
         protected override void Prepare()
         {
-            C_CurrencySource_ID = GetRecord_ID();
+            VAB_CurrencySource_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace VAdvantage.Process
             try
             {
                 // Get URL and Api Key from Currency Source
-                sql = "SELECT URL, ApiKey FROM C_CurrencySource WHERE C_CurrencySource_ID=" + C_CurrencySource_ID;
+                sql = "SELECT URL, ApiKey FROM VAB_CurrencySource WHERE VAB_CurrencySource_ID=" + VAB_CurrencySource_ID;
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {

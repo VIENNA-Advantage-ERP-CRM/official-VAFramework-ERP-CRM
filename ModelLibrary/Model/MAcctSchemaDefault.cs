@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAcctSchemaDefault
  * Purpose        : Default Accounts for MAcctSchema
- * Class Used     : X_C_AcctSchema_Default
+ * Class Used     : X_VAB_AccountBook_Default
  * Chronological    Development
  * Deepak           23-Nov-2009
   ******************************************************/
@@ -22,7 +22,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MAcctSchemaDefault : X_C_AcctSchema_Default
+    public class MAcctSchemaDefault : X_VAB_AccountBook_Default
     {
         /**	Logger							*/
         protected static VLogger _log = VLogger.GetVLogger(typeof(MAcctSchemaDefault).FullName);
@@ -31,21 +31,21 @@ namespace VAdvantage.Model
         /// 	Get Accounting Schema Default Info
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">id</param>
+        /// <param name="VAB_AccountBook_ID">id</param>
         /// <returns>defaults</returns>
-        public static MAcctSchemaDefault Get(Ctx ctx, int C_AcctSchema_ID)
+        public static MAcctSchemaDefault Get(Ctx ctx, int VAB_AccountBook_ID)
         {
             MAcctSchemaDefault retValue = null;
-            String sql = "SELECT * FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=@Param1";
+            String sql = "SELECT * FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=@Param1";
             SqlParameter[] Param = new SqlParameter[1];
             IDataReader idr = null;
             DataTable dt = null;
             //PreparedStatement pstmt = null;
             try
             {
-                Param[0] = new SqlParameter("@Param1", C_AcctSchema_ID);
+                Param[0] = new SqlParameter("@Param1", VAB_AccountBook_ID);
                 //pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setInt(1, C_AcctSchema_ID);
+                //pstmt.setInt(1, VAB_AccountBook_ID);
                 //ResultSet rs = pstmt.executeQuery();
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, Param, null);
                 dt = new DataTable();
@@ -79,12 +79,12 @@ namespace VAdvantage.Model
         /// Load Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_AcctSchema_ID">parent</param>
+        /// <param name="VAB_AccountBook_ID">parent</param>
         /// <param name="trxName">transaction</param>
-        public MAcctSchemaDefault(Ctx ctx, int C_AcctSchema_ID, Trx trxName)
-            : base(ctx, C_AcctSchema_ID, trxName)
+        public MAcctSchemaDefault(Ctx ctx, int VAB_AccountBook_ID, Trx trxName)
+            : base(ctx, VAB_AccountBook_ID, trxName)
         {
-            //super(ctx, C_AcctSchema_ID, trxName);
+            //super(ctx, VAB_AccountBook_ID, trxName);
         }	
 
         /// <summary>
@@ -102,11 +102,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Realized Gain Acct for currency
         /// </summary>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <returns>gain acct</returns>
-        public int GetRealizedGain_Acct(int C_Currency_ID)
+        public int GetRealizedGain_Acct(int VAB_Currency_ID)
         {
-            MCurrencyAcct acct = MCurrencyAcct.Get(this, C_Currency_ID);
+            MCurrencyAcct acct = MCurrencyAcct.Get(this, VAB_Currency_ID);
             if (acct != null)
             {
                 return acct.GetRealizedGain_Acct();
@@ -117,11 +117,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Realized Loss Acct for currency 
         /// </summary>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <returns>loss acct</returns>
-        public int GetRealizedLoss_Acct(int C_Currency_ID)
+        public int GetRealizedLoss_Acct(int VAB_Currency_ID)
         {
-            MCurrencyAcct acct = MCurrencyAcct.Get(this, C_Currency_ID);
+            MCurrencyAcct acct = MCurrencyAcct.Get(this, VAB_Currency_ID);
             if (acct != null)
             {
                 return acct.GetRealizedLoss_Acct();

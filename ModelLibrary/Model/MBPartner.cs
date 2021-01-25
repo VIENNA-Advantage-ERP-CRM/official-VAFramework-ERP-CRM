@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : VFramwork
  * Purpose        : Business Partner Model
- * Class Used     : X_C_BPartner
+ * Class Used     : X_VAB_BusinessPartner
  * Chronological Development
  * Veena Pandey     02-June-2009
  * Raghunandan      24-june-2009
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Business Partner Model
     /// </summary>
-    public class MBPartner : X_C_BPartner
+    public class MBPartner : X_VAB_BusinessPartner
     {
         #region private Variables
         // Users						
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         // BP Bank Accounts				
         private MBPBankAccount[] _accounts = null;
         // Prim Address					
-        private int? _primaryC_BPartner_Location_ID = null;
+        private int? _primaryVAB_BPart_Location_ID = null;
         // Prim User						
         private int? _primaryVAF_UserContact_ID = null;
         // Credit Limit recently calcualted		
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
             //	Reset
             if (template != null)
             {
-                template.Set_ValueNoCheck("C_BPartner_ID", 0);
+                template.Set_ValueNoCheck("VAB_BusinessPartner_ID", 0);
                 template.SetValue("");
                 template.SetName("");
                 template.SetName2(null);
@@ -93,8 +93,8 @@ namespace VAdvantage.Model
         public static MBPartner GetBPartnerCashTrx(Ctx ctx, int VAF_Client_ID)
         {
             MBPartner retValue = null;
-            String sql = "SELECT * FROM C_BPartner "
-                + " WHERE C_BPartner_ID IN (SELECT C_BPartnerCashTrx_ID FROM VAF_ClientDetail" +
+            String sql = "SELECT * FROM VAB_BusinessPartner "
+                + " WHERE VAB_BusinessPartner_ID IN (SELECT VAB_BusinessPartnerCashTrx_ID FROM VAF_ClientDetail" +
                 " WHERE VAF_Client_ID=" + VAF_Client_ID + ")";
             DataTable dt = null;
             IDataReader idr = null;
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
                 return null;
             MBPartner retValue = null;
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM C_BPartner WHERE Value=@Value"
+            String sql = "SELECT * FROM VAB_BusinessPartner WHERE Value=@Value"
                 + " AND VAF_Client_ID=" + VAF_Client_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -173,13 +173,13 @@ namespace VAdvantage.Model
         /// Get BPartner with Value
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BPartner_ID">id</param>
+        /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <returns>BPartner or null</returns>
-        public static MBPartner Get(Ctx ctx, int C_BPartner_ID)
+        public static MBPartner Get(Ctx ctx, int VAB_BusinessPartner_ID)
         {
             MBPartner retValue = null;
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM C_BPartner WHERE C_BPartner_ID=" + C_BPartner_ID;
+            String sql = "SELECT * FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             //    + " AND  VAF_Client_ID=" + VAF_Client_ID;
             DataSet ds = new DataSet();
             try
@@ -202,16 +202,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Not Invoiced Shipment Value
         /// </summary>
-        /// <param name="C_BPartner_ID">partner</param>
+        /// <param name="VAB_BusinessPartner_ID">partner</param>
         /// <returns>value in accounting currency</returns>
-        public static Decimal GetNotInvoicedAmt(int C_BPartner_ID)
+        public static Decimal GetNotInvoicedAmt(int VAB_BusinessPartner_ID)
         {
             Decimal retValue = new decimal();
             String sql = "SELECT SUM(COALESCE("
-                + "CURRENCYBASEWITHCONVERSIONTYPE((ol.QtyDelivered-ol.QtyInvoiced)*ol.PriceActual,o.C_Currency_ID,o.DateOrdered, o.VAF_Client_ID,o.VAF_Org_ID, o.C_CONVERSIONTYPE_ID) ,0)) "
+                + "CURRENCYBASEWITHCONVERSIONTYPE((ol.QtyDelivered-ol.QtyInvoiced)*ol.PriceActual,o.VAB_Currency_ID,o.DateOrdered, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) ,0)) "
                 + " FROM C_OrderLine ol"
                 + " INNER JOIN C_Order o ON (ol.C_Order_ID=o.C_Order_ID) "
-                + " WHERE o.IsSOTrx='Y' AND Bill_BPartner_ID=" + C_BPartner_ID;
+                + " WHERE o.IsSOTrx='Y' AND Bill_BPartner_ID=" + VAB_BusinessPartner_ID;
             IDataReader idr = null;
             try
             {
@@ -259,18 +259,18 @@ namespace VAdvantage.Model
         /// Default Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BPartner_ID">id</param>
+        /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MBPartner(Ctx ctx, int C_BPartner_ID, Trx trxName)
-            : base(ctx, C_BPartner_ID, trxName)
+        public MBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
+            : base(ctx, VAB_BusinessPartner_ID, trxName)
         {
             //
-            if (C_BPartner_ID == -1)
+            if (VAB_BusinessPartner_ID == -1)
             {
                 InitTemplate(ctx.GetContextAsInt("VAF_Client_ID"));
-                C_BPartner_ID = 0;
+                VAB_BusinessPartner_ID = 0;
             }
-            if (C_BPartner_ID == 0)
+            if (VAB_BusinessPartner_ID == 0)
             {
                 //	setValue ("");
                 //	setName ("");
@@ -333,7 +333,7 @@ namespace VAdvantage.Model
             SetDUNS(impBP.GetDUNS());
             SetTaxID(impBP.GetTaxID());
             SetNAICS(impBP.GetNAICS());
-            SetC_BP_Group_ID(impBP.GetC_BP_Group_ID());
+            SetVAB_BPart_Category_ID(impBP.GetVAB_BPart_Category_ID());
         }
 
         /// <summary>
@@ -347,8 +347,8 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Client_ID=0");
 
             bool success = true;
-            String sql = "SELECT * FROM C_BPartner "
-                + " WHERE C_BPartner_ID=(SELECT C_BPartnerCashTrx_ID FROM VAF_ClientDetail" +
+            String sql = "SELECT * FROM VAB_BusinessPartner "
+                + " WHERE VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartnerCashTrx_ID FROM VAF_ClientDetail" +
                 " WHERE VAF_Client_ID=" + VAF_Client_ID + ")";
             try
             {
@@ -371,7 +371,7 @@ namespace VAdvantage.Model
 
             SetStandardDefaults();
             //	Reset
-            Set_ValueNoCheck("C_BPartner_ID", I_ZERO);
+            Set_ValueNoCheck("VAB_BusinessPartner_ID", I_ZERO);
             SetValue("");
             SetName("");
             SetName2(null);
@@ -393,7 +393,7 @@ namespace VAdvantage.Model
                 return _contacts;
             //
             List<MUser> list = new List<MUser>();
-            String sql = "SELECT * FROM VAF_UserContact WHERE C_BPartner_ID=" + GetC_BPartner_ID();
+            String sql = "SELECT * FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataSet ds = null;
             try
             {
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
             }
             //
             List<MBPartnerLocation> list = new List<MBPartnerLocation>();
-            String sql = "SELECT * FROM C_BPartner_Location WHERE C_BPartner_ID=" + GetC_BPartner_ID();
+            String sql = "SELECT * FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataSet ds = null;
             try
             {
@@ -475,9 +475,9 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get explicit or first bill Location
         /// </summary>
-        /// <param name="C_BPartner_Location_ID">optional explicit location</param>
+        /// <param name="VAB_BPart_Location_ID">optional explicit location</param>
         /// <returns>location or null</returns>
-        public MBPartnerLocation GetLocation(int C_BPartner_Location_ID)
+        public MBPartnerLocation GetLocation(int VAB_BPart_Location_ID)
         {
             MBPartnerLocation[] locations = GetLocations(false);
             if (locations.Length == 0)
@@ -485,7 +485,7 @@ namespace VAdvantage.Model
             MBPartnerLocation retValue = null;
             for (int i = 0; i < locations.Length; i++)
             {
-                if (locations[i].GetC_BPartner_Location_ID() == C_BPartner_Location_ID)
+                if (locations[i].GetVAB_BPart_Location_ID() == VAB_BPart_Location_ID)
                     return locations[i];
                 if (retValue == null && locations[i].IsBillTo())
                     retValue = locations[i];
@@ -506,7 +506,7 @@ namespace VAdvantage.Model
                 return _accounts;
             //
             List<MBPBankAccount> list = new List<MBPBankAccount>();
-            String sql = "SELECT * FROM C_BP_BankAccount WHERE C_BPartner_ID=" + GetC_BPartner_ID()
+            String sql = "SELECT * FROM VAB_BPart_Bank_Acct WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID()
                 + " AND IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
@@ -598,44 +598,44 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get Primary C_BPartner_Location_ID
+        /// Get Primary VAB_BPart_Location_ID
         /// </summary>
-        /// <returns>C_BPartner_Location_ID</returns>
-        public int GetPrimaryC_BPartner_Location_ID()
+        /// <returns>VAB_BPart_Location_ID</returns>
+        public int GetPrimaryVAB_BPart_Location_ID()
         {
-            if (_primaryC_BPartner_Location_ID == null)
+            if (_primaryVAB_BPart_Location_ID == null)
             {
                 MBPartnerLocation[] locs = GetLocations(false);
-                for (int i = 0; _primaryC_BPartner_Location_ID == null && i < locs.Length; i++)
+                for (int i = 0; _primaryVAB_BPart_Location_ID == null && i < locs.Length; i++)
                 {
                     if (locs[i].IsBillTo())
                     {
-                        SetPrimaryC_BPartner_Location_ID(locs[i].GetC_BPartner_Location_ID());
+                        SetPrimaryVAB_BPart_Location_ID(locs[i].GetVAB_BPart_Location_ID());
                         break;
                     }
                 }
                 //	get first
-                if (_primaryC_BPartner_Location_ID == null && locs.Length > 0)
-                    SetPrimaryC_BPartner_Location_ID(locs[0].GetC_BPartner_Location_ID());
+                if (_primaryVAB_BPart_Location_ID == null && locs.Length > 0)
+                    SetPrimaryVAB_BPart_Location_ID(locs[0].GetVAB_BPart_Location_ID());
             }
-            if (_primaryC_BPartner_Location_ID == null)
+            if (_primaryVAB_BPart_Location_ID == null)
                 return 0;
-            return (int)_primaryC_BPartner_Location_ID;
+            return (int)_primaryVAB_BPart_Location_ID;
         }
 
         /// <summary>
-        /// Get Primary C_BPartner_Location
+        /// Get Primary VAB_BPart_Location
         /// </summary>
-        /// <returns>C_BPartner_Location</returns>
-        public MBPartnerLocation GetPrimaryC_BPartner_Location()
+        /// <returns>VAB_BPart_Location</returns>
+        public MBPartnerLocation GetPrimaryVAB_BPart_Location()
         {
-            if (_primaryC_BPartner_Location_ID == null)
+            if (_primaryVAB_BPart_Location_ID == null)
             {
-                _primaryC_BPartner_Location_ID = GetPrimaryC_BPartner_Location_ID();
+                _primaryVAB_BPart_Location_ID = GetPrimaryVAB_BPart_Location_ID();
             }
-            if (_primaryC_BPartner_Location_ID == null)
+            if (_primaryVAB_BPart_Location_ID == null)
                 return null;
-            return new MBPartnerLocation(GetCtx(), (int)_primaryC_BPartner_Location_ID, null);
+            return new MBPartnerLocation(GetCtx(), (int)_primaryVAB_BPart_Location_ID, null);
         }
 
         /// <summary>
@@ -659,12 +659,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Set Primary C_BPartner_Location_ID
+        /// Set Primary VAB_BPart_Location_ID
         /// </summary>
-        /// <param name="C_BPartner_Location_ID">id</param>
-        public void SetPrimaryC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        /// <param name="VAB_BPart_Location_ID">id</param>
+        public void SetPrimaryVAB_BPart_Location_ID(int VAB_BPart_Location_ID)
         {
-            _primaryC_BPartner_Location_ID = C_BPartner_Location_ID;
+            _primaryVAB_BPart_Location_ID = VAB_BPart_Location_ID;
         }
 
         /// <summary>
@@ -686,75 +686,75 @@ namespace VAdvantage.Model
             Decimal? TotalOpenBalance = null;
             String sql = "SELECT "
                 //	SO Credit Used	= SO Invoices
-                + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.C_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)) "
+                + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.VAB_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
                     + " FROM C_Invoice_v i "
-                    + " WHERE i.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND i.IsSOTrx='Y' AND i.DocStatus IN('CO','CL')),0) "
                 //					- All SO Allocations
-                + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)) "
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
-                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID AND a.IsActive='Y'"
+                + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND a.IsActive='Y'"
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')),0) "
                 //					- Unallocated Receipts	= (All Receipts
-                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.C_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.C_CONVERSIONTYPE_ID)),0) "
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.VAB_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.VAB_CurrencyType_ID)),0) "
                     + " FROM C_Payment_v p "
-                    + " WHERE p.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " WHERE p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND p.IsReceipt='Y' AND p.DocStatus IN('CO','CL')"
-                    + " AND p.C_Charge_ID IS NULL)"
+                    + " AND p.VAB_Charge_ID IS NULL)"
                 // JID_1224: Consider Cash Journal Transaction also to Get Total Open Balance of Business Partner
                 //                  - Unallocated Cash Receipts
-                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.C_Currency_ID,c.StatementDate, cl.VAF_Client_ID,cl.VAF_Org_ID, cl.C_CONVERSIONTYPE_ID)),0)"
-                    + " FROM C_CASHLINE cl INNER JOIN C_Cash C ON C.C_Cash_ID = cl.C_Cash_ID WHERE cl.C_BPartner_ID=bp.C_BPartner_ID"
-                    + " AND cl.VSS_PaymentType ='R' AND c.DocStatus IN('CO','CL') AND cl.C_Charge_ID IS NULL)"
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.VAB_Currency_ID,c.StatementDate, cl.VAF_Client_ID,cl.VAF_Org_ID, cl.VAB_CurrencyType_ID)),0)"
+                    + " FROM VAB_CASHJRNLLINE cl INNER JOIN VAB_CashJRNL C ON C.VAB_CashJRNL_ID = cl.VAB_CashJRNL_ID WHERE cl.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+                    + " AND cl.VSS_PaymentType ='R' AND c.DocStatus IN('CO','CL') AND cl.VAB_Charge_ID IS NULL)"
                 //											- All Receipt Allocations
-                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
-                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL"
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')) "
                 //                                          - All Cash Receipt Allocatioons
-                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)),0)"
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID)"
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID AND A.IsActive ='Y' AND a.C_CashLine_ID IS NOT NULL AND i.isSoTrx ='Y' AND h.DocStatus IN('CO','CL')), "
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0)"
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID)"
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND A.IsActive ='Y' AND a.VAB_CashJRNLLine_ID IS NOT NULL AND i.isSoTrx ='Y' AND h.DocStatus IN('CO','CL')), "
 
                 //	Balance			= All Invoices
-                + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal*MultiplierAP,i.C_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)) "
+                + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal*MultiplierAP,i.VAB_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
                     + " FROM C_Invoice_v i "
-                    + " WHERE i.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND i.DocStatus IN('CO','CL')),0) "
                 //					- All Allocations
-                + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)) "
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
-                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID AND a.IsActive='Y' AND h.DocStatus IN('CO','CL')),0) "
+                + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND a.IsActive='Y' AND h.DocStatus IN('CO','CL')),0) "
                 //					- Unallocated Receipts	= (All Receipts
-                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.C_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.C_CONVERSIONTYPE_ID)),0) "
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.VAB_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.VAB_CurrencyType_ID)),0) "
                     + " FROM C_Payment_v p "
-                    + " WHERE p.C_BPartner_ID=bp.C_BPartner_ID"
+                    + " WHERE p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND p.DocStatus IN('CO','CL')"
-                    + " AND p.C_Charge_ID IS NULL)"
+                    + " AND p.VAB_Charge_ID IS NULL)"
                 // JID_1224: Consider Cash Journal Transaction also to Get Total Open Balance of Business Partner
                 //                  - Unallocated Cash Receipts
-                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.C_Currency_ID,c.StatementDate, cl.VAF_Client_ID,cl.VAF_Org_ID, cl.C_CONVERSIONTYPE_ID)),0)"
-                    + " FROM C_CASHLINE cl INNER JOIN C_Cash C ON C.C_Cash_ID = cl.C_Cash_ID WHERE cl.C_BPartner_ID=bp.C_BPartner_ID"
-                    + " AND c.DocStatus IN('CO','CL') AND cl.C_Charge_ID IS NULL)"
+                + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(cl.Amount,cl.VAB_Currency_ID,c.StatementDate, cl.VAF_Client_ID,cl.VAF_Org_ID, cl.VAB_CurrencyType_ID)),0)"
+                    + " FROM VAB_CASHJRNLLINE cl INNER JOIN VAB_CashJRNL C ON C.VAB_CashJRNL_ID = cl.VAB_CashJRNL_ID WHERE cl.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+                    + " AND c.DocStatus IN('CO','CL') AND cl.VAB_Charge_ID IS NULL)"
                 //											- All Allocations
-                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
-                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
                 //											- All Cash Allocations
-                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.C_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)),0) "
-                    + " FROM C_AllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
-                    + " INNER JOIN C_AllocationHdr h ON (a.C_AllocationHdr_ID = h.C_AllocationHdr_ID) "
-                    + " WHERE a.C_BPartner_ID=bp.C_BPartner_ID"
-                    + " AND a.IsActive='Y' AND a.C_CashLine_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
+                + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
+                    + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
+                    + " AND a.IsActive='Y' AND a.VAB_CashJRNLLine_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
                 //
-                + " FROM C_BPartner bp "
-                + " WHERE C_BPartner_ID=" + GetC_BPartner_ID();
+                + " FROM VAB_BusinessPartner bp "
+                + " WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -805,11 +805,11 @@ namespace VAdvantage.Model
         {
             Decimal? ActualLifeTimeValue = null;
             String sql = "SELECT "
-                + "COALESCE ((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.C_Currency_ID,i.DateOrdered,"
-                + " i.VAF_Client_ID,i.VAF_Org_ID, i.C_CONVERSIONTYPE_ID)) "
-                    + " FROM C_Invoice_v i WHERE i.C_BPartner_ID=bp.C_BPartner_ID AND i.IsSOTrx='Y'"
-            + " AND i.DocStatus IN('CO','CL')),0) FROM C_BPartner bp "
-                + " WHERE C_BPartner_ID=" + GetC_BPartner_ID();
+                + "COALESCE ((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.VAB_Currency_ID,i.DateOrdered,"
+                + " i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
+                    + " FROM C_Invoice_v i WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND i.IsSOTrx='Y'"
+            + " AND i.DocStatus IN('CO','CL')),0) FROM VAB_BusinessPartner bp "
+                + " WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -945,10 +945,10 @@ namespace VAdvantage.Model
         {
             if (_group == null)
             {
-                if (GetC_BP_Group_ID() == 0)
+                if (GetVAB_BPart_Category_ID() == 0)
                     _group = MBPGroup.GetDefault(GetCtx());
                 else
-                    _group = MBPGroup.Get(GetCtx(), GetC_BP_Group_ID());
+                    _group = MBPGroup.Get(GetCtx(), GetVAB_BPart_Category_ID());
             }
             return _group;
         }
@@ -962,9 +962,9 @@ namespace VAdvantage.Model
             _group = group;
             if (_group == null)
                 return;
-            SetC_BP_Group_ID(_group.GetC_BP_Group_ID());
-            if (_group.GetC_Dunning_ID() != 0)
-                SetC_Dunning_ID(_group.GetC_Dunning_ID());
+            SetVAB_BPart_Category_ID(_group.GetVAB_BPart_Category_ID());
+            if (_group.GetVAB_Dunning_ID() != 0)
+                SetVAB_Dunning_ID(_group.GetVAB_Dunning_ID());
             // if pricelist already selected from UI then skip..
             if (base.GetM_PriceList_ID() > 0) { }
             else
@@ -1063,12 +1063,12 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (newRecord || Is_ValueChanged("C_BP_Group_ID"))
+            if (newRecord || Is_ValueChanged("VAB_BPart_Category_ID"))
             {
                 MBPGroup grp = GetBPGroup();
                 if (grp == null)
                 {
-                    log.SaveWarning("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@:  @C_BP_Group_ID@"));
+                    log.SaveWarning("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@:  @VAB_BPart_Category_ID@"));
                     return false;
                 }
                 SetBPGroup(grp);	//	setDefaults
@@ -1206,20 +1206,20 @@ namespace VAdvantage.Model
                 {
                     PO obj = null;
                     //MFRPTBPCustomerAcct obj = null;
-                    int Customer_ID = GetC_BPartner_ID();
-                    int C_BP_Group_ID = GetC_BP_Group_ID();
+                    int Customer_ID = GetVAB_BusinessPartner_ID();
+                    int VAB_BPart_Category_ID = GetVAB_BPart_Category_ID();
                     string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Customer'";
                     //string sql = "select VALUE from VAF_CtrlRef_List where name='Customer'";
                     string _RelatedToCustmer = Convert.ToString(DB.ExecuteScalar(sql));
 
                     _sql.Clear();
-                    _sql.Append("Select Count(*) From FRPT_BP_Customer_Acct   where C_BPartner_ID=" + Customer_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                    _sql.Append("Select Count(*) From FRPT_BP_Customer_Acct   where VAB_BusinessPartner_ID=" + Customer_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                     int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                     if (value < 1)
                     {
 
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToCustmer + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToCustmer + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1227,9 +1227,9 @@ namespace VAdvantage.Model
                             {
                                 //obj = new MFRPTBPCustomerAcct(GetCtx(), 0, null);
                                 obj = MTable.GetPO(GetCtx(), "FRPT_BP_Customer_Acct", 0, null);
-                                obj.Set_ValueNoCheck("C_BPartner_ID", Customer_ID);
+                                obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Customer_ID);
                                 obj.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                                obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                                 obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                 if (!obj.Save())
@@ -1251,8 +1251,8 @@ namespace VAdvantage.Model
                 {
                     PO obj = null;
                     //MFRPTBPVendorAcct obj = null;
-                    int Vendor_ID = GetC_BPartner_ID();
-                    int C_BP_Group_ID = GetC_BP_Group_ID();
+                    int Vendor_ID = GetVAB_BusinessPartner_ID();
+                    int VAB_BPart_Category_ID = GetVAB_BPart_Category_ID();
                     string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Vendor'";
                     //string sql = "select VALUE from VAF_CtrlRef_List where name='Vendor'";
                     string _RelatedToVendor = Convert.ToString(DB.ExecuteScalar(sql));
@@ -1260,12 +1260,12 @@ namespace VAdvantage.Model
 
 
                     _sql.Clear();
-                    _sql.Append("Select Count(*) From FRPT_BP_Vendor_Acct   where C_BPartner_ID=" + Vendor_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                    _sql.Append("Select Count(*) From FRPT_BP_Vendor_Acct   where VAB_BusinessPartner_ID=" + Vendor_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                     int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToVendor + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToVendor + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1273,8 +1273,8 @@ namespace VAdvantage.Model
                             {
                                 //obj = new MFRPTBPVendorAcct(GetCtx(), 0, null);
                                 obj = MTable.GetPO(GetCtx(), "FRPT_BP_Vendor_Acct", 0, null);
-                                obj.Set_ValueNoCheck("C_BPartner_ID", Vendor_ID);
-                                obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                                obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Vendor_ID);
+                                obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                                 obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
 
@@ -1297,8 +1297,8 @@ namespace VAdvantage.Model
                 if (IsEmployee())
                 {
                     // MFRPTBPEmployeeAcct obj = null;
-                    int Employee_ID = GetC_BPartner_ID();
-                    int C_BP_Group_ID = GetC_BP_Group_ID();
+                    int Employee_ID = GetVAB_BusinessPartner_ID();
+                    int VAB_BPart_Category_ID = GetVAB_BPart_Category_ID();
                     string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Employee'";
                     //string sql = "select VALUE from VAF_CtrlRef_List where name='Employee'";
                     string _RelatedToEmployee = Convert.ToString(DB.ExecuteScalar(sql));
@@ -1306,12 +1306,12 @@ namespace VAdvantage.Model
 
 
                     _sql.Clear();
-                    _sql.Append("Select Count(*) From FRPT_BP_Employee_Acct  where C_BPartner_ID=" + Employee_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                    _sql.Append("Select Count(*) From FRPT_BP_Employee_Acct  where VAB_BusinessPartner_ID=" + Employee_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                     int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToEmployee + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToEmployee + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1319,8 +1319,8 @@ namespace VAdvantage.Model
                             {
                                 //obj = new MFRPTBPEmployeeAcct(GetCtx(), 0, null);
                                 var obj = MTable.GetPO(GetCtx(), "FRPT_BP_Employee_Acct", 0, null);
-                                obj.Set_ValueNoCheck("C_BPartner_ID", Employee_ID);
-                                obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
+                                obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Employee_ID);
+                                obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                                 obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                 if (!obj.Save())
@@ -1337,8 +1337,8 @@ namespace VAdvantage.Model
                 if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
                 {
                     //	Accounting
-                    bool sucs = Insert_Accounting("C_BP_Customer_Acct", "C_BP_Group_Acct",
-                           "p.C_BP_Group_ID=" + GetC_BP_Group_ID());
+                    bool sucs = Insert_Accounting("C_BP_Customer_Acct", "VAB_BPart_Category_Acct",
+                           "p.VAB_BPart_Category_ID=" + GetVAB_BPart_Category_ID());
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
                     if (!sucs)
@@ -1346,8 +1346,8 @@ namespace VAdvantage.Model
                         log.SaveWarning("AcctNotSaved", "");
                     }
 
-                    sucs = Insert_Accounting("C_BP_Vendor_Acct", "C_BP_Group_Acct",
-                           "p.C_BP_Group_ID=" + GetC_BP_Group_ID());
+                    sucs = Insert_Accounting("C_BP_Vendor_Acct", "VAB_BPart_Category_Acct",
+                           "p.VAB_BPart_Category_ID=" + GetVAB_BPart_Category_ID());
 
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
@@ -1357,7 +1357,7 @@ namespace VAdvantage.Model
                     }
 
 
-                    sucs = Insert_Accounting("C_BP_Employee_Acct", "C_AcctSchema_Default", null);
+                    sucs = Insert_Accounting("C_BP_Employee_Acct", "VAB_AccountBook_Default", null);
 
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
@@ -1370,8 +1370,8 @@ namespace VAdvantage.Model
                 //	Value/Name change
                 if (success && !newRecord
                     && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                    MAccount.UpdateValueDescription(GetCtx(), "C_BPartner_ID=" +
-                        GetC_BPartner_ID(), Get_TrxName());
+                    MAccount.UpdateValueDescription(GetCtx(), "VAB_BusinessPartner_ID=" +
+                        GetVAB_BusinessPartner_ID(), Get_TrxName());
             }
             //Added by Neha Thakur--05 Jan 2018--Set "Report To" (from Header tab) as Supervisor in Login User tab--Asked by Ravikant
             if (IsEmployee())
@@ -1383,17 +1383,17 @@ namespace VAdvantage.Model
                     if (_Emp_ID > 0)
                     {
                         _sql.Clear();
-                        _sql.Append(@"SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE C_BPARTNER_ID=" + _Emp_ID + " AND VAF_CLIENT_ID =" + GetVAF_Client_ID());
+                        _sql.Append(@"SELECT VAF_USERCONTACT_ID FROM VAF_USERCONTACT WHERE VAB_BUSINESSPARTNER_ID=" + _Emp_ID + " AND VAF_CLIENT_ID =" + GetVAF_Client_ID());
                         int VAF_UserContact_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString(), null, null));
                         _sql.Clear();
                         if (VAF_UserContact_ID > 0)
                         {
-                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=" + VAF_UserContact_ID + " WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
+                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=" + VAF_UserContact_ID + " WHERE VAB_BUSINESSPARTNER_ID=" + GetVAB_BusinessPartner_ID());
 
                         }
                         else
                         {
-                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=null WHERE C_BPARTNER_ID=" + GetC_BPartner_ID());
+                            _sql.Append(@"UPDATE VAF_USERCONTACT SET SUPERVISOR_ID=null WHERE VAB_BUSINESSPARTNER_ID=" + GetVAB_BusinessPartner_ID());
                         }
                         int _count = Util.GetValueOfInt(DB.ExecuteQuery(_sql.ToString(), null, null));
                         _sql.Clear();
@@ -1420,7 +1420,7 @@ namespace VAdvantage.Model
 
             }
 
-            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx());
+            int count = DB.ExecuteQuery("UPDATE VAB_BPart_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE VAB_BusinessPartner_ID = " + GetVAB_BusinessPartner_ID(), null, Get_Trx());
 
             //---------End----------------------------------------------------
             return success;
@@ -1431,18 +1431,18 @@ namespace VAdvantage.Model
         /// set either on Business Partner header Or Locaion based on the settings
         /// </summary>
         /// <param name="TrxType">Credit Validation type to match</param>
-        /// <param name="C_BPartner_Location_ID">Business Partner Locaion ID</param>
+        /// <param name="VAB_BPart_Location_ID">Business Partner Locaion ID</param>
         /// <returns>True/False</returns>
-        public bool ValidateCreditValidation(string TrxType, int C_BPartner_Location_ID)
+        public bool ValidateCreditValidation(string TrxType, int VAB_BPart_Location_ID)
         {
-            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            if (GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerHeader)
             {
                 if (TrxType.Contains(GetCreditValidation()))
                     return true;
             }
-            else if (C_BPartner_Location_ID > 0)
+            else if (VAB_BPart_Location_ID > 0)
             {
-                MBPartnerLocation loc = new MBPartnerLocation(GetCtx() , C_BPartner_Location_ID, Get_Trx());
+                MBPartnerLocation loc = new MBPartnerLocation(GetCtx() , VAB_BPart_Location_ID, Get_Trx());
                 if (TrxType.Contains(loc.GetCreditValidation()))
                     return true;
             }
@@ -1453,27 +1453,27 @@ namespace VAdvantage.Model
         /// function to check credit limit and other validations for Business partner,
         /// based on the settings on Business partner 
         /// </summary>
-        /// <param name="C_BPartner_Location_ID">Business partner location ID</param>
+        /// <param name="VAB_BPart_Location_ID">Business partner location ID</param>
         /// <param name="Amt">Amount</param>
         /// <param name="retMsg">Return Message</param>
         /// <returns>Status True/False (whether credit allowed or not)</returns>
-        public bool IsCreditAllowed(int C_BPartner_Location_ID, Decimal? Amt, out string retMsg)
+        public bool IsCreditAllowed(int VAB_BPart_Location_ID, Decimal? Amt, out string retMsg)
         {
             Decimal? totOpnBal = 0;
             Decimal? crdLmt = 0;
             retMsg = "";
             string creditStatus = GetSOCreditStatus();
-            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            if (GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerHeader)
             {
                 //Credit Limit by Vivek on 30/09/2016
-                if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(GetSOCreditStatus()))
+                if (X_VAB_BusinessPartner.SOCREDITSTATUS_CreditStop.Equals(GetSOCreditStatus()))
                 {
                     retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
                         + GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + GetSO_CreditLimit();
                     return false;
                 }
-                if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(GetSOCreditStatus()))
+                if (X_VAB_BusinessPartner.SOCREDITSTATUS_CreditHold.Equals(GetSOCreditStatus()))
                 {
                     retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
                         + GetTotalOpenBalance()
@@ -1483,18 +1483,18 @@ namespace VAdvantage.Model
                 totOpnBal = GetTotalOpenBalance();
                 crdLmt = GetSO_CreditLimit();
             }
-            else if (C_BPartner_Location_ID > 0 && GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+            else if (VAB_BPart_Location_ID > 0 && GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
             {
-                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), C_BPartner_Location_ID, Get_Trx());
+                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), VAB_BPart_Location_ID, Get_Trx());
                 creditStatus = bploc.GetSOCreditStatus();
-                if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(bploc.GetSOCreditStatus()))
+                if (X_VAB_BusinessPartner.SOCREDITSTATUS_CreditStop.Equals(bploc.GetSOCreditStatus()))
                 {
                     retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
                         + bploc.GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + bploc.GetSO_CreditLimit();
                     return false;
                 }
-                if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(bploc.GetSOCreditStatus()))
+                if (X_VAB_BusinessPartner.SOCREDITSTATUS_CreditHold.Equals(bploc.GetSOCreditStatus()))
                 {
                     retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
                         + bploc.GetTotalOpenBalance()
@@ -1505,7 +1505,7 @@ namespace VAdvantage.Model
                 crdLmt = bploc.GetSO_CreditLimit();
             }
             // check for payment if Total Open Balance + payment Amount exceeds Credit limit do not allow to complete transaction
-            if ((creditStatus != X_C_BPartner.SOCREDITSTATUS_NoCreditCheck) && (crdLmt > 0) && (crdLmt < (totOpnBal + Amt)))
+            if ((creditStatus != X_VAB_BusinessPartner.SOCREDITSTATUS_NoCreditCheck) && (crdLmt > 0) && (crdLmt < (totOpnBal + Amt)))
             {
                 retMsg = Msg.GetMsg(GetCtx(), "VIS_CreditLimitExceed") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
                         + totOpnBal + ", " + Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " = " + Amt 
@@ -1518,19 +1518,19 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check whether Business partner credit stauts is on Credit Watch
         /// </summary>
-        /// <param name="C_BPartner_Location_ID">Business Partner Location ID</param>
+        /// <param name="VAB_BPart_Location_ID">Business Partner Location ID</param>
         /// <returns></returns>
-        public bool IsCreditWatch(int C_BPartner_Location_ID)
+        public bool IsCreditWatch(int VAB_BPart_Location_ID)
         {
-            if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerHeader)
+            if (GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerHeader)
             {
-                if (GetSOCreditStatus() == X_C_BPartner.SOCREDITSTATUS_CreditWatch)
+                if (GetSOCreditStatus() == X_VAB_BusinessPartner.SOCREDITSTATUS_CreditWatch)
                     return true;
             }
-            else if (GetCreditStatusSettingOn() == X_C_BPartner.CREDITSTATUSSETTINGON_CustomerLocation)
+            else if (GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
             {
-                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), C_BPartner_Location_ID, Get_Trx());
-                if (bploc.GetSOCreditStatus() == X_C_BPartner.SOCREDITSTATUS_CreditWatch)
+                MBPartnerLocation bploc = new MBPartnerLocation(GetCtx(), VAB_BPart_Location_ID, Get_Trx());
+                if (bploc.GetSOCreditStatus() == X_VAB_BusinessPartner.SOCREDITSTATUS_CreditWatch)
                     return true;
             }
             return false;

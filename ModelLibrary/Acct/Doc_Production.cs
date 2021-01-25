@@ -55,7 +55,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(NO_CURRENCY);
+            SetVAB_Currency_ID(NO_CURRENCY);
             X_M_Production prod = (X_M_Production)GetPO();
             SetDateDoc(prod.GetMovementDate());
             SetDateAcct(prod.GetMovementDate());
@@ -174,7 +174,7 @@ namespace VAdvantage.Acct
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             //  Line pointer
             FactLine fl = null;
@@ -209,7 +209,7 @@ namespace VAdvantage.Acct
                 //  Inventory       DR      CR
                 fl = fact.CreateLine(line,
                     line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1),
-                    as1.GetC_Currency_ID(), costs);
+                    as1.GetVAB_Currency_ID(), costs);
                 if (fl == null)
                 {
                     _error = "No Costs for Line " + line.GetLine() + " - " + line;

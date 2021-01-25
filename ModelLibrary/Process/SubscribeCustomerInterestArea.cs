@@ -14,11 +14,11 @@ namespace VAdvantage.Process
     class SubscribeCustomerInterestArea : SvrProcess
     {
 
-        int _C_BPartner_ID;
+        int _VAB_BusinessPartner_ID;
         int R_InterestArea_ID;
         protected override void Prepare()
         {
-            _C_BPartner_ID = GetRecord_ID();
+            _VAB_BusinessPartner_ID = GetRecord_ID();
             ProcessInfoParameter[] para = GetParameter();
             for (int i = 0; i < para.Length; i++)
             {
@@ -49,15 +49,15 @@ namespace VAdvantage.Process
             {
                 X_R_ContactInterest customer = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
                 customer.SetR_InterestArea_ID(R_InterestArea_ID);
-                customer.SetC_BPartner_ID(_C_BPartner_ID);
-                String query = "Select VAF_UserContact_id from VAF_UserContact where c_bpartner_id= " + _C_BPartner_ID;
+                customer.SetVAB_BusinessPartner_ID(_VAB_BusinessPartner_ID);
+                String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + _VAB_BusinessPartner_ID;
                 int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query));
                 customer.SetVAF_UserContact_ID(UserId);
-                query = "Select C_BPartner_Location_id from C_BPartner_Location where c_bpartner_id= " + _C_BPartner_ID;
+                query = "Select VAB_BPart_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id= " + _VAB_BusinessPartner_ID;
 
                 int Id = Util.GetValueOfInt(DB.ExecuteScalar(query));
-                VAdvantage.Model.X_C_BPartner_Location loc = new VAdvantage.Model.X_C_BPartner_Location(GetCtx(), Id, Get_TrxName());
-                customer.SetC_BPartner_Location_ID(Id);
+                VAdvantage.Model.X_VAB_BPart_Location loc = new VAdvantage.Model.X_VAB_BPart_Location(GetCtx(), Id, Get_TrxName());
+                customer.SetVAB_BPart_Location_ID(Id);
                 customer.SetPhone(loc.GetPhone());
                 customer.SetFax(loc.GetFax());
 

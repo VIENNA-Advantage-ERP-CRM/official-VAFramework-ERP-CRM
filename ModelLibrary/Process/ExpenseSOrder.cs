@@ -26,7 +26,7 @@ namespace VAdvantage.Process
     public class ExpenseSOrder : ProcessEngine.SvrProcess
     {
         /**	 BPartner				*/
-        private int _C_BPartner_ID = 0;
+        private int _VAB_BusinessPartner_ID = 0;
         /** Date Drom				*/
         private DateTime? _DateFrom = null;
         /** Date To					*/
@@ -54,9 +54,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateExpense"))
                 {
@@ -78,14 +78,14 @@ namespace VAdvantage.Process
             int index = 1;
             StringBuilder sql = new StringBuilder("SELECT * FROM S_TimeExpenseLine el "
                 + "WHERE el.VAF_Client_ID=@param1"                       //	#1
-                + " AND el.C_BPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
+                + " AND el.VAB_BusinessPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
                 + " AND el.C_OrderLine_ID IS NULL"                  //	not invoiced yet
                 + " AND EXISTS (SELECT * FROM S_TimeExpense e "     //	processed only
                     + "WHERE el.S_TimeExpense_ID=e.S_TimeExpense_ID AND e.Processed='Y')");
-            if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+            if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 index++;
-                sql.Append(" AND el.C_BPartner_ID=@param2");            //	#2
+                sql.Append(" AND el.VAB_BusinessPartner_ID=@param2");            //	#2
             }
             if (_DateFrom != null || _DateTo != null)
             {
@@ -105,7 +105,7 @@ namespace VAdvantage.Process
 
                 sql.Append(")");
             }
-            sql.Append(" ORDER BY el.C_BPartner_ID, el.C_Project_ID, el.S_TimeExpense_ID, el.Line");
+            sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.C_Project_ID, el.S_TimeExpense_ID, el.Line");
 
             //
             MBPartner oldBPartner = null;
@@ -121,11 +121,11 @@ namespace VAdvantage.Process
                 int par = 0;
                 //pstmt.setInt(par++, getVAF_Client_ID());
                 param[par] = new SqlParameter("@param1", GetVAF_Client_ID());
-                if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
+                if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
                 {
-                    //pstmt.setInt(par++, _C_BPartner_ID);
+                    //pstmt.setInt(par++, _VAB_BusinessPartner_ID);
                     par++;
-                    param[par] = new SqlParameter("@param2", _C_BPartner_ID);
+                    param[par] = new SqlParameter("@param2", _VAB_BusinessPartner_ID);
                 }
                 if (_DateFrom != null)
                 {
@@ -156,10 +156,10 @@ namespace VAdvantage.Process
 
                         //	New BPartner - New Order
                         if (oldBPartner == null
-                            || oldBPartner.GetC_BPartner_ID() != tel.GetC_BPartner_ID())
+                            || oldBPartner.GetVAB_BusinessPartner_ID() != tel.GetVAB_BusinessPartner_ID())
                         {
                             CompleteOrder();
-                            oldBPartner = new MBPartner(GetCtx(), tel.GetC_BPartner_ID(), Get_TrxName());
+                            oldBPartner = new MBPartner(GetCtx(), tel.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         }
                         //	New Project - New Order
                         if (old_Project_ID != tel.GetC_Project_ID())
@@ -232,10 +232,10 @@ namespace VAdvantage.Process
                 log.Info("New Order for " + bp + ", Project=" + tel.GetC_Project_ID());
                 _order = new MOrder(GetCtx(), 0, Get_TrxName());
                 _order.SetVAF_Org_ID(tel.GetVAF_Org_ID());
-                _order.SetC_DocTypeTarget_ID(MOrder.DocSubTypeSO_Standard);
+                _order.SetVAB_DocTypesTarget_ID(MOrder.DocSubTypeSO_Standard);
                 //
                 _order.SetBPartner(bp);
-                if (_order.GetC_BPartner_Location_ID() == 0)
+                if (_order.GetVAB_BPart_Location_ID() == 0)
                 {
                     log.Log(Level.SEVERE, "No BP Location: " + bp);
                     AddLog(0, te.GetDateReport(),
@@ -288,13 +288,13 @@ namespace VAdvantage.Process
                 ////Added By Arpit asked by Surya Sir..................29-12-2015
                 //_order.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                 //End
-                if (tel.GetC_Activity_ID() != 0)
+                if (tel.GetVAB_BillingCode_ID() != 0)
                 {
-                    _order.SetC_Activity_ID(tel.GetC_Activity_ID());
+                    _order.SetVAB_BillingCode_ID(tel.GetVAB_BillingCode_ID());
                 }
-                if (tel.GetC_Campaign_ID() != 0)
+                if (tel.GetVAB_Promotion_ID() != 0)
                 {
-                    _order.SetC_Campaign_ID(tel.GetC_Campaign_ID());
+                    _order.SetVAB_Promotion_ID(tel.GetVAB_Promotion_ID());
                 }
                 if (tel.GetC_Project_ID() != 0)
                 {
@@ -358,13 +358,13 @@ namespace VAdvantage.Process
             else
             {
                 //	Update Header info
-                if (tel.GetC_Activity_ID() != 0 && tel.GetC_Activity_ID() != _order.GetC_Activity_ID())
+                if (tel.GetVAB_BillingCode_ID() != 0 && tel.GetVAB_BillingCode_ID() != _order.GetVAB_BillingCode_ID())
                 {
-                    _order.SetC_Activity_ID(tel.GetC_Activity_ID());
+                    _order.SetVAB_BillingCode_ID(tel.GetVAB_BillingCode_ID());
                 }
-                if (tel.GetC_Campaign_ID() != 0 && tel.GetC_Campaign_ID() != _order.GetC_Campaign_ID())
+                if (tel.GetVAB_Promotion_ID() != 0 && tel.GetVAB_Promotion_ID() != _order.GetVAB_Promotion_ID())
                 {
-                    _order.SetC_Campaign_ID(tel.GetC_Campaign_ID());
+                    _order.SetVAB_Promotion_ID(tel.GetVAB_Promotion_ID());
                 }
                 if (!_order.Save())
                 {
@@ -401,9 +401,9 @@ namespace VAdvantage.Process
                 ol.SetS_ResourceAssignment_ID(tel.GetS_ResourceAssignment_ID());
             }
             // Set charge ID
-            if (tel.GetC_Charge_ID() != 0)
+            if (tel.GetVAB_Charge_ID() != 0)
             {
-                ol.SetC_Charge_ID(tel.GetC_Charge_ID());
+                ol.SetVAB_Charge_ID(tel.GetVAB_Charge_ID());
                 ol.SetPriceActual(tel.GetExpenseAmt());
                 ol.SetQty(tel.GetQty());
             }
@@ -413,15 +413,15 @@ namespace VAdvantage.Process
             ol.SetC_Project_ID(tel.GetC_Project_ID());
             ol.SetC_ProjectPhase_ID(tel.GetC_ProjectPhase_ID());
             ol.SetC_ProjectTask_ID(tel.GetC_ProjectTask_ID());
-            ol.SetC_Activity_ID(tel.GetC_Activity_ID());
-            ol.SetC_Campaign_ID(tel.GetC_Campaign_ID());
+            ol.SetVAB_BillingCode_ID(tel.GetVAB_BillingCode_ID());
+            ol.SetVAB_Promotion_ID(tel.GetVAB_Promotion_ID());
             //
             Decimal price = tel.GetPriceInvoiced(); //	
             if (price.CompareTo(Env.ZERO) != 0)
             {
-                if (tel.GetC_Currency_ID() != _order.GetC_Currency_ID())
+                if (tel.GetVAB_Currency_ID() != _order.GetVAB_Currency_ID())
                     price = MConversionRate.Convert(GetCtx(), price,
-                        tel.GetC_Currency_ID(), _order.GetC_Currency_ID(),
+                        tel.GetVAB_Currency_ID(), _order.GetVAB_Currency_ID(),
                         _order.GetVAF_Client_ID(), _order.GetVAF_Org_ID());
                 ol.SetPrice(price);
                 // added by Bhupendra to set the entered price

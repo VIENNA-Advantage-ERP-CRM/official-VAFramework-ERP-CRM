@@ -426,16 +426,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check WorkFlow Access Gainst role
         /// </summary>
-        /// <param name="AD_Workflow_ID"></param>
+        /// <param name="VAF_Workflow_ID"></param>
         /// <returns></returns>
-        //public static bool? GetWorkflowAccess1(int AD_Workflow_ID)
+        //public static bool? GetWorkflowAccess1(int VAF_Workflow_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcWorkflow_access == null)
         //    {
         //        _dcWorkflow_access = new Dictionary<string, string>();
 
-        //        string strQry = "SELECT AD_Workflow_ID, IsReadWrite FROM AD_Workflow_Access "
+        //        string strQry = "SELECT VAF_Workflow_ID, IsReadWrite FROM VAF_WFlow_Rights "
         //         + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
@@ -452,7 +452,7 @@ namespace VAdvantage.Model
         //            _dcWorkflow_access = null;
         //        }
         //    }
-        //    if (_dcWorkflow_access.ContainsKey(AD_Workflow_ID.ToString()))
+        //    if (_dcWorkflow_access.ContainsKey(VAF_Workflow_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -717,11 +717,11 @@ namespace VAdvantage.Model
                 + "FROM VAF_Page f "
                 + "WHERE AccessLevel IN ";
 
-            String sqlWorkflow = "INSERT INTO AD_Workflow_Access "
-                + "(AD_Workflow_ID, VAF_Role_ID,"
+            String sqlWorkflow = "INSERT INTO VAF_WFlow_Rights "
+                + "(VAF_Workflow_ID, VAF_Role_ID,"
                 + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,IsReadWrite) "
-                + "SELECT w.AD_Workflow_ID, " + roleClientOrgUser
-                + "FROM AD_Workflow w "
+                + "SELECT w.VAF_Workflow_ID, " + roleClientOrgUser
+                + "FROM VAF_Workflow w "
                 + "WHERE AccessLevel IN ";           
 
 
@@ -773,7 +773,7 @@ namespace VAdvantage.Model
             int proc = CoreLibrary.DataBase.DB.ExecuteQuery(sqlProcess + roleAccessLevel, null, Get_TrxName());
             int formDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_Page_Rights" + whereDel, null, Get_TrxName());
             int form = CoreLibrary.DataBase.DB.ExecuteQuery(sqlForm + roleAccessLevel, null, Get_TrxName());
-            int wfDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM AD_Workflow_Access" + whereDel, null, Get_TrxName());
+            int wfDel = CoreLibrary.DataBase.DB.ExecuteQuery("DELETE FROM VAF_WFlow_Rights" + whereDel, null, Get_TrxName());
             int wf = CoreLibrary.DataBase.DB.ExecuteQuery(sqlWorkflow + roleAccessLevel, null, Get_TrxName());
 
             // called function to add Document action access
@@ -782,14 +782,14 @@ namespace VAdvantage.Model
             log.Fine("VAF_Screen_ID=" + winDel + "+" + win
                 + ", VAF_Job_ID=" + procDel + "+" + proc
                 + ", VAF_Page_ID=" + formDel + "+" + form
-                + ", AD_Workflow_ID=" + wfDel + "+" + wf
+                + ", VAF_Workflow_ID=" + wfDel + "+" + wf
                 + daAccess);
 
             LoadAccess(true);
             return "@VAF_Screen_ID@ #" + win
                 + " -  @VAF_Job_ID@ #" + proc
                 + " -  @VAF_Page_ID@ #" + form
-                + " -  @AD_Workflow_ID@ #" + wf
+                + " -  @VAF_Workflow_ID@ #" + wf
                 + daAccess;
                 
         }
@@ -812,20 +812,20 @@ namespace VAdvantage.Model
             {
                 String sqlDocAction = "INSERT INTO VAF_DocumentAction_Rights "
                     + "(VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
-                    + "C_DocType_ID , VAF_CtrlRef_List_ID, VAF_Role_ID) "
+                    + "VAB_DocTypes_ID , VAF_CtrlRef_List_ID, VAF_Role_ID) "
                     + "(SELECT "
                     + GetVAF_Client_ID() + ",0,'Y', SysDate,"
                     + GetUpdatedBy() + ", SysDate," + GetUpdatedBy()
-                    + ", doctype.C_DocType_ID, action.VAF_CtrlRef_List_ID, rol.VAF_Role_ID "
+                    + ", doctype.VAB_DocTypes_ID, action.VAF_CtrlRef_List_ID, rol.VAF_Role_ID "
                     + "FROM VAF_Client client "
-                    + "INNER JOIN C_DocType doctype ON (doctype.VAF_Client_ID=client.VAF_Client_ID) "
+                    + "INNER JOIN VAB_DocTypes doctype ON (doctype.VAF_Client_ID=client.VAF_Client_ID) "
                     + "INNER JOIN VAF_CtrlRef_List action ON (action.VAF_Control_Ref_ID=135) "
                     + "INNER JOIN VAF_Role rol ON (rol.VAF_Client_ID=client.VAF_Client_ID "
                     + "AND rol.VAF_Role_ID=" + GetVAF_Role_ID()
                     + ") LEFT JOIN VAF_DocumentAction_Rights da ON "
                     + "(da.VAF_Role_ID=" + GetVAF_Role_ID()
-                    + " AND da.C_DocType_ID=doctype.C_DocType_ID AND da.VAF_CtrlRef_List_ID=action.VAF_CtrlRef_List_ID) "
-                    + "WHERE (da.C_DocType_ID IS NULL AND da.VAF_CtrlRef_List_ID IS NULL)) ";
+                    + " AND da.VAB_DocTypes_ID=doctype.VAB_DocTypes_ID AND da.VAF_CtrlRef_List_ID=action.VAF_CtrlRef_List_ID) "
+                    + "WHERE (da.VAB_DocTypes_ID IS NULL AND da.VAF_CtrlRef_List_ID IS NULL)) ";
 
                 // change done here to assign Document Action access based on setting on Role window
                 int daAccDel = 0;
@@ -933,16 +933,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check WorkFlow Access Gainst role
         /// </summary>
-        /// <param name="AD_Workflow_ID"></param>
+        /// <param name="VAF_Workflow_ID"></param>
         /// <returns></returns>
-        public bool? GetWorkflowAccess(int AD_Workflow_ID)
+        public bool? GetWorkflowAccess(int VAF_Workflow_ID)
         {
             bool? blnReturn = null;
             if (_dcWorkflow_access == null)
             {
                 _dcWorkflow_access = new Dictionary<string, string>();
 
-                string strQry = "SELECT AD_Workflow_ID, IsReadWrite FROM AD_Workflow_Access "
+                string strQry = "SELECT VAF_Workflow_ID, IsReadWrite FROM VAF_WFlow_Rights "
                  + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
 
                 IDataReader dr = null;
@@ -967,7 +967,7 @@ namespace VAdvantage.Model
                     _dcWorkflow_access = null;
                 }
             }
-            if (_dcWorkflow_access.ContainsKey(AD_Workflow_ID.ToString()))
+            if (_dcWorkflow_access.ContainsKey(VAF_Workflow_ID.ToString()))
             {
                 blnReturn = true;
             }
@@ -2208,7 +2208,7 @@ namespace VAdvantage.Model
             string sql = "SELECT count(*) FROM VAF_TableView t "
                             + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                             + "WHERE t.TableName='" + TableName
-                            + "' AND c.ColumnName='C_BPartner_ID' ";
+                            + "' AND c.ColumnName='VAB_BusinessPartner_ID' ";
             try
             {
                 string ret = CoreLibrary.DataBase.DB.ExecuteScalar(sql).ToString();
@@ -2226,14 +2226,14 @@ namespace VAdvantage.Model
 
             int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
 
-            string docAccess = "(EXISTS (SELECT 1 FROM C_BPartner bp INNER JOIN VAF_UserContact u "
-                                        + "ON (u.C_BPartner_ID=bp.C_BPartner_ID) "
+            string docAccess = "(EXISTS (SELECT 1 FROM VAB_BusinessPartner bp INNER JOIN VAF_UserContact u "
+                                        + "ON (u.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                                         + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
-                                        + " AND bp.C_BPartner_ID=" + TableName + ".C_BPartner_ID)"
-                                + " OR EXISTS (SELECT 1 FROM C_BP_Relation bpr INNER JOIN VAF_UserContact u "
-                                        + "ON (u.C_BPartner_ID=bpr.C_BPartnerRelation_ID) "
+                                        + " AND bp.VAB_BusinessPartner_ID=" + TableName + ".VAB_BusinessPartner_ID)"
+                                + " OR EXISTS (SELECT 1 FROM VAB_BPart_Relation bpr INNER JOIN VAF_UserContact u "
+                                        + "ON (u.VAB_BusinessPartner_ID=bpr.VAB_BusinessPartnerRelation_ID) "
                                         + " WHERE u.VAF_UserContact_ID=" + VAF_UserContact_ID
-                                        + " AND bpr.C_BPartner_ID=" + TableName + ".C_BPartner_ID)";
+                                        + " AND bpr.VAB_BusinessPartner_ID=" + TableName + ".VAB_BusinessPartner_ID)";
 
             bool hasUserColumn = false;
             string sql1 = "SELECT count(*) FROM VAF_TableView t "
@@ -2799,7 +2799,7 @@ namespace VAdvantage.Model
             //
             String sql = "SELECT DISTINCT rl.Value FROM VAF_DocumentAction_Rights a"
                     + " INNER JOIN VAF_CtrlRef_List rl ON (rl.VAF_Control_Ref_ID=135 and rl.VAF_CtrlRef_List_ID=a.VAF_CtrlRef_List_ID)"
-                    + " WHERE a.IsActive='Y' AND a.VAF_Client_ID=" + clientId + " AND a.C_DocType_ID=" + docTypeId // #1,2
+                    + " WHERE a.IsActive='Y' AND a.VAF_Client_ID=" + clientId + " AND a.VAB_DocTypes_ID=" + docTypeId // #1,2
                         + " AND rl.Value IN (" + sql_values + ")"
                         + " AND " + GetIncludedRolesWhereClause("a.VAF_Role_ID", param)
             ;

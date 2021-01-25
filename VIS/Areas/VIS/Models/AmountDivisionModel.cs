@@ -23,8 +23,8 @@ namespace VIS.Models
         public string DimensionTypeVal { get; set; }
         public int DimensionNameVal { get; set; }
         public int ElementID { get; set; }
-        public int C_BPartner_ID { get; set; }
-        public String C_BPartner { get; set; }
+        public int VAB_BusinessPartner_ID { get; set; }
+        public String VAB_BusinessPartner { get; set; }
         public String lineAmountID { get; set; }
         public int TotalRecord { get; set; }
         public decimal TotalLineAmount { get; set; }
@@ -73,9 +73,9 @@ namespace VIS.Models
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
-                Sql = "SELECT DISTINCT C_AcctSchema.Name,C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema C_AcctSchema INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.vaf_client_ID=C_AcctSchema.vaf_client_ID " +
-                    " AND FRPT_AssignedOrg.C_Acctschema_ID=C_AcctSchema.c_acctschema_id INNER JOIN C_Currency c ON C_AcctSchema.C_Currency_ID = c.C_Currency_ID " +
-                    " WHERE  C_AcctSchema.isactive='Y' AND C_AcctSchema.costing='N' AND";
+                Sql = "SELECT DISTINCT VAB_AccountBook.Name,VAB_AccountBook.VAB_AccountBook_id, c.StdPrecision FROM VAB_AccountBook VAB_AccountBook INNER JOIN FRPT_AssignedOrg FRPT_AssignedOrg ON FRPT_AssignedOrg.vaf_client_ID=VAB_AccountBook.vaf_client_ID " +
+                    " AND FRPT_AssignedOrg.VAB_AccountBook_ID=VAB_AccountBook.VAB_AccountBook_id INNER JOIN VAB_Currency c ON VAB_AccountBook.VAB_Currency_ID = c.VAB_Currency_ID " +
+                    " WHERE  VAB_AccountBook.isactive='Y' AND VAB_AccountBook.costing='N' AND";
                 if (OrgID != 0)
                 {
                     Sql += "(FRPT_AssignedOrg.VAF_Org_ID=" + OrgID + " OR FRPT_AssignedOrg.VAF_Org_ID=0)";
@@ -87,10 +87,10 @@ namespace VIS.Models
             }
             else
             {
-                Sql = "SELECT distinct C_AcctSchema.Name, C_AcctSchema.c_acctschema_id, c.StdPrecision FROM C_AcctSchema INNER JOIN C_Currency c ON C_AcctSchema.C_Currency_ID = c.C_Currency_ID WHERE C_AcctSchema.isactive='Y' AND C_AcctSchema.Costing='N'";
+                Sql = "SELECT distinct VAB_AccountBook.Name, VAB_AccountBook.VAB_AccountBook_id, c.StdPrecision FROM VAB_AccountBook INNER JOIN VAB_Currency c ON VAB_AccountBook.VAB_Currency_ID = c.VAB_Currency_ID WHERE VAB_AccountBook.isactive='Y' AND VAB_AccountBook.Costing='N'";
             }
 
-            Sql = MRole.GetDefault(ctx).AddAccessSQL(Sql, "C_AcctSchema", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RW);
+            Sql = MRole.GetDefault(ctx).AddAccessSQL(Sql, "VAB_AccountBook", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RW);
 
             DataSet dsAcctSchema = DB.ExecuteDataset(Sql);
             if (dsAcctSchema != null && dsAcctSchema.Tables[0].Rows.Count > 0)
@@ -144,7 +144,7 @@ namespace VIS.Models
             }
             else
             {
-                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from c_DimAmtline where c_dimAmt_ID=" + RecordID + " AND ROWNUM=1"));
+                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from VAB_DimAmtline where VAB_DimAmt_ID=" + RecordID + " AND ROWNUM=1"));
                 if (chkAmount == 0)
                 {
                     return true;
@@ -152,12 +152,12 @@ namespace VIS.Models
                 else
                 {
 
-                    DataSet dsAmount = DB.ExecuteDataset("select totaldimlineamout,c_acctSchema_ID from c_dimamtaccttype where c_dimamt_id=" + RecordID + "");
+                    DataSet dsAmount = DB.ExecuteDataset("select totaldimlineamout,VAB_AccountBook_ID from VAB_DimAmtaccttype where VAB_DimAmt_id=" + RecordID + "");
                     if (dsAmount != null && dsAmount.Tables[0].Rows.Count > 0)
                     {
                         for (int j = 0; j < dsAmount.Tables[0].Rows.Count; j++)
                         {
-                            if (Convert.ToInt32(dsAmount.Tables[0].Rows[j]["c_acctSchema_ID"]) == acctSchema[0])
+                            if (Convert.ToInt32(dsAmount.Tables[0].Rows[j]["VAB_AccountBook_ID"]) == acctSchema[0])
                             {
                                 if (TotalAmount < (Convert.ToDecimal(dsAmount.Tables[0].Rows[j]["totaldimlineamout"]) + lineAmount))
                                 {
@@ -216,7 +216,7 @@ namespace VIS.Models
             {
                 foreach (int acct in acctSchemaID)
                 {
-                    X_C_DimAmt objDimAmt = new X_C_DimAmt(ctx, RecordId, trx);
+                    X_VAB_DimAmt objDimAmt = new X_VAB_DimAmt(ctx, RecordId, trx);
                     //  if (objDimAmt.GetAmount() <= TotalAmount)
                     // {
                     if (CheckUpdateMaxAmount(RecordId, TotalAmount, acctSchemaID, LineAmount))
@@ -231,28 +231,28 @@ namespace VIS.Models
                         }
                     }
                     // }
-                    LineAmountID[0] = Convert.ToString(objDimAmt.GetC_DimAmt_ID());
-                    RecordId = objDimAmt.GetC_DimAmt_ID();
+                    LineAmountID[0] = Convert.ToString(objDimAmt.GetVAB_DimAmt_ID());
+                    RecordId = objDimAmt.GetVAB_DimAmt_ID();
                     if (acct != -1)
                     {
 
-                        // RecordId = objDimAmt.GetC_DimAmt_ID();
+                        // RecordId = objDimAmt.GetVAB_DimAmt_ID();
 
-                        Sql = "select nvl(c_dimamtaccttype_ID,0) from c_dimamtaccttype where c_dimamt_id=" + RecordId + " and c_acctschema_ID=" + acct + "";
+                        Sql = "select nvl(VAB_DimAmtaccttype_ID,0) from VAB_DimAmtaccttype where VAB_DimAmt_id=" + RecordId + " and VAB_AccountBook_ID=" + acct + "";
                         DimAcctTypeId = Convert.ToInt32(DB.ExecuteScalar(Sql));
-                        Sql = "select nvl((sum(cd.amount)),0) as Amount from c_dimamtline cd inner join c_dimamtaccttype ct on cd.c_dimamt_id=ct.c_dimamt_id " +
-                            " and cd.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
-                            " where cd.c_dimamt_id=" + RecordId + " and ct.c_dimamtaccttype_id=" + DimAcctTypeId + "";
+                        Sql = "select nvl((sum(cd.amount)),0) as Amount from VAB_DimAmtline cd inner join VAB_DimAmtaccttype ct on cd.VAB_DimAmt_id=ct.VAB_DimAmt_id " +
+                            " and cd.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id " +
+                            " where cd.VAB_DimAmt_id=" + RecordId + " and ct.VAB_DimAmtaccttype_id=" + DimAcctTypeId + "";
                         decimal TotoalDimAmount = Convert.ToDecimal(DB.ExecuteScalar(Sql));
                         if (LineAmount != -1)
                         {
                             TotoalDimAmount += LineAmount;
                         }
-                        X_C_DimAmtAcctType objDimAcctType = new X_C_DimAmtAcctType(ctx, DimAcctTypeId, trx);
-                        objDimAcctType.SetC_DimAmt_ID(objDimAmt.GetC_DimAmt_ID());
+                        X_VAB_DimAmtAcctType objDimAcctType = new X_VAB_DimAmtAcctType(ctx, DimAcctTypeId, trx);
+                        objDimAcctType.SetVAB_DimAmt_ID(objDimAmt.GetVAB_DimAmt_ID());
                         if (LineAmount != -1)
                         {
-                            objDimAcctType.SetC_AcctSchema_ID(acct);
+                            objDimAcctType.SetVAB_AccountBook_ID(acct);
                             objDimAcctType.SetElementType(elementTypeID);
                         }
                         if (LineAmount != -1 || TotoalDimAmount != 0)
@@ -266,25 +266,25 @@ namespace VIS.Models
                         }
                         if (LineAmount != -1)
                         {
-                            Sql = "select nvl(c_dimamtline_id,0) from c_dimamtline where c_Dimamt_ID=" + RecordId + " and c_dimamtaccttype_id=" + objDimAcctType.GetC_DimAmtAcctType_ID() + "";
+                            Sql = "select nvl(VAB_DimAmtline_id,0) from VAB_DimAmtline where VAB_DimAmt_ID=" + RecordId + " and VAB_DimAmtaccttype_id=" + objDimAcctType.GetVAB_DimAmtAcctType_ID() + "";
                             if (elementTypeID == "AC")
                             {
-                                Sql += " and c_elementvalue_id=" + oldDimensionName + " AND NVL(C_BPartner_ID, 0)=" + oldBPartner_ID;
+                                Sql += " and VAB_Acct_Element_id=" + oldDimensionName + " AND NVL(VAB_BusinessPartner_ID, 0)=" + oldBPartner_ID;
                             }//Account
-                            else if (elementTypeID == "AY") { Sql += " and c_activity_id=" + oldDimensionName; }//Activity
-                            else if (elementTypeID == "BP") { Sql += " and c_BPartner_ID=" + oldDimensionName; }//BPartner
+                            else if (elementTypeID == "AY") { Sql += " and VAB_BillingCode_id=" + oldDimensionName; }//Activity
+                            else if (elementTypeID == "BP") { Sql += " and VAB_BusinessPartner_ID=" + oldDimensionName; }//BPartner
                             else if (elementTypeID == "LF" || elementTypeID == "LT") { Sql += " and c_location_ID=" + oldDimensionName; }//Location From//Location To
-                            else if (elementTypeID == "MC") { Sql += " and c_Campaign_ID=" + oldDimensionName; }//Campaign
+                            else if (elementTypeID == "MC") { Sql += " and VAB_Promotion_ID=" + oldDimensionName; }//Campaign
                             else if (elementTypeID == "OO" || elementTypeID == "OT") { Sql += " and Org_ID=" + oldDimensionName; }//Organization//Org Trx
                             else if (elementTypeID == "PJ") { Sql += " and c_Project_id=" + oldDimensionName; }//Project
                             else if (elementTypeID == "PR") { Sql += " and M_Product_Id=" + oldDimensionName; }//Product
                             else if (elementTypeID == "SR") { Sql += " and c_SalesRegion_Id=" + oldDimensionName; }//Sales Region
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
-                                Sql += " and c_elementvalue_id=" + oldDimensionName;
+                                Sql += " and VAB_Acct_Element_id=" + oldDimensionName;
                                 if (oldBPartner_ID > 0)
                                 {
-                                    Sql += " AND NVL(C_BPartner_ID, 0)= " + oldBPartner_ID;
+                                    Sql += " AND NVL(VAB_BusinessPartner_ID, 0)= " + oldBPartner_ID;
                                 }
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
@@ -292,7 +292,7 @@ namespace VIS.Models
 
                             dimAmtLineId = Convert.ToInt32(DB.ExecuteScalar(Sql));
 
-                            X_C_DimAmtLine objDimAmtLine = new X_C_DimAmtLine(ctx, dimAmtLineId, trx);
+                            X_VAB_DimAmtLine objDimAmtLine = new X_VAB_DimAmtLine(ctx, dimAmtLineId, trx);
                             if (dimAmtLineId != 0)
                             {
                                 objDimAcctType.SetTotalDimLineAmout(objDimAcctType.GetTotalDimLineAmout() - objDimAmtLine.GetAmount());
@@ -302,20 +302,20 @@ namespace VIS.Models
                                     goto ErrorCheck;
                                 }
                             }
-                            objDimAmtLine.SetC_DimAmt_ID(objDimAmt.GetC_DimAmt_ID());
-                            objDimAmtLine.SetC_DimAmtAcctType_ID(objDimAcctType.GetC_DimAmtAcctType_ID());
+                            objDimAmtLine.SetVAB_DimAmt_ID(objDimAmt.GetVAB_DimAmt_ID());
+                            objDimAmtLine.SetVAB_DimAmtAcctType_ID(objDimAcctType.GetVAB_DimAmtAcctType_ID());
                             objDimAmtLine.SetAmount(LineAmount);
 
                             if (elementTypeID == "AC")
                             {
-                                objDimAmtLine.SetC_Element_ID(elementID);
-                                objDimAmtLine.SetC_ElementValue_ID(dimensionValue);
-                                objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
+                                objDimAmtLine.SetVAB_Element_ID(elementID);
+                                objDimAmtLine.SetVAB_Acct_Element_ID(dimensionValue);
+                                objDimAmtLine.SetVAB_BusinessPartner_ID(bpartner_ID);
                             }//Account
-                            else if (elementTypeID == "AY") { objDimAmtLine.SetC_Activity_ID(dimensionValue); }//Activity
-                            else if (elementTypeID == "BP") { objDimAmtLine.SetC_BPartner_ID(dimensionValue); }//BPartner
+                            else if (elementTypeID == "AY") { objDimAmtLine.SetVAB_BillingCode_ID(dimensionValue); }//Activity
+                            else if (elementTypeID == "BP") { objDimAmtLine.SetVAB_BusinessPartner_ID(dimensionValue); }//BPartner
                             else if (elementTypeID == "LF" || elementTypeID == "LT") { objDimAmtLine.SetC_Location_ID(dimensionValue); }//Location From//Location To
-                            else if (elementTypeID == "MC") { objDimAmtLine.SetC_Campaign_ID(dimensionValue); }//Campaign
+                            else if (elementTypeID == "MC") { objDimAmtLine.SetVAB_Promotion_ID(dimensionValue); }//Campaign
                             else if (elementTypeID == "OO" || elementTypeID == "OT") { objDimAmtLine.SetOrg_ID(dimensionValue); }//Organization//Org Trx
                             else if (elementTypeID == "PJ") { objDimAmtLine.SetC_Project_ID(dimensionValue); }//Project
                             else if (elementTypeID == "PR") { objDimAmtLine.SetM_Product_ID(dimensionValue); }//Product
@@ -323,9 +323,9 @@ namespace VIS.Models
                             else if (elementTypeID == "SR") { objDimAmtLine.SetC_SalesRegion_ID(dimensionValue); }//Sales Region
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
-                                objDimAmtLine.SetC_Element_ID(elementID);
-                                objDimAmtLine.SetC_ElementValue_ID(dimensionValue);
-                                objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
+                                objDimAmtLine.SetVAB_Element_ID(elementID);
+                                objDimAmtLine.SetVAB_Acct_Element_ID(dimensionValue);
+                                objDimAmtLine.SetVAB_BusinessPartner_ID(bpartner_ID);
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
                                      elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { objDimAmtLine.SetVAF_Column_ID(dimensionValue); }//User Element 1 to User Element 9
@@ -336,11 +336,11 @@ namespace VIS.Models
                             }
                             if (lineID == "")
                             {
-                                lineID += Convert.ToString(objDimAmtLine.GetC_DimAmtLine_ID());
+                                lineID += Convert.ToString(objDimAmtLine.GetVAB_DimAmtLine_ID());
                             }
                             else
                             {
-                                lineID += "," + Convert.ToString(objDimAmtLine.GetC_DimAmtLine_ID());
+                                lineID += "," + Convert.ToString(objDimAmtLine.GetVAB_DimAmtLine_ID());
                             }
                         }
 
@@ -382,7 +382,7 @@ namespace VIS.Models
         //    try
         //    {
         //        dimensionLine = splitAllAccountSchema(acctSchema, dimensionLine);
-        //        X_C_DimAmt objDimAmt = new X_C_DimAmt(ctx, DimAmtId, trx);
+        //        X_VAB_DimAmt objDimAmt = new X_VAB_DimAmt(ctx, DimAmtId, trx);
         //        objDimAmt.SetAmount(amount);
         //        if (!objDimAmt.Save(trx))
         //        {
@@ -390,7 +390,7 @@ namespace VIS.Models
         //            RecordID = -1;
         //            return RecordID;
         //        }
-        //        RecordID = objDimAmt.GetC_DimAmt_ID();
+        //        RecordID = objDimAmt.GetVAB_DimAmt_ID();
         //        List<AmountDivisionModel> oldDimensionLine = GetDimensionLine(DimAmtId);
 
         //        //Check For Value in oldDimensionLine List against DimensionType and Accounting Schema...............
@@ -399,36 +399,36 @@ namespace VIS.Models
         //            var abc = dimensionLine.Where(x => x.DimensionTypeVal == obj.DimensionTypeVal && x.AcctSchema == obj.AcctSchema);
         //            if (abc == null)
         //            {
-        //                //if Value does not exist in dimension Line than delete from C_DimamtAcctType Table against DimensionType and AccountSchema
+        //                //if Value does not exist in dimension Line than delete from VAB_DimAmtAcctType Table against DimensionType and AccountSchema
         //                //and corresponding Dimension Line Will be deleted.................(cascade).
-        //                Sql = "delete from c_dimamtaccttype where c_dimamt_id=" + DimAmtId + " and elementtype='" + obj.DimensionTypeVal + "' and c_acctschema_id=" + obj.AcctSchema;
+        //                Sql = "delete from VAB_DimAmtaccttype where VAB_DimAmt_id=" + DimAmtId + " and elementtype='" + obj.DimensionTypeVal + "' and VAB_AccountBook_id=" + obj.AcctSchema;
         //                DB.ExecuteQuery(Sql, null, trx);
         //                oldDimensionLine.RemoveAll(x => x.DimensionTypeVal == obj.DimensionTypeVal && x.AcctSchema == obj.AcctSchema);
         //            }
         //        }
-        //        //string sql1 = "delete from c_dimamtline where c_dimamt_id=" + objDimAmt.GetC_DimAmt_ID();
+        //        //string sql1 = "delete from VAB_DimAmtline where VAB_DimAmt_id=" + objDimAmt.GetVAB_DimAmt_ID();
         //        //DB.ExecuteQuery(sql1, null, trx);
         //        for (int i = 0; i < acctSchema.Length; i++)
         //        {
         //            if (DimAmtId != 0)
         //            {
         //                //if User Change Dimension Type Value from Accounting Schema Element against Accounting Schema............
-        //                //When user update Record against that Value than delete old Value From C_DimAmtAcctType............
-        //                Sql = "select nvl(c_dimamtaccttype_ID,0) from c_dimamtaccttype where c_dimamt_id=" + objDimAmt.GetC_DimAmt_ID() + " and c_acctschema_ID=" + acctSchema[i] + "";
+        //                //When user update Record against that Value than delete old Value From VAB_DimAmtAcctType............
+        //                Sql = "select nvl(VAB_DimAmtaccttype_ID,0) from VAB_DimAmtaccttype where VAB_DimAmt_id=" + objDimAmt.GetVAB_DimAmt_ID() + " and VAB_AccountBook_ID=" + acctSchema[i] + "";
         //                DimAcctTypeId = Convert.ToInt32(DB.ExecuteScalar(Sql));
-        //                Sql = "select elementType from c_dimamtaccttype where c_dimamtAcctType_id=" + DimAcctTypeId;
+        //                Sql = "select elementType from VAB_DimAmtaccttype where VAB_DimAmtAcctType_id=" + DimAcctTypeId;
         //                string oldElement = Convert.ToString(DB.ExecuteScalar(Sql));
         //                if (oldElement != elementType[i])
         //                {
-        //                    Sql = "delete from c_dimamtaccttype where c_dimamtAcctType_id=" + DimAcctTypeId;
+        //                    Sql = "delete from VAB_DimAmtaccttype where VAB_DimAmtAcctType_id=" + DimAcctTypeId;
         //                    DB.ExecuteQuery(Sql, null, trx);
         //                    DimAcctTypeId = 0;
         //                }
         //            }
 
-        //            X_C_DimAmtAcctType objDimAcctType = new X_C_DimAmtAcctType(ctx, DimAcctTypeId, trx);
-        //            objDimAcctType.SetC_DimAmt_ID(objDimAmt.GetC_DimAmt_ID());
-        //            objDimAcctType.SetC_AcctSchema_ID(acctSchema[i]);
+        //            X_VAB_DimAmtAcctType objDimAcctType = new X_VAB_DimAmtAcctType(ctx, DimAcctTypeId, trx);
+        //            objDimAcctType.SetVAB_DimAmt_ID(objDimAmt.GetVAB_DimAmt_ID());
+        //            objDimAcctType.SetVAB_AccountBook_ID(acctSchema[i]);
         //            objDimAcctType.SetElementType(elementType[i]);
         //            if (DimAcctTypeId == 0)
         //            {
@@ -458,23 +458,23 @@ namespace VIS.Models
         //                    oldTempDim = oldAccountDimensionLine.FindAll(x => x.DimensionNameVal == mod.DimensionNameVal && x.DimensionTypeVal == mod.DimensionTypeVal);
         //                    if (oldTempDim != null)
         //                    {
-        //                        Sql = "select c_dimamtline_id from c_dimamtline cl inner join c_dimamtacctType ct on cl.c_dimamt_id=ct.c_dimamt_id and ct.c_dimamtaccttype_id = cl.c_dimamtaccttype_id " +
-        //                               " where cl.c_dimamt_id=" + objDimAmt.GetC_DimAmt_ID() + " and cl.c_dimamtacctType_Id=" + DimAcctTypeId;
+        //                        Sql = "select VAB_DimAmtline_id from VAB_DimAmtline cl inner join VAB_DimAmtacctType ct on cl.VAB_DimAmt_id=ct.VAB_DimAmt_id and ct.VAB_DimAmtaccttype_id = cl.VAB_DimAmtaccttype_id " +
+        //                               " where cl.VAB_DimAmt_id=" + objDimAmt.GetVAB_DimAmt_ID() + " and cl.VAB_DimAmtacctType_Id=" + DimAcctTypeId;
         //                        if (mod.DimensionTypeVal == "AC")
         //                        {
-        //                            Sql += " and cl.c_elementvalue_id=" + mod.DimensionNameVal;
+        //                            Sql += " and cl.VAB_Acct_Element_id=" + mod.DimensionNameVal;
         //                        }//Account
-        //                        else if (mod.DimensionTypeVal == "AY") { Sql += " and cl.c_activity_id=" + mod.DimensionNameVal; }//Activity
-        //                        else if (mod.DimensionTypeVal == "BP") { Sql += " and cl.c_BPartner_ID=" + mod.DimensionNameVal; }//BPartner
+        //                        else if (mod.DimensionTypeVal == "AY") { Sql += " and cl.VAB_BillingCode_id=" + mod.DimensionNameVal; }//Activity
+        //                        else if (mod.DimensionTypeVal == "BP") { Sql += " and cl.VAB_BusinessPartner_ID=" + mod.DimensionNameVal; }//BPartner
         //                        else if (mod.DimensionTypeVal == "LF" || mod.DimensionTypeVal == "LT") { Sql += " and cl.c_location_ID=" + mod.DimensionNameVal; }//Location From//Location To
-        //                        else if (mod.DimensionTypeVal == "MC") { Sql += " and cl.c_Campaign_ID=" + mod.DimensionNameVal; }//Campaign
+        //                        else if (mod.DimensionTypeVal == "MC") { Sql += " and cl.VAB_Promotion_ID=" + mod.DimensionNameVal; }//Campaign
         //                        else if (mod.DimensionTypeVal == "OO" || mod.DimensionTypeVal == "OT") { Sql += " and cl.Org_ID=" + mod.DimensionNameVal; }//Organization//Org Trx
         //                        else if (mod.DimensionTypeVal == "PJ") { Sql += " and cl.c_Project_id=" + mod.DimensionNameVal; }//Project
         //                        else if (mod.DimensionTypeVal == "PR") { Sql += " and cl.M_Product_Id=" + mod.DimensionNameVal; }//Product
         //                        else if (mod.DimensionTypeVal == "SR") { Sql += " and cl.c_SalesRegion_Id=" + mod.DimensionNameVal; }//Sales Region
         //                        else if (mod.DimensionTypeVal == "U1" || mod.DimensionTypeVal == "U2")
         //                        {
-        //                            Sql += " and cl.c_elementvalue_id=" + mod.DimensionNameVal;
+        //                            Sql += " and cl.VAB_Acct_Element_id=" + mod.DimensionNameVal;
         //                        }//User List 1//User List 2
         //                        else if (mod.DimensionTypeVal == "X1" || mod.DimensionTypeVal == "X2" || mod.DimensionTypeVal == "X3" || mod.DimensionTypeVal == "X4" || mod.DimensionTypeVal == "X5" || mod.DimensionTypeVal == "X6" ||
         //                                 mod.DimensionTypeVal == "X7" || mod.DimensionTypeVal == "X8" || mod.DimensionTypeVal == "X9") { Sql += " and cl.VAF_Column_ID=" + mod.DimensionNameVal; }//User Element 1 to User Element 9
@@ -485,19 +485,19 @@ namespace VIS.Models
         //                    {
         //                        dimAmtLineId = 0;
         //                    }
-        //                    X_C_DimAmtLine objDimAmtLine = new X_C_DimAmtLine(ctx, dimAmtLineId, trx);
-        //                    objDimAmtLine.SetC_DimAmt_ID(objDimAmt.GetC_DimAmt_ID());
-        //                    objDimAmtLine.SetC_DimAmtAcctType_ID(objDimAcctType.GetC_DimAmtAcctType_ID());
+        //                    X_VAB_DimAmtLine objDimAmtLine = new X_VAB_DimAmtLine(ctx, dimAmtLineId, trx);
+        //                    objDimAmtLine.SetVAB_DimAmt_ID(objDimAmt.GetVAB_DimAmt_ID());
+        //                    objDimAmtLine.SetVAB_DimAmtAcctType_ID(objDimAcctType.GetVAB_DimAmtAcctType_ID());
         //                    objDimAmtLine.SetAmount(mod.DiemensionValueAmount);
         //                    if (elementType[i] == "AC")
         //                    {
-        //                        objDimAmtLine.SetC_Element_ID(mod.ElementID);
-        //                        objDimAmtLine.SetC_ElementValue_ID(mod.DimensionNameVal);
+        //                        objDimAmtLine.SetVAB_Element_ID(mod.ElementID);
+        //                        objDimAmtLine.SetVAB_Acct_Element_ID(mod.DimensionNameVal);
         //                    }//Account
-        //                    else if (elementType[i] == "AY") { objDimAmtLine.SetC_Activity_ID(mod.DimensionNameVal); }//Activity
-        //                    else if (elementType[i] == "BP") { objDimAmtLine.SetC_BPartner_ID(mod.DimensionNameVal); }//BPartner
+        //                    else if (elementType[i] == "AY") { objDimAmtLine.SetVAB_BillingCode_ID(mod.DimensionNameVal); }//Activity
+        //                    else if (elementType[i] == "BP") { objDimAmtLine.SetVAB_BusinessPartner_ID(mod.DimensionNameVal); }//BPartner
         //                    else if (elementType[i] == "LF" || elementType[i] == "LT") { objDimAmtLine.SetC_Location_ID(mod.DimensionNameVal); }//Location From//Location To
-        //                    else if (elementType[i] == "MC") { objDimAmtLine.SetC_Campaign_ID(mod.DimensionNameVal); }//Campaign
+        //                    else if (elementType[i] == "MC") { objDimAmtLine.SetVAB_Promotion_ID(mod.DimensionNameVal); }//Campaign
         //                    else if (elementType[i] == "OO" || elementType[i] == "OT") { objDimAmtLine.SetOrg_ID(mod.DimensionNameVal); }//Organization//Org Trx
         //                    else if (elementType[i] == "PJ") { objDimAmtLine.SetC_Project_ID(mod.DimensionNameVal); }//Project
         //                    else if (elementType[i] == "PR") { objDimAmtLine.SetM_Product_ID(mod.DimensionNameVal); }//Product
@@ -505,8 +505,8 @@ namespace VIS.Models
         //                    else if (elementType[i] == "SR") { objDimAmtLine.SetC_SalesRegion_ID(mod.DimensionNameVal); }//Sales Region
         //                    else if (elementType[i] == "U1" || elementType[i] == "U2")
         //                    {
-        //                        objDimAmtLine.SetC_Element_ID(mod.ElementID);
-        //                        objDimAmtLine.SetC_ElementValue_ID(mod.DimensionNameVal);
+        //                        objDimAmtLine.SetVAB_Element_ID(mod.ElementID);
+        //                        objDimAmtLine.SetVAB_Acct_Element_ID(mod.DimensionNameVal);
         //                    }//User List 1//User List 2
         //                    else if (elementType[i] == "X1" || elementType[i] == "X2" || elementType[i] == "X3" || elementType[i] == "X4" || elementType[i] == "X5" || elementType[i] == "X6" ||
         //                             elementType[i] == "X7" || elementType[i] == "X8" || elementType[i] == "X9") { objDimAmtLine.SetVAF_Column_ID(mod.DimensionNameVal); }//User Element 1 to User Element 9
@@ -527,8 +527,8 @@ namespace VIS.Models
         //            }
         //            foreach (AmountDivisionModel oldMod in oldAccountDimensionLine)
         //            {
-        //                //Delete Remaing Value Which are in old List and from C_dimAmtLine Table....................
-        //                Sql = "delete from c_dimamtline where c_dimamtline_id=" + oldMod.AmtLineID;
+        //                //Delete Remaing Value Which are in old List and from VAB_DimAmtLine Table....................
+        //                Sql = "delete from VAB_DimAmtline where VAB_DimAmtline_id=" + oldMod.AmtLineID;
         //                DB.ExecuteQuery(Sql, null, trx);
         //            }
         //        }
@@ -565,17 +565,17 @@ namespace VIS.Models
                     break;
                 }
 
-                int tempDimensionID = Convert.ToInt32(DB.ExecuteScalar("select nvl(c_dimamt_id,0) as DimID from c_dimamtline where c_dimamt_id=" + dimensionID + ""));
+                int tempDimensionID = Convert.ToInt32(DB.ExecuteScalar("select nvl(VAB_DimAmt_id,0) as DimID from VAB_DimAmtline where VAB_DimAmt_id=" + dimensionID + ""));
                 if (tempDimensionID != 0)
                 {
                     string uQuery = "select main.TableName," + DBFunctionCollection.ListAggregationAmountDimesnionLine("listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId)") + " AS ColName from " +
-                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.vaf_column_id as ColId from c_dimamtaccttype ct " +
-                         "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
-                         "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
+                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.vaf_column_id as ColId from VAB_DimAmtaccttype ct " +
+                         "inner join VAB_DimAmtline cl on cl.VAB_DimAmt_id=ct.VAB_DimAmt_id and cl.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id " +
+                         "inner join VAB_AccountBook_element se on se.VAB_AccountBook_id=ct.VAB_AccountBook_id and se.elementtype=ct.elementtype " +
                          "inner join vaf_column col1 on col1.vaf_column_id=se.vaf_column_id " +
                          "inner join vaf_tableview tab on tab.vaf_tableview_id=col1.vaf_tableview_id " +
                          "inner join vaf_column col2 on col2.vaf_tableview_id=tab.vaf_tableview_id and col2.isidentifier='Y' " +
-                         "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.vaf_column_id)  main " +
+                         "where ct.VAB_DimAmt_id=" + dimensionID + " and ct.VAB_AccountBook_id=" + acctId + " order by col2.vaf_column_id)  main " +
                          "group by main.TableName";
                     DataSet dsUelement = DB.ExecuteDataset(uQuery);
                     if (dsUelement != null && dsUelement.Tables[0].Rows.Count > 0)
@@ -584,28 +584,28 @@ namespace VIS.Models
                         uElementColumn = Convert.ToString(dsUelement.Tables[0].Rows[0][1]);
                     }
 
-                    string sql = "SELECT distinct COALESCE(cl.vaf_column_id,cl.C_ELEMENTVALUE_ID,cl.c_activity_id,cl.C_BPARTNER_ID,cl.C_CAMPAIGN_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
-                                  " cl.amount,ct.c_acctschema_id,ct.elementtype,rl.Name as DimensionType, " +
+                    string sql = "SELECT distinct COALESCE(cl.vaf_column_id,cl.VAB_ACCT_ELEMENT_ID,cl.VAB_BillingCode_id,cl.VAB_BUSINESSPARTNER_ID,cl.VAB_PROMOTION_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
+                                  " cl.amount,ct.VAB_AccountBook_id,ct.elementtype,rl.Name as DimensionType, " +
                                    " COALESCE(o.name ";
                     if (uElementColumn != "")
                     {
                         sql += " ,(" + uElementColumn + ") ";
                     }
-                    sql += " ,cel.Name,act.Name,cb.Name,cc.Name,cloc.address1,cpr.Name,cs.Name,mp.NAME) AS DimensionName ,nvl(cl.C_ELEMENT_ID,0) as ElementID,cl.c_dimamtline_id as LineID, cl.C_BPartner_ID, cb.Name AS BPartnerName " +
-                        " from c_dimamt cdm ";
+                    sql += " ,cel.Name,act.Name,cb.Name,cc.Name,cloc.address1,cpr.Name,cs.Name,mp.NAME) AS DimensionName ,nvl(cl.VAB_ELEMENT_ID,0) as ElementID,cl.VAB_DimAmtline_id as LineID, cl.VAB_BusinessPartner_ID, cb.Name AS BPartnerName " +
+                        " from VAB_DimAmt cdm ";
 
                     //{
-                    //    sql += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
-                    //       "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
-                    //       " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
+                    //    sql += " left join VAB_DimAmtaccttype ct on cdm.VAB_DimAmt_id=ct.VAB_DimAmt_id " +
+                    //       "  Left join  VAB_DimAmtline cl ON cl.VAB_DimAmt_ID=ct.VAB_DimAmt_ID and cl.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id" +
+                    //       " left JOIN VAB_AccountBook_element rl ON ct.elementtype     =rl.elementtype AND ct.VAB_AccountBook_id=rl.VAB_AccountBook_ID " +
                     //       " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
                     //       " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     //}
                     //else
                     //{
-                    sql += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
-                       "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
-                       " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
+                    sql += " inner join VAB_DimAmtaccttype ct on cdm.VAB_DimAmt_id=ct.VAB_DimAmt_id " +
+                       "  inner join  VAB_DimAmtline cl ON cl.VAB_DimAmt_ID=ct.VAB_DimAmt_ID and cl.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id" +
+                       " inner JOIN VAB_AccountBook_element rl ON ct.elementtype     =rl.elementtype AND ct.VAB_AccountBook_id=rl.VAB_AccountBook_ID " +
                        " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
                        " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
@@ -616,23 +616,23 @@ namespace VIS.Models
                     }
 
                     sql +=
-                       " LEFT JOIN c_activity act ON cl.c_activity_id=act.c_activity_id " +
-                       " LEFT JOIN C_BPARTNER cb ON cl.C_BPARTNER_ID=cb.C_BPARTNER_ID " +
-                       " LEFT JOIN C_CAMPAIGN cc ON cl.C_CAMPAIGN_ID=cc.C_CAMPAIGN_ID " +
-                       " LEFT JOIN C_ELEMENTVALUE cel ON cl.C_ELEMENTVALUE_ID=cel.C_ELEMENTVALUE_ID " +
-                       " LEFT JOIN C_ELEMENT el ON cl.C_ELEMENT_ID=el.C_ELEMENT_ID " +
+                       " LEFT JOIN VAB_BillingCode act ON cl.VAB_BillingCode_id=act.VAB_BillingCode_id " +
+                       " LEFT JOIN VAB_BUSINESSPARTNER cb ON cl.VAB_BUSINESSPARTNER_ID=cb.VAB_BUSINESSPARTNER_ID " +
+                       " LEFT JOIN VAB_PROMOTION cc ON cl.VAB_PROMOTION_ID=cc.VAB_PROMOTION_ID " +
+                       " LEFT JOIN VAB_ACCT_ELEMENT cel ON cl.VAB_ACCT_ELEMENT_ID=cel.VAB_ACCT_ELEMENT_ID " +
+                       " LEFT JOIN VAB_ELEMENT el ON cl.VAB_ELEMENT_ID=el.VAB_ELEMENT_ID " +
                        " LEFT JOIN C_LOCATION cloc ON cl.C_LOCATION_ID=cloc.C_LOCATION_ID " +
                        " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
-                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId;
+                       " WHERE cdm.VAB_DimAmt_ID=" + dimensionID + " and ct.VAB_AccountBook_id=" + acctId;
                     if (DimensionLineID != 0)
                     {
-                        sql += " and cl.c_dimamtline_id=" + DimensionLineID;
+                        sql += " and cl.VAB_DimAmtline_id=" + DimensionLineID;
                     }
 
-                    sql += " order by  ct.c_acctschema_id";
+                    sql += " order by  ct.VAB_AccountBook_id";
                     DataSet ds = new DataSet();
                     if (pSize == 0 || DimensionLineID != 0)
                     {
@@ -644,36 +644,36 @@ namespace VIS.Models
                     }
 
                     string sqlcount = "select count(*),sum(lineTotalAmount) as lineTotalAmount  from ( " +
-                                      " SELECT distinct (cl.Amount) AS LineTotalAmount,cdm.c_dimamt_id,ct.elementtype,cl.c_dimamtline_id from c_dimamt cdm ";
+                                      " SELECT distinct (cl.Amount) AS LineTotalAmount,cdm.VAB_DimAmt_id,ct.elementtype,cl.VAB_DimAmtline_id from VAB_DimAmt cdm ";
                     if (tempDimensionID == 0)
                     {
-                        sqlcount += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
-                           "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
-                           " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
+                        sqlcount += " left join VAB_DimAmtaccttype ct on cdm.VAB_DimAmt_id=ct.VAB_DimAmt_id " +
+                           "  Left join  VAB_DimAmtline cl ON cl.VAB_DimAmt_ID=ct.VAB_DimAmt_ID and cl.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id" +
+                           " left JOIN VAB_AccountBook_element rl ON ct.elementtype     =rl.elementtype AND ct.VAB_AccountBook_id=rl.VAB_AccountBook_ID " +
                            " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
                            " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     }
                     else
                     {
-                        sqlcount += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
-                           "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
-                           " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
+                        sqlcount += " inner join VAB_DimAmtaccttype ct on cdm.VAB_DimAmt_id=ct.VAB_DimAmt_id " +
+                           "  inner join  VAB_DimAmtline cl ON cl.VAB_DimAmt_ID=ct.VAB_DimAmt_ID and cl.VAB_DimAmtaccttype_id=ct.VAB_DimAmtaccttype_id" +
+                           " inner JOIN VAB_AccountBook_element rl ON ct.elementtype     =rl.elementtype AND ct.VAB_AccountBook_id=rl.VAB_AccountBook_ID " +
                            " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
                            " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
                     }
                     sqlcount += " LEFT JOIN vaf_column ac ON cl.vaf_column_ID=ac.vaf_column_ID " +
-                       " LEFT JOIN c_activity act ON cl.c_activity_id=act.c_activity_id " +
-                       " LEFT JOIN C_BPARTNER cb ON cl.C_BPARTNER_ID=cb.C_BPARTNER_ID " +
-                       " LEFT JOIN C_CAMPAIGN cc ON cl.C_CAMPAIGN_ID=cc.C_CAMPAIGN_ID " +
-                       " LEFT JOIN C_ELEMENTVALUE cel ON cl.C_ELEMENTVALUE_ID=cel.C_ELEMENTVALUE_ID " +
-                       " LEFT JOIN C_ELEMENT el ON cl.C_ELEMENT_ID=el.C_ELEMENT_ID " +
+                       " LEFT JOIN VAB_BillingCode act ON cl.VAB_BillingCode_id=act.VAB_BillingCode_id " +
+                       " LEFT JOIN VAB_BUSINESSPARTNER cb ON cl.VAB_BUSINESSPARTNER_ID=cb.VAB_BUSINESSPARTNER_ID " +
+                       " LEFT JOIN VAB_PROMOTION cc ON cl.VAB_PROMOTION_ID=cc.VAB_PROMOTION_ID " +
+                       " LEFT JOIN VAB_ACCT_ELEMENT cel ON cl.VAB_ACCT_ELEMENT_ID=cel.VAB_ACCT_ELEMENT_ID " +
+                       " LEFT JOIN VAB_ELEMENT el ON cl.VAB_ELEMENT_ID=el.VAB_ELEMENT_ID " +
                        " LEFT JOIN C_LOCATION cloc ON cl.C_LOCATION_ID=cloc.C_LOCATION_ID " +
                        " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
-                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + "  ) main";//order by  ct.c_acctschema_id
+                       " WHERE cdm.VAB_DimAmt_ID=" + dimensionID + " and ct.VAB_AccountBook_id=" + acctId + "  ) main";//order by  ct.VAB_AccountBook_id
 
                     DataSet Record = DB.ExecuteDataset(sqlcount);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -682,7 +682,7 @@ namespace VIS.Models
                         {
                             AmountDivisionModel obj = new AmountDivisionModel();
                             obj.recid = tempRecid + (i + 1);
-                            obj.AcctSchema = Convert.ToInt32(ds.Tables[0].Rows[i]["c_acctschema_id"]);
+                            obj.AcctSchema = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_AccountBook_id"]);
                             if (ds.Tables[0].Rows[i]["amount"] != DBNull.Value)
                             {
 
@@ -705,8 +705,8 @@ namespace VIS.Models
                             {
                                 obj.DimensionNameVal = 0;
                             }
-                            obj.C_BPartner_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_ID"]);
-                            obj.C_BPartner = Convert.ToString(ds.Tables[0].Rows[i]["BPartnerName"]);
+                            obj.VAB_BusinessPartner_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_BusinessPartner_ID"]);
+                            obj.VAB_BusinessPartner = Convert.ToString(ds.Tables[0].Rows[i]["BPartnerName"]);
 
                             obj.DimensionType = Convert.ToString(ds.Tables[0].Rows[i]["DimensionType"]);
                             obj.DimensionTypeVal = Convert.ToString(ds.Tables[0].Rows[i]["elementtype"]);
@@ -765,24 +765,24 @@ namespace VIS.Models
         /// <returns>Element ID</returns>
         public int GetElementID(Ctx ctx, int[] accountingSchema)
         {
-            int c_element_id = 0;
+            int VAB_Element_id = 0;
             List<int> elementID = new List<int>();
             for (int i = 0; i < accountingSchema.Length; i++)
             {
-                string qry = "SELECT C_Element_ID FROM C_AcctSchema_Element WHERE ElementType = 'AC' AND IsActive='Y' AND C_AcctSchema_ID = " + accountingSchema[i];
-                c_element_id = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
-                elementID.Add(c_element_id);
+                string qry = "SELECT VAB_Element_ID FROM VAB_AccountBook_Element WHERE ElementType = 'AC' AND IsActive='Y' AND VAB_AccountBook_ID = " + accountingSchema[i];
+                VAB_Element_id = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+                elementID.Add(VAB_Element_id);
                 if (i > 0)
                 {
                     if (elementID[i - 1] != elementID[i])
                     {
-                        c_element_id = 0;
+                        VAB_Element_id = 0;
                         break;
                     }
                 }
             }
 
-            return c_element_id;
+            return VAB_Element_id;
         }
 
         /// <summary>
@@ -837,16 +837,16 @@ namespace VIS.Models
         {
             string qry = null;
             //DataSet ds1 = ds;
-            qry = "select cv.C_ElementValue_ID, ac.C_Element_ID, cv.value || '_' || cv.name AS ElementName from c_acctschema_element ac "
-                  + " inner join C_Element ce on ce.C_Element_ID = ac.C_Element_ID"
-                  + " inner JOIN c_elementvalue cv on cv.C_Element_ID = ce.C_Element_ID where ac.c_acctschema_id =" + acctschemaid + " AND  "
+            qry = "select cv.VAB_Acct_Element_ID, ac.VAB_Element_ID, cv.value || '_' || cv.name AS ElementName from VAB_AccountBook_element ac "
+                  + " inner join VAB_Element ce on ce.VAB_Element_ID = ac.VAB_Element_ID"
+                  + " inner JOIN VAB_Acct_Element cv on cv.VAB_Element_ID = ce.VAB_Element_ID where ac.VAB_AccountBook_id =" + acctschemaid + " AND  "
                   + " ac.ElementType = '" + type + "'  and cv.Value = '" + value + "'";
             DataSet dsAccountElement = (DB.ExecuteDataset(qry, null, null));
             if (dsAccountElement != null && dsAccountElement.Tables.Count > 0 && dsAccountElement.Tables[0].Rows.Count > 0)
             {
-                dt.Rows[rowNo]["AccoutId"] = dsAccountElement.Tables[0].Rows[0]["C_ElementValue_ID"];
+                dt.Rows[rowNo]["AccoutId"] = dsAccountElement.Tables[0].Rows[0]["VAB_Acct_Element_ID"];
                 dt.Rows[rowNo]["AccountValue"] = dsAccountElement.Tables[0].Rows[0]["ElementName"];
-                dt.Rows[rowNo]["C_Element_ID"] = dsAccountElement.Tables[0].Rows[0]["C_Element_ID"];
+                dt.Rows[rowNo]["VAB_Element_ID"] = dsAccountElement.Tables[0].Rows[0]["VAB_Element_ID"];
             }
             return dt;
         }

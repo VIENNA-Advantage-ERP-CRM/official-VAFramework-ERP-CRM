@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Commission Run Amount Detail Model
- * Class Used     : X_C_CommissionDetail
+ * Class Used     : X_VAB_WorkCommissionDetail
  * Chronological    Development
  * Veena        09-Nov-2009
 **********************************************************/
@@ -23,7 +23,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Commission Run Amount Detail Model
     /// </summary>
-    public class MCommissionDetail : X_C_CommissionDetail
+    public class MCommissionDetail : X_VAB_WorkCommissionDetail
     {
         /// <summary>
         /// Standard Constructor
@@ -53,15 +53,15 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="camt">commission amt</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="amt">amount</param>
         /// <param name="qty">quantity</param>
-        public MCommissionDetail(MCommissionAmt camt, int C_Currency_ID, Decimal amt, Decimal qty)
+        public MCommissionDetail(MCommissionAmt camt, int VAB_Currency_ID, Decimal amt, Decimal qty)
             : this(camt.GetCtx(), 0, camt.Get_TrxName())
 	    {
             SetClientOrg(camt);
-            SetC_CommissionAmt_ID(camt.GetC_CommissionAmt_ID());
-            SetC_Currency_ID(C_Currency_ID);
+            SetVAB_WorkCommission_Amt_ID(camt.GetVAB_WorkCommission_Amt_ID());
+            SetVAB_Currency_ID(VAB_Currency_ID);
             SetActualAmt(amt);
             SetActualQty(qty);
             SetConvertedAmt(Env.ZERO);
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
         public void SetConvertedAmt(DateTime? date)
         {
             Decimal amt = MConversionRate.ConvertBase(GetCtx(),
-                GetActualAmt(), GetC_Currency_ID(), date, 0, 	//	type
+                GetActualAmt(), GetVAB_Currency_ID(), date, 0, 	//	type
                 GetVAF_Client_ID(), GetVAF_Org_ID());
             //if (amt != null)
                 SetConvertedAmt(amt);
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateAmtHeader()
         {
-            MCommissionAmt amt = new MCommissionAmt(GetCtx(), GetC_CommissionAmt_ID(), Get_TrxName());
+            MCommissionAmt amt = new MCommissionAmt(GetCtx(), GetVAB_WorkCommission_Amt_ID(), Get_TrxName());
             amt.CalculateCommission();
             amt.Save();
         }

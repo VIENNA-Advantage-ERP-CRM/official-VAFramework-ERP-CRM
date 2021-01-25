@@ -2,7 +2,7 @@
     * Project Name   : VAdvantage
     * Class Name     : MBankStatementLine
     * Purpose        : Bank Statement Line Model open on button click(it is Form)
-    * Class Used     : X_C_BankStatementLine
+    * Class Used     : X_VAB_BankingJRNLLine
     * Chronological    Development
     * Raghunandan     01-Aug-2009
 ******************************************************/
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBankStatementLine : X_C_BankStatementLine
+    public class MBankStatementLine : X_VAB_BankingJRNLLine
     {
 
         private decimal old_ebAmt;
@@ -42,18 +42,18 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_BankStatementLine_ID">Id</param>
+        /// <param name="VAB_BankingJRNLLine_ID">Id</param>
         /// <param name="trxName">Transaction</param>
-        public MBankStatementLine(Ctx ctx, int C_BankStatementLine_ID, Trx trxName)
-            : base(ctx, C_BankStatementLine_ID, trxName)
+        public MBankStatementLine(Ctx ctx, int VAB_BankingJRNLLine_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNLLine_ID, trxName)
         {
 
-            if (C_BankStatementLine_ID == 0)
+            if (VAB_BankingJRNLLine_ID == 0)
             {
-                /*/	setC_BankStatement_ID (0);		//	Parent
-                //	setC_Charge_ID (0);
-                //	setC_Currency_ID (0);	//	Bank Acct Currency
-                //	setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_BankStatementLine WHERE C_BankStatement_ID=@C_BankStatement_ID@*/
+                /*/	setVAB_BankingJRNL_ID (0);		//	Parent
+                //	setVAB_Charge_ID (0);
+                //	setVAB_Currency_ID (0);	//	Bank Acct Currency
+                //	setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_BankingJRNLLine WHERE VAB_BankingJRNL_ID=@VAB_BankingJRNL_ID@*/
                 SetStmtAmt(Env.ZERO);
                 SetTrxAmt(Env.ZERO);
                 SetInterestAmt(Env.ZERO);
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
             : this(statement.GetCtx(), 0, statement.Get_TrxName())
         {
             SetClientOrg(statement);
-            SetC_BankStatement_ID(statement.GetC_BankStatement_ID());
+            SetVAB_BankingJRNL_ID(statement.GetVAB_BankingJRNL_ID());
             SetStatementLineDate(statement.GetStatementDate());
         }
 
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
         public void SetPayment(MPayment payment)
         {
             SetC_Payment_ID(payment.GetC_Payment_ID());
-            SetC_Currency_ID(payment.GetC_Currency_ID());
+            SetVAB_Currency_ID(payment.GetVAB_Currency_ID());
             Decimal amt = payment.GetPayAmt(true);
             SetTrxAmt(amt);
             SetStmtAmt(amt);
@@ -334,35 +334,35 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (Env.Signum(GetChargeAmt()) != 0 && GetC_Charge_ID() == 0)
+            if (Env.Signum(GetChargeAmt()) != 0 && GetVAB_Charge_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Charge_ID"));
-                // ErrorLog.FillErrorLog("FillMandatory", GetMessage.Translate(GetCtx(), "C_Charge_ID"), "", VAdvantage.Framework.Message.MessageType.ERROR);
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Charge_ID"));
+                // ErrorLog.FillErrorLog("FillMandatory", GetMessage.Translate(GetCtx(), "VAB_Charge_ID"), "", VAdvantage.Framework.Message.MessageType.ERROR);
                 return false;
             }
 
             //	Set Line No
             if (GetLine() == 0)
             {
-                String sql = "SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM C_BankStatementLine WHERE C_BankStatement_ID=@param1";
-                int ii = Convert.ToInt32(DB.GetSQLValue(Get_TrxName(), sql, GetC_BankStatement_ID()));
+                String sql = "SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_BankingJRNLLine WHERE VAB_BankingJRNL_ID=@param1";
+                int ii = Convert.ToInt32(DB.GetSQLValue(Get_TrxName(), sql, GetVAB_BankingJRNL_ID()));
                 SetLine(ii);
             }
 
             //	Set References
-            if (GetC_Payment_ID() != 0 && GetC_BPartner_ID() == 0)
+            if (GetC_Payment_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
                 MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
-                SetC_BPartner_ID(payment.GetC_BPartner_ID());
+                SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
                 if (payment.GetC_Invoice_ID() != 0)
                 {
                     SetC_Invoice_ID(payment.GetC_Invoice_ID());
                 }
             }
-            if (GetC_Invoice_ID() != 0 && GetC_BPartner_ID() == 0)
+            if (GetC_Invoice_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
                 MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
-                SetC_BPartner_ID(invoice.GetC_BPartner_ID());
+                SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
             //	Calculate Charge = Statement - trx - Interest  
             Decimal amt = GetStmtAmt();
@@ -376,7 +376,7 @@ namespace VAdvantage.Model
             // Reset Amount Dimension if Trx Amount is different
             if (Util.GetValueOfInt(Get_Value("AmtDimTrxAmount")) > 0)
             {
-                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimTrxAmount"));
+                string qry = "SELECT Amount FROM VAB_DimAmt WHERE VAB_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimTrxAmount"));
                 decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
                 if (amtdimAmt != GetTrxAmt())
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
             // Reset Amount Dimension if charge Amount is different
             if (Util.GetValueOfInt(Get_Value("AmtDimChargeAmount")) > 0)
             {
-                string qry = "SELECT Amount FROM C_DimAmt WHERE C_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimChargeAmount"));
+                string qry = "SELECT Amount FROM VAB_DimAmt WHERE VAB_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimChargeAmount"));
                 decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
                 if (amtdimAmt != GetChargeAmt())
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
             bool updateBS = UpdateBSAndLine();
 
             //JID_1325: On save on bank statment system should give warning message "Payment and charge reference not found. Either create payment or the system will not complete bank statement."
-            if (GetC_Payment_ID() == 0 && GetC_Charge_ID() == 0)
+            if (GetC_Payment_ID() == 0 && GetVAB_Charge_ID() == 0)
             {
                 log.SaveWarning("VIS_NoPaymentorChargeStatement", "");
             }
@@ -433,7 +433,7 @@ namespace VAdvantage.Model
 
             // Update BankAccount and BankAccountLine
             MBankStatement parent = GetParent();
-            MBankAccount bankAccount = new MBankAccount(GetCtx(), parent.GetC_BankAccount_ID(), Get_TrxName());
+            MBankAccount bankAccount = new MBankAccount(GetCtx(), parent.GetVAB_Bank_Acct_ID(), Get_TrxName());
 
             // bankAccount.SetUnMatchedBalance(Decimal.Add(Decimal.Subtract(bankAccount.GetUnMatchedBalance(), old_ebAmt), new_ebAmt)); //Commented Arpit..To updated only if document gets completed..asked by Ashish
             if (!bankAccount.Save(Get_TrxName()))
@@ -443,23 +443,23 @@ namespace VAdvantage.Model
             }
 
             DataTable dtBankAccountLine;
-            int C_BANKACCOUNTLINE_ID = 0;
+            int VAB_BANK_ACCTLINE_ID = 0;
 
-            string sql = "SELECT C_BANKACCOUNTLINE_ID FROM C_BANKACCOUNTLINE WHERE C_BANKACCOUNT_ID="
-                            + bankAccount.GetC_BankAccount_ID() + " AND STATEMENTDATE="
+            string sql = "SELECT VAB_BANK_ACCTLINE_ID FROM VAB_BANK_ACCTLINE WHERE VAB_BANK_ACCT_ID="
+                            + bankAccount.GetVAB_Bank_Acct_ID() + " AND STATEMENTDATE="
                             + DB.TO_DATE(GetStatementLineDate()) + " AND VAF_ORG_ID=" + GetVAF_Org_ID();
 
             dtBankAccountLine = DB.ExecuteDataset(sql, null, Get_TrxName()).Tables[0];
 
             if (dtBankAccountLine.Rows.Count > 0)
             {
-                C_BANKACCOUNTLINE_ID = Util.GetValueOfInt(dtBankAccountLine.Rows[0][0]);
+                VAB_BANK_ACCTLINE_ID = Util.GetValueOfInt(dtBankAccountLine.Rows[0][0]);
             }
 
-            MBankAccountLine bankAccountLine = new MBankAccountLine(GetCtx(), C_BANKACCOUNTLINE_ID, Get_TrxName());
-            if (C_BANKACCOUNTLINE_ID == 0)
+            MBankAccountLine bankAccountLine = new MBankAccountLine(GetCtx(), VAB_BANK_ACCTLINE_ID, Get_TrxName());
+            if (VAB_BANK_ACCTLINE_ID == 0)
             {
-                bankAccountLine.SetC_BankAccount_ID(bankAccount.GetC_BankAccount_ID());
+                bankAccountLine.SetVAB_Bank_Acct_ID(bankAccount.GetVAB_Bank_Acct_ID());
                 //Arpit To set same orgnization as Bank Statement on Account Line
                 //bankAccountLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 //bankAccountLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
@@ -493,7 +493,7 @@ namespace VAdvantage.Model
         public MBankStatement GetParent()
         {
             if (_parent == null)
-                _parent = new MBankStatement(GetCtx(), GetC_BankStatement_ID(), Get_TrxName());
+                _parent = new MBankStatement(GetCtx(), GetVAB_BankingJRNL_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -532,37 +532,37 @@ namespace VAdvantage.Model
                 if (DeletingLinesFromHeader)
                 {
                     //Commented the below query
-                    // _Sql.Append("UPDATE C_BankStatement bs"
-                    //+ " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
-                    //    + "WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y' AND bsl.C_BankStatementLine_ID=" + GetC_BankStatementLine_ID()+ ") "
-                    //+ "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
+                    // _Sql.Append("UPDATE VAB_BankingJRNL bs"
+                    //+ " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM VAB_BankingJRNLLine bsl "
+                    //    + "WHERE bsl.VAB_BankingJRNL_ID=bs.VAB_BankingJRNL_ID AND bsl.IsActive='Y' AND bsl.VAB_BankingJRNLLine_ID=" + GetVAB_BankingJRNLLine_ID()+ ") "
+                    //+ "WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID());
 
-                    _Sql.Append("UPDATE C_BankStatement bs"
-                  + " SET StatementDifference=(StatementDifference-(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
-                  + " WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y' AND bsl.C_BankStatementLine_ID=" + GetC_BankStatementLine_ID() + ")) "
-                  + " WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
+                    _Sql.Append("UPDATE VAB_BankingJRNL bs"
+                  + " SET StatementDifference=(StatementDifference-(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM VAB_BankingJRNLLine bsl "
+                  + " WHERE bsl.VAB_BankingJRNL_ID=bs.VAB_BankingJRNL_ID AND bsl.IsActive='Y' AND bsl.VAB_BankingJRNLLine_ID=" + GetVAB_BankingJRNLLine_ID() + ")) "
+                  + " WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID());
 
                 }
                 else
                 {
-                    _Sql.Append("UPDATE C_BankStatement bs"
-                   + " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM C_BankStatementLine bsl "
-                       + "WHERE bsl.C_BankStatement_ID=bs.C_BankStatement_ID AND bsl.IsActive='Y') "
-                   + "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
+                    _Sql.Append("UPDATE VAB_BankingJRNL bs"
+                   + " SET StatementDifference=(SELECT COALESCE( SUM(StmtAmt), 0 ) FROM VAB_BankingJRNLLine bsl "
+                       + "WHERE bsl.VAB_BankingJRNL_ID=bs.VAB_BankingJRNL_ID AND bsl.IsActive='Y') "
+                   + "WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID());
                 }
 
                 DB.ExecuteQuery(_Sql.ToString(), null, Get_TrxName());
 
                 _Sql.Clear();
 
-                _Sql.Append("UPDATE C_BankStatement bs"
+                _Sql.Append("UPDATE VAB_BankingJRNL bs"
                           + " SET EndingBalance=BeginningBalance+StatementDifference "
-                          + "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID());
+                          + "WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID());
 
                 //Commented the below query
-                //sql = "UPDATE C_BankStatement bs"
+                //sql = "UPDATE VAB_BankingJRNL bs"
                 //    + " SET EndingBalance=BeginningBalance+StatementDifference "
-                //    + "WHERE C_BankStatement_ID=" + GetC_BankStatement_ID();
+                //    + "WHERE VAB_BankingJRNL_ID=" + GetVAB_BankingJRNL_ID();
                 //DB.executeUpdate(sql, get_TrxName());
                 //DB.ExecuteQuery(sql, null, Get_TrxName());
 
@@ -584,8 +584,8 @@ namespace VAdvantage.Model
 
         private DataTable GetCurrentAmounts()
         {
-            string sql = "SELECT ENDINGBALANCE,STATEMENTDIFFERENCE FROM C_BANKSTATEMENT "
-                    + "WHERE C_BANKSTATEMENT_ID=" + GetC_BankStatement_ID();
+            string sql = "SELECT ENDINGBALANCE,STATEMENTDIFFERENCE FROM VAB_BANKINGJRNL "
+                    + "WHERE VAB_BANKINGJRNL_ID=" + GetVAB_BankingJRNL_ID();
 
             return DB.ExecuteDataset(sql, null, Get_TrxName()).Tables[0];
         }

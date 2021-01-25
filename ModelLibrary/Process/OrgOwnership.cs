@@ -31,8 +31,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _M_Warehouse_ID = -1;
         private int _M_Product_Category_ID = -1;
         private int _M_Product_ID = -1;
-        private int _C_BP_Group_ID = -1;
-        private int _C_BPartner_ID = -1;
+        private int _VAB_BPart_Category_ID = -1;
+        private int _VAB_BusinessPartner_ID = -1;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -65,13 +65,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     _M_Product_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
 
-                else if (name.Equals("C_BP_Group_ID"))
+                else if (name.Equals("VAB_BPart_Category_ID"))
                 {
-                    _C_BP_Group_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_BPart_Category_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
 
                 else
@@ -105,7 +105,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return ProductOwnership();
             }
 
-            if (_C_BPartner_ID > 0 || _C_BP_Group_ID > 0)
+            if (_VAB_BusinessPartner_ID > 0 || _VAB_BPart_Category_ID > 0)
             {
                 return BPartnerOwnership();
             }
@@ -143,7 +143,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 .Append(" AND VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND VAF_Org_ID<>").Append(_VAF_Org_ID);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_AcctSchema_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
 
             //	Set Locators
             sql = new StringBuilder();
@@ -200,7 +200,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Acct
             sql = "UPDATE M_Product_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_AcctSchema_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
 
             //	BOM
             sql = "UPDATE M_Product_BOM x " + set;
@@ -217,7 +217,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAF_Language"));
 
-            //Added by Pratap 30-12-15 M_Replenish,M_Substitute,C_BPartner_Product - Mantis Issue ID - 0000441
+            //Added by Pratap 30-12-15 M_Replenish,M_Substitute,VAB_BPart_Product - Mantis Issue ID - 0000441
             //	M_Replenish 
             sql = "UPDATE M_Replenish x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -228,10 +228,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Substitute"));
 
-            //	C_BPartner_Product
-            sql = "UPDATE C_BPartner_Product x " + set;
+            //	VAB_BPart_Product
+            sql = "UPDATE VAB_BPart_Product x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_BPartner_Product"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_BPart_Product"));
 
 
             return "";
@@ -243,41 +243,41 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>""</returns>
         private String BPartnerOwnership()
         {
-            log.Info("bPartnerOwnership - C_BP_Group_ID=" + _C_BP_Group_ID
-                + ", C_BPartner_ID=" + _C_BPartner_ID);
+            log.Info("bPartnerOwnership - VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID
+                + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
 
             String set = " SET VAF_Org_ID=" + _VAF_Org_ID;
-            if (_C_BP_Group_ID > 0)
+            if (_VAB_BPart_Category_ID > 0)
             {
-                set += " WHERE EXISTS (SELECT * FROM C_BPartner bp WHERE bp.C_BPartner_ID=x.C_BPartner_ID AND bp.C_BP_Group_ID=" + _C_BP_Group_ID + ")";
+                set += " WHERE EXISTS (SELECT * FROM VAB_BusinessPartner bp WHERE bp.VAB_BusinessPartner_ID=x.VAB_BusinessPartner_ID AND bp.VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ")";
             }
             else
             {
-                set += " WHERE C_BPartner_ID=" + _C_BPartner_ID;
+                set += " WHERE VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
             }
             set += " AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID<>" + _VAF_Org_ID;
             log.Fine("bPartnerOwnership - " + set);
 
             //	BPartner
-            String sql = "UPDATE C_BPartner x " + set;
+            String sql = "UPDATE VAB_BusinessPartner x " + set;
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_BPartner_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_BusinessPartner_ID"));
 
             //	Acct xxx
             sql = "UPDATE C_BP_Customer_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_AcctSchema_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
             sql = "UPDATE C_BP_Employee_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_AcctSchema_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
             sql = "UPDATE C_BP_Vendor_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_AcctSchema_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
 
             //	Location
-            sql = "UPDATE C_BPartner_Location x " + set;
+            sql = "UPDATE VAB_BPart_Location x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_BPartner_Location_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_BPart_Location_ID"));
 
             //	Contcat/User
             sql = "UPDATE VAF_UserContact x " + set;
@@ -285,9 +285,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAF_UserContact_ID"));
 
             //	BankAcct
-            sql = "UPDATE C_BP_BankAccount x " + set;
+            sql = "UPDATE VAB_BPart_Bank_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "C_BP_BankAccount_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_BPart_Bank_Acct_ID"));
 
             return "";
         }
@@ -317,20 +317,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("generalOwnership - VAF_UserContact_Roles=" + no);
             }
 
-            //	C_BPartner_Product
-            sql = "UPDATE C_BPartner_Product " + set;
+            //	VAB_BPart_Product
+            sql = "UPDATE VAB_BPart_Product " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - C_BPartner_Product=" + no);
+                log.Fine("generalOwnership - VAB_BPart_Product=" + no);
             }
 
             //	Withholding
-            sql = "UPDATE C_BP_Withholding x " + set;
+            sql = "UPDATE VAB_BPart_Withholding x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - C_BP_Withholding=" + no);
+                log.Fine("generalOwnership - VAB_BPart_Withholding=" + no);
             }
 
             //	Costing

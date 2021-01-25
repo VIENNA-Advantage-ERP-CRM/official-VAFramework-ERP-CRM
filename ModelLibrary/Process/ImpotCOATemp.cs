@@ -41,7 +41,7 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Element_ID"))
+                else if (name.Equals("VAB_Element_ID"))
                 {
                     C_Elememt_ID = para[i].GetParameterAsInt();
                 }
@@ -96,22 +96,22 @@ namespace VAdvantage.Process
                     //da.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
-                        sql = "select VAF_TreeInfo_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
+                        sql = "select VAF_TreeInfo_id from VAB_Element where VAB_Element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
                         int VAF_TreeInfo_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
                             string key = Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]);
                             if (key != "")
                             {
-                                sql = "select c_elementvalue_id from c_elementvalue where value = '" + key + "' and vaf_client_id = " + client;
-                                int C_ElementValue_ID1 = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                                if (C_ElementValue_ID1 == 0)
+                                sql = "select VAB_Acct_Element_id from VAB_Acct_Element where value = '" + key + "' and vaf_client_id = " + client;
+                                int VAB_Acct_Element_ID1 = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                if (VAB_Acct_Element_ID1 == 0)
                                 {
                                     int parent_ID = Util.GetValueOfInt(dt.Rows[i]["(Account_Parent)"]);
-                                    sql = "select c_elementvalue_id from c_elementvalue where value = '" + parent_ID + "' and vaf_client_id = " + Util.GetValueOfInt(GetVAF_Client_ID());
-                                    int C_ElementValue_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                    sql = "select VAB_Acct_Element_id from VAB_Acct_Element where value = '" + parent_ID + "' and vaf_client_id = " + Util.GetValueOfInt(GetVAF_Client_ID());
+                                    int VAB_Acct_Element_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                     MElementValue eleValue = new MElementValue(GetCtx(), 0, null);
-                                    int C_ElementValue_ID = DB.GetNextID(GetVAF_Client_ID(), "C_ElementValue", null);
+                                    int VAB_Acct_Element_ID = DB.GetNextID(GetVAF_Client_ID(), "VAB_Acct_Element", null);
                                     string accSign = Util.GetValueOfString(dt.Rows[i]["(Account_Sign)"]);
                                     if (accSign == "")
                                     {
@@ -121,8 +121,8 @@ namespace VAdvantage.Process
                                     {
                                         eleValue.SetAccountSign(accSign);
                                     }
-                                    eleValue.SetC_Element_ID(C_Elememt_ID);
-                                    eleValue.SetC_ElementValue_ID(C_ElementValue_ID);
+                                    eleValue.SetVAB_Element_ID(C_Elememt_ID);
+                                    eleValue.SetVAB_Acct_Element_ID(VAB_Acct_Element_ID);
                                     eleValue.SetValue(Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]));
                                     eleValue.SetName(Util.GetValueOfString(dt.Rows[i]["(Account_Name)"]));
                                     eleValue.SetDescription(Util.GetValueOfString(dt.Rows[i]["(Account_Description)"]));
@@ -176,14 +176,14 @@ namespace VAdvantage.Process
                                     }
 
                                     // when Foreign Currency true, then only set Currency
-                                    if (eleValue.IsForeignCurrency() && eleValue.Get_ColumnIndex("C_Currency_ID") >= 0)
+                                    if (eleValue.IsForeignCurrency() && eleValue.Get_ColumnIndex("VAB_Currency_ID") >= 0)
                                     {
-                                        sql = "SELECT C_Currency_ID FROM C_Currency WHERE IsActive='Y' AND ISO_CODE='"
+                                        sql = "SELECT VAB_Currency_ID FROM VAB_Currency WHERE IsActive='Y' AND ISO_CODE='"
                                             + Util.GetValueOfString(dt.Rows[i]["(Currency)"]) + "'";
                                         result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                         if (result > 0)
                                         {
-                                            eleValue.Set_Value("C_Currency_ID", result);
+                                            eleValue.Set_Value("VAB_Currency_ID", result);
                                         }
                                     }
 
@@ -230,14 +230,14 @@ namespace VAdvantage.Process
                                     }
 
                                     // Conversion Type
-                                    if (eleValue.Get_ColumnIndex("C_ConversionType_ID") >= 0)
+                                    if (eleValue.Get_ColumnIndex("VAB_CurrencyType_ID") >= 0)
                                     {
-                                        sql = "SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y' AND Value='"
+                                        sql = "SELECT VAB_CurrencyType_ID FROM VAB_CurrencyType WHERE IsActive='Y' AND Value='"
                                             + Util.GetValueOfString(dt.Rows[i]["(Currency_Type)"]) + "'";
                                         result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                         if (result > 0)
                                         {
-                                            eleValue.Set_Value("C_ConversionType_ID", result);
+                                            eleValue.Set_Value("VAB_CurrencyType_ID", result);
                                         }
                                     }
 
@@ -273,9 +273,9 @@ namespace VAdvantage.Process
                                         return msg;
                                     }
                                     VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
-                                    C_ElementValue_ID = C_ElementValue_ID + 1;
-                                    VAdvantage.Model.MTreeNode mNode = new VAdvantage.Model.MTreeNode(obj, C_ElementValue_ID);
-                                    mNode.SetParent_ID(C_ElementValue_ID_Parent);
+                                    VAB_Acct_Element_ID = VAB_Acct_Element_ID + 1;
+                                    VAdvantage.Model.MTreeNode mNode = new VAdvantage.Model.MTreeNode(obj, VAB_Acct_Element_ID);
+                                    mNode.SetParent_ID(VAB_Acct_Element_ID_Parent);
                                     if (!mNode.Save())
                                     {
                                         return GetRetrievedError(mNode, "NodeNotSaved");

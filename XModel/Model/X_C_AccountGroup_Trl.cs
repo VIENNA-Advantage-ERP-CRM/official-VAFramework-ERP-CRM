@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_AccountGroup_Trl
+/** Generated Model for VAB_AccountGroup_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_AccountGroup_Trl : PO
+public class X_VAB_AccountGroup_TL : PO
 {
-public X_C_AccountGroup_Trl (Context ctx, int C_AccountGroup_Trl_ID, Trx trxName) : base (ctx, C_AccountGroup_Trl_ID, trxName)
+public X_VAB_AccountGroup_TL (Context ctx, int VAB_AccountGroup_TL_ID, Trx trxName) : base (ctx, VAB_AccountGroup_TL_ID, trxName)
 {
-/** if (C_AccountGroup_Trl_ID == 0)
+/** if (VAB_AccountGroup_TL_ID == 0)
 {
-SetC_AccountGroup_ID (0);
-SetC_AccountGroup_Trl_ID (0);
+SetVAB_AccountGroup_ID (0);
+SetVAB_AccountGroup_TL_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_AccountGroup_Trl (Ctx ctx, int C_AccountGroup_Trl_ID, Trx trxName) : base (ctx, C_AccountGroup_Trl_ID, trxName)
+public X_VAB_AccountGroup_TL (Ctx ctx, int VAB_AccountGroup_TL_ID, Trx trxName) : base (ctx, VAB_AccountGroup_TL_ID, trxName)
 {
-/** if (C_AccountGroup_Trl_ID == 0)
+/** if (VAB_AccountGroup_TL_ID == 0)
 {
-SetC_AccountGroup_ID (0);
-SetC_AccountGroup_Trl_ID (0);
+SetVAB_AccountGroup_ID (0);
+SetVAB_AccountGroup_TL_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroup_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountGroup_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_AccountGroup_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroup_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AccountGroup_TL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_AccountGroup_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_AccountGroup_Trl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AccountGroup_TL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_AccountGroup_Trl()
+static X_VAB_AccountGroup_TL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1351919190195L;
 public static int Table_ID;
  // =1000381;
 
-/** TableName=C_AccountGroup_Trl */
-public static String Table_Name="C_AccountGroup_Trl";
+/** TableName=VAB_AccountGroup_TL */
+public static String Table_Name="VAB_AccountGroup_TL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_AccountGroup_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AccountGroup_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -134,33 +134,33 @@ public String GetVAF_Language()
 {
 return (String)Get_Value("VAF_Language");
 }
-/** Set C_AccountGroup_ID.
-@param C_AccountGroup_ID C_AccountGroup_ID */
-public void SetC_AccountGroup_ID (int C_AccountGroup_ID)
+/** Set VAB_AccountGroup_ID.
+@param VAB_AccountGroup_ID VAB_AccountGroup_ID */
+public void SetVAB_AccountGroup_ID (int VAB_AccountGroup_ID)
 {
-if (C_AccountGroup_ID < 1) throw new ArgumentException ("C_AccountGroup_ID is mandatory.");
-Set_ValueNoCheck ("C_AccountGroup_ID", C_AccountGroup_ID);
+if (VAB_AccountGroup_ID < 1) throw new ArgumentException ("VAB_AccountGroup_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountGroup_ID", VAB_AccountGroup_ID);
 }
-/** Get C_AccountGroup_ID.
-@return C_AccountGroup_ID */
-public int GetC_AccountGroup_ID() 
+/** Get VAB_AccountGroup_ID.
+@return VAB_AccountGroup_ID */
+public int GetVAB_AccountGroup_ID() 
 {
-Object ii = Get_Value("C_AccountGroup_ID");
+Object ii = Get_Value("VAB_AccountGroup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_AccountGroup_Trl_ID.
-@param C_AccountGroup_Trl_ID C_AccountGroup_Trl_ID */
-public void SetC_AccountGroup_Trl_ID (int C_AccountGroup_Trl_ID)
+/** Set VAB_AccountGroup_TL_ID.
+@param VAB_AccountGroup_TL_ID VAB_AccountGroup_TL_ID */
+public void SetVAB_AccountGroup_TL_ID (int VAB_AccountGroup_TL_ID)
 {
-if (C_AccountGroup_Trl_ID < 1) throw new ArgumentException ("C_AccountGroup_Trl_ID is mandatory.");
-Set_ValueNoCheck ("C_AccountGroup_Trl_ID", C_AccountGroup_Trl_ID);
+if (VAB_AccountGroup_TL_ID < 1) throw new ArgumentException ("VAB_AccountGroup_TL_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountGroup_TL_ID", VAB_AccountGroup_TL_ID);
 }
-/** Get C_AccountGroup_Trl_ID.
-@return C_AccountGroup_Trl_ID */
-public int GetC_AccountGroup_Trl_ID() 
+/** Get VAB_AccountGroup_TL_ID.
+@return VAB_AccountGroup_TL_ID */
+public int GetVAB_AccountGroup_TL_ID() 
 {
-Object ii = Get_Value("C_AccountGroup_Trl_ID");
+Object ii = Get_Value("VAB_AccountGroup_TL_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

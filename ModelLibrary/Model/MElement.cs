@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MElement
  * Purpose        : Accounting Element model.
- * Class Used     : MElement inherits from X_C_Element class
+ * Class Used     : MElement inherits from X_VAB_Element class
  * Chronological    Development
  * Raghunandan      08-May-2009
   ******************************************************/
@@ -21,7 +21,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MElement : X_C_Element
+    public class MElement : X_VAB_Element
     {
         //Cache						
         private static CCache<int, MElement> s_cache = new CCache<int, MElement>("VAF_ColumnDic", 20);
@@ -50,12 +50,12 @@ namespace VAdvantage.Model
         ///Standard Accounting Element Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Element_ID">id</param>
+        /// <param name="VAB_Element_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MElement(Ctx ctx, int C_Element_ID, Trx trxName)
-            : base(ctx, C_Element_ID, trxName)
+        public MElement(Ctx ctx, int VAB_Element_ID, Trx trxName)
+            : base(ctx, VAB_Element_ID, trxName)
         {
-            if (C_Element_ID == 0)
+            if (VAB_Element_ID == 0)
             {
                 //	setName (null);
                 //	setVAF_TreeInfo_ID (0);

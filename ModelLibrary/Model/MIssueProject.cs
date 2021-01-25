@@ -119,24 +119,24 @@ namespace VAdvantage.Model
 		//super (ctx, rs, trxName);
 	}
 	/// <summary>
-	///	Set A_Asset_ID
+	///	Set VAA_Asset_ID
 	/// </summary>
 	/// <param name="issue"></param>
 	public void SetA_Asset_ID (MIssue issue)
 	{
-		int A_Asset_ID = 0;
-        //String sql = "SELECT * FROM A_Asset a "
-        //    + "WHERE EXISTS (SELECT * FROM A_Asset_Group ag "	//	Tracking Assets
-        //        + "WHERE a.A_Asset_Group_ID=ag.A_Asset_Group_ID AND ag.IsTrackIssues='Y')"
+		int VAA_Asset_ID = 0;
+        //String sql = "SELECT * FROM VAA_Asset a "
+        //    + "WHERE EXISTS (SELECT * FROM VAA_AssetGroup ag "	//	Tracking Assets
+        //        + "WHERE a.VAA_AssetGroup_ID=ag.VAA_AssetGroup_ID AND ag.IsTrackIssues='Y')"
         //    + " AND EXISTS (SELECT * FROM VAF_UserContact u "
-        //        + "WHERE (a.C_BPartner_ID=u.C_BPartner_ID OR a.C_BPartnerSR_ID=u.C_BPartner_ID)"
+        //        + "WHERE (a.VAB_BusinessPartner_ID=u.VAB_BusinessPartner_ID OR a.VAB_BusinessPartnerSR_ID=u.VAB_BusinessPartner_ID)"
         //        + " AND u.EMail=@param1)"					//	#1 EMail
         //    + " AND (SerNo IS NULL OR SerNo=@param2)";	//	#2 Name
 		
 		
 		
 		
-		base.SetA_Asset_ID (A_Asset_ID);
+		base.SetA_Asset_ID (VAA_Asset_ID);
 	}	//	setA_Asset_ID
 	
 	/// <summary>
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
 		StringBuilder sb = new StringBuilder ("MIssueProject[");
 		sb.Append (Get_ID())
 			.Append ("-").Append (GetName())
-			.Append(",A_Asset_ID=").Append(GetA_Asset_ID())
+			.Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
 			.Append(",C_Project_ID=").Append(GetC_Project_ID())
 			.Append ("]");
 		return sb.ToString ();

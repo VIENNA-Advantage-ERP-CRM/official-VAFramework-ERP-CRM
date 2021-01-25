@@ -61,7 +61,7 @@ namespace VAdvantage.WF
             if (VAF_WFlow_Node_ID == 0)
             {
                 //	setVAF_WFlow_Node_ID (0);
-                //	setAD_Workflow_ID (0);
+                //	setVAF_Workflow_ID (0);
                 //	setValue (null);
                 //	setName (null);
                 SetAction(ACTION_WaitSleep);
@@ -93,7 +93,7 @@ namespace VAdvantage.WF
             : base(wf.GetCtx(), 0, wf.Get_Trx())
         {
             SetClientOrg(wf);
-            SetAD_Workflow_ID(wf.GetAD_Workflow_ID());
+            SetVAF_Workflow_ID(wf.GetVAF_Workflow_ID());
             SetValue(value);
             SetName(name);
             _durationBaseMS = wf.GetDurationBaseSec() * 1000;
@@ -174,7 +174,7 @@ namespace VAdvantage.WF
         /// </summary>
         private void LoadTrl()
         {
-            if (Utility.Env.IsBaseLanguage(GetCtx(),"AD_Workflow") || Get_ID() == 0)
+            if (Utility.Env.IsBaseLanguage(GetCtx(),"VAF_Workflow") || Get_ID() == 0)
                 return;
             String sql = "SELECT Name, Description, Help FROM VAF_WFlow_Node_TL WHERE VAF_WFlow_Node_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";
             IDataReader idr = null;
@@ -293,7 +293,7 @@ namespace VAdvantage.WF
             else if (ACTION_SetVariable.Equals(action))
                 return "SetVariable:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_SubWorkflow.Equals(action))
-                return "Workflow:AD_Workflow_ID=" + GetAD_Workflow_ID();
+                return "Workflow:VAF_Workflow_ID=" + GetVAF_Workflow_ID();
             else if (ACTION_UserChoice.Equals(action))
                 return "UserChoice:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_UserWorkbench.Equals(action))
@@ -444,7 +444,7 @@ namespace VAdvantage.WF
         /// <returns>workflow</returns>
         public MWorkflow GetWorkflow()
         {
-            return MWorkflow.Get(GetCtx(), GetAD_Workflow_ID());
+            return MWorkflow.Get(GetCtx(), GetVAF_Workflow_ID());
         }
 
         /// <summary>
@@ -528,9 +528,9 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_SubWorkflow))
             {
-                if (GetAD_Workflow_ID() == 0)
+                if (GetVAF_Workflow_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Workflow_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Workflow_ID"));
                     return false;
                 }
             }

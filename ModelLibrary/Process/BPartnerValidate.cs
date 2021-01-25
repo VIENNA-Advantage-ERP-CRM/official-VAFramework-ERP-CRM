@@ -29,16 +29,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class BPartnerValidate : ProcessEngine.SvrProcess
     {
         //	BPartner ID		
-        int _C_BPartner_ID = 0;
+        int _VAB_BusinessPartner_ID = 0;
         // BPartner Group		*/
-        int _C_BP_Group_ID = 0;
+        int _VAB_BPart_Category_ID = 0;
 
         /// <summary>
         ///	Prepare	 
         /// </summary>
         protected override void Prepare()
         {
-            _C_BPartner_ID = GetRecord_ID();
+            _VAB_BusinessPartner_ID = GetRecord_ID();
             ProcessInfoParameter[] para = GetParameter();
             for (int i = 0; i < para.Length; i++)
             {
@@ -47,13 +47,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_BPartner_ID"))
+                else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
-                    _C_BPartner_ID = para[i].GetParameterAsInt();
+                    _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_BP_Group_ID"))
+                else if (name.Equals("VAB_BPart_Category_ID"))
                 {
-                    _C_BP_Group_ID = para[i].GetParameterAsInt();
+                    _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -68,34 +68,34 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("C_BPartner_ID=" + _C_BPartner_ID + ", C_BP_Group_ID=" + _C_BP_Group_ID);
-            if (_C_BP_Group_ID == -1)
+            log.Info("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID + ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID);
+            if (_VAB_BPart_Category_ID == -1)
             {
-                _C_BP_Group_ID = 0;
+                _VAB_BPart_Category_ID = 0;
             }
-            if (_C_BPartner_ID == 0 && _C_BP_Group_ID == 0)
+            if (_VAB_BusinessPartner_ID == 0 && _VAB_BPart_Category_ID == 0)
             {
                 throw new Exception("No Business Partner/Group selected");
 
             }
-            if (_C_BP_Group_ID == 0)
+            if (_VAB_BPart_Category_ID == 0)
             {
-                MBPartner bp = new MBPartner(GetCtx(), _C_BPartner_ID, Get_Trx());
+                MBPartner bp = new MBPartner(GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
                 if (bp.Get_ID() == 0)
                 {
-                    throw new Exception("Business Partner not found - C_BPartner_ID=" + _C_BPartner_ID);
+                    throw new Exception("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
                 }
                 CheckBP(bp);
             }
             else
             {
-                String sql = "SELECT * FROM C_BPartner WHERE C_BP_Group_ID=@Param1 AND IsActive='Y'";
+                String sql = "SELECT * FROM VAB_BusinessPartner WHERE VAB_BPart_Category_ID=@Param1 AND IsActive='Y'";
                 SqlParameter[] Param = new SqlParameter[1];
                 DataTable dt = null;
                 IDataReader idr = null;
                 try
                 {
-                    Param[0] = new SqlParameter("@Param1", _C_BP_Group_ID);
+                    Param[0] = new SqlParameter("@Param1", _VAB_BPart_Category_ID);
                     idr = DataBase.DB.ExecuteReader(sql, Param, Get_Trx());
                     dt = new DataTable();
                     dt.Load(idr);
@@ -161,7 +161,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //	See also VMerge.postMerge
             int changed = 0;
-            MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetC_BPartner_ID(), Get_Trx());
+            MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
             for (int i = 0; i < payments.Length; i++)
             {
                 MPayment payment = payments[i];
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //	See also VMerge.postMerge
             int changed = 0;
-            MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetC_BPartner_ID(), Get_Trx());
+            MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
             for (int i = 0; i < invoices.Length; i++)
             {
                 MInvoice invoice = invoices[i];

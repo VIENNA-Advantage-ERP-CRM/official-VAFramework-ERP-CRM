@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Organization to be imported to	*/
         private int _VAF_Org_ID = 0;
         /** Default Bank Account			*/
-        private int _C_BankAccount_ID = 0;
+        private int _VAB_Bank_Acct_ID = 0;
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
 
@@ -53,8 +53,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("VAF_Org_ID"))
                     _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                else if (name.Equals("C_BankAccount_ID"))
-                    _C_BankAccount_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAB_Bank_Acct_ID"))
+                    _VAB_Bank_Acct_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
                 else
@@ -70,7 +70,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("VAF_Org_ID=" + _VAF_Org_ID + ", C_BankAccount_ID" + _C_BankAccount_ID);
+            log.Info("VAF_Org_ID=" + _VAF_Org_ID + ", VAB_Bank_Acct_ID" + _VAB_Bank_Acct_ID);
             StringBuilder sql = null;
             int no = 0;
             String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
@@ -113,10 +113,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Bank Account
             sql = new StringBuilder("UPDATE I_BankStatement i "
-                + "SET C_BankAccount_ID="
+                + "SET VAB_Bank_Acct_ID="
                 + "( "
-                + " SELECT C_BankAccount_ID "
-                + " FROM C_BankAccount a, C_Bank b "
+                + " SELECT VAB_Bank_Acct_ID "
+                + " FROM VAB_Bank_Acct a, C_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + " AND a.C_Bank_ID=b.C_Bank_ID "
@@ -124,7 +124,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " AND b.RoutingNo=i.RoutingNo "
                 + " OR b.SwiftCode=i.RoutingNo "
                 + ") "
-                + "WHERE i.C_BankAccount_ID IS NULL "
+                + "WHERE i.VAB_Bank_Acct_ID IS NULL "
                 + "AND i.I_IsImported<>'Y' "
                 + "OR i.I_IsImported IS NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -132,16 +132,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Info("Bank Account (With Routing No)=" + no);
             //
             sql = new StringBuilder("UPDATE I_BankStatement i "
-                + "SET C_BankAccount_ID="
+                + "SET VAB_Bank_Acct_ID="
                 + "( "
-                + " SELECT C_BankAccount_ID "
-                + " FROM C_BankAccount a, C_Bank b "
+                + " SELECT VAB_Bank_Acct_ID "
+                + " FROM VAB_Bank_Acct a, C_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
                 + " AND a.C_Bank_ID=b.C_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + ") "
-                + "WHERE i.C_BankAccount_ID IS NULL "
+                + "WHERE i.VAB_Bank_Acct_ID IS NULL "
                 + "AND i.I_isImported<>'Y' "
                 + "OR i.I_isImported IS NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -149,9 +149,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Info("Bank Account (Without Routing No)=" + no);
             //
             sql = new StringBuilder("UPDATE I_BankStatement i "
-                + "SET C_BankAccount_ID=(SELECT C_BankAccount_ID FROM C_BankAccount a WHERE a.C_BankAccount_ID=").Append(_C_BankAccount_ID);
+                + "SET VAB_Bank_Acct_ID=(SELECT VAB_Bank_Acct_ID FROM VAB_Bank_Acct a WHERE a.VAB_Bank_Acct_ID=").Append(_VAB_Bank_Acct_ID);
             sql.Append(" and a.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE i.C_BankAccount_ID IS NULL "
+                + "WHERE i.VAB_Bank_Acct_ID IS NULL "
                 + "AND i.BankAccountNo IS NULL "
                 + "AND i.I_isImported<>'Y' "
                 + "OR i.I_isImported IS NULL").Append(clientCheck);
@@ -161,7 +161,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	
             sql = new StringBuilder("UPDATE I_BankStatement "
                 + "SET I_isImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Bank Account, ' "
-                + "WHERE C_BankAccount_ID IS NULL "
+                + "WHERE VAB_Bank_Acct_ID IS NULL "
                 + "AND I_isImported<>'Y' "
                 + "OR I_isImported IS NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -170,18 +170,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Currency
             sql = new StringBuilder("UPDATE I_BankStatement i "
-                + "SET C_Currency_ID=(SELECT C_Currency_ID FROM C_Currency c"
+                + "SET VAB_Currency_ID=(SELECT VAB_Currency_ID FROM VAB_Currency c"
                 + " WHERE i.ISO_Code=c.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE C_Currency_ID IS NULL"
+                + "WHERE VAB_Currency_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Info("Set Currency=" + no);
             //
             sql = new StringBuilder("UPDATE I_BankStatement i "
-                //jz	+ "SET i.C_Currency_ID=(SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID=i.C_BankAccount_ID) "
-                    + "SET C_Currency_ID=(SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID=i.C_BankAccount_ID) "
-                + "WHERE i.C_Currency_ID IS NULL "
+                //jz	+ "SET i.VAB_Currency_ID=(SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID=i.VAB_Bank_Acct_ID) "
+                    + "SET VAB_Currency_ID=(SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID=i.VAB_Bank_Acct_ID) "
+                + "WHERE i.VAB_Currency_ID IS NULL "
                 + "AND i.ISO_Code IS NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -189,7 +189,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_BankStatement "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Currency,' "
-                + "WHERE C_Currency_ID IS NULL "
+                + "WHERE VAB_Currency_ID IS NULL "
                 + "AND I_IsImported<>'E' "
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -261,9 +261,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
-                    + "WHERE i.C_BPartner_ID IS NOT NULL "
-                    + " AND p.C_BPartner_ID IS NOT NULL "
-                    + " AND p.C_BPartner_ID<>i.C_BPartner_ID) ")
+                    + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
+                    + " AND p.VAB_BusinessPartner_ID IS NOT NULL "
+                    + " AND p.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -276,9 +276,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
                     + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID) "
-                    + "WHERE i.C_BPartner_ID IS NOT NULL "
-                    + " AND v.C_BPartner_ID IS NOT NULL "
-                    + " AND v.C_BPartner_ID<>i.C_BPartner_ID) ")
+                    + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
+                    + " AND v.VAB_BusinessPartner_ID IS NOT NULL "
+                    + " AND v.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -293,17 +293,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID)"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
                     + "WHERE p.C_Invoice_ID<>v.C_Invoice_ID"
-                    + " AND v.C_BPartner_ID<>p.C_BPartner_ID) ")
+                    + " AND v.VAB_BusinessPartner_ID<>p.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Info("Invoice.BPartner<->Payment.BPartner Mismatch=" + no);
 
             //	Detect Duplicates
-            sql = new StringBuilder("SELECT i.I_BankStatement_ID, l.C_BankStatementLine_ID, i.EftTrxID "
-               + "FROM I_BankStatement i, C_BankStatement s, C_BankStatementLine l "
+            sql = new StringBuilder("SELECT i.I_BankStatement_ID, l.VAB_BankingJRNLLine_ID, i.EftTrxID "
+               + "FROM I_BankStatement i, VAB_BankingJRNL s, VAB_BankingJRNLLine l "
                + "WHERE i.I_isImported='N' "
-               + "AND s.C_BankStatement_ID=l.C_BankStatement_ID "
+               + "AND s.VAB_BankingJRNL_ID=l.VAB_BankingJRNL_ID "
                + "AND i.EftTrxID IS NOT NULL AND "
                 //	Concatinate EFT Info
                + "(l.EftTrxID||l.EftAmt||l.EftStatementLineDate||l.EftValutaDate||l.EftTrxType||l.EftCurrency||l.EftReference||s.EftStatementReference "
@@ -328,7 +328,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 while (idr.Read())
                 {
-                    String Info = "Line_ID=" + Utility.Util.GetValueOfInt(idr[1])// s.getInt(2)		//	l.C_BankStatementLine_ID
+                    String Info = "Line_ID=" + Utility.Util.GetValueOfInt(idr[1])// s.getInt(2)		//	l.VAB_BankingJRNLLine_ID
                     + ",EDTTrxID=" + Utility.Util.GetValueOfString(idr[2]);// rs.getString(3);			//	i.EftTrxID
                     //pupdt.setString(1, Info);	
                     param[0] = new SqlParameter("@param1", Info);
@@ -356,7 +356,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //Import Bank Statement
             sql = new StringBuilder("SELECT * FROM I_BankStatement"
                 + " WHERE I_IsImported='N'"
-                + " ORDER BY C_BankAccount_ID, Name, EftStatementDate, EftStatementReference");
+                + " ORDER BY VAB_Bank_Acct_ID, Name, EftStatementDate, EftStatementReference");
 
             MBankStatement statement = null;
             MBankAccount account = null;
@@ -375,14 +375,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Get the bank account for the first statement
                     if (account == null)
                     {
-                        account = MBankAccount.Get(_ctx, imp.GetC_BankAccount_ID());
+                        account = MBankAccount.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
                         statement = null;
                         log.Info("New Statement, Account=" + account.GetAccountNo());
                     }
                     //	Create a new Bank Statement for every account
-                    else if (account.GetC_BankAccount_ID() != imp.GetC_BankAccount_ID())
+                    else if (account.GetVAB_Bank_Acct_ID() != imp.GetVAB_Bank_Acct_ID())
                     {
-                        account = MBankAccount.Get(_ctx, imp.GetC_BankAccount_ID());
+                        account = MBankAccount.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
                         statement = null;
                         log.Info("New Statement, Account=" + account.GetAccountNo());
                     }
@@ -443,7 +443,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     MBankStatementLine line = new MBankStatementLine(statement, lineNo);
 
                     //	Copy statement line data
-                    //line.setC_BPartner_ID(imp.getC_BPartner_ID());
+                    //line.setVAB_BusinessPartner_ID(imp.getVAB_BusinessPartner_ID());
                     //line.setC_Invoice_ID(imp.getC_Invoice_ID());
                     line.SetReferenceNo(imp.GetReferenceNo());
                     line.SetDescription(imp.GetLineDescription());
@@ -451,12 +451,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     line.SetDateAcct(imp.GetStatementLineDate());
                     line.SetValutaDate(imp.GetValutaDate());
                     line.SetIsReversal(imp.IsReversal());
-                    line.SetC_Currency_ID(imp.GetC_Currency_ID());
+                    line.SetVAB_Currency_ID(imp.GetVAB_Currency_ID());
                     line.SetTrxAmt(imp.GetTrxAmt());
                     line.SetStmtAmt(imp.GetStmtAmt());
-                    if (imp.GetC_Charge_ID() != 0)
+                    if (imp.GetVAB_Charge_ID() != 0)
                     {
-                        line.SetC_Charge_ID(imp.GetC_Charge_ID());
+                        line.SetVAB_Charge_ID(imp.GetVAB_Charge_ID());
                     }
                     line.SetInterestAmt(imp.GetInterestAmt());
                     line.SetChargeAmt(imp.GetChargeAmt());
@@ -482,8 +482,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Save statement line
                     if (line.Save())
                     {
-                        imp.SetC_BankStatement_ID(statement.GetC_BankStatement_ID());
-                        imp.SetC_BankStatementLine_ID(line.GetC_BankStatementLine_ID());
+                        imp.SetVAB_BankingJRNL_ID(statement.GetVAB_BankingJRNL_ID());
+                        imp.SetVAB_BankingJRNLLine_ID(line.GetVAB_BankingJRNLLine_ID());
                         imp.SetI_IsImported(X_I_BankStatement.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         imp.Save();
@@ -513,8 +513,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             //
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@C_BankStatement_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@C_BankStatementLine_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAB_BankingJRNL_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@VAB_BankingJRNLLine_ID@: @Inserted@");
             return "";
 
         }	//	doIt

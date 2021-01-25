@@ -23,17 +23,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBPWithholding : X_C_BP_Withholding
+    public class MBPWithholding : X_VAB_BPart_Withholding
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BP_Withholding_ID">id</param>
+        /// <param name="VAB_BPart_Withholding_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MBPWithholding(Ctx ctx, int C_BP_Withholding_ID, Trx trxName)
-            : base(ctx, C_BP_Withholding_ID, trxName)
+        public MBPWithholding(Ctx ctx, int VAB_BPart_Withholding_ID, Trx trxName)
+            : base(ctx, VAB_BPart_Withholding_ID, trxName)
         {
 
         }

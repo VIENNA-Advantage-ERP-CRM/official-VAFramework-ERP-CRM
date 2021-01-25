@@ -639,7 +639,7 @@ namespace VAdvantage.Model
                     difference = Decimal.Multiply(difference, GetQty());
                     SetPriceMatchDifference(difference);
                     //	Approval
-                    //MBPGroup group = MBPGroup.getOfBPartner(GetCtx(), GetOrderLine().GetC_BPartner_ID());
+                    //MBPGroup group = MBPGroup.getOfBPartner(GetCtx(), GetOrderLine().GetVAB_BusinessPartner_ID());
                     Decimal mt = 0; //group.getPriceMatchTolerance();
                     if (Math.Sign(mt) != 0)
                     {

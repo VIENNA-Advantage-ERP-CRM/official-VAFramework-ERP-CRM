@@ -1,9 +1,9 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : Doc_Cash
+ * Class Name     : DoVAB_CashBook
  * Purpose        : Post Invoice Documents.
  *                  <pre>
- *                  Table:              C_Cash (407)
+ *                  Table:              VAB_CashJRNL (407)
  *                  Document Types:     CMC
  *                  </pre>
  * Class Used      : Doc
@@ -30,7 +30,7 @@ using VAdvantage.Acct;
 
 namespace VAdvantage.Acct
 {
-    public class Doc_Cash : Doc
+    public class DoVAB_CashBook : Doc
     {
 
         //Beginning balance of cash Journal
@@ -43,12 +43,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Cash(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public DoVAB_CashBook(MAcctSchema[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MCash), idr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
         }
-        public Doc_Cash(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public DoVAB_CashBook(MAcctSchema[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MCash), dr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
@@ -63,15 +63,15 @@ namespace VAdvantage.Acct
             MCash cash = (MCash)GetPO();
             SetDateDoc(cash.GetStatementDate());
             BeginningBalance = cash.GetBeginningBalance();
-            HeaderCasbookID = cash.GetC_CashBook_ID();
+            HeaderCasbookID = cash.GetVAB_CashBook_ID();
 
             //	Amounts
             SetAmount(Doc.AMTTYPE_Gross, cash.GetStatementDifference());
 
             //  Set CashBook Org & Currency
-            MCashBook cb = MCashBook.Get(GetCtx(), cash.GetC_CashBook_ID());
-            SetC_CashBook_ID(cb.GetC_CashBook_ID());
-            SetC_Currency_ID(cb.GetC_Currency_ID());
+            MCashBook cb = MCashBook.Get(GetCtx(), cash.GetVAB_CashBook_ID());
+            SetVAB_CashBook_ID(cb.GetVAB_CashBook_ID());
+            SetVAB_Currency_ID(cb.GetVAB_Currency_ID());
 
             //	Contained Objects
             _lines = LoadLines(cash, cb);
@@ -158,9 +158,9 @@ namespace VAdvantage.Acct
         public override List<Fact> CreateFacts(MAcctSchema as1)
         {
             //  Need to have CashBook
-            if (GetC_CashBook_ID() == 0)
+            if (GetVAB_CashBook_ID() == 0)
             {
-                _error = "C_CashBook_ID not set";
+                _error = "VAB_CashBook_ID not set";
                 log.Log(Level.SEVERE, _error);
                 return null;
             }
@@ -191,9 +191,9 @@ namespace VAdvantage.Acct
                     //  CashExpense     DR
                     //  CashAsset               CR
                     fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashExpense, as1),
-                        GetC_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
+                        GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
                     //	fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    //		p_vo.C_Currency_ID, null, line.GetAmount().negate());
+                    //		p_vo.VAB_Currency_ID, null, line.GetAmount().negate());
                     assetAmt = Decimal.Subtract(assetAmt, Decimal.Negate(line.GetAmount()));
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
@@ -203,10 +203,10 @@ namespace VAdvantage.Acct
                     //  CashAsset       DR
                     //  CashReceipt             CR
                     //	fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    //		p_vo.C_Currency_ID, line.GetAmount(), null);
+                    //		p_vo.VAB_Currency_ID, line.GetAmount(), null);
                     assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                     fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashReceipt, as1),
-                        GetC_Currency_ID(), null, line.GetAmount());
+                        GetVAB_Currency_ID(), null, line.GetAmount());
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
                 }
@@ -215,11 +215,11 @@ namespace VAdvantage.Acct
                     //  Charge          DR
                     //  CashAsset               CR
                     fact.CreateLine(line, line.GetChargeAccount(as1, GetAmount()),
-                        GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                     //fact.CreateLine(line, line.GetChargeAccount(as1, GetAmount()),
-                    //    GetC_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
+                    //    GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
                     //	fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    //		p_vo.C_Currency_ID, null, line.GetAmount().negate());
+                    //		p_vo.VAB_Currency_ID, null, line.GetAmount().negate());
                     assetAmt = Decimal.Subtract(assetAmt, Decimal.Negate(line.GetAmount()));
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
@@ -229,9 +229,9 @@ namespace VAdvantage.Acct
                     //  CashDifference  DR
                     //  CashAsset               CR
                     fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashDifference, as1),
-                        GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                     //	fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    //		p_vo.C_Currency_ID, line.GetAmount());
+                    //		p_vo.VAB_Currency_ID, line.GetAmount());
                     assetAmt = Decimal.Add(assetAmt, line.GetAmount());
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
@@ -241,7 +241,7 @@ namespace VAdvantage.Acct
                 {   //  amount is pos/neg
                     //  CashAsset       DR      dr      --   Invoice is in Invoice Currency !
                     //  CashTransfer    cr      CR
-                    if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                    if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                     {
                         assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                     }
@@ -249,11 +249,11 @@ namespace VAdvantage.Acct
                     {
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                            line.GetC_Currency_ID(), line.GetAmount());
+                            line.GetVAB_Currency_ID(), line.GetAmount());
                     }
                     fact.CreateLine(line,
                         GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                        line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
 
@@ -262,13 +262,13 @@ namespace VAdvantage.Acct
                 {   //  amount is pos/neg
                     //  BankInTransit   DR      dr      --  Transfer is in Bank Account Currency
                     //  CashAsset       dr      CR
-                    int temp = GetC_BankAccount_ID();
-                    SetC_BankAccount_ID(line.GetC_BankAccount_ID());
+                    int temp = GetVAB_Bank_Acct_ID();
+                    SetVAB_Bank_Acct_ID(line.GetVAB_Bank_Acct_ID());
                     fact.CreateLine(line,
                         GetAccount(Doc.ACCTTYPE_BankInTransit, as1),
-                        line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
-                    SetC_BankAccount_ID(temp);
-                    if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                        line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                    SetVAB_Bank_Acct_ID(temp);
+                    if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                     {
                         assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                     }
@@ -276,7 +276,7 @@ namespace VAdvantage.Acct
                     {
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                            line.GetC_Currency_ID(), line.GetAmount());
+                            line.GetVAB_Currency_ID(), line.GetAmount());
                     }
 
                     CreateFactLine(fact, line, as1, line.GetAmount());
@@ -287,62 +287,62 @@ namespace VAdvantage.Acct
                     //  CashAsset       DR      dr      --   Invoice is in Invoice Currency !
                     //  CashTransfer    cr      CR
 
-                    MBPartner bPartner = new MBPartner(Env.GetCtx(), line.GetC_BPartner_ID(), null);
+                    MBPartner bPartner = new MBPartner(Env.GetCtx(), line.GetVAB_BusinessPartner_ID(), null);
                     if (bPartner != null)
                     {
                         if (bPartner.IsEmployee())
                         {
-                            if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                            if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                             {
                                 assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                             }
                             else
                             {
                                 fact.CreateLine(line,
-                                    GetAccount(Doc.ACCTTYPE_E_Prepayment, as1, line.GetC_BPartner_ID()),
-                                    line.GetC_Currency_ID(), line.GetAmount());
+                                    GetAccount(Doc.ACCTTYPE_E_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                    line.GetVAB_Currency_ID(), line.GetAmount());
                             }
                             fact.CreateLine(line,
-                                GetAccount(Doc.ACCTTYPE_E_Prepayment, as1, line.GetC_BPartner_ID()),
-                                line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                                GetAccount(Doc.ACCTTYPE_E_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         }
                         else if (bPartner.IsVendor())
                         {
-                            if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                            if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                             {
                                 assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                             }
                             else
                             {
                                 fact.CreateLine(line,
-                                    GetAccount(Doc.ACCTTYPE_V_Prepayment, as1, line.GetC_BPartner_ID()),
-                                    line.GetC_Currency_ID(), line.GetAmount());
+                                    GetAccount(Doc.ACCTTYPE_V_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                    line.GetVAB_Currency_ID(), line.GetAmount());
                             }
                             fact.CreateLine(line,
-                                GetAccount(Doc.ACCTTYPE_V_Prepayment, as1, line.GetC_BPartner_ID()),
-                                line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                                GetAccount(Doc.ACCTTYPE_V_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         }
                         else if (bPartner.IsCustomer())
                         {
-                            if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                            if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                             {
                                 assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                             }
                             else
                             {
                                 fact.CreateLine(line,
-                                    GetAccount(Doc.ACCTTYPE_C_Prepayment, as1, line.GetC_BPartner_ID()),
-                                    line.GetC_Currency_ID(), line.GetAmount());
+                                    GetAccount(Doc.ACCTTYPE_C_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                    line.GetVAB_Currency_ID(), line.GetAmount());
                             }
                             fact.CreateLine(line,
-                                GetAccount(Doc.ACCTTYPE_C_Prepayment, as1, line.GetC_BPartner_ID()),
-                                line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                                GetAccount(Doc.ACCTTYPE_C_Prepayment, as1, line.GetVAB_BusinessPartner_ID()),
+                                line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         }
                         CreateFactLine(fact, line, as1, line.GetAmount());
                     }
                     else
                     {
-                        if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                        if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                         {
                             assetAmt = Decimal.Add(assetAmt, line.GetAmount());
                         }
@@ -350,11 +350,11 @@ namespace VAdvantage.Acct
                         {
                             fact.CreateLine(line,
                                 GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                                line.GetC_Currency_ID(), line.GetAmount());
+                                line.GetVAB_Currency_ID(), line.GetAmount());
                         }
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                            line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                            line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
 
                         CreateFactLine(fact, line, as1, line.GetAmount());
                     }
@@ -371,21 +371,21 @@ namespace VAdvantage.Acct
                     ////  Charge          DR
                     ////  CashAsset               CR
                     //fact.CreateLine(line, line.GetChargeAccount(as1, GetAmount()),
-                    //    GetC_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
+                    //    GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()), null);
                     ////	fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    ////		p_vo.C_Currency_ID, null, line.GetAmount().negate());
+                    ////		p_vo.VAB_Currency_ID, null, line.GetAmount().negate());
                     //assetAmt = Decimal.Subtract(assetAmt, Decimal.Negate(line.GetAmount()));
-                    int temp = GetC_CashBook_ID();
-                    SetC_CashBook_ID(line.Get_C_CashBook_ID());
+                    int temp = GetVAB_CashBook_ID();
+                    SetVAB_CashBook_ID(line.Get_VAB_CashBook_ID());
 
                     if (BeginningBalance > 0)
                     {
 
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                            line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
-                        SetC_CashBook_ID(temp);
-                        //if (line.GetC_Currency_ID() == (new MCashBook(Env.GetCtx(), GetC_CashBook_ID(), null)).GetC_Currency_ID())// GetC_Currency_ID())
+                            line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        SetVAB_CashBook_ID(temp);
+                        //if (line.GetVAB_Currency_ID() == (new MCashBook(Env.GetCtx(), GetVAB_CashBook_ID(), null)).GetVAB_Currency_ID())// GetVAB_Currency_ID())
                         //{
                         //if (BeginningBalance > assetAmt)
                         //if (BeginningBalance >= Math.Abs(line.GetAmount()))
@@ -402,7 +402,7 @@ namespace VAdvantage.Acct
                         //{
                         //    fact.CreateLine(line,
                         //        GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                        //        line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        //        line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         //}
                     }
                     else
@@ -411,12 +411,12 @@ namespace VAdvantage.Acct
 
                         //fact.CreateLine(line,
                         //    GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                        //    line.GetC_Currency_ID(), decimal.Negate(line.GetAmount()));
+                        //    line.GetVAB_Currency_ID(), decimal.Negate(line.GetAmount()));
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                            (new MCashBook(Env.GetCtx(), HeaderCasbookID, null)).GetC_Currency_ID(), decimal.Negate(line.GetAmount()));
-                        SetC_CashBook_ID(temp);
-                        //if (line.GetC_Currency_ID() == (new MCashBook(Env.GetCtx(), GetC_CashBook_ID(), null)).GetC_Currency_ID())// GetC_Currency_ID())
+                            (new MCashBook(Env.GetCtx(), HeaderCasbookID, null)).GetVAB_Currency_ID(), decimal.Negate(line.GetAmount()));
+                        SetVAB_CashBook_ID(temp);
+                        //if (line.GetVAB_Currency_ID() == (new MCashBook(Env.GetCtx(), GetVAB_CashBook_ID(), null)).GetVAB_Currency_ID())// GetVAB_Currency_ID())
                         //{
                         assetAmt = (Decimal.Add(assetAmt, line.GetAmount()));
                         //}
@@ -424,7 +424,7 @@ namespace VAdvantage.Acct
                         //{
                         //    fact.CreateLine(line,
                         //        GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                        //        line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                        //        line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         //}
                     }
 
@@ -434,13 +434,13 @@ namespace VAdvantage.Acct
                 else if (CashType.Equals(DocLine_Cash.CASHTYPE_CASHRECIEVEDFROM))
                 {
 
-                    int temp = GetC_CashBook_ID();
-                    //SetC_CashBook_ID(line.Get_C_CashBook_ID());
+                    int temp = GetVAB_CashBook_ID();
+                    //SetVAB_CashBook_ID(line.Get_VAB_CashBook_ID());
                     //fact.CreateLine(line,
                     //    GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                    //    line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
-                    //SetC_CashBook_ID(temp);
-                    //if (line.GetC_Currency_ID() == GetC_Currency_ID())
+                    //    line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                    //SetVAB_CashBook_ID(temp);
+                    //if (line.GetVAB_Currency_ID() == GetVAB_Currency_ID())
                     //{
                     //assetAmt = (Decimal.Add(assetAmt, line.GetAmount()));
                     //}
@@ -448,18 +448,18 @@ namespace VAdvantage.Acct
                     //{
                     //    fact.CreateLine(line,
                     //        GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                    //        line.GetC_Currency_ID(), line.GetAmount());
+                    //        line.GetVAB_Currency_ID(), line.GetAmount());
                     //}
-                    headerCashCurrency = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetC_Currency_ID());
-                    childCashCurrency = (new MCashBook(Env.GetCtx(), line.Get_C_CashBook_ID(), null).GetC_Currency_ID());
+                    headerCashCurrency = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAB_Currency_ID());
+                    childCashCurrency = (new MCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAB_Currency_ID());
                     headerCashOrg = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAF_Org_ID());
-                    childCashOrg = (new MCashBook(Env.GetCtx(), line.Get_C_CashBook_ID(), null).GetVAF_Org_ID());
+                    childCashOrg = (new MCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAF_Org_ID());
 
                     //else
                     //{
                     if (headerCashCurrency != childCashCurrency)
                     {
-                        Decimal transferdAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT Amount FROM C_CashLine WHERE C_CashLine_ID =" + line.Get_C_CashLine_Ref_ID()));
+                        Decimal transferdAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT Amount FROM VAB_CashJRNLLine WHERE VAB_CashJRNLLine_ID =" + line.Get_VAB_CashJRNLLine_Ref_ID()));
                         Decimal recievedAmt = MConversionRate.Convert(Env.GetCtx(), line.GetAmount(), headerCashCurrency, childCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         Decimal res = Decimal.Subtract(recievedAmt, Math.Abs(transferdAmt));
                         if (res > 0)
@@ -471,7 +471,7 @@ namespace VAdvantage.Acct
                             TotalCurrLoss = Decimal.Add(TotalCurrLoss, Decimal.Negate(res));
                         }
 
-                        SetC_CashBook_ID(line.Get_C_CashBook_ID());
+                        SetVAB_CashBook_ID(line.Get_VAB_CashBook_ID());
 
                         int OrgID = line.GetVAF_Org_ID();
                         if (headerCashOrg != childCashOrg)
@@ -486,31 +486,31 @@ namespace VAdvantage.Acct
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
                             headerCashCurrency, transferdAmt, OrgID);
-                        SetC_CashBook_ID(temp);
+                        SetVAB_CashBook_ID(temp);
                     }
                     else
                     {
-                        SetC_CashBook_ID(line.Get_C_CashBook_ID());
+                        SetVAB_CashBook_ID(line.Get_VAB_CashBook_ID());
                         if (headerCashOrg != childCashOrg)
                         {
 
                             fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                            line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()), childCashOrg);
+                            line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()), childCashOrg);
                         }
                         else
                         {
                             fact.CreateLine(line,
                                 GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                                line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                                line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                         }
-                        SetC_CashBook_ID(temp);
+                        SetVAB_CashBook_ID(temp);
                     }
 
 
                     //if (headerCashOrg != childCashOrg)
                     //{
-                    //    DataSet ds = DB.ExecuteDataset("SELECT INTERCOMPANYDUETO_ACCT,INTERCOMPANYDUEFROM_ACCT FROM C_AcctSchema_GL WHERE VAF_Client_ID=" + GetVAF_Client_ID());
+                    //    DataSet ds = DB.ExecuteDataset("SELECT INTERCOMPANYDUETO_ACCT,INTERCOMPANYDUEFROM_ACCT FROM VAB_AccountBook_GL WHERE VAF_Client_ID=" + GetVAF_Client_ID());
                     //    int dueFrom = 0;
                     //    int dueTo = 0;
                     //    if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -519,8 +519,8 @@ namespace VAdvantage.Acct
                     //        dueFrom = Util.GetValueOfInt(ds.Tables[0].Rows[0]["INTERCOMPANYDUEFROM_ACCT"]);
                     //        if (dueFrom > 0 && dueTo > 0)
                     //        {
-                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueFrom),line.GetC_Currency_ID(), line.GetAmount());
-                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueTo), line.GetC_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueFrom),line.GetVAB_Currency_ID(), line.GetAmount());
+                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueTo), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                     //        }
                     //    }
 
@@ -537,36 +537,36 @@ namespace VAdvantage.Acct
 
             if (TotalCurrGain != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrGain = MConversionRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,
-                GetC_Currency_ID(), Decimal.Negate(TotalCurrGain));
+                GetVAB_Currency_ID(), Decimal.Negate(TotalCurrGain));
 
 
             }
             if (TotalCurrLoss != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrLoss = MConversionRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,
-                 GetC_Currency_ID(), (TotalCurrLoss));
+                 GetVAB_Currency_ID(), (TotalCurrLoss));
 
             }
             //
 
             ////  Cash Asset
             //fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-            //    GetC_Currency_ID(), assetAmt);
+            //    GetVAB_Currency_ID(), assetAmt);
 
             //  Cash Asset
             //fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-            //    GetC_Currency_ID(), assetAmt);
+            //    GetVAB_Currency_ID(), assetAmt);
             List<Fact> facts = new List<Fact>();
             facts.Add(fact);
             return facts;
@@ -575,7 +575,7 @@ namespace VAdvantage.Acct
         private void CreateFactLine(Fact fact, DocLine_Cash line, MAcctSchema as1, decimal assetAmt)
         {
             fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
-                   GetC_Currency_ID(), assetAmt);
+                   GetVAB_Currency_ID(), assetAmt);
         }
     }
 }

@@ -47,7 +47,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("C_BankStatementLoader_ID"))
+                if (name.Equals("VAB_BankingJRNLLoader_ID"))
                     _C_BankStmtLoader_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 else if (name.Equals("FileName"))
                     fileName = Utility.Util.GetValueOfString(para[i].GetParameter());
@@ -58,7 +58,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("VAF_Client_ID=" + _VAF_Client_ID);
             _VAF_Org_ID = m_ctx.GetVAF_Org_ID();
             log.Info("VAF_Org_ID=" + _VAF_Org_ID);
-            log.Info("C_BankStatementLoader_ID=" + _C_BankStmtLoader_ID);
+            log.Info("VAB_BankingJRNLLoader_ID=" + _C_BankStmtLoader_ID);
         }	//	prepare
 
 

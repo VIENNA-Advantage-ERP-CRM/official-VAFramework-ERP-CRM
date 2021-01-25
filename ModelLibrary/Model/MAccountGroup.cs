@@ -8,10 +8,10 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-    class MAccountGroup:X_C_AccountGroup
+    class MAccountGroup:X_VAB_AccountGroup
     {
-        public MAccountGroup(Ctx ctx, int C_AccountGroup_ID, Trx trxName)
-            : base(ctx, C_AccountGroup_ID, trxName)
+        public MAccountGroup(Ctx ctx, int VAB_AccountGroup_ID, Trx trxName)
+            : base(ctx, VAB_AccountGroup_ID, trxName)
         {
         }
     }

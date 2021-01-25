@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MBankStatementLoader
  * Purpose        : MBankStatement Loader  Model
- * Class Used     : X_C_BankStatementLoader
+ * Class Used     : X_VAB_BankingJRNLLoader
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -23,7 +23,7 @@ using VAdvantage.Interface;
 //using VAdvantage.ImpExp;
 namespace VAdvantage.Model
 {
-    public class MBankStatementLoader : X_C_BankStatementLoader
+    public class MBankStatementLoader : X_VAB_BankingJRNLLoader
     {
         /**	Number of statement lines imported			*/
         private int loadCount = 0;
@@ -46,10 +46,10 @@ namespace VAdvantage.Model
         /// Create a Statement Loader Added for compatibility with new PO infrastructure (bug# 968136)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BankStatementLoader_ID">loader to use</param>
+        /// <param name="VAB_BankingJRNLLoader_ID">loader to use</param>
         /// <param name="trxName">trx</param>
-        public MBankStatementLoader(Ctx ctx, int C_BankStatementLoader_ID, Trx trxName)
-            : base(ctx, C_BankStatementLoader_ID, trxName)
+        public MBankStatementLoader(Ctx ctx, int VAB_BankingJRNLLoader_ID, Trx trxName)
+            : base(ctx, VAB_BankingJRNLLoader_ID, trxName)
         {
             Init(null);
         }	//	MBankStatementLoader
@@ -58,10 +58,10 @@ namespace VAdvantage.Model
         /// Create a Statement Loader
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_BankStatementLoader_ID">loader to use</param>
+        /// <param name="VAB_BankingJRNLLoader_ID">loader to use</param>
         /// <param name="trxName">trx</param>
-        public MBankStatementLoader(Ctx ctx, int C_BankStatementLoader_ID, String fileName, Trx trxName)
-            : base(ctx, C_BankStatementLoader_ID, trxName)
+        public MBankStatementLoader(Ctx ctx, int VAB_BankingJRNLLoader_ID, String fileName, Trx trxName)
+            : base(ctx, VAB_BankingJRNLLoader_ID, trxName)
         {
 
             Init(fileName);

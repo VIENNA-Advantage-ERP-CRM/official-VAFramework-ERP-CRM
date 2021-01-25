@@ -61,7 +61,7 @@ namespace VAdvantage.Model
 
             // validate unique record on the basis of this filteration of parameters
             string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND NVL(C_WithholdingCategory_ID , 0) = " +
-                GetC_WithholdingCategory_ID() + " AND NVL(c_country_ID  ,0) = " + GetC_Country_ID() + " AND NVL(C_region_ID , 0) = " + GetC_Region_ID();
+                GetC_WithholdingCategory_ID() + " AND NVL(c_country_ID  ,0) = " + GetVAB_Country_ID() + " AND NVL(C_region_ID , 0) = " + GetC_Region_ID();
             if (!newRecord)
             {
                 sql += " AND C_withholding_ID != " + GetC_Withholding_ID();
@@ -101,19 +101,19 @@ namespace VAdvantage.Model
 
                 // Get Accounting Schema
                 _sql.Clear();
-                _sql.Append("SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
+                _sql.Append("SELECT VAB_AccountBook_ID FROM VAB_AccountBook WHERE IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
                 dsAcctSchema = DB.ExecuteDataset(_sql.ToString(), null);
                 if (dsAcctSchema != null && dsAcctSchema.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < dsAcctSchema.Tables[0].Rows.Count; k++)
                     {
                         // get accounting schema ID
-                        int _AcctSchema_ID = Util.GetValueOfInt(dsAcctSchema.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(dsAcctSchema.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
 
                         // Get Accounting default and combination from "Default Accounting" tab of Accounting schema based on "Related To" (withholding)
                         _sql.Clear();
                         _sql.Append(@"SELECT Frpt_Acctdefault_Id,C_Validcombination_Id FROM Frpt_Acctschema_Default
-                                        WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID +
+                                        WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID +
                                         " AND Frpt_Relatedto = " + relatedtoProduct);
                         dsDefaultAcct = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (dsDefaultAcct != null && dsDefaultAcct.Tables[0].Rows.Count > 0)
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
                                     withholdingAcct.Set_ValueNoCheck("C_Withholding_ID", Util.GetValueOfInt(GetC_Withholding_ID()));
                                     withholdingAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                     withholdingAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                    withholdingAcct.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                    withholdingAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                     if (!withholdingAcct.Save())
                                     {
                                         ValueNamePair pp = VLogger.RetrieveError();

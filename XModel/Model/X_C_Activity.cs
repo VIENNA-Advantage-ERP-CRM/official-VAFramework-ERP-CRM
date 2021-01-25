@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Activity
+/** Generated Model for VAB_BillingCode
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Activity : PO
+public class X_VAB_BillingCode : PO
 {
-public X_C_Activity (Context ctx, int C_Activity_ID, Trx trxName) : base (ctx, C_Activity_ID, trxName)
+public X_VAB_BillingCode (Context ctx, int VAB_BillingCode_ID, Trx trxName) : base (ctx, VAB_BillingCode_ID, trxName)
 {
-/** if (C_Activity_ID == 0)
+/** if (VAB_BillingCode_ID == 0)
 {
-SetC_Activity_ID (0);
+SetVAB_BillingCode_ID (0);
 SetIsSummary (false);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_Activity (Ctx ctx, int C_Activity_ID, Trx trxName) : base (ctx, C_Activity_ID, trxName)
+public X_VAB_BillingCode (Ctx ctx, int VAB_BillingCode_ID, Trx trxName) : base (ctx, VAB_BillingCode_ID, trxName)
 {
-/** if (C_Activity_ID == 0)
+/** if (VAB_BillingCode_ID == 0)
 {
-SetC_Activity_ID (0);
+SetVAB_BillingCode_ID (0);
 SetIsSummary (false);
 SetName (null);
 SetValue (null);
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Activity (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BillingCode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_Activity (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Activity (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BillingCode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_Activity (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Activity (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BillingCode (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Activity()
+static X_VAB_BillingCode()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389052859L;
 public static int Table_ID;
  // =316;
 
-/** TableName=C_Activity */
-public static String Table_Name="C_Activity";
+/** TableName=VAB_BillingCode */
+public static String Table_Name="VAB_BillingCode";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Activity[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BillingCode[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Activity.
-@param C_Activity_ID Business Activity */
-public void SetC_Activity_ID (int C_Activity_ID)
+@param VAB_BillingCode_ID Business Activity */
+public void SetVAB_BillingCode_ID (int VAB_BillingCode_ID)
 {
-if (C_Activity_ID < 1) throw new ArgumentException ("C_Activity_ID is mandatory.");
-Set_ValueNoCheck ("C_Activity_ID", C_Activity_ID);
+if (VAB_BillingCode_ID < 1) throw new ArgumentException ("VAB_BillingCode_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BillingCode_ID", VAB_BillingCode_ID);
 }
 /** Get Activity.
 @return Business Activity */
-public int GetC_Activity_ID() 
+public int GetVAB_BillingCode_ID() 
 {
-Object ii = Get_Value("C_Activity_ID");
+Object ii = Get_Value("VAB_BillingCode_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

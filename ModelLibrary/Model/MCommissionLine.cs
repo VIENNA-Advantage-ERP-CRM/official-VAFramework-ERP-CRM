@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Commission Line Model
- * Class Used     : X_C_CommissionLine
+ * Class Used     : X_VAB_WorkCommissionLine
  * Chronological    Development
  * Veena        09-Nov-2009
 **********************************************************/
@@ -20,21 +20,21 @@ namespace VAdvantage.Model
     /// <summary>
     /// Commission Line Model
     /// </summary>
-    public class MCommissionLine : X_C_CommissionLine
+    public class MCommissionLine : X_VAB_WorkCommissionLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_CommissionLine_ID">id</param>
+        /// <param name="VAB_WorkCommissionLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCommissionLine(Ctx ctx, int C_CommissionLine_ID, Trx trxName)
-            : base(ctx, C_CommissionLine_ID, trxName)
+        public MCommissionLine(Ctx ctx, int VAB_WorkCommissionLine_ID, Trx trxName)
+            : base(ctx, VAB_WorkCommissionLine_ID, trxName)
         {
-            if (C_CommissionLine_ID == 0)
+            if (VAB_WorkCommissionLine_ID == 0)
             {
-                //	SetC_Commission_ID (0);
-                SetLine(0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_CommissionLine WHERE C_Commission_ID=@C_Commission_ID@
+                //	SetVAB_WorkCommission_ID (0);
+                SetLine(0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_WorkCommissionLine WHERE VAB_WorkCommission_ID=@VAB_WorkCommission_ID@
                 SetAmtMultiplier(Env.ZERO);
                 SetAmtSubtract(Env.ZERO);
                 SetCommissionOrders(false);

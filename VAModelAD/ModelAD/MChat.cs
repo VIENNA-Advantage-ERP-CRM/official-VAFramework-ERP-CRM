@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Form Name      : Chat
- * Purpose        : To featch/insert(get/set) data in the CM_CHAT table.
+ * Purpose        : To featch/insert(get/set) data in the VACM_Chat table.
  * Class Used     : MChat (inherits X_CM_Chat class) 
  * Chronological    Development
  * Raghunandan      13-March-2009 
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         private MChatEntry[] _chatEntries = null;//chat entries
         //private SimpleDateFormat _createdDate = null;
         private DateTime _createdDate;//get date from database according to chat entry
-        private DataSet _ds = null;//data set for CM_ChatEntry table
+        private DataSet _ds = null;//data set for VACM_ChatLine table
         //public Ctx ctx = Utility.Env.GetCtx();//context
         private DateTime _format;
         //Logger	
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             List<MChat> list = new List<MChat>();
             //
-            String sql = "SELECT * FROM CM_Chat "
+            String sql = "SELECT * FROM VACM_Chat "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " ORDER BY Record_ID";
             DataTable dt = null;
             IDataReader idr = null;
@@ -104,12 +104,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">ctx context</param>
-        /// <param name="CM_Chat_ID">CM_Chat_ID id</param>
+        /// <param name="VACM_Chat_ID">VACM_Chat_ID id</param>
         /// <param name="trxName">trxName transcation</param>
-        public MChat(Ctx ctx, int CM_Chat_ID, Trx trxName)
-            : base(ctx, CM_Chat_ID, trxName)
+        public MChat(Ctx ctx, int VACM_Chat_ID, Trx trxName)
+            : base(ctx, VACM_Chat_ID, trxName)
         {
-            if (CM_Chat_ID == 0)
+            if (VACM_Chat_ID == 0)
             {
                 //set table id
                 //  SetVAF_TableView_ID(0);
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
                 return _chatEntries;//return chat
             //list for chatEntry records
             List<MChatEntry> list = new List<MChatEntry>();
-            String sql = "SELECT * FROM CM_ChatEntry WHERE CM_Chat_ID=" + GetCM_Chat_ID() + " ORDER BY Created";
+            String sql = "SELECT * FROM VACM_ChatLine WHERE VACM_Chat_ID=" + GetCM_Chat_ID() + " ORDER BY Created";
 
             try
             {
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
                 {
                     rs = _ds.Tables[0].Rows[i];
                     //list.Add(new MChatEntry(GetCtx, rs, Get_TrxName()));
-                    //add chatentries into list from CM_ChatEntry table
+                    //add chatentries into list from VACM_ChatLine table
                     list.Add(new MChatEntry(GetCtx(), rs, Get_TrxName()));
                 }
                 //_ds = null;

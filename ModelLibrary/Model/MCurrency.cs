@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MCurrency
  * Purpose        : Currency setting
- * Class Used     : X_C_Currency
+ * Class Used     : X_VAB_Currency
  * Chronological    Development
  * Raghunandan      28-04-2009
   ******************************************************/
@@ -21,21 +21,21 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MCurrency : X_C_Currency
+    public class MCurrency : X_VAB_Currency
     {
         //Store System Currencies			
-        private static CCache<int, MCurrency> currencies = new CCache<int, MCurrency>("C_Currency", 50);
+        private static CCache<int, MCurrency> currencies = new CCache<int, MCurrency>("VAB_Currency", 50);
 
         /// <summary>
         /// Currency Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Currency_ID">id</param>
+        /// <param name="VAB_Currency_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MCurrency(Ctx ctx, int C_Currency_ID, Trx trxName)
-            : base(ctx, C_Currency_ID, trxName)
+        public MCurrency(Ctx ctx, int VAB_Currency_ID, Trx trxName)
+            : base(ctx, VAB_Currency_ID, trxName)
         {
-            if (C_Currency_ID == 0)
+            if (VAB_Currency_ID == 0)
             {
                 SetIsEMUMember(false);
                 SetIsEuro(false);
@@ -83,17 +83,17 @@ namespace VAdvantage.Model
         /// Get Currency
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <returns>ISO Code</returns>
-        public static MCurrency Get(Ctx ctx, int C_Currency_ID)
+        public static MCurrency Get(Ctx ctx, int VAB_Currency_ID)
         {
             //	Try Cache
-            int key = C_Currency_ID;
+            int key = VAB_Currency_ID;
             MCurrency retValue = currencies[key];
             if (retValue != null)
                 return retValue;
             //	Create it
-            retValue = new MCurrency(ctx, C_Currency_ID, null);
+            retValue = new MCurrency(ctx, VAB_Currency_ID, null);
             //	Save in System
             if (retValue.GetVAF_Client_ID() == 0)
                 currencies.Add(key, retValue);
@@ -104,17 +104,17 @@ namespace VAdvantage.Model
         /// Get Currency Iso Code.
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <returns>ISO Code</returns>
-        public static string GetISO_Code(Ctx ctx, int C_Currency_ID)
+        public static string GetISO_Code(Ctx ctx, int VAB_Currency_ID)
         {
-            String contextKey = "C_Currency_" + C_Currency_ID;
+            String contextKey = "VAB_Currency_" + VAB_Currency_ID;
             String retValue = ctx.GetContext(contextKey);
             if (retValue != null && retValue.Length > 0)
                 return retValue;
 
             //	Create it
-            MCurrency c = Get(ctx, C_Currency_ID);
+            MCurrency c = Get(ctx, VAB_Currency_ID);
             retValue = c.GetISO_Code();
             ctx.SetContext(contextKey, retValue);
             return retValue;
@@ -124,11 +124,11 @@ namespace VAdvantage.Model
         /// Get Standard Precision.
         /// </summary>
         /// <param name="ctx">Ctx</param>
-        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="VAB_Currency_ID">currency</param>
         /// <returns>Standard Precision</returns>
-        public static int GetStdPrecision(Ctx ctx, int C_Currency_ID)
+        public static int GetStdPrecision(Ctx ctx, int VAB_Currency_ID)
         {
-            MCurrency c = Get(ctx, C_Currency_ID);
+            MCurrency c = Get(ctx, VAB_Currency_ID);
             return c.GetStdPrecision();
         }
 
@@ -138,7 +138,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            return "MCurrency[" + GetC_Currency_ID()
+            return "MCurrency[" + GetVAB_Currency_ID()
                 + "-" + GetISO_Code() + "-" + GetCurSymbol()
                 + "," + GetDescription()
                 + ",Precision=" + GetStdPrecision() + "/" + GetCostingPrecision() + "]";

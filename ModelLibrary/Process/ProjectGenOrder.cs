@@ -69,9 +69,9 @@ namespace VAdvantage.Process
 
             /** @todo duplicate invoice prevention */
             //Added by Vivek for Credit Limit on 24/08/2016
-            if (fromProject.GetC_BPartner_ID() != 0)
+            if (fromProject.GetVAB_BusinessPartner_ID() != 0)
             {
-                VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), fromProject.GetC_BPartner_ID(), Get_TrxName());
+                VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), fromProject.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     if (bp.GetCreditValidation() == "A" || bp.GetCreditValidation() == "D" || bp.GetCreditValidation() == "E")
@@ -91,7 +91,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    VAdvantage.Model.MBPartnerLocation loc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), fromProject.GetC_BPartner_Location_ID(), Get_TrxName());
+                    VAdvantage.Model.MBPartnerLocation loc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), fromProject.GetVAB_BPart_Location_ID(), Get_TrxName());
                     if (loc.GetCreditValidation() == "A" || loc.GetCreditValidation() == "D" || loc.GetCreditValidation() == "E")
                     {
                         log.SaveError("StopOrder", "");
@@ -188,7 +188,7 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("Project has no Warehouse");
             }
-            if (fromProject.GetC_BPartner_ID() == 0 || fromProject.GetC_BPartner_Location_ID() == 0)
+            if (fromProject.GetVAB_BusinessPartner_ID() == 0 || fromProject.GetVAB_BPart_Location_ID() == 0)
             {
                 throw new ArgumentException("Project has no Business Partner/Location");
             }

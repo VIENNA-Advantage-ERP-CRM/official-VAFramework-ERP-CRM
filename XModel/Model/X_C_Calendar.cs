@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Calendar
+/** Generated Model for VAB_Calender
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Calendar : PO
+public class X_VAB_Calender : PO
 {
-public X_C_Calendar (Context ctx, int C_Calendar_ID, Trx trxName) : base (ctx, C_Calendar_ID, trxName)
+public X_VAB_Calender (Context ctx, int VAB_Calender_ID, Trx trxName) : base (ctx, VAB_Calender_ID, trxName)
 {
-/** if (C_Calendar_ID == 0)
+/** if (VAB_Calender_ID == 0)
 {
-SetC_Calendar_ID (0);
+SetVAB_Calender_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_Calendar (Ctx ctx, int C_Calendar_ID, Trx trxName) : base (ctx, C_Calendar_ID, trxName)
+public X_VAB_Calender (Ctx ctx, int VAB_Calender_ID, Trx trxName) : base (ctx, VAB_Calender_ID, trxName)
 {
-/** if (C_Calendar_ID == 0)
+/** if (VAB_Calender_ID == 0)
 {
-SetC_Calendar_ID (0);
+SetVAB_Calender_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Calendar (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Calender (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_Calendar (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Calendar (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Calender (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_Calendar (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Calendar (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Calender (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Calendar()
+static X_VAB_Calender()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389054160L;
 public static int Table_ID;
  // =139;
 
-/** TableName=C_Calendar */
-public static String Table_Name="C_Calendar";
+/** TableName=VAB_Calender */
+public static String Table_Name="VAB_Calender";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Calendar[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Calender[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Calendar.
-@param C_Calendar_ID Accounting Calendar Name */
-public void SetC_Calendar_ID (int C_Calendar_ID)
+@param VAB_Calender_ID Accounting Calendar Name */
+public void SetVAB_Calender_ID (int VAB_Calender_ID)
 {
-if (C_Calendar_ID < 1) throw new ArgumentException ("C_Calendar_ID is mandatory.");
-Set_ValueNoCheck ("C_Calendar_ID", C_Calendar_ID);
+if (VAB_Calender_ID < 1) throw new ArgumentException ("VAB_Calender_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Calender_ID", VAB_Calender_ID);
 }
 /** Get Calendar.
 @return Accounting Calendar Name */
-public int GetC_Calendar_ID() 
+public int GetVAB_Calender_ID() 
 {
-Object ii = Get_Value("C_Calendar_ID");
+Object ii = Get_Value("VAB_Calender_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

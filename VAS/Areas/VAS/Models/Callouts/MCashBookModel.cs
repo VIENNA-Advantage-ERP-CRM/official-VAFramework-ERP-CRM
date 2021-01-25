@@ -21,11 +21,11 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int C_CashBook_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_CashBook_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MCashBook cBook = new MCashBook(ctx, C_CashBook_ID, null);
+            MCashBook cBook = new MCashBook(ctx, VAB_CashBook_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["C_Currency_ID"] = cBook.GetC_Currency_ID().ToString();
+            result["VAB_Currency_ID"] = cBook.GetVAB_Currency_ID().ToString();
             return result;
         }
 
@@ -34,11 +34,11 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int C_CashJournal_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_CashJRNLJournal_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MCash cash = new MCash(ctx, C_CashJournal_ID, null);
+            MCash cash = new MCash(ctx, VAB_CashJRNLJournal_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["C_Currency_ID"] = cash.GetC_Currency_ID().ToString();
+            result["VAB_Currency_ID"] = cash.GetVAB_Currency_ID().ToString();
             result["DateAcct"] = cash.GetDateAcct().ToString();
             return result;
         }
@@ -52,7 +52,7 @@ namespace VIS.Models
         /// <returns></returns>
         public decimal GetBeginBalance(Ctx ctx, int Cashbook_ID)
         {
-            decimal TotalAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(" select sum(nvl(CompletedBalance,0)) + sum(nvl(runningbalance,0)) as TotalBal from c_cashbook where c_cashbook_id=" + Cashbook_ID));
+            decimal TotalAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(" select sum(nvl(CompletedBalance,0)) + sum(nvl(runningbalance,0)) as TotalBal from VAB_CashBook where VAB_CashBook_id=" + Cashbook_ID));
             return TotalAmt;
         }
         /// <summary>
@@ -79,9 +79,9 @@ namespace VIS.Models
             try
             {
                 string[] Data = fields.Split(',');
-                decimal amt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT CASHLINE.Amount FROM C_CashLine CASHLINE INNER JOIN C_Cashbook CB ON (CB.C_Cashbook_ID=CASHLINE.C_Cashbook_ID) WHERE CASHLINE.C_CashLine_ID =" + Util.GetValueOfInt(Data[0])));
-                int currTo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_CashBook WHERE C_CashBook_ID=(SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=" + Util.GetValueOfInt(Data[1]) + ")"));
-                int CurrFrom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_Cashbook WHERE C_Cashbook_ID= (SELECT C_CashBook_ID FROM C_Cash WHERE C_Cash_ID=(SELECT C_Cash_ID FROM C_CashLine WHERE C_CashLine_ID= " + Util.GetValueOfInt(Data[0]) + "))"));
+                decimal amt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT CASHLINE.Amount FROM VAB_CashJRNLLine CASHLINE INNER JOIN VAB_CashBook CB ON (CB.VAB_CashBook_ID=CASHLINE.VAB_CashBook_ID) WHERE CASHLINE.VAB_CashJRNLLine_ID =" + Util.GetValueOfInt(Data[0])));
+                int currTo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_CashBook WHERE VAB_CashBook_ID=(SELECT VAB_CashBook_ID FROM VAB_CashJRNL WHERE VAB_CashJRNL_ID=" + Util.GetValueOfInt(Data[1]) + ")"));
+                int CurrFrom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_CashBook WHERE VAB_CashBook_ID= (SELECT VAB_CashBook_ID FROM VAB_CashJRNL WHERE VAB_CashJRNL_ID=(SELECT VAB_CashJRNL_ID FROM VAB_CashJRNLLine WHERE VAB_CashJRNLLine_ID= " + Util.GetValueOfInt(Data[0]) + "))"));
 
                 retValue.CurrFrom = CurrFrom;
                 retValue.CurrTo = currTo;
@@ -103,7 +103,7 @@ namespace VIS.Models
         {
             string _sql = "SELECT sum(ips.DueAmt)  FROM C_Invoice i INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID=ips.C_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
                     "AND i.C_Invoice_ID = " + Util.GetValueOfInt(fields) + " AND C_InvoicePaySchedule_ID NOT IN (SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Payment_ID IN " +
-                    "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Cashline_ID IN (SELECT NVL(C_Cashline_ID,0) FROM C_InvoicePaySchedule))";
+                    "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM C_InvoicePaySchedule))";
             return Util.GetValueOfDecimal(DB.ExecuteScalar(_sql, null, null));
         }
 
@@ -130,7 +130,7 @@ namespace VIS.Models
                     retValue["IsReturnTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsReturnTrx"]);
                 }
                 
-                retValue["accountDate"] = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT DateAcct FROM C_Cash WHERE IsActive = 'Y' AND C_Cash_ID = " + Util.GetValueOfInt(paramValue[1])));                
+                retValue["accountDate"] = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT DateAcct FROM VAB_CashJRNL WHERE IsActive = 'Y' AND VAB_CashJRNL_ID = " + Util.GetValueOfInt(paramValue[1])));                
                 retValue["isSoTrx"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsSoTrx FROM C_Invoice WHERE C_Invoice_ID = " + Util.GetValueOfInt(paramValue[2])));
             }
             catch (Exception e)
@@ -150,7 +150,7 @@ namespace VIS.Models
         {
             Dictionary<string, object> retValue = null;
             string qry = @"SELECT NVL(DueAmt , 0) AS DueAmt, i.IsReturnTrx FROM C_InvoicePaySchedule ips INNER JOIN C_Invoice i ON ips.C_Invoice_ID = i.C_Invoice_ID"
-                + " INNER JOIN C_DocType d ON i.C_DocTypeTarget_ID = d.C_DocType_ID WHERE ips.C_InvoicePaySchedule_ID = " + Util.GetValueOfInt(fields);
+                + " INNER JOIN VAB_DocTypes d ON i.VAB_DocTypesTarget_ID = d.VAB_DocTypes_ID WHERE ips.C_InvoicePaySchedule_ID = " + Util.GetValueOfInt(fields);
             DataSet _ds = DB.ExecuteDataset(qry);
             if (_ds.Tables[0].Rows.Count > 0 && _ds != null)
             {
@@ -163,7 +163,7 @@ namespace VIS.Models
 
         public int GetBankAcctCurrency(string fields)
         {
-            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_BankAccount WHERE C_BankAccount_ID = " + Util.GetValueOfInt(fields)));
+            int Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID = " + Util.GetValueOfInt(fields)));
             return Currency_ID;
         }
         // End Changes Mohit

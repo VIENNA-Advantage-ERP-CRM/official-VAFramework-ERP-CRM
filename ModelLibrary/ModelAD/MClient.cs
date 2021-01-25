@@ -179,9 +179,9 @@ namespace VAdvantage.Model
                 _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
-                int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
-                if (C_AcctSchema_ID != 0)
-                    return MAcctSchema.Get(GetCtx(), C_AcctSchema_ID);
+                int VAB_AccountBook_ID = _info.GetVAB_AccountBook1_ID();
+                if (VAB_AccountBook_ID != 0)
+                    return MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID);
             }
             return null;
         }
@@ -196,9 +196,9 @@ namespace VAdvantage.Model
                 _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
-                int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
-                if (C_AcctSchema_ID != 0)
-                    return C_AcctSchema_ID;
+                int VAB_AccountBook_ID = _info.GetVAB_AccountBook1_ID();
+                if (VAB_AccountBook_ID != 0)
+                    return VAB_AccountBook_ID;
             }
             return 0;
         }
@@ -236,14 +236,14 @@ namespace VAdvantage.Model
         /// Get Default Accounting Currency
         /// </summary>
         /// <returns>currency or 0</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
             if (_info == null)
                 GetInfo();
             if (_info != null)
-                return _info.GetC_Currency_ID();
+                return _info.GetVAB_Currency_ID();
             return 0;
-        }	//	getC_Currency_ID
+        }	//	getVAB_Currency_ID
        
         /// <summary>
         ///Get Client Info

@@ -475,7 +475,7 @@
             $self.lblMatchFrom.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "MatchFrom"));
             $self.lblMatchTo.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "MatchTo"));
             $self.lblMatchMode.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "MatchMode"));
-            $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
+            $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"));
             $self.lblProduct.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"));
             $self.lblDateFrom.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "DateFrom"));
             $self.lblDateTo.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "DateTo"));
@@ -507,7 +507,7 @@
         function fillPicks() {
             //BPartners
             var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3499, VIS.DisplayType.Search);
-            $self.onlyVendor = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, value);
+            $self.onlyVendor = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, value);
 
             //Product
             value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3840, VIS.DisplayType.Search);
@@ -582,7 +582,7 @@
             //  BPartner
             if ($self.onlyVendor.getValue() != null) {
                 var Vendor = $self.onlyVendor.getValue();
-                onlyVendor_s = " AND hdr.C_BPartner_ID=" + Vendor;
+                onlyVendor_s = " AND hdr.VAB_BusinessPartner_ID=" + Vendor;
             }
             //  Date
             var from = $self.dtpFrom.val();
@@ -647,13 +647,13 @@
                 matchToTypees = matchToType;
                 tableInit(display, matchToType);	//	sets _sql
                 //  ** Add Where Clause **              
-                var BPartner = { 'key': $self.vdgvInvoice.get(row).C_BPartner_ID_K, 'value': $self.vdgvInvoice.get(row).C_BPartner_ID };
+                var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
                 var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
 
 
 
                 if ($self.chkSameBPartner.prop("checked")) {
-                    chkSameBPartners = " AND hdr.C_BPartner_ID=" + BPartner.key;
+                    chkSameBPartners = " AND hdr.VAB_BusinessPartner_ID=" + BPartner.key;
                 }
                 if ($self.chkSameProduct.prop("checked")) {
                     chkSameProducts = " AND lin.M_Product_ID=" + Product.key;
@@ -724,12 +724,12 @@
         //        tableInit(display, matchToType);	//	sets _sql
         //        //  ** Add Where Clause **
         //        //var BPartner = ($self.vdgvInvoice.get(row)).I_BPartner;
-        //        var BPartner = { 'key': $self.vdgvInvoice.get(row).C_BPartner_ID_K, 'value': $self.vdgvInvoice.get(row).C_BPartner_ID };
+        //        var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
         //        var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
 
         //        //log.Fine("BPartner=" + BPartner + " - Product=" + Product);
         //        if ($self.chkSameBPartner.prop("checked")) {
-        //            _sql = _sql.concat(" AND hdr.C_BPartner_ID=").concat(BPartner.key);
+        //            _sql = _sql.concat(" AND hdr.VAB_BusinessPartner_ID=").concat(BPartner.key);
         //        }
         //        if ($self.chkSameProduct.prop("checked")) {
         //            _sql = _sql.concat(" AND lin.M_Product_ID=").concat(Product.key);
@@ -777,7 +777,7 @@
             //    return;
             //}
 
-            var BPartner = { 'key': $self.vdgvInvoice.get(row).C_BPartner_ID_K, 'value': $self.vdgvInvoice.get(row).C_BPartner_ID };
+            var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
             var lineMatched = { 'key': $self.vdgvInvoice.get(row).Line_K, 'value': $self.vdgvInvoice.get(row).Line };
             var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
 
@@ -963,19 +963,19 @@
         //    if (display == MATCH_INVOICE) {
         //        _dateColumn = "hdr.DateInvoiced";
         //        _qtyColumn = "lin.QtyInvoiced";
-        //        _sql = _sql.concat("SELECT hdr.C_Invoice_ID,hdr.DocumentNo, hdr.DateInvoiced, bp.Name,hdr.C_BPartner_ID,"
+        //        _sql = _sql.concat("SELECT hdr.C_Invoice_ID,hdr.DocumentNo, hdr.DateInvoiced, bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.C_InvoiceLine_ID, p.Name as Product,lin.M_Product_ID,"
         //            + " lin.QtyInvoiced,SUM(NVL(mi.Qty,0)) as match "
         //            + "FROM C_Invoice hdr"
-        //            + " INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID)"
+        //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
         //            + " INNER JOIN C_InvoiceLine lin ON (hdr.C_Invoice_ID=lin.C_Invoice_ID)"
         //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
-        //            + " INNER JOIN C_DocType dt ON (hdr.C_DocType_ID=dt.C_DocType_ID and dt.DocBaseType in ('API','APC') AND dt.IsReturnTrx = ")
+        //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID and dt.DocBaseType in ('API','APC') AND dt.IsReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
         //            .concat(" FULL JOIN M_MatchInv mi ON (lin.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
         //            + "WHERE hdr.DocStatus IN ('CO','CL')");
 
-        //        _groupBy = " GROUP BY hdr.C_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.C_BPartner_ID,"
+        //        _groupBy = " GROUP BY hdr.C_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.C_InvoiceLine_ID,p.Name,lin.M_Product_ID,lin.QtyInvoiced "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyInvoiced")
@@ -984,14 +984,14 @@
         //    else if (display == MATCH_ORDER) {
         //        _dateColumn = "hdr.DateOrdered";
         //        _qtyColumn = "lin.QtyOrdered";
-        //        _sql = _sql.concat("SELECT hdr.C_Order_ID,hdr.DocumentNo, hdr.DateOrdered, bp.Name,hdr.C_BPartner_ID,"
+        //        _sql = _sql.concat("SELECT hdr.C_Order_ID,hdr.DocumentNo, hdr.DateOrdered, bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.C_OrderLine_ID, p.Name as Product,lin.M_Product_ID,"
         //            + " lin.QtyOrdered,SUM(COALESCE(mo.Qty,0)) as match "
         //            + "FROM C_Order hdr"
-        //            + " INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID)"
+        //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
         //            + " INNER JOIN C_OrderLine lin ON (hdr.C_Order_ID=lin.C_Order_ID)"
         //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
-        //            + " INNER JOIN C_DocType dt ON (hdr.C_DocType_ID=dt.C_DocType_ID AND dt.DocBaseType='POO'AND dt.isReturnTrx = ")
+        //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID AND dt.DocBaseType='POO'AND dt.isReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
         //            .concat(" FULL JOIN M_MatchPO mo ON (lin.C_OrderLine_ID=mo.C_OrderLine_ID) "
         //            + "WHERE mo.")
@@ -999,7 +999,7 @@
         //            .concat(matched ? " IS NOT NULL" : " IS NULL"
         //            + " AND hdr.DocStatus IN ('CO','CL')");
 
-        //        _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.C_BPartner_ID,"
+        //        _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.C_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyOrdered")
@@ -1009,20 +1009,20 @@
         //    {
         //        _dateColumn = "hdr.MovementDate";
         //        _qtyColumn = "lin.MovementQty";
-        //        _sql = _sql.concat("SELECT hdr.M_InOut_ID,hdr.DocumentNo, hdr.MovementDate, bp.Name,hdr.C_BPartner_ID,"
+        //        _sql = _sql.concat("SELECT hdr.M_InOut_ID,hdr.DocumentNo, hdr.MovementDate, bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.M_InOutLine_ID, p.Name as Product,lin.M_Product_ID,"
         //            + " lin.MovementQty,SUM(NVL(m.Qty,0)) as match"
         //            + " FROM M_InOut hdr"
-        //            + " INNER JOIN C_BPartner bp ON (hdr.C_BPartner_ID=bp.C_BPartner_ID)"
+        //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
         //            + " INNER JOIN M_InOutLine lin ON (hdr.M_InOut_ID=lin.M_InOut_ID)"
         //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
-        //            + " INNER JOIN C_DocType dt ON (hdr.C_DocType_ID = dt.C_DocType_ID AND dt.DocBaseType='MMR' AND dt.isReturnTrx = ")
+        //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID = dt.VAB_DocTypes_ID AND dt.DocBaseType='MMR' AND dt.isReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
         //            .concat(" FULL JOIN ")
         //            .concat(matchToType == MATCH_ORDER ? "M_MatchPO" : "M_MatchInv")
         //            .concat(" m ON (lin.M_InOutLine_ID=m.M_InOutLine_ID) "
         //            + "WHERE hdr.DocStatus IN ('CO','CL')");
-        //        _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.C_BPartner_ID,"
+        //        _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.VAB_BusinessPartner_ID,"
         //            + " lin.Line,lin.M_InOutLine_ID,p.Name,lin.M_Product_ID,lin.MovementQty "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.MovementQty")
@@ -1076,8 +1076,8 @@
                             res[i].Date = d.toLocaleDateString();
                             line['Date'] = res[i].Date;
                             //line['Date'] = res[i].Date;
-                            line['C_BPartner_ID'] = res[i].CBPartnerIDK;
-                            line['C_BPartner_ID_K'] = res[i].CBPartnerID;
+                            line['VAB_BusinessPartner_ID'] = res[i].CBPartnerIDK;
+                            line['VAB_BusinessPartner_ID_K'] = res[i].CBPartnerID;
                             line['Line'] = res[i].Line;
                             line['Line_K'] = res[i].Line_K;
                             line['M_Product_ID'] = res[i].MProductIDK;
@@ -1202,8 +1202,8 @@
                 $self.arrListColumns.push({ field: "_ID", caption: "_ID", sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.translate(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "Date", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Date"), sortable: true, size: '11%', hidden: false });
-                $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '11%', hidden: false });
-                $self.arrListColumns.push({ field: "C_BPartner_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '11%', hidden: true });
+                $self.arrListColumns.push({ field: "VAB_BusinessPartner_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"), sortable: true, size: '11%', hidden: false });
+                $self.arrListColumns.push({ field: "VAB_BusinessPartner_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "Line", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "Line_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "M_Product_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"), sortable: true, size: '11%', hidden: false });

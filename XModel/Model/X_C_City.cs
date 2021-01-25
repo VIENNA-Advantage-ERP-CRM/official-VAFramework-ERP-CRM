@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_City
+/** Generated Model for VAB_City
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_City : PO
+public class X_VAB_City : PO
 {
-public X_C_City (Context ctx, int C_City_ID, Trx trxName) : base (ctx, C_City_ID, trxName)
+public X_VAB_City (Context ctx, int VAB_City_ID, Trx trxName) : base (ctx, VAB_City_ID, trxName)
 {
-/** if (C_City_ID == 0)
+/** if (VAB_City_ID == 0)
 {
-SetC_City_ID (0);
+SetVAB_City_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_City (Ctx ctx, int C_City_ID, Trx trxName) : base (ctx, C_City_ID, trxName)
+public X_VAB_City (Ctx ctx, int VAB_City_ID, Trx trxName) : base (ctx, VAB_City_ID, trxName)
 {
-/** if (C_City_ID == 0)
+/** if (VAB_City_ID == 0)
 {
-SetC_City_ID (0);
+SetVAB_City_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_City (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_City (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_City (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_City (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_City (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_City (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_City (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_City (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_City()
+static X_VAB_City()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389054458L;
 public static int Table_ID;
  // =186;
 
-/** TableName=C_City */
-public static String Table_Name="C_City";
+/** TableName=VAB_City */
+public static String Table_Name="VAB_City";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_City[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_City[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Area Code.
@@ -130,33 +130,33 @@ public String GetAreaCode()
 return (String)Get_Value("AreaCode");
 }
 /** Set City.
-@param C_City_ID City */
-public void SetC_City_ID (int C_City_ID)
+@param VAB_City_ID City */
+public void SetVAB_City_ID (int VAB_City_ID)
 {
-if (C_City_ID < 1) throw new ArgumentException ("C_City_ID is mandatory.");
-Set_ValueNoCheck ("C_City_ID", C_City_ID);
+if (VAB_City_ID < 1) throw new ArgumentException ("VAB_City_ID is mandatory.");
+Set_ValueNoCheck ("VAB_City_ID", VAB_City_ID);
 }
 /** Get City.
 @return City */
-public int GetC_City_ID() 
+public int GetVAB_City_ID() 
 {
-Object ii = Get_Value("C_City_ID");
+Object ii = Get_Value("VAB_City_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Country.
-@param C_Country_ID Country */
-public void SetC_Country_ID (int C_Country_ID)
+@param VAB_Country_ID Country */
+public void SetVAB_Country_ID (int VAB_Country_ID)
 {
-if (C_Country_ID <= 0) Set_ValueNoCheck ("C_Country_ID", null);
+if (VAB_Country_ID <= 0) Set_ValueNoCheck ("VAB_Country_ID", null);
 else
-Set_ValueNoCheck ("C_Country_ID", C_Country_ID);
+Set_ValueNoCheck ("VAB_Country_ID", VAB_Country_ID);
 }
 /** Get Country.
 @return Country */
-public int GetC_Country_ID() 
+public int GetVAB_Country_ID() 
 {
-Object ii = Get_Value("C_Country_ID");
+Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

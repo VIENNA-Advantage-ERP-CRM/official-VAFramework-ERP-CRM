@@ -26,7 +26,7 @@
         var btnSelect = null;
         var controlList = null;
 
-        this.log.config("C_GenAttributeSetInstance_ID=" + M_AttributeSetInstance_ID);
+        this.log.config("VAB_GenFeatureSetInstance_ID=" + M_AttributeSetInstance_ID);
 
         //constructor load
         mAttributeSetInstanceId = M_AttributeSetInstance_ID;
@@ -48,7 +48,7 @@
                 },
                 success: function (data) {
                     returnValue = data.result;
-                    VIS.Env.getCtx().setContext(windowNo, "C_GenAttributeSet_ID", vadms_AttributeSet_ID);
+                    VIS.Env.getCtx().setContext(windowNo, "VAB_GenFeatureSet_ID", vadms_AttributeSet_ID);
                     if (returnValue.Error != null) {
                         VIS.ADialog.error(returnValue.Error, null, null, null);
                         return;
@@ -179,7 +179,7 @@
         this.showDialog = function () {
             $root.dialog({
                 modal: true,
-                title: VIS.Msg.translate(VIS.Env.getCtx(), "C_GenAttributeSetInstance_ID"),
+                title: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_GenFeatureSetInstance_ID"),
                 width: 400,
                 close: function () {
                     $self.dispose();

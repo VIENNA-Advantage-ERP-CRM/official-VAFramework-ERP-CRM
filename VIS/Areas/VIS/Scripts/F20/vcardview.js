@@ -582,7 +582,7 @@
     /* Group Control */
     function VCardGroup(onlyOne, records, grpName, fields, conditions) {
 
-        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @C_DocTypeTarget_ID@=132' }];
+        //conditions = [{ 'bgColor': '#80ff80', 'cValue': '@VAF_UserContact_ID@=1005324 & @VAB_DocTypesTarget_ID@=132' }];
 
         var root = null;
         var body;

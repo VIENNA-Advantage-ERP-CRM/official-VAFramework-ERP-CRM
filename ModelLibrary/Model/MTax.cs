@@ -56,7 +56,7 @@ namespace VAdvantage.Model
 
             //	Create it
             String sql = "SELECT * FROM C_Tax WHERE VAF_Client_ID=@VAF_Client_ID"
-                + " ORDER BY C_Country_ID, C_Region_ID, To_Country_ID, To_Region_ID";
+                + " ORDER BY VAB_Country_ID, C_Region_ID, To_Country_ID, To_Region_ID";
             List<MTax> list = new List<MTax>();
             //PreparedStatement pstmt = null;
             DataSet ds;
@@ -273,7 +273,7 @@ namespace VAdvantage.Model
                 .Append(",C_TaxCategory_ID=").Append(GetC_TaxCategory_ID())
                 .Append(",Summary=").Append(IsSummary())
                 .Append(",Parent=").Append(GetParent_Tax_ID())
-                .Append(",Country=").Append(GetC_Country_ID()).Append("|").Append(GetTo_Country_ID())
+                .Append(",Country=").Append(GetVAB_Country_ID()).Append("|").Append(GetTo_Country_ID())
                 .Append(",Region=").Append(GetC_Region_ID()).Append("|").Append(GetTo_Region_ID())
                 .Append(",From=").Append(GetValidFrom())
                 .Append("]");
@@ -460,16 +460,16 @@ namespace VAdvantage.Model
                 var relatedtoTax = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
+                _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                     {
-                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -488,7 +488,7 @@ namespace VAdvantage.Model
                                         tax.Set_ValueNoCheck("C_Tax_ID", Util.GetValueOfInt(GetC_Tax_ID()));
                                         tax.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         tax.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                        tax.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                        tax.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!tax.Save())
                                         {
 
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-                bool sucs = Insert_Accounting("C_Tax_Acct", "C_AcctSchema_Default", null);
+                bool sucs = Insert_Accounting("C_Tax_Acct", "VAB_AccountBook_Default", null);
                 //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                 // Before this, data was being saved but giving message "record not saved".
                 if (!sucs)

@@ -34,7 +34,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Date Promised		
         private DateTime? _DatePromised = null;
         //Dicument Type			
-        private int _C_DocType_ID = 0;
+        private int _VAB_DocTypes_ID = 0;
         // Test Mode				
         private bool _IsTest = false;
 
@@ -67,9 +67,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_DocType_ID"))
+                else if (name.Equals("VAB_DocTypes_ID"))
                 {
-                    _C_DocType_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                    _VAB_DocTypes_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("DatePromised"))
                 {
@@ -94,7 +94,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("M_DistributionRun_ID=" + _M_DistributionRun_ID
-                + ", C_DocType_ID=" + _C_DocType_ID
+                + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
                 + ", DatePromised=" + _DatePromised
                 + ", Test=" + _IsTest);
             //	Distribution Run
@@ -114,14 +114,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Document Type
-            if (_C_DocType_ID == 0)
+            if (_VAB_DocTypes_ID == 0)
             {
                 throw new ArgumentException("No Document Type ID");
             }
-            _docType = new MDocType(GetCtx(), _C_DocType_ID, null);	//	outside trx
+            _docType = new MDocType(GetCtx(), _VAB_DocTypes_ID, null);	//	outside trx
             if (_docType.Get_ID() == 0)
             {
-                throw new Exception("Document Type not found -  C_DocType_ID=" + _C_DocType_ID);
+                throw new Exception("Document Type not found -  VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
             }
             //
             //_DateOrdered = Utility.Util.GetValueOfDateTime(new DateTime(CommonFunctions.CurrentTimeMillis()));
@@ -192,13 +192,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = "INSERT INTO T_DistributionRunDetail "
                 + "(M_DistributionRun_ID, M_DistributionRunLine_ID, M_DistributionList_ID, M_DistributionListLine_ID,"
                 + "VAF_Client_ID,VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-                + "C_BPartner_ID, C_BPartner_Location_ID, M_Product_ID,"
+                + "VAB_BusinessPartner_ID, VAB_BPart_Location_ID, M_Product_ID,"
                 + "Ratio, MinQty, Qty) "
                 //
                 + "SELECT rl.M_DistributionRun_ID, rl.M_DistributionRunLine_ID,"
                 + "ll.M_DistributionList_ID, ll.M_DistributionListLine_ID, "
                 + "rl.VAF_Client_ID,rl.VAF_Org_ID, rl.IsActive, rl.Created,rl.CreatedBy, rl.Updated,rl.UpdatedBy,"
-                + "ll.C_BPartner_ID, ll.C_BPartner_Location_ID, rl.M_Product_ID, "
+                + "ll.VAB_BusinessPartner_ID, ll.VAB_BPart_Location_ID, rl.M_Product_ID, "
                 + "ll.Ratio, "
                 + "CASE WHEN rl.MinQty > ll.MinQty THEN rl.MinQty ELSE ll.MinQty END, ";
 
@@ -256,7 +256,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         runLine.SetMaxAllocation(detail.GetActualAllocation(), false);
                         //
                         log.Fine("RunLine=" + runLine.GetLine()
-                            + ": BP_ID=" + detail.GetC_BPartner_ID()
+                            + ": BP_ID=" + detail.GetVAB_BusinessPartner_ID()
                             + ", Min=" + detail.GetMinQty()
                             + ", Qty=" + detail.GetQty()
                             + ", Allocation=" + detail.GetActualAllocation());
@@ -406,12 +406,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             }
             MOrg runOrg = MOrg.Get(GetCtx(), runVAF_Org_ID);
-            int runC_BPartner_ID = runOrg.GetLinkedC_BPartner_ID();
+            int runVAB_BusinessPartner_ID = runOrg.GetLinkedVAB_BusinessPartner_ID();
             bool counter = !_run.IsCreateSingleOrder()	//	no single Order 
-                && runC_BPartner_ID > 0						//	Org linked to BP
+                && runVAB_BusinessPartner_ID > 0						//	Org linked to BP
                 && !_docType.IsSOTrx();					//	PO
-            MBPartner runBPartner = counter ? new MBPartner(GetCtx(), runC_BPartner_ID, Get_TrxName()) : null;
-            if (!counter || runBPartner == null || runBPartner.Get_ID() != runC_BPartner_ID)
+            MBPartner runBPartner = counter ? new MBPartner(GetCtx(), runVAB_BusinessPartner_ID, Get_TrxName()) : null;
+            if (!counter || runBPartner == null || runBPartner.Get_ID() != runVAB_BusinessPartner_ID)
             {
                 counter = false;
             }
@@ -423,7 +423,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("Single=" + _run.IsCreateSingleOrder()
                 + " - " + _docType + ",SO=" + _docType.IsSOTrx());
             log.Fine("Counter=" + counter
-                + ",C_BPartner_ID=" + runC_BPartner_ID + "," + runBPartner);
+                + ",VAB_BusinessPartner_ID=" + runVAB_BusinessPartner_ID + "," + runBPartner);
             //
             MBPartner bp = null;
             MOrder singleOrder = null;
@@ -431,23 +431,23 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Consolidated Order
             if (_run.IsCreateSingleOrder())
             {
-                bp = new MBPartner(GetCtx(), _run.GetC_BPartner_ID(), Get_TrxName());
+                bp = new MBPartner(GetCtx(), _run.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.Get_ID() == 0)
                 {
-                    throw new ArgumentException("Business Partner not found - C_BPartner_ID=" + _run.GetC_BPartner_ID());
+                    throw new ArgumentException("Business Partner not found - VAB_BusinessPartner_ID=" + _run.GetVAB_BusinessPartner_ID());
                 }
                 //
                 if (!_IsTest)
                 {
                     singleOrder = new MOrder(GetCtx(), 0, Get_TrxName());
-                    singleOrder.SetC_DocTypeTarget_ID(_docType.GetC_DocType_ID());
-                    singleOrder.SetC_DocType_ID(_docType.GetC_DocType_ID());
+                    singleOrder.SetVAB_DocTypesTarget_ID(_docType.GetVAB_DocTypes_ID());
+                    singleOrder.SetVAB_DocTypes_ID(_docType.GetVAB_DocTypes_ID());
                     singleOrder.SetIsReturnTrx(_docType.IsReturnTrx());
                     singleOrder.SetIsSOTrx(_docType.IsSOTrx());
                     singleOrder.SetBPartner(bp);
-                    if (_run.GetC_BPartner_Location_ID() != 0)
+                    if (_run.GetVAB_BPart_Location_ID() != 0)
                     {
-                        singleOrder.SetC_BPartner_Location_ID(_run.GetC_BPartner_Location_ID());
+                        singleOrder.SetVAB_BPart_Location_ID(_run.GetVAB_BPart_Location_ID());
                     }
                     singleOrder.SetDateOrdered(_DateOrdered);
                     singleOrder.SetDatePromised(_DatePromised);
@@ -460,8 +460,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
             }
 
-            int lastC_BPartner_ID = 0;
-            int lastC_BPartner_Location_ID = 0;
+            int lastVAB_BusinessPartner_ID = 0;
+            int lastVAB_BPart_Location_ID = 0;
             MOrder order = null;
             //	For all lines
             for (int i = 0; i < _details.Length; i++)
@@ -474,25 +474,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     order = singleOrder;
                 }
                 //	New Business Partner
-                else if (lastC_BPartner_ID != detail.GetC_BPartner_ID()
-                    || lastC_BPartner_Location_ID != detail.GetC_BPartner_Location_ID())
+                else if (lastVAB_BusinessPartner_ID != detail.GetVAB_BusinessPartner_ID()
+                    || lastVAB_BPart_Location_ID != detail.GetVAB_BPart_Location_ID())
                 {
                     //	finish order
                     order = null;
                 }
-                lastC_BPartner_ID = detail.GetC_BPartner_ID();
-                lastC_BPartner_Location_ID = detail.GetC_BPartner_Location_ID();
+                lastVAB_BusinessPartner_ID = detail.GetVAB_BusinessPartner_ID();
+                lastVAB_BPart_Location_ID = detail.GetVAB_BPart_Location_ID();
 
                 //	New Order
                 if (order == null)
                 {
-                    bp = new MBPartner(GetCtx(), detail.GetC_BPartner_ID(), Get_TrxName());
+                    bp = new MBPartner(GetCtx(), detail.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     if (!_IsTest)
                     {
                         order = new MOrder(GetCtx(), 0, Get_TrxName());
-                        order.SetC_DocTypeTarget_ID(_docType.GetC_DocType_ID());
+                        order.SetVAB_DocTypesTarget_ID(_docType.GetVAB_DocTypes_ID());
                         order.SetIsReturnTrx(_docType.IsReturnTrx());
-                        order.SetC_DocType_ID(_docType.GetC_DocType_ID());
+                        order.SetVAB_DocTypes_ID(_docType.GetVAB_DocTypes_ID());
                         order.SetIsSOTrx(_docType.IsSOTrx());
                         //	Counter Doc
                         if (counter && bp.GetVAF_OrgBP_ID_Int() > 0)
@@ -513,9 +513,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 + ", To_BP=" + bp);
                             order.SetVAF_Org_ID(runVAF_Org_ID);
                             order.SetBPartner(bp);
-                            if (detail.GetC_BPartner_Location_ID() != 0)
+                            if (detail.GetVAB_BPart_Location_ID() != 0)
                             {
-                                order.SetC_BPartner_Location_ID(detail.GetC_BPartner_Location_ID());
+                                order.SetVAB_BPart_Location_ID(detail.GetVAB_BPart_Location_ID());
                             }
                         }
                         order.SetDateOrdered(_DateOrdered);
@@ -546,9 +546,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 else	//	normal - optionally overwrite
                 {
-                    line.SetC_BPartner_ID(detail.GetC_BPartner_ID());
-                    if (detail.GetC_BPartner_Location_ID() != 0)
-                        line.SetC_BPartner_Location_ID(detail.GetC_BPartner_Location_ID());
+                    line.SetVAB_BusinessPartner_ID(detail.GetVAB_BusinessPartner_ID());
+                    if (detail.GetVAB_BPart_Location_ID() != 0)
+                        line.SetVAB_BPart_Location_ID(detail.GetVAB_BPart_Location_ID());
                 }
                 //
                 line.SetProduct(product);

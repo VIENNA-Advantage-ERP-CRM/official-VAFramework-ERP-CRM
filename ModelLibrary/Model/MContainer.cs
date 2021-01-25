@@ -347,9 +347,9 @@ namespace VAdvantage.Model
 	/// <returns>template</returns>
 	public MTemplate GetTemplate() 
 	{
-        if (GetCM_Template_ID() > 0 && _template == null)
+        if (GetVACM_Layout_ID() > 0 && _template == null)
         {
-            _template = MTemplate.Get(GetCtx(), GetCM_Template_ID(), null);
+            _template = MTemplate.Get(GetCtx(), GetVACM_Layout_ID(), null);
         }
 		return _template;
 	} // getTemplate
@@ -494,8 +494,8 @@ namespace VAdvantage.Model
 					project.GetCtx (), tableKeys[i], trxName);
 				int[] thisContainerTTableKeys = X_CM_ContainerTTable.GetAllIDs (
 					"CM_ContainerTTable", "CM_Container_ID=" + stage.Get_ID ()
-						+ " AND CM_TemplateTable_ID="
-						+ thisStageTTable.GetCM_TemplateTable_ID (), trxName);
+						+ " AND VACM_LayoutTable_ID="
+						+ thisStageTTable.GetVACM_LayoutTable_ID (), trxName);
 				X_CM_ContainerTTable thisContainerTTable;
 				if (thisContainerTTableKeys != null
 					&& thisContainerTTableKeys.Length > 0)

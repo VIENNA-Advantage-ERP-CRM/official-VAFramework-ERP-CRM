@@ -176,15 +176,15 @@ namespace VAdvantage.Report
 		if (MReportColumn.ELEMENTTYPE_Organization.Equals(et))
 			ID = GetOrg_ID();
 		else if (MReportColumn.ELEMENTTYPE_BPartner.Equals(et))
-			ID = GetC_BPartner_ID();
+			ID = GetVAB_BusinessPartner_ID();
 		else if (MReportColumn.ELEMENTTYPE_Product.Equals(et))
 			ID = GetM_Product_ID();
 		else if (MReportColumn.ELEMENTTYPE_Project.Equals(et))
 			ID = GetC_Project_ID();
 		else if (MReportColumn.ELEMENTTYPE_Activity.Equals(et))
-			ID = GetC_Activity_ID();
+			ID = GetVAB_BillingCode_ID();
 		else if (MReportColumn.ELEMENTTYPE_Campaign.Equals(et))
-			ID = GetC_Campaign_ID();
+			ID = GetVAB_Promotion_ID();
 		else if (MReportColumn.ELEMENTTYPE_LocationFrom.Equals(et))
 			ID = GetC_Location_ID();
 		else if (MReportColumn.ELEMENTTYPE_LocationTo.Equals(et))
@@ -194,15 +194,15 @@ namespace VAdvantage.Report
 		else if (MReportColumn.ELEMENTTYPE_SalesRegion.Equals(et))
 			ID = GetC_SalesRegion_ID();
 		else if (MReportColumn.ELEMENTTYPE_Account.Equals(et))
-			ID = GetC_ElementValue_ID();
+			ID = GetVAB_Acct_Element_ID();
 		else if (MReportColumn.ELEMENTTYPE_UserList1.Equals(et))
-			ID = GetC_ElementValue_ID();
+			ID = GetVAB_Acct_Element_ID();
 		else if (MReportColumn.ELEMENTTYPE_UserList2.Equals(et))
-			ID = GetC_ElementValue_ID();
+			ID = GetVAB_Acct_Element_ID();
 	//	else if (MReportColumn.ELEMENTTYPE_UserElement1.equals(et))
-	//		ID = getC_ElementValue_ID();
+	//		ID = getVAB_Acct_Element_ID();
 	//	else if (MReportColumn.ELEMENTTYPE_UserElement2.equals(et))
-	//		ID = getC_ElementValue_ID();
+	//		ID = getVAB_Acct_Element_ID();
 		else
 			log.Warning("Unsupported Element Type=" + et);
 
@@ -223,7 +223,7 @@ namespace VAdvantage.Report
 		StringBuilder sb = new StringBuilder ("MReportColumn[")
 			.Append(Get_ID()).Append(" - ").Append(GetName()).Append(" - ").Append(GetDescription())
 			.Append(", SeqNo=").Append(GetSeqNo()).Append(", AmountType=").Append(GetAmountType())
-			.Append(", CurrencyType=").Append(GetCurrencyType()).Append("/").Append(GetC_Currency_ID())
+			.Append(", CurrencyType=").Append(GetCurrencyType()).Append("/").Append(GetVAB_Currency_ID())
 			.Append(" - ColumnType=").Append(GetColumnType());
 		if (IsColumnTypeCalculation())
         {

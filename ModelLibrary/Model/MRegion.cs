@@ -108,11 +108,11 @@ namespace VAdvantage.Model
         /**
          *	Return Array of Regions of Country
          * 	@param ctx context
-         *  @param C_Country_ID country
+         *  @param VAB_Country_ID country
          *  @return MRegion Array
          */
         //@SuppressWarnings("unchecked")
-        public static MRegion[] GetRegions(Ctx ctx, int C_Country_ID)
+        public static MRegion[] GetRegions(Ctx ctx, int VAB_Country_ID)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
             while (it.MoveNext())
             {
                 MRegion r = (MRegion)it.Current;
-                if (r.GetC_Country_ID() == C_Country_ID)
+                if (r.GetVAB_Country_ID() == VAB_Country_ID)
                     list.Add(r);
             }
             //  Sort it
@@ -175,7 +175,7 @@ namespace VAdvantage.Model
         public MRegion(MCountry country, String regionName)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
-            SetC_Country_ID(country.GetC_Country_ID());
+            SetVAB_Country_ID(country.GetVAB_Country_ID());
             SetName(regionName);
         }
 

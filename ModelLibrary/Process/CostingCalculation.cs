@@ -533,7 +533,7 @@ namespace VAdvantage.Process
                                                     continue;
                                                 if (invoiceLine.GetC_OrderLine_ID() > 0)
                                                 {
-                                                    if (invoiceLine.GetC_Charge_ID() > 0)
+                                                    if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
                                                         #region Landed Cost Allocation
                                                         if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
@@ -801,7 +801,7 @@ namespace VAdvantage.Process
                                                                 // when Ap Credit memo is alone then we will do a impact on costing.
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
-                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetC_DocTypeTarget_ID(), Get_Trx());
+                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                                 if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                                 {
                                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
@@ -855,7 +855,7 @@ namespace VAdvantage.Process
                                                 else
                                                 {
                                                     #region for Landed Cost Allocation
-                                                    if (invoiceLine.GetC_Charge_ID() > 0)
+                                                    if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
                                                         if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
                                                         {
@@ -1106,7 +1106,7 @@ namespace VAdvantage.Process
                                                             // when Ap Credit memo is alone then we will do a impact on costing.
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
-                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetC_DocTypeTarget_ID(), Get_Trx());
+                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                             if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                             {
                                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
@@ -4208,7 +4208,7 @@ namespace VAdvantage.Process
 
                                                 if (invoiceLine.GetC_OrderLine_ID() > 0)
                                                 {
-                                                    if (invoiceLine.GetC_Charge_ID() > 0)
+                                                    if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
                                                         #region Landed Cost Allocation
                                                         if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
@@ -4437,7 +4437,7 @@ namespace VAdvantage.Process
                                                                 // when Ap Credit memo is alone then we will do a impact on costing.
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
-                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetC_DocTypeTarget_ID(), Get_Trx());
+                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                                 if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                                 {
                                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
@@ -4484,7 +4484,7 @@ namespace VAdvantage.Process
                                                 else
                                                 {
                                                     #region for Landed Cost Allocation
-                                                    if (invoiceLine.GetC_Charge_ID() > 0)
+                                                    if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
                                                         if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
                                                         {
@@ -4703,7 +4703,7 @@ namespace VAdvantage.Process
                                                             // when Ap Credit memo is alone then we will do a impact on costing.
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
-                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetC_DocTypeTarget_ID(), Get_Trx());
+                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                             if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                             {
                                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),

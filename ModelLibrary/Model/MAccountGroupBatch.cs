@@ -7,10 +7,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    class MAccountGroupBatch : X_C_AccountGroupBatch
+    class MAccountGroupBatch : X_VAB_AccountGroupBatch
     {
-        public MAccountGroupBatch(Ctx ctx, int C_AccountGroupBatch_ID, Trx trxName)
-            : base(ctx, C_AccountGroupBatch_ID, trxName)
+        public MAccountGroupBatch(Ctx ctx, int VAB_AccountGroupBatch_ID, Trx trxName)
+            : base(ctx, VAB_AccountGroupBatch_ID, trxName)
         {
 
         }

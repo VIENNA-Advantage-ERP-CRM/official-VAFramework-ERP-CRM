@@ -60,17 +60,17 @@ namespace VAdvantage.Model
         {
             if (isActive)
             {
-                DB.ExecuteQuery(@"UPDATE ad_workflow_access
+                DB.ExecuteQuery(@"UPDATE VAF_WFlow_Rights
                                     SET IsActive      ='Y',IsReadWrite='Y'
-                                    WHERE ad_workflow_id=" + GetAD_Workflow_ID() + @"
+                                    WHERE VAF_Workflow_id=" + GetVAF_Workflow_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
             else
             {
-                DB.ExecuteQuery(@"UPDATE ad_workflow_access
+                DB.ExecuteQuery(@"UPDATE VAF_WFlow_Rights
                                     SET IsActive      ='N',IsReadWrite='N'
-                                    WHERE ad_workflow_id=" + GetAD_Workflow_ID() + @"
+                                    WHERE VAF_Workflow_id=" + GetVAF_Workflow_ID() + @"
                                     AND VAF_Role_ID   IN
                                       ( SELECT VAF_Role_ID FROM VAF_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
@@ -84,8 +84,8 @@ namespace VAdvantage.Model
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    X_AD_Workflow_Access access = new X_AD_Workflow_Access(GetCtx(), 0, null);
-                    access.SetAD_Workflow_ID(GetAD_Workflow_ID());
+                    X_VAF_WFlow_Rights access = new X_VAF_WFlow_Rights(GetCtx(), 0, null);
+                    access.SetVAF_Workflow_ID(GetVAF_Workflow_ID());
                     access.SetVAF_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     access.SetIsReadWrite(true);
                     access.Save();

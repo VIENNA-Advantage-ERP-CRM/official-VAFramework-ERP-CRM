@@ -37,8 +37,8 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 
 
-                retDic["C_BParter_ID"]= order.GetC_BPartner_ID().ToString();
-                retDic["C_BPartner_Location_ID"]= order.GetC_BPartner_Location_ID().ToString();
+                retDic["C_BParter_ID"]= order.GetVAB_BusinessPartner_ID().ToString();
+                retDic["VAB_BPart_Location_ID"]= order.GetVAB_BPart_Location_ID().ToString();
                 retDic["Bill_BPartner_ID"]= order.GetBill_BPartner_ID().ToString();
                 retDic["Bill_Location_ID"]= order.GetBill_Location_ID().ToString();
 
@@ -100,7 +100,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 retDic["PriceLimit"]= orderline.GetPriceLimit().ToString();
                 retDic["PriceActual"]= orderline.GetPriceActual().ToString();
                 retDic["PriceEntered"]= orderline.GetPriceEntered().ToString();
-                retDic["C_Currency_ID"]= orderline.GetC_Currency_ID().ToString();
+                retDic["VAB_Currency_ID"]= orderline.GetVAB_Currency_ID().ToString();
                 retDic["Discount"]= orderline.GetDiscount().ToString();
                 retDic["Discount"]= orderline.GetDiscount().ToString();
                 //retlst.Add(retValue);

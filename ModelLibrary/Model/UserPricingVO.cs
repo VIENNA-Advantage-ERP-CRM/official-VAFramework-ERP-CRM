@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         // Limit		
         private Decimal? _PriceLimit = null;
         // Currency	
-        private int _C_Currency_ID = 0;
+        private int _VAB_Currency_ID = 0;
         // Enforce Price Limit	
         private bool _enforcePriceLimit = false;
         // Product UOM		
@@ -141,18 +141,18 @@ namespace VAdvantage.Model
         /// get country
         /// </summary>
         /// <returns>id</returns>
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            return _C_Currency_ID;
+            return _VAB_Currency_ID;
         }
 
         /// <summary>
         /// set id
         /// </summary>
         /// <param name="currency_ID"></param>
-        public void SetC_Currency_ID(int currency_ID)
+        public void SetVAB_Currency_ID(int currency_ID)
         {
-            _C_Currency_ID = currency_ID;
+            _VAB_Currency_ID = currency_ID;
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace VAdvantage.Acct
             }
             //
             String sql = "SELECT T_Due_Acct, T_Liability_Acct, T_Credit_Acct, T_Receivables_Acct, T_Expense_Acct "
-                + "FROM C_Tax_Acct WHERE C_Tax_ID=" + _C_Tax_ID + " AND C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID();
+                + "FROM C_Tax_Acct WHERE C_Tax_ID=" + _C_Tax_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             int validCombination_ID = 0;
             IDataReader idr = null;
             try

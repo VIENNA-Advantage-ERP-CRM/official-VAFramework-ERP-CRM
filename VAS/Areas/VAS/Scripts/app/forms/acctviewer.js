@@ -16,7 +16,7 @@
         this.dataByData = null;
         this._elements = [];
         this.documentQuery = false;
-        this.C_AcctSchema_ID = 0;
+        this.VAB_AccountBook_ID = 0;
         this.PostingType = "";
 
         this.VAF_TableView_ID = vaf_tableview_ID;
@@ -103,8 +103,8 @@
                         var actSch = data.result.AcctSchemas;
                         for (var i = 0; i < actSch.length; i++) {
                             var line = {};
-                            c_acctschema_id = actSch[i].Key;
-                            line['Key'] = c_acctschema_id;
+                            VAB_AccountBook_id = actSch[i].Key;
+                            line['Key'] = VAB_AccountBook_id;
                             line['Name'] = VIS.Utility.encodeText(actSch[i].Name);
                             obj.push(line);
                         }
@@ -139,36 +139,36 @@
         //function getClientAcctSchema(VAF_Client_ID, OrgID) {
         //    var obj = [];
 
-        //    //var sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_ACCTSCHEMA WHERE C_ACCTSCHEMA_ID=(SELECT  C_ACCTSCHEMA1_ID   FROM VAF_ClientDetail WHERE VAF_CLIENT_ID=" + VAF_Client_ID + ")";
+        //    //var sql = "SELECT VAB_ACCOUNTBOOK_ID,NAME FROM VAB_ACCOUNTBOOK WHERE VAB_ACCOUNTBOOK_ID=(SELECT  VAB_ACCOUNTBOOK1_ID   FROM VAF_ClientDetail WHERE VAF_CLIENT_ID=" + VAF_Client_ID + ")";
 
-        //    sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_AcctSchema WHERE ISACTIVE='Y' AND C_ACCTSCHEMA_ID IN( " +
-        //"SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + VAF_Client_ID + " AND VAF_ORG_ID=" + OrgID + ")" +
+        //    sql = "SELECT VAB_ACCOUNTBOOK_ID,NAME FROM VAB_AccountBook WHERE ISACTIVE='Y' AND VAB_ACCOUNTBOOK_ID IN( " +
+        //"SELECT VAB_ACCOUNTBOOK_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + VAF_Client_ID + " AND VAF_ORG_ID=" + OrgID + ")" +
         ////Get default Accounting schema selected on tenant
-        //" OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + VAF_Client_ID + ")";
+        //" OR VAB_ACCOUNTBOOK_ID IN (SELECT VAB_ACCOUNTBOOK1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + VAF_Client_ID + ")";
 
 
-        //    var c_acctschema_id = null;
+        //    var VAB_AccountBook_id = null;
         //    var dr = VIS.DB.executeReader(sql.toString(), null, null);
 
         //    while (dr.read()) {
         //        var line = {};
-        //        c_acctschema_id = dr.getInt(0);
-        //        line['Key'] = c_acctschema_id;
+        //        VAB_AccountBook_id = dr.getInt(0);
+        //        line['Key'] = VAB_AccountBook_id;
         //        line['Name'] = dr.getString(1);
         //        obj.push(line);
         //    }
         //    dr.close();
 
         //    //	Other
-        //    sql = "SELECT c_acctschema_id,name FROM C_AcctSchema acs "
+        //    sql = "SELECT VAB_AccountBook_id,name FROM VAB_AccountBook acs "
         //        + "WHERE IsActive='Y'"
-        //        + " AND EXISTS (SELECT * FROM C_AcctSchema_GL gl WHERE acs.C_AcctSchema_ID=gl.C_AcctSchema_ID)"
-        //        + " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
+        //        + " AND EXISTS (SELECT * FROM VAB_AccountBook_GL gl WHERE acs.VAB_AccountBook_ID=gl.VAB_AccountBook_ID)"
+        //        + " AND EXISTS (SELECT * FROM VAB_AccountBook_Default d WHERE acs.VAB_AccountBook_ID=d.VAB_AccountBook_ID)";
         //    if (VAF_Client_ID != 0) {
         //        sql += " AND VAF_Client_ID=" + VAF_Client_ID;
         //    }
 
-        //    sql += " ORDER BY C_AcctSchema_ID";
+        //    sql += " ORDER BY VAB_AccountBook_ID";
         //    dr = VIS.DB.executeReader(sql.toString(), null, null);
         //    while (dr.read()) {
         //        var line = {};
@@ -176,9 +176,9 @@
         //        line['Key'] = id;
         //        line['Name'] = dr.getString(1);
 
-        //        if (id != c_acctschema_id)	//	already in _elements
+        //        if (id != VAB_AccountBook_id)	//	already in _elements
         //        {
-        //            sql = "SELECT c_acctschema_id,name from C_AcctSchema WHERE C_AcctSchema_ID=" + id;
+        //            sql = "SELECT VAB_AccountBook_id,name from VAB_AccountBook WHERE VAB_AccountBook_ID=" + id;
         //            var drSch = VIS.DB.executeReader(sql.toString(), null, null);
         //            if (drSch.read()) {
         //                var lineObj = {};
@@ -196,7 +196,7 @@
 
     AcctViewerData.prototype.getAcctSchema = function () {
         //for (var i = 0; i < this.ASchemas.length; i++) {
-        //    ctrol.append(" <option value='" + this.ASchemas[i].c_acctschema_id + "'>" + this.ASchemas[i].name + "</option>");
+        //    ctrol.append(" <option value='" + this.ASchemas[i].VAB_AccountBook_id + "'>" + this.ASchemas[i].name + "</option>");
         //}
         return this.ASchemas;
     }
@@ -376,23 +376,23 @@
 
 
     // Get Accounting Schema Elements
-    AcctViewerData.prototype.getAcctSchemaElements = function (C_AcctSchema_ID) {
+    AcctViewerData.prototype.getAcctSchemaElements = function (VAB_AccountBook_ID) {
         this._elements = [];
         var currentThis = this._elements;
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetAcctSchElements",
             type: 'POST',
             async: true,
-            data: { keys: C_AcctSchema_ID },
+            data: { keys: VAB_AccountBook_ID },
             success: function (data) {
                 var res = data.result;
                 if (res) {
                     for (var i = 0; i < res.length; i++) {
                         var ase = [];
                         ase.push({
-                            'c_acctschema_element_id': res[i].C_AcctSchema_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),
-                            'elementtype': res[i].ElementType, 'c_elementvalue_id': res[i].C_ElementValue_ID,
-                            'seqno': res[i].SeqNo, 'detail': res[i].Detail, 'c_element_id': res[i].C_Element_ID
+                            'VAB_AccountBook_element_id': res[i].VAB_AccountBook_Element_ID, 'name': VIS.Utility.encodeText(res[i].ElementName),
+                            'elementtype': res[i].ElementType, 'VAB_Acct_Element_id': res[i].VAB_Acct_Element_ID,
+                            'seqno': res[i].SeqNo, 'detail': res[i].Detail, 'VAB_Element_id': res[i].VAB_Element_ID
                         });
                         currentThis.push(ase);
                     }
@@ -406,21 +406,21 @@
     }
 
 
-    //AcctViewerData.prototype.getAcctSchemaElements = function (C_AcctSchema_ID) {
+    //AcctViewerData.prototype.getAcctSchemaElements = function (VAB_AccountBook_ID) {
 
     //    //working on this function
-    //    var key = C_AcctSchema_ID;
+    //    var key = VAB_AccountBook_ID;
     //    this._elements = [];
 
-    //    var sql = "SELECT c_acctschema_element_id,name,elementtype,c_elementvalue_id,seqno," +
-    //    "'AcctSchemaElement['||c_acctschema_element_id||'-'||name||'('||elementtype||')='||c_elementvalue_id||',Pos='||seqno||']' as detail,c_element_id FROM C_AcctSchema_Element "
-    //        + "WHERE C_AcctSchema_ID=" + key + " AND IsActive='Y' ORDER BY SeqNo";
+    //    var sql = "SELECT VAB_AccountBook_element_id,name,elementtype,VAB_Acct_Element_id,seqno," +
+    //    "'AcctSchemaElement['||VAB_AccountBook_element_id||'-'||name||'('||elementtype||')='||VAB_Acct_Element_id||',Pos='||seqno||']' as detail,VAB_Element_id FROM VAB_AccountBook_Element "
+    //        + "WHERE VAB_AccountBook_ID=" + key + " AND IsActive='Y' ORDER BY SeqNo";
 
     //    try {
     //        var dr = VIS.DB.executeReader(sql.toString(), null, null);
     //        while (dr.read()) {
     //            var ase = [];
-    //            ase.push({ 'c_acctschema_element_id': dr.getInt(0), 'name': dr.getString(1), 'elementtype': dr.getString(2), 'c_elementvalue_id': dr.getInt(3), 'seqno': dr.getString(4), 'detail': dr.getString(5), 'c_element_id': dr.getInt(6) });
+    //            ase.push({ 'VAB_AccountBook_element_id': dr.getInt(0), 'name': dr.getString(1), 'elementtype': dr.getString(2), 'VAB_Acct_Element_id': dr.getInt(3), 'seqno': dr.getString(4), 'detail': dr.getString(5), 'VAB_Element_id': dr.getInt(6) });
 
     //            this._elements.push(ase);
     //        }
@@ -451,17 +451,17 @@
         else if (elementType.equals(this.ELEMENTTYPE_Account))
             return "Account_ID";
         else if (elementType.equals(this.ELEMENTTYPE_BPartner))
-            return "C_BPartner_ID";
+            return "VAB_BusinessPartner_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Product))
             return "M_Product_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Activity))
-            return "C_Activity_ID";
+            return "VAB_BillingCode_ID";
         else if (elementType.equals(this.ELEMENTTYPE_LocationFrom))
             return "C_LocFrom_ID";
         else if (elementType.equals(this.ELEMENTTYPE_LocationTo))
             return "C_LocTo_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Campaign))
-            return "C_Campaign_ID";
+            return "VAB_Promotion_ID";
         else if (elementType.equals(this.ELEMENTTYPE_OrgTrx))
             return "VAF_OrgTrx_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Project))
@@ -535,8 +535,8 @@
         //  Set Where Clause
         var whereClause = "";
         //  Add Organization
-        if (this.C_AcctSchema_ID != 0) {
-            whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".C_AcctSchema_ID=").concat(this.C_AcctSchema_ID);
+        if (this.VAB_AccountBook_ID != 0) {
+            whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".VAB_AccountBook_ID=").concat(this.VAB_AccountBook_ID);
         }
 
         //	Posting Type Selected
@@ -677,7 +677,7 @@
         this.menuForm = false;
 
         var Load = false;
-        var ACCT_SCHEMA = "C_AcctSchema_ID";
+        var ACCT_SCHEMA = "VAB_AccountBook_ID";
         var DOC_TYPE = "DocumentType";
         var POSTING_TYPE = "PostingType";
         var ORG = "VAF_Org_ID";
@@ -687,9 +687,9 @@
         var ACCT_DATE = "AcctDateFrom";//DateAcct
 
         var PROD = "M_Product_ID";
-        var BPARTNER = "C_BPartner_ID";
+        var BPARTNER = "VAB_BusinessPartner_ID";
         var PROJECT = "C_Project_ID";
-        var CAMPAIGN = "C_Campaign_ID";
+        var CAMPAIGN = "VAB_Promotion_ID";
 
 
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Find24.gif";
@@ -994,7 +994,7 @@
             if (cmbAccSchemaFilter != null) {
                 cmbAccSchemaFilter.getControl().change(function () {
                     setBusy(true);
-                    _data.C_AcctSchema_ID = cmbAccSchemaFilter.getControl().find('option:selected').val();
+                    _data.VAB_AccountBook_ID = cmbAccSchemaFilter.getControl().find('option:selected').val();
                     setTimeout(function () {
                         //var dataValue = _data.Query(VAF_Client_ID , callbackGetDataModel);
                         _data.Query(VAF_Client_ID, callbackGetDataModel);
@@ -1035,12 +1035,12 @@
 
                 //btnRePost.on("click", function () {
                 //    setBusy(true);                
-                //    var invoiceID = "(SELECT ca.c_invoice_id FROM c_allocationline ca" +
+                //    var invoiceID = "(SELECT ca.c_invoice_id FROM VAB_DocAllocationLine ca" +
                 //         " inner join c_invoice ci on ci.c_invoice_id= ca.c_invoice_id" +
-                //         " WHERE ci.issotrx='Y' and ca.c_allocationhdr_id=" + _data.Record_ID;
+                //         " WHERE ci.issotrx='Y' and ca.VAB_DocAllocation_id=" + _data.Record_ID;
 
-                //    var postValue = "SELECT (SELECT SUM(al.amount) FROM c_allocationline al INNER JOIN" +
-                //        " c_allocationhdr alh ON al.c_allocationhdr_id=alh.c_allocationhdr_id  WHERE " +
+                //    var postValue = "SELECT (SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN" +
+                //        " VAB_DocAllocation alh ON al.VAB_DocAllocation_id=alh.VAB_DocAllocation_id  WHERE " +
                 //        " alh.posted   ='Y' and c_invoice_id=" + invoiceID + ")) as aloc  ," +
                 //        "(SELECT SUM(cl.linenetamt)  FROM c_invoiceline cl WHERE " +
                 //        " c_invoice_id     =" + invoiceID + ")) as adj  from dual";
@@ -1051,7 +1051,7 @@
                 //        if (dr.read()) {
                 //            if (dr.getInt(0) - dr.getInt(1) == 0) {
                 //                //reposting
-                //                var sql = "update c_allocationhdr alh set alh.posted ='N' where alh.c_allocationhdr_id in (select c_allocationhdr_id from c_allocationline where c_invoice_id=" + invoiceID + "))";
+                //                var sql = "update VAB_DocAllocation alh set alh.posted ='N' where alh.VAB_DocAllocation_id in (select VAB_DocAllocation_id from VAB_DocAllocationLine where c_invoice_id=" + invoiceID + "))";
                 //                VIS.DB.executeQuery(sql);
                 //            }
                 //        }
@@ -1627,9 +1627,9 @@
             if (kp == null) {
                 return;
             }
-            _data.C_AcctSchema_ID = kp;
-            // _data.ASchema = MAcctSchema.Get(Env.GetCtx(), _data.C_AcctSchema_ID);//--->
-            var elements = _data.getAcctSchemaElements(_data.C_AcctSchema_ID);//--->
+            _data.VAB_AccountBook_ID = kp;
+            // _data.ASchema = MAcctSchema.Get(Env.GetCtx(), _data.VAB_AccountBook_ID);//--->
+            var elements = _data.getAcctSchemaElements(_data.VAB_AccountBook_ID);//--->
 
             //  Sort Options
             cmbSort1.getControl().empty();
@@ -1711,16 +1711,16 @@
             //  Parameter Info
             var para = "";
             //  Reset Selection Data
-            _data.C_AcctSchema_ID = 0;
+            _data.VAB_AccountBook_ID = 0;
             _data.VAF_Org_ID = 0;
 
             //  Save Selection Choices
             var kp = cmbAccSchema.getControl().find('option:selected').val();
             if (kp != null) {
-                _data.C_AcctSchema_ID = kp;
+                _data.VAB_AccountBook_ID = kp;
             }
 
-            para = para.concat("C_AcctSchema_ID=").concat(_data.C_AcctSchema_ID);
+            para = para.concat("VAB_AccountBook_ID=").concat(_data.VAB_AccountBook_ID);
             //
             kp = cmbPostType.getControl().find('option:selected').val();
             if (kp != null && kp != "0") {
@@ -1827,8 +1827,8 @@
             // var dataValue = _data.Query(VAF_Client_ID);
             _data.Query(VAF_Client_ID, callbackGetDataModel);
             //if (dataValues != null) {
-            if (_data.C_AcctSchema_ID > 0) {
-                cmbAccSchemaFilter.setValue(_data.C_AcctSchema_ID);
+            if (_data.VAB_AccountBook_ID > 0) {
+                cmbAccSchemaFilter.setValue(_data.VAB_AccountBook_ID);
             }
             //setModel(dataValues);
             //    setBusy(false);
@@ -1936,24 +1936,24 @@
             var whereClause = "IsSummary='N'";
             var lookupColumn = keyColumn;
             if (keyColumn.equals("Account_ID")) {
-                lookupColumn = "C_ElementValue_ID";
+                lookupColumn = "VAB_Acct_Element_ID";
                 var ase = _data.getAcctSchemaElement("AC");
                 if (ase != null) {
-                    whereClause += " AND C_Element_ID=" + ase.c_element_id;
+                    whereClause += " AND VAB_Element_ID=" + ase.VAB_Element_id;
                 }
             }
             else if (keyColumn.equals("User1_ID")) {
-                lookupColumn = "C_ElementValue_ID";
+                lookupColumn = "VAB_Acct_Element_ID";
                 var ase = _data.getAcctSchemaElement("U1");
                 if (ase != null) {
-                    whereClause += " AND C_Element_ID=" + ase.c_element_id;
+                    whereClause += " AND VAB_Element_ID=" + ase.VAB_Element_id;
                 }
             }
             else if (keyColumn.equals("User2_ID")) {
-                lookupColumn = "C_ElementValue_ID";
+                lookupColumn = "VAB_Acct_Element_ID";
                 var ase = _data.getAcctSchemaElement("U2");
                 if (ase != null) {
-                    whereClause += " AND C_Element_ID=" + ase.c_element_id;
+                    whereClause += " AND VAB_Element_ID=" + ase.VAB_Element_id;
                 }
             }
             else if (chkSelectDoc.find('input').prop("checked")) {
@@ -1965,7 +1965,7 @@
             if (keyColumn == "M_Product_ID") {
                 info = new VIS.InfoWindow(101, "", _data.windowNo, "", false);
             }
-            else if (keyColumn == "C_BPartner_ID") {
+            else if (keyColumn == "VAB_BusinessPartner_ID") {
                 info = new VIS.InfoWindow(100, "", _data.windowNo, "", false);
             }
             else {
@@ -2045,7 +2045,7 @@
 
                         if (window.FRPT && postingByNewLogic) {
                             var orgID = Number(VIS.context.getWindowTabContext(windowNo, 0, "VAF_Org_ID"));
-                            var docTypeID = Number(VIS.context.getWindowTabContext(windowNo, 0, "C_DocType_ID"));
+                            var docTypeID = Number(VIS.context.getWindowTabContext(windowNo, 0, "VAB_DocTypes_ID"));
 
                             $.ajax({
                                 url: VIS.Application.contextUrl + "FRPT/PostingLogicFRPT/PostImediateFRPT",

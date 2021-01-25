@@ -64,7 +64,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            SetC_Currency_ID(Doc.NO_CURRENCY);
+            SetVAB_Currency_ID(Doc.NO_CURRENCY);
             MMatchInv matchInv = (MMatchInv)GetPO();
             SetDateDoc(matchInv.GetDateTrx());
             SetQty(matchInv.GetQty());
@@ -72,8 +72,8 @@ namespace VAdvantage.Acct
             int C_InvoiceLine_ID = matchInv.GetC_InvoiceLine_ID();
             _invoiceLine = new MInvoiceLine(GetCtx(), C_InvoiceLine_ID, null);
             //		BP for NotInvoicedReceipts
-            int C_BPartner_ID = _invoiceLine.GetParent().GetC_BPartner_ID();
-            SetC_BPartner_ID(C_BPartner_ID);
+            int VAB_BusinessPartner_ID = _invoiceLine.GetParent().GetVAB_BusinessPartner_ID();
+            SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             //
             int M_InOutLine_ID = matchInv.GetM_InOutLine_ID();
             _receiptLine = new MInOutLine(GetCtx(), M_InOutLine_ID, null);
@@ -125,7 +125,7 @@ namespace VAdvantage.Acct
 
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
-            SetC_Currency_ID(as1.GetC_Currency_ID());
+            SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
             /**	Needs to be handeled in PO Matching as1 no Receipt info
             if (_pc.isService())
@@ -141,7 +141,7 @@ namespace VAdvantage.Acct
             Decimal multiplier = Math.Abs(Decimal.Round(Decimal.Divide(GetQty().Value, _receiptLine.GetMovementQty()), 12, MidpointRounding.AwayFromZero));
             FactLine dr = fact.CreateLine(null,
                 GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
-                as1.GetC_Currency_ID(), Env.ONE, null);			// updated below
+                as1.GetVAB_Currency_ID(), Env.ONE, null);			// updated below
             if (dr == null)
             {
                 _error = "No Product Costs";
@@ -150,7 +150,7 @@ namespace VAdvantage.Acct
             dr.SetQty(GetQty());
             //	dr.setM_Locator_ID(_receiptLine.getM_Locator_ID());
             //	MInOut receipt = _receiptLine.getParent();
-            //	dr.setLocationFromBPartner(receipt.getC_BPartner_Location_ID(), true);	//  from Loc
+            //	dr.setLocationFromBPartner(receipt.getVAB_BPart_Location_ID(), true);	//  from Loc
             //	dr.setLocationFromLocator(_receiptLine.getM_Locator_ID(), false);		//  to Loc
             Decimal temp = dr.GetAcctBalance();
             //	Set AmtAcctCr/Dr from Receipt (sets also Project)
@@ -185,7 +185,7 @@ namespace VAdvantage.Acct
             if (as1.IsAccrual())
             {
                 cr = fact.CreateLine(null, expense,
-                    as1.GetC_Currency_ID(), null, LineNetAmt);		//	updated below
+                    as1.GetVAB_Currency_ID(), null, LineNetAmt);		//	updated below
                 if (cr == null)
                 {
                     log.Fine("Line Net Amt=0 - M_Product_ID=" + GetM_Product_ID()
@@ -208,20 +208,20 @@ namespace VAdvantage.Acct
             else	//	Cash Acct
             {
                 MInvoice invoice = _invoiceLine.GetParent();
-                if (as1.GetC_Currency_ID() == invoice.GetC_Currency_ID())
+                if (as1.GetVAB_Currency_ID() == invoice.GetVAB_Currency_ID())
                 {
                     LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt,
-                        invoice.GetC_Currency_ID(), as1.GetC_Currency_ID(),
-                        invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(),
+                        invoice.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
+                        invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(),
                         invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 }
                 cr = fact.CreateLine(null, expense,
-                    as1.GetC_Currency_ID(), null, LineNetAmt);
+                    as1.GetVAB_Currency_ID(), null, LineNetAmt);
 
                 cr.SetQty(Decimal.Negate(Decimal.Multiply(GetQty().Value, multiplier)));
             }
-            cr.SetC_Activity_ID(_invoiceLine.GetC_Activity_ID());
-            cr.SetC_Campaign_ID(_invoiceLine.GetC_Campaign_ID());
+            cr.SetVAB_BillingCode_ID(_invoiceLine.GetVAB_BillingCode_ID());
+            cr.SetVAB_Promotion_ID(_invoiceLine.GetVAB_Promotion_ID());
             cr.SetC_Project_ID(_invoiceLine.GetC_Project_ID());
             cr.SetC_UOM_ID(_invoiceLine.GetC_UOM_ID());
             cr.SetUser1_ID(_invoiceLine.GetUser1_ID());
@@ -234,9 +234,9 @@ namespace VAdvantage.Acct
             {
                 FactLine pv = fact.CreateLine(null,
                     _pc.GetAccount(ProductCost.ACCTTYPE_P_IPV, as1),
-                    as1.GetC_Currency_ID(), ipv);
-                pv.SetC_Activity_ID(_invoiceLine.GetC_Activity_ID());
-                pv.SetC_Campaign_ID(_invoiceLine.GetC_Campaign_ID());
+                    as1.GetVAB_Currency_ID(), ipv);
+                pv.SetVAB_BillingCode_ID(_invoiceLine.GetVAB_BillingCode_ID());
+                pv.SetVAB_Promotion_ID(_invoiceLine.GetVAB_Promotion_ID());
                 pv.SetC_Project_ID(_invoiceLine.GetC_Project_ID());
                 pv.SetC_UOM_ID(_invoiceLine.GetC_UOM_ID());
                 pv.SetUser1_ID(_invoiceLine.GetUser1_ID());
@@ -257,7 +257,7 @@ namespace VAdvantage.Acct
                     GetDescription(), GetTrx(), GetRectifyingProcess());
 
                 //  Update Costing
-                UpdateProductInfo(as1.GetC_AcctSchema_ID(),
+                UpdateProductInfo(as1.GetVAB_AccountBook_ID(),
                     MAcctSchema.COSTINGMETHOD_StandardCosting.Equals(as1.GetCostingMethod()));
             }
             //
@@ -282,11 +282,11 @@ namespace VAdvantage.Acct
         /// Update Product Info (old).
         /// - Costing (CostStandardCumQty, CostStandardCumAmt, CostAverageCumQty, CostAverageCumAmt)
         /// </summary>
-        /// <param name="C_AcctSchema_ID">accounting schema</param>
+        /// <param name="VAB_AccountBook_ID">accounting schema</param>
         /// <param name="standardCosting">true if std costing</param>
         /// <returns>true if updated</returns>
         /// @deprecated old costing
-        private bool UpdateProductInfo(int C_AcctSchema_ID, bool standardCosting)
+        private bool UpdateProductInfo(int VAB_AccountBook_ID, bool standardCosting)
         {
             log.Fine("M_MatchInv_ID=" + Get_ID());
 
@@ -296,18 +296,18 @@ namespace VAdvantage.Acct
                 "UPDATE M_Product_Costing pc "
                 + "SET (CostStandardCumQty,CostStandardCumAmt, CostAverageCumQty,CostAverageCumAmt) = "
                 + "(SELECT pc.CostStandardCumQty + m.Qty, " //jz ", "
-                + "pc.CostStandardCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty, "
+                + "pc.CostStandardCumAmt + currencyConvert(il.PriceActual,i.VAB_Currency_ID,a.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty, "
                 + "pc.CostAverageCumQty + m.Qty, "
-                + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.C_Currency_ID,a.C_Currency_ID,i.DateInvoiced,i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty "
+                + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.VAB_Currency_ID,a.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty "
                 + "FROM M_MatchInv m"
                 + " INNER JOIN C_InvoiceLine il ON (m.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
                 + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID),"
-                + " C_AcctSchema a "
-                + "WHERE pc.C_AcctSchema_ID=a.C_AcctSchema_ID"
+                + " VAB_AccountBook a "
+                + "WHERE pc.VAB_AccountBook_ID=a.VAB_AccountBook_ID"
                 + " AND pc.M_Product_ID=m.M_Product_ID"
                 + " AND m.M_MatchInv_ID=").Append(Get_ID()).Append(")"
                 //
-                + "WHERE pc.C_AcctSchema_ID=").Append(C_AcctSchema_ID).Append(
+                + "WHERE pc.VAB_AccountBook_ID=").Append(VAB_AccountBook_ID).Append(
                   " AND EXISTS (SELECT * FROM M_MatchInv m "
                     + "WHERE pc.M_Product_ID=m.M_Product_ID"
                     + " AND m.M_MatchInv_ID=").Append(Get_ID()).Append(")");
@@ -319,7 +319,7 @@ namespace VAdvantage.Acct
             sql = new StringBuilder(
                 "UPDATE M_Product_Costing "
                 + "SET CostAverage = CostAverageCumAmt/DECODE(CostAverageCumQty, 0,1, CostAverageCumQty) "
-                + "WHERE C_AcctSchema_ID=").Append(C_AcctSchema_ID)
+                + "WHERE VAB_AccountBook_ID=").Append(VAB_AccountBook_ID)
                 .Append(" AND M_Product_ID=").Append(GetM_Product_ID());
 
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
@@ -332,7 +332,7 @@ namespace VAdvantage.Acct
                 sql = new StringBuilder(
                     "UPDATE M_Product_Costing "
                     + "SET CurrentCostPrice = CostAverage "
-                    + "WHERE C_AcctSchema_ID=").Append(C_AcctSchema_ID)
+                    + "WHERE VAB_AccountBook_ID=").Append(VAB_AccountBook_ID)
                     .Append(" AND M_Product_ID=").Append(GetM_Product_ID());
 
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());

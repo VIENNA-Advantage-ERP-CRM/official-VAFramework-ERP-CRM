@@ -59,7 +59,7 @@ namespace VIS.Controllers
             string res = "No";
 
             MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID);
-            MAcctSchema ass = new MAcctSchema(ctx, info.GetC_AcctSchema1_ID(), null);
+            MAcctSchema ass = new MAcctSchema(ctx, info.GetVAB_AccountBook1_ID(), null);
             if (ass.GetFRPT_LocAcct_ID() > 0)
             {
                 res = "Yes";

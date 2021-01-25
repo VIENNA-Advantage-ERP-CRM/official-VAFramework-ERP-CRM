@@ -45,8 +45,8 @@ namespace VAdvantage.Model
         {
             if (C_RevenueRecognition_Plan_ID == 0)
             {
-                //	setC_AcctSchema_ID (0);
-                //	setC_Currency_ID (0);
+                //	setVAB_AccountBook_ID (0);
+                //	setVAB_Currency_ID (0);
                 //	setC_InvoiceLine_ID (0);
                 //	setC_RevenueRecognition_ID (0);
                 //	setC_RevenueRecognition_Plan_ID (0);
@@ -129,15 +129,15 @@ namespace VAdvantage.Model
 
             SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             SetVAF_Org_ID(invoice.GetVAF_Org_ID());
-            SetC_Currency_ID(ToCurrency);
+            SetVAB_Currency_ID(ToCurrency);
             SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
             bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
-            if (invoice.GetC_Currency_ID() != ToCurrency)
+            if (invoice.GetVAB_Currency_ID() != ToCurrency)
             {
-                Amount = MConversionRate.Convert(GetCtx(), Amount, invoice.GetC_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetC_ConversionType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                Amount = MConversionRate.Convert(GetCtx(), Amount, invoice.GetVAB_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
             }
             SetTotalAmt(Amount);
             SetRecognizedAmt(Env.ZERO);

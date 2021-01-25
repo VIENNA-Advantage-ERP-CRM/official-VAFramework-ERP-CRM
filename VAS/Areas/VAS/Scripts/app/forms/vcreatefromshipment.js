@@ -50,14 +50,14 @@
             var DocumentNos = VIS.Env.getCtx().getContext(baseObj.windowNo, "DocumentNo");
             baseObj.DocumentNoRef.setValue(DocumentNos);
 
-            var C_BPartner_ID = baseObj.initBPartner(false);
+            var VAB_BusinessPartner_ID = baseObj.initBPartner(false);
             baseObj.vBPartner.setReadOnly(true);
-            initBPDetails(C_BPartner_ID);
+            initBPDetails(VAB_BusinessPartner_ID);
         }
 
 
         // Get Invoice Data
-        function getInvoices(ctx, C_BPartner_ID, isReturnTrx) {
+        function getInvoices(ctx, VAB_BusinessPartner_ID, isReturnTrx) {
             //var pairs = [];
 
             var display = ("i.DocumentNo||' - '||").concat(
@@ -73,7 +73,7 @@
                 //async: false,
                 data: {
                     displays: display,
-                    cBPartnerId: C_BPartner_ID,
+                    cBPartnerId: VAB_BusinessPartner_ID,
                     isReturnTrxs: isReturnTrx,
                     IsDrops: _isdrop
                 },
@@ -107,7 +107,7 @@
         }
 
 
-        //function getInvoices(ctx, C_BPartner_ID, isReturnTrx) {
+        //function getInvoices(ctx, VAB_BusinessPartner_ID, isReturnTrx) {
         //    var pairs = [];
 
         //    var display = ("i.DocumentNo||' - '||").concat(
@@ -115,8 +115,8 @@
         //            .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
 
         //    //var sql = ("SELECT i.C_Invoice_ID,").concat(display).concat(
-        //    //        " FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
-        //    //                + "WHERE i.C_BPartner_ID=" + C_BPartner_ID + " AND i.IsSOTrx='N' "
+        //    //        " FROM C_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
+        //    //                + "WHERE i.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND i.IsSOTrx='N' "
         //    //                + "AND d.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' "
         //    //                + "AND i.DocStatus IN ('CL','CO')"
         //    //                + " AND i.C_Invoice_ID IN " + "(SELECT il.C_Invoice_ID FROM C_InvoiceLine il"
@@ -126,8 +126,8 @@
         //    //                + " OR mi.C_InvoiceLine_ID IS NULL) " + "ORDER BY i.DateInvoiced");
 
         //    var sql = ("SELECT i.C_Invoice_ID,").concat(display).concat(
-        //        " FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
-        //        + "WHERE i.C_BPartner_ID=" + C_BPartner_ID + " AND i.IsSOTrx='N' "
+        //        " FROM C_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
+        //        + "WHERE i.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND i.IsSOTrx='N' "
         //        + "AND d.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO')"
         //        + " AND i.C_Invoice_ID IN "
         //        + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
@@ -151,13 +151,13 @@
         //    return pairs;
         //}
 
-        function initBPDetails(C_BPartner_ID) {
+        function initBPDetails(VAB_BusinessPartner_ID) {
             baseObj.cmbInvoice.getControl().html("")
             var isReturnTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(baseObj.windowNo, "IsReturnTrx"));
             //var invoices =
 
             //// JID_0350: "When user create MR with refrence to order OR by invoice by using "Create Line From" charge should not shows on grid.
-            getInvoices(VIS.Env.getCtx(), C_BPartner_ID, isReturnTrx);
+            getInvoices(VIS.Env.getCtx(), VAB_BusinessPartner_ID, isReturnTrx);
 
             //for (var i = 0; i < invoices.length; i++) {
             //    if (i == 0) {

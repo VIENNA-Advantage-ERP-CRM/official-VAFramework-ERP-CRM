@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for CM_Template
+/** Generated Model for VACM_Layout
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_CM_Template : PO
+public class X_VACM_Layout : PO
 {
-public X_CM_Template (Context ctx, int CM_Template_ID, Trx trxName) : base (ctx, CM_Template_ID, trxName)
+public X_VACM_Layout (Context ctx, int VACM_Layout_ID, Trx trxName) : base (ctx, VACM_Layout_ID, trxName)
 {
-/** if (CM_Template_ID == 0)
+/** if (VACM_Layout_ID == 0)
 {
-SetCM_Template_ID (0);
+SetVACM_Layout_ID (0);
 SetIsInclude (false);
 SetIsNews (false);
 SetIsSummary (false);
@@ -31,11 +31,11 @@ SetValue (null);
 }
  */
 }
-public X_CM_Template (Ctx ctx, int CM_Template_ID, Trx trxName) : base (ctx, CM_Template_ID, trxName)
+public X_VACM_Layout (Ctx ctx, int VACM_Layout_ID, Trx trxName) : base (ctx, VACM_Layout_ID, trxName)
 {
-/** if (CM_Template_ID == 0)
+/** if (VACM_Layout_ID == 0)
 {
-SetCM_Template_ID (0);
+SetVACM_Layout_ID (0);
 SetIsInclude (false);
 SetIsNews (false);
 SetIsSummary (false);
@@ -51,7 +51,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Layout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_CM_Template (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VACM_Layout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_CM_Template (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_CM_Template (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VACM_Layout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_CM_Template()
+static X_VACM_Layout()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389052389L;
 public static int Table_ID;
  // =854;
 
-/** TableName=CM_Template */
-public static String Table_Name="CM_Template";
+/** TableName=VACM_Layout */
+public static String Table_Name="VACM_Layout";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,21 +121,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_CM_Template[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VACM_Layout[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Template.
-@param CM_Template_ID Template defines how content is displayed */
-public void SetCM_Template_ID (int CM_Template_ID)
+@param VACM_Layout_ID Template defines how content is displayed */
+public void SetVACM_Layout_ID (int VACM_Layout_ID)
 {
-if (CM_Template_ID < 1) throw new ArgumentException ("CM_Template_ID is mandatory.");
-Set_ValueNoCheck ("CM_Template_ID", CM_Template_ID);
+if (VACM_Layout_ID < 1) throw new ArgumentException ("VACM_Layout_ID is mandatory.");
+Set_ValueNoCheck ("VACM_Layout_ID", VACM_Layout_ID);
 }
 /** Get Template.
 @return Template defines how content is displayed */
-public int GetCM_Template_ID() 
+public int GetVACM_Layout_ID() 
 {
-Object ii = Get_Value("CM_Template_ID");
+Object ii = Get_Value("VACM_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

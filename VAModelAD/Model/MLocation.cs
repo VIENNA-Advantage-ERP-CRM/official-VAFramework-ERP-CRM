@@ -57,16 +57,16 @@ namespace VAModelAD.Model
         /// Get Business Partner Location
         /// </summary>
         /// <param name="context">context</param>
-        /// <param name="c_BPartner_Location_ID"> bp location id </param>
+        /// <param name="VAB_BPart_Location_ID"> bp location id </param>
         /// <param name="trx">transaction object</param>
         /// <returns>BP Location</returns>
-        internal static dynamic GetBPLocation(Context context, int c_BPartner_Location_ID, Trx trx)
+        internal static dynamic GetBPLocation(Context context, int VAB_BPart_Location_ID, Trx trx)
         {
             if (_GetBPLocation == null)
                 LoadLocationType();
             if (_GetBPLocation != null)
             {
-                dynamic obj = _GetBPLocation.Invoke(null, new Object[] { context, c_BPartner_Location_ID, trx });
+                dynamic obj = _GetBPLocation.Invoke(null, new Object[] { context, VAB_BPart_Location_ID, trx });
                 return obj;
             }
             return null;

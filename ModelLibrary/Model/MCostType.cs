@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             {
                 if (ass[i].GetM_CostType_ID() == GetM_CostType_ID())
                 {
-                    log.SaveError("CannotDelete", Msg.GetElement(GetCtx(), "C_AcctSchema_ID") + " - " + ass[i].GetName());
+                    log.SaveError("CannotDelete", Msg.GetElement(GetCtx(), "VAB_AccountBook_ID") + " - " + ass[i].GetName());
                     return false;
                 }
             }

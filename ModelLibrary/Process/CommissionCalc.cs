@@ -54,7 +54,7 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             string msg;
-            log.Info("C_Commission_ID=" + GetRecord_ID() + ", StartDate=" + p_StartDate);
+            log.Info("VAB_WorkCommission_ID=" + GetRecord_ID() + ", StartDate=" + p_StartDate);
             if (p_StartDate == null)
                 p_StartDate = DateTime.Now;
             m_com = new MCommission(GetCtx(), GetRecord_ID(), Get_Trx());
@@ -71,11 +71,11 @@ namespace VAdvantage.Process
             Classes.SimpleDateFormat format = Classes.DisplayType.GetDateFormat(Classes.DisplayType.Date);
             String description = format.Format(p_StartDate)
                 + " - " + format.Format(m_EndDate)
-                + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetC_Currency_ID());
+                + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetVAB_Currency_ID());
 
             //string description = p_StartDate
             //    + " - " + m_EndDate
-            //    + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetC_Currency_ID());
+            //    + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetVAB_Currency_ID());
 
             comRun.SetDescription(description);
             System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
@@ -96,7 +96,7 @@ namespace VAdvantage.Process
                 #region
                 #endregion
                 //	Amt for Line - Updated By Trigger
-                MCommissionAmt comAmt = new MCommissionAmt(comRun, lines[i].GetC_CommissionLine_ID());
+                MCommissionAmt comAmt = new MCommissionAmt(comRun, lines[i].GetVAB_WorkCommissionLine_ID());
                 if (!comAmt.Save())
                     throw new SystemException("Could not save Commission Amt");
                 //
@@ -105,12 +105,12 @@ namespace VAdvantage.Process
                 {
                     if (m_com.IsListDetails())
                     {
-                        sql.Append("SELECT h.C_Currency_ID, (l.LineNetAmt*al.Amount/h.GrandTotal) AS Amt,"
+                        sql.Append("SELECT h.VAB_Currency_ID, (l.LineNetAmt*al.Amount/h.GrandTotal) AS Amt,"
                             + " (l.QtyInvoiced*al.Amount/h.GrandTotal) AS Qty,"
                             + " NULL, l.C_InvoiceLine_ID, p.DocumentNo||'_'||h.DocumentNo,"
                             + " COALESCE(prd.Value,l.Description), h.DateInvoiced "
                             + "FROM C_Payment p"
-                            + " INNER JOIN C_AllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
+                            + " INNER JOIN VAB_DocAllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
                             + " INNER JOIN C_Invoice h ON (al.C_Invoice_ID = h.C_Invoice_ID)"
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
@@ -122,11 +122,11 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt*al.Amount/h.GrandTotal) AS Amt,"
+                        sql.Append("SELECT h.VAB_Currency_ID, SUM(l.LineNetAmt*al.Amount/h.GrandTotal) AS Amt,"
                             + " SUM(l.QtyInvoiced*al.Amount/h.GrandTotal) AS Qty,"
                             + " NULL, NULL, NULL, NULL, MAX(h.DateInvoiced) "
                             + "FROM C_Payment p"
-                            + " INNER JOIN C_AllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
+                            + " INNER JOIN VAB_DocAllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
                             + " INNER JOIN C_Invoice h ON (al.C_Invoice_ID = h.C_Invoice_ID)"
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
@@ -140,7 +140,7 @@ namespace VAdvantage.Process
                 {
                     if (m_com.IsListDetails())
                     {
-                        sql.Append("SELECT h.C_Currency_ID, l.LineNetAmt, l.QtyOrdered, "
+                        sql.Append("SELECT h.VAB_Currency_ID, l.LineNetAmt, l.QtyOrdered, "
                             + "l.C_OrderLine_ID, NULL, h.DocumentNo,"
                             + " COALESCE(prd.Value,l.Description),h.DateOrdered "
                             + "FROM C_Order h"
@@ -154,7 +154,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
+                        sql.Append("SELECT h.VAB_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyOrdered) AS Qty, "
                             + "l.C_OrderLine_ID, NULL, NULL, NULL, MAX(h.DateOrdered) "
                             + "FROM C_Order h"
@@ -170,7 +170,7 @@ namespace VAdvantage.Process
                 {
                     if (m_com.IsListDetails())
                     {
-                        sql.Append("SELECT h.C_Currency_ID, l.LineNetAmt, l.QtyInvoiced, "
+                        sql.Append("SELECT h.VAB_Currency_ID, l.LineNetAmt, l.QtyInvoiced, "
                             + "NULL, l.C_InvoiceLine_ID, h.DocumentNo,"
                             + " COALESCE(prd.Value,l.Description),h.DateInvoiced "
                             + "FROM C_Invoice h"
@@ -184,7 +184,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
+                        sql.Append("SELECT h.VAB_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyInvoiced) AS Qty, "
                             + "NULL, l.C_InvoiceLine_ID, NULL, NULL, MAX(h.DateInvoiced) "
                             + "FROM C_Invoice h"
@@ -199,7 +199,7 @@ namespace VAdvantage.Process
                 //	CommissionOrders/Invoices
                 if (lines[i].IsCommissionOrders())
                 {
-                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetC_BPartner_ID());
+                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
                     if (users == null || users.Length == 0)
                         throw new Exception("Commission Business Partner has no Users/Contact");
                     if (users.Length == 1)
@@ -209,17 +209,17 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        log.Warning("Not 1 User/Contact for C_BPartner_ID="
-                            + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
-                            .Append(m_com.GetC_BPartner_ID()).Append(")");
+                        log.Warning("Not 1 User/Contact for VAB_BusinessPartner_ID="
+                            + m_com.GetVAB_BusinessPartner_ID() + " but " + users.Length);
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=")
+                            .Append(m_com.GetVAB_BusinessPartner_ID()).Append(")");
                     }
                 }
                 //added by Arpit Rai on 7-May-2016 asked & Tested by Ravikant Sir
                 //To calculate Commission Amount For the Particular Agent If Not Selected in Line Tab Of Commission
                 else
                 {
-                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetC_BPartner_ID());
+                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
                     if (users == null || users.Length == 0)
                     {
                         throw new Exception("Commission Business Partner has no Users/Contact");
@@ -232,10 +232,10 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        log.Warning("Not 1 User/Contact for C_BPartner_ID="
-                            + m_com.GetC_BPartner_ID() + " but " + users.Length);
-                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE C_BPartner_ID=")
-                            .Append(m_com.GetC_BPartner_ID()).Append(")");
+                        log.Warning("Not 1 User/Contact for VAB_BusinessPartner_ID="
+                            + m_com.GetVAB_BusinessPartner_ID() + " but " + users.Length);
+                        sql.Append(" AND h.SalesRep_ID IN (SELECT VAF_UserContact_ID FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=")
+                            .Append(m_com.GetVAB_BusinessPartner_ID()).Append(")");
                     }
                 }
 
@@ -243,16 +243,16 @@ namespace VAdvantage.Process
                 if (lines[i].GetOrg_ID() != 0)
                     sql.Append(" AND h.VAF_Org_ID=").Append(lines[i].GetOrg_ID());
                 //	BPartner
-                if (lines[i].GetC_BPartner_ID() != 0)
-                    sql.Append(" AND h.C_BPartner_ID=").Append(lines[i].GetC_BPartner_ID());
+                if (lines[i].GetVAB_BusinessPartner_ID() != 0)
+                    sql.Append(" AND h.VAB_BusinessPartner_ID=").Append(lines[i].GetVAB_BusinessPartner_ID());
                 //	BPartner Group
-                if (lines[i].GetC_BP_Group_ID() != 0)
-                    sql.Append(" AND h.C_BPartner_ID IN "
-                        + "(SELECT C_BPartner_ID FROM C_BPartner WHERE C_BP_Group_ID=").Append(lines[i].GetC_BP_Group_ID()).Append(")");
+                if (lines[i].GetVAB_BPart_Category_ID() != 0)
+                    sql.Append(" AND h.VAB_BusinessPartner_ID IN "
+                        + "(SELECT VAB_BusinessPartner_ID FROM VAB_BusinessPartner WHERE VAB_BPart_Category_ID=").Append(lines[i].GetVAB_BPart_Category_ID()).Append(")");
                 //	Sales Region
                 if (lines[i].GetC_SalesRegion_ID() != 0)
-                    sql.Append(" AND h.C_BPartner_Location_ID IN "
-                        + "(SELECT C_BPartner_Location_ID FROM C_BPartner_Location WHERE C_SalesRegion_ID=").Append(lines[i].GetC_SalesRegion_ID()).Append(")");
+                    sql.Append(" AND h.VAB_BPart_Location_ID IN "
+                        + "(SELECT VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE C_SalesRegion_ID=").Append(lines[i].GetC_SalesRegion_ID()).Append(")");
                 //	Product
                 if (lines[i].GetM_Product_ID() != 0)
                     sql.Append(" AND l.M_Product_ID=").Append(lines[i].GetM_Product_ID());
@@ -263,10 +263,10 @@ namespace VAdvantage.Process
                 //	Grouping according to Calculation Basis
                 if (!m_com.IsListDetails() && m_com.GetDocBasisType().Equals("O"))
                 {
-                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_OrderLine_ID");
+                    sql.Append(" GROUP BY h.VAB_Currency_ID,l.C_OrderLine_ID");
                 }
                 else
-                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_InvoiceLine_ID");
+                    sql.Append(" GROUP BY h.VAB_Currency_ID,l.C_InvoiceLine_ID");
 
                 //
                 log.Fine("Line=" + lines[i].GetLine() + " - " + sql);
@@ -276,7 +276,7 @@ namespace VAdvantage.Process
                 comAmt.CalculatecommissionwithNewLogic();
                 comAmt.Save();
 
-                int countDetails = Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT COUNT(*) FROM C_CommissionDetail WHERE C_CommissionAmt_ID=" + comAmt.GetC_CommissionAmt_ID(), null, Get_TrxName()));
+                int countDetails = Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_WorkCommissionDetail WHERE VAB_WorkCommission_Amt_ID=" + comAmt.GetVAB_WorkCommission_Amt_ID(), null, Get_TrxName()));
                 if (countDetails == 0)
                 {
                     comAmt.Delete(true, Get_Trx());
@@ -290,7 +290,7 @@ namespace VAdvantage.Process
             m_com.SetDateLastRun(DateTime.Now);
             m_com.Save();
 
-            return "@C_CommissionRun_ID@ = " + comRun.GetDocumentNo()
+            return "@VAB_WorkCommission_Calc_ID@ = " + comRun.GetDocumentNo()
                 + " - " + comRun.GetDescription();
         }
 
@@ -384,7 +384,7 @@ namespace VAdvantage.Process
                 foreach (DataRow dr in dt.Rows)
                 //while (idr.Read())
                 {
-                    //	CommissionAmount, C_Currency_ID, Amt, Qty,
+                    //	CommissionAmount, VAB_Currency_ID, Amt, Qty,
                     MCommissionDetail cd = new MCommissionDetail(comAmt,
                         Utility.Util.GetValueOfInt(dr[0]), Utility.Util.GetValueOfDecimal(dr[1]), Utility.Util.GetValueOfDecimal(dr[2]));
 

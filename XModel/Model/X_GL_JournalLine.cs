@@ -25,8 +25,8 @@ namespace VAdvantage.Model
             SetAmtAcctDr (0.0);
             SetAmtSourceCr (0.0);
             SetAmtSourceDr (0.0);
-            SetC_ConversionType_ID (0);
-            SetC_Currency_ID (0);	// @C_Currency_ID@
+            SetVAB_CurrencyType_ID (0);
+            SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetC_ValidCombination_ID (0);
             SetCurrencyRate (0.0);	// @CurrencyRate@;
             1
@@ -48,8 +48,8 @@ namespace VAdvantage.Model
             SetAmtAcctDr (0.0);
             SetAmtSourceCr (0.0);
             SetAmtSourceDr (0.0);
-            SetC_ConversionType_ID (0);
-            SetC_Currency_ID (0);	// @C_Currency_ID@
+            SetVAB_CurrencyType_ID (0);
+            SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetC_ValidCombination_ID (0);
             SetCurrencyRate (0.0);	// @CurrencyRate@;
             1
@@ -204,32 +204,32 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Currency Type.
-        @param C_ConversionType_ID Currency Conversion Rate Type */
-        public void SetC_ConversionType_ID(int C_ConversionType_ID)
+        @param VAB_CurrencyType_ID Currency Conversion Rate Type */
+        public void SetVAB_CurrencyType_ID(int VAB_CurrencyType_ID)
         {
-            if (C_ConversionType_ID < 1) throw new ArgumentException("C_ConversionType_ID is mandatory.");
-            Set_Value("C_ConversionType_ID", C_ConversionType_ID);
+            if (VAB_CurrencyType_ID < 1) throw new ArgumentException("VAB_CurrencyType_ID is mandatory.");
+            Set_Value("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
         }
         /** Get Currency Type.
         @return Currency Conversion Rate Type */
-        public int GetC_ConversionType_ID()
+        public int GetVAB_CurrencyType_ID()
         {
-            Object ii = Get_Value("C_ConversionType_ID");
+            Object ii = Get_Value("VAB_CurrencyType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Currency.
-        @param C_Currency_ID The Currency for this record */
-        public void SetC_Currency_ID(int C_Currency_ID)
+        @param VAB_Currency_ID The Currency for this record */
+        public void SetVAB_Currency_ID(int VAB_Currency_ID)
         {
-            if (C_Currency_ID < 1) throw new ArgumentException("C_Currency_ID is mandatory.");
-            Set_Value("C_Currency_ID", C_Currency_ID);
+            if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory.");
+            Set_Value("VAB_Currency_ID", VAB_Currency_ID);
         }
         /** Get Currency.
         @return The Currency for this record */
-        public int GetC_Currency_ID()
+        public int GetVAB_Currency_ID()
         {
-            Object ii = Get_Value("C_Currency_ID");
+            Object ii = Get_Value("VAB_Currency_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

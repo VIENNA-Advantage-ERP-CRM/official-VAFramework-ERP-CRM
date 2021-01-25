@@ -11,35 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_BankAccount_Acct
+/** Generated Model for VAB_Bank_Acct_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_BankAccount_Acct : PO
+public class X_VAB_Bank_Acct_Acct : PO
 {
-public X_C_BankAccount_Acct (Context ctx, int C_BankAccount_Acct_ID, Trx trxName) : base (ctx, C_BankAccount_Acct_ID, trxName)
+public X_VAB_Bank_Acct_Acct (Context ctx, int VAB_Bank_Acct_Acct_ID, Trx trxName) : base (ctx, VAB_Bank_Acct_Acct_ID, trxName)
 {
-/** if (C_BankAccount_Acct_ID == 0)
-{
-SetB_Asset_Acct (0);
-SetB_Expense_Acct (0);
-SetB_InTransit_Acct (0);
-SetB_InterestExp_Acct (0);
-SetB_InterestRev_Acct (0);
-SetB_PaymentSelect_Acct (0);
-SetB_RevaluationGain_Acct (0);
-SetB_RevaluationLoss_Acct (0);
-SetB_SettlementGain_Acct (0);
-SetB_SettlementLoss_Acct (0);
-SetB_UnallocatedCash_Acct (0);
-SetB_Unidentified_Acct (0);
-SetC_AcctSchema_ID (0);
-SetC_BankAccount_ID (0);
-}
- */
-}
-public X_C_BankAccount_Acct (Ctx ctx, int C_BankAccount_Acct_ID, Trx trxName) : base (ctx, C_BankAccount_Acct_ID, trxName)
-{
-/** if (C_BankAccount_Acct_ID == 0)
+/** if (VAB_Bank_Acct_Acct_ID == 0)
 {
 SetB_Asset_Acct (0);
 SetB_Expense_Acct (0);
@@ -53,8 +32,29 @@ SetB_SettlementGain_Acct (0);
 SetB_SettlementLoss_Acct (0);
 SetB_UnallocatedCash_Acct (0);
 SetB_Unidentified_Acct (0);
-SetC_AcctSchema_ID (0);
-SetC_BankAccount_ID (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Bank_Acct_ID (0);
+}
+ */
+}
+public X_VAB_Bank_Acct_Acct (Ctx ctx, int VAB_Bank_Acct_Acct_ID, Trx trxName) : base (ctx, VAB_Bank_Acct_Acct_ID, trxName)
+{
+/** if (VAB_Bank_Acct_Acct_ID == 0)
+{
+SetB_Asset_Acct (0);
+SetB_Expense_Acct (0);
+SetB_InTransit_Acct (0);
+SetB_InterestExp_Acct (0);
+SetB_InterestRev_Acct (0);
+SetB_PaymentSelect_Acct (0);
+SetB_RevaluationGain_Acct (0);
+SetB_RevaluationLoss_Acct (0);
+SetB_SettlementGain_Acct (0);
+SetB_SettlementLoss_Acct (0);
+SetB_UnallocatedCash_Acct (0);
+SetB_Unidentified_Acct (0);
+SetVAB_AccountBook_ID (0);
+SetVAB_Bank_Acct_ID (0);
 }
  */
 }
@@ -63,7 +63,7 @@ SetC_BankAccount_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankAccount_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Bank_Acct_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,7 +71,7 @@ public X_C_BankAccount_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankAccount_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Bank_Acct_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -79,13 +79,13 @@ public X_C_BankAccount_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_BankAccount_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Bank_Acct_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_BankAccount_Acct()
+static X_VAB_Bank_Acct_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -98,8 +98,8 @@ public static long updatedMS = 1280389053894L;
 public static int Table_ID;
  // =391;
 
-/** TableName=C_BankAccount_Acct */
-public static String Table_Name="C_BankAccount_Acct";
+/** TableName=VAB_Bank_Acct_Acct */
+public static String Table_Name="VAB_Bank_Acct_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -133,7 +133,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_BankAccount_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Bank_Acct_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Bank Asset.
@@ -305,17 +305,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_ValueNoCheck ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -323,20 +323,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Bank Account.
-@param C_BankAccount_ID Account at the Bank */
-public void SetC_BankAccount_ID (int C_BankAccount_ID)
+@param VAB_Bank_Acct_ID Account at the Bank */
+public void SetVAB_Bank_Acct_ID (int VAB_Bank_Acct_ID)
 {
-if (C_BankAccount_ID < 1) throw new ArgumentException ("C_BankAccount_ID is mandatory.");
-Set_ValueNoCheck ("C_BankAccount_ID", C_BankAccount_ID);
+if (VAB_Bank_Acct_ID < 1) throw new ArgumentException ("VAB_Bank_Acct_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
 }
 /** Get Bank Account.
 @return Account at the Bank */
-public int GetC_BankAccount_ID() 
+public int GetVAB_Bank_Acct_ID() 
 {
-Object ii = Get_Value("C_BankAccount_ID");
+Object ii = Get_Value("VAB_Bank_Acct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

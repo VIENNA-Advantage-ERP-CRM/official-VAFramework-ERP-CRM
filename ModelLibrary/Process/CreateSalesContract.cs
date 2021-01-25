@@ -23,7 +23,7 @@ namespace ViennaAdvantageServer.Process
         bool isTaxIncluded = false;
         int StdPrecision = 0;
         IDataReader dr;
-        VAdvantage.Model.X_C_Contract contact = null;
+        VAdvantage.Model.X_VAB_Contract contact = null;
         VAdvantage.Model.X_C_OrderLine line = null;
         string DocumntNo;
 
@@ -34,7 +34,7 @@ namespace ViennaAdvantageServer.Process
 
         protected override String DoIt()
         {
-            //int C_Contract_ID = 0;
+            //int VAB_Contract_ID = 0;
             String Sql = "SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=" + orderID + " AND CreateServiceContract='N' AND IsContract='Y' AND IsActive='Y'";
             dr = DB.ExecuteReader(Sql);
             try
@@ -56,30 +56,30 @@ namespace ViennaAdvantageServer.Process
                 while (dr.Read())
                 {
                     line = new VAdvantage.Model.X_C_OrderLine(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
-                    if (line.IsContract() && line.GetC_Contract_ID() == 0)
+                    if (line.IsContract() && line.GetVAB_Contract_ID() == 0)
                     {
 
-                        contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, Get_TrxName());
+                        contact = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                         int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
 
                         //Neha---Commented code because object created but not used in further class---04 Sep,2018
 
                         //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
-                        //    line.GetM_Product_ID(), order.GetC_BPartner_ID(), line.GetQtyOrdered(), true);                        
+                        //    line.GetM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);                        
                         //pp.SetM_PriceList_ID(M_PriceList_ID);
                         //VAdvantage.Model.MProduct prd = new VAdvantage.Model.MProduct(GetCtx(), line.GetM_Product_ID(), null);
                         //pp.SetC_UOM_ID(prd.GetC_UOM_ID());
 
-                        string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.C_Currency_ID,c.StdPrecision,"
+                        string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
                         + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                        + "FROM M_PriceList pl,C_Currency c,M_PriceList_Version plv "
-                        + "WHERE pl.C_Currency_ID=c.C_Currency_ID"
+                        + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                        + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
                         + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
                         + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
                         + "ORDER BY plv.ValidFrom DESC";
 
                         //int M_PriceList_Version_ID = 0;
-                        int C_Currency_ID = 0;
+                        int VAB_Currency_ID = 0;
                         DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
@@ -90,7 +90,7 @@ namespace ViennaAdvantageServer.Process
 
                             //	Currency                            
 
-                            C_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Currency_ID"]);
+                            VAB_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Currency_ID"]);
 
                             // Std Precision
                             StdPrecision = Util.GetValueOfInt(ds.Tables[0].Rows[i]["StdPrecision"]);
@@ -110,15 +110,15 @@ namespace ViennaAdvantageServer.Process
                         contact.SetStartDate(line.GetStartDate());
                         contact.SetBillStartDate(line.GetStartDate());
                         contact.SetEndDate(line.GetEndDate());
-                        contact.SetC_BPartner_ID(order.GetC_BPartner_ID());
+                        contact.SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
                         contact.SetBill_Location_ID(order.GetBill_Location_ID());
                         contact.SetBill_User_ID(order.GetBill_User_ID());
                         contact.SetSalesRep_ID(order.GetSalesRep_ID());
-                        contact.SetC_Currency_ID(line.GetC_Currency_ID());
-                        contact.SetC_ConversionType_ID(order.GetC_ConversionType_ID());
+                        contact.SetVAB_Currency_ID(line.GetVAB_Currency_ID());
+                        contact.SetVAB_CurrencyType_ID(order.GetVAB_CurrencyType_ID());
                         contact.SetC_PaymentTerm_ID(order.GetC_PaymentTerm_ID());
                         contact.SetM_PriceList_ID(order.GetM_PriceList_ID());
-                        contact.SetC_Frequency_ID(line.GetC_Frequency_ID());
+                        contact.SetVAB_Frequency_ID(line.GetVAB_Frequency_ID());
 
                         //Neha--Set List Price,Price,Unit Price,Discount from Order Line--4 Sep,2018
 
@@ -137,8 +137,8 @@ namespace ViennaAdvantageServer.Process
                         // invoice Count Start
                         //DateTime SDate = (DateTime)(line.GetStartDate());
                         //DateTime Edate = (DateTime)(line.GetEndDate());
-                        //int frequency = Util.GetValueOfInt(line.GetC_Frequency_ID());
-                        //string PSql = "Select NoOfDays from C_Frequency where C_Frequency_ID=" + frequency;
+                        //int frequency = Util.GetValueOfInt(line.GetVAB_Frequency_ID());
+                        //string PSql = "Select NoOfDays from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                         //int days = Util.GetValueOfInt(DB.ExecuteScalar(PSql, null, null));
                         //int totaldays = (Edate - SDate).Days;
                         //int count = totaldays / days;
@@ -155,7 +155,7 @@ namespace ViennaAdvantageServer.Process
                         //contact.SetQtyEntered(line.GetQtyEntered());
                         // contact.SetDiscount(line.GetDiscount());
                         contact.SetC_Tax_ID(line.GetC_Tax_ID());
-                        contact.SetC_Campaign_ID(order.GetC_Campaign_ID());
+                        contact.SetVAB_Promotion_ID(order.GetVAB_Promotion_ID());
 
                         contact.SetLineNetAmt(Decimal.Multiply(line.GetQtyPerCycle(), line.GetPriceActual()));
 
@@ -220,10 +220,10 @@ namespace ViennaAdvantageServer.Process
                                 throw new ArgumentException("Cannot save Order Line");
                             }
                             //Neha---Set CreateServiceContract,Order Line ID on Order Line tab---17 Sep,2018
-                            String _qry = "UPDATE C_ORDERLINE SET C_CONTRACT_ID=" + contact.GetC_Contract_ID() + " ,CreateServiceContract='Y' WHERE C_ORDERLINE_ID=" + line.GetC_OrderLine_ID();
+                            String _qry = "UPDATE C_ORDERLINE SET VAB_Contract_ID=" + contact.GetVAB_Contract_ID() + " ,CreateServiceContract='Y' WHERE C_ORDERLINE_ID=" + line.GetC_OrderLine_ID();
                             DB.ExecuteScalar(_qry, null, Get_TrxName());
                         }
-                        //C_Contract_ID = contact.GetC_Contract_ID();
+                        //VAB_Contract_ID = contact.GetVAB_Contract_ID();
                         DocumntNo += contact.GetDocumentNo() + ",";
                     }
 
@@ -250,11 +250,11 @@ namespace ViennaAdvantageServer.Process
 
 
         /*****
-          int C_BPartner_ID = ctx.GetContextAsInt(WindowNo, "C_BPartner_ID");
+          int VAB_BusinessPartner_ID = ctx.GetContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
                 MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
-                        M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
+                        M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
                 int M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
                 pp.SetM_PriceList_ID(M_PriceList_ID);
                 /** PLV is only accurate if PL selected in header
@@ -278,7 +278,7 @@ namespace ViennaAdvantageServer.Process
                     mTab.SetValue("PriceActual", 0);
                     mTab.SetValue("PriceEntered", 0);
                 }
-                mTab.SetValue("C_Currency_ID", System.Convert.ToInt32(pp.GetC_Currency_ID()));
+                mTab.SetValue("VAB_Currency_ID", System.Convert.ToInt32(pp.GetVAB_Currency_ID()));
                 mTab.SetValue("Discount", pp.GetDiscount());
                 mTab.SetValue("C_UOM_ID", System.Convert.ToInt32(pp.GetC_UOM_ID()));
                 mTab.SetValue("QtyOrdered", mTab.GetValue("QtyEntered"));

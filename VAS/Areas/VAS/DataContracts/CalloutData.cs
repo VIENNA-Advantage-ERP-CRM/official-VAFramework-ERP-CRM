@@ -12,7 +12,7 @@ namespace VIS.DataContracts
         public decimal PriceStd { get; set; }
         public decimal PriceActual { get; set; }
         public decimal PriceEntered { get; set; }
-        public int C_Currency_ID { get; set; }
+        public int VAB_Currency_ID { get; set; }
         public decimal Discount { get; set; }
         public decimal LineAmt { get; set; }
         public int C_UOM_ID { get; set; }

@@ -15,7 +15,7 @@ namespace VAdvantage.Process
     class CreateConversionEntries : ProcessEngine.SvrProcess
     {
         int baseCurrencyID = 0;
-        int C_CurrencySource_ID = 0;
+        int VAB_CurrencySource_ID = 0;
          string KEY =DataBase.GlobalVariable.ACCESSKEY;// "caff4eb4fbd6273e37e8a325e19f0991";
         protected override void Prepare()
         {
@@ -28,13 +28,13 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Currency_ID"))
+                else if (name.Equals("VAB_Currency_ID"))
                 {
                     baseCurrencyID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_CurrencySource_ID"))
+                else if (name.Equals("VAB_CurrencySource_ID"))
                 {
-                    C_CurrencySource_ID = para[i].GetParameterAsInt();
+                    VAB_CurrencySource_ID = para[i].GetParameterAsInt();
                 }
                
                 else
@@ -47,11 +47,11 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             string status = "OK";
-            string baseCurrency = DB.ExecuteScalar("Select ISO_Code from C_Currency Where C_Currency_ID=" + baseCurrencyID).ToString();
-            string currencySourceName = DB.ExecuteScalar("Select url from C_CurrencySource Where C_CurrencySource_ID=" + C_CurrencySource_ID).ToString();
+            string baseCurrency = DB.ExecuteScalar("Select ISO_Code from VAB_Currency Where VAB_Currency_ID=" + baseCurrencyID).ToString();
+            string currencySourceName = DB.ExecuteScalar("Select url from VAB_CurrencySource Where VAB_CurrencySource_ID=" + VAB_CurrencySource_ID).ToString();
             string myCurrency = "";
             int myCurrencyID = 0;
-            string sql = @"SELECT ISO_Code,C_Currency_ID FROM C_Currency WHERE IsActive='Y' AND ISMYCURRENCY='Y'";
+            string sql = @"SELECT ISO_Code,VAB_Currency_ID FROM VAB_Currency WHERE IsActive='Y' AND ISMYCURRENCY='Y'";
             DataSet ds = DB.ExecuteDataset(sql);
             Trx trx = Trx.Get("CreateConVersionEnties");
             try
@@ -74,7 +74,7 @@ namespace VAdvantage.Process
                     int defaultconversionType = 0;
                     try
                     {
-                        defaultconversionType = Convert.ToInt32(DB.ExecuteScalar("select c_conversiontype_id from c_conversiontype where isdefault='Y' and isactive='Y'"));
+                        defaultconversionType = Convert.ToInt32(DB.ExecuteScalar("select VAB_CurrencyType_id from VAB_CurrencyType where isdefault='Y' and isactive='Y'"));
                     }
                     catch { }
                     MConversionRate conversion = null;
@@ -84,7 +84,7 @@ namespace VAdvantage.Process
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         myCurrency = ds.Tables[0].Rows[i]["ISO_Code"].ToString();
-                        myCurrencyID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Currency_ID"]);
+                        myCurrencyID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Currency_ID"]);
 
                         var client = new ModelLibrary.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
                         if (!String.IsNullOrEmpty(myCurrency)
@@ -100,10 +100,10 @@ namespace VAdvantage.Process
                                 conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);
                                 conversion.SetValidTo(DateTime.Now);
-                                conversion.SetC_ConversionType_ID(defaultconversionType);
-                                conversion.SetC_Currency_ID(myCurrencyID);
-                                conversion.SetC_Currency_To_ID(baseCurrencyID);
-                                //conversion.SetC_Currency_To_ID();
+                                conversion.SetVAB_CurrencyType_ID(defaultconversionType);
+                                conversion.SetVAB_Currency_ID(myCurrencyID);
+                                conversion.SetVAB_Currency_To_ID(baseCurrencyID);
+                                //conversion.SetVAB_Currency_To_ID();
                                  rate1 = Convert.ToDecimal(result);
                                  rate2 = Utility.Env.ZERO;
                                  one = new Decimal(1.0);
@@ -128,10 +128,10 @@ namespace VAdvantage.Process
                                 conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);
                                 conversion.SetValidTo(DateTime.Now);
-                                conversion.SetC_ConversionType_ID(defaultconversionType);
-                                conversion.SetC_Currency_ID(baseCurrencyID);
-                                conversion.SetC_Currency_To_ID(myCurrencyID);
-                                //conversion.SetC_Currency_To_ID();
+                                conversion.SetVAB_CurrencyType_ID(defaultconversionType);
+                                conversion.SetVAB_Currency_ID(baseCurrencyID);
+                                conversion.SetVAB_Currency_To_ID(myCurrencyID);
+                                //conversion.SetVAB_Currency_To_ID();
                                 rate1 = Convert.ToDecimal(result);
                                 rate2 = Utility.Env.ZERO;
                                 one = new Decimal(1.0);

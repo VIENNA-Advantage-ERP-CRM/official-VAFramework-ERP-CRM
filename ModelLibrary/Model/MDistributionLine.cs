@@ -114,19 +114,19 @@ namespace VAdvantage.Model
             MAccount acct = MAccount.Get(GetCtx(),
                 _account.GetVAF_Client_ID(),
                 IsOverwriteOrg() && GetOrg_ID() != 0 ? GetOrg_ID() : _account.GetVAF_Org_ID(),
-                _account.GetC_AcctSchema_ID(),
+                _account.GetVAB_AccountBook_ID(),
                 IsOverwriteAcct() && GetAccount_ID() != 0 ? GetAccount_ID() : _account.GetAccount_ID(),
                     _account.GetC_SubAcct_ID(),
                 //	
                 IsOverwriteProduct() ? GetM_Product_ID() : _account.GetM_Product_ID(),
-                IsOverwriteBPartner() ? GetC_BPartner_ID() : _account.GetC_BPartner_ID(),
+                IsOverwriteBPartner() ? GetVAB_BusinessPartner_ID() : _account.GetVAB_BusinessPartner_ID(),
                 IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
                 IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
                 IsOverwriteLocTo() ? GetC_LocTo_ID() : _account.GetC_LocTo_ID(),
                 IsOverwriteSalesRegion() ? GetC_SalesRegion_ID() : _account.GetC_SalesRegion_ID(),
                 IsOverwriteProject() ? GetC_Project_ID() : _account.GetC_Project_ID(),
-                IsOverwriteCampaign() ? GetC_Campaign_ID() : _account.GetC_Campaign_ID(),
-                IsOverwriteActivity() ? GetC_Activity_ID() : _account.GetC_Activity_ID(),
+                IsOverwriteCampaign() ? GetVAB_Promotion_ID() : _account.GetVAB_Promotion_ID(),
+                IsOverwriteActivity() ? GetVAB_BillingCode_ID() : _account.GetVAB_BillingCode_ID(),
                 IsOverwriteUser1() ? GetUser1_ID() : _account.GetUser1_ID(),
                 IsOverwriteUser2() ? GetUser2_ID() : _account.GetUser2_ID(),
                     _account.GetUserElement1_ID(),
@@ -186,17 +186,17 @@ namespace VAdvantage.Model
             {
                 SetAccount_ID(0);
             }
-            if (!IsOverwriteActivity() && GetC_Activity_ID() != 0)
+            if (!IsOverwriteActivity() && GetVAB_BillingCode_ID() != 0)
             {
-                SetC_Activity_ID(0);
+                SetVAB_BillingCode_ID(0);
             }
-            if (!IsOverwriteBPartner() && GetC_BPartner_ID() != 0)
+            if (!IsOverwriteBPartner() && GetVAB_BusinessPartner_ID() != 0)
             {
-                SetC_BPartner_ID(0);
+                SetVAB_BusinessPartner_ID(0);
             }
-            if (!IsOverwriteCampaign() && GetC_Campaign_ID() != 0)
+            if (!IsOverwriteCampaign() && GetVAB_Promotion_ID() != 0)
             {
-                SetC_Campaign_ID(0);
+                SetVAB_Promotion_ID(0);
             }
             if (!IsOverwriteLocFrom() && GetC_LocFrom_ID() != 0)
             {

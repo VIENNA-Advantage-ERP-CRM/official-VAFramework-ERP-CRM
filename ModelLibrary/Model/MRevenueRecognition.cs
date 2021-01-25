@@ -89,16 +89,16 @@ namespace VAdvantage.Model
 
                 PO assetGroupAcct = null;
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
+                _sql.Append("select VAB_AccountBook_ID from VAB_AccountBook where IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
                 {
                     for (int k = 0; k < ds3.Tables[0].Rows.Count; k++)
                     {
-                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
+                        int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
                                         assetGroupAcct.Set_ValueNoCheck("C_RevenueRecognition_ID", Util.GetValueOfInt(GetC_RevenueRecognition_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         assetGroupAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
-                                        assetGroupAcct.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);
+                                        assetGroupAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!assetGroupAcct.Save())
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -197,13 +197,13 @@ namespace VAdvantage.Model
                 int NoofMonths = 0;
                 MRevenueRecognition revenueRecognition = new MRevenueRecognition(Invoice.GetCtx(), C_RevenueRecognition_ID, Invoice.Get_Trx());
                 int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetVAF_Client_ID(), Invoice.GetVAF_Org_ID());
-                int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID=" + defaultAccSchemaOrg_ID));
+                int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE VAB_AccountBook_ID=" + defaultAccSchemaOrg_ID));
 
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
                 RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("RevenueStartDate"));
 
                 // precision to be handle based on std precision defined on acct schema
-                string sql = "SELECT C.StdPrecision FROM C_AcctSchema a INNER JOIN C_Currency c ON c.C_Currency_ID= a.C_Currency_ID WHERE a.C_AcctSchema_ID=" + defaultAccSchemaOrg_ID;
+                string sql = "SELECT C.StdPrecision FROM VAB_AccountBook a INNER JOIN VAB_Currency c ON c.VAB_Currency_ID= a.VAB_Currency_ID WHERE a.VAB_AccountBook_ID=" + defaultAccSchemaOrg_ID;
                 int stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
 
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
                 }
                 MRevenueRecognitionPlan revenueRecognitionPlan = new MRevenueRecognitionPlan(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                 revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, Invoice, C_RevenueRecognition_ID, ToCurrency);
-                revenueRecognitionPlan.SetC_AcctSchema_ID(defaultAccSchemaOrg_ID);
+                revenueRecognitionPlan.SetVAB_AccountBook_ID(defaultAccSchemaOrg_ID);
                 revenueRecognitionPlan.SetRecognizedAmt(0);
                 if (!revenueRecognitionPlan.Save())
                 {
@@ -339,14 +339,14 @@ namespace VAdvantage.Model
                             int calendar_ID = 0;
                             DataSet ds = new DataSet();
 
-                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_OrgDetail WHERE vaf_org_id = " + Invoice.GetVAF_Org_ID()));
+                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Calender_ID FROM VAF_OrgDetail WHERE vaf_org_id = " + Invoice.GetVAF_Org_ID()));
                             if (calendar_ID == 0)
                             {
-                                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE vaf_client_id = " + Invoice.GetVAF_Client_ID()));
+                                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE vaf_client_id = " + Invoice.GetVAF_Client_ID()));
                             }
                             sql = "SELECT startdate , enddate FROM c_period WHERE " +
                                 "c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON c_year.c_year_id = C_period.c_year_id " +
-                                "WHERE  c_year.c_calendar_id =" + calendar_ID + " AND " + GlobalVariable.TO_DATE(RecognizationDate, true) + " BETWEEN C_period.startdate AND C_period.enddate) AND periodno IN (1, 12)";
+                                "WHERE  c_year.VAB_Calender_id =" + calendar_ID + " AND " + GlobalVariable.TO_DATE(RecognizationDate, true) + " BETWEEN C_period.startdate AND C_period.enddate) AND periodno IN (1, 12)";
                             ds = DB.ExecuteDataset(sql);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
@@ -428,7 +428,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">ctx</param>
         /// <param name="vaf_client_ID">VAF_Client_ID</param>
         /// <param name="VAF_Org_ID">Org ID</param>
-        /// <returns>C_AcctSchema ID</returns>
+        /// <returns>VAB_AccountBook ID</returns>
         public static int GetDefaultActSchema(Ctx ctx, int vaf_client_ID, int VAF_Org_ID)
         {
             MAcctSchema acctSchema = null;
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
             {
                 acctSchema = MClient.Get(ctx, vaf_client_ID).GetAcctSchema();
             }
-            return acctSchema.GetC_AcctSchema_ID();
+            return acctSchema.GetVAB_AccountBook_ID();
         }
 
     }

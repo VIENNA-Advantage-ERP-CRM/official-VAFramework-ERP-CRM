@@ -33,8 +33,8 @@ namespace ViennaAdvantageServer.Process
         StringBuilder sql = new StringBuilder();
         //int _count = 0;
         //Neha--Declare X-Class or MClass object publically for further use in class--11 Sep,2018
-        VAdvantage.Model.X_C_Contract cont = null;
-        VAdvantage.Model.X_C_ContractSchedule contSchedule = null;
+        VAdvantage.Model.X_VAB_Contract cont = null;
+        VAdvantage.Model.X_VAB_ContractSchedule contSchedule = null;
         VAdvantage.Model.MInvoice inv = null;
         MBPartner bp = null;
         #endregion
@@ -50,20 +50,20 @@ namespace ViennaAdvantageServer.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            int C_Contract_ID = Util.GetValueOfInt(GetRecord_ID());
-            if (C_Contract_ID != 0)
+            int VAB_Contract_ID = Util.GetValueOfInt(GetRecord_ID());
+            if (VAB_Contract_ID != 0)
             {
-                cont = new VAdvantage.Model.X_C_Contract(GetCtx(), C_Contract_ID, Get_TrxName());
-                bp = new MBPartner(GetCtx(), cont.GetC_BPartner_ID(), Get_TrxName());
+                cont = new VAdvantage.Model.X_VAB_Contract(GetCtx(), VAB_Contract_ID, Get_TrxName());
+                bp = new MBPartner(GetCtx(), cont.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + C_Contract_ID + " AND FROMDATE <= '" + date 
+                int[] contSch = VAdvantage.Model.X_VAB_ContractSchedule.GetAllIDs("VAB_ContractSchedule", "VAB_Contract_ID = " + VAB_Contract_ID + " AND FROMDATE <= '" + date 
                     + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
                 //Neha----If Not found any Invoice Schedule against the Contract then it will display the error message--11 Sep,2018
                 if (contSch != null && contSch.Length > 0)
                 {
                     for (int i = 0; i < contSch.Length; i++)
                     {
-                        contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
+                        contSchedule = new VAdvantage.Model.X_VAB_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
                         GenerateInvoice(contSchedule);
                     }
                 }
@@ -73,36 +73,36 @@ namespace ViennaAdvantageServer.Process
                 }
 
                 sql.Clear();
-                sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + C_Contract_ID + " AND NVL(C_INVOICE_ID,0) > 0");
-                string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) + " WHERE C_Contract_ID = " + C_Contract_ID;
+                sql.Append("SELECT COUNT(VAB_ContractSchedule_ID) FROM VAB_ContractSchedule WHERE VAB_Contract_ID = " + VAB_Contract_ID + " AND NVL(C_INVOICE_ID,0) > 0");
+                string sql1 = "UPDATE VAB_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName())) + " WHERE VAB_Contract_ID = " + VAB_Contract_ID;
                 int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
             }
             else
             {
-                sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                sql.Append("SELECT VAB_Contract_ID FROM VAB_Contract WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 IDataReader idr = null;
                 try
                 {
                     idr = DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                     while (idr.Read())
                     {
-                        cont = new VAdvantage.Model.X_C_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
+                        cont = new VAdvantage.Model.X_VAB_Contract(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
                         string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
-                        int[] contSch = VAdvantage.Model.X_C_ContractSchedule.GetAllIDs("C_ContractSchedule", "C_Contract_ID = " + cont.GetC_Contract_ID() + " AND FROMDATE <= '" 
+                        int[] contSch = VAdvantage.Model.X_VAB_ContractSchedule.GetAllIDs("VAB_ContractSchedule", "VAB_Contract_ID = " + cont.GetVAB_Contract_ID() + " AND FROMDATE <= '" 
                             + date + "' AND NVL(C_INVOICE_ID,0) = 0", Get_TrxName());
                         if (contSch != null)
                         {
                             for (int i = 0; i < contSch.Length; i++)
                             {
-                                contSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
+                                contSchedule = new VAdvantage.Model.X_VAB_ContractSchedule(GetCtx(), Util.GetValueOfInt(contSch[i]), Get_TrxName());
                                 GenerateInvoice(contSchedule);
                             }
                         }
                         
                         sql.Clear();
-                        sql.Append("SELECT COUNT(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE C_Contract_ID = " + cont.GetC_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
-                        string sql1 = "UPDATE C_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
-                            + " WHERE C_Contract_ID = " + cont.GetC_Contract_ID();
+                        sql.Append("SELECT COUNT(VAB_ContractSchedule_ID) FROM VAB_ContractSchedule WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID() + " AND NVL(C_INVOICE_ID,0) > 0");
+                        string sql1 = "UPDATE VAB_Contract SET InvoicesGenerated = " + Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()))
+                            + " WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID();
                         int res = DB.ExecuteQuery(sql1, null, Get_TrxName());
                     }
                     if (idr != null)
@@ -135,16 +135,16 @@ namespace ViennaAdvantageServer.Process
         /// Generate Contract Invoice
         /// </summary>
         /// <param name="contSchedule"></param>
-        private void GenerateInvoice(VAdvantage.Model.X_C_ContractSchedule contSchedule)
+        private void GenerateInvoice(VAdvantage.Model.X_VAB_ContractSchedule contSchedule)
         {
             if (contSchedule.IsActive())
             {
                 int res = 0;
                 sql.Clear();
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(C_DOCTYPE_ID) FROM C_DocType WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "C_DocType", true, true));
-                int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(VAB_DocTypes_ID) FROM VAB_DocTypes WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "VAB_DocTypes", true, true));
+                int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
-                // sql = "select noofdays from c_frequency where c_frequency_id = " + cont.GetC_Frequency_ID();
+                // sql = "select noofdays from VAB_Frequency where VAB_Frequency_id = " + cont.GetVAB_Frequency_ID();
                 //  Decimal? days = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                 Decimal? price = null;
 
@@ -155,7 +155,7 @@ namespace ViennaAdvantageServer.Process
                 else
                 {
                     sql.Clear();
-                    sql.Append("UPDATE C_Contract SET RenewalType = NULL WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                    sql.Append("UPDATE VAB_Contract SET RenewalType = NULL WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
                     int res2 = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 
                     if (contSchedule.GetEndDate() <= cont.GetCancellationDate())
@@ -165,26 +165,26 @@ namespace ViennaAdvantageServer.Process
                     else
                     {
                         sql.Clear();
-                        sql.Append("SELECT MAX(C_ContractSchedule_ID) FROM C_ContractSchedule WHERE NVL(C_INVOICE_ID,0) > 0 AND C_Contract_ID = " + cont.GetC_Contract_ID());
-                        int c_contractschedule_id = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                        if (c_contractschedule_id != 0)
+                        sql.Append("SELECT MAX(VAB_ContractSchedule_ID) FROM VAB_ContractSchedule WHERE NVL(C_INVOICE_ID,0) > 0 AND VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
+                        int VAB_Contractschedule_id = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                        if (VAB_Contractschedule_id != 0)
                         {
                             string date = cont.GetCancellationDate().Value.ToString("dd-MMM-yyyy");
 
                             sql.Clear();
-                            sql.Append("SELECT DaysBetween('" + date + "', EndDate) FROM C_ContractSchedule WHERE C_ContractSchedule_ID = " + c_contractschedule_id);
+                            sql.Append("SELECT DaysBetween('" + date + "', EndDate) FROM VAB_ContractSchedule WHERE VAB_ContractSchedule_ID = " + VAB_Contractschedule_id);
                             Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                             
                             price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
 
                             sql.Clear();
-                            sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE EndDate > '" + date + "' AND C_Contract_ID = " + cont.GetC_Contract_ID());
+                            sql.Append("UPDATE VAB_ContractSchedule SET IsActive = 'N' WHERE EndDate > '" + date + "' AND VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
                             res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                         }
                         else
                         {
                             sql.Clear();
-                            sql.Append("SELECT DaysBetween(CancellationDate, StartDate) FROM C_Contract WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                            sql.Append("SELECT DaysBetween(CancellationDate, StartDate) FROM VAB_Contract WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
                             Decimal? diffDays = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                             
                             price = Decimal.Multiply(cont.GetPriceEntered(), cont.GetQtyEntered());
@@ -192,13 +192,13 @@ namespace ViennaAdvantageServer.Process
                             if (diffDays > 0)
                             {
                                 sql.Clear();
-                                sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                sql.Append("UPDATE VAB_ContractSchedule SET IsActive = 'N' WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
                                 res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                             }
                             else
                             {
                                 sql.Clear();
-                                sql.Append("UPDATE C_ContractSchedule SET IsActive = 'N' WHERE C_Contract_ID = " + cont.GetC_Contract_ID());
+                                sql.Append("UPDATE VAB_ContractSchedule SET IsActive = 'N' WHERE VAB_Contract_ID = " + cont.GetVAB_Contract_ID());
                                 res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                             }
                         }
@@ -210,7 +210,7 @@ namespace ViennaAdvantageServer.Process
                 inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
                 inv.SetVAF_Client_ID(cont.GetVAF_Client_ID());
                 inv.SetVAF_Org_ID(cont.GetVAF_Org_ID());
-                inv.SetC_BPartner_ID(cont.GetC_BPartner_ID());
+                inv.SetVAB_BusinessPartner_ID(cont.GetVAB_BusinessPartner_ID());
                 if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
                 {
                     inv.SetC_Order_ID(cont.GetC_Order_ID());
@@ -227,18 +227,18 @@ namespace ViennaAdvantageServer.Process
                         throw new ArgumentException(Msg.GetMsg(GetCtx(), "VIS_PaymentMethodNotDefined") + " : " + bp.GetName());
                     }
                 }
-                inv.SetC_DocType_ID(C_DocType_ID);
-                inv.SetC_DocTypeTarget_ID(C_DocType_ID);
-                inv.SetC_BPartner_Location_ID(cont.GetBill_Location_ID());
-                inv.SetC_Currency_ID(cont.GetC_Currency_ID());
+                inv.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
+                inv.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
+                inv.SetVAB_BPart_Location_ID(cont.GetBill_Location_ID());
+                inv.SetVAB_Currency_ID(cont.GetVAB_Currency_ID());
                 // JID_1536_3
-                inv.SetC_ConversionType_ID(cont.GetC_ConversionType_ID());
+                inv.SetVAB_CurrencyType_ID(cont.GetVAB_CurrencyType_ID());
                 inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
-                inv.SetC_Campaign_ID(cont.GetC_Campaign_ID());
+                inv.SetVAB_Promotion_ID(cont.GetVAB_Promotion_ID());
                 inv.SetIsSOTrx(true);
                 inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
                 inv.SetSalesRep_ID(cont.GetSalesRep_ID());
-                inv.SetC_Contract_ID(cont.GetC_Contract_ID());
+                inv.SetVAB_Contract_ID(cont.GetVAB_Contract_ID());
                 if (!inv.Save())
                 {
                     //Neha----If Invoice not saved then will show the exception---11 Sep,2018
@@ -253,7 +253,7 @@ namespace ViennaAdvantageServer.Process
                     VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
                     invLine.SetVAF_Client_ID(inv.GetVAF_Client_ID());
                     invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
-                    invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());
+                    invLine.SetVAB_Promotion_ID(inv.GetVAB_Promotion_ID());
                     invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
                     invLine.SetC_UOM_ID(cont.GetC_UOM_ID());
                     invLine.SetM_Product_ID(cont.GetM_Product_ID());
@@ -288,8 +288,8 @@ namespace ViennaAdvantageServer.Process
                 {
                     inv.SetDocAction("CL");
                     inv.SetDocStatus("CO");
-                    //Neha---Set C_Contract_ID on C_invoice table using MClass object--11 Sep,2018
-                    inv.SetC_Contract_ID(cont.GetC_Contract_ID());
+                    //Neha---Set VAB_Contract_ID on C_invoice table using MClass object--11 Sep,2018
+                    inv.SetVAB_Contract_ID(cont.GetVAB_Contract_ID());
                     if (!inv.Save())
                     {
                         //Neha----If Invoice not saved then will show the exception---11 Sep,2018
@@ -310,9 +310,9 @@ namespace ViennaAdvantageServer.Process
                 }
 
                 #region Commented Code
-                //Neha---Set C_Contract_ID on C_invoice table using MClass object--11 Sep,2018
+                //Neha---Set VAB_Contract_ID on C_invoice table using MClass object--11 Sep,2018
 
-                //sql = "UPDATE c_invoice SET C_Contract_ID = " + cont.GetC_Contract_ID() + " WHERE c_invoice_id = " + inv.GetC_Invoice_ID();
+                //sql = "UPDATE c_invoice SET VAB_Contract_ID = " + cont.GetVAB_Contract_ID() + " WHERE c_invoice_id = " + inv.GetC_Invoice_ID();
                 //res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
 
                 //Neha---taxAmt not used in this class----11 Sep,2018
@@ -321,7 +321,7 @@ namespace ViennaAdvantageServer.Process
                 //Decimal? taxAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                 # endregion
                 sql.Clear();
-                sql.Append("UPDATE C_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE C_ContractSchedule_ID = " + contSchedule.GetC_ContractSchedule_ID());
+                sql.Append("UPDATE VAB_ContractSchedule SET C_Invoice_ID = " + inv.GetC_Invoice_ID() + ", Processed = 'Y' WHERE VAB_ContractSchedule_ID = " + contSchedule.GetVAB_ContractSchedule_ID());
                 res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
                 //Neha---Append Document No. in sb----12 Sep,2018
                 sb.Append(inv.GetDocumentNo() + ", ");

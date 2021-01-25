@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                     || columnName.Equals("User1_ID") || columnName.Equals("User2_ID"))
                 {
                     _colSQL += ",(" + VLookUpFactory.GetLookup_TableDirEmbed(
-                        language, "C_ElementValue_ID", RModel.TABLE_ALIAS, columnName) + ")";
+                        language, "VAB_Acct_Element_ID", RModel.TABLE_ALIAS, columnName) + ")";
                     _isIDcol = true;
                 }
                 else if (columnName.StartsWith("UserElement") && refColumnName != null)

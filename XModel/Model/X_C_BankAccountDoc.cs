@@ -11,31 +11,31 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_BankAccountDoc
+    /** Generated Model for VAB_Bank_AcctDoc
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_BankAccountDoc : PO
+    public class X_VAB_Bank_AcctDoc : PO
     {
-        public X_C_BankAccountDoc(Context ctx, int C_BankAccountDoc_ID, Trx trxName)
-            : base(ctx, C_BankAccountDoc_ID, trxName)
+        public X_VAB_Bank_AcctDoc(Context ctx, int VAB_Bank_AcctDoc_ID, Trx trxName)
+            : base(ctx, VAB_Bank_AcctDoc_ID, trxName)
         {
-            /** if (C_BankAccountDoc_ID == 0)
+            /** if (VAB_Bank_AcctDoc_ID == 0)
             {
-            SetC_BankAccountDoc_ID (0);
-            SetC_BankAccount_ID (0);
+            SetVAB_Bank_AcctDoc_ID (0);
+            SetVAB_Bank_Acct_ID (0);
             SetCurrentNext (0);
             SetName (null);
             SetPaymentRule (null);
             }
              */
         }
-        public X_C_BankAccountDoc(Ctx ctx, int C_BankAccountDoc_ID, Trx trxName)
-            : base(ctx, C_BankAccountDoc_ID, trxName)
+        public X_VAB_Bank_AcctDoc(Ctx ctx, int VAB_Bank_AcctDoc_ID, Trx trxName)
+            : base(ctx, VAB_Bank_AcctDoc_ID, trxName)
         {
-            /** if (C_BankAccountDoc_ID == 0)
+            /** if (VAB_Bank_AcctDoc_ID == 0)
             {
-            SetC_BankAccountDoc_ID (0);
-            SetC_BankAccount_ID (0);
+            SetVAB_Bank_AcctDoc_ID (0);
+            SetVAB_Bank_Acct_ID (0);
             SetCurrentNext (0);
             SetName (null);
             SetPaymentRule (null);
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccountDoc(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Bank_AcctDoc(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccountDoc(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Bank_AcctDoc(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_BankAccountDoc(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Bank_AcctDoc(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_BankAccountDoc()
+        static X_VAB_Bank_AcctDoc()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =455;
 
-        /** TableName=C_BankAccountDoc */
-        public static String Table_Name = "C_BankAccountDoc";
+        /** TableName=VAB_Bank_AcctDoc */
+        public static String Table_Name = "VAB_Bank_AcctDoc";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,36 +120,36 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_BankAccountDoc[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Bank_AcctDoc[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Bank Account Document.
-        @param C_BankAccountDoc_ID Checks, Transfers, etc. */
-        public void SetC_BankAccountDoc_ID(int C_BankAccountDoc_ID)
+        @param VAB_Bank_AcctDoc_ID Checks, Transfers, etc. */
+        public void SetVAB_Bank_AcctDoc_ID(int VAB_Bank_AcctDoc_ID)
         {
-            if (C_BankAccountDoc_ID < 1) throw new ArgumentException("C_BankAccountDoc_ID is mandatory.");
-            Set_ValueNoCheck("C_BankAccountDoc_ID", C_BankAccountDoc_ID);
+            if (VAB_Bank_AcctDoc_ID < 1) throw new ArgumentException("VAB_Bank_AcctDoc_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Bank_AcctDoc_ID", VAB_Bank_AcctDoc_ID);
         }
         /** Get Bank Account Document.
         @return Checks, Transfers, etc. */
-        public int GetC_BankAccountDoc_ID()
+        public int GetVAB_Bank_AcctDoc_ID()
         {
-            Object ii = Get_Value("C_BankAccountDoc_ID");
+            Object ii = Get_Value("VAB_Bank_AcctDoc_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Bank Account.
-        @param C_BankAccount_ID Account at the Bank */
-        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        @param VAB_Bank_Acct_ID Account at the Bank */
+        public void SetVAB_Bank_Acct_ID(int VAB_Bank_Acct_ID)
         {
-            if (C_BankAccount_ID < 1) throw new ArgumentException("C_BankAccount_ID is mandatory.");
-            Set_ValueNoCheck("C_BankAccount_ID", C_BankAccount_ID);
+            if (VAB_Bank_Acct_ID < 1) throw new ArgumentException("VAB_Bank_Acct_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
         }
         /** Get Bank Account.
         @return Account at the Bank */
-        public int GetC_BankAccount_ID()
+        public int GetVAB_Bank_Acct_ID()
         {
-            Object ii = Get_Value("C_BankAccount_ID");
+            Object ii = Get_Value("VAB_Bank_Acct_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -25,7 +25,7 @@ namespace VIS.Classes
 
     public class VchargeCElementValue
     {
-        public int C_ElementValue_ID { get; set; }
+        public int VAB_Acct_Element_ID { get; set; }
         public string Value { get; set; }
         public string Name { get; set; }
         public string Expense { get; set; }        

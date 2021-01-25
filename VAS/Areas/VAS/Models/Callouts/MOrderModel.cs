@@ -31,8 +31,8 @@ namespace VIS.Models
 
             Dictionary<String, object> retDic = new Dictionary<string, object>();
             // Reset Orig Shipment
-            retDic["C_BPartner_ID"] = Util.GetValueOfString(order.GetC_BPartner_ID());
-            retDic["C_BPartner_Location_ID"] = Util.GetValueOfString(order.GetC_BPartner_Location_ID());
+            retDic["VAB_BusinessPartner_ID"] = Util.GetValueOfString(order.GetVAB_BusinessPartner_ID());
+            retDic["VAB_BPart_Location_ID"] = Util.GetValueOfString(order.GetVAB_BPart_Location_ID());
             retDic["Bill_BPartner_ID"] = Util.GetValueOfString(order.GetBill_BPartner_ID());
             retDic["Bill_Location_ID"] = Util.GetValueOfString(order.GetBill_Location_ID());
             if (order.GetVAF_UserContact_ID() != 0)
@@ -59,8 +59,8 @@ namespace VIS.Models
             retDic["M_Shipper_ID"] = Util.GetValueOfString(order.GetM_Shipper_ID());
             retDic["FreightAmt"] = Util.GetValueOfString(order.GetFreightAmt());
             retDic["VAF_OrgTrx_ID"] = Util.GetValueOfString(order.GetVAF_OrgTrx_ID());
-            retDic["C_Activity_ID"] = Util.GetValueOfString(order.GetC_Activity_ID());
-            retDic["C_Campaign_ID"] = Util.GetValueOfString(order.GetC_Campaign_ID());
+            retDic["VAB_BillingCode_ID"] = Util.GetValueOfString(order.GetVAB_BillingCode_ID());
+            retDic["VAB_Promotion_ID"] = Util.GetValueOfString(order.GetVAB_Promotion_ID());
             retDic["C_Project_ID"] = Util.GetValueOfString(order.GetC_Project_ID());
             retDic["User1_ID"] = Util.GetValueOfString(order.GetUser1_ID());
             retDic["User2_ID"] = Util.GetValueOfString(order.GetUser2_ID());
@@ -77,13 +77,13 @@ namespace VIS.Models
             retDic["PriorityRule"] = Util.GetValueOfString(order.GetPriorityRule());
 
 
-            if (order.GetC_Currency_ID() != 0)
+            if (order.GetVAB_Currency_ID() != 0)
             {
-                retDic["C_Currency_ID"] = Util.GetValueOfString(order.GetC_Currency_ID());
+                retDic["VAB_Currency_ID"] = Util.GetValueOfString(order.GetVAB_Currency_ID());
             }
             else
             {
-                retDic["C_Currency_ID"] = "0";
+                retDic["VAB_Currency_ID"] = "0";
             }
             //End
             // added by vivek on 09/10/2017 advised by pradeep to set drop ship checkbox value
@@ -108,13 +108,13 @@ namespace VIS.Models
             return order.GetM_PriceList_ID();
         }
 
-        public int GetC_Currency_ID(Ctx ctx, string fields)
+        public int GetVAB_Currency_ID(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
             int C_Order_ID;
             C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
             MOrder order = new MOrder(ctx, C_Order_ID, null);
-            return order.GetC_Currency_ID();
+            return order.GetVAB_Currency_ID();
         }
         //End
 
@@ -214,11 +214,11 @@ namespace VIS.Models
             // when document type is not --  Warehouse Order / Credit Order / POS Order / Prepay order, then true
             // Payment term can't be advance for Customer RMA / Vendor RMA
             MDocType doctype = MDocType.Get(ctx, documnetType_Id);
-            if (!(doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_PrepayOrder ||
-                doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_OnCreditOrder ||
-                doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_WarehouseOrder ||
-                doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_POSOrder ||
-                (doctype.GetDocSubTypeSO() == X_C_DocType.DOCSUBTYPESO_StandardOrder && doctype.IsReturnTrx()) ||
+            if (!(doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_PrepayOrder ||
+                doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_OnCreditOrder ||
+                doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_WarehouseOrder ||
+                doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_POSOrder ||
+                (doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_StandardOrder && doctype.IsReturnTrx()) ||
                 (doctype.GetDocBaseType() == "POO" && doctype.IsReturnTrx())))
             {
                 isAdvancePayTerm = true;
@@ -251,12 +251,12 @@ namespace VIS.Models
             Dictionary<String, object> retDir = null;
             if (_Order_ID > 0)
             {
-                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, C_DOCTYPETARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, C_BPARTNER_ID, BILL_BPARTNER_ID, C_BPARTNER_LOCATION_ID, BILL_LOCATION_ID, VAF_USERCONTACT_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, C_CURRENCY_ID, C_CONVERSIONTYPE_ID, SALESREP_ID,");
+                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, VAB_DocTypesTARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, VAB_BUSINESSPARTNER_ID, BILL_BPARTNER_ID, VAB_BPart_Location_ID, BILL_LOCATION_ID, VAF_USERCONTACT_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, VAB_CURRENCY_ID, VAB_CurrencyType_ID, SALESREP_ID,");
                 if (_PrefixVA009)
                 {
                     sql.Append("VA009_PAYMENTMETHOD_ID,");
                 }
-                sql.Append("C_PAYMENTTERM_ID, C_CAMPAIGN_ID, C_ACTIVITY_ID, VAF_ORGTRX_ID, USER1_ID, USER2_ID,");
+                sql.Append("C_PAYMENTTERM_ID, VAB_PROMOTION_ID, VAB_BILLINGCODE_ID, VAF_ORGTRX_ID, USER1_ID, USER2_ID,");
                 sql.Append("TOTALLINES, GRANDTOTAL FROM C_ORDER WHERE C_ORDER_ID= " + _Order_ID);
                 DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
                 sql.Clear();
@@ -266,14 +266,14 @@ namespace VIS.Models
                     retDir["VAF_Client_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Client_ID"]);
                     retDir["VAF_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Org_ID"]);
                     retDir["Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Description"]);
-                    retDir["C_DocTypeTarget_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_DocTypeTarget_ID"]);
+                    retDir["VAB_DocTypesTarget_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_DocTypesTarget_ID"]);
                     retDir["DateOrdered"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["DateOrdered"]);
                     retDir["DatePromised"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["DatePromised"]);
                     retDir["OrderValidFrom"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["OrderValidFrom"]);
                     retDir["OrderValidTo"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["OrderValidTo"]);
-                    retDir["C_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                    retDir["VAB_BusinessPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BusinessPartner_ID"]);
                     retDir["Bill_BPartner_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_BPartner_ID"]);
-                    retDir["C_BPartner_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_Location_ID"]);
+                    retDir["VAB_BPart_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPart_Location_ID"]);
                     retDir["Bill_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_Location_ID"]);
                     retDir["VAF_UserContact_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_UserContact_ID"]);
                     retDir["Bill_User_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["Bill_User_ID"]);
@@ -281,16 +281,16 @@ namespace VIS.Models
                     retDir["PriorityRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PriorityRule"]);
                     retDir["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
                     retDir["C_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTerm_ID"]);
-                    retDir["C_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Currency_ID"]);
-                    retDir["C_ConversionType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_ConversionType_ID"]);
+                    retDir["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
+                    retDir["VAB_CurrencyType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_CurrencyType_ID"]);
                     retDir["SalesRep_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["SalesRep_ID"]);
                     if (_PrefixVA009)
                     {
                         retDir["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
                     }
                     retDir["C_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_PaymentTerm_ID"]);
-                    retDir["C_Campaign_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Campaign_ID"]);
-                    retDir["C_Activity_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Activity_ID"]);
+                    retDir["VAB_Promotion_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Promotion_ID"]);
+                    retDir["VAB_BillingCode_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BillingCode_ID"]);
                     retDir["VAF_OrgTrx_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_OrgTrx_ID"]);
                     retDir["User1_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["User1_ID"]);
                     retDir["User2_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["User2_ID"]);
@@ -311,7 +311,7 @@ namespace VIS.Models
 
         public int GetPrecision(Ctx ctx,string fields)
         {
-            string sql = "SELECT CC.StdPrecision FROM C_Order CO INNER JOIN C_Currency CC on CC.C_Currency_Id = Co.C_Currency_Id where CO.C_Order_Id= " + Util.GetValueOfInt(fields);
+            string sql = "SELECT CC.StdPrecision FROM C_Order CO INNER JOIN VAB_Currency CC on CC.VAB_Currency_Id = Co.VAB_Currency_Id where CO.C_Order_Id= " + Util.GetValueOfInt(fields);
             var stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null,null));
             return stdPrecision;
         }

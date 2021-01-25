@@ -21,7 +21,7 @@ public X_GL_Fund (Context ctx, int GL_Fund_ID, Trx trxName) : base (ctx, GL_Fund
 /** if (GL_Fund_ID == 0)
 {
 SetAmt (0.0);
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetGL_Fund_ID (0);
 SetName (null);
 }
@@ -32,7 +32,7 @@ public X_GL_Fund (Ctx ctx, int GL_Fund_ID, Trx trxName) : base (ctx, GL_Fund_ID,
 /** if (GL_Fund_ID == 0)
 {
 SetAmt (0.0);
-SetC_AcctSchema_ID (0);
+SetVAB_AccountBook_ID (0);
 SetGL_Fund_ID (0);
 SetName (null);
 }
@@ -132,17 +132,17 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Accounting Schema.
-@param C_AcctSchema_ID Rules for accounting */
-public void SetC_AcctSchema_ID (int C_AcctSchema_ID)
+@param VAB_AccountBook_ID Rules for accounting */
+public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID)
 {
-if (C_AcctSchema_ID < 1) throw new ArgumentException ("C_AcctSchema_ID is mandatory.");
-Set_Value ("C_AcctSchema_ID", C_AcctSchema_ID);
+if (VAB_AccountBook_ID < 1) throw new ArgumentException ("VAB_AccountBook_ID is mandatory.");
+Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);
 }
 /** Get Accounting Schema.
 @return Rules for accounting */
-public int GetC_AcctSchema_ID() 
+public int GetVAB_AccountBook_ID() 
 {
-Object ii = Get_Value("C_AcctSchema_ID");
+Object ii = Get_Value("VAB_AccountBook_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -706,10 +706,10 @@ namespace VAdvantage.Model
             if (VAF_UserContact_ID == 0)
                 return;
 
-            if (GetC_BPartner_ID() == 0)
+            if (GetVAB_BusinessPartner_ID() == 0)
             {
                 MUser user = new MUser(GetCtx(), VAF_UserContact_ID, null);
-                SetC_BPartner_ID(user.GetC_BPartner_ID());
+                SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
             }
         }
 
@@ -719,12 +719,12 @@ namespace VAdvantage.Model
          */
         public MBPartner GetBPartner()
         {
-            if (GetC_BPartner_ID() == 0)
+            if (GetVAB_BusinessPartner_ID() == 0)
                 return null;
-            if (_partner != null && _partner.GetC_BPartner_ID() != GetC_BPartner_ID())
+            if (_partner != null && _partner.GetVAB_BusinessPartner_ID() != GetVAB_BusinessPartner_ID())
                 _partner = null;
             if (_partner == null)
-                _partner = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
+                _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _partner;
         }
 
@@ -756,12 +756,12 @@ namespace VAdvantage.Model
             //
             if (GetBPartner() != null)
             {
-                MBPGroup bpg = MBPGroup.Get(GetCtx(), GetBPartner().GetC_BP_Group_ID());
+                MBPGroup bpg = MBPGroup.Get(GetCtx(), GetBPartner().GetVAB_BPart_Category_ID());
                 String prioBase = bpg.GetPriorityBase();
-                if (prioBase != null && !prioBase.Equals(X_C_BP_Group.PRIORITYBASE_Same))
+                if (prioBase != null && !prioBase.Equals(X_VAB_BPart_Category.PRIORITYBASE_Same))
                 {
                     char tarGetPrio = Convert.ToChar(GetPriorityUser().Substring(0, 1));
-                    if (prioBase.Equals(X_C_BP_Group.PRIORITYBASE_Lower))
+                    if (prioBase.Equals(X_VAB_BPart_Category.PRIORITYBASE_Lower))
                     {
                         tarGetPrio = Convert.ToChar((char.GetNumericValue(tarGetPrio) + 2).ToString());
                     }
@@ -1032,19 +1032,19 @@ namespace VAdvantage.Model
             if (CheckChange(ra, "Summary"))
                 sendInfo.Add("Summary");
             CheckChange(ra, "IsSelfService");
-            CheckChange(ra, "C_BPartner_ID");
+            CheckChange(ra, "VAB_BusinessPartner_ID");
             CheckChange(ra, "VAF_UserContact_ID");
             CheckChange(ra, "C_Project_ID");
-            CheckChange(ra, "A_AsSet_ID");
+            CheckChange(ra, "VAA_Asset_ID");
             CheckChange(ra, "C_Order_ID");
             CheckChange(ra, "C_Invoice_ID");
             CheckChange(ra, "M_Product_ID");
             CheckChange(ra, "C_Payment_ID");
             CheckChange(ra, "M_InOut_ID");
-            //	checkChange(ra, "C_Campaign_ID");
+            //	checkChange(ra, "VAB_Promotion_ID");
             //	checkChange(ra, "RequestAmt");
             CheckChange(ra, "IsInvoiced");
-            CheckChange(ra, "C_Activity_ID");
+            CheckChange(ra, "VAB_BillingCode_ID");
             CheckChange(ra, "DateNextAction");
             CheckChange(ra, "M_ProductSpent_ID");
             CheckChange(ra, "QtySpent");
@@ -1364,19 +1364,19 @@ namespace VAdvantage.Model
                 if (CheckChange(ra, "Summary"))
                     sendInfo.Add("Summary");
                 CheckChange(ra, "IsSelfService");
-                CheckChange(ra, "C_BPartner_ID");
+                CheckChange(ra, "VAB_BusinessPartner_ID");
                 CheckChange(ra, "VAF_UserContact_ID");
                 CheckChange(ra, "C_Project_ID");
-                CheckChange(ra, "A_AsSet_ID");
+                CheckChange(ra, "VAA_Asset_ID");
                 CheckChange(ra, "C_Order_ID");
                 CheckChange(ra, "C_Invoice_ID");
                 CheckChange(ra, "M_Product_ID");
                 CheckChange(ra, "C_Payment_ID");
                 CheckChange(ra, "M_InOut_ID");
-                //	checkChange(ra, "C_Campaign_ID");
+                //	checkChange(ra, "VAB_Promotion_ID");
                 //	checkChange(ra, "RequestAmt");
                 CheckChange(ra, "IsInvoiced");
-                CheckChange(ra, "C_Activity_ID");
+                CheckChange(ra, "VAB_BillingCode_ID");
                 CheckChange(ra, "DateNextAction");
                 CheckChange(ra, "M_ProductSpent_ID");
                 CheckChange(ra, "QtySpent");

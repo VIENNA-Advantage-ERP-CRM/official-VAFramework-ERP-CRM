@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Conversion_Rate
+/** Generated Model for VAB_ExchangeRate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Conversion_Rate : PO
+public class X_VAB_ExchangeRate : PO
 {
-public X_C_Conversion_Rate (Context ctx, int C_Conversion_Rate_ID, Trx trxName) : base (ctx, C_Conversion_Rate_ID, trxName)
+public X_VAB_ExchangeRate (Context ctx, int VAB_ExchangeRate_ID, Trx trxName) : base (ctx, VAB_ExchangeRate_ID, trxName)
 {
-/** if (C_Conversion_Rate_ID == 0)
+/** if (VAB_ExchangeRate_ID == 0)
 {
-SetC_ConversionType_ID (0);
-SetC_Conversion_Rate_ID (0);
-SetC_Currency_ID (0);
-SetC_Currency_To_ID (0);
+SetVAB_CurrencyType_ID (0);
+SetVAB_ExchangeRate_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_Currency_To_ID (0);
 SetDivideRate (0.0);
 SetMultiplyRate (0.0);
 SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_C_Conversion_Rate (Ctx ctx, int C_Conversion_Rate_ID, Trx trxName) : base (ctx, C_Conversion_Rate_ID, trxName)
+public X_VAB_ExchangeRate (Ctx ctx, int VAB_ExchangeRate_ID, Trx trxName) : base (ctx, VAB_ExchangeRate_ID, trxName)
 {
-/** if (C_Conversion_Rate_ID == 0)
+/** if (VAB_ExchangeRate_ID == 0)
 {
-SetC_ConversionType_ID (0);
-SetC_Conversion_Rate_ID (0);
-SetC_Currency_ID (0);
-SetC_Currency_To_ID (0);
+SetVAB_CurrencyType_ID (0);
+SetVAB_ExchangeRate_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_Currency_To_ID (0);
 SetDivideRate (0.0);
 SetMultiplyRate (0.0);
 SetValidFrom (DateTime.Now);
@@ -49,7 +49,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Conversion_Rate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ExchangeRate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_Conversion_Rate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Conversion_Rate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ExchangeRate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_Conversion_Rate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Conversion_Rate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ExchangeRate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Conversion_Rate()
+static X_VAB_ExchangeRate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389054677L;
 public static int Table_ID;
  // =140;
 
-/** TableName=C_Conversion_Rate */
-public static String Table_Name="C_Conversion_Rate";
+/** TableName=VAB_ExchangeRate */
+public static String Table_Name="VAB_ExchangeRate";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,36 +119,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Conversion_Rate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ExchangeRate[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Currency Type.
-@param C_ConversionType_ID Currency Conversion Rate Type */
-public void SetC_ConversionType_ID (int C_ConversionType_ID)
+@param VAB_CurrencyType_ID Currency Conversion Rate Type */
+public void SetVAB_CurrencyType_ID (int VAB_CurrencyType_ID)
 {
-if (C_ConversionType_ID < 1) throw new ArgumentException ("C_ConversionType_ID is mandatory.");
-Set_Value ("C_ConversionType_ID", C_ConversionType_ID);
+if (VAB_CurrencyType_ID < 1) throw new ArgumentException ("VAB_CurrencyType_ID is mandatory.");
+Set_Value ("VAB_CurrencyType_ID", VAB_CurrencyType_ID);
 }
 /** Get Currency Type.
 @return Currency Conversion Rate Type */
-public int GetC_ConversionType_ID() 
+public int GetVAB_CurrencyType_ID() 
 {
-Object ii = Get_Value("C_ConversionType_ID");
+Object ii = Get_Value("VAB_CurrencyType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Conversion Rate.
-@param C_Conversion_Rate_ID Rate used for converting currencies */
-public void SetC_Conversion_Rate_ID (int C_Conversion_Rate_ID)
+@param VAB_ExchangeRate_ID Rate used for converting currencies */
+public void SetVAB_ExchangeRate_ID (int VAB_ExchangeRate_ID)
 {
-if (C_Conversion_Rate_ID < 1) throw new ArgumentException ("C_Conversion_Rate_ID is mandatory.");
-Set_ValueNoCheck ("C_Conversion_Rate_ID", C_Conversion_Rate_ID);
+if (VAB_ExchangeRate_ID < 1) throw new ArgumentException ("VAB_ExchangeRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ExchangeRate_ID", VAB_ExchangeRate_ID);
 }
 /** Get Conversion Rate.
 @return Rate used for converting currencies */
-public int GetC_Conversion_Rate_ID() 
+public int GetVAB_ExchangeRate_ID() 
 {
-Object ii = Get_Value("C_Conversion_Rate_ID");
+Object ii = Get_Value("VAB_ExchangeRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -156,55 +156,55 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Conversion_Rate_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_ExchangeRate_ID().ToString());
 }
 
-/** C_Currency_ID VAF_Control_Ref_ID=112 */
-public static int C_CURRENCY_ID_VAF_Control_Ref_ID=112;
+/** VAB_Currency_ID VAF_Control_Ref_ID=112 */
+public static int VAB_CURRENCY_ID_VAF_Control_Ref_ID=112;
 /** Set Currency.
-@param C_Currency_ID The Currency for this record */
-public void SetC_Currency_ID (int C_Currency_ID)
+@param VAB_Currency_ID The Currency for this record */
+public void SetVAB_Currency_ID (int VAB_Currency_ID)
 {
-if (C_Currency_ID < 1) throw new ArgumentException ("C_Currency_ID is mandatory.");
-Set_Value ("C_Currency_ID", C_Currency_ID);
+if (VAB_Currency_ID < 1) throw new ArgumentException ("VAB_Currency_ID is mandatory.");
+Set_Value ("VAB_Currency_ID", VAB_Currency_ID);
 }
 /** Get Currency.
 @return The Currency for this record */
-public int GetC_Currency_ID() 
+public int GetVAB_Currency_ID() 
 {
-Object ii = Get_Value("C_Currency_ID");
+Object ii = Get_Value("VAB_Currency_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Discontinued.
-@param C_Currency_ID_To Discontinued */
-public void SetC_Currency_ID_To (int C_Currency_ID_To)
+@param VAB_Currency_ID_To Discontinued */
+public void SetVAB_Currency_ID_To (int VAB_Currency_ID_To)
 {
-Set_ValueNoCheck ("C_Currency_ID_To", C_Currency_ID_To);
+Set_ValueNoCheck ("VAB_Currency_ID_To", VAB_Currency_ID_To);
 }
 /** Get Discontinued.
 @return Discontinued */
-public int GetC_Currency_ID_To() 
+public int GetVAB_Currency_ID_To() 
 {
-Object ii = Get_Value("C_Currency_ID_To");
+Object ii = Get_Value("VAB_Currency_ID_To");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Currency_To_ID VAF_Control_Ref_ID=112 */
-public static int C_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
+/** VAB_Currency_To_ID VAF_Control_Ref_ID=112 */
+public static int VAB_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
 /** Set Currency To.
-@param C_Currency_To_ID Target currency */
-public void SetC_Currency_To_ID (int C_Currency_To_ID)
+@param VAB_Currency_To_ID Target currency */
+public void SetVAB_Currency_To_ID (int VAB_Currency_To_ID)
 {
-if (C_Currency_To_ID < 1) throw new ArgumentException ("C_Currency_To_ID is mandatory.");
-Set_Value ("C_Currency_To_ID", C_Currency_To_ID);
+if (VAB_Currency_To_ID < 1) throw new ArgumentException ("VAB_Currency_To_ID is mandatory.");
+Set_Value ("VAB_Currency_To_ID", VAB_Currency_To_ID);
 }
 /** Get Currency To.
 @return Target currency */
-public int GetC_Currency_To_ID() 
+public int GetVAB_Currency_To_ID() 
 {
-Object ii = Get_Value("C_Currency_To_ID");
+Object ii = Get_Value("VAB_Currency_To_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

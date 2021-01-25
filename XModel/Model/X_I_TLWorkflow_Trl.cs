@@ -20,7 +20,7 @@ public X_I_TLWorkflow_Trl (Context ctx, int I_TLWorkflow_Trl_ID, Trx trxName) : 
 {
 /** if (I_TLWorkflow_Trl_ID == 0)
 {
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLWorkflow_Trl (Ctx ctx, int I_TLWorkflow_Trl_ID, Trx trxName) : base
 {
 /** if (I_TLWorkflow_Trl_ID == 0)
 {
-SetAD_Workflow_ID (0);
+SetVAF_Workflow_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLWorkflow_Trl[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Workflow.
-@param AD_Workflow_ID Workflow or combination of tasks */
-public void SetAD_Workflow_ID (int AD_Workflow_ID)
+@param VAF_Workflow_ID Workflow or combination of tasks */
+public void SetVAF_Workflow_ID (int VAF_Workflow_ID)
 {
-if (AD_Workflow_ID < 1) throw new ArgumentException ("AD_Workflow_ID is mandatory.");
-Set_ValueNoCheck ("AD_Workflow_ID", AD_Workflow_ID);
+if (VAF_Workflow_ID < 1) throw new ArgumentException ("VAF_Workflow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Workflow_ID", VAF_Workflow_ID);
 }
 /** Get Workflow.
 @return Workflow or combination of tasks */
-public int GetAD_Workflow_ID() 
+public int GetVAF_Workflow_ID() 
 {
-Object ii = Get_Value("AD_Workflow_ID");
+Object ii = Get_Value("VAF_Workflow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

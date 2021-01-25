@@ -149,7 +149,7 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetUser(int bpartner)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "Select VAF_UserContact_ID, IsSms, Mobile FROM VAF_UserContact WHERE IsEmail='Y' AND C_BPartner_ID=" + bpartner;
+            string sql = "Select VAF_UserContact_ID, IsSms, Mobile FROM VAF_UserContact WHERE IsEmail='Y' AND VAB_BusinessPartner_ID=" + bpartner;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
