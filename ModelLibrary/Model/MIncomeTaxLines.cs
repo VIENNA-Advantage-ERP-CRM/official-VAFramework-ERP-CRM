@@ -19,10 +19,10 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    class MIncomeTaxLines:X_C_IncomeTaxLines
+    class MIncomeTaxLines:X_VAB_IncomeTaxLines
     {
-        public MIncomeTaxLines(Ctx ctx, int C_IncomeTaxLines_ID, Trx trxName)
-            : base(ctx, C_IncomeTaxLines_ID, trxName)
+        public MIncomeTaxLines(Ctx ctx, int VAB_IncomeTaxLines_ID, Trx trxName)
+            : base(ctx, VAB_IncomeTaxLines_ID, trxName)
         {
 
         }

@@ -129,9 +129,9 @@ namespace ViennaAdvantage.Process
 
             // Added by Bharat on 31 Jan 2018 to set Inco Term from Quotation
 
-            if (newOrder.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+            if (newOrder.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
             {
-                newOrder.SetC_IncoTerm_ID(from.GetC_IncoTerm_ID());
+                newOrder.SetVAB_IncoTerm_ID(from.GetVAB_IncoTerm_ID());
             }
 
             String sqlbp = "update c_project set VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "  where ref_order_id=" + _C_Order_ID + "";

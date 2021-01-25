@@ -11,21 +11,21 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_InvoiceLine
+    /** Generated Model for VAB_InvoiceLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_InvoiceLine : PO
+    public class X_VAB_InvoiceLine : PO
     {
-        public X_C_InvoiceLine(Context ctx, int C_InvoiceLine_ID, Trx trxName)
-            : base(ctx, C_InvoiceLine_ID, trxName)
+        public X_VAB_InvoiceLine(Context ctx, int VAB_InvoiceLine_ID, Trx trxName)
+            : base(ctx, VAB_InvoiceLine_ID, trxName)
         {
-            /** if (C_InvoiceLine_ID == 0)
+            /** if (VAB_InvoiceLine_ID == 0)
             { 
-            SetC_InvoiceLine_ID (0);
-            SetC_Invoice_ID (0);
+            SetVAB_InvoiceLine_ID (0);
+            SetVAB_Invoice_ID (0);
             SetIsDescription (false);	// N
             SetIsPrinted (true);	// Y
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_InvoiceLine WHERE C_Invoice_ID=@C_Invoice_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=@VAB_Invoice_ID@
             SetLineNetAmt (0.0);
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
@@ -37,16 +37,16 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_InvoiceLine(Ctx ctx, int C_InvoiceLine_ID, Trx trxName)
-            : base(ctx, C_InvoiceLine_ID, trxName)
+        public X_VAB_InvoiceLine(Ctx ctx, int VAB_InvoiceLine_ID, Trx trxName)
+            : base(ctx, VAB_InvoiceLine_ID, trxName)
         {
-            /** if (C_InvoiceLine_ID == 0)
+            /** if (VAB_InvoiceLine_ID == 0)
             {
-            SetC_InvoiceLine_ID (0);
-            SetC_Invoice_ID (0);
+            SetVAB_InvoiceLine_ID (0);
+            SetVAB_Invoice_ID (0);
             SetIsDescription (false);	// N
             SetIsPrinted (true);	// Y
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_InvoiceLine WHERE C_Invoice_ID=@C_Invoice_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=@VAB_Invoice_ID@
             SetLineNetAmt (0.0);
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_InvoiceLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_InvoiceLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_InvoiceLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_InvoiceLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -81,14 +81,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_InvoiceLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_InvoiceLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_InvoiceLine()
+        static X_VAB_InvoiceLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -101,8 +101,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =333;
 
-        /** TableName=C_InvoiceLine */
-        public static String Table_Name = "C_InvoiceLine";
+        /** TableName=VAB_InvoiceLine */
+        public static String Table_Name = "VAB_InvoiceLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_InvoiceLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_InvoiceLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -223,32 +223,32 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Invoice Line.
-        @param C_InvoiceLine_ID Invoice Detail Line */
-        public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+        @param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            if (C_InvoiceLine_ID < 1) throw new ArgumentException("C_InvoiceLine_ID is mandatory.");
-            Set_ValueNoCheck("C_InvoiceLine_ID", C_InvoiceLine_ID);
+            if (VAB_InvoiceLine_ID < 1) throw new ArgumentException("VAB_InvoiceLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
         }
         /** Get Invoice Line.
         @return Invoice Detail Line */
-        public int GetC_InvoiceLine_ID()
+        public int GetVAB_InvoiceLine_ID()
         {
-            Object ii = Get_Value("C_InvoiceLine_ID");
+            Object ii = Get_Value("VAB_InvoiceLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Invoice.
-        @param C_Invoice_ID Invoice Identifier */
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        @param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            if (C_Invoice_ID < 1) throw new ArgumentException("C_Invoice_ID is mandatory.");
-            Set_ValueNoCheck("C_Invoice_ID", C_Invoice_ID);
+            if (VAB_Invoice_ID < 1) throw new ArgumentException("VAB_Invoice_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Invoice_ID", VAB_Invoice_ID);
         }
         /** Get Invoice.
         @return Invoice Identifier */
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            Object ii = Get_Value("C_Invoice_ID");
+            Object ii = Get_Value("VAB_Invoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -256,7 +256,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetC_Invoice_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
         }
         /** Set Order Line.
         @param C_OrderLine_ID Order Line */

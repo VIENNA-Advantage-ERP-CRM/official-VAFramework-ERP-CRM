@@ -22,7 +22,7 @@ public X_C_RevenueRecognition_Plan (Context ctx, int C_RevenueRecognition_Plan_I
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_Currency_ID (0);
-SetC_InvoiceLine_ID (0);
+SetVAB_InvoiceLine_ID (0);
 SetC_RevenueRecognition_ID (0);
 SetC_RevenueRecognition_Plan_ID (0);
 SetP_Revenue_Acct (0);
@@ -38,7 +38,7 @@ public X_C_RevenueRecognition_Plan (Ctx ctx, int C_RevenueRecognition_Plan_ID, T
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_Currency_ID (0);
-SetC_InvoiceLine_ID (0);
+SetVAB_InvoiceLine_ID (0);
 SetC_RevenueRecognition_ID (0);
 SetC_RevenueRecognition_Plan_ID (0);
 SetP_Revenue_Acct (0);
@@ -157,17 +157,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Invoice Line.
-@param C_InvoiceLine_ID Invoice Detail Line */
-public void SetC_InvoiceLine_ID (int C_InvoiceLine_ID)
+@param VAB_InvoiceLine_ID Invoice Detail Line */
+public void SetVAB_InvoiceLine_ID (int VAB_InvoiceLine_ID)
 {
-if (C_InvoiceLine_ID < 1) throw new ArgumentException ("C_InvoiceLine_ID is mandatory.");
-Set_ValueNoCheck ("C_InvoiceLine_ID", C_InvoiceLine_ID);
+if (VAB_InvoiceLine_ID < 1) throw new ArgumentException ("VAB_InvoiceLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
 }
 /** Get Invoice Line.
 @return Invoice Detail Line */
-public int GetC_InvoiceLine_ID() 
+public int GetVAB_InvoiceLine_ID() 
 {
-Object ii = Get_Value("C_InvoiceLine_ID");
+Object ii = Get_Value("VAB_InvoiceLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

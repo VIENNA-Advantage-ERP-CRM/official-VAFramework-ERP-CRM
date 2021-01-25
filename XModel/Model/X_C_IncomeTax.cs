@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_IncomeTax
+/** Generated Model for VAB_IncomeTax
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_IncomeTax : PO
+public class X_VAB_IncomeTax : PO
 {
-public X_C_IncomeTax (Context ctx, int C_IncomeTax_ID, Trx trxName) : base (ctx, C_IncomeTax_ID, trxName)
+public X_VAB_IncomeTax (Context ctx, int VAB_IncomeTax_ID, Trx trxName) : base (ctx, VAB_IncomeTax_ID, trxName)
 {
-/** if (C_IncomeTax_ID == 0)
+/** if (VAB_IncomeTax_ID == 0)
 {
-SetC_IncomeTax_ID (0);
+SetVAB_IncomeTax_ID (0);
 SetPosted (false);
 }
  */
 }
-public X_C_IncomeTax (Ctx ctx, int C_IncomeTax_ID, Trx trxName) : base (ctx, C_IncomeTax_ID, trxName)
+public X_VAB_IncomeTax (Ctx ctx, int VAB_IncomeTax_ID, Trx trxName) : base (ctx, VAB_IncomeTax_ID, trxName)
 {
-/** if (C_IncomeTax_ID == 0)
+/** if (VAB_IncomeTax_ID == 0)
 {
-SetC_IncomeTax_ID (0);
+SetVAB_IncomeTax_ID (0);
 SetPosted (false);
 }
  */
@@ -39,7 +39,7 @@ SetPosted (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_IncomeTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_IncomeTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_IncomeTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_IncomeTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTax (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_IncomeTax (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_IncomeTax()
+static X_VAB_IncomeTax()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1399525069764L;
 public static int Table_ID;
  // =1000441;
 
-/** TableName=C_IncomeTax */
-public static String Table_Name="C_IncomeTax";
+/** TableName=VAB_IncomeTax */
+public static String Table_Name="VAB_IncomeTax";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_IncomeTax[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_IncomeTax[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Document Type.
@@ -129,17 +129,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Income Tax.
-@param C_IncomeTax_ID Income Tax */
-public void SetC_IncomeTax_ID (int C_IncomeTax_ID)
+@param VAB_IncomeTax_ID Income Tax */
+public void SetVAB_IncomeTax_ID (int VAB_IncomeTax_ID)
 {
-if (C_IncomeTax_ID < 1) throw new ArgumentException ("C_IncomeTax_ID is mandatory.");
-Set_ValueNoCheck ("C_IncomeTax_ID", C_IncomeTax_ID);
+if (VAB_IncomeTax_ID < 1) throw new ArgumentException ("VAB_IncomeTax_ID is mandatory.");
+Set_ValueNoCheck ("VAB_IncomeTax_ID", VAB_IncomeTax_ID);
 }
 /** Get Income Tax.
 @return Income Tax */
-public int GetC_IncomeTax_ID() 
+public int GetVAB_IncomeTax_ID() 
 {
-Object ii = Get_Value("C_IncomeTax_ID");
+Object ii = Get_Value("VAB_IncomeTax_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

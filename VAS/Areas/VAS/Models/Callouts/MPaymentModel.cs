@@ -30,7 +30,7 @@ namespace VIS.Models
             MPayment payment = new MPayment(ctx, C_Payment_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_Charge_ID"] = payment.GetVAB_Charge_ID().ToString();
-            result["C_Invoice_ID"] = payment.GetC_Invoice_ID().ToString();
+            result["VAB_Invoice_ID"] = payment.GetVAB_Invoice_ID().ToString();
             result["C_Order_ID"] = payment.GetC_Order_ID().ToString();
             return result;
         }
@@ -61,7 +61,7 @@ namespace VIS.Models
         public Dictionary<String, Object> GetInvoiceData(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Invoice_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0]);
             int C_PaySchedule_ID = Util.GetValueOfInt(paramValue[1]);
             DateTime? trxDate = Util.GetValueOfDateTime(paramValue[2]);
             Dictionary<String, Object> retDic = null;
@@ -69,28 +69,28 @@ namespace VIS.Models
             if (Env.IsModuleInstalled("VA009_"))
             {
                 sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
-                    //+ " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"
+                    //+ " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen,"
                      + " NVL(p.DueAmt , 0) - NVL(p.VA009_PaidAmntInvce , 0) as invoiceOpen,"
-                     + " invoiceDiscount(" + C_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
+                     + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
                      + " i.IsSOTrx, i.IsInDispute, i.IsReturnTrx"
-                     + " FROM C_Invoice i INNER JOIN C_InvoicePaySchedule p ON p.C_Invoice_ID = i.C_Invoice_ID"
-                     + " WHERE i.C_Invoice_ID=" + C_Invoice_ID + " AND p.C_InvoicePaySchedule_ID=" + C_PaySchedule_ID;
+                     + " FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment p ON p.VAB_Invoice_ID = i.VAB_Invoice_ID"
+                     + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + C_PaySchedule_ID;
             }
             else
             {
                 sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
-                    //+ " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"
+                    //+ " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen,"
                     + " p.DueAmt as invoiceOpen,"
-                    + " invoiceDiscount(" + C_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
+                    + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
                     + " i.IsSOTrx, i.IsInDispute, i.IsReturnTrx"
-                    + " FROM C_Invoice i INNER JOIN C_InvoicePaySchedule p ON p.C_Invoice_ID = i.C_Invoice_ID"
-                    + " WHERE i.C_Invoice_ID=" + C_Invoice_ID + " AND p.C_InvoicePaySchedule_ID=" + C_PaySchedule_ID;
+                    + " FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment p ON p.VAB_Invoice_ID = i.VAB_Invoice_ID"
+                    + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + C_PaySchedule_ID;
             }
             SqlParameter[] param = new SqlParameter[1];
             //param[0] = new SqlParameter("@param1", C_PaySchedule_ID);
             param[0] = new SqlParameter("@param1", trxDate);
             //param[2] = new SqlParameter("@param3", C_PaySchedule_ID);
-            //param[3] = new SqlParameter("@param4", C_Invoice_ID);
+            //param[3] = new SqlParameter("@param4", VAB_Invoice_ID);
             DataSet ds = DB.ExecuteDataset(sql, param, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -132,9 +132,9 @@ namespace VIS.Models
                 sql.Append(@"SELECT LTRIM(MAX(SYS_CONNECT_BY_PATH( ConvertPrice, ',')),',') amounts FROM " +
                    "(SELECT ConvertPrice, ROW_NUMBER () OVER (ORDER BY ConvertPrice ) RN, COUNT (*) OVER () CNT FROM " +
                    "(SELECT iso_code || ':' || SUM(OpenAmt) AS ConvertPrice " +
-                   "FROM ((SELECT c.iso_code,  invoiceOpen (i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)*MultiplierAP AS OpenAmt FROM C_Invoice_V i " +
+                   "FROM ((SELECT c.iso_code,  invoiceOpen (i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)*MultiplierAP AS OpenAmt FROM VAB_Invoice_v i " +
                    "LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=i.VAB_Currency_ID " +
-                   "LEFT JOIN C_InvoicePaySchedule IPS ON IPS.c_invoice_ID = i.c_invoice_ID " +
+                   "LEFT JOIN VAB_sched_InvoicePayment IPS ON IPS.VAB_Invoice_ID = i.VAB_Invoice_ID " +
                    "WHERE i.docstatus IN ('CO','CL') AND i.IsActive ='Y' AND i.ispaid ='N' " +
                    "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.VAB_BusinessPartner_id = " + bp_BusinessPartner + " AND i.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(ips.duedate) <= (CASE WHEN  TRUNC(@param1) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param2) END ) " +

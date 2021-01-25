@@ -69,8 +69,8 @@ namespace VAdvantage.Acct
             SetDateDoc(matchInv.GetDateTrx());
             SetQty(matchInv.GetQty());
             //	Invoice Info
-            int C_InvoiceLine_ID = matchInv.GetC_InvoiceLine_ID();
-            _invoiceLine = new MInvoiceLine(GetCtx(), C_InvoiceLine_ID, null);
+            int VAB_InvoiceLine_ID = matchInv.GetVAB_InvoiceLine_ID();
+            _invoiceLine = new MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
             //		BP for NotInvoicedReceipts
             int VAB_BusinessPartner_ID = _invoiceLine.GetParent().GetVAB_BusinessPartner_ID();
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
@@ -197,7 +197,7 @@ namespace VAdvantage.Acct
                 temp = cr.GetAcctBalance();
                 //	Set AmtAcctCr/Dr from Invoice (sets also Project)
                 if (as1.IsAccrual() && !cr.UpdateReverseLine(MInvoice.Table_ID, 		//	Amt updated
-                    _invoiceLine.GetC_Invoice_ID(), _invoiceLine.GetC_InvoiceLine_ID(), multiplier))
+                    _invoiceLine.GetVAB_Invoice_ID(), _invoiceLine.GetVAB_InvoiceLine_ID(), multiplier))
                 {
                     _error = "Invoice not posted yet";
                     return null;
@@ -252,7 +252,7 @@ namespace VAdvantage.Acct
                 //	Cost Detail Record - data from Expense/IncClearing (CR) record
                 MCostDetail.CreateInvoice(as1, GetVAF_Org_ID(),
                     GetM_Product_ID(), matchInv.GetM_AttributeSetInstance_ID(),
-                    _invoiceLine.GetC_InvoiceLine_ID(), 0,		//	No cost element
+                    _invoiceLine.GetVAB_InvoiceLine_ID(), 0,		//	No cost element
                     Decimal.Negate(cr.GetAcctBalance()), isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),		//	correcting
                     GetDescription(), GetTrx(), GetRectifyingProcess());
 
@@ -267,7 +267,7 @@ namespace VAdvantage.Acct
             if (as1.IsAccrual() && as1.IsCreateCommitment())
             {
                 fact = Doc_Order.GetCommitmentRelease(as1, this,
-                   Utility.Util.GetValueOfDecimal(GetQty()), _invoiceLine.GetC_InvoiceLine_ID(), Env.ONE);
+                   Utility.Util.GetValueOfDecimal(GetQty()), _invoiceLine.GetVAB_InvoiceLine_ID(), Env.ONE);
                 if (fact == null)
                 {
                     return null;
@@ -300,8 +300,8 @@ namespace VAdvantage.Acct
                 + "pc.CostAverageCumQty + m.Qty, "
                 + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.VAB_Currency_ID,a.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty "
                 + "FROM M_MatchInv m"
-                + " INNER JOIN C_InvoiceLine il ON (m.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID),"
+                + " INNER JOIN VAB_InvoiceLine il ON (m.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID)"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID),"
                 + " VAB_AccountBook a "
                 + "WHERE pc.VAB_AccountBook_ID=a.VAB_AccountBook_ID"
                 + " AND pc.M_Product_ID=m.M_Product_ID"

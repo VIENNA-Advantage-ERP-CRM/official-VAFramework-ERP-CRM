@@ -32,16 +32,16 @@ namespace VAdvantage.Model
        * 	Get InOut-Invoice Matches
        *	@param ctx context
        *	@param M_InOutLine_ID shipment
-       *	@param C_InvoiceLine_ID invoice
+       *	@param VAB_InvoiceLine_ID invoice
        *	@param trxName transaction
        *	@return array of matches
        */
-        public static MMatchInv[] Get(Ctx ctx, int M_InOutLine_ID, int C_InvoiceLine_ID, Trx trxName)
+        public static MMatchInv[] Get(Ctx ctx, int M_InOutLine_ID, int VAB_InvoiceLine_ID, Trx trxName)
         {
-            if (M_InOutLine_ID == 0 || C_InvoiceLine_ID == 0)
+            if (M_InOutLine_ID == 0 || VAB_InvoiceLine_ID == 0)
                 return new MMatchInv[] { };
             //
-            String sql = "SELECT * FROM M_MatchInv WHERE M_InOutLine_ID=" + M_InOutLine_ID + " AND C_InvoiceLine_ID=" + C_InvoiceLine_ID;
+            String sql = "SELECT * FROM M_MatchInv WHERE M_InOutLine_ID=" + M_InOutLine_ID + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID;
             List<MMatchInv> list = new List<MMatchInv>();
             DataSet ds = new DataSet();
             try
@@ -151,18 +151,18 @@ namespace VAdvantage.Model
 
         /* 	Get Inv Matches for Invoice
          *	@param ctx context
-         *	@param C_Invoice_ID invoice
+         *	@param VAB_Invoice_ID invoice
          *	@param trxName transaction
          *	@return array of matches
          */
-        public static MMatchInv[] GetInvoice(Ctx ctx, int C_Invoice_ID, Trx trxName)
+        public static MMatchInv[] GetInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName)
         {
-            if (C_Invoice_ID == 0)
+            if (VAB_Invoice_ID == 0)
                 return new MMatchInv[] { };
             //
             String sql = "SELECT * FROM M_MatchInv mi"
-                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID) "
-                + "WHERE il.C_Invoice_ID=" + C_Invoice_ID;
+                + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID) "
+                + "WHERE il.VAB_Invoice_ID=" + VAB_Invoice_ID;
             List<MMatchInv> list = new List<MMatchInv>();
             DataTable dt = null;
             IDataReader idr = null;
@@ -206,7 +206,7 @@ namespace VAdvantage.Model
             if (M_MatchInv_ID == 0)
             {
                 //	setDateTrx (new DateTime(System.currentTimeMillis()));
-                //	setC_InvoiceLine_ID (0);
+                //	setVAB_InvoiceLine_ID (0);
                 //	setM_InOutLine_ID (0);
                 //	setM_Product_ID (0);
                 SetM_AttributeSetInstance_ID(0);
@@ -239,7 +239,7 @@ namespace VAdvantage.Model
             : this(iLine.GetCtx(), 0, iLine.Get_TrxName())
         {
             SetClientOrg(iLine);
-            SetC_InvoiceLine_ID(iLine.GetC_InvoiceLine_ID());
+            SetVAB_InvoiceLine_ID(iLine.GetVAB_InvoiceLine_ID());
             SetM_InOutLine_ID(iLine.GetM_InOutLine_ID());
             if (dateTrx != null)
                 SetDateTrx(dateTrx);
@@ -292,7 +292,7 @@ namespace VAdvantage.Model
                      costTrack = new X_M_MatchInvCostTrack(GetCtx(), 0, null);
                      costTrack.SetM_MatchInv_ID(GetM_MatchInv_ID());
                      costTrack.SetM_InOutLine_ID(GetM_InOutLine_ID());
-                     costTrack.SetC_InvoiceLine_ID(GetC_InvoiceLine_ID());
+                     costTrack.SetVAB_InvoiceLine_ID(GetVAB_InvoiceLine_ID());
                      costTrack.SetQty(GetQty());
                      costTrack.SetM_Product_ID(GetM_Product_ID());
                      costTrack.SetIsCostCalculated(IsCostCalculated());
@@ -313,9 +313,9 @@ namespace VAdvantage.Model
             DateTime? shipDate = null;
 
             String sql = "SELECT i.DateAcct "
-                + "FROM C_InvoiceLine il"
-                + " INNER JOIN C_Invoice i ON (i.C_Invoice_ID=il.C_Invoice_ID) "
-                + "WHERE C_InvoiceLine_ID=" + GetC_InvoiceLine_ID();
+                + "FROM VAB_InvoiceLine il"
+                + " INNER JOIN VAB_Invoice i ON (i.VAB_Invoice_ID=il.VAB_Invoice_ID) "
+                + "WHERE VAB_InvoiceLine_ID=" + GetVAB_InvoiceLine_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -404,7 +404,7 @@ namespace VAdvantage.Model
             if (success)
             {
                 //	Get Order and decrease invoices
-                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
                 int C_OrderLine_ID = iLine.GetC_OrderLine_ID();
                 if (C_OrderLine_ID == 0)
                 {
@@ -415,14 +415,14 @@ namespace VAdvantage.Model
                 if (C_OrderLine_ID == 0)
                     return success;
                 //	Find MatchPO
-                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), C_OrderLine_ID, GetC_InvoiceLine_ID(), Get_TrxName());
+                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), C_OrderLine_ID, GetVAB_InvoiceLine_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetM_InOutLine_ID() == 0)
                         mPO[i].Delete(true);
                     else
                     {
-                        mPO[i].SetC_InvoiceLine_ID(null);
+                        mPO[i].SetVAB_InvoiceLine_ID(null);
                         mPO[i].Save();
                     }
                 }

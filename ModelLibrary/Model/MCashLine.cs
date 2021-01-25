@@ -117,7 +117,7 @@ namespace VAdvantage.Model
         public void SetInvoice(MInvoice invoice)
         {
             Decimal amt = 0;
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetCashType(CASHTYPE_Invoice);
             SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
 
@@ -127,13 +127,13 @@ namespace VAdvantage.Model
             SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             //	Amount
             MDocType dt = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
-            if (invoice.GetRef_C_Invoice_ID() > 0)
+            if (invoice.GetRef_VAB_Invoice_ID() > 0)
             {
                 //amt = Decimal.Negate(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Al.Amount) FROM VAB_DocAllocationLine al INNER JOIN VAB_DocAllocation alhdr ON alhdr.VAB_DocAllocation_ID=al.VAB_DocAllocation_ID "
-                //                                            + " WHERE alhdr.isactive        ='Y' AND Alhdr.Docstatus        IN ('CO','CL') and al.c_invoice_id=" + invoice.GetRef_C_Invoice_ID())));
+                //                                            + " WHERE alhdr.isactive        ='Y' AND Alhdr.Docstatus        IN ('CO','CL') and al.VAB_Invoice_id=" + invoice.GetRef_VAB_Invoice_ID())));
                 // get amount against invoice wheether cash journal is completed or not
                 // Done by Vivek on 01/03/2016
-                amt = Decimal.Negate(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(cl.Amount) FROM VAB_CashJRNLLine cl INNER JOIN VAB_CashJRNL cs ON cs.VAB_CashJRNL_ID=CL.VAB_CASHJRNL_ID WHERE cl.C_Invoice_ID=" + invoice.GetRef_C_Invoice_ID() + " AND cs.DocStatus NOT IN ('VO') ")));
+                amt = Decimal.Negate(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(cl.Amount) FROM VAB_CashJRNLLine cl INNER JOIN VAB_CashJRNL cs ON cs.VAB_CashJRNL_ID=CL.VAB_CASHJRNL_ID WHERE cl.VAB_Invoice_ID=" + invoice.GetRef_VAB_Invoice_ID() + " AND cs.DocStatus NOT IN ('VO') ")));
             }
             else
             {
@@ -163,12 +163,12 @@ namespace VAdvantage.Model
         /// Create Cash Journal Line
         /// </summary>
         /// <param name="invoice">Invoice</param>
-        /// <param name="C_InvoicePaySchedule_ID">Invoice Payemt Schedule</param>
+        /// <param name="VAB_sched_InvoicePayment_ID">Invoice Payemt Schedule</param>
         /// <param name="amt">Amount</param>
-        public void CreateCashLine(MInvoice invoice, int C_InvoicePaySchedule_ID, decimal amt)
+        public void CreateCashLine(MInvoice invoice, int VAB_sched_InvoicePayment_ID, decimal amt)
         {
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
-            SetC_InvoicePaySchedule_ID(C_InvoicePaySchedule_ID);
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
+            SetVAB_sched_InvoicePayment_ID(VAB_sched_InvoicePayment_ID);
             SetCashType(CASHTYPE_Invoice);
             SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
 
@@ -198,25 +198,25 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Invoice - Callout
-         *	@param oldC_Invoice_ID old BP
-         *	@param newC_Invoice_ID new BP
+         *	@param oldVAB_Invoice_ID old BP
+         *	@param newVAB_Invoice_ID new BP
          *	@param windowNo window no
          */
         //@UICallout 
-        public void SetC_Invoice_ID(String oldC_Invoice_ID, String newC_Invoice_ID, int windowNo)
+        public void SetVAB_Invoice_ID(String oldVAB_Invoice_ID, String newVAB_Invoice_ID, int windowNo)
         {
-            if (newC_Invoice_ID == null || newC_Invoice_ID.Length == 0)
+            if (newVAB_Invoice_ID == null || newVAB_Invoice_ID.Length == 0)
                 return;
-            int C_Invoice_ID = int.Parse(newC_Invoice_ID);
-            if (C_Invoice_ID == 0)
+            int VAB_Invoice_ID = int.Parse(newVAB_Invoice_ID);
+            if (VAB_Invoice_ID == 0)
                 return;
 
             //  Date
             DateTime ts = new DateTime(GetCtx().GetContextAsTime(windowNo, "DateAcct"));     //  from VAB_CashJRNL
             String sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID,"		//	1..2
-                + "invoiceOpen(C_Invoice_ID, 0), IsSOTrx, "			//	3..4
-                + "paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced," + DB.TO_DATE(ts, true) + ") "
-                + "FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
+                + "invoiceOpen(VAB_Invoice_ID, 0), IsSOTrx, "			//	3..4
+                + "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced," + DB.TO_DATE(ts, true) + ") "
+                + "FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -283,7 +283,7 @@ namespace VAdvantage.Model
                 if (length > 0)		//	get last invoice
                 {
                     _invoice = invoices[length - 1];
-                    SetC_Invoice_ID(_invoice.GetC_Invoice_ID());
+                    SetVAB_Invoice_ID(_invoice.GetVAB_Invoice_ID());
                 }
             }
         }
@@ -417,7 +417,7 @@ namespace VAdvantage.Model
             reversal.SetVAB_Bank_Acct_ID(GetVAB_Bank_Acct_ID());
             reversal.SetVAB_Charge_ID(GetVAB_Charge_ID());
             reversal.SetVAB_Currency_ID(GetVAB_Currency_ID());
-            reversal.SetC_Invoice_ID(GetC_Invoice_ID());
+            reversal.SetVAB_Invoice_ID(GetVAB_Invoice_ID());
             reversal.SetCashType(GetCashType());
             reversal.SetDescription(GetDescription());
             reversal.SetIsGenerated(true);
@@ -475,8 +475,8 @@ namespace VAdvantage.Model
          */
         public MInvoice GetInvoice()
         {
-            if (_invoice == null && GetC_Invoice_ID() != 0)
-                _invoice = MInvoice.Get(GetCtx(), GetC_Invoice_ID());
+            if (_invoice == null && GetVAB_Invoice_ID() != 0)
+                _invoice = MInvoice.Get(GetCtx(), GetVAB_Invoice_ID());
             return _invoice;
         }
 
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
             Boolean? generated = (Boolean?)Get_ValueOld("IsGenerated");
             if (generated != null && generated.Value)
             {
-                if (Get_ValueOld("C_Invoice_ID") != null)
+                if (Get_ValueOld("VAB_Invoice_ID") != null)
                 {
                     log.Warning("Cannot delete line with generated Invoice");
                     return false;
@@ -528,7 +528,7 @@ namespace VAdvantage.Model
             //    //charge
             //    if (GetCashType() == "C")
             //    {
-            //        SetC_Invoice_ID(0);
+            //        SetVAB_Invoice_ID(0);
             //        SetDiscountAmt(0);
             //        SetWriteOffAmt(0);
             //        SetVAB_Bank_Acct_ID(0);
@@ -543,7 +543,7 @@ namespace VAdvantage.Model
             //    //bank a/c transfer
             //    if (GetCashType() == "T")
             //    {
-            //        SetC_Invoice_ID(0);
+            //        SetVAB_Invoice_ID(0);
             //        SetDiscountAmt(0);
             //        SetWriteOffAmt(0);
             //        SetVAB_BusinessPartner_ID(0);
@@ -552,7 +552,7 @@ namespace VAdvantage.Model
             //    //genral expense
             //    if (GetCashType() == "E")
             //    {
-            //        SetC_Invoice_ID(0);
+            //        SetVAB_Invoice_ID(0);
             //        SetDiscountAmt(0);
             //        SetWriteOffAmt(0);
             //        SetVAB_BusinessPartner_ID(0);
@@ -562,7 +562,7 @@ namespace VAdvantage.Model
             //    //genral receipt
             //    if (GetCashType() == "R")
             //    {
-            //        SetC_Invoice_ID(0);
+            //        SetVAB_Invoice_ID(0);
             //        SetDiscountAmt(0);
             //        SetWriteOffAmt(0);
             //        SetVAB_BusinessPartner_ID(0);
@@ -572,7 +572,7 @@ namespace VAdvantage.Model
             //    //differennce
             //    if (GetCashType() == "D")
             //    {
-            //        SetC_Invoice_ID(0);
+            //        SetVAB_Invoice_ID(0);
             //        SetDiscountAmt(0);
             //        SetWriteOffAmt(0);
             //        SetVAB_BusinessPartner_ID(0);
@@ -583,7 +583,7 @@ namespace VAdvantage.Model
             // End
 
             //	Cannot change generated Invoices
-            if (Is_ValueChanged("C_Invoice_ID"))
+            if (Is_ValueChanged("VAB_Invoice_ID"))
             {
                 Object generated = Get_ValueOld("IsGenerated");
                 if (generated != null && ((Boolean)generated))
@@ -601,10 +601,10 @@ namespace VAdvantage.Model
             }
 
             // during saving a new record, system will check same invoice schedule reference exist on same cash line or not
-            if (newRecord && GetCashType() == CASHTYPE_Invoice && GetC_InvoicePaySchedule_ID() > 0)
+            if (newRecord && GetCashType() == CASHTYPE_Invoice && GetVAB_sched_InvoicePayment_ID() > 0)
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_CashJRNLLine WHERE VAB_CashJRNL_ID = " + GetVAB_CashJRNL_ID() +
-                          @" AND IsActive = 'Y' AND C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx())) > 0)
+                          @" AND IsActive = 'Y' AND VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
                     return false;
@@ -613,9 +613,9 @@ namespace VAdvantage.Model
             }
 
             // check schedule is hold or not, if hold then no to save record
-            if (Get_ColumnIndex("C_InvoicePaySchedule_ID") >= 0 && GetC_InvoicePaySchedule_ID() > 0)
+            if (Get_ColumnIndex("VAB_sched_InvoicePayment_ID") >= 0 && GetVAB_sched_InvoicePayment_ID() > 0)
             {
-                if (IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                if (IsHoldpaymentSchedule(GetVAB_sched_InvoicePayment_ID()))
                 {
                     log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
                     return false;
@@ -623,7 +623,7 @@ namespace VAdvantage.Model
             }
 
             //	Verify CashType
-            if (CASHTYPE_Invoice.Equals(GetCashType()) && GetC_Invoice_ID() == 0)
+            if (CASHTYPE_Invoice.Equals(GetCashType()) && GetVAB_Invoice_ID() == 0)
                 SetCashType(CASHTYPE_GeneralExpense);
             if (CASHTYPE_BankAccountTransfer.Equals(GetCashType()) && GetVAB_Bank_Acct_ID() == 0)
                 SetCashType(CASHTYPE_GeneralExpense);
@@ -645,7 +645,7 @@ namespace VAdvantage.Model
 
             bool verify = newRecord
                 || Is_ValueChanged("CashType")
-                || Is_ValueChanged("C_Invoice_ID")
+                || Is_ValueChanged("VAB_Invoice_ID")
                 || Is_ValueChanged("VAB_Bank_Acct_ID");
             if (verify)
             {
@@ -691,7 +691,7 @@ namespace VAdvantage.Model
             }
 
             /**	General fix of Currency 
-            UPDATE VAB_CashJRNLLine cl SET VAB_Currency_ID = (SELECT VAB_Currency_ID FROM C_Invoice i WHERE i.C_Invoice_ID=cl.C_Invoice_ID) WHERE VAB_Currency_ID IS NULL AND C_Invoice_ID IS NOT NULL;
+            UPDATE VAB_CashJRNLLine cl SET VAB_Currency_ID = (SELECT VAB_Currency_ID FROM VAB_Invoice i WHERE i.VAB_Invoice_ID=cl.VAB_Invoice_ID) WHERE VAB_Currency_ID IS NULL AND VAB_Invoice_ID IS NOT NULL;
             UPDATE VAB_CashJRNLLine cl SET VAB_Currency_ID = (SELECT VAB_Currency_ID FROM VAB_Bank_Acct b WHERE b.VAB_Bank_Acct_ID=cl.VAB_Bank_Acct_ID) WHERE VAB_Currency_ID IS NULL AND VAB_Bank_Acct_ID IS NOT NULL;
             UPDATE VAB_CashJRNLLine cl SET VAB_Currency_ID = (SELECT b.VAB_Currency_ID FROM VAB_CashJRNL c, VAB_CashBook b WHERE c.VAB_CashJRNL_ID=cl.VAB_CashJRNL_ID AND c.VAB_CashBook_ID=b.VAB_CashBook_ID) WHERE VAB_Currency_ID IS NULL;
             **/
@@ -790,13 +790,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Is used to get Invoice payment schedule is Hold payment or not
         /// </summary>
-        /// <param name="C_InvoicePaySchedule_ID">Invoice payment schedule reference</param>
+        /// <param name="VAB_sched_InvoicePayment_ID">Invoice payment schedule reference</param>
         /// <returns>TRUE, if hold payment</returns>
-        public bool IsHoldpaymentSchedule(int C_InvoicePaySchedule_ID)
+        public bool IsHoldpaymentSchedule(int VAB_sched_InvoicePayment_ID)
         {
             try
             {
-                String sql = "SELECT IsHoldPayment FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID = " + C_InvoicePaySchedule_ID;
+                String sql = "SELECT IsHoldPayment FROM VAB_sched_InvoicePayment WHERE VAB_sched_InvoicePayment_ID = " + VAB_sched_InvoicePayment_ID;
                 String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                 return IsHoldPayment.Equals("Y");
             }
@@ -1037,7 +1037,7 @@ namespace VAdvantage.Model
         */
         public void SetInvoiceMultiCurrency(MInvoice invoice, Decimal Amt, int VAB_Currency_ID)
         {
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetCashType(CASHTYPE_Invoice);
             SetVAB_Currency_ID(VAB_Currency_ID);
             //	Amount

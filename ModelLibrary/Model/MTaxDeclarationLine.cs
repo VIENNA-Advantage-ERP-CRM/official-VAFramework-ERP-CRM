@@ -65,12 +65,12 @@ namespace VAdvantage.Model
             SetC_TaxDeclaration_ID(parent.GetC_TaxDeclaration_ID());
             SetIsManual(false);
             //
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             SetDateAcct(invoice.GetDateAcct());
             //
-            SetC_InvoiceLine_ID(iLine.GetC_InvoiceLine_ID());
+            SetVAB_InvoiceLine_ID(iLine.GetVAB_InvoiceLine_ID());
             SetC_Tax_ID(iLine.GetC_Tax_ID());
             if (invoice.IsTaxIncluded())
             {
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
             SetC_TaxDeclaration_ID(parent.GetC_TaxDeclaration_ID());
             SetIsManual(false);
             //
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             SetDateAcct(invoice.GetDateAcct());

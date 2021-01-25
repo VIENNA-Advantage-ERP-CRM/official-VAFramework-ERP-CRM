@@ -125,8 +125,8 @@ namespace VAdvantage.Process
                     {
                         MRevenueRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
                         revenueRecognitionPlan = new MRevenueRecognitionPlan(GetCtx(), revenueRecognitionRun.GetC_RevenueRecognition_Plan_ID(), Get_TrxName());
-                        invoiceLine = new MInvoiceLine(GetCtx(), revenueRecognitionPlan.GetC_InvoiceLine_ID(), Get_TrxName());
-                        invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_TrxName());
+                        invoiceLine = new MInvoiceLine(GetCtx(), revenueRecognitionPlan.GetVAB_InvoiceLine_ID(), Get_TrxName());
+                        invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_TrxName());
 
                         if (revenueRecognitionPlan.GetVAB_AccountBook_ID() != _AcctSchema_ID || revenueRecognitionPlan.GetVAB_Currency_ID() != _Currency_ID || revenueRecognitionRun.GetRecognitionDate() != _RecognizeDate)
                         {

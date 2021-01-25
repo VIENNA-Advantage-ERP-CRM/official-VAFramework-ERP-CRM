@@ -265,7 +265,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_APINVOICE) || dbt.Equals(DOCBASETYPE_APCREDITMEMO)
                     || dbt.Equals(DOCBASETYPE_ARINVOICE) || dbt.Equals(DOCBASETYPE_ARCREDITMEMO)
                     || dbt.Equals(DOCBASETYPE_ARPROFORMAINVOICE))
-                return X_C_Invoice.Table_ID;
+                return X_VAB_Invoice.Table_ID;
             if (dbt.Equals(DOCBASETYPE_APPAYMENT) || dbt.Equals(DOCBASETYPE_ARRECEIPT))
                 return X_C_Payment.Table_ID;
             if (dbt.Equals(DOCBASETYPE_PAYMENTALLOCATION))
@@ -322,8 +322,8 @@ namespace VAdvantage.Model
                 return X_C_Order.Table_Name;
             if (VAF_TableView_ID == X_M_InOut.Table_ID)
                 return X_M_InOut.Table_Name;
-            if (VAF_TableView_ID == X_C_Invoice.Table_ID)
-                return X_C_Invoice.Table_Name;
+            if (VAF_TableView_ID == X_VAB_Invoice.Table_ID)
+                return X_VAB_Invoice.Table_Name;
             if (VAF_TableView_ID == X_C_Payment.Table_ID)
                 return X_C_Payment.Table_Name;
             if (VAF_TableView_ID == X_VAB_DocAllocation.Table_ID)
@@ -393,7 +393,7 @@ namespace VAdvantage.Model
                 || dbt.Equals(DOCBASETYPE_ARPROFORMAINVOICE))
             {
               
-                return "VAdvantage.Acct.Doc_Invoice";
+                return "VAdvantage.Acct.DoVAB_Invoice";
             }
             if (dbt.Equals(DOCBASETYPE_APPAYMENT) || dbt.Equals(DOCBASETYPE_ARRECEIPT))
             {

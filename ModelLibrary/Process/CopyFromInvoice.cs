@@ -29,7 +29,7 @@ namespace VAdvantage.Process
 {
   public class CopyFromInvoice:SvrProcess
     {
-   private int		_C_Invoice_ID = 0;
+   private int		_VAB_Invoice_ID = 0;
 
 	/// <summary>
 	/// Prepare - e.g., get Parameters.
@@ -44,10 +44,10 @@ namespace VAdvantage.Process
             {
                 ;
             }
-            else if (name.Equals("C_Invoice_ID"))
+            else if (name.Equals("VAB_Invoice_ID"))
             {
-               // _C_Invoice_ID = ((Decimal)para[i].GetParameter()).intValue();
-                _C_Invoice_ID =Util.GetValueOfInt(((Decimal?)para[i].GetParameter()));
+               // _VAB_Invoice_ID = ((Decimal)para[i].GetParameter()).intValue();
+                _VAB_Invoice_ID =Util.GetValueOfInt(((Decimal?)para[i].GetParameter()));
             }
             else
             {
@@ -62,18 +62,18 @@ namespace VAdvantage.Process
 	/// <returns>Message </returns>
 	protected override String DoIt() 
 	{
-		int To_C_Invoice_ID = GetRecord_ID();
-		log.Info("From C_Invoice_ID=" + _C_Invoice_ID + " to " + To_C_Invoice_ID);
-        if (To_C_Invoice_ID == 0)
+		int To_VAB_Invoice_ID = GetRecord_ID();
+		log.Info("From VAB_Invoice_ID=" + _VAB_Invoice_ID + " to " + To_VAB_Invoice_ID);
+        if (To_VAB_Invoice_ID == 0)
         {
-            throw new Exception("Target C_Invoice_ID == 0");
+            throw new Exception("Target VAB_Invoice_ID == 0");
         }
-        if (_C_Invoice_ID == 0)
+        if (_VAB_Invoice_ID == 0)
         {
-            throw new Exception("Source C_Invoice_ID == 0");
+            throw new Exception("Source VAB_Invoice_ID == 0");
         }
-		VAdvantage.Model.MInvoice from = new VAdvantage.Model.MInvoice (GetCtx(), _C_Invoice_ID, null);
-		VAdvantage.Model.MInvoice to = new VAdvantage.Model.MInvoice (GetCtx(), To_C_Invoice_ID, null);
+		VAdvantage.Model.MInvoice from = new VAdvantage.Model.MInvoice (GetCtx(), _VAB_Invoice_ID, null);
+		VAdvantage.Model.MInvoice to = new VAdvantage.Model.MInvoice (GetCtx(), To_VAB_Invoice_ID, null);
 		//
 		int no = to.CopyLinesFrom (from, false, false);
 		//

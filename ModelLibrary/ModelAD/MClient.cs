@@ -473,7 +473,7 @@ namespace VAdvantage.Model
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM C_Invoice WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM VAB_Invoice WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND issotrx = 'N' AND isreturntrx = 'N'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))

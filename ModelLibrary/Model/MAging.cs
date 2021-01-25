@@ -82,15 +82,15 @@ namespace VAdvantage.Model
         /// <param name="StatementDate">statement date</param>
         /// <param name="VAB_BusinessPartner_ID">bpartner</param>
         /// <param name="VAB_Currency_ID">currency</param>
-        /// <param name="C_Invoice_ID">invoice</param>
-        /// <param name="C_InvoicePaySchedule_ID">invoice schedule</param>
+        /// <param name="VAB_Invoice_ID">invoice</param>
+        /// <param name="VAB_sched_InvoicePayment_ID">invoice schedule</param>
         /// <param name="VAB_BPart_Category_ID">group</param>
         /// <param name="DueDate">due date</param>
         /// <param name="IsSOTrx">so trx</param>
         /// <param name="trxName">transaction</param>
         public MAging(Ctx ctx, int VAF_JInstance_ID, DateTime? StatementDate,
             int VAB_BusinessPartner_ID, int VAB_Currency_ID,
-            int C_Invoice_ID, int C_InvoicePaySchedule_ID,
+            int VAB_Invoice_ID, int VAB_sched_InvoicePayment_ID,
             int VAB_BPart_Category_ID, DateTime? DueDate, Boolean IsSOTrx, Trx trxName)
             : this(ctx, 0, trxName)
         {
@@ -104,11 +104,11 @@ namespace VAdvantage.Model
             SetIsSOTrx(IsSOTrx);
 
             //	Optional
-            //	setC_Invoice_ID (C_Invoice_ID);		// may be zero
-            Set_ValueNoCheck("C_Invoice_ID", Utility.Util.GetValueOfInt(C_Invoice_ID));
-            //	setC_InvoicePaySchedule_ID(C_InvoicePaySchedule_ID);	//	may be zero
-            Set_ValueNoCheck("C_InvoicePaySchedule_ID", Utility.Util.GetValueOfInt(C_InvoicePaySchedule_ID));
-            SetIsListInvoices(C_Invoice_ID != 0);
+            //	setVAB_Invoice_ID (VAB_Invoice_ID);		// may be zero
+            Set_ValueNoCheck("VAB_Invoice_ID", Utility.Util.GetValueOfInt(VAB_Invoice_ID));
+            //	setVAB_sched_InvoicePayment_ID(VAB_sched_InvoicePayment_ID);	//	may be zero
+            Set_ValueNoCheck("VAB_sched_InvoicePayment_ID", Utility.Util.GetValueOfInt(VAB_sched_InvoicePayment_ID));
+            SetIsListInvoices(VAB_Invoice_ID != 0);
             //
             SetDueDate(DueDate);		//	only sensible if List invoices
         }	//	MAging
@@ -292,7 +292,7 @@ namespace VAdvantage.Model
             sb.Append("VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID())
                 .Append(",VAB_Currency_ID=").Append(GetVAB_Currency_ID())
-                .Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());
+                .Append(",VAB_Invoice_ID=").Append(GetVAB_Invoice_ID());
             sb.Append("]");
             return sb.ToString();
         } //	toString

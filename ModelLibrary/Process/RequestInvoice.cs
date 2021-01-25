@@ -114,7 +114,7 @@ namespace VAdvantage.Process
             String sql = "SELECT * FROM R_Request r"
                 + " INNER JOIN R_Status s ON (r.R_Status_ID=s.R_Status_ID) "
                 + "WHERE s.IsClosed='Y'"
-                + " AND r.C_Invoice_ID IS null"
+                + " AND r.VAB_Invoice_ID IS null"
                 + " AND r.R_RequestType_ID=@Param1";
             if (_R_Group_ID != 0 && _R_Group_ID != -1)
             {
@@ -247,7 +247,7 @@ namespace VAdvantage.Process
                 _m_invoice.SetVA009_PaymentMethod_ID(partner.GetVA009_PaymentMethod_ID());
             }
             _m_invoice.Save();
-            request.SetC_Invoice_ID(_m_invoice.GetC_Invoice_ID());
+            request.SetVAB_Invoice_ID(_m_invoice.GetVAB_Invoice_ID());
             request.Save();
             if (string.IsNullOrEmpty(_msg))
             {

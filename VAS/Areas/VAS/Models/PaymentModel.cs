@@ -584,17 +584,17 @@ namespace VIS.Models
 
                 //  Get Order and optionally Invoice
                 //int C_Order_ID = ctx.GetContextAsInt(inputs.WindowNo, "C_Order_ID");
-                //int C_Invoice_ID = ctx.GetContextAsInt(inputs.WindowNo, "C_Invoice_ID");
-                if (inputs.C_Invoice_ID == 0 && inputs._DocStatus.Equals("CO"))
+                //int VAB_Invoice_ID = ctx.GetContextAsInt(inputs.WindowNo, "VAB_Invoice_ID");
+                if (inputs.VAB_Invoice_ID == 0 && inputs._DocStatus.Equals("CO"))
                 {
-                    inputs.C_Invoice_ID = GetInvoiceID(inputs.C_Order_ID);
+                    inputs.VAB_Invoice_ID = GetInvoiceID(inputs.C_Order_ID);
                 }
                 //  Amount sign negative, if ARC (Credit Memo) or API (AP Invoice)
                 bool negateAmt = false;
                 MInvoice invoice = null;
-                if (inputs.C_Invoice_ID != 0)
+                if (inputs.VAB_Invoice_ID != 0)
                 {
-                    invoice = new MInvoice(ctx, inputs.C_Invoice_ID, null);
+                    invoice = new MInvoice(ctx, inputs.VAB_Invoice_ID, null);
                     negateAmt = invoice.IsCreditMemo();
                 }
                 MOrder order = null;
@@ -608,7 +608,7 @@ namespace VIS.Models
                     payAmount = Decimal.Negate(inputs._Amount);//.negate();
                 }
                 // Info
-                //    log.Config("C_Order_ID=" + C_Order_ID + ", C_Invoice_ID=" + C_Invoice_ID + ", NegateAmt=" + negateAmt);
+                //    log.Config("C_Order_ID=" + C_Order_ID + ", VAB_Invoice_ID=" + VAB_Invoice_ID + ", NegateAmt=" + negateAmt);
 
 
                 /***********************
@@ -619,7 +619,7 @@ namespace VIS.Models
                     //log.fine("Cash");
                     String description = inputs.Description;
 
-                    if (inputs.C_Invoice_ID == 0 && order == null)
+                    if (inputs.VAB_Invoice_ID == 0 && order == null)
                     {
                         //log.Config("No Invoice!");
                         //     ShowMessage.Error("", true, "PaymentError" + Msg.GetMsg(Envs.GetContext(), "CashNotCreated", true).ToString());
@@ -732,7 +732,7 @@ namespace VIS.Models
                             inputs.txtSNumber, inputs.txtSCheck);
                     }
                     _mPayment.SetVAB_BusinessPartner_ID(inputs._VAB_BusinessPartner_ID);
-                    _mPayment.SetC_Invoice_ID(inputs.C_Invoice_ID);
+                    _mPayment.SetVAB_Invoice_ID(inputs.VAB_Invoice_ID);
                     if (order != null)
                     {
                         _mPayment.SetC_Order_ID(inputs.C_Order_ID);
@@ -787,12 +787,12 @@ namespace VIS.Models
         /// Get Invoice ID for Order
         /// </summary>
         /// <param name="C_Order_ID">order</param>
-        /// <returns>C_Invoice_ID or 0 if not found</returns>
+        /// <returns>VAB_Invoice_ID or 0 if not found</returns>
         private int GetInvoiceID(int C_Order_ID)
         {
             int retValue = 0;
-            String sql = "SELECT C_Invoice_ID FROM C_Invoice WHERE C_Order_ID=" + C_Order_ID
-                + "ORDER BY C_Invoice_ID DESC";     //  last invoice
+            String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice WHERE C_Order_ID=" + C_Order_ID
+                + "ORDER BY VAB_Invoice_ID DESC";     //  last invoice
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -1051,7 +1051,7 @@ namespace VIS.Models
         public bool OnlyRule { get; set; }
         public int WindowNo { get; set; }
         public int C_Order_ID { get; set; }
-        public int C_Invoice_ID { get; set; }
+        public int VAB_Invoice_ID { get; set; }
         public string Description { get; set; }
 
     }

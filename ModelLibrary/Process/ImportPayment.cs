@@ -249,9 +249,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Invoice
             sql = new StringBuilder("UPDATE I_Payment i "
-                  + "SET C_Invoice_ID=(SELECT MAX(C_Invoice_ID) FROM C_Invoice ii"
+                  + "SET VAB_Invoice_ID=(SELECT MAX(VAB_Invoice_ID) FROM VAB_Invoice ii"
                   + " WHERE i.InvoiceDocumentNo=ii.DocumentNo AND i.VAF_Client_ID=ii.VAF_Client_ID) "
-                  + "WHERE C_Invoice_ID IS NULL AND InvoiceDocumentNo IS NOT NULL"
+                  + "WHERE VAB_Invoice_ID IS NULL AND InvoiceDocumentNo IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -268,9 +268,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("Set BP from Value=" + no);
 
             sql = new StringBuilder("UPDATE I_Payment i "
-                  + "SET VAB_BusinessPartner_ID=(SELECT MAX(VAB_BusinessPartner_ID) FROM C_Invoice ii"
-                  + " WHERE i.C_Invoice_ID=ii.C_Invoice_ID AND i.VAF_Client_ID=ii.VAF_Client_ID) "
-                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Invoice_ID IS NOT NULL"
+                  + "SET VAB_BusinessPartner_ID=(SELECT MAX(VAB_BusinessPartner_ID) FROM VAB_Invoice ii"
+                  + " WHERE i.VAB_Invoice_ID=ii.VAB_Invoice_ID AND i.VAF_Client_ID=ii.VAF_Client_ID) "
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Invoice_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -293,9 +293,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
-                    + "WHERE i.C_Invoice_ID IS NOT NULL "
-                    + " AND p.C_Invoice_ID IS NOT NULL "
-                    + " AND p.C_Invoice_ID<>i.C_Invoice_ID) ")
+                    + "WHERE i.VAB_Invoice_ID IS NOT NULL "
+                    + " AND p.VAB_Invoice_ID IS NOT NULL "
+                    + " AND p.VAB_Invoice_ID<>i.VAB_Invoice_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -322,7 +322,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_Payment_ID IN "
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
-                    + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID) "
+                    + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID) "
                     + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND v.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND v.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
@@ -337,9 +337,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_Payment_ID IN "
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
-                    + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID)"
+                    + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID)"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
-                    + "WHERE p.C_Invoice_ID<>v.C_Invoice_ID"
+                    + "WHERE p.VAB_Invoice_ID<>v.VAB_Invoice_ID"
                     + " AND v.VAB_BusinessPartner_ID<>p.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -445,7 +445,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	payment.setDescription(imp.getDescription());
                     //
                     payment.SetVAB_BusinessPartner_ID(imp.GetVAB_BusinessPartner_ID());
-                    payment.SetC_Invoice_ID(imp.GetC_Invoice_ID());
+                    payment.SetVAB_Invoice_ID(imp.GetVAB_Invoice_ID());
                     payment.SetVAB_DocTypes_ID(imp.GetVAB_DocTypes_ID());
                     payment.SetVAB_Currency_ID(imp.GetVAB_Currency_ID());
                     //	payment.setVAB_CurrencyType_ID(imp.getVAB_CurrencyType_ID());

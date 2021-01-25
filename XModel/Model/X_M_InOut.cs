@@ -296,18 +296,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Invoice.
-        @param C_Invoice_ID Invoice Identifier */
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        @param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            if (C_Invoice_ID <= 0) Set_ValueNoCheck("C_Invoice_ID", null);
+            if (VAB_Invoice_ID <= 0) Set_ValueNoCheck("VAB_Invoice_ID", null);
             else
-                Set_ValueNoCheck("C_Invoice_ID", C_Invoice_ID);
+                Set_ValueNoCheck("VAB_Invoice_ID", VAB_Invoice_ID);
         }
         /** Get Invoice.
         @return Invoice Identifier */
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            Object ii = Get_Value("C_Invoice_ID");
+            Object ii = Get_Value("VAB_Invoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1484,19 +1484,19 @@ namespace VAdvantage.Model
         }
 
         /** Set Inco Term.
-        @param C_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
-        public void SetC_IncoTerm_ID(int C_IncoTerm_ID)
+        @param VAB_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
+        public void SetVAB_IncoTerm_ID(int VAB_IncoTerm_ID)
         {
-            if (C_IncoTerm_ID <= 0)
-                Set_Value("C_IncoTerm_ID", null);
+            if (VAB_IncoTerm_ID <= 0)
+                Set_Value("VAB_IncoTerm_ID", null);
             else
-                Set_Value("C_IncoTerm_ID", C_IncoTerm_ID);
+                Set_Value("VAB_IncoTerm_ID", VAB_IncoTerm_ID);
         }
         /** Get Inco Term.
         @return Inco term will be used to create or define the Inco term based on client requirement */
-        public int GetC_IncoTerm_ID()
+        public int GetVAB_IncoTerm_ID()
         {
-            Object ii = Get_Value("C_IncoTerm_ID");
+            Object ii = Get_Value("VAB_IncoTerm_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

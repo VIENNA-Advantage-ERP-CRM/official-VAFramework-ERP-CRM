@@ -377,8 +377,8 @@ namespace VAdvantage.Model
                     _bp.SetURL(GetURL());
                 if (GetVAB_BPart_Status_ID() != 0)
                     _bp.SetVAB_BPart_Status_ID(GetVAB_BPart_Status_ID());
-                if (GetC_IndustryCode_ID() != 0)
-                    _bp.SetC_IndustryCode_ID(GetC_IndustryCode_ID());
+                if (GetVAB_Industrykey_ID() != 0)
+                    _bp.SetVAB_Industrykey_ID(GetVAB_Industrykey_ID());
                 if (GetNAICS() != null)
                     _bp.SetNAICS(GetNAICS());
                 if (GetDUNS() != null)
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
                         Prospect.SetFax(loc.GetFax());
 
                         X_VAF_UserContact us = new X_VAF_UserContact(GetCtx(), UserId, Get_TrxName());
-                        Prospect.SetC_Job_ID(us.GetC_Job_ID());
+                        Prospect.SetVAB_Position_ID(us.GetVAB_Position_ID());
                         Prospect.SetSubscribeDate(DateTime.Today);
                         query = "Select Email from VAF_UserContact where VAF_UserContact_id= " + UserId;
                         String mail = Util.GetValueOfString(DB.ExecuteScalar(query, null, Get_TrxName()));
@@ -490,8 +490,8 @@ namespace VAdvantage.Model
             }
             _user.SetName(GetContactName());
             //
-            if (GetC_Job_ID() != 0)
-                _user.SetC_Job_ID(GetC_Job_ID());
+            if (GetVAB_Position_ID() != 0)
+                _user.SetVAB_Position_ID(GetVAB_Position_ID());
             if (GetEMail() != null)
                 _user.SetEMail(GetEMail());
             if (GetVAB_Greeting_ID() != 0)

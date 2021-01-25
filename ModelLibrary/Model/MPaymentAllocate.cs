@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             if (C_PaymentAllocate_ID == 0)
             {
                 //	SetC_Payment_ID (0);	//	Parent
-                //	SetC_Invoice_ID (0);
+                //	SetVAB_Invoice_ID (0);
                 SetAmount(Env.ZERO);
                 SetDiscountAmt(Env.ZERO);
                 SetOverUnderAmt(Env.ZERO);
@@ -91,12 +91,12 @@ namespace VAdvantage.Model
         }
 
         /**
-	     * 	Set C_Invoice_ID
-	     *	@param C_Invoice_ID id
+	     * 	Set VAB_Invoice_ID
+	     *	@param VAB_Invoice_ID id
 	     */
-        public new void SetC_Invoice_ID(int C_Invoice_ID)
+        public new void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            base.SetC_Invoice_ID(C_Invoice_ID);
+            base.SetVAB_Invoice_ID(VAB_Invoice_ID);
             _invoice = null;
         }
 
@@ -106,8 +106,8 @@ namespace VAdvantage.Model
          */
         public MInvoice GetInvoice()
         {
-            if (_invoice == null && GetC_Invoice_ID() != 0)
-                _invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+            if (_invoice == null && GetVAB_Invoice_ID() != 0)
+                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 
@@ -126,24 +126,24 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Invoice - Callout
-         *	@param oldC_Invoice_ID old BP
-         *	@param newC_Invoice_ID new BP
+         *	@param oldVAB_Invoice_ID old BP
+         *	@param newVAB_Invoice_ID new BP
          *	@param windowNo window no
          */
         //@UICallout
-        public void SetC_Invoice_ID(String oldC_Invoice_ID, String newC_Invoice_ID, int windowNo)
+        public void SetVAB_Invoice_ID(String oldVAB_Invoice_ID, String newVAB_Invoice_ID, int windowNo)
         {
-            if (newC_Invoice_ID == null || newC_Invoice_ID.Length == 0)
+            if (newVAB_Invoice_ID == null || newVAB_Invoice_ID.Length == 0)
                 return;
-            int C_Invoice_ID = int.Parse(newC_Invoice_ID);
-            SetC_Invoice_ID(C_Invoice_ID);
-            if (C_Invoice_ID == 0)
+            int VAB_Invoice_ID = int.Parse(newVAB_Invoice_ID);
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
+            if (VAB_Invoice_ID == 0)
                 return;
             //	Check Payment
             int C_Payment_ID = GetC_Payment_ID();
             MPayment payment = new MPayment(GetCtx(), C_Payment_ID, null);
             if (payment.GetVAB_Charge_ID() != 0
-                || payment.GetC_Invoice_ID() != 0
+                || payment.GetVAB_Invoice_ID() != 0
                 || payment.GetC_Order_ID() != 0)
             {
                 //p_changeVO.addError( Msg.GetMsg(GetCtx(),"PaymentIsAllocated"));
@@ -154,10 +154,10 @@ namespace VAdvantage.Model
             SetWriteOffAmt(Env.ZERO);
             SetOverUnderAmt(Env.ZERO);
 
-            int C_InvoicePaySchedule_ID = 0;
-            if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_Invoice_ID") == C_Invoice_ID
-                && GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_InvoicePaySchedule_ID") != 0)
-                C_InvoicePaySchedule_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "C_InvoicePaySchedule_ID");
+            int VAB_sched_InvoicePayment_ID = 0;
+            if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_Invoice_ID") == VAB_Invoice_ID
+                && GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_sched_InvoicePayment_ID") != 0)
+                VAB_sched_InvoicePayment_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAB_sched_InvoicePayment_ID");
 
             //  Payment Date
             DateTime ts = CommonFunctions.CovertMilliToDate(GetCtx().GetContextAsTime(windowNo, "DateTrx"));
@@ -165,18 +165,18 @@ namespace VAdvantage.Model
                 ts = DateTime.Now;
             //
             String sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		        //	1..2
-                + " invoiceOpen(C_Invoice_ID, @paysch),"					//	3		#1
-                + " invoiceDiscount(C_Invoice_ID,@tsdt,@paysch1), IsSOTrx "	//	4..5	#2/3
-                + "FROM C_Invoice WHERE C_Invoice_ID=@invid";			    //			#4
+                + " invoiceOpen(VAB_Invoice_ID, @paysch),"					//	3		#1
+                + " invoiceDiscount(VAB_Invoice_ID,@tsdt,@paysch1), IsSOTrx "	//	4..5	#2/3
+                + "FROM VAB_Invoice WHERE VAB_Invoice_ID=@invid";			    //			#4
             int VAB_Currency_ID = 0;		//	Invoice Currency
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[4];
-                param[0] = new SqlParameter("@paysch", C_InvoicePaySchedule_ID);
+                param[0] = new SqlParameter("@paysch", VAB_sched_InvoicePayment_ID);
                 param[1] = new SqlParameter("@tsdt", (DateTime?)ts);
-                param[2] = new SqlParameter("@paysch1", C_InvoicePaySchedule_ID);
-                param[3] = new SqlParameter("@invid", C_Invoice_ID);
+                param[2] = new SqlParameter("@paysch1", VAB_sched_InvoicePayment_ID);
+                param[3] = new SqlParameter("@invid", VAB_Invoice_ID);
 
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
                     SetAmount(Decimal.Subtract((Decimal)invoiceOpen, (Decimal)discountAmt));
                     SetDiscountAmt(Convert.ToDecimal(discountAmt));
                     //  reSet as dependent fields Get reSet
-                    GetCtx().SetContext(windowNo, "C_Invoice_ID", C_Invoice_ID);
+                    GetCtx().SetContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID);
                     //IsSOTrx, Project
                 }
                 idr.Close();
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
                 int currency_ID = GetCtx().GetContextAsInt(windowNo, "VAB_Currency_ID");
                 if (currency_ID != VAB_Currency_ID)
                 {
-                    String msg = Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@: @C_Invoice_ID@ <> @C_Payment_ID@");
+                    String msg = Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@: @VAB_Invoice_ID@ <> @C_Payment_ID@");
                     //p_changeVO.addError(msg);
                 }
             }
@@ -301,9 +301,9 @@ namespace VAdvantage.Model
          */
         private void CheckAmt(int windowNo, String columnName)
         {
-            int C_Invoice_ID = GetC_Invoice_ID();
+            int VAB_Invoice_ID = GetVAB_Invoice_ID();
             //	No Payment
-            if (C_Invoice_ID == 0)
+            if (VAB_Invoice_ID == 0)
                 return;
 
             //	Get Info from Tab
@@ -337,9 +337,9 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
-            if ((newRecord || Is_ValueChanged("C_Invoice_ID"))
+            if ((newRecord || Is_ValueChanged("VAB_Invoice_ID"))
                 && (payment.GetVAB_Charge_ID() != 0
-                    || payment.GetC_Invoice_ID() != 0
+                    || payment.GetVAB_Invoice_ID() != 0
                     || payment.GetC_Order_ID() != 0))
             {
                 log.SaveError("PaymentIsAllocated", "");
@@ -347,10 +347,10 @@ namespace VAdvantage.Model
             }
 
             // during saving a new record, system will check same invoice schedule reference exist on same payment or not
-            if (newRecord && Get_ColumnIndex("C_InvoicePaySchedule_ID") >= 0 && GetC_InvoicePaySchedule_ID() > 0)
+            if (newRecord && Get_ColumnIndex("VAB_sched_InvoicePayment_ID") >= 0 && GetVAB_sched_InvoicePayment_ID() > 0)
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaymentAllocate   WHERE C_Payment_ID = " + GetC_Payment_ID() +
-                          @" AND IsActive = 'Y' AND C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx())) > 0)
+                          @" AND IsActive = 'Y' AND VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx())) > 0)
                 {
                     //"Error" not required
                     //log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
@@ -360,9 +360,9 @@ namespace VAdvantage.Model
             }
 
             // check schedule is hold or not, if hold then no to save record
-            if (Get_ColumnIndex("C_InvoicePaySchedule_ID") >= 0 && GetC_InvoicePaySchedule_ID() > 0)
+            if (Get_ColumnIndex("VAB_sched_InvoicePayment_ID") >= 0 && GetVAB_sched_InvoicePayment_ID() > 0)
             {
-                if (payment.IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                if (payment.IsHoldpaymentSchedule(GetVAB_sched_InvoicePayment_ID()))
                 {
                     log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
                     return false;
@@ -382,7 +382,7 @@ namespace VAdvantage.Model
             }
 
             //	Org
-            if (newRecord || Is_ValueChanged("C_Invoice_ID"))
+            if (newRecord || Is_ValueChanged("VAB_Invoice_ID"))
             {
                 GetInvoice();
                 if (_invoice != null)

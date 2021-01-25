@@ -79,7 +79,7 @@
                              + " <div class='vis-paymentselect-field'>"  // div Invoice starts here
                              +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbinvoice_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Invoice_ID") + " </label>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Invoice_ID") + " </label>"
                              +"</div></div>"
                              + " </div>" // div Invoice ends here 
                              + " <div class='vis-paymentselect-field'>"  // div Order starts here

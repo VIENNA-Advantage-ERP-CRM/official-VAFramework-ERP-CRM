@@ -246,9 +246,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
-                    + "WHERE i.C_Invoice_ID IS NOT NULL "
-                    + " AND p.C_Invoice_ID IS NOT NULL "
-                    + " AND p.C_Invoice_ID<>i.C_Invoice_ID) ")
+                    + "WHERE i.VAB_Invoice_ID IS NOT NULL "
+                    + " AND p.VAB_Invoice_ID IS NOT NULL "
+                    + " AND p.VAB_Invoice_ID<>i.VAB_Invoice_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -275,7 +275,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_BankStatement_ID IN "
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
-                    + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID) "
+                    + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID) "
                     + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND v.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND v.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
@@ -290,9 +290,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_BankStatement_ID IN "
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
-                    + " INNER JOIN C_Invoice v ON (i.C_Invoice_ID=v.C_Invoice_ID)"
+                    + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID)"
                     + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
-                    + "WHERE p.C_Invoice_ID<>v.C_Invoice_ID"
+                    + "WHERE p.VAB_Invoice_ID<>v.VAB_Invoice_ID"
                     + " AND v.VAB_BusinessPartner_ID<>p.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -444,7 +444,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	Copy statement line data
                     //line.setVAB_BusinessPartner_ID(imp.getVAB_BusinessPartner_ID());
-                    //line.setC_Invoice_ID(imp.getC_Invoice_ID());
+                    //line.setVAB_Invoice_ID(imp.getVAB_Invoice_ID());
                     line.SetReferenceNo(imp.GetReferenceNo());
                     line.SetDescription(imp.GetLineDescription());
                     line.SetStatementLineDate(imp.GetStatementLineDate());

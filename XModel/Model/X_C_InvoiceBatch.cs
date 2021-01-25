@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_InvoiceBatch
+/** Generated Model for VAB_BatchInvoice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_InvoiceBatch : PO
+public class X_VAB_BatchInvoice : PO
 {
-public X_C_InvoiceBatch (Context ctx, int C_InvoiceBatch_ID, Trx trxName) : base (ctx, C_InvoiceBatch_ID, trxName)
+public X_VAB_BatchInvoice (Context ctx, int VAB_BatchInvoice_ID, Trx trxName) : base (ctx, VAB_BatchInvoice_ID, trxName)
 {
-/** if (C_InvoiceBatch_ID == 0)
+/** if (VAB_BatchInvoice_ID == 0)
 {
 SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
-SetC_InvoiceBatch_ID (0);
+SetVAB_BatchInvoice_ID (0);
 SetControlAmt (0.0);	// 0
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDocumentAmt (0.0);
@@ -32,12 +32,12 @@ SetSalesRep_ID (0);
 }
  */
 }
-public X_C_InvoiceBatch (Ctx ctx, int C_InvoiceBatch_ID, Trx trxName) : base (ctx, C_InvoiceBatch_ID, trxName)
+public X_VAB_BatchInvoice (Ctx ctx, int VAB_BatchInvoice_ID, Trx trxName) : base (ctx, VAB_BatchInvoice_ID, trxName)
 {
-/** if (C_InvoiceBatch_ID == 0)
+/** if (VAB_BatchInvoice_ID == 0)
 {
 SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
-SetC_InvoiceBatch_ID (0);
+SetVAB_BatchInvoice_ID (0);
 SetControlAmt (0.0);	// 0
 SetDateDoc (DateTime.Now);	// @#Date@
 SetDocumentAmt (0.0);
@@ -53,7 +53,7 @@ SetSalesRep_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BatchInvoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_C_InvoiceBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_BatchInvoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_C_InvoiceBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceBatch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_BatchInvoice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_InvoiceBatch()
+static X_VAB_BatchInvoice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -88,8 +88,8 @@ public static long updatedMS = 1280389055586L;
 public static int Table_ID;
  // =767;
 
-/** TableName=C_InvoiceBatch */
-public static String Table_Name="C_InvoiceBatch";
+/** TableName=VAB_BatchInvoice */
+public static String Table_Name="VAB_BatchInvoice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -123,7 +123,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_InvoiceBatch[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_BatchInvoice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Currency Type.
@@ -158,17 +158,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Invoice Batch.
-@param C_InvoiceBatch_ID Expense Invoice Batch Header */
-public void SetC_InvoiceBatch_ID (int C_InvoiceBatch_ID)
+@param VAB_BatchInvoice_ID Expense Invoice Batch Header */
+public void SetVAB_BatchInvoice_ID (int VAB_BatchInvoice_ID)
 {
-if (C_InvoiceBatch_ID < 1) throw new ArgumentException ("C_InvoiceBatch_ID is mandatory.");
-Set_ValueNoCheck ("C_InvoiceBatch_ID", C_InvoiceBatch_ID);
+if (VAB_BatchInvoice_ID < 1) throw new ArgumentException ("VAB_BatchInvoice_ID is mandatory.");
+Set_ValueNoCheck ("VAB_BatchInvoice_ID", VAB_BatchInvoice_ID);
 }
 /** Get Invoice Batch.
 @return Expense Invoice Batch Header */
-public int GetC_InvoiceBatch_ID() 
+public int GetVAB_BatchInvoice_ID() 
 {
-Object ii = Get_Value("C_InvoiceBatch_ID");
+Object ii = Get_Value("VAB_BatchInvoice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Order to re-price		
         private int _C_Order_ID = 0;
         // Invoice to re-price		
-        private int _C_Invoice_ID = 0;
+        private int _VAB_Invoice_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -50,9 +50,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _C_Order_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_Invoice_ID"))
+                else if (name.Equals("VAB_Invoice_ID"))
                 {
-                    _C_Invoice_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_Invoice_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else
                 {
@@ -67,8 +67,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            log.Info("C_Order_ID=" + _C_Order_ID + ", C_Invoice_ID=" + _C_Invoice_ID);
-            if (_C_Order_ID == 0 && _C_Invoice_ID == 0)
+            log.Info("C_Order_ID=" + _C_Order_ID + ", VAB_Invoice_ID=" + _VAB_Invoice_ID);
+            if (_C_Order_ID == 0 && _VAB_Invoice_ID == 0)
             {
                 throw new Exception("Nothing to do");
             }
@@ -88,9 +88,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 Decimal newPrice = order.GetGrandTotal();
                 retValue = order.GetDocumentNo() + ":  " + oldPrice + " -> " + newPrice;
             }
-            if (_C_Invoice_ID != 0)
+            if (_VAB_Invoice_ID != 0)
             {
-                MInvoice invoice = new MInvoice(GetCtx(), _C_Invoice_ID, null);
+                MInvoice invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, null);
                 Decimal oldPrice = invoice.GetGrandTotal();
                 MInvoiceLine[] lines = invoice.GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
@@ -98,7 +98,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     lines[i].SetPrice(invoice.GetM_PriceList_ID(), invoice.GetVAB_BusinessPartner_ID());
                     lines[i].Save();
                 }
-                invoice = new MInvoice(GetCtx(), _C_Invoice_ID, null);
+                invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, null);
                 Decimal newPrice = invoice.GetGrandTotal();
                 if (retValue.Length > 0)
                 {

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_JobRemuneration
+/** Generated Model for VAB_PositionPayment
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_JobRemuneration : PO
+public class X_VAB_PositionPayment : PO
 {
-public X_C_JobRemuneration (Context ctx, int C_JobRemuneration_ID, Trx trxName) : base (ctx, C_JobRemuneration_ID, trxName)
+public X_VAB_PositionPayment (Context ctx, int VAB_PositionPayment_ID, Trx trxName) : base (ctx, VAB_PositionPayment_ID, trxName)
 {
-/** if (C_JobRemuneration_ID == 0)
+/** if (VAB_PositionPayment_ID == 0)
 {
-SetC_JobRemuneration_ID (0);
-SetC_Job_ID (0);
+SetVAB_PositionPayment_ID (0);
+SetVAB_Position_ID (0);
 SetC_Remuneration_ID (0);
 SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_C_JobRemuneration (Ctx ctx, int C_JobRemuneration_ID, Trx trxName) : base (ctx, C_JobRemuneration_ID, trxName)
+public X_VAB_PositionPayment (Ctx ctx, int VAB_PositionPayment_ID, Trx trxName) : base (ctx, VAB_PositionPayment_ID, trxName)
 {
-/** if (C_JobRemuneration_ID == 0)
+/** if (VAB_PositionPayment_ID == 0)
 {
-SetC_JobRemuneration_ID (0);
-SetC_Job_ID (0);
+SetVAB_PositionPayment_ID (0);
+SetVAB_Position_ID (0);
 SetC_Remuneration_ID (0);
 SetValidFrom (DateTime.Now);
 }
@@ -43,7 +43,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobRemuneration (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PositionPayment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_JobRemuneration (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobRemuneration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PositionPayment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_JobRemuneration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobRemuneration (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PositionPayment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_JobRemuneration()
+static X_VAB_PositionPayment()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389055978L;
 public static int Table_ID;
  // =793;
 
-/** TableName=C_JobRemuneration */
-public static String Table_Name="C_JobRemuneration";
+/** TableName=VAB_PositionPayment */
+public static String Table_Name="VAB_PositionPayment";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_JobRemuneration[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PositionPayment[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Position Remuneration.
-@param C_JobRemuneration_ID Remuneration for the Position */
-public void SetC_JobRemuneration_ID (int C_JobRemuneration_ID)
+@param VAB_PositionPayment_ID Remuneration for the Position */
+public void SetVAB_PositionPayment_ID (int VAB_PositionPayment_ID)
 {
-if (C_JobRemuneration_ID < 1) throw new ArgumentException ("C_JobRemuneration_ID is mandatory.");
-Set_ValueNoCheck ("C_JobRemuneration_ID", C_JobRemuneration_ID);
+if (VAB_PositionPayment_ID < 1) throw new ArgumentException ("VAB_PositionPayment_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PositionPayment_ID", VAB_PositionPayment_ID);
 }
 /** Get Position Remuneration.
 @return Remuneration for the Position */
-public int GetC_JobRemuneration_ID() 
+public int GetVAB_PositionPayment_ID() 
 {
-Object ii = Get_Value("C_JobRemuneration_ID");
+Object ii = Get_Value("VAB_PositionPayment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Position.
-@param C_Job_ID Job Position */
-public void SetC_Job_ID (int C_Job_ID)
+@param VAB_Position_ID Job Position */
+public void SetVAB_Position_ID (int VAB_Position_ID)
 {
-if (C_Job_ID < 1) throw new ArgumentException ("C_Job_ID is mandatory.");
-Set_ValueNoCheck ("C_Job_ID", C_Job_ID);
+if (VAB_Position_ID < 1) throw new ArgumentException ("VAB_Position_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Position_ID", VAB_Position_ID);
 }
 /** Get Position.
 @return Job Position */
-public int GetC_Job_ID() 
+public int GetVAB_Position_ID() 
 {
-Object ii = Get_Value("C_Job_ID");
+Object ii = Get_Value("VAB_Position_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -150,7 +150,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Job_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Position_ID().ToString());
 }
 /** Set Remuneration.
 @param C_Remuneration_ID Wage or Salary */

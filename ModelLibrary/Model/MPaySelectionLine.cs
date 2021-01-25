@@ -72,16 +72,16 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Invoice Info
-         *	@param C_Invoice_ID invoice
+         *	@param VAB_Invoice_ID invoice
          *	@param isSOTrx sales trx
          *	@param PayAmt payment
          *	@param OpenAmt open
          *	@param DiscountAmt discount
          */
-        public void SetInvoice(int C_Invoice_ID, Boolean isSOTrx, Decimal OpenAmt,
+        public void SetInvoice(int VAB_Invoice_ID, Boolean isSOTrx, Decimal OpenAmt,
             Decimal PayAmt, Decimal DiscountAmt)
         {
-            SetC_Invoice_ID(C_Invoice_ID);
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
             SetIsSOTrx(isSOTrx);
             SetOpenAmt(OpenAmt);
             SetPayAmt(PayAmt);
@@ -91,16 +91,16 @@ namespace VAdvantage.Model
 
         /**
        * 	Set Invoice Info
-       *	@param C_Invoice_ID invoice
+       *	@param VAB_Invoice_ID invoice
        *	@param isSOTrx sales trx
        *	@param PayAmt payment
        *	@param OpenAmt open
        *	@param DiscountAmt discount
        */
-        public void SetInvoice(int C_Invoice_ID, Boolean isSOTrx, Decimal OpenAmt,
+        public void SetInvoice(int VAB_Invoice_ID, Boolean isSOTrx, Decimal OpenAmt,
             Decimal PayAmt, Decimal DiscountAmt, Decimal WriteOffAmount)
         {
-            SetC_Invoice_ID(C_Invoice_ID);
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
             SetIsSOTrx(isSOTrx);
             SetOpenAmt(OpenAmt);
             SetPayAmt(PayAmt);
@@ -110,21 +110,21 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Invoice - Callout
-         *	@param oldC_Invoice_ID old BP
-         *	@param newC_Invoice_ID new BP
+         *	@param oldVAB_Invoice_ID old BP
+         *	@param newVAB_Invoice_ID new BP
          *	@param windowNo window no
          */
         //@UICallout 
-        public void SetC_Invoice_ID(String oldC_Invoice_ID,
-                String newC_Invoice_ID, int windowNo)
+        public void SetVAB_Invoice_ID(String oldVAB_Invoice_ID,
+                String newVAB_Invoice_ID, int windowNo)
         {
-            if (newC_Invoice_ID == null || newC_Invoice_ID.Length == 0)
+            if (newVAB_Invoice_ID == null || newVAB_Invoice_ID.Length == 0)
                 return;
-            int C_Invoice_ID = int.Parse(newC_Invoice_ID);
+            int VAB_Invoice_ID = int.Parse(newVAB_Invoice_ID);
             //  reSet as dependent fields Get reSet
-            SetContext(windowNo, "C_Invoice_ID", C_Invoice_ID.ToString());
-            SetC_Invoice_ID(C_Invoice_ID);
-            if (C_Invoice_ID == 0)
+            SetContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID.ToString());
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
+            if (VAB_Invoice_ID == 0)
             {
                 SetPayAmt(Env.ZERO);
                 SetDiscountAmt(Env.ZERO);
@@ -138,18 +138,18 @@ namespace VAdvantage.Model
             Decimal OpenAmt = Env.ZERO;
             Decimal DiscountAmt = Env.ZERO;
             Boolean IsSOTrx = false;
-            String sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.VAB_Currency_ID,"
+            String sql = "SELECT currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0), i.VAB_Currency_ID,"
                     + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID),"
                 + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
-                + "FROM C_Invoice_v i, VAB_Bank_Acct ba "
-                + "WHERE i.C_Invoice_ID=@C_Invoice_ID AND ba.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID";	//	#1..2
+                + "FROM VAB_Invoice_v i, VAB_Bank_Acct ba "
+                + "WHERE i.VAB_Invoice_ID=@VAB_Invoice_ID AND ba.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID";	//	#1..2
 
             IDataReader idr = null;
             try
             {
 
                 SqlParameter[] param = new SqlParameter[3];
-                param[0] = new SqlParameter("@C_Invoice_ID", C_Invoice_ID);
+                param[0] = new SqlParameter("@VAB_Invoice_ID", VAB_Invoice_ID);
                 param[1] = new SqlParameter("@VAB_Bank_Acct_ID", VAB_Bank_Acct_ID);
                 param[2] = new SqlParameter("@PayDate", PayDate);
 
@@ -173,9 +173,9 @@ namespace VAdvantage.Model
                 }
                 log.Log(Level.SEVERE, sql, e);
             }
-            log.Fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
-            SetInvoice(C_Invoice_ID, IsSOTrx, OpenAmt, Decimal.Subtract(OpenAmt, DiscountAmt), DiscountAmt);
-        }	//	SetC_Invoice_ID
+            log.Fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + VAB_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
+            SetInvoice(VAB_Invoice_ID, IsSOTrx, OpenAmt, Decimal.Subtract(OpenAmt, DiscountAmt), DiscountAmt);
+        }	//	SetVAB_Invoice_ID
 
         /**
          * 	Set Pay Amt - Callout
@@ -196,8 +196,8 @@ namespace VAdvantage.Model
             Decimal DifferenceAmt = Decimal.Subtract(Decimal.Subtract(OpenAmt, PayAmt), DiscountAmt);
 
             //	Get invoice info
-            int C_Invoice_ID = GetC_Invoice_ID();
-            if (C_Invoice_ID == 0)
+            int VAB_Invoice_ID = GetVAB_Invoice_ID();
+            if (VAB_Invoice_ID == 0)
             {
                 PayAmt = Env.ZERO;
                 DifferenceAmt = Env.ZERO;
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
         public MInvoice GetInvoice()
         {
             if (_invoice == null)
-                _invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 
@@ -232,9 +232,9 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             // check schedule is hold or not, if hold then do not save record
-            if (GetC_InvoicePaySchedule_ID() > 0)
+            if (GetVAB_sched_InvoicePayment_ID() > 0)
             {
-                if (IsHoldpaymentSchedule(GetC_InvoicePaySchedule_ID()))
+                if (IsHoldpaymentSchedule(GetVAB_sched_InvoicePayment_ID()))
                 {
                     log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PaymentisHold"));
                     return false;
@@ -248,13 +248,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Is used to get Invoice payment schedule is Hold Payment or not
         /// </summary>
-        /// <param name="C_InvoicePaySchedule_ID">Invoice payment schedule reference</param>
+        /// <param name="VAB_sched_InvoicePayment_ID">Invoice payment schedule reference</param>
         /// <returns>TRUE, if hold payment</returns>
-        public bool IsHoldpaymentSchedule(int C_InvoicePaySchedule_ID)
+        public bool IsHoldpaymentSchedule(int VAB_sched_InvoicePayment_ID)
         {
             try
             {
-                String sql = "SELECT IsHoldPayment FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID = " + C_InvoicePaySchedule_ID;
+                String sql = "SELECT IsHoldPayment FROM VAB_sched_InvoicePayment WHERE VAB_sched_InvoicePayment_ID = " + VAB_sched_InvoicePayment_ID;
                 String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                 return IsHoldPayment.Equals("Y");
             }
@@ -312,7 +312,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MPaySelectionLine[");
-            sb.Append(Get_ID()).Append(",C_Invoice_ID=").Append(GetC_Invoice_ID())
+            sb.Append(Get_ID()).Append(",VAB_Invoice_ID=").Append(GetVAB_Invoice_ID())
                 .Append(",PayAmt=").Append(GetPayAmt())
                 .Append(",DifferenceAmt=").Append(GetDifferenceAmt())
                 .Append("]");

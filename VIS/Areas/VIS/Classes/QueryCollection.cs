@@ -135,7 +135,7 @@ namespace VIS.Classes
 
             queryList.VIS_33 = "SELECT VAB_Currency_ID FROM M_PriceList where M_PriceList_ID = @Param";
 
-            queryList.VIS_34 = "SELECT COALESCE(MAX(C_InvoiceBatchLine_ID),0) FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID = @Param";
+            queryList.VIS_34 = "SELECT COALESCE(MAX(VAB_BatchInvoiceLine_ID),0) FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID = @Param";
 
             queryList.VIS_35 = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty FROM S_ResourceAssignment ra"
                              + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) WHERE ra.S_ResourceAssignment_ID = @Param";
@@ -486,12 +486,12 @@ namespace VIS.Classes
             + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
-            + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+            + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
             + " l.C_OrderLine_ID "                					//  9
-            + " FROM C_UOM uom  INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) "
-            + " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
-              + " WHERE l.C_Invoice_ID=@C_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                    + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID ORDER BY l.Line";
+            + " FROM C_UOM uom  INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) "
+            + " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
+              + " WHERE l.VAB_Invoice_ID=@VAB_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
+                    + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID ORDER BY l.Line";
 
             queryList.VIS_134 = "SELECT "	//	Entered UOM
                 //+ "l.QtyInvoiced-SUM(NVL(mi.Qty,0)),round(l.QtyEntered/l.QtyInvoiced,6),"
@@ -500,11 +500,11 @@ namespace VIS.Classes
             + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
-            + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,"      //  5..8
-            + " l.C_OrderLine_ID FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language=@VAF_Language) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
-           + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) WHERE l.C_Invoice_ID=@C_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered,"
+            + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
+            + " l.C_OrderLine_ID FROM C_UOM_Trl uom INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language=@VAF_Language) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
+           + " LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) WHERE l.VAB_Invoice_ID=@VAB_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered,"
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID  ORDER BY l.Line";
+                + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID  ORDER BY l.Line";
 
 
             queryList.VIS_135 = "SELECT PaymentRule FROM C_PaySelectionCheck WHERE C_PaySelection_ID = @pSelectID";

@@ -963,7 +963,7 @@ namespace VAdvantage.Model
         /// <returns>file if success</returns>
         public FileInfo CreatePDF(FileInfo file)
         {
-            //	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
+            //	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getVAB_Invoice_ID());
             //	if (re == null)
             return null;
             //	return re.getPDF(file);

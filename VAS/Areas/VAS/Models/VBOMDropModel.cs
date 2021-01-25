@@ -72,11 +72,11 @@ namespace VIS.Models
         {
             List<Invoice> lstInvoice = new List<Invoice>();
             DataSet ds = new DataSet();
-            string sql = "SELECT C_Invoice_ID, DocumentNo || '_' || GrandTotal AS Name "
-                   + "FROM C_Invoice "
+            string sql = "SELECT VAB_Invoice_ID, DocumentNo || '_' || GrandTotal AS Name "
+                   + "FROM VAB_Invoice "
                    + "WHERE Processed='N' AND DocStatus='DR' "
                    + "ORDER BY DocumentNo";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_Invoice", true, false);    
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Invoice", true, false);    
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -86,7 +86,7 @@ namespace VIS.Models
                     {
                         lstInvoice.Add(new Invoice()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Invoice_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Invoice_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
 
                         });
@@ -321,16 +321,16 @@ namespace VIS.Models
         /// <summary>
         /// Save to Invoice
         /// </summary>
-        /// <param name="C_Invoice_ID">id</param>
+        /// <param name="VAB_Invoice_ID">id</param>
         /// <returns>true if saved</returns>
-        private bool Cmd_SaveInvoice(Ctx ctx,int C_Invoice_ID)
+        private bool Cmd_SaveInvoice(Ctx ctx,int VAB_Invoice_ID)
         {
             Decimal qty = 0;
-            log.Config("C_Invoice_ID=" + C_Invoice_ID);
-            MInvoice invoice = new MInvoice(ctx, C_Invoice_ID, null);
+            log.Config("VAB_Invoice_ID=" + VAB_Invoice_ID);
+            MInvoice invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
             if (invoice.Get_ID() == 0)
             {
-                log.Log(Level.SEVERE, "Not found - C_Invoice_ID=" + C_Invoice_ID);
+                log.Log(Level.SEVERE, "Not found - VAB_Invoice_ID=" + VAB_Invoice_ID);
                 
             }
             int lineCount = 0;

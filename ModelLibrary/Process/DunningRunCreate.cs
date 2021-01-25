@@ -43,7 +43,7 @@ namespace VAdvantage.Process
         private MDunningRun _run = null;
         private MDunningLevel _level = null;
 
-        int C_Invoice_ID = 0; // Invoice id for dunning creation.
+        int VAB_Invoice_ID = 0; // Invoice id for dunning creation.
         int VAB_Currency_ID = 0; // Curency id of invoice.
         int DaysDue = 0; // Due days left.
         int VAB_BusinessPartner_ID = 0; // Customer ID.
@@ -214,7 +214,7 @@ namespace VAdvantage.Process
                 param = new SqlParameter[1];
             }
 
-            sql.Append("SELECT I.C_INVOICE_ID,  I.VAB_CURRENCY_ID, INVOICEOPEN(I.C_INVOICE_ID,Ips.C_INVOICEPAYSCHEDULE_ID),  "
+            sql.Append("SELECT I.VAB_INVOICE_ID,  I.VAB_CURRENCY_ID, INVOICEOPEN(I.VAB_INVOICE_ID,Ips.VAB_sched_InvoicePayment_ID),  "
                     + " DAYSBETWEEN(@param1,IPS.DUEDATE) AS DaysDue ,"
                     + " i.IsInDispute, i.VAB_BusinessPartner_ID, "
                     + "CASE "
@@ -232,16 +232,16 @@ namespace VAdvantage.Process
                     + " THEN ips.DueAmt * -1"
                     + " ELSE ips.DueAmt"                                                // AP Credit Memo
                     + " END AS DueAmt,"
-                    + " ips.C_INVOICEPAYSCHEDULE_ID"
-                    + " FROM C_Invoice i "
-                    + " LEFT JOIN C_INVOICEPAYSCHEDULE ips "
-                    + " ON ips.c_invoice_id               =i.c_invoice_id "
+                    + " ips.VAB_sched_InvoicePayment_ID"
+                    + " FROM VAB_Invoice i "
+                    + " LEFT JOIN VAB_sched_InvoicePayment ips "
+                    + " ON ips.VAB_Invoice_id               =i.VAB_Invoice_id "
                     + " WHERE ips.VA009_IsPaid                    ='N' "
                     + " AND i.VAF_Client_ID                = " + _run.GetVAF_Client_ID()
                     + " AND i.VAF_Org_ID                   = " + _run.GetVAF_Org_ID()
                     + " AND i.DocStatus                  IN ('CO','CL') "
-                    + " AND (NOT i.InvoiceCollectionType IN ('" + X_C_Invoice.INVOICECOLLECTIONTYPE_CollectionAgency + "', "
-                    + "'" + X_C_Invoice.INVOICECOLLECTIONTYPE_LegalProcedure + "', '" + X_C_Invoice.INVOICECOLLECTIONTYPE_Uncollectable + "')"
+                    + " AND (NOT i.InvoiceCollectionType IN ('" + X_VAB_Invoice.INVOICECOLLECTIONTYPE_CollectionAgency + "', "
+                    + "'" + X_VAB_Invoice.INVOICECOLLECTIONTYPE_LegalProcedure + "', '" + X_VAB_Invoice.INVOICECOLLECTIONTYPE_Uncollectable + "')"
                     + " OR InvoiceCollectionType IS NULL) ");
             if (_SalesRep_ID > 0)
             {
@@ -327,7 +327,7 @@ namespace VAdvantage.Process
 
                     for (int i = 0; i < previousLevels.Length; i++)
                     {
-                        sql.Append(" AND i.C_Invoice_ID IN (SELECT C_Invoice_ID FROM VAB_DunningExeLine WHERE " +
+                        sql.Append(" AND i.VAB_Invoice_ID IN (SELECT VAB_Invoice_ID FROM VAB_DunningExeLine WHERE " +
                         "VAB_DunningExeEntry_ID IN (SELECT VAB_DunningExeEntry_ID FROM VAB_DunningExeEntry WHERE " +
                         "VAB_DunningExe_ID IN (SELECT VAB_DunningExe_ID FROM VAB_DunningExe WHERE " +
                         "VAB_DunningStep_ID=" + previousLevels[i].Get_ID() + ")) AND Processed<>'N')");
@@ -340,7 +340,7 @@ namespace VAdvantage.Process
                 + "FROM VAB_DunningExe dr2, VAB_DunningExe dr"
                 + " INNER JOIN VAB_DunningExeEntry dre ON (dr.VAB_DunningExe_ID=dre.VAB_DunningExe_ID)"
                 + " INNER JOIN VAB_DunningExeLine drl ON (dre.VAB_DunningExeEntry_ID=drl.VAB_DunningExeEntry_ID) "
-                + "WHERE drl.Processed='Y' AND dr2.VAB_DunningExe_ID=@VAB_DunningExe_ID AND drl.C_Invoice_ID=@C_Invoice_ID AND C_InvoicePaySchedule_ID=@C_InvoicePaySchedule_ID AND dr.VAB_DunningExe_ID!=@VAB_DunningExe_ID"; // ##1 ##2
+                + "WHERE drl.Processed='Y' AND dr2.VAB_DunningExe_ID=@VAB_DunningExe_ID AND drl.VAB_Invoice_ID=@VAB_Invoice_ID AND VAB_sched_InvoicePayment_ID=@VAB_sched_InvoicePayment_ID AND dr.VAB_DunningExe_ID!=@VAB_DunningExe_ID"; // ##1 ##2
 
             Decimal DaysAfterDue = _run.GetLevel().GetDaysAfterDue();
             int DaysBetweenDunning = _run.GetLevel().GetDaysBetweenDunning();
@@ -361,17 +361,17 @@ namespace VAdvantage.Process
                 foreach (DataRow dr in dt.Rows)
                 // while (idr.Read())
                 {
-                    C_Invoice_ID = 0; VAB_Currency_ID = 0; GrandTotal = 0; Open = 0; DaysDue = 0;
+                    VAB_Invoice_ID = 0; VAB_Currency_ID = 0; GrandTotal = 0; Open = 0; DaysDue = 0;
                     IsInDispute = false; VAB_BusinessPartner_ID = 0; PaySchedule_ID = 0;
 
-                    C_Invoice_ID = Utility.Util.GetValueOfInt(dr["C_Invoice_ID"]);
+                    VAB_Invoice_ID = Utility.Util.GetValueOfInt(dr["VAB_Invoice_ID"]);
                     VAB_Currency_ID = Utility.Util.GetValueOfInt(dr["VAB_Currency_ID"]);
                     GrandTotal = Utility.Util.GetValueOfDecimal(dr["GrandTotal"]);
                     Open = Utility.Util.GetValueOfDecimal(dr["DueAmt"]);
                     DaysDue = Utility.Util.GetValueOfInt(dr["DaysDue"]);
                     IsInDispute = "Y".Equals(Utility.Util.GetValueOfString(dr["IsInDispute"]));
                     VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(dr["VAB_BusinessPartner_ID"]);
-                    PaySchedule_ID = Utility.Util.GetValueOfInt(dr["C_INVOICEPAYSCHEDULE_ID"]);
+                    PaySchedule_ID = Utility.Util.GetValueOfInt(dr["VAB_sched_InvoicePayment_ID"]);
 
                     //
                     // Check for Dispute
@@ -392,8 +392,8 @@ namespace VAdvantage.Process
                     //2nd record set
                     SqlParameter[] param1 = new SqlParameter[3];
                     param1[0] = new SqlParameter("@VAB_DunningExe_ID", _run.Get_ID());
-                    param1[1] = new SqlParameter("@C_Invoice_ID", C_Invoice_ID);
-                    param1[2] = new SqlParameter("@C_InvoicePaySchedule_ID", PaySchedule_ID);
+                    param1[1] = new SqlParameter("@VAB_Invoice_ID", VAB_Invoice_ID);
+                    param1[2] = new SqlParameter("@VAB_sched_InvoicePayment_ID", PaySchedule_ID);
                     idr1 = DataBase.DB.ExecuteReader(sql2, param1, Get_TrxName());
                     dt1 = new DataTable();
                     dt1.Load(idr);
@@ -427,7 +427,7 @@ namespace VAdvantage.Process
                         timesDunned = timesDunned * -1;
                     }
                     //
-                    if (CreateInvoiceLine(C_Invoice_ID, VAB_Currency_ID, GrandTotal, Open,
+                    if (CreateInvoiceLine(VAB_Invoice_ID, VAB_Currency_ID, GrandTotal, Open,
                         DaysDue, IsInDispute, VAB_BusinessPartner_ID,
                         timesDunned, daysAfterLast, PaySchedule_ID))
                     {
@@ -455,7 +455,7 @@ namespace VAdvantage.Process
         /// <summary>
         /// Create Invoice Line on run tab of dunning run window.
         /// </summary>
-        /// <param name="C_Invoice_ID">Invoice ID.</param>
+        /// <param name="VAB_Invoice_ID">Invoice ID.</param>
         /// <param name="VAB_Currency_ID">Currency ID.</param>
         /// <param name="GrandTotal">Grand Total.</param>
         /// <param name="Open">Amount.</param>
@@ -464,7 +464,7 @@ namespace VAdvantage.Process
         /// <param name="VAB_BusinessPartner_ID">Business Partner.</param>
         /// <param name="timesDunned">Number of times dunning occurred.</param>
         /// <param name="daysAfterLast">Days after last dunning.</param>
-        private bool CreateInvoiceLine(int C_Invoice_ID, int VAB_Currency_ID,
+        private bool CreateInvoiceLine(int VAB_Invoice_ID, int VAB_Currency_ID,
             Decimal GrandTotal, Decimal Open,
             int DaysDue, bool IsInDispute,
             int VAB_BusinessPartner_ID, int timesDunned, int daysAfterLast, int PaySchedule_ID)
@@ -491,10 +491,10 @@ namespace VAdvantage.Process
             }
             //
             MDunningRunLine line = new MDunningRunLine(entry);
-            line.SetInvoice(C_Invoice_ID, VAB_Currency_ID, GrandTotal, Open,
+            line.SetInvoice(VAB_Invoice_ID, VAB_Currency_ID, GrandTotal, Open,
                 new Decimal(0), DaysDue, IsInDispute, timesDunned,
                 daysAfterLast);
-            line.SetC_InvoicePaySchedule_ID(PaySchedule_ID);
+            line.SetVAB_sched_InvoicePayment_ID(PaySchedule_ID);
             if (!line.Save())
             {
                 // Change by mohit to pick error message from last error in mclass.

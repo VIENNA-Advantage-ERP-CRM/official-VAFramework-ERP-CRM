@@ -78,7 +78,7 @@ namespace ViennaAdvantage.Process
                 }
                 else if (baseType.Equals("WI"))//OnCreditOrder
                 {
-                    payment.SetC_Invoice_ID(order.GetC_Invoice_ID());
+                    payment.SetVAB_Invoice_ID(order.GetVAB_Invoice_ID());
 
                 }
                 payment.Save();

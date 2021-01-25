@@ -632,7 +632,7 @@ namespace VAdvantage.Print
         /******************Manufacturing**************/
 
         private static String[] DOC_TABLES = new String[] {
-		"C_Order_Header_v", "M_InOut_Header_v", "C_Invoice_Header_v", "C_Project_Header_v",
+		"C_Order_Header_v", "M_InOut_Header_v", "VAB_Invoice_Target_v", "C_Project_Header_v",
 		"C_RfQResponse_v",
 		"C_PaySelection_Check_v", "C_PaySelection_Check_v",  
 		"VAB_DunningExeEntry_v", "M_Movement", "M_Inventory" ,
@@ -642,7 +642,7 @@ namespace VAdvantage.Print
         /******************Manufacturing**************/
         };
         private static String[] DOC_BASETABLES = new String[] {
-		"C_Order", "M_InOut", "C_Invoice", "C_Project",
+		"C_Order", "M_InOut", "VAB_Invoice", "C_Project",
 		"C_RfQResponse",
 		"C_PaySelectionCheck", "C_PaySelectionCheck", 
 		"VAB_DunningExeEntry", "M_Movement", "M_Inventory" ,
@@ -653,7 +653,7 @@ namespace VAdvantage.Print
         
         };
         private static String[] DOC_IDS = new String[] {
-		"C_Order_ID", "M_InOut_ID", "C_Invoice_ID", "C_Project_ID",
+		"C_Order_ID", "M_InOut_ID", "VAB_Invoice_ID", "C_Project_ID",
 		"C_RfQResponse_ID",
 		"C_PaySelectionCheck_ID", "C_PaySelectionCheck_ID", 
 		"VAB_DunningExeEntry_ID", "M_Movement_ID",  "M_Inventory_ID" ,
@@ -664,7 +664,7 @@ namespace VAdvantage.Print
         
         };
         private static int[] DOC_TABLE_ID = new int[] {
-		X_C_Order.Table_ID, X_M_InOut.Table_ID, X_C_Invoice.Table_ID, X_C_Project.Table_ID,
+		X_C_Order.Table_ID, X_M_InOut.Table_ID, X_VAB_Invoice.Table_ID, X_C_Project.Table_ID,
 		X_C_RfQResponse.Table_ID,
 		X_C_PaySelectionCheck.Table_ID, X_C_PaySelectionCheck.Table_ID, 
 		X_VAB_DunningExeEntry.Table_ID, X_M_Movement.Table_ID, X_M_Inventory.Table_ID ,
@@ -880,8 +880,8 @@ namespace VAdvantage.Print
 
             //	Get Record_ID of Invoice/Receipt
             if (what[0] == INVOICE)
-                sql = "SELECT C_Invoice_ID REC FROM C_Invoice WHERE C_Order_ID='" + C_Order_ID + "'"	//	1
-                    + " ORDER BY C_Invoice_ID DESC";
+                sql = "SELECT VAB_Invoice_ID REC FROM VAB_Invoice WHERE C_Order_ID='" + C_Order_ID + "'"	//	1
+                    + " ORDER BY VAB_Invoice_ID DESC";
             else
                 sql = "SELECT M_InOut_ID REC FROM M_InOut WHERE C_Order_ID='" + C_Order_ID + "'" 	//	1
                     + " ORDER BY M_InOut_ID DESC";

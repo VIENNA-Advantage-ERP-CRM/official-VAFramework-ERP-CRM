@@ -386,7 +386,7 @@
         //    //  Create SQL
         //    var sql = (
         //        "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
-        //        + "FROM C_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
+        //        + "FROM VAB_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
         //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
         //        + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
         //        + " AND ic.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"

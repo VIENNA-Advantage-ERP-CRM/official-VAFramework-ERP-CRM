@@ -43,7 +43,7 @@ namespace VAdvantage.Model
                 SetM_AttributeSetInstance_ID(0);
                 //	setC_OrderLine_ID (0);
                 //	setM_InOutLine_ID(0);
-                //	setC_InvoiceLine_ID (0);
+                //	setVAB_InvoiceLine_ID (0);
                 SetProcessed(false);
                 SetAmt(Env.ZERO);
                 SetQty(Env.ZERO);
@@ -157,7 +157,7 @@ namespace VAdvantage.Model
                 }
                 else if (WindowName == "Invoice(Vendor)" || WindowName == "Invoice(Vendor)-Return" || WindowName == "LandedCost")
                 {
-                    cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                    cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     cd.SetIsSOTrx(false);
                     if (invoiceline.GetC_OrderLine_ID() > 0)
                     {
@@ -177,7 +177,7 @@ namespace VAdvantage.Model
                 }
                 else if (WindowName == "Invoice(Customer)")
                 {
-                    cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                    cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     cd.SetIsSOTrx(true);
                     if (invoiceline.GetC_OrderLine_ID() > 0)
                     {
@@ -331,20 +331,20 @@ namespace VAdvantage.Model
                             }
                             else if (windowName == "Invoice(Vendor)" || windowName == "Match IV" || windowName == "Product Cost IV" || windowName == "Product Cost IV Form" || windowName == "Invoice(Vendor)-Return")
                             {
-                                // isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM C_InvoiceLine WHERE C_InvoiceLine_ID =  " + cd.GetC_InvoiceLine_ID(), null, Get_Trx()));
-                                string docStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM C_invoice WHERE C_Invoice_ID = (SELECT C_Invoice_ID FROM C_invoiceLine WHERE C_InvoiceLine_ID = " + cd.GetC_InvoiceLine_ID() + ")", null, Get_Trx()));
+                                // isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM VAB_InvoiceLine WHERE VAB_InvoiceLine_ID =  " + cd.GetVAB_InvoiceLine_ID(), null, Get_Trx()));
+                                string docStatus = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocStatus FROM VAB_Invoice WHERE VAB_Invoice_ID = (SELECT VAB_Invoice_ID FROM VAB_InvoiceLine WHERE VAB_InvoiceLine_ID = " + cd.GetVAB_InvoiceLine_ID() + ")", null, Get_Trx()));
                                 if (docStatus == "VO" || docStatus == "RE")
                                 {
-                                    isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT isreversedcostcalculated FROM M_MatchInvCostTrack WHERE Rev_C_InvoiceLine_ID =  " + cd.GetC_InvoiceLine_ID() + " AND M_inoutline_ID = " + cd.GetM_InOutLine_ID(), null, Get_Trx()));
+                                    isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT isreversedcostcalculated FROM M_MatchInvCostTrack WHERE Rev_VAB_InvoiceLine_ID =  " + cd.GetVAB_InvoiceLine_ID() + " AND M_inoutline_ID = " + cd.GetM_InOutLine_ID(), null, Get_Trx()));
                                 }
                                 else
                                 {
-                                    isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM M_matchInv WHERE C_InvoiceLine_ID =  " + cd.GetC_InvoiceLine_ID() + " AND M_inoutline_ID = " + cd.GetM_InOutLine_ID(), null, Get_Trx()));
+                                    isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM M_matchInv WHERE VAB_InvoiceLine_ID =  " + cd.GetVAB_InvoiceLine_ID() + " AND M_inoutline_ID = " + cd.GetM_InOutLine_ID(), null, Get_Trx()));
                                 }
                             }
                             else if (windowName == "Invoice(Customer)" || windowName == "Invoice(APC)")
                             {
-                                isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM C_InvoiceLine WHERE C_InvoiceLine_ID =  " + cd.GetC_InvoiceLine_ID(), null, Get_Trx()));
+                                isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM VAB_InvoiceLine WHERE VAB_InvoiceLine_ID =  " + cd.GetVAB_InvoiceLine_ID(), null, Get_Trx()));
                             }
                             if (windowName == "Production Execution" || windowName.Equals("PE-FinishGood"))
                             {
@@ -429,23 +429,23 @@ namespace VAdvantage.Model
 
             //Decimal qty = 0;
             //Decimal amt = 0;
-            //if (ce.IsWeightedAverageCost() && ((GetC_InvoiceLine_ID() != 0 && windowName != "Material Receipt") || (windowName == "Product Cost IV") || (windowName == "Product Cost IV Form")))
+            //if (ce.IsWeightedAverageCost() && ((GetVAB_InvoiceLine_ID() != 0 && windowName != "Material Receipt") || (windowName == "Product Cost IV") || (windowName == "Product Cost IV Form")))
             //{
-            //    invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
-            //    invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
-            //    if (GetC_InvoiceLine_ID() > 0 && ((invoice.GetDescription() != null && !invoice.GetDescription().Contains("{->")) || (invoice.GetDescription() == null)))
+            //    invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+            //    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
+            //    if (GetVAB_InvoiceLine_ID() > 0 && ((invoice.GetDescription() != null && !invoice.GetDescription().Contains("{->")) || (invoice.GetDescription() == null)))
             //    {
             //        amt = Decimal.Divide(GetAmt(), GetQty());
 
-            //        string sql = "SELECT SUM(QTY) FROM M_MatchInv WHERE IsCostCalculated = 'N' AND C_InvoiceLine_ID = " + GetC_InvoiceLine_ID();
+            //        string sql = "SELECT SUM(QTY) FROM M_MatchInv WHERE IsCostCalculated = 'N' AND VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID();
             //        qty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, cd.Get_Trx()));
 
             //        amt = Decimal.Multiply(amt, qty);
 
-            //        sql = "UPDATE M_MatchInv SET IsCostCalculated = 'Y' WHERE C_InvoiceLine_ID = " + GetC_InvoiceLine_ID();
+            //        sql = "UPDATE M_MatchInv SET IsCostCalculated = 'Y' WHERE VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID();
             //        DB.ExecuteQuery(sql, null, cd.Get_Trx());
             //    }
-            //    else if (GetC_InvoiceLine_ID() > 0 && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
+            //    else if (GetVAB_InvoiceLine_ID() > 0 && invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
             //    {
             //        // on reversal - get qty from new table of M_MatchInvCostTrack
             //        qty = GetQty();
@@ -483,7 +483,7 @@ namespace VAdvantage.Model
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
+                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         if (MRPrice == 0)
@@ -492,7 +492,7 @@ namespace VAdvantage.Model
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) =  " + cd.GetC_OrderLine_ID() +
-                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
+                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
@@ -503,7 +503,7 @@ namespace VAdvantage.Model
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                         @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                        @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND NVL(cq.M_CostElement_ID , 0)  = 0 " +
+                                        @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND NVL(cq.M_CostElement_ID , 0)  = 0 " +
                                         @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
@@ -515,19 +515,19 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                      " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                     " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
+                                     " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                          " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0";
+                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
                         }
                         else
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                              " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = " + cd.GetC_InvoiceLine_ID();
+                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
                         }
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
 
@@ -537,13 +537,13 @@ namespace VAdvantage.Model
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                          " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
+                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                             {
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                              " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                              " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0";
+                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
                             }
                             else
                             {
@@ -551,7 +551,7 @@ namespace VAdvantage.Model
                                                  " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                                  " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                                  " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                                 " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = " + cd.GetC_InvoiceLine_ID();
+                                                 " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
                             }
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
@@ -622,20 +622,20 @@ namespace VAdvantage.Model
                     //    cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                     //}
                     //cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
-                    if (GetC_InvoiceLine_ID() > 0)
+                    if (GetVAB_InvoiceLine_ID() > 0)
                     {
-                        invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
-                        invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
+                        invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                        invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                         if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                         {
                             // this check is used to get previous invoice price from cost element detail 
                             // if invoice found then set that invoice price else 0
                             string sql = @"select * from (
-                                           SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.c_invoiceline_id , 
+                                           SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.VAB_InvoiceLine_id , 
                                            ced.m_costelementdetail_id,  ced.M_CostElement_ID,  row_number() over(order by ced.m_costelementdetail_id desc nulls last) rnm
-                                           FROM m_costelementdetail ced inner join c_invoiceline il on il.c_invoiceline_id = ced.c_invoiceline_id
-                                           inner join c_invoice i on i.c_invoice_id = il.c_invoice_id 
-                                           WHERE ced.c_invoiceline_id > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
+                                           FROM m_costelementdetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
+                                           inner join VAB_Invoice i on i.VAB_Invoice_id = il.VAB_Invoice_id 
+                                           WHERE ced.VAB_InvoiceLine_id > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                            @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
@@ -914,17 +914,17 @@ namespace VAdvantage.Model
             // calculate weighted Average cost from MR record if IscostCalculated is true on invoice linked with that MR
             //            if (windowName == "Material Receipt" && ce.IsWeightedAverageCost())
             //            {
-            //                string sql = @"SELECT il.C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i  ON i.C_Invoice_ID = il.C_Invoice_ID
+            //                string sql = @"SELECT il.VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i  ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
             //                               WHERE il.IsCostCalculated = 'Y' AND il.ISREVERSEDCOSTCALCULATED = 'N' AND i.DocStatus IN ('CO' , 'CL') AND il.IsActive = 'Y' 
             //                               AND il.M_InoutLine_ID = " + GetM_InOutLine_ID();
             //                int invLineId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, cd.Get_Trx()));
             //                if (invLineId > 0)
             //                {
             //                    invoiceline = new MInvoiceLine(GetCtx(), invLineId, cd.Get_Trx());
-            //                    invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), cd.Get_Trx());
+            //                    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), cd.Get_Trx());
             //                    inoutline = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
             //                    inout = new MInOut(GetCtx(), inoutline.GetM_InOut_ID(), Get_Trx());
-            //                    string IsCostCalculated = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsCostCalculated FROM M_MatchInv WHERE C_InvoiceLine_ID = " + invLineId +
+            //                    string IsCostCalculated = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsCostCalculated FROM M_MatchInv WHERE VAB_InvoiceLine_ID = " + invLineId +
             //                        @" AND M_InoutLine_ID = " + GetM_InOutLine_ID(), null, cd.Get_Trx()));
             //                    if (IsCostCalculated == "N" && inout != null && ((inout.GetDescription() != null && !inout.GetDescription().Contains("{->")) || inout.GetDescription() == null))
             //                    {
@@ -950,7 +950,7 @@ namespace VAdvantage.Model
             //                        MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
             //                                                           mas, ce.GetM_CostElement_ID(), "Invoice(Vendor)", cd, cost.GetCurrentCostPrice() * qty, qty);
 
-            //                        DB.ExecuteQuery("UPDATE M_MatchInv SET IsCostCalculated = 'Y' WHERE C_InvoiceLine_ID = " + invLineId +
+            //                        DB.ExecuteQuery("UPDATE M_MatchInv SET IsCostCalculated = 'Y' WHERE VAB_InvoiceLine_ID = " + invLineId +
             //                        @" AND M_InoutLine_ID = " + GetM_InOutLine_ID(), null, cd.Get_Trx());
 
             //                        return cost.Save();
@@ -1151,17 +1151,17 @@ namespace VAdvantage.Model
             }
 
             //	*** AP Invoice Detail Record ***
-            else if (GetC_InvoiceLine_ID() != 0 && windowName != "Material Receipt" && windowName != "Invoice(Vendor)-Return")
+            else if (GetVAB_InvoiceLine_ID() != 0 && windowName != "Material Receipt" && windowName != "Invoice(Vendor)-Return")
             {
                 #region AP Invoice Detail Record
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 if (GetM_InOutLine_ID() > 0 || GetC_OrderLine_ID() > 0)
                 {
-                    invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
-                    invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
+                    invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                     // checking invoice contain reverse invoice ref or not
                 }
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_LandedCostAllocation WHERE  C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx())) <= 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_LCostDistribution WHERE  VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID(), null, Get_Trx())) <= 0)
                 {
                     if (GetC_OrderLine_ID() == 0) // if invoice created without orderline  then no impact on cost
                     {
@@ -1463,18 +1463,18 @@ namespace VAdvantage.Model
                             // this check is used to get previous invoice price from cost element detail 
                             // if invoice found then set that invoice price else 0
                             // this block is executed for reverse record
-                            if (GetC_InvoiceLine_ID() > 0 && isReturnTrx)
+                            if (GetVAB_InvoiceLine_ID() > 0 && isReturnTrx)
                             {
-                                invoiceline = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
-                                invoice = new MInvoice(GetCtx(), invoiceline.GetC_Invoice_ID(), Get_Trx());
+                                invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                                invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                                 if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                 {
                                     string sql = @"select * from (
-                                           SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.c_invoiceline_id , 
+                                           SELECT ced.qty , ced.amt , ced.amt/ced.qty AS price , ced.VAB_AccountBook_id ,  ced.VAB_InvoiceLine_id , 
                                            ced.m_costelementdetail_id,  ced.M_CostElement_ID,  row_number() over(order by ced.m_costelementdetail_id desc nulls last) rnm
-                                           FROM m_costelementdetail ced inner join c_invoiceline il on il.c_invoiceline_id = ced.c_invoiceline_id
-                                           inner join c_invoice i on i.c_invoice_id = il.c_invoice_id 
-                                           WHERE ced.c_invoiceline_id > 0 AND ced.M_Inoutline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
+                                           FROM m_costelementdetail ced inner join VAB_InvoiceLine il on il.VAB_InvoiceLine_id = ced.VAB_InvoiceLine_id
+                                           inner join VAB_Invoice i on i.VAB_Invoice_id = il.VAB_Invoice_id 
+                                           WHERE ced.VAB_InvoiceLine_id > 0 AND ced.M_Inoutline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                                    @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                                    @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
@@ -4432,13 +4432,13 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Create New Invoice Cost Detail for AP Invoices.
-        /// Called from Doc_Invoice - for Invoice Adjustments
+        /// Called from DoVAB_Invoice - for Invoice Adjustments
         /// </summary>
         /// <param name="mas">accounting schema</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
-        /// <param name="C_InvoiceLine_ID">invoice</param>
+        /// <param name="VAB_InvoiceLine_ID">invoice</param>
         /// <param name="M_CostElement_ID">optional cost element</param>
         /// <param name="Amt">total amount</param>
         /// <param name="Qty">quantity</param>
@@ -4446,21 +4446,21 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
         public static bool CreateInvoice(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
-            int M_AttributeSetInstance_ID, int C_InvoiceLine_ID, int M_CostElement_ID,
+            int M_AttributeSetInstance_ID, int VAB_InvoiceLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
             //	Delete Unprocessed zero Differences
             String sql = "DELETE FROM M_CostDetail "
                 + "WHERE Processed='N' AND COALESCE(DeltaAmt,0)=0 AND COALESCE(DeltaQty,0)=0"
-                + " AND C_InvoiceLine_ID=" + C_InvoiceLine_ID
+                + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID
                 + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);
             if (no != 0)
             {
                 _log.Config("Deleted #" + no);
             }
-            MCostDetail cd = Get(mas.GetCtx(), "C_InvoiceLine_ID=@param1 AND M_AttributeSetInstance_ID=@param2",
-                C_InvoiceLine_ID, M_AttributeSetInstance_ID, trxName);
+            MCostDetail cd = Get(mas.GetCtx(), "VAB_InvoiceLine_ID=@param1 AND M_AttributeSetInstance_ID=@param2",
+                VAB_InvoiceLine_ID, M_AttributeSetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew
             {
@@ -4468,7 +4468,7 @@ namespace VAdvantage.Model
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
-                cd.SetC_InvoiceLine_ID(C_InvoiceLine_ID);
+                cd.SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
             }
             else
             {
@@ -4481,7 +4481,7 @@ namespace VAdvantage.Model
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,                              M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
-                    cd.SetC_InvoiceLine_ID(C_InvoiceLine_ID);
+                    cd.SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
                     /*****************************************/
                     cd.SetVAB_AccountBook_ID(mas.GetVAB_AccountBook_ID());
                     cd.SetM_Product_ID(M_Product_ID);
@@ -4982,7 +4982,7 @@ namespace VAdvantage.Model
         /// <returns>true if invoice line</returns>
         public bool IsInvoice()
         {
-            return GetC_InvoiceLine_ID() != 0;
+            return GetVAB_InvoiceLine_ID() != 0;
         }
 
         /// <summary>
@@ -5122,8 +5122,8 @@ namespace VAdvantage.Model
                     else
                     {
                         qry = @"SELECT ast.VAA_Asset_ID from VAA_Asset ast INNER JOIN M_InOutLine inl ON (ast.M_InOutLine_ID = inl.M_InOutLine_ID)
-                            INNER JOIN C_InvoiceLine inv ON (inv.M_InOutLine_ID = inl.M_InOutLine_ID) WHERE ast.IsActive ='Y' 
-                            AND ast.M_Product_ID=" + product.GetM_Product_ID() + " AND inv.C_InvoiceLine_ID =" + GetC_InvoiceLine_ID();
+                            INNER JOIN VAB_InvoiceLine inv ON (inv.M_InOutLine_ID = inl.M_InOutLine_ID) WHERE ast.IsActive ='Y' 
+                            AND ast.M_Product_ID=" + product.GetM_Product_ID() + " AND inv.VAB_InvoiceLine_ID =" + GetVAB_InvoiceLine_ID();
                     }
                     DataSet ds = DB.ExecuteDataset(qry, null, null);
                     if (ds != null)
@@ -5247,7 +5247,7 @@ namespace VAdvantage.Model
             }
 
             //	*** AP Invoice Detail Record ***
-            else if (GetC_InvoiceLine_ID() != 0)
+            else if (GetVAB_InvoiceLine_ID() != 0)
             {
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 if (ce.IsAverageInvoice())
@@ -5522,8 +5522,8 @@ namespace VAdvantage.Model
                 sb.Append(",C_OrderLine_ID=").Append(GetC_OrderLine_ID());
             if (GetM_InOutLine_ID() != 0)
                 sb.Append(",M_InOutLine_ID=").Append(GetM_InOutLine_ID());
-            if (GetC_InvoiceLine_ID() != 0)
-                sb.Append(",C_InvoiceLine_ID=").Append(GetC_InvoiceLine_ID());
+            if (GetVAB_InvoiceLine_ID() != 0)
+                sb.Append(",VAB_InvoiceLine_ID=").Append(GetVAB_InvoiceLine_ID());
             if (GetC_ProjectIssue_ID() != 0)
                 sb.Append(",C_ProjectIssue_ID=").Append(GetC_ProjectIssue_ID());
             if (GetM_MovementLine_ID() != 0)
@@ -5641,7 +5641,7 @@ namespace VAdvantage.Model
             }
 
             //	*** AP Invoice Detail Record ***
-            else if (GetC_InvoiceLine_ID() != 0)
+            else if (GetVAB_InvoiceLine_ID() != 0)
             {
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 if (ce.IsAverageInvoice())
@@ -5687,9 +5687,9 @@ namespace VAdvantage.Model
                 {
 
                     string lastPrice = "select round(amt/ qty,6) as Price from m_costdetail where m_product_id="
-                        + cost.GetM_Product_ID() + " and c_invoiceline_id is NOT NULL and c_invoiceline_id<> @param1"
+                        + cost.GetM_Product_ID() + " and VAB_InvoiceLine_id is NOT NULL and VAB_InvoiceLine_id<> @param1"
                         + " ORDER BY m_costdetail_id DESC";
-                    cost.SetCurrentCostPrice(DB.GetSQLValueBD(Get_TrxName(), lastPrice, GetC_InvoiceLine_ID()));
+                    cost.SetCurrentCostPrice(DB.GetSQLValueBD(Get_TrxName(), lastPrice, GetVAB_InvoiceLine_ID()));
 
                     cost.Add(amt, qty);
                     //if (!isReturnTrx)

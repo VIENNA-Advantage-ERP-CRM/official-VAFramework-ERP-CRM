@@ -110,10 +110,10 @@ namespace VAdvantage.Model
 
             //	Create new PaySelection Line
             MPaySelectionLine psl = null;
-            if (payment.GetC_Invoice_ID() != 0)
+            if (payment.GetVAB_Invoice_ID() != 0)
             {
                 psl = new MPaySelectionLine(ps, 10, PaymentRule);
-                psl.SetC_Invoice_ID(payment.GetC_Invoice_ID());
+                psl.SetVAB_Invoice_ID(payment.GetVAB_Invoice_ID());
                 psl.SetIsSOTrx(payment.IsReceipt());
                 psl.SetOpenAmt(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()));
                 psl.SetPayAmt(payment.GetPayAmt());
@@ -612,10 +612,10 @@ namespace VAdvantage.Model
                             MPaySelectionLine psl = psls[0];
                             _log.Fine("Map to Invoice " + psl);
                             //
-                            payment.SetC_Invoice_ID(psl.GetC_Invoice_ID());
-                            if (psl.Get_ColumnIndex("C_InvoicePaySchedule_ID") > 0)
+                            payment.SetVAB_Invoice_ID(psl.GetVAB_Invoice_ID());
+                            if (psl.Get_ColumnIndex("VAB_sched_InvoicePayment_ID") > 0)
                             {
-                                payment.SetC_InvoicePaySchedule_ID(psl.GetC_InvoicePaySchedule_ID());
+                                payment.SetVAB_sched_InvoicePayment_ID(psl.GetVAB_sched_InvoicePayment_ID());
                             }
                             payment.SetDiscountAmt(psl.GetDiscountAmt());
                             if (psl.GetDifferenceAmt() > 0)
@@ -632,11 +632,11 @@ namespace VAdvantage.Model
                         if (psls.Length == 1)
                         {
                             MPaySelectionLine psl = psls[0];
-                            if (psl.Get_ColumnIndex("C_InvoicePaySchedule_ID") > 0)
+                            if (psl.Get_ColumnIndex("VAB_sched_InvoicePayment_ID") > 0)
                             {
-                                payment.SetC_InvoicePaySchedule_ID(psl.GetC_InvoicePaySchedule_ID());
+                                payment.SetVAB_sched_InvoicePayment_ID(psl.GetVAB_sched_InvoicePayment_ID());
                             }
-                            payment.SetC_Invoice_ID(psl.GetC_Invoice_ID());
+                            payment.SetVAB_Invoice_ID(psl.GetVAB_Invoice_ID());
                             payment.SetDiscountAmt(psl.GetDiscountAmt());
                             if (psl.GetDifferenceAmt() > 0)
                                 payment.SetWriteOffAmt(psl.GetDifferenceAmt());
@@ -665,8 +665,8 @@ namespace VAdvantage.Model
                                 {
                                     MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
                                     PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
-                                    PayAlocate.SetC_Invoice_ID(psls[j].GetC_Invoice_ID());
-                                    PayAlocate.SetC_InvoicePaySchedule_ID(psls[j].GetC_InvoicePaySchedule_ID());
+                                    PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
+                                    PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
                                     PayAlocate.SetAmount(psls[j].GetPayAmt());
                                     PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());
@@ -757,7 +757,7 @@ namespace VAdvantage.Model
                             MPaySelectionLine psl = psls[0];
                             _log.Fine("Map to Invoice " + psl);
                             //
-                            payment.SetC_Invoice_ID(psl.GetC_Invoice_ID());
+                            payment.SetVAB_Invoice_ID(psl.GetVAB_Invoice_ID());
                             payment.SetDiscountAmt(psl.GetDiscountAmt());
                             payment.SetWriteOffAmt(psl.GetDifferenceAmt());
                             Decimal overUnder = Decimal.Subtract(Decimal.Subtract(Decimal.Subtract(psl.GetOpenAmt(), psl.GetPayAmt()), psl.GetDiscountAmt()), psl.GetDifferenceAmt());
@@ -788,8 +788,8 @@ namespace VAdvantage.Model
                                 {
                                     MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
                                     PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
-                                    PayAlocate.SetC_Invoice_ID(psls[j].GetC_Invoice_ID());
-                                    PayAlocate.SetC_InvoicePaySchedule_ID(psls[j].GetC_InvoicePaySchedule_ID());
+                                    PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
+                                    PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
                                     PayAlocate.SetAmount(psls[j].GetPayAmt());
                                     PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());

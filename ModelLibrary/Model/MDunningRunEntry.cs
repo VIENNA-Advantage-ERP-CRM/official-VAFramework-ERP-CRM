@@ -236,7 +236,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM VAB_DunningExeLine WHERE VAB_DunningExeEntry_ID=" + Get_ID();
             if (onlyInvoices)
             {
-                sql += " AND C_Invoice_ID IS NOT NULL";
+                sql += " AND VAB_Invoice_ID IS NOT NULL";
             }
             DataTable dt = null;
             IDataReader idr = null;
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
         public bool HasInvoices()
         {
             bool retValue = false;
-            String sql = "SELECT COUNT(*) FROM VAB_DunningExeLine WHERE VAB_DunningExeEntry_ID=" + Get_ID() + " AND C_Invoice_ID IS NOT NULL";
+            String sql = "SELECT COUNT(*) FROM VAB_DunningExeLine WHERE VAB_DunningExeEntry_ID=" + Get_ID() + " AND VAB_Invoice_ID IS NOT NULL";
             IDataReader idr = null;
             try
             {

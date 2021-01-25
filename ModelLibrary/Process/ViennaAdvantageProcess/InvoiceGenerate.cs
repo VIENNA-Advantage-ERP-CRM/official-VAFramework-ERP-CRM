@@ -291,7 +291,7 @@ namespace ViennaAdvantage.Process
                 if (MOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
                 {
                     _bp = new MBPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
-                    if (_bp.GetC_InvoiceSchedule_ID() == 0)
+                    if (_bp.GetVAB_sched_Invoice_ID() == 0)
                     {
                         log.Warning("BPartner has no Schedule - set to After Delivery");
                         order.SetInvoiceRule(MOrder.INVOICERULE_AfterDelivery);
@@ -299,7 +299,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        MInvoiceSchedule ins = MInvoiceSchedule.Get(GetCtx(), _bp.GetC_InvoiceSchedule_ID(), Get_TrxName());
+                        MInvoiceSchedule ins = MInvoiceSchedule.Get(GetCtx(), _bp.GetVAB_sched_Invoice_ID(), Get_TrxName());
                         if (ins.CanInvoice(order.GetDateOrdered(), order.GetGrandTotal()))
                         {
                             doInvoice = true;
@@ -521,9 +521,9 @@ namespace ViennaAdvantage.Process
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
-                if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (_invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    _invoice.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
+                    _invoice.SetVAB_IncoTerm_ID(order.GetVAB_IncoTerm_ID());
                 }
 
                 if (!_invoice.Save())
@@ -593,9 +593,9 @@ namespace ViennaAdvantage.Process
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
-                if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (_invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    _invoice.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
+                    _invoice.SetVAB_IncoTerm_ID(order.GetVAB_IncoTerm_ID());
                 }
 
                 if (!_invoice.Save())
@@ -788,10 +788,10 @@ namespace ViennaAdvantage.Process
                 //
                 if (_msg != null)
                 {
-                    AddLog(_invoice.GetC_Invoice_ID(), Convert.ToDateTime(_invoice.GetDateInvoiced()), null, _msg + _invoice.GetDocumentNo());
+                    AddLog(_invoice.GetVAB_Invoice_ID(), Convert.ToDateTime(_invoice.GetDateInvoiced()), null, _msg + _invoice.GetDocumentNo());
                 }
                 else
-                    AddLog(_invoice.GetC_Invoice_ID(), Convert.ToDateTime(_invoice.GetDateInvoiced()), null, _invoice.GetDocumentNo());
+                    AddLog(_invoice.GetVAB_Invoice_ID(), Convert.ToDateTime(_invoice.GetDateInvoiced()), null, _invoice.GetDocumentNo());
                 _created++;
             }
             _invoice = null;

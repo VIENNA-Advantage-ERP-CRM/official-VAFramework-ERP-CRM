@@ -59,7 +59,7 @@ namespace VAdvantage.Acct
         //  References
         private int _VAB_Bank_Acct_ID = 0;
         private int _VAB_CashBook_ID = 0;
-        private int _C_Invoice_ID = 0;
+        private int _VAB_Invoice_ID = 0;
 
         //  Amounts
         private Decimal _Amount = Env.ZERO;
@@ -80,11 +80,11 @@ namespace VAdvantage.Acct
             _CashType = line.GetCashType();
             _VAB_Bank_Acct_ID = line.GetVAB_Bank_Acct_ID();
             _VAB_CashBook_ID = line.GetVAB_CashBook_ID();
-            _C_Invoice_ID = line.GetC_Invoice_ID();
+            _VAB_Invoice_ID = line.GetVAB_Invoice_ID();
             //
-            if (_C_Invoice_ID != 0)
+            if (_VAB_Invoice_ID != 0)
             {
-                MInvoice invoice = MInvoice.Get(line.GetCtx(), _C_Invoice_ID);
+                MInvoice invoice = MInvoice.Get(line.GetCtx(), _VAB_Invoice_ID);
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
 
@@ -119,10 +119,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Invoice
         /// </summary>
-        /// <returns>C_Invoice_ID</returns>
-        public int GetC_Invoice_ID()
+        /// <returns>VAB_Invoice_ID</returns>
+        public int GetVAB_Invoice_ID()
         {
-            return _C_Invoice_ID;
+            return _VAB_Invoice_ID;
         }
 
         /// <summary>

@@ -477,7 +477,7 @@ namespace VAdvantage.Model
          */
         public FileInfo CreatePDF(FileInfo file)
         {
-            //	ReportEngine re = ReportEngine.get (GetCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
+            //	ReportEngine re = ReportEngine.get (GetCtx(), ReportEngine.INVOICE, getVAB_Invoice_ID());
             //	if (re == null)
             //return null;
             //	return re.getPDF(file);
@@ -893,7 +893,7 @@ namespace VAdvantage.Model
             }
             //End Here 
             if (_creditMemo != null)
-                _processMsg += " @C_Invoice_ID@=" + _creditMemo.GetDocumentNo();
+                _processMsg += " @VAB_Invoice_ID@=" + _creditMemo.GetDocumentNo();
             if (_inventory != null)
                 //   _processMsg += " @M_Inventory_ID@=" + _inventory.GetDocumentNo();
                 //new 13 jan
@@ -1108,7 +1108,7 @@ namespace VAdvantage.Model
                         _processMsg += "Credit Memo not created";
                         return false;
                     }
-                    SetC_Invoice_ID(_creditMemo.GetC_Invoice_ID());
+                    SetVAB_Invoice_ID(_creditMemo.GetVAB_Invoice_ID());
                 }
                 MInvoiceLine line = new MInvoiceLine(_creditMemo);
                 line.SetShipLine(confirm.GetLine());
@@ -1128,7 +1128,7 @@ namespace VAdvantage.Model
                     _processMsg += "Credit Memo Line not created";
                     return false;
                 }
-                confirm.SetC_InvoiceLine_ID(line.GetC_InvoiceLine_ID());
+                confirm.SetVAB_InvoiceLine_ID(line.GetVAB_InvoiceLine_ID());
             }
 
             //	Create Inventory Difference

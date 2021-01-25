@@ -123,13 +123,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Insert Trx
             String dateStr = DataBase.DB.TO_DATE(_DateReval, true);
             sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-             + " VAF_JInstance_ID, C_Invoice_ID, GrandTotal, OpenAmt, "
+             + " VAF_JInstance_ID, VAB_Invoice_ID, GrandTotal, OpenAmt, "
              + " Fact_Acct_ID, AmtSourceBalance, AmtAcctBalance, "
              + " AmtRevalDr, AmtRevalCr, VAB_DocTypesReval_ID, IsAllCurrencies, "
              + " DateReval, VAB_CurrencyTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
                 //	--
              + "SELECT i.VAF_Client_ID, i.VAF_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
-             + GetVAF_JInstance_ID() + ", i.C_Invoice_ID, i.GrandTotal, invoiceOpen(i.C_Invoice_ID, 0), "
+             + GetVAF_JInstance_ID() + ", i.VAB_Invoice_ID, i.GrandTotal, invoiceOpen(i.VAB_Invoice_ID, 0), "
              + " fa.Fact_Acct_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
                 //	AmtRevalDr, AmtRevalCr,
              + " currencyConvert(fa.AmtSourceDr, i.VAB_Currency_ID, a.VAB_Currency_ID, " + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
@@ -138,8 +138,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
              + (_IsAllCurrencies ? "'Y'," : "'N',")
              + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", 0, 0, '" + _APAR + "' "
                 //
-             + "FROM C_Invoice_v i"
-             + " INNER JOIN Fact_Acct fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.C_Invoice_ID"
+             + "FROM VAB_Invoice_v i"
+             + " INNER JOIN Fact_Acct fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.VAB_Invoice_ID"
                  + " AND (i.GrandTotal=fa.AmtSourceDr OR i.GrandTotal=fa.AmtSourceCr))"
              + " INNER JOIN VAB_AccountBook a ON (fa.VAB_AccountBook_ID=a.VAB_AccountBook_ID) "
              + "WHERE i.IsPaid='N'"
@@ -300,7 +300,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MInvoice invoice = new MInvoice(GetCtx(), gl.GetC_Invoice_ID(), null);
+                MInvoice invoice = new MInvoice(GetCtx(), gl.GetVAB_Invoice_ID(), null);
                 if (invoice.GetVAB_Currency_ID() == aas.GetVAB_Currency_ID())
                 {
                     continue;

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_InviteeList
+/** Generated Model for VAB_InviteeList
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_InviteeList : PO
+public class X_VAB_InviteeList : PO
 {
-public X_C_InviteeList (Context ctx, int C_InviteeList_ID, Trx trxName) : base (ctx, C_InviteeList_ID, trxName)
+public X_VAB_InviteeList (Context ctx, int VAB_InviteeList_ID, Trx trxName) : base (ctx, VAB_InviteeList_ID, trxName)
 {
-/** if (C_InviteeList_ID == 0)
+/** if (VAB_InviteeList_ID == 0)
 {
 SetVAB_Promotion_ID (0);
-SetC_InviteeList_ID (0);
+SetVAB_InviteeList_ID (0);
 }
  */
 }
-public X_C_InviteeList (Ctx ctx, int C_InviteeList_ID, Trx trxName) : base (ctx, C_InviteeList_ID, trxName)
+public X_VAB_InviteeList (Ctx ctx, int VAB_InviteeList_ID, Trx trxName) : base (ctx, VAB_InviteeList_ID, trxName)
 {
-/** if (C_InviteeList_ID == 0)
+/** if (VAB_InviteeList_ID == 0)
 {
 SetVAB_Promotion_ID (0);
-SetC_InviteeList_ID (0);
+SetVAB_InviteeList_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetC_InviteeList_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InviteeList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InviteeList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_InviteeList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InviteeList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InviteeList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_InviteeList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InviteeList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_InviteeList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_InviteeList()
+static X_VAB_InviteeList()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1328532445767L;
 public static int Table_ID;
  // =1000241;
 
-/** TableName=C_InviteeList */
-public static String Table_Name="C_InviteeList";
+/** TableName=VAB_InviteeList */
+public static String Table_Name="VAB_InviteeList";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_InviteeList[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_InviteeList[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -209,18 +209,18 @@ Object ii = Get_Value("VAB_Country_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_InviteeList_ID.
-@param C_InviteeList_ID C_InviteeList_ID */
-public void SetC_InviteeList_ID (int C_InviteeList_ID)
+/** Set VAB_InviteeList_ID.
+@param VAB_InviteeList_ID VAB_InviteeList_ID */
+public void SetVAB_InviteeList_ID (int VAB_InviteeList_ID)
 {
-if (C_InviteeList_ID < 1) throw new ArgumentException ("C_InviteeList_ID is mandatory.");
-Set_ValueNoCheck ("C_InviteeList_ID", C_InviteeList_ID);
+if (VAB_InviteeList_ID < 1) throw new ArgumentException ("VAB_InviteeList_ID is mandatory.");
+Set_ValueNoCheck ("VAB_InviteeList_ID", VAB_InviteeList_ID);
 }
-/** Get C_InviteeList_ID.
-@return C_InviteeList_ID */
-public int GetC_InviteeList_ID() 
+/** Get VAB_InviteeList_ID.
+@return VAB_InviteeList_ID */
+public int GetVAB_InviteeList_ID() 
 {
-Object ii = Get_Value("C_InviteeList_ID");
+Object ii = Get_Value("VAB_InviteeList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

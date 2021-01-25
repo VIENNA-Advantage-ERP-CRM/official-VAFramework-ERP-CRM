@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInvoiceBatchLine
  * Purpose        : Invoice batch line setting
- * Class Used     : X_C_InvoiceBatchLine
+ * Class Used     : X_VAB_BatchInvoiceLine
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -24,21 +24,21 @@ using VAdvantage.Logging;
 //using java.math;
 namespace VAdvantage.Model
 {
-    public class MInvoiceBatchLine : X_C_InvoiceBatchLine
+    public class MInvoiceBatchLine : X_VAB_BatchInvoiceLine
     {
         /**
 	 * 	Standard Constructor
 	 *	@param ctx context
-	 *	@param C_InvoiceBatchLine_ID id
+	 *	@param VAB_BatchInvoiceLine_ID id
 	 *	@param trxName trx
 	 */
-        public MInvoiceBatchLine(Ctx ctx, int C_InvoiceBatchLine_ID,
+        public MInvoiceBatchLine(Ctx ctx, int VAB_BatchInvoiceLine_ID,
             Trx trxName) :
-            base(ctx, C_InvoiceBatchLine_ID, trxName)
+            base(ctx, VAB_BatchInvoiceLine_ID, trxName)
         {
-            if (C_InvoiceBatchLine_ID == 0)
+            if (VAB_BatchInvoiceLine_ID == 0)
             {
-                //	setC_InvoiceBatch_ID (0);
+                //	setVAB_BatchInvoice_ID (0);
                 /**
                 setVAB_BusinessPartner_ID (0);
                 setVAB_BPart_Location_ID (0);
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
                 setVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
                 setC_Tax_ID (0);
                 setDocumentNo (null);
-                setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID=@C_InvoiceBatch_ID@
+                setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=@VAB_BatchInvoice_ID@
                 **/
                 //SetDateAcct (new Timestamp(System.currentTimeMillis()));	// @DateDoc@
                 SetDateAcct(DateTime.Now);	// @DateDoc@
@@ -139,12 +139,12 @@ namespace VAdvantage.Model
         private void SetDocumentNo()
         {
             //	Get last line
-            int C_InvoiceBatch_ID = GetC_InvoiceBatch_ID();
-            String sql = "SELECT COALESCE(MAX(C_InvoiceBatchLine_ID),0) FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID=" + C_InvoiceBatch_ID;
-            int C_InvoiceBatchLine_ID = DataBase.DB.GetSQLValue(null, sql);
-            if (C_InvoiceBatchLine_ID == 0)
+            int VAB_BatchInvoice_ID = GetVAB_BatchInvoice_ID();
+            String sql = "SELECT COALESCE(MAX(VAB_BatchInvoiceLine_ID),0) FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=" + VAB_BatchInvoice_ID;
+            int VAB_BatchInvoiceLine_ID = DataBase.DB.GetSQLValue(null, sql);
+            if (VAB_BatchInvoiceLine_ID == 0)
                 return;
-            MInvoiceBatchLine last = new MInvoiceBatchLine(GetCtx(), C_InvoiceBatchLine_ID, null);
+            MInvoiceBatchLine last = new MInvoiceBatchLine(GetCtx(), VAB_BatchInvoiceLine_ID, null);
 
             //	Need to Increase when different DocType or BP
             int VAB_DocTypes_ID = GetVAB_DocTypes_ID();
@@ -550,10 +550,10 @@ namespace VAdvantage.Model
         {
             if (success)
             {
-                String sql = "UPDATE C_InvoiceBatch h "
-                    + "SET DocumentAmt = NVL((SELECT SUM(LineTotalAmt) FROM C_InvoiceBatchLine l "
-                        + "WHERE h.C_InvoiceBatch_ID=l.C_InvoiceBatch_ID AND l.IsActive='Y'),0) "
-                    + "WHERE C_InvoiceBatch_ID=" + GetC_InvoiceBatch_ID();
+                String sql = "UPDATE VAB_BatchInvoice h "
+                    + "SET DocumentAmt = NVL((SELECT SUM(LineTotalAmt) FROM VAB_BatchInvoiceLine l "
+                        + "WHERE h.VAB_BatchInvoice_ID=l.VAB_BatchInvoice_ID AND l.IsActive='Y'),0) "
+                    + "WHERE VAB_BatchInvoice_ID=" + GetVAB_BatchInvoice_ID();
                 DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             }
             return success;

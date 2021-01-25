@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				.Append("&NumProduct=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM M_Product")), UTF8Encoding.UTF8))
 				.Append("&NumInvoice=").Append(HttpUtility.UrlEncode(Convert.ToString(
-					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM C_Invoice")), UTF8Encoding.UTF8));
+					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAB_Invoice")), UTF8Encoding.UTF8));
 		}
 		log.Fine(urlString.ToString());
 	

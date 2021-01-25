@@ -71,13 +71,13 @@ namespace VAdvantage.Model
         /// Set Line IDs
         /// </summary>
         /// <param name="C_OrderLine_ID">order</param>
-        /// <param name="C_InvoiceLine_ID">invoice</param>
-        public void SetLineIDs(int C_OrderLine_ID, int C_InvoiceLine_ID)
+        /// <param name="VAB_InvoiceLine_ID">invoice</param>
+        public void SetLineIDs(int C_OrderLine_ID, int VAB_InvoiceLine_ID)
         {
             if (C_OrderLine_ID != 0)
                 SetC_OrderLine_ID(C_OrderLine_ID);
-            if (C_InvoiceLine_ID != 0)
-                SetC_InvoiceLine_ID(C_InvoiceLine_ID);
+            if (VAB_InvoiceLine_ID != 0)
+                SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
         }
 
 

@@ -1003,7 +1003,7 @@
 
 
             inputProperties['C_Order_ID'] = ctx.getContextAsInt(windowNo, "C_Order_ID");
-            inputProperties['C_Invoice_ID'] = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+            inputProperties['VAB_Invoice_ID'] = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
 
 
             $.ajax({

@@ -240,18 +240,18 @@ public int GetVAB_BPart_Location_ID()
     return Convert.ToInt32(ii);
 }
 /** Set Position.
-@param C_Job_ID Job Position */
-public void SetC_Job_ID(int C_Job_ID)
+@param VAB_Position_ID Job Position */
+public void SetVAB_Position_ID(int VAB_Position_ID)
 {
-    if (C_Job_ID <= 0) Set_Value("C_Job_ID", null);
+    if (VAB_Position_ID <= 0) Set_Value("VAB_Position_ID", null);
     else
-        Set_Value("C_Job_ID", C_Job_ID);
+        Set_Value("VAB_Position_ID", VAB_Position_ID);
 }
 /** Get Position.
 @return Job Position */
-public int GetC_Job_ID()
+public int GetVAB_Position_ID()
 {
-    Object ii = Get_Value("C_Job_ID");
+    Object ii = Get_Value("VAB_Position_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

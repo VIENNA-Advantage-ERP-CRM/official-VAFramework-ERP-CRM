@@ -199,7 +199,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (changed != 0)
             {
                 AddLog(0, null, new Decimal(invoices.Length),
-                    Msg.GetElement(GetCtx(), "C_Invoice_ID") + " - #" + changed);
+                    Msg.GetElement(GetCtx(), "VAB_Invoice_ID") + " - #" + changed);
             }
         }	//	checkInvoices
 

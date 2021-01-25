@@ -37,16 +37,16 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             StringBuilder _sql = new StringBuilder();
-            X_C_InviteeList invi = null;
+            X_VAB_InviteeList invi = null;
             //_sql.Clear();
-            _sql.Append(" Select c_inviteelist_ID, Name, email From c_inviteelist where VAB_Promotion_id=" + _Campaign_ID);
+            _sql.Append(" Select VAB_InviteeList_ID, Name, email From VAB_InviteeList where VAB_Promotion_id=" + _Campaign_ID);
             DataSet ds1 = DB.ExecuteDataset(_sql.ToString());
 
 
 
             int _SelectedInvitee = GetRecord_ID();
             _sql.Clear();
-            _sql.Append(@"Select VAB_Promotion_ID FROM C_InviteeList Where C_InviteeList_ID=" + _SelectedInvitee);
+            _sql.Append(@"Select VAB_Promotion_ID FROM VAB_InviteeList Where VAB_InviteeList_ID=" + _SelectedInvitee);
             int _SelectedCampaign = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
 
 
@@ -54,7 +54,7 @@ namespace VAdvantage.Process
             {
                 //StringBuilder _sql = new StringBuilder();
                 _sql.Clear();
-                _sql.Append(@"Select * From C_InviteeList ");
+                _sql.Append(@"Select * From VAB_InviteeList ");
                 _sql.Append(@" Where IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID());
                 if (_Campaign_ID > 0)
                 {
@@ -71,10 +71,10 @@ namespace VAdvantage.Process
 
 
                         _sql.Clear();
-                        _sql.Append(@"Select C_InviteeList_ID FROM C_InviteeList Where (Name='" + _name + "' AND Email ='" + _mail + "') And VAB_Promotion_id=" + _Campaign_ID);
+                        _sql.Append(@"Select VAB_InviteeList_ID FROM VAB_InviteeList Where (Name='" + _name + "' AND Email ='" + _mail + "') And VAB_Promotion_id=" + _Campaign_ID);
                         int _recordID = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
 
-                        invi = new X_C_InviteeList(Env.GetCtx(), _recordID, null);
+                        invi = new X_VAB_InviteeList(Env.GetCtx(), _recordID, null);
                         invi.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
                         invi.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
                         invi.SetVAB_Promotion_ID(_Campaign_ID);

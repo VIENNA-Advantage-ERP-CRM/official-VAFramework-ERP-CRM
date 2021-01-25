@@ -32,7 +32,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Document Type		
         private int _VAB_DocTypes_ID = 0;
         // Invoice			
-        private int _C_Invoice_ID = 0;
+        private int _VAB_Invoice_ID = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -59,7 +59,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_Invoice_ID = GetRecord_ID();
+            _VAB_Invoice_ID = GetRecord_ID();
         }
 
 
@@ -69,22 +69,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            //log.info("C_Invoice_ID=" + _C_Invoice_ID 
+            //log.info("VAB_Invoice_ID=" + _VAB_Invoice_ID 
             //    + ", M_Warehouse_ID=" + _M_Warehouse_ID
             //    + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
-            if (_C_Invoice_ID == 0)
+            if (_VAB_Invoice_ID == 0)
             {
-                throw new ArgumentException("@NotFound@ @C_Invoice_ID@");
+                throw new ArgumentException("@NotFound@ @VAB_Invoice_ID@");
             }
             if (_M_Warehouse_ID == 0)
             {
                 throw new ArgumentException("@NotFound@ @M_Warehouse_ID@");
             }
             //
-            MInvoice invoice = new MInvoice(GetCtx(), _C_Invoice_ID, Get_Trx());
+            MInvoice invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, Get_Trx());
             if (invoice.Get_ID() == 0)
             {
-                throw new ArgumentException("@NotFound@ @C_Invoice_ID@");
+                throw new ArgumentException("@NotFound@ @VAB_Invoice_ID@");
             }
             if (!MInvoice.DOCSTATUS_Completed.Equals(invoice.GetDocStatus()))
             {
@@ -94,7 +94,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (invoice.IsSOTrx() != dt.IsSOTrx()
                 || invoice.IsReturnTrx() != dt.IsReturnTrx())
             {
-                throw new ArgumentException("@VAB_DocTypes_ID@ <> @C_Invoice_ID@");
+                throw new ArgumentException("@VAB_DocTypes_ID@ <> @VAB_Invoice_ID@");
             }
 
             //*****************************Vikas  1 Dec 2015  *********************************
@@ -199,8 +199,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 invoiceLine.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
                 if (!invoiceLine.Save())
                 {
-                    return GetRetrievedError(invoiceLine, "@SaveError@ @C_InvoiceLine_ID@");
-                    //throw new ArgumentException("@SaveError@ @C_InvoiceLine_ID@");
+                    return GetRetrievedError(invoiceLine, "@SaveError@ @VAB_InvoiceLine_ID@");
+                    //throw new ArgumentException("@SaveError@ @VAB_InvoiceLine_ID@");
                 }
             }
             return ship.GetDocumentNo();

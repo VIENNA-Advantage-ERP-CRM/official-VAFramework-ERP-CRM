@@ -56,14 +56,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            //log.info ("C_InvoicePaySchedule_ID=" + getRecord_ID());
+            //log.info ("VAB_sched_InvoicePayment_ID=" + getRecord_ID());
             MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule(GetCtx(), 0, GetRecord_ID(), null);
             if (schedule.Length == 0)
             {
                 throw new ArgumentException("InvoicePayScheduleValidate - No Schedule");
             }
             //	Get Invoice
-            MInvoice invoice = new MInvoice(GetCtx(), schedule[0].GetC_Invoice_ID(), null);
+            MInvoice invoice = new MInvoice(GetCtx(), schedule[0].GetVAB_Invoice_ID(), null);
             if (invoice.Get_ID() == 0)
             {
                 throw new ArgumentException("InvoicePayScheduleValidate - No Invoice");

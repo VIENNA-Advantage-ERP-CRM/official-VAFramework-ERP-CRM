@@ -242,16 +242,16 @@ namespace VIS.Models
         {
             bool repostval = true;
 
-            string invoiceID = "(SELECT ca.c_invoice_id FROM VAB_DocAllocationLine ca" +
-                   " inner join c_invoice ci on ci.c_invoice_id= ca.c_invoice_id" +
+            string invoiceID = "(SELECT ca.VAB_Invoice_id FROM VAB_DocAllocationLine ca" +
+                   " inner join VAB_Invoice ci on ci.VAB_Invoice_id= ca.VAB_Invoice_id" +
                    " WHERE ci.issotrx='Y' and ca.VAB_DocAllocation_id=" + dataRecID;
 
 
             string postValue = "SELECT (SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN" +
                 " VAB_DocAllocation alh ON al.VAB_DocAllocation_id=alh.VAB_DocAllocation_id  WHERE " +
-                " alh.posted   ='Y' and c_invoice_id=" + invoiceID + ")) as aloc  ," +
-                "(SELECT SUM(cl.linenetamt)  FROM c_invoiceline cl WHERE " +
-                " c_invoice_id     =" + invoiceID + ")) as adj  from dual";
+                " alh.posted   ='Y' and VAB_Invoice_id=" + invoiceID + ")) as aloc  ," +
+                "(SELECT SUM(cl.linenetamt)  FROM VAB_InvoiceLine cl WHERE " +
+                " VAB_Invoice_id     =" + invoiceID + ")) as adj  from dual";
 
 
             var dr = DB.ExecuteReader(postValue);
@@ -263,7 +263,7 @@ namespace VIS.Models
                     if (dr.GetInt32(0) - dr.GetInt32(1) == 0)
                     {
                         //reposting
-                        var sql = "update VAB_DocAllocation alh set alh.posted ='N' where alh.VAB_DocAllocation_id in (select VAB_DocAllocation_id from VAB_DocAllocationLine where c_invoice_id=" + invoiceID + "))";
+                        var sql = "update VAB_DocAllocation alh set alh.posted ='N' where alh.VAB_DocAllocation_id in (select VAB_DocAllocation_id from VAB_DocAllocationLine where VAB_Invoice_id=" + invoiceID + "))";
                         DB.ExecuteQuery(sql);
                     }
                 }

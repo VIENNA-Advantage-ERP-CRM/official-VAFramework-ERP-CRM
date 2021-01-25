@@ -11,30 +11,30 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_LandedCost
+    /** Generated Model for VAB_LCost
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_LandedCost : PO
+    public class X_VAB_LCost : PO
     {
-        public X_C_LandedCost(Context ctx, int C_LandedCost_ID, Trx trxName)
-            : base(ctx, C_LandedCost_ID, trxName)
+        public X_VAB_LCost(Context ctx, int VAB_LCost_ID, Trx trxName)
+            : base(ctx, VAB_LCost_ID, trxName)
         {
-            /** if (C_LandedCost_ID == 0)
+            /** if (VAB_LCost_ID == 0)
             {
-            SetC_InvoiceLine_ID (0);
-            SetC_LandedCost_ID (0);
+            SetVAB_InvoiceLine_ID (0);
+            SetVAB_LCost_ID (0);
             SetLandedCostDistribution (null);	// Q
             SetM_CostElement_ID (0);
             }
              */
         }
-        public X_C_LandedCost(Ctx ctx, int C_LandedCost_ID, Trx trxName)
-            : base(ctx, C_LandedCost_ID, trxName)
+        public X_VAB_LCost(Ctx ctx, int VAB_LCost_ID, Trx trxName)
+            : base(ctx, VAB_LCost_ID, trxName)
         {
-            /** if (C_LandedCost_ID == 0)
+            /** if (VAB_LCost_ID == 0)
             {
-            SetC_InvoiceLine_ID (0);
-            SetC_LandedCost_ID (0);
+            SetVAB_InvoiceLine_ID (0);
+            SetVAB_LCost_ID (0);
             SetLandedCostDistribution (null);	// Q
             SetM_CostElement_ID (0);
             }
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_LandedCost(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_LCost(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_LandedCost(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_LCost(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -63,14 +63,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_LandedCost(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_LCost(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_LandedCost()
+        static X_VAB_LCost()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -83,8 +83,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =759;
 
-        /** TableName=C_LandedCost */
-        public static String Table_Name = "C_LandedCost";
+        /** TableName=VAB_LCost */
+        public static String Table_Name = "VAB_LCost";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -118,21 +118,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_LandedCost[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_LCost[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice Line.
-        @param C_InvoiceLine_ID Invoice Detail Line */
-        public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+        @param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            if (C_InvoiceLine_ID < 1) throw new ArgumentException("C_InvoiceLine_ID is mandatory.");
-            Set_ValueNoCheck("C_InvoiceLine_ID", C_InvoiceLine_ID);
+            if (VAB_InvoiceLine_ID < 1) throw new ArgumentException("VAB_InvoiceLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
         }
         /** Get Invoice Line.
         @return Invoice Detail Line */
-        public int GetC_InvoiceLine_ID()
+        public int GetVAB_InvoiceLine_ID()
         {
-            Object ii = Get_Value("C_InvoiceLine_ID");
+            Object ii = Get_Value("VAB_InvoiceLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -140,20 +140,20 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetC_InvoiceLine_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAB_InvoiceLine_ID().ToString());
         }
         /** Set Landed Cost.
-        @param C_LandedCost_ID Landed cost to be allocated to material receipts */
-        public void SetC_LandedCost_ID(int C_LandedCost_ID)
+        @param VAB_LCost_ID Landed cost to be allocated to material receipts */
+        public void SetVAB_LCost_ID(int VAB_LCost_ID)
         {
-            if (C_LandedCost_ID < 1) throw new ArgumentException("C_LandedCost_ID is mandatory.");
-            Set_ValueNoCheck("C_LandedCost_ID", C_LandedCost_ID);
+            if (VAB_LCost_ID < 1) throw new ArgumentException("VAB_LCost_ID is mandatory.");
+            Set_ValueNoCheck("VAB_LCost_ID", VAB_LCost_ID);
         }
         /** Get Landed Cost.
         @return Landed cost to be allocated to material receipts */
-        public int GetC_LandedCost_ID()
+        public int GetVAB_LCost_ID()
         {
-            Object ii = Get_Value("C_LandedCost_ID");
+            Object ii = Get_Value("VAB_LCost_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

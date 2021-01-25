@@ -249,7 +249,7 @@
             if (arrListColumns.length == 0) {
                 //debugger;
                 arrListColumns.push({ field: "SELECT", caption: VIS.Msg.getMsg("SELECT"), sortable: true, size: '100px',hidden:true });
-                arrListColumns.push({ field: "C_INVOICE_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: true, size: '100px' });
+                arrListColumns.push({ field: "VAB_INVOICE_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: true, size: '100px' });
                 arrListColumns.push({ field: "DUEDATE", caption: VIS.Msg.getMsg("DueDate"), sortable: true, size: '100px',
                     render: function (record, index, col_index) {
                         var val;
@@ -379,7 +379,7 @@
                         for (i = 0; i < data.length; i++) {
                             var line = {};
                             line['SELECT'] = data[i].SELECT;
-                            line['C_INVOICE_ID'] = data[i].C_INVOICE_ID;
+                            line['VAB_INVOICE_ID'] = data[i].VAB_INVOICE_ID;
                             line['DUEDATE'] = data[i].DUEDATE;
                             line['BUSINESSPARTNER'] = data[i].BUSINESSPARTNER;
                             line['DOCUMENTNO'] = data[i].DOCUMENTNO;

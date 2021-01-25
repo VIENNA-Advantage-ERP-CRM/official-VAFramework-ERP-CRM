@@ -159,7 +159,7 @@ public static void AddRestricts(int table_id, string table_name)
             {
                 j++;
                 // DELETE FROM VAF_Attachment WHERE VAF_TableView_ID=1 AND Record_ID IN 
-                //	(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_Invoice_ID=1)
+                //	(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=1)
                 if (prnts.Key == VAF_TableView_ID)
                 {
                     var pcitm = _parentChilds.ElementAt(j);
@@ -237,7 +237,7 @@ public static void AddRestricts(int table_id, string table_name)
             {
                 j++;
                 // DELETE FROM VAF_Attachment WHERE VAF_TableView_ID=1 AND Record_ID IN 
-                //	(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_Invoice_ID=1)
+                //	(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=1)
                 if (prnts.Key == VAF_TableView_ID)
                 {
                     var prntChild = _parentChilds.ElementAt(j);

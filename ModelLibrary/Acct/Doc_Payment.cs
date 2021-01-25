@@ -410,7 +410,7 @@ namespace VAdvantage.Acct
                         payAmt = GetAmount();
 
                         string sql = @"SELECT cl.m_product_id, cl.linenetamt,prd.ed010_sscode_id,holddet.ed010_appliedpercentage,holddet.ed010_actualpercentage,withAcct.Withholding_Acct
-                        FROM C_Payment pay INNER JOIN c_invoice inv ON pay.c_invoice_id = inv.c_invoice_id inner join c_invoiceline cl  on pay.c_invoice_id=cl.c_invoice_id inner join VAB_BusinessPartner cb 
+                        FROM C_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
                         on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN c_withholding hold ON hold.C_WithHolding_Id = prd.c_withholding_id
                         LEFT JOIN ed010_withholdingdetails holddet ON holddet.C_WithHolding_Id = hold.C_WithHolding_Id left join C_Withholding_Acct withAcct on hold.C_WithHolding_Id=withAcct.C_WithHolding_Id
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
@@ -454,7 +454,7 @@ namespace VAdvantage.Acct
                         ds.Dispose();
 
                         sql = @"SELECT cl.m_product_id,cb.VAB_BusinessPartner_id,cl.linenetamt,prd.ed010_sscode_id,sdet.ed010_percentagetype,sdet.ed010_maxamt,sdet.ed010_minamt,sdet.ed010_socialsecurityprcnt,sdet.ed010_orgpercentage,
-                        sdet.ed010_vendorpercentage,sscAcct.ED000_SecCodeAcct FROM C_Payment pay INNER JOIN c_invoice inv ON pay.c_invoice_id = inv.c_invoice_id inner join c_invoiceline cl  on pay.c_invoice_id=cl.c_invoice_id inner join VAB_BusinessPartner cb 
+                        sdet.ed010_vendorpercentage,sscAcct.ED000_SecCodeAcct FROM C_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
                         on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN ed010_sscode scode ON scode.ed010_sscode_ID = prd.ed010_sscode_id
                         LEFT JOIN ed010_sscodedetails sdet ON sdet.ed010_sscode_ID = scode.ed010_sscode_ID left join ED010_SSCode_Acct sscAcct on scode.ED010_SSCode_ID=sscAcct.ED010_SSCode_ID
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
@@ -470,7 +470,7 @@ namespace VAdvantage.Acct
                                 {
                                     MAccount sscAcct = null;
                                     int vlID = 0;
-                                    sql = @"SELECT SUM(grandtotal) FROM c_invoice WHERE IsActive = 'Y' AND  docstatus = 'CO' AND VAB_BusinessPartner_Id = " + Util.GetValueOfInt(dsSSCode.Tables[0].Rows[i]["VAB_BusinessPartner_id"]);
+                                    sql = @"SELECT SUM(grandtotal) FROM VAB_Invoice WHERE IsActive = 'Y' AND  docstatus = 'CO' AND VAB_BusinessPartner_Id = " + Util.GetValueOfInt(dsSSCode.Tables[0].Rows[i]["VAB_BusinessPartner_id"]);
                                     decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                                     if (result <= Util.GetValueOfDecimal(dsSSCode.Tables[0].Rows[i]["ed010_maxamt"]) && result >= Util.GetValueOfDecimal(dsSSCode.Tables[0].Rows[i]["ed010_minamt"]))
                                     {

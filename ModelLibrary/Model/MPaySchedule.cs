@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                 string sql = @" SELECT SUM(COUNT) FROM (
                               SELECT COUNT(*) AS COUNT FROM C_Order  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM C_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
                               SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 

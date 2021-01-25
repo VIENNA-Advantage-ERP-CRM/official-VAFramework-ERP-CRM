@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_InvoiceTax
+/** Generated Model for VAB_Tax_Invoice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_InvoiceTax : PO
+public class X_VAB_Tax_Invoice : PO
 {
-public X_C_InvoiceTax (Context ctx, int C_InvoiceTax_ID, Trx trxName) : base (ctx, C_InvoiceTax_ID, trxName)
+public X_VAB_Tax_Invoice (Context ctx, int VAB_Tax_Invoice_ID, Trx trxName) : base (ctx, VAB_Tax_Invoice_ID, trxName)
 {
-/** if (C_InvoiceTax_ID == 0)
+/** if (VAB_Tax_Invoice_ID == 0)
 {
-SetC_Invoice_ID (0);
+SetVAB_Invoice_ID (0);
 SetC_Tax_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
@@ -29,11 +29,11 @@ SetTaxBaseAmt (0.0);
 }
  */
 }
-public X_C_InvoiceTax (Ctx ctx, int C_InvoiceTax_ID, Trx trxName) : base (ctx, C_InvoiceTax_ID, trxName)
+public X_VAB_Tax_Invoice (Ctx ctx, int VAB_Tax_Invoice_ID, Trx trxName) : base (ctx, VAB_Tax_Invoice_ID, trxName)
 {
-/** if (C_InvoiceTax_ID == 0)
+/** if (VAB_Tax_Invoice_ID == 0)
 {
-SetC_Invoice_ID (0);
+SetVAB_Invoice_ID (0);
 SetC_Tax_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
@@ -47,7 +47,7 @@ SetTaxBaseAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Tax_Invoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_InvoiceTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Tax_Invoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_InvoiceTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceTax (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Tax_Invoice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_InvoiceTax()
+static X_VAB_Tax_Invoice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389055837L;
 public static int Table_ID;
  // =334;
 
-/** TableName=C_InvoiceTax */
-public static String Table_Name="C_InvoiceTax";
+/** TableName=VAB_Tax_Invoice */
+public static String Table_Name="VAB_Tax_Invoice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -117,21 +117,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_InvoiceTax[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Tax_Invoice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Invoice.
-@param C_Invoice_ID Invoice Identifier */
-public void SetC_Invoice_ID (int C_Invoice_ID)
+@param VAB_Invoice_ID Invoice Identifier */
+public void SetVAB_Invoice_ID (int VAB_Invoice_ID)
 {
-if (C_Invoice_ID < 1) throw new ArgumentException ("C_Invoice_ID is mandatory.");
-Set_ValueNoCheck ("C_Invoice_ID", C_Invoice_ID);
+if (VAB_Invoice_ID < 1) throw new ArgumentException ("VAB_Invoice_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Invoice_ID", VAB_Invoice_ID);
 }
 /** Get Invoice.
 @return Invoice Identifier */
-public int GetC_Invoice_ID() 
+public int GetVAB_Invoice_ID() 
 {
-Object ii = Get_Value("C_Invoice_ID");
+Object ii = Get_Value("VAB_Invoice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -139,7 +139,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Invoice_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
 }
 /** Set Tax.
 @param C_Tax_ID Tax identifier */

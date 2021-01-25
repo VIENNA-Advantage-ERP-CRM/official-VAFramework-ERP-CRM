@@ -40,7 +40,7 @@ namespace VIS.Models
             }
             else if (VAF_TableView_ID == 318)
             {//MInvoice.Table_ID){
-                m_where += " OR C_Invoice_ID=" + Record_ID;
+                m_where += " OR VAB_Invoice_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 335)
             {// MPayment.Table_ID){
@@ -538,9 +538,9 @@ namespace VIS.Models
                 sql += "SELECT C_Order_ID FROM C_Order WHERE UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
             }
-            else if (_columnName.Equals("C_Invoice_ID"))
+            else if (_columnName.Equals("VAB_Invoice_ID"))
             {
-                sql += "SELECT C_Invoice_ID FROM C_Invoice WHERE UPPER(DocumentNo) LIKE ";
+                sql += "SELECT VAB_Invoice_ID FROM VAB_Invoice WHERE UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
             }
             else if (_columnName.Equals("M_InOut_ID"))
@@ -758,10 +758,10 @@ namespace VIS.Models
             }
             else
             {
-                sql.Append("FROM C_Invoice o"
+                sql.Append("FROM VAB_Invoice o"
                         + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
-                        + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
-                        + "WHERE o.C_Invoice_ID=" + Record_ID + "");
+                        + " INNER JOIN VAB_InvoiceLine l ON (o.VAB_Invoice_ID=l.VAB_Invoice_ID) "
+                        + "WHERE o.VAB_Invoice_ID=" + Record_ID + "");
             }
             sql.Append("GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.VAB_CurrencyType_ID");
 

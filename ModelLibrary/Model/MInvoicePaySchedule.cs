@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInvoicePaySchedule
  * Purpose        : Invoice payment shedule calculations 
- * Class Used     : X_C_InvoicePaySchedule
+ * Class Used     : X_VAB_sched_InvoicePayment
  * Chronological    Development
  * Raghunandan     22-Jun-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoicePaySchedule : X_C_InvoicePaySchedule
+    public class MInvoicePaySchedule : X_VAB_sched_InvoicePayment
     {
         // Static Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MInvoicePaySchedule).FullName);
@@ -40,23 +40,23 @@ namespace VAdvantage.Model
         /**
          * 	Get Payment Schedule of the invoice
          * 	@param Ctx context
-         * 	@param C_Invoice_ID invoice id (direct)
-         * 	@param C_InvoicePaySchedule_ID id (indirect)
+         * 	@param VAB_Invoice_ID invoice id (direct)
+         * 	@param VAB_sched_InvoicePayment_ID id (indirect)
          *	@param trxName transaction
          *	@return array of schedule
          */
         public static MInvoicePaySchedule[] GetInvoicePaySchedule(Ctx Ctx,
-            int C_Invoice_ID, int C_InvoicePaySchedule_ID, Trx trxName)
+            int VAB_Invoice_ID, int VAB_sched_InvoicePayment_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM C_InvoicePaySchedule ips ";
-            if (C_Invoice_ID != 0)
+            String sql = "SELECT * FROM VAB_sched_InvoicePayment ips ";
+            if (VAB_Invoice_ID != 0)
             {
-                sql += "WHERE C_Invoice_ID=" + C_Invoice_ID;
+                sql += "WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
             }
             else
             {
-                sql += "WHERE EXISTS (SELECT * FROM C_InvoicePaySchedule xps"
-                + " WHERE xps.c_invoicepayschedule_id=" + C_InvoicePaySchedule_ID + " AND ips.C_Invoice_ID=xps.C_Invoice_ID) ";
+                sql += "WHERE EXISTS (SELECT * FROM VAB_sched_InvoicePayment xps"
+                + " WHERE xps.VAB_sched_InvoicePayment_id=" + VAB_sched_InvoicePayment_ID + " AND ips.VAB_Invoice_ID=xps.VAB_Invoice_ID) ";
             }
             sql += "ORDER BY duedate";
 
@@ -96,15 +96,15 @@ namespace VAdvantage.Model
         /***
          * 	Standard Constructor
          *	@param Ctx context
-         *	@param C_InvoicePaySchedule_ID id
+         *	@param VAB_sched_InvoicePayment_ID id
          *	@param trxName transaction
          */
-        public MInvoicePaySchedule(Ctx Ctx, int C_InvoicePaySchedule_ID, Trx trxName)
-            : base(Ctx, C_InvoicePaySchedule_ID, trxName)
+        public MInvoicePaySchedule(Ctx Ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
+            : base(Ctx, VAB_sched_InvoicePayment_ID, trxName)
         {
-            if (C_InvoicePaySchedule_ID == 0)
+            if (VAB_sched_InvoicePayment_ID == 0)
             {
-                //	setC_Invoice_ID (0);
+                //	setVAB_Invoice_ID (0);
                 //	setDiscountAmt (Env.ZERO);
                 //	setDiscountDate (new Datetime(System.currentTimeMillis()));
                 //	setDueAmt (Env.ZERO);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
 
             _parent = invoice;
             SetClientOrg(invoice);
-            SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetC_PaySchedule_ID(paySchedule.GetC_PaySchedule_ID());
 
             //	Amounts
@@ -177,7 +177,7 @@ namespace VAdvantage.Model
         public MInvoice GetParent()
         {
             if (_parent == null)
-                _parent = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                _parent = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
                 // when schedile is not paid and invoice hedaer having "Hold Payment", then set "Hold payment" on schedule also
                 if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0))
                 {
-                    String sql = "SELECT IsHoldPayment FROM C_Invoice WHERE C_Invoice_ID = " + GetC_Invoice_ID();
+                    String sql = "SELECT IsHoldPayment FROM VAB_Invoice WHERE VAB_Invoice_ID = " + GetVAB_Invoice_ID();
                     String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                     SetIsHoldPayment(IsHoldPayment.Equals("Y"));
                 }
@@ -343,7 +343,7 @@ namespace VAdvantage.Model
                 }
                 if (GetDueAmt() <= Decimal.Add(GetVA009_PaidAmntInvce(), GetVA009_Variance()))
                 {
-                    DB.ExecuteQuery("UPDATE C_InvoicePaySchedule SET VA009_IsPaid = 'Y' WHERE C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx());
+                    DB.ExecuteQuery("UPDATE VAB_sched_InvoicePayment SET VA009_IsPaid = 'Y' WHERE VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx());
                     // if payment is done against invioce for advanced schedules then update payment reference at order schedule tab
                     if (GetVA009_OrderPaySchedule_ID() > 0 && GetC_Payment_ID() > 0)
                     {
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
                     // Check if order schedule found at invoice schedule then it will not set ispaid to false
                     if (GetVA009_OrderPaySchedule_ID() == 0)
                     {
-                        DB.ExecuteQuery("UPDATE C_InvoicePaySchedule SET VA009_IsPaid = 'N' WHERE C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx());
+                        DB.ExecuteQuery("UPDATE VAB_sched_InvoicePayment SET VA009_IsPaid = 'N' WHERE VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx());
                     }
                     // if payment is done against invioce for advanced schedules then update payment reference at order schedule tab
                     else if (GetVA009_OrderPaySchedule_ID() != 0)
@@ -367,9 +367,9 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                DB.ExecuteQuery(@"UPDATE C_Invoice inv SET VA009_PaidAmount = 
-                              (SELECT SUM(VA009_PaidAmntInvce) FROM C_InvoicePaySchedule isch WHERE isch.C_Invoice_ID = inv.C_Invoice_ID AND isch.IsActive = 'Y')
-                             WHERE inv.IsActive = 'Y' AND inv.C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE VAB_Invoice inv SET VA009_PaidAmount = 
+                              (SELECT SUM(VA009_PaidAmntInvce) FROM VAB_sched_InvoicePayment isch WHERE isch.VAB_Invoice_ID = inv.VAB_Invoice_ID AND isch.IsActive = 'Y')
+                             WHERE inv.IsActive = 'Y' AND inv.VAB_Invoice_ID = " + GetVAB_Invoice_ID(), null, Get_Trx());
             }
             return success;
         }

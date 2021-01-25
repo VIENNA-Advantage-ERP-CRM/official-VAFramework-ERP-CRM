@@ -54,11 +54,11 @@ public void SetVAB_Currency_ID (int VAB_Currency_ID){if (VAB_Currency_ID <= 0) S
 Set_Value ("VAB_Currency_ID", VAB_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
 public int GetVAB_Currency_ID() {Object ii = Get_Value("VAB_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Invoice.
-@param C_Invoice_ID Invoice Identifier */
-public void SetC_Invoice_ID (int C_Invoice_ID){if (C_Invoice_ID <= 0) Set_Value ("C_Invoice_ID", null);else
-Set_Value ("C_Invoice_ID", C_Invoice_ID);}/** Get Invoice.
+@param VAB_Invoice_ID Invoice Identifier */
+public void SetVAB_Invoice_ID (int VAB_Invoice_ID){if (VAB_Invoice_ID <= 0) Set_Value ("VAB_Invoice_ID", null);else
+Set_Value ("VAB_Invoice_ID", VAB_Invoice_ID);}/** Get Invoice.
 @return Invoice Identifier */
-public int GetC_Invoice_ID() {Object ii = Get_Value("C_Invoice_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Order.
+public int GetVAB_Invoice_ID() {Object ii = Get_Value("VAB_Invoice_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Order.
 @param C_Order_ID Sales Order */
 public void SetC_Order_ID (int C_Order_ID){if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);else
 Set_Value ("C_Order_ID", C_Order_ID);}/** Get Order.

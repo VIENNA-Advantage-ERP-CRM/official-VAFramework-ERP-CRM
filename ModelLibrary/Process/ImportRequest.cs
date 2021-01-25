@@ -740,9 +740,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Invoice from InvoiceDocumentNo
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Invoice_ID =(SELECT C_Invoice_ID FROM C_Invoice i"
+                      + " SET VAB_Invoice_ID =(SELECT VAB_Invoice_ID FROM VAB_Invoice i"
                       + " WHERE r.InvoiceDocumentNo = i.DocumentNo AND r.VAF_Client_ID=i.VAF_Client_ID )"
-                      + " WHERE C_Invoice_ID IS NULL AND InvoiceDocumentNo IS NOT NULL"
+                      + " WHERE VAB_Invoice_ID IS NULL AND InvoiceDocumentNo IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Invoice from InvoiceDocumentNo =" + no);
@@ -751,7 +751,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid InvoiceDocumentNo, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Invoice_ID IS NULL"
+                      + " AND r.VAB_Invoice_ID IS NULL"
                       + " AND r.InvoiceDocumentNo IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

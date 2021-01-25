@@ -2764,19 +2764,19 @@ namespace VAdvantage.Model
         }
 
         /** Set Inco Term.
-        @param C_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
-        public void SetC_IncoTerm_ID(int C_IncoTerm_ID)
+        @param VAB_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
+        public void SetVAB_IncoTerm_ID(int VAB_IncoTerm_ID)
         {
-            if (C_IncoTerm_ID <= 0)
-                Set_Value("C_IncoTerm_ID", null);
+            if (VAB_IncoTerm_ID <= 0)
+                Set_Value("VAB_IncoTerm_ID", null);
             else
-                Set_Value("C_IncoTerm_ID", C_IncoTerm_ID);
+                Set_Value("VAB_IncoTerm_ID", VAB_IncoTerm_ID);
         }
         /** Get Inco Term.
         @return Inco term will be used to create or define the Inco term based on client requirement */
-        public int GetC_IncoTerm_ID()
+        public int GetVAB_IncoTerm_ID()
         {
-            Object ii = Get_Value("C_IncoTerm_ID");
+            Object ii = Get_Value("VAB_IncoTerm_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

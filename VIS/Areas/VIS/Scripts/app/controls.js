@@ -2947,7 +2947,7 @@
                     var multipleSelection = false;
                     if (self.lookup.windowNo > 0) {
                         multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_OrderLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_InvoiceLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_InvoiceLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||

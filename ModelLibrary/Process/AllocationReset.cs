@@ -223,8 +223,8 @@ namespace VAdvantage.Process
             SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Payment p WHERE al.C_Payment_ID=p.C_Payment_ID)
             WHERE VAB_BusinessPartner_ID IS NULL AND C_Payment_ID IS NOT NULL;
             UPDATE VAB_DocAllocationLine al
-            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Invoice i WHERE al.C_Invoice_ID=i.C_Invoice_ID)
-            WHERE VAB_BusinessPartner_ID IS NULL AND C_Invoice_ID IS NOT NULL;
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_Invoice i WHERE al.VAB_Invoice_ID=i.VAB_Invoice_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Invoice_ID IS NOT NULL;
             UPDATE VAB_DocAllocationLine al
             SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Order o WHERE al.C_Order_ID=o.C_Order_ID)
             WHERE VAB_BusinessPartner_ID IS NULL AND C_Order_ID IS NOT NULL;

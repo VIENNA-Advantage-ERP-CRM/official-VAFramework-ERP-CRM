@@ -391,7 +391,7 @@ namespace VIS.Models
 
             // Evaluate only for these 4 tables
             // get IDs like Client ID, Org ID, BP ID from parent
-            if (keyColName.ToUpper().Trim() == "C_ORDER_ID" || keyColName.ToUpper().Trim() == "C_INVOICE_ID"
+            if (keyColName.ToUpper().Trim() == "C_ORDER_ID" || keyColName.ToUpper().Trim() == "VAB_INVOICE_ID"
                 || keyColName.ToUpper().Trim() == "M_REQUISITION_ID" || keyColName.ToUpper().Trim() == "C_PROJECT_ID")
             {
                 if (keyColName.ToUpper().Trim() == "C_ORDER_ID")
@@ -403,7 +403,7 @@ namespace VIS.Models
                     isSOTrx = ord.IsSOTrx();
                     VAB_BusinessPartner_ID = ord.GetVAB_BusinessPartner_ID();
                 }
-                else if (keyColName.ToUpper().Trim() == "C_INVOICE_ID")
+                else if (keyColName.ToUpper().Trim() == "VAB_INVOICE_ID")
                 {
                     MInvoice inv = new MInvoice(ctx, recordID, null);
                     _Version_ID = GetPLVID(inv.GetM_PriceList_ID());
@@ -535,7 +535,7 @@ namespace VIS.Models
             #endregion Order
 
             #region Invoice
-            else if (keyColName.ToUpper().Trim() == "C_INVOICE_ID")
+            else if (keyColName.ToUpper().Trim() == "VAB_INVOICE_ID")
             {
                 tbl = new MTable(ctx, 333, null);
                 MInvoice inv = new MInvoice(ctx, recordID, null);
@@ -550,7 +550,7 @@ namespace VIS.Models
                     po.Set_Value("M_Product_ID", _m_Product_ID);
                     po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
                     po.Set_Value("QtyInvoiced", Util.GetValueOfDecimal(qty[i]));
-                    po.Set_ValueNoCheck("C_Invoice_ID", recordID);
+                    po.Set_ValueNoCheck("VAB_Invoice_ID", recordID);
                     if (_attribute_ID != 0)
                         po.Set_Value("M_AttributeSetInstance_ID", _attribute_ID);
 

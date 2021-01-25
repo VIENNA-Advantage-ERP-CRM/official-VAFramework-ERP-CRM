@@ -269,9 +269,9 @@ namespace ViennaAdvantage.Process
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
-            if (invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+            if (invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
             {
-                invoice.SetC_IncoTerm_ID(ship.GetC_IncoTerm_ID());
+                invoice.SetVAB_IncoTerm_ID(ship.GetVAB_IncoTerm_ID());
             }
             //To get Payment Rule and set the Payment method
             if (invoice.GetPaymentRule() != "")
@@ -298,7 +298,7 @@ namespace ViennaAdvantage.Process
                 MInOutLine sLine = shipLines[i];
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
                 string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty- SUM(COALESCE(li.QtyInvoiced, 0)) as QtyInvoiced" +
-                    " FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID " +
+                    " FROM M_InOutLine ml INNER JOIN VAB_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
                     " WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -308,7 +308,7 @@ namespace ViennaAdvantage.Process
                     if (qtyEntered <= 0)
                     {
                         // Getting document number Count if Invoice already generated for Material Receipt
-                        string StrSql = "SELECT ci.DocumentNo,li.M_InOutLine_ID FROM C_InvoiceLine li INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID " +
+                        string StrSql = "SELECT ci.DocumentNo,li.M_InOutLine_ID FROM VAB_InvoiceLine li INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
                             "  WHERE ci.DocStatus NOT IN ('VO', 'RE') AND li.M_InOutLine_ID = " + sLine.GetM_InOutLine_ID();
                         dsDoc = DB.ExecuteDataset(StrSql, null, Get_Trx());
                         if (dsDoc != null && dsDoc.Tables[0].Rows.Count > 0)

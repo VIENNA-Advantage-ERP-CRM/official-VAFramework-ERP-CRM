@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "VAF_UserContact_ID");
             GetChangeHTML(sb, "VAB_BillingCode_ID");
             GetChangeHTML(sb, "VAB_BusinessPartner_ID");
-            GetChangeHTML(sb, "C_Invoice_ID");
+            GetChangeHTML(sb, "VAB_Invoice_ID");
             GetChangeHTML(sb, "C_Order_ID");
             GetChangeHTML(sb, "C_Payment_ID");
             GetChangeHTML(sb, "C_Project_ID");

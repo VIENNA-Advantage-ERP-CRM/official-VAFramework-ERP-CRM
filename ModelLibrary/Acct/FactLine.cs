@@ -1426,7 +1426,7 @@ namespace VAdvantage.Acct
         /// the revenue account.
         /// </summary>
         /// <param name="C_RevenueRecognition_ID">revenue recognition</param>
-        /// <param name="C_InvoiceLine_ID">invoice line</param>
+        /// <param name="VAB_InvoiceLine_ID">invoice line</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">Org</param>
         /// <param name="VAF_UserContact_ID">user</param>
@@ -1447,7 +1447,7 @@ namespace VAdvantage.Acct
         /// <param name="UserElement2_ID">user element 2</param>
         /// <returns></returns>
         private int CreateRevenueRecognition(
-            int C_RevenueRecognition_ID, int C_InvoiceLine_ID,
+            int C_RevenueRecognition_ID, int VAB_InvoiceLine_ID,
             int VAF_Client_ID, int VAF_Org_ID, int VAF_UserContact_ID,
             int Account_ID, int C_SubAcct_ID,
             int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
@@ -1508,7 +1508,7 @@ namespace VAdvantage.Acct
             MRevenueRecognitionPlan plan = new MRevenueRecognitionPlan(GetCtx(), 0, null);
             plan.SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
             plan.SetVAB_AccountBook_ID(GetVAB_AccountBook_ID());
-            plan.SetC_InvoiceLine_ID(C_InvoiceLine_ID);
+            plan.SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
             plan.SetUnEarnedRevenue_Acct(unearnedRevenue_Acct);
             plan.SetP_Revenue_Acct(P_Revenue_Acct);
             plan.SetVAB_Currency_ID(GetVAB_Currency_ID());

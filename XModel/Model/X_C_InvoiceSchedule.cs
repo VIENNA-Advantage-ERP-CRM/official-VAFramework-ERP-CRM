@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_InvoiceSchedule
+/** Generated Model for VAB_sched_Invoice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_InvoiceSchedule : PO
+public class X_VAB_sched_Invoice : PO
 {
-public X_C_InvoiceSchedule (Context ctx, int C_InvoiceSchedule_ID, Trx trxName) : base (ctx, C_InvoiceSchedule_ID, trxName)
+public X_VAB_sched_Invoice (Context ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
 {
-/** if (C_InvoiceSchedule_ID == 0)
+/** if (VAB_sched_Invoice_ID == 0)
 {
 SetAmt (0.0);
-SetC_InvoiceSchedule_ID (0);
+SetVAB_sched_Invoice_ID (0);
 SetInvoiceFrequency (null);
 SetIsAmount (false);
 SetIsDefault (false);
@@ -29,12 +29,12 @@ SetName (null);
 }
  */
 }
-public X_C_InvoiceSchedule (Ctx ctx, int C_InvoiceSchedule_ID, Trx trxName) : base (ctx, C_InvoiceSchedule_ID, trxName)
+public X_VAB_sched_Invoice (Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
 {
-/** if (C_InvoiceSchedule_ID == 0)
+/** if (VAB_sched_Invoice_ID == 0)
 {
 SetAmt (0.0);
-SetC_InvoiceSchedule_ID (0);
+SetVAB_sched_Invoice_ID (0);
 SetInvoiceFrequency (null);
 SetIsAmount (false);
 SetIsDefault (false);
@@ -47,7 +47,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceSchedule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_sched_Invoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_InvoiceSchedule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceSchedule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_sched_Invoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_InvoiceSchedule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InvoiceSchedule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_sched_Invoice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_InvoiceSchedule()
+static X_VAB_sched_Invoice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389055806L;
 public static int Table_ID;
  // =257;
 
-/** TableName=C_InvoiceSchedule */
-public static String Table_Name="C_InvoiceSchedule";
+/** TableName=VAB_sched_Invoice */
+public static String Table_Name="VAB_sched_Invoice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_InvoiceSchedule[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_sched_Invoice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Amount.
@@ -136,17 +136,17 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Invoice Schedule.
-@param C_InvoiceSchedule_ID Schedule for generating Invoices */
-public void SetC_InvoiceSchedule_ID (int C_InvoiceSchedule_ID)
+@param VAB_sched_Invoice_ID Schedule for generating Invoices */
+public void SetVAB_sched_Invoice_ID (int VAB_sched_Invoice_ID)
 {
-if (C_InvoiceSchedule_ID < 1) throw new ArgumentException ("C_InvoiceSchedule_ID is mandatory.");
-Set_ValueNoCheck ("C_InvoiceSchedule_ID", C_InvoiceSchedule_ID);
+if (VAB_sched_Invoice_ID < 1) throw new ArgumentException ("VAB_sched_Invoice_ID is mandatory.");
+Set_ValueNoCheck ("VAB_sched_Invoice_ID", VAB_sched_Invoice_ID);
 }
 /** Get Invoice Schedule.
 @return Schedule for generating Invoices */
-public int GetC_InvoiceSchedule_ID() 
+public int GetVAB_sched_Invoice_ID() 
 {
-Object ii = Get_Value("C_InvoiceSchedule_ID");
+Object ii = Get_Value("VAB_sched_Invoice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

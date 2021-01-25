@@ -143,7 +143,7 @@ namespace VAdvantage.Process
                 throw new Exception("CommissionAPInvoice - cannot save Invoice Line");
             }
             //
-            return "@C_Invoice_ID@ = " + invoice.GetDocumentNo();
+            return "@VAB_Invoice_ID@ = " + invoice.GetDocumentNo();
         }
 
     }

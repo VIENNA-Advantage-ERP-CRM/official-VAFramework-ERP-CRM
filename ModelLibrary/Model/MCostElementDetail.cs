@@ -69,7 +69,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    ced.SetC_InvoiceLine_ID(cd.GetC_InvoiceLine_ID());
+                    ced.SetVAB_InvoiceLine_ID(cd.GetVAB_InvoiceLine_ID());
                 }
                 ced.Set_Value("VAFAM_AssetDisposal_ID", cd.Get_Value("VAFAM_AssetDisposal_ID"));
                 ced.SetM_InventoryLine_ID(cd.GetM_InventoryLine_ID());

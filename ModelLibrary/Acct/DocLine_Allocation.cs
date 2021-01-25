@@ -29,7 +29,7 @@ namespace VAdvantage.Acct
     public class DocLine_Allocation : DocLine
     {
 
-        private int _C_Invoice_ID;
+        private int _VAB_Invoice_ID;
         private int _C_Payment_ID;
         private int _VAB_CashJRNLLine_ID;
         private int _C_Order_ID;
@@ -48,7 +48,7 @@ namespace VAdvantage.Acct
 
             _C_Payment_ID = line.GetC_Payment_ID();
             _VAB_CashJRNLLine_ID = line.GetVAB_CashJRNLLine_ID();
-            _C_Invoice_ID = line.GetC_Invoice_ID();
+            _VAB_Invoice_ID = line.GetVAB_Invoice_ID();
             _C_Order_ID = line.GetC_Order_ID();
             //
             SetAmount(line.GetAmount());
@@ -63,14 +63,14 @@ namespace VAdvantage.Acct
         /// <returns>0 if no invoice -1 if not found</returns>
         public int GetInvoiceVAB_Currency_ID()
         {
-            if (_C_Invoice_ID == 0)
+            if (_VAB_Invoice_ID == 0)
             {
                 return 0;
             }
             String sql = "SELECT VAB_Currency_ID "
-                + "FROM C_Invoice "
-                + "WHERE C_Invoice_ID=@param1";
-            return DataBase.DB.GetSQLValue(null, sql, _C_Invoice_ID);
+                + "FROM VAB_Invoice "
+                + "WHERE VAB_Invoice_ID=@param1";
+            return DataBase.DB.GetSQLValue(null, sql, _VAB_Invoice_ID);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace VAdvantage.Acct
                 .Append(",OverUnderAmt=").Append(GetOverUnderAmt())
                 .Append(" - C_Payment_ID=").Append(_C_Payment_ID)
                 .Append(",VAB_CashJRNLLine_ID=").Append(_VAB_CashJRNLLine_ID)
-                .Append(",C_Invoice_ID=").Append(_C_Invoice_ID)
+                .Append(",VAB_Invoice_ID=").Append(_VAB_Invoice_ID)
                 .Append("]");
             return sb.ToString();
         }
@@ -139,12 +139,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Returns the c_Invoice_ID.
+        /// Returns the VAB_Invoice_ID.
         /// </summary>
         /// <returns></returns>
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            return _C_Invoice_ID;
+            return _VAB_Invoice_ID;
         }
 
         /// <summary>

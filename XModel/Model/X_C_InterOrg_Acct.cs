@@ -11,25 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_InterOrg_Acct
+/** Generated Model for VAB_InterOrg_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_InterOrg_Acct : PO
+public class X_VAB_InterOrg_Acct : PO
 {
-public X_C_InterOrg_Acct (Context ctx, int C_InterOrg_Acct_ID, Trx trxName) : base (ctx, C_InterOrg_Acct_ID, trxName)
+public X_VAB_InterOrg_Acct (Context ctx, int VAB_InterOrg_Acct_ID, Trx trxName) : base (ctx, VAB_InterOrg_Acct_ID, trxName)
 {
-/** if (C_InterOrg_Acct_ID == 0)
-{
-SetVAF_OrgTo_ID (0);
-SetVAB_AccountBook_ID (0);
-SetIntercompanyDueFrom_Acct (0);
-SetIntercompanyDueTo_Acct (0);
-}
- */
-}
-public X_C_InterOrg_Acct (Ctx ctx, int C_InterOrg_Acct_ID, Trx trxName) : base (ctx, C_InterOrg_Acct_ID, trxName)
-{
-/** if (C_InterOrg_Acct_ID == 0)
+/** if (VAB_InterOrg_Acct_ID == 0)
 {
 SetVAF_OrgTo_ID (0);
 SetVAB_AccountBook_ID (0);
@@ -38,12 +27,23 @@ SetIntercompanyDueTo_Acct (0);
 }
  */
 }
+public X_VAB_InterOrg_Acct (Ctx ctx, int VAB_InterOrg_Acct_ID, Trx trxName) : base (ctx, VAB_InterOrg_Acct_ID, trxName)
+{
+/** if (VAB_InterOrg_Acct_ID == 0)
+{
+SetVAF_OrgTo_ID (0);
+SetVAB_AccountBook_ID (0);
+SetIntercompanyDueFrom_Acct (0);
+SetIntercompanyDueTo_Acct (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InterOrg_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InterOrg_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_InterOrg_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InterOrg_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_InterOrg_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_InterOrg_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_InterOrg_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_InterOrg_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_InterOrg_Acct()
+static X_VAB_InterOrg_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389055445L;
 public static int Table_ID;
  // =397;
 
-/** TableName=C_InterOrg_Acct */
-public static String Table_Name="C_InterOrg_Acct";
+/** TableName=VAB_InterOrg_Acct */
+public static String Table_Name="VAB_InterOrg_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_InterOrg_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_InterOrg_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 

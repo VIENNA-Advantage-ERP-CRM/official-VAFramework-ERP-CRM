@@ -125,8 +125,8 @@
         //       + " AND s.M_InOut_ID IN "
         //       + "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty,IL.QtyInvoiced FROM M_InOutLine sl "
         //       + "LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
-        //       + " LEFT OUTER JOIN C_INVOICELINE IL    ON (sl.C_ORDERLINE_ID =IL.C_ORDERLINE_ID)"
-        //       + " LEFT OUTER JOIN C_Invoice I   ON I.C_INVOICE_ID      =IL.C_INVOICE_ID "
+        //       + " LEFT OUTER JOIN VAB_INVOICELINE IL    ON (sl.C_ORDERLINE_ID =IL.C_ORDERLINE_ID)"
+        //       + " LEFT OUTER JOIN VAB_Invoice I   ON I.VAB_INVOICE_ID      =IL.VAB_INVOICE_ID "
         //       + " AND I.DOCSTATUS NOT   IN ('VO','RE') "
         //       + " WHERE (sl.MovementQty <> nvl(mi.Qty,0) OR SL.MovementQty     <> NVL(IL.QtyInvoiced,0)"
         //       + "AND mi.M_InOutLine_ID IS NOT NULL) OR mi.M_InOutLine_ID IS NULL ) GROUP BY M_InOut_ID,M_InOutLine_ID,MovementQty "
@@ -194,11 +194,11 @@
 
 
         //	Get Shipment
-        var C_Invoice_ID = this.$super.mTab.getValue("C_Invoice_ID");
+        var VAB_Invoice_ID = this.$super.mTab.getValue("VAB_Invoice_ID");
         var C_Order_ID = this.$super.cmbOrder.getControl().find('option:selected').val();
         var M_InOut_ID = this.$super.cmbShipment.getControl().find('option:selected').val();
 
-        return this.saveData(model, "", C_Order_ID, M_InOut_ID, C_Invoice_ID);
+        return this.saveData(model, "", C_Order_ID, M_InOut_ID, VAB_Invoice_ID);
     }
 
     //Added by Bharat for new search filters
@@ -213,7 +213,7 @@
 
         var data = [];
         var self = this;
-        this.$super.record_ID = $self.mTab.getValue("C_Invoice_ID");
+        this.$super.record_ID = $self.mTab.getValue("VAB_Invoice_ID");
         if (self.$super.dGrid != null) {
             var selection = self.$super.dGrid.getSelection();
             for (item in selection) {
@@ -288,7 +288,7 @@
 
     //    var data = [];
     //    var self = this;
-    //    this.$super.record_ID = $self.mTab.getValue("C_Invoice_ID");
+    //    this.$super.record_ID = $self.mTab.getValue("VAB_Invoice_ID");
     //    if (self.$super.dGrid != null) {
     //        var selection = self.$super.dGrid.getSelection();
     //        for (item in selection) {
@@ -378,14 +378,14 @@
     //    //        var select = false;
     //    //        var rec = 0;
     //    //        if (dr.getInt("m_inoutline_id") > 0) {
-    //    //            sql = "SELECT Count(*) FROM C_InvoiceLine WHERE C_Invoice_ID = " + this.$super.mTab.getValue("C_Invoice_ID") + " AND M_InOutLine_ID = " + dr.getInt("m_inoutline_id");
+    //    //            sql = "SELECT Count(*) FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + this.$super.mTab.getValue("VAB_Invoice_ID") + " AND M_InOutLine_ID = " + dr.getInt("m_inoutline_id");
     //    //            rec = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql));
     //    //            if (rec > 0) {
     //    //                select = true;
     //    //            }
     //    //        }
     //    //        else {
-    //    //            sql = "SELECT Count(*) FROM C_InvoiceLine WHERE C_Invoice_ID = " + this.$super.mTab.getValue("C_Invoice_ID") + " AND M_Product_ID = " + dr.getInt("m_product_id");
+    //    //            sql = "SELECT Count(*) FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + this.$super.mTab.getValue("VAB_Invoice_ID") + " AND M_Product_ID = " + dr.getInt("m_product_id");
     //    //            rec = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql));
     //    //            if (rec > 0) {
     //    //                select = true;
@@ -399,14 +399,14 @@
     //    //        line['M_AttributeSetInstance_ID'] = dr.getString("description");
     //    //        line['C_Order_ID'] = ".";               //  4-Order
     //    //        line['M_InOut_ID'] = dr.getString(7);   //  5-Ship
-    //    //        line['C_Invoice_ID'] = null;            //  6-Invoice
+    //    //        line['VAB_Invoice_ID'] = null;            //  6-Invoice
 
     //    //        line['C_UOM_ID_K'] = dr.getString(2);   //  2-UOM -Key
     //    //        line['M_Product_ID_K'] = dr.getInt(4);  //  3-Product -Key
     //    //        line['M_AttributeSetInstance_ID_K'] = dr.getString("m_attributesetinstance_id");
     //    //        line['C_Order_ID_K'] = dr.getInt(8);;   //  4-OrderLine -Key
     //    //        line['M_InOut_ID_K'] = dr.getInt(6);    //  5-Ship -Key
-    //    //        line['C_Invoice_ID_K'] = null;          //  6-Invoice -Key
+    //    //        line['VAB_Invoice_ID_K'] = null;          //  6-Invoice -Key
 
     //    //        line['recid'] = count;
     //    //        count++;
@@ -462,13 +462,13 @@
                         line['M_Product_ID'] = dr.getString(5);
                         line['C_Order_ID'] = ".";
                         line['M_InOut_ID'] = dr.getString(7);
-                        line['C_Invoice_ID'] = null;
+                        line['VAB_Invoice_ID'] = null;
 
                         line['C_UOM_ID_K'] = dr.getString(2);
                         line['M_Product_ID_K'] = dr.getInt(4);
                         line['C_Order_ID_K'] = dr.getInt(8);;
                         line['M_InOut_ID_K'] = dr.getInt(6);
-                        line['C_Invoice_ID_K'] = null;
+                        line['VAB_Invoice_ID_K'] = null;
 
                         line['recid'] = count;
                         count++;
@@ -528,13 +528,13 @@
     //            line['M_Product_ID'] = dr.getString(5); //  3-Product
     //            line['C_Order_ID'] = ".";               //  4-Order
     //            line['M_InOut_ID'] = dr.getString(7);   //  5-Ship
-    //            line['C_Invoice_ID'] = null;            //  6-Invoice
+    //            line['VAB_Invoice_ID'] = null;            //  6-Invoice
 
     //            line['C_UOM_ID_K'] = dr.getString(2);   //  2-UOM -Key
     //            line['M_Product_ID_K'] = dr.getInt(4);  //  3-Product -Key
     //            line['C_Order_ID_K'] = dr.getInt(8);;   //  4-OrderLine -Key
     //            line['M_InOut_ID_K'] = dr.getInt(6);    //  5-Ship -Key
-    //            line['C_Invoice_ID_K'] = null;          //  6-Invoice -Key
+    //            line['VAB_Invoice_ID_K'] = null;          //  6-Invoice -Key
 
     //            line['recid'] = count;
     //            count++;
@@ -548,7 +548,7 @@
     //    return data;
     //}
 
-    VCreateFromInvoice.prototype.saveData = function (model, selectedItems, C_Order_ID, M_inout_id, C_Invoice_ID) {
+    VCreateFromInvoice.prototype.saveData = function (model, selectedItems, C_Order_ID, M_inout_id, VAB_Invoice_ID) {
         var obj = this;
         $.ajax({
             type: "POST",
@@ -558,7 +558,7 @@
                 model: model,
                 selectedItems: selectedItems,
                 C_Order_ID: C_Order_ID,
-                C_Invoice_ID: C_Invoice_ID,
+                VAB_Invoice_ID: VAB_Invoice_ID,
                 M_inout_id: M_inout_id
             },
             success: function (data) {

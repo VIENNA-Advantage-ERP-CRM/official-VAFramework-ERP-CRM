@@ -833,7 +833,7 @@
 
     GridTab.prototype.getFooterInfo = function (tableName, ctx, windowNo, tabNo, rec_id) {
         return new Promise(function (resolve, reject) {
-            if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
+            if (tableName.startsWith("C_Order") || tableName.startsWith("VAB_Invoice")) {
                 var Record_ID;
                 var isOrder = tableName.startsWith("C_Order");
 
@@ -872,7 +872,7 @@
                     Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
                 }
                 else {
-                    Record_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+                    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
                 }
 
                 if (Record_ID < 1 && rec_id > 0)
@@ -934,7 +934,7 @@
 
 
     GridTab.prototype.getTrxInfo = function (tableName, ctx, windowNo, tabNo) {
-        if (tableName.startsWith("C_Order") || tableName.startsWith("C_Invoice")) {
+        if (tableName.startsWith("C_Order") || tableName.startsWith("VAB_Invoice")) {
             var Record_ID;
             var isOrder = tableName.startsWith("C_Order");
             //
@@ -948,11 +948,11 @@
             //			+ "WHERE o.C_Order_ID=" + Record_ID + "");
             //}
             //else {
-            //    Record_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
-            //    sql.append("FROM C_Invoice o"
+            //    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
+            //    sql.append("FROM VAB_Invoice o"
             //			+ " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
-            //			+ " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
-            //			+ "WHERE o.C_Invoice_ID=" + Record_ID + "");
+            //			+ " INNER JOIN VAB_InvoiceLine l ON (o.VAB_Invoice_ID=l.VAB_Invoice_ID) "
+            //			+ "WHERE o.VAB_Invoice_ID=" + Record_ID + "");
             //}
             //sql.append("GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID,o.VAB_CurrencyType_ID");
 
@@ -993,7 +993,7 @@
                     Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
                 }
                 else {
-                    Record_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+                    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
                 }
 
                 var dr = null;

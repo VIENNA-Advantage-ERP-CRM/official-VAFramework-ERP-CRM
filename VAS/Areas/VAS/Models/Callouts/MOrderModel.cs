@@ -91,9 +91,9 @@ namespace VIS.Models
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
 
-            if (order.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+            if (order.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
             {
-                retDic["C_IncoTerm_ID"] = Util.GetValueOfString(order.GetC_IncoTerm_ID());
+                retDic["VAB_IncoTerm_ID"] = Util.GetValueOfString(order.GetVAB_IncoTerm_ID());
             }
             return retDic;
         }
@@ -158,25 +158,25 @@ namespace VIS.Models
                 if (referenceID > 0)
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
-                    incoTerm_ID = ord.GetC_IncoTerm_ID();
+                    incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
             }
-            else if (tableName == "C_Invoice")
+            else if (tableName == "VAB_Invoice")
             {
                 if (isSOTrx && referenceID > 0)
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
-                    incoTerm_ID = ord.GetC_IncoTerm_ID();
+                    incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "C_Order_ID")
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
-                    incoTerm_ID = ord.GetC_IncoTerm_ID();
+                    incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "M_InOut_ID")
                 {
                     MInOut inOut = new MInOut(ctx, referenceID, null);
-                    incoTerm_ID = inOut.GetC_IncoTerm_ID();
+                    incoTerm_ID = inOut.GetVAB_IncoTerm_ID();
                 }
             }
             else if (tableName == "M_InOut")
@@ -184,17 +184,17 @@ namespace VIS.Models
                 if (isSOTrx && referenceID > 0)
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
-                    incoTerm_ID = ord.GetC_IncoTerm_ID();
+                    incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "C_Order_ID")
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
-                    incoTerm_ID = ord.GetC_IncoTerm_ID();
+                    incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
-                else if (!isSOTrx && referenceID > 0 && refColumn == "C_Invoice_ID")
+                else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Invoice_ID")
                 {
                     MInvoice inv = new MInvoice(ctx, referenceID, null);
-                    incoTerm_ID = inv.GetC_IncoTerm_ID();
+                    incoTerm_ID = inv.GetVAB_IncoTerm_ID();
                 }
             }
             return incoTerm_ID;
@@ -251,7 +251,7 @@ namespace VIS.Models
             Dictionary<String, object> retDir = null;
             if (_Order_ID > 0)
             {
-                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, VAB_DocTypesTARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, VAB_BUSINESSPARTNER_ID, BILL_BPARTNER_ID, VAB_BPart_Location_ID, BILL_LOCATION_ID, VAF_USERCONTACT_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, VAB_CURRENCY_ID, VAB_CurrencyType_ID, SALESREP_ID,");
+                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, VAB_DocTypesTARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, VAB_BUSINESSPARTNER_ID, BILL_BPARTNER_ID, VAB_BPart_Location_ID, BILL_LOCATION_ID, VAF_USERCONTACT_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, VAB_INCOTERM_ID, VAB_CURRENCY_ID, VAB_CurrencyType_ID, SALESREP_ID,");
                 if (_PrefixVA009)
                 {
                     sql.Append("VA009_PAYMENTMETHOD_ID,");
@@ -280,7 +280,7 @@ namespace VIS.Models
                     retDir["M_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]);
                     retDir["PriorityRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PriorityRule"]);
                     retDir["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
-                    retDir["C_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_IncoTerm_ID"]);
+                    retDir["VAB_IncoTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_IncoTerm_ID"]);
                     retDir["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
                     retDir["VAB_CurrencyType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_CurrencyType_ID"]);
                     retDir["SalesRep_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["SalesRep_ID"]);

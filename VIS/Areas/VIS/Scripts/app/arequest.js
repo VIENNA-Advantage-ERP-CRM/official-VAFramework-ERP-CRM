@@ -70,7 +70,7 @@
                 m_where += " OR C_Order_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 318) {//MInvoice.Table_ID){
-                m_where += " OR C_Invoice_ID=" + Record_ID;
+                m_where += " OR VAB_Invoice_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 335) {// MPayment.Table_ID){
                 m_where += " OR C_Payment_ID=" + Record_ID;
@@ -178,7 +178,7 @@
                     else if (VAF_TableView_ID == 259)
                         tab.setValue("C_Order_ID", Record_ID);
                     else if (VAF_TableView_ID == 318)//MInvoice.Table_ID)
-                        tab.setValue("C_Invoice_ID", Record_ID);
+                        tab.setValue("VAB_Invoice_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 208)//MProduct.Table_ID)
                         tab.setValue("M_Product_ID", Record_ID);

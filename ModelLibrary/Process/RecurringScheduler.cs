@@ -65,10 +65,10 @@ namespace ViennaAdvantageServer.Process
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
                         {
-                            MInvoice from = new MInvoice(GetCtx(), Recurring.GetC_Invoice_ID(), Get_TrxName());
+                            MInvoice from = new MInvoice(GetCtx(), Recurring.GetVAB_Invoice_ID(), Get_TrxName());
                             MInvoice invoice = MInvoice.CopyFrom(from, dateDoc,
                                 from.GetVAB_DocTypes_ID(), false, Get_TrxName(), false);
-                            run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                            run.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                             msg += invoice.GetDocumentNo();
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))

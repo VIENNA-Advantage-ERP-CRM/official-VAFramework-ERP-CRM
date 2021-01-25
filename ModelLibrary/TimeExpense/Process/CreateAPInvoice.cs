@@ -77,10 +77,10 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            //string sqlSelect = "select * from s_timeexpenseline where processed = 'Y' and (APInvoice = 'Y' or expenseinvoice = 'Y') and C_Invoice_ID is null";
-            //string sqlSelect = "select * from s_timeexpenseline where APInvoice = 'Y' and C_Invoice_ID is null";
+            //string sqlSelect = "select * from s_timeexpenseline where processed = 'Y' and (APInvoice = 'Y' or expenseinvoice = 'Y') and VAB_Invoice_ID is null";
+            //string sqlSelect = "select * from s_timeexpenseline where APInvoice = 'Y' and VAB_Invoice_ID is null";
             string sqlSelect = "SELECT res.VAB_BusinessPartner_ID, tl.s_timeexpenseline_ID FROM s_timeexpenseline tl inner join s_resource res on (res.s_resource_id = tl.s_resource_id) "
-                           + " WHERE tl.processed = 'Y' AND (tl.APInvoice = 'Y' OR tl.expenseinvoice = 'Y') AND tl.C_Invoice_ID IS NULL";
+                           + " WHERE tl.processed = 'Y' AND (tl.APInvoice = 'Y' OR tl.expenseinvoice = 'Y') AND tl.VAB_Invoice_ID IS NULL";
             StringBuilder sqlWhere = new StringBuilder();
             if (_VAB_BusinessPartner_ID != 0)
             {
@@ -130,10 +130,10 @@ namespace VAdvantage.Process
                         VAB_BusinessPartner_ID.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]));
                         VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
                         VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
-                        int C_Invoice_ID = GenerateInvoice(tLine, tExp);
+                        int VAB_Invoice_ID = GenerateInvoice(tLine, tExp);
 
-                        BPInvoice.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]), C_Invoice_ID);
-                        invoices.Add(C_Invoice_ID);
+                        BPInvoice.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]), VAB_Invoice_ID);
+                        invoices.Add(VAB_Invoice_ID);
                     }
                 }
                 if (idr != null)
@@ -212,7 +212,7 @@ namespace VAdvantage.Process
         /// 
         /// </summary>
         /// <param name="p"></param>
-        private void CreateLine(int S_TimeExpenseLine_ID, int C_Invoice_ID)
+        private void CreateLine(int S_TimeExpenseLine_ID, int VAB_Invoice_ID)
         {
             VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), S_TimeExpenseLine_ID, null);
             VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
@@ -221,13 +221,13 @@ namespace VAdvantage.Process
             {
                 if (Util.GetValueOfInt(tLine.GetM_Product_ID()) != 0)
                 {
-                    sql = "select max(line) from c_invoiceline where c_invoice_id = " + C_Invoice_ID;
+                    sql = "select max(line) from VAB_InvoiceLine where VAB_Invoice_id = " + VAB_Invoice_ID;
                     int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
 
-                    sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and m_product_id = " + tLine.GetM_Product_ID();
-                    int C_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (C_InvoiceLine_ID != 0)
+                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and m_product_id = " + tLine.GetM_Product_ID();
+                    int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    if (VAB_InvoiceLine_ID != 0)
                     {
 
                         sql = "select c_uom_id from c_orderline where c_orderline_id = " + tLine.GetC_OrderLine_ID();
@@ -243,7 +243,7 @@ namespace VAdvantage.Process
                             qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetM_Product_ID(), C_UOM_IDTo, tLine.GetAPApprovedHrs());
                         }
 
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), C_InvoiceLine_ID, null);
+                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetQtyEntered(Decimal.Add(iLine.GetQtyEntered(), qty.Value));
                         iLine.SetQtyInvoiced(Decimal.Add(iLine.GetQtyInvoiced(), qty.Value));
                         // iLine.SetTaxAmt(Decimal.Add(iLine.GetTaxAmt(), tLine.GetTaxAmt()));
@@ -304,7 +304,7 @@ namespace VAdvantage.Process
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-                        iLine.SetC_Invoice_ID(C_Invoice_ID);
+                        iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
                         iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
                         iLine.SetC_UOM_ID(tLine.GetC_UOM_ID());
                         iLine.SetDescription(tLine.GetDescription());
@@ -325,7 +325,7 @@ namespace VAdvantage.Process
 
                         }
                     }
-                    sql = "update S_TimeExpenseLine set C_Invoice_ID = " + C_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update S_TimeExpenseLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -334,14 +334,14 @@ namespace VAdvantage.Process
             {
                 if (Util.GetValueOfInt(tLine.GetVAB_Charge_ID()) != 0)
                 {
-                    sql = "select max(line) from c_invoiceline where c_invoice_id = " + C_Invoice_ID;
+                    sql = "select max(line) from VAB_InvoiceLine where VAB_Invoice_id = " + VAB_Invoice_ID;
                     int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                    sql = "select C_Invoiceline_ID from C_InvoiceLine where c_invoice_ID = " + C_Invoice_ID + " and VAB_Charge_ID = " + tLine.GetVAB_Charge_ID() + " and c_tax_id = " + tLine.GetC_Tax_ID();
-                    int C_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (C_InvoiceLine_ID != 0)
+                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and VAB_Charge_ID = " + tLine.GetVAB_Charge_ID() + " and c_tax_id = " + tLine.GetC_Tax_ID();
+                    int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    if (VAB_InvoiceLine_ID != 0)
                     {
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), C_InvoiceLine_ID, null);
+                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetPriceEntered(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceEntered()));
                         iLine.SetPriceActual(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceActual()));
                         iLine.SetPriceLimit(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceLimit()));
@@ -360,7 +360,7 @@ namespace VAdvantage.Process
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-                        iLine.SetC_Invoice_ID(C_Invoice_ID);
+                        iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
                         iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
                         iLine.SetC_UOM_ID(tLine.GetC_UOM_ID());
                         iLine.SetDescription(tLine.GetDescription());
@@ -382,7 +382,7 @@ namespace VAdvantage.Process
 
                     }
 
-                    sql = "update S_TimeExpenseLine set C_Invoice_ID = " + C_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update S_TimeExpenseLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -427,7 +427,7 @@ namespace VAdvantage.Process
             sql = "select VAB_BPart_Location_ID from VAB_BPart_Location where VAB_BusinessPartner_ID = " + VAB_BusinessPartner_ID;
             int VAB_BPart_Location_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-            VAdvantage.Model.X_C_Invoice inv = new VAdvantage.Model.X_C_Invoice(GetCtx(), 0, null);
+            VAdvantage.Model.X_VAB_Invoice inv = new VAdvantage.Model.X_VAB_Invoice(GetCtx(), 0, null);
             inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             inv.SetVAF_UserContact_ID(tExp.GetVAF_UserContact_ID());
@@ -472,7 +472,7 @@ namespace VAdvantage.Process
                 log.SaveError("InvoiceNotSaved", "InvoiceNotSaved");
                 return 0;
             }
-            return inv.GetC_Invoice_ID();
+            return inv.GetVAB_Invoice_ID();
         }
 
 

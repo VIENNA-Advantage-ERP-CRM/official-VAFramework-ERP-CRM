@@ -662,7 +662,7 @@ namespace VAdvantage.Model
         // */
         //public File createPDF (File file)
         //{
-        ////	ReportEngine re = ReportEngine.Get (GetCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
+        ////	ReportEngine re = ReportEngine.Get (GetCtx(), ReportEngine.INVOICE, getVAB_Invoice_ID());
         ////	if (re == null)
         //        return null;
         ////	return re.getPDF(file);
@@ -1067,8 +1067,8 @@ namespace VAdvantage.Model
                 lock (objLock)
                 {
                     if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAB_CashJRNL c INNER JOIN VAB_CashJRNLLine cl ON c.VAB_CashBook_id = cl.VAB_CashBook_id 
-                                                           INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID
-                                                           INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
+                                                           INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID
+                                                           INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                          WHERE cl.CashType = 'I' AND cs.DueAmt > 0  AND (nvl(cs.c_payment_id,0) != 0 or nvl(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
                                          AND cl.IsActive = 'Y' AND c.VAB_CashBook_id = " + GetVAB_CashJRNL_ID(), null, Get_Trx())) > 0)
                     {
@@ -1140,9 +1140,9 @@ namespace VAdvantage.Model
             {
                 MCashLine line = lines[i];
 
-                if (Util.GetValueOfInt(line.GetC_InvoicePaySchedule_ID()) != 0)
+                if (Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()) != 0)
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(line.GetC_InvoicePaySchedule_ID()), Get_TrxName());
+                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()), Get_TrxName());
                     if (paySch != null) //if schedule not found or deleted 
                     {
                         paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
@@ -1157,9 +1157,9 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    int[] InvoicePaySchedule_ID = MInvoicePaySchedule.GetAllIDs("C_InvoicePaySchedule", "C_Invoice_ID = " + line.GetC_Invoice_ID() + @" AND C_InvoicePaySchedule_ID NOT IN 
-                    (SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Payment_ID IN (SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION 
-                    SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM C_InvoicePaySchedule))", Get_TrxName());
+                    int[] InvoicePaySchedule_ID = MInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
+                    (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE C_Payment_ID IN (SELECT NVL(C_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
+                    SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_TrxName());
 
                     foreach (int invocePay in InvoicePaySchedule_ID)
                     {
@@ -1183,7 +1183,7 @@ namespace VAdvantage.Model
                             Msg.Translate(GetCtx(), "VAB_CashJRNL_ID") + ": " + GetName(), Get_TrxName());
                         hdr.SetVAF_Org_ID(GetVAF_Org_ID());
                         // Update conversion type from invoice to view allocation (required for posting)
-                        invoice = MInvoice.Get(GetCtx(), line.GetC_Invoice_ID());
+                        invoice = MInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
                         if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && invoice != null && invoice.Get_ID() > 0)
                         {
                             hdr.SetVAB_CurrencyType_ID(invoice.GetVAB_CurrencyType_ID());
@@ -1201,7 +1201,7 @@ namespace VAdvantage.Model
                     else if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && hdr.GetVAB_CurrencyType_ID() == 0)
                     {
                         // when invoice having same currency as on cash journal then Update conversion type from invoice to view allocation (required for posting)
-                        invoice = MInvoice.Get(GetCtx(), line.GetC_Invoice_ID());
+                        invoice = MInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
                         if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && invoice != null && invoice.Get_ID() > 0)
                         {
                             hdr.SetVAB_CurrencyType_ID(invoice.GetVAB_CurrencyType_ID());
@@ -1224,11 +1224,11 @@ namespace VAdvantage.Model
                     //	Allocation Line
                     MAllocationLine aLine = new MAllocationLine(hdr, line.GetAmount(),
                         line.GetDiscountAmt(), line.GetWriteOffAmt(), line.GetOverUnderAmt());
-                    aLine.SetC_Invoice_ID(line.GetC_Invoice_ID());
+                    aLine.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
                     aLine.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
                     if (Env.IsModuleInstalled("VA009_"))
                     {
-                        aLine.SetC_InvoicePaySchedule_ID(line.GetC_InvoicePaySchedule_ID());
+                        aLine.SetVAB_sched_InvoicePayment_ID(line.GetVAB_sched_InvoicePayment_ID());
                     }
 
                     // Added by Amit 31-7-2015 VAMRP
@@ -1395,7 +1395,7 @@ namespace VAdvantage.Model
             {
                 MCashLine line = lines[i];
 
-                if (Util.GetValueOfInt(line.GetC_InvoicePaySchedule_ID()) != 0)
+                if (Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()) != 0)
                 {
 
                 }
@@ -1644,9 +1644,9 @@ namespace VAdvantage.Model
                     if (bp.Save(Get_TrxName()))
                     {
                         MBPartnerLocation loc = null;
-                        if (line.GetC_Invoice_ID() > 0)
+                        if (line.GetVAB_Invoice_ID() > 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_TrxName());
+                            MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                             loc = new MBPartnerLocation(GetCtx(), inv.GetVAB_BPart_Location_ID(), Get_TrxName());
                         }
                         else
@@ -1708,7 +1708,7 @@ namespace VAdvantage.Model
                 /*
                 else
                 {
-                    MInvoice inv = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_TrxName());
+                    MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                     MBPartnerLocation loc = new MBPartnerLocation(GetCtx(), inv.GetVAB_BPart_Location_ID(), Get_TrxName());
                     //Arpit Dated 30th Nov,2017
                     // Commented Code because the amount which is of cash Line is converted into Header currency and then update into Business Partner
@@ -1787,7 +1787,7 @@ namespace VAdvantage.Model
         // Added By Amit 31-7-2015 VAMRP Not Used
         private void IsPaid()
         {
-            string sql = "select c_invoice_id from VAB_CashJRNLLine where VAB_CashBook_id =" + GetVAB_CashJRNL_ID();
+            string sql = "select VAB_Invoice_id from VAB_CashJRNLLine where VAB_CashBook_id =" + GetVAB_CashJRNL_ID();
             IDataReader idr = null;
             try
             {
@@ -1801,7 +1801,7 @@ namespace VAdvantage.Model
 
                 for (int i = 0; i < inv.Count; i++)
                 {
-                    sql = "select sum(amount),sum(writeoffamt),sum(discountamt) from VAB_CashJRNLLine where c_invoice_id = " + Util.GetValueOfInt(inv[i]);
+                    sql = "select sum(amount),sum(writeoffamt),sum(discountamt) from VAB_CashJRNLLine where VAB_Invoice_id = " + Util.GetValueOfInt(inv[i]);
                     Decimal cashAmt = 0;
                     idr = DB.ExecuteReader(sql, null, Get_TrxName());
                     if (idr.Read())
@@ -1809,7 +1809,7 @@ namespace VAdvantage.Model
                         cashAmt = Decimal.Add(Decimal.Add(Util.GetValueOfDecimal(idr[0]), Util.GetValueOfDecimal(idr[1])), Util.GetValueOfDecimal(idr[2]));
                     }
                     idr = null;
-                    sql = "select sum(payamt), sum(writeoffamt), sum(discountamt) from c_payment where c_invoice_id =" + Util.GetValueOfInt(inv[i]);
+                    sql = "select sum(payamt), sum(writeoffamt), sum(discountamt) from c_payment where VAB_Invoice_id =" + Util.GetValueOfInt(inv[i]);
                     Decimal totalPayAmount = 0;
                     idr = DB.ExecuteReader(sql, null, Get_TrxName());
                     if (idr.Read())
@@ -1821,12 +1821,12 @@ namespace VAdvantage.Model
                         idr.Close();
                         idr = null;
                     }
-                    sql = "select grandtotal from c_invoice where c_invoice_id = " + Util.GetValueOfInt(inv[i]);
+                    sql = "select grandtotal from VAB_Invoice where VAB_Invoice_id = " + Util.GetValueOfInt(inv[i]);
                     Decimal GT = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     Decimal total = Decimal.Add(cashAmt, totalPayAmount);
                     if (total >= GT)
                     {
-                        sql = "update c_invoice set ispaid = 'Y' where c_invoice_id = " + Util.GetValueOfInt(inv[i]);
+                        sql = "update VAB_Invoice set ispaid = 'Y' where VAB_Invoice_id = " + Util.GetValueOfInt(inv[i]);
                         int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_TrxName()));
                     }
                 }

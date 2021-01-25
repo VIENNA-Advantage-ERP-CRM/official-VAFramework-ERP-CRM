@@ -11,22 +11,22 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Invoice
+    /** Generated Model for VAB_Invoice
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Invoice : PO
+    public class X_VAB_Invoice : PO
     {
-        public X_C_Invoice(Context ctx, int C_Invoice_ID, Trx trxName)
-            : base(ctx, C_Invoice_ID, trxName)
+        public X_VAB_Invoice(Context ctx, int VAB_Invoice_ID, Trx trxName)
+            : base(ctx, VAB_Invoice_ID, trxName)
         {
-            /** if (C_Invoice_ID == 0)
+            /** if (VAB_Invoice_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
-            SetC_Invoice_ID (0);
+            SetVAB_Invoice_ID (0);
             SetC_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateInvoiced (DateTime.Now);	// @#Date@
@@ -54,17 +54,17 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Invoice(Ctx ctx, int C_Invoice_ID, Trx trxName)
-            : base(ctx, C_Invoice_ID, trxName)
+        public X_VAB_Invoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName)
+            : base(ctx, VAB_Invoice_ID, trxName)
         {
-            /** if (C_Invoice_ID == 0)
+            /** if (VAB_Invoice_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
-            SetC_Invoice_ID (0);
+            SetVAB_Invoice_ID (0);
             SetC_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateInvoiced (DateTime.Now);	// @#Date@
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Invoice(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Invoice(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Invoice(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Invoice(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -115,14 +115,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Invoice(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Invoice(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Invoice()
+        static X_VAB_Invoice()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -135,8 +135,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =318;
 
-        /** TableName=C_Invoice */
-        public static String Table_Name = "C_Invoice";
+        /** TableName=VAB_Invoice */
+        public static String Table_Name = "VAB_Invoice";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Invoice[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Invoice[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -370,17 +370,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Invoice.
-        @param C_Invoice_ID Invoice Identifier */
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        @param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            if (C_Invoice_ID < 1) throw new ArgumentException("C_Invoice_ID is mandatory.");
-            Set_ValueNoCheck("C_Invoice_ID", C_Invoice_ID);
+            if (VAB_Invoice_ID < 1) throw new ArgumentException("VAB_Invoice_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Invoice_ID", VAB_Invoice_ID);
         }
         /** Get Invoice.
         @return Invoice Identifier */
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            Object ii = Get_Value("C_Invoice_ID");
+            Object ii = Get_Value("VAB_Invoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1442,21 +1442,21 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** Ref_C_Invoice_ID VAF_Control_Ref_ID=1000238 */
-        public static int REF_C_INVOICE_ID_VAF_Control_Ref_ID = 1000238;
+        /** Ref_VAB_Invoice_ID VAF_Control_Ref_ID=1000238 */
+        public static int REF_VAB_INVOICE_ID_VAF_Control_Ref_ID = 1000238;
         /** Set Invoice Ref.
-        @param Ref_C_Invoice_ID Original reference of reversed invoice document */
-        public void SetRef_C_Invoice_ID(int Ref_C_Invoice_ID)
+        @param Ref_VAB_Invoice_ID Original reference of reversed invoice document */
+        public void SetRef_VAB_Invoice_ID(int Ref_VAB_Invoice_ID)
         {
-            if (Ref_C_Invoice_ID <= 0) Set_Value("Ref_C_Invoice_ID", null);
+            if (Ref_VAB_Invoice_ID <= 0) Set_Value("Ref_VAB_Invoice_ID", null);
             else
-                Set_Value("Ref_C_Invoice_ID", Ref_C_Invoice_ID);
+                Set_Value("Ref_VAB_Invoice_ID", Ref_VAB_Invoice_ID);
         }
         /** Get Invoice Ref.
         @return Original reference of reversed invoice document */
-        public int GetRef_C_Invoice_ID()
+        public int GetRef_VAB_Invoice_ID()
         {
-            Object ii = Get_Value("Ref_C_Invoice_ID");
+            Object ii = Get_Value("Ref_VAB_Invoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1482,19 +1482,19 @@ namespace VAdvantage.Model
         }
 
         /** Set Inco Term.
-        @param C_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
-        public void SetC_IncoTerm_ID(int C_IncoTerm_ID)
+        @param VAB_IncoTerm_ID Inco term will be used to create or define the Inco term based on client requirement */
+        public void SetVAB_IncoTerm_ID(int VAB_IncoTerm_ID)
         {
-            if (C_IncoTerm_ID <= 0)
-                Set_Value("C_IncoTerm_ID", null);
+            if (VAB_IncoTerm_ID <= 0)
+                Set_Value("VAB_IncoTerm_ID", null);
             else
-                Set_Value("C_IncoTerm_ID", C_IncoTerm_ID);
+                Set_Value("VAB_IncoTerm_ID", VAB_IncoTerm_ID);
         }
         /** Get Inco Term.
         @return Inco term will be used to create or define the Inco term based on client requirement */
-        public int GetC_IncoTerm_ID()
+        public int GetVAB_IncoTerm_ID()
         {
-            Object ii = Get_Value("C_IncoTerm_ID");
+            Object ii = Get_Value("VAB_IncoTerm_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

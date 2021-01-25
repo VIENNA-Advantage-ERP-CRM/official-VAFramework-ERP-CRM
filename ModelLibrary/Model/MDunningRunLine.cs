@@ -104,13 +104,13 @@ namespace VAdvantage.Model
         /// <returns>Returns the invoice.</returns>
         public MInvoice GetInvoice()
         {
-            if (GetC_Invoice_ID() == 0)
+            if (GetVAB_Invoice_ID() == 0)
             {
                 _invoice = null;
             }
             else if (_invoice == null)
             {
-                _invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             }
             return _invoice;
         }
@@ -142,7 +142,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Invoice
         /// </summary>
-        /// <param name="C_Invoice_ID">invoice</param>
+        /// <param name="VAB_Invoice_ID">invoice</param>
         /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="grandTotal"> total</param>
         /// <param name="open"> open amount</param>
@@ -151,13 +151,13 @@ namespace VAdvantage.Model
         /// <param name="isInDispute">bp</param>
         /// <param name="timesDunned">number of dunnings</param>
         /// <param name="daysAfterLast">not used</param>
-        public void SetInvoice(int C_Invoice_ID, int VAB_Currency_ID,
+        public void SetInvoice(int VAB_Invoice_ID, int VAB_Currency_ID,
             Decimal grandTotal, Decimal open,
             Decimal feeAmount,
             int daysDue, bool isInDispute,
             int timesDunned, int daysAfterLast)
         {
-            SetC_Invoice_ID(C_Invoice_ID);
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(grandTotal);
             SetOpenAmt(open);
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
         {
             if (_VAB_CurrencyFrom_ID == 0)
             {
-                if (GetC_Invoice_ID() != 0)
+                if (GetVAB_Invoice_ID() != 0)
                 {
                     _VAB_CurrencyFrom_ID = GetInvoice().GetVAB_Currency_ID();
                 }
@@ -353,7 +353,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //	Set Amt
-            if (GetC_Invoice_ID() == 0 && GetC_Payment_ID() == 0 && Util.GetValueOfInt(Get_Value("VAB_CashJRNLLine_ID")) == 0 && Util.GetValueOfInt(Get_Value("GL_JournalLine_ID")) == 0 && (!Env.IsModuleInstalled("VA027_") || (Get_ColumnIndex("VA027_PostDatedCheck_ID") > 0 && Util.GetValueOfInt(Get_Value("VA027_PostDatedCheck_ID")) == 0)))
+            if (GetVAB_Invoice_ID() == 0 && GetC_Payment_ID() == 0 && Util.GetValueOfInt(Get_Value("VAB_CashJRNLLine_ID")) == 0 && Util.GetValueOfInt(Get_Value("GL_JournalLine_ID")) == 0 && (!Env.IsModuleInstalled("VA027_") || (Get_ColumnIndex("VA027_PostDatedCheck_ID") > 0 && Util.GetValueOfInt(Get_Value("VA027_PostDatedCheck_ID")) == 0)))
             {
                 SetAmt(Env.ZERO);
                 SetOpenAmt(Env.ZERO);
@@ -375,7 +375,7 @@ namespace VAdvantage.Model
             {
                 if (_invoice != null)
                 {
-                    _invoice.SetInvoiceCollectionType(X_C_Invoice.INVOICECOLLECTIONTYPE_Dunning);
+                    _invoice.SetInvoiceCollectionType(X_VAB_Invoice.INVOICECOLLECTIONTYPE_Dunning);
                     _invoice.Save();
                 }
             }
@@ -420,7 +420,7 @@ namespace VAdvantage.Model
                 + "QTY=(SELECT COUNT(*)"
                 + " FROM VAB_DunningExeLine l "
                     + "WHERE e.VAB_DunningExeEntry_ID=l.VAB_DunningExeEntry_ID )"
-                //+ " AND (NOT C_Invoice_ID IS NULL OR NOT C_Payment_ID IS NULL))"
+                //+ " AND (NOT VAB_Invoice_ID IS NULL OR NOT C_Payment_ID IS NULL))"
                 + " WHERE VAB_DunningExeEntry_ID=" + GetVAB_DunningExeEntry_ID();
 
             DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());

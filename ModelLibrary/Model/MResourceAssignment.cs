@@ -86,7 +86,7 @@ namespace VAdvantage.Model
           AND (Description <> v_Description OR QtyOrdered <> :new.Qty);
 
         -- Update Invoice Line
-        UPDATE C_InvoiceLine
+        UPDATE VAB_InvoiceLine
           SET  Description = v_Description,
             QtyInvoiced = :new.Qty
         WHERE s_ResourceAssignment_ID = :new.s_ResourceAssignment_ID

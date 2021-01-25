@@ -2824,10 +2824,10 @@ namespace VAdvantage.Model
                     100, GL_GL);
                 //	MDocBaseType.DOCBASETYPE_GLDocument
                 //
-                int DT_I = CreateDocType("AR Invoice", Msg.GetElement(m_ctx, "C_Invoice_ID", true),
+                int DT_I = CreateDocType("AR Invoice", Msg.GetElement(m_ctx, "VAB_Invoice_ID", true),
                     MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
                     100000, GL_ARI);
-                int DT_II = CreateDocType("AR Invoice Indirect", Msg.GetElement(m_ctx, "C_Invoice_ID", true),
+                int DT_II = CreateDocType("AR Invoice Indirect", Msg.GetElement(m_ctx, "VAB_Invoice_ID", true),
                     MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
                     150000, GL_ARI);
                 //int DT_IC = CreateDocType("AR Credit Memo", Msg.GetMsg(m_ctx, "CreditMemo"),
@@ -2838,7 +2838,7 @@ namespace VAdvantage.Model
                   170000, GL_ARI, true, false);
                 //	MDocBaseType.DOCBASETYPE_ARProFormaInvoice
 
-                CreateDocType("AP Invoice", Msg.GetElement(m_ctx, "C_Invoice_ID", false),
+                CreateDocType("AP Invoice", Msg.GetElement(m_ctx, "VAB_Invoice_ID", false),
                     MDocBaseType.DOCBASETYPE_APINVOICE, null, 0, 0,
                     0, GL_API);
                 //CreateDocType("AP CreditMemo", Msg.GetMsg(m_ctx, "CreditMemo"),

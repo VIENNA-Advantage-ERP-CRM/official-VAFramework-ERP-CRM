@@ -631,20 +631,20 @@ namespace VAdvantage.Model
                                     if (invoiceline == null)
                                     {
                                         query.Clear();
-                                        query.Append(@"SELECT MIN(il.C_InvoiceLine_ID) FROM C_InvoiceLine il INNER JOIN c_invoice i 
-                                                   ON i.c_invoice_id  = il.c_invoice_id
+                                        query.Append(@"SELECT MIN(il.VAB_InvoiceLine_ID) FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i 
+                                                   ON i.VAB_Invoice_id  = il.VAB_Invoice_id
                                                    WHERE i.DocStatus IN ('CO' , 'CL') AND il.IsActive = 'Y'
                                                    AND il.M_InoutLine_ID = " + inoutline.GetM_InOutLine_ID());
                                         invoiceLineId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
                                     }
                                     else
                                     {
-                                        invoiceLineId = invoiceline.GetC_InvoiceLine_ID();
+                                        invoiceLineId = invoiceline.GetVAB_InvoiceLine_ID();
                                     }
                                     if (invoiceLineId > 0)
                                     {
                                         invoiceline = new MInvoiceLine(ctx, invoiceLineId, trxName);
-                                        invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                                        invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
 
                                         Price = Decimal.Divide(invoiceline.GetProductLineCost(invoiceline), invoiceline.GetQtyInvoiced());
                                         Price = Price * inoutline.GetMovementQty();
@@ -680,7 +680,7 @@ namespace VAdvantage.Model
                         else if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Match IV" || windowName == "Invoice(Vendor)-Return")
                         {
                             #region Get Price with conversion if required
-                            invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                            invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                             if (invoiceline.GetM_InOutLine_ID() > 0)
                             {
                                 M_Warehouse_Id = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT m_warehouse_id FROM m_inout WHERE m_inout_id = 
@@ -891,7 +891,7 @@ namespace VAdvantage.Model
                             {
                                 query.Clear();
                                 query.Append("SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
-                                     " AND c_invoiceline_id IS NULL  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
+                                     " AND VAB_InvoiceLine_id IS NULL  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                 costDetailId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
                             }
 
@@ -916,7 +916,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0" +
-                                       " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                       " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'A' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch)
@@ -924,7 +924,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'A' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -933,7 +933,7 @@ namespace VAdvantage.Model
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND  NVL(ced.M_Warehouse_ID , 0) = " + inout.GetM_Warehouse_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                               @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch ? M_ASI_ID : 0) + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'A' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceAvPo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -944,7 +944,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                                                               " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND 
+                                                               " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'p' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch)
@@ -952,7 +952,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'p' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_Warehouse || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -961,7 +961,7 @@ namespace VAdvantage.Model
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @"  AND  NVL(ced.M_Warehouse_ID , 0) = " + inout.GetM_Warehouse_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                               @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + (cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch ? M_ASI_ID : 0) + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'p' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceLastPO = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -1400,7 +1400,7 @@ namespace VAdvantage.Model
                             //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                             //                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
-                            //                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                            //                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                             //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y'
                             //                                     AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             //                            }
@@ -1411,7 +1411,7 @@ namespace VAdvantage.Model
                             //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                             //                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + 
-                            //                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                            //                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                             //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' 
                             //                                     AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             //                            }
@@ -1426,7 +1426,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
-                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                         @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -1436,7 +1436,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
-                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                                 if (MRPriceLifo == 0)
@@ -1454,7 +1454,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                             @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                             @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                     }
                                     else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -1464,7 +1464,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                         @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                     }
                                     MRPriceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                                 }
@@ -1477,7 +1477,7 @@ namespace VAdvantage.Model
                             //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                            //                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                            //                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                             //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             //                            }
                             //                            else
@@ -1486,7 +1486,7 @@ namespace VAdvantage.Model
                             //                                query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                             //                                    where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                             //                                     AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                            //                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                            //                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                             //                                     ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             //                            }
                             //                            MRPriceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -1500,7 +1500,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
-                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                         @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -1510,7 +1510,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
-                                     @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                     @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                                 if (MRPriceFifo == 0)
@@ -1528,7 +1528,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                             @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                             @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                     }
                                     else if (cl == MProductCategory.COSTINGLEVEL_BatchLot || cl == MProductCategory.COSTINGLEVEL_OrgPlusBatch
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -1538,7 +1538,7 @@ namespace VAdvantage.Model
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
-                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
+                                         @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                     }
                                     MRPriceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
                                 }
@@ -1546,12 +1546,12 @@ namespace VAdvantage.Model
                             #endregion
 
                             // not execute this if section
-                            if (costDetailId > 0 && cd.GetC_InvoiceLine_ID() == 0 && handlingWindowName != "Match IV" && handlingWindowName != "Invoice(Vendor)")
+                            if (costDetailId > 0 && cd.GetVAB_InvoiceLine_ID() == 0 && handlingWindowName != "Match IV" && handlingWindowName != "Invoice(Vendor)")
                             {
                                 // set amount and qty on cost detail from match receipt
                                 cd.SetAmt(Price);
                                 cd.SetQty(Qty);
-                                cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                                cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                                 cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
                                 if (!cd.Save(trxName))
                                 {
@@ -1612,7 +1612,7 @@ namespace VAdvantage.Model
                                 {
                                     #region Calculate amount of matched Invoice
                                     query.Clear();
-                                    query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual, 
+                                    query.Append(@"SELECT il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual, 
                                                     CASE
                                                     WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
                                                     AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
@@ -1628,12 +1628,12 @@ namespace VAdvantage.Model
                                                     , mi.qty ,  SUM(mi.qty) AS matchedqty 
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
-                                          INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id
                                           INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
                                           LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                           " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
-                                         @" GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
+                                         @" GROUP BY  il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
                                             il.taxbaseamt ,  il.taxamt , il.surchargeamt , C_SurChargeTax.IsIncludeInCost , C_Tax.IsIncludeInCost, il.qtyinvoiced ");
                                     ds2 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                     if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
@@ -1649,7 +1649,7 @@ namespace VAdvantage.Model
                                             Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]);
 
                                             Qty += Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["matchedqty"]);
-                                            inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["c_invoice_id"]), trxName);
+                                            inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                             if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                             {
                                                 Price += MConversionRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
@@ -1738,7 +1738,7 @@ namespace VAdvantage.Model
                             {
                                 Decimal ProductLineCost = invoiceline.GetProductLineCost(invoiceline);
 
-                                invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                                invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
                                     Price = MConversionRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(ProductLineCost, invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
@@ -1756,7 +1756,7 @@ namespace VAdvantage.Model
 
                                 cd = new MCostDetail(acctSchema, VAF_Org_ID, product.GetM_Product_ID(), M_ASI_ID,
                                                          0, Price, Qty, null, trxName);
-                                cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                                cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                                 cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
                                 cd.SetM_InOutLine_ID(inoutline.GetM_InOutLine_ID());
                                 cd.SetM_Warehouse_ID(inoutline.GetM_Warehouse_ID()); // get warehouse reference from header
@@ -1767,7 +1767,7 @@ namespace VAdvantage.Model
                                         trxName.Rollback();
                                     }
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Severe("Error occured during saving a record, C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID() + " in cost detail -> Match IV. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                    _log.Severe("Error occured during saving a record, VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID() + " in cost detail -> Match IV. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                     return false;
                                 }
                                 else
@@ -1780,7 +1780,7 @@ namespace VAdvantage.Model
                                         {
                                             trxName.Rollback();
                                         }
-                                        _log.Severe("Error occured during saving a record , C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID() + " in M-Cost -> Match IV");
+                                        _log.Severe("Error occured during saving a record , VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID() + " in M-Cost -> Match IV");
                                         return false;
                                     }
 
@@ -1835,7 +1835,7 @@ namespace VAdvantage.Model
                                     {
                                         #region Calculate amount of matched Invoice
                                         query.Clear();
-                                        query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , 
+                                        query.Append(@"SELECT il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , 
                                              CASE WHEN NVL(C_SurChargeTax.IsIncludeInCost , 'N') = 'Y'
                                                 AND NVL(C_Tax.IsIncludeInCost , 'N')           = 'Y'
                                                 THEN ROUND((il.taxbaseamt + il.taxamt + il.surchargeamt) / il.qtyinvoiced , 4)
@@ -1850,12 +1850,12 @@ namespace VAdvantage.Model
                                             mi.qty ,  SUM(mi.qty) AS matchedqty 
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
-                                          INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id
                                           INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
                                           LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                                      " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
-                                                      @" GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
+                                                      @" GROUP BY  il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty , 
                                           il.taxbaseamt ,  il.taxamt , il.surchargeamt , C_SurChargeTax.IsIncludeInCost , C_Tax.IsIncludeInCost , il.qtyinvoiced ");
                                         ds2 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                         if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
@@ -1871,7 +1871,7 @@ namespace VAdvantage.Model
                                                     Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]);
 
                                                 Qty += Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["matchedqty"]);
-                                                inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["c_invoice_id"]), trxName);
+                                                inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                                 if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                                 {
                                                     Price += MConversionRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
@@ -1967,12 +1967,12 @@ namespace VAdvantage.Model
 
                             // set is cost calculated true for matched invoice
                             // after using optionalStr - this region never be called
-                            if (handlingWindowName == "Match IV" && invoice != null && invoice.GetC_Invoice_ID() > 0 && optionalstr == "process")
+                            if (handlingWindowName == "Match IV" && invoice != null && invoice.GetVAB_Invoice_ID() > 0 && optionalstr == "process")
                             {
                                 invoice.SetIsCostCalculated(true);
                                 if (invoice.Save())
                                 {
-                                    if (invoiceline != null && invoiceline.GetC_InvoiceLine_ID() > 0)
+                                    if (invoiceline != null && invoiceline.GetVAB_InvoiceLine_ID() > 0)
                                     {
                                         invoiceline.SetIsCostCalculated(true);
                                         invoiceline.Save();
@@ -2416,17 +2416,17 @@ namespace VAdvantage.Model
                             decimal qntity = 0;
                             bool isExpectedCostCalculated = false;
                             query.Clear();
-                            query.Append("SELECT * FROM C_LandedCostAllocation WHERE IsCostCalculated = 'N' AND Amt != 0 AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                            query.Append("SELECT * FROM VAB_LCostDistribution WHERE IsCostCalculated = 'N' AND Amt != 0 AND VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                             if (windowName == "LandedCost")
                             {
                                 query.Append(" AND M_product_ID = " + product.GetM_Product_ID());
                             }
-                            //query.Append("SELECT * FROM C_LandedCostAllocation WHERE Amt != 0 AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                            //query.Append("SELECT * FROM VAB_LCostDistribution WHERE Amt != 0 AND VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                             //
                             DataSet dsLandedCostAllocation = DB.ExecuteDataset(query.ToString(), null, trxName);
                             if (dsLandedCostAllocation != null && dsLandedCostAllocation.Tables.Count > 0 && dsLandedCostAllocation.Tables[0].Rows.Count > 0)
                             {
-                                invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                                invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 for (int lca = 0; lca < dsLandedCostAllocation.Tables[0].Rows.Count; lca++)
                                 {
                                     cd = null;
@@ -2483,7 +2483,7 @@ namespace VAdvantage.Model
                                     if (optionalstr == "process")
                                     {
                                         query.Clear();
-                                        query.Append("SELECT M_CostDetail_ID FROM M_CostDetail WHERE IsActive = 'Y'  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + " AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                        query.Append("SELECT M_CostDetail_ID FROM M_CostDetail WHERE IsActive = 'Y'  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + " AND VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                         if (invoiceline.GetC_OrderLine_ID() > 0)
                                         {
                                             query.Append(" AND C_Orderline_ID = " + invoiceline.GetC_OrderLine_ID());
@@ -2526,8 +2526,8 @@ namespace VAdvantage.Model
                                             // will mark IsCostCalculated as TRUE during last accounting schema cycle
                                             if (i == ds.Tables[0].Rows.Count - 1)
                                             {
-                                                DB.ExecuteQuery(@"UPDATE C_LandedCostAllocation SET IsCostCalculated = 'Y' WHERE C_LandedCostAllocation_ID = "
-                                                    + Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["C_LandedCostAllocation_ID"]), null, trxName);
+                                                DB.ExecuteQuery(@"UPDATE VAB_LCostDistribution SET IsCostCalculated = 'Y' WHERE VAB_LCostDistribution_ID = "
+                                                    + Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["VAB_LCostDistribution_ID"]), null, trxName);
                                             }
                                         }
                                         else
@@ -2537,7 +2537,7 @@ namespace VAdvantage.Model
                                                 trxName.Rollback();
                                             }
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
-                                            _log.Severe("Error occured during UpdateProductCost for C_LandedCostAllocation = " + Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["C_LandedCostAllocation_ID"]));
+                                            _log.Severe("Error occured during UpdateProductCost for VAB_LCostDistribution = " + Util.GetValueOfInt(dsLandedCostAllocation.Tables[0].Rows[lca]["VAB_LCostDistribution_ID"]));
                                             return false;
                                         }
                                         //}
@@ -2560,9 +2560,9 @@ namespace VAdvantage.Model
                                 query.Append("SELECT MIN(M_CostDetail_ID) FROM M_CostDetail WHERE IsActive = 'Y' AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                 if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Invoice(Vendor)-Return")
                                 {
-                                    if (invoiceline.GetC_InvoiceLine_ID() > 0)
+                                    if (invoiceline.GetVAB_InvoiceLine_ID() > 0)
                                     {
-                                        query.Append("  AND C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                        query.Append("  AND VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                     }
                                     if (invoiceline.GetC_OrderLine_ID() > 0)
                                     {
@@ -2595,7 +2595,7 @@ namespace VAdvantage.Model
                                     {
                                         query.Append(" AND C_Orderline_ID = " + inoutline.GetC_OrderLine_ID());
                                     }
-                                    query.Append(" AND NVL(C_Invoiceline_ID , 0) = 0 AND NVL(M_CostElement_ID , 0) = 0 ");
+                                    query.Append(" AND NVL(VAB_InvoiceLine_ID , 0) = 0 AND NVL(M_CostElement_ID , 0) = 0 ");
                                 }
                                 else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                                 {
@@ -2646,7 +2646,7 @@ namespace VAdvantage.Model
                                 inoutline != null && inoutline.GetM_InOutLine_ID() > 0 &&
                                 !inoutline.IsCostImmediate()) //&& windowName == "Material Receipt" / shipment and its reverse
                              || (optionalstr == "process" && client.IsCostImmediate() &&
-                                invoiceline != null && invoiceline.GetC_InvoiceLine_ID() > 0 &&
+                                invoiceline != null && invoiceline.GetVAB_InvoiceLine_ID() > 0 &&
                                 !invoiceline.IsCostImmediate()) //&& windowName == "Invoice(Vendor)"
                                 || (optionalstr == "process" && client.IsCostImmediate() &&
                                 inventoryLine != null && inventoryLine.GetM_InventoryLine_ID() > 0 &&
@@ -3105,7 +3105,7 @@ namespace VAdvantage.Model
                                             DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                             DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
                                         }
-                                        _log.Severe("Error occured during UpdateProductCost for C_invoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                        _log.Severe("Error occured during UpdateProductCost for VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                         return false;
                                     }
                                 }
@@ -3140,7 +3140,7 @@ namespace VAdvantage.Model
                                                     DB.ExecuteQuery("DELETE FROM M_CostDetail WHERE M_CostDetail_ID = " + cd.GetM_CostDetail_ID(), null, trxName);
                                                     DB.ExecuteQuery("DELETE FROM M_CostQueue WHERE M_CostQueue_ID IN ( " + costQueuseIds + " )", null, trxName);
                                                 }
-                                                _log.Severe("Error occured during UpdateProductCost for C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                                _log.Severe("Error occured during UpdateProductCost for VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                                 return false;
                                             }
                                         }
@@ -3338,7 +3338,7 @@ namespace VAdvantage.Model
                         }
                         else if (windowName == "Invoice(Vendor)" || windowName == "Invoice(Customer)" || windowName == "Match IV")
                         {
-                            invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                            invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                             if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
                                 Price = MConversionRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
@@ -3443,7 +3443,7 @@ namespace VAdvantage.Model
 
                             query.Clear();
                             query.Append("SELECT M_CostDetail_ID FROM M_CostDetail WHERE M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
-                                 " AND c_invoiceline_id IS NULL  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
+                                 " AND VAB_InvoiceLine_id IS NULL  AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                             costDetailId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
                             cd = new MCostDetail(ctx, costDetailId, trxName);
 
@@ -3469,7 +3469,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0" +
-                                       " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                       " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'A' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else
@@ -3477,7 +3477,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'A' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceAvPo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -3488,7 +3488,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                                         " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                         " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'p' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 else
@@ -3496,7 +3496,7 @@ namespace VAdvantage.Model
                                     query.Append(@"SELECT  ROUND(Amt/Qty , 4) as currentCostAmount  FROM m_costelementdetail ced 
                                                                 where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                                                  AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                                                 AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                                                  ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'p' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                                 }
                                 MRPriceLastPO = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -3834,7 +3834,7 @@ namespace VAdvantage.Model
                                 query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                      ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             }
                             else
@@ -3843,7 +3843,7 @@ namespace VAdvantage.Model
                                 query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                      ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             }
                             MRPriceLifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -3854,7 +3854,7 @@ namespace VAdvantage.Model
                                 query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
-                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                     " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                      ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             }
                             else
@@ -3863,7 +3863,7 @@ namespace VAdvantage.Model
                                 query.Append(@"SELECT  Amt/Qty as currentCostAmount  FROM m_costelementdetail ced 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
-                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 and 
+                                     AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = " + MatchPO_OrderLineId + @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 and 
                                      ced.M_CostElement_ID = (SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID() + " ) AND ced.VAF_Client_ID = " + inoutline.GetVAF_Client_ID());
                             }
                             MRPriceFifo = Util.GetValueOfDecimal(DB.ExecuteScalar(query.ToString()));
@@ -3871,12 +3871,12 @@ namespace VAdvantage.Model
                             ceFifo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_CostElement_ID from M_costElement where costingMethod = 'F' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID()));
                             ceLifo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_CostElement_ID from M_costElement where costingMethod = 'L' AND IsActive = 'Y' AND VAF_Client_ID = " + inoutline.GetVAF_Client_ID()));
 
-                            if (costDetailId > 0 && cd.GetC_InvoiceLine_ID() == 0)
+                            if (costDetailId > 0 && cd.GetVAB_InvoiceLine_ID() == 0)
                             {
                                 // set amount and qty on cost detail from match receipt
                                 cd.SetAmt(Price);
                                 cd.SetQty(Qty);
-                                cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                                cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                                 cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
                                 if (!cd.Save(trxName))
                                 {
@@ -3929,13 +3929,13 @@ namespace VAdvantage.Model
                                 {
                                     // Calculate amount of matched Invoice
                                     query.Clear();
-                                    query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , mi.qty ,  SUM(mi.qty) AS matchedqty 
+                                    query.Append(@"SELECT il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , mi.qty ,  SUM(mi.qty) AS matchedqty 
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
-                                          INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                                     " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
-                                                     " GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty ");
+                                                     " GROUP BY  il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty ");
                                     ds2 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                     if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
                                     {
@@ -3945,7 +3945,7 @@ namespace VAdvantage.Model
                                         for (int n = 0; n < ds2.Tables[0].Rows.Count; n++)
                                         {
                                             Qty += Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["matchedqty"]);
-                                            inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["c_invoice_id"]), trxName);
+                                            inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                             if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                             {
                                                 Price += MConversionRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
@@ -4019,7 +4019,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                                invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
                                     Price = MConversionRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(invoiceline.GetLineNetAmt(), invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
@@ -4034,14 +4034,14 @@ namespace VAdvantage.Model
 
                                 cd = new MCostDetail(acctSchema, VAF_Org_ID, product.GetM_Product_ID(), M_ASI_ID,
                                                          0, Price, Qty, null, trxName);
-                                cd.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                                cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                                 cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
                                 cd.SetM_InOutLine_ID(inoutline.GetM_InOutLine_ID());
                                 if (!cd.Save(trxName))
                                 {
                                     trxName.Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Severe("Error occured during saving a record, C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID() + " in cost detail -> Match IV. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                                    _log.Severe("Error occured during saving a record, VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID() + " in cost detail -> Match IV. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                                     return false;
                                 }
                                 else
@@ -4051,7 +4051,7 @@ namespace VAdvantage.Model
                                     if (!result)
                                     {
                                         trxName.Rollback();
-                                        _log.Severe("Error occured during saving a record , C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID() + " in M-Cost -> Match IV");
+                                        _log.Severe("Error occured during saving a record , VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID() + " in M-Cost -> Match IV");
                                         return false;
                                     }
 
@@ -4099,13 +4099,13 @@ namespace VAdvantage.Model
                                     {
                                         // Calculate amount of matched Invoice
                                         query.Clear();
-                                        query.Append(@"SELECT il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , mi.qty ,  SUM(mi.qty) AS matchedqty 
+                                        query.Append(@"SELECT il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) AS priceactual , mi.qty ,  SUM(mi.qty) AS matchedqty 
                                           FROM m_inout io INNER JOIN m_inoutline iol ON io.m_inout_id = iol.m_inout_id
                                           INNER JOIN m_matchInv mi ON iol.m_inoutline_id = mi.m_inoutline_id
-                                          INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id
+                                          INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id
                                           WHERE mi.isactive      = 'Y' AND io.M_InOut_ID      =" + inoutline.GetM_InOut_ID() +
                                                      " AND iol.m_inoutline_ID = " + inoutline.GetM_InOutLine_ID() +
-                                                      " GROUP BY  il.c_invoiceline_id , il.c_invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty ");
+                                                      " GROUP BY  il.VAB_InvoiceLine_id , il.VAB_Invoice_id , ROUND(il.linenetamt/il.qtyinvoiced , 4) , mi.qty ");
                                         ds2 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                         if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
                                         {
@@ -4115,7 +4115,7 @@ namespace VAdvantage.Model
                                             for (int n = 0; n < ds2.Tables[0].Rows.Count; n++)
                                             {
                                                 Qty += Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["matchedqty"]);
-                                                inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["c_invoice_id"]), trxName);
+                                                inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                                 if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                                 {
                                                     Price += MConversionRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
@@ -4363,11 +4363,11 @@ namespace VAdvantage.Model
                             decimal amt = 0;
                             decimal qntity = 0;
                             query.Clear();
-                            query.Append("SELECT * FROM C_LandedCostAllocation WHERE  C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                            query.Append("SELECT * FROM VAB_LCostDistribution WHERE  VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                             DataSet dsLandedCostAllocation = DB.ExecuteDataset(query.ToString(), null, trxName);
                             if (dsLandedCostAllocation != null && dsLandedCostAllocation.Tables.Count > 0 && dsLandedCostAllocation.Tables[0].Rows.Count > 0)
                             {
-                                invoice = new MInvoice(ctx, invoiceline.GetC_Invoice_ID(), trxName);
+                                invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 for (int lca = 0; lca < dsLandedCostAllocation.Tables[0].Rows.Count; lca++)
                                 {
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
@@ -4692,7 +4692,7 @@ namespace VAdvantage.Model
                                     if (!result)
                                     {
                                         trxName.Rollback();
-                                        _log.Severe("Error occured during UpdateProductCost for C_invoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                        _log.Severe("Error occured during UpdateProductCost for VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                         return false;
                                     }
                                 }
@@ -4707,7 +4707,7 @@ namespace VAdvantage.Model
                                         if (!result)
                                         {
                                             trxName.Rollback();
-                                            _log.Severe("Error occured during UpdateProductCost for C_InvoiceLine_ID = " + invoiceline.GetC_InvoiceLine_ID());
+                                            _log.Severe("Error occured during UpdateProductCost for VAB_InvoiceLine_ID = " + invoiceline.GetVAB_InvoiceLine_ID());
                                             return false;
                                         }
                                     }
@@ -4839,11 +4839,11 @@ namespace VAdvantage.Model
                                 ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
                               END AS PriceActualIncludedTax,
                                                    il.qtyinvoiced as qtyentered,  i.VAB_Currency_id ,  i.VAB_CurrencyType_id ,
-                                                   il.c_invoiceline_id ,  iol.m_inout_id , il.m_inoutline_id  , i.dateacct , iol.movementqty AS mrqty
-                                              FROM m_inoutline iol INNER JOIN c_invoiceline il ON il.m_inoutline_id = iol.m_inoutline_id
+                                                   il.VAB_InvoiceLine_id ,  iol.m_inout_id , il.m_inoutline_id  , i.dateacct , iol.movementqty AS mrqty
+                                              FROM m_inoutline iol INNER JOIN VAB_InvoiceLine il ON il.m_inoutline_id = iol.m_inoutline_id
                                                    INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID
                                                    LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID
-                                                   INNER JOIN c_invoice i ON i.c_invoice_id = il.c_invoice_id
+                                                   INNER JOIN VAB_Invoice i ON i.VAB_Invoice_id = il.VAB_Invoice_id
                                               WHERE il.IsActive = 'Y' AND i.DocStatus IN ('CO' , 'CL') AND i.issotrx = 'N' and i.isreturntrx = 'N'
                                                     AND iol.M_Inoutline_ID = " + matchInoutLine.GetM_InOutLine_ID();
                 DataSet dsInvoiceRecord = new DataSet();
@@ -5677,8 +5677,8 @@ namespace VAdvantage.Model
                     tempCostDetail.SetM_CostDetail_ID(cd.GetM_CostDetail_ID());
                     tempCostDetail.SetM_CostQueue_ID(costQueue.GetM_CostQueue_ID());
                     tempCostDetail.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
-                    if (invoiceline != null && invoiceline.GetC_InvoiceLine_ID() > 0)
-                        tempCostDetail.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                    if (invoiceline != null && invoiceline.GetVAB_InvoiceLine_ID() > 0)
+                        tempCostDetail.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     if (inoutline != null && inoutline.GetC_OrderLine_ID() > 0)
                         tempCostDetail.SetC_OrderLine_ID(inoutline.GetC_OrderLine_ID());
                     if (inoutline != null && inoutline.GetM_InOutLine_ID() > 0)
@@ -5774,8 +5774,8 @@ namespace VAdvantage.Model
                     tempCostDetail.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
                     tempCostDetail.SetM_CostDetail_ID(cd.GetM_CostDetail_ID());
                     tempCostDetail.SetM_CostQueue_ID(costQueue.GetM_CostQueue_ID());
-                    if (invoiceline != null && invoiceline.GetC_InvoiceLine_ID() > 0)
-                        tempCostDetail.SetC_InvoiceLine_ID(invoiceline.GetC_InvoiceLine_ID());
+                    if (invoiceline != null && invoiceline.GetVAB_InvoiceLine_ID() > 0)
+                        tempCostDetail.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     if (inoutline != null && inoutline.GetC_OrderLine_ID() > 0)
                         tempCostDetail.SetC_OrderLine_ID(inoutline.GetC_OrderLine_ID());
                     if (inoutline != null && inoutline.GetM_InOutLine_ID() > 0)

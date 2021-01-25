@@ -21,7 +21,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class InvoiceBatchProcess : ProcessEngine.SvrProcess
     {
         /**	Batch to process		*/
-        private int _C_InvoiceBatch_ID = 0;
+        private int _VAB_BatchInvoice_ID = 0;
         /** Action					*/
         private String _DocAction = null;
 
@@ -52,7 +52,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 else if (name.Equals("DocAction"))
                     _DocAction = (String)para[i].GetParameter();
             }
-            _C_InvoiceBatch_ID = GetRecord_ID();
+            _VAB_BatchInvoice_ID = GetRecord_ID();
         }   //  prepare
 
 
@@ -80,12 +80,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns></returns>
         protected override String DoIt()
         {
-            log.Info("C_InvoiceBatch_ID=" + _C_InvoiceBatch_ID + ", DocAction=" + _DocAction);
-            if (_C_InvoiceBatch_ID == 0)
-                throw new Exception("C_InvoiceBatch_ID = 0");
-            MInvoiceBatch batch = new MInvoiceBatch(GetCtx(), _C_InvoiceBatch_ID, Get_TrxName());
+            log.Info("VAB_BatchInvoice_ID=" + _VAB_BatchInvoice_ID + ", DocAction=" + _DocAction);
+            if (_VAB_BatchInvoice_ID == 0)
+                throw new Exception("VAB_BatchInvoice_ID = 0");
+            MInvoiceBatch batch = new MInvoiceBatch(GetCtx(), _VAB_BatchInvoice_ID, Get_TrxName());
             if (batch.Get_ID() == 0)
-                throw new Exception("@NotFound@: @C_InvoiceBatch_ID@ - " + _C_InvoiceBatch_ID);
+                throw new Exception("@NotFound@: @VAB_BatchInvoice_ID@ - " + _VAB_BatchInvoice_ID);
             if (batch.IsProcessed())
                 throw new Exception("@Processed@");
             //
@@ -96,7 +96,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < lines.Length; i++)
             {
                 MInvoiceBatchLine line = lines[i];
-                if (line.GetC_Invoice_ID() != 0 || line.GetC_InvoiceLine_ID() != 0)
+                if (line.GetVAB_Invoice_ID() != 0 || line.GetVAB_InvoiceLine_ID() != 0)
                     continue;
 
                 if ((_oldDocumentNo != null
@@ -142,8 +142,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 //	Update Batch Line
-                line.SetC_Invoice_ID(_invoice.GetC_Invoice_ID());
-                line.SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
+                line.SetVAB_Invoice_ID(_invoice.GetVAB_Invoice_ID());
+                line.SetVAB_InvoiceLine_ID(invoiceLine.GetVAB_InvoiceLine_ID());
                 line.Save();
             }	//	for all lines
 

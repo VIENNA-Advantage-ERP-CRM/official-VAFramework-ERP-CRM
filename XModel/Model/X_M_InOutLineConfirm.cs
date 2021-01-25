@@ -126,18 +126,18 @@ using System.Data;
             return sb.ToString();
         }
         /** Set Invoice Line.
-        @param C_InvoiceLine_ID Invoice Detail Line */
-        public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+        @param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            if (C_InvoiceLine_ID <= 0) Set_Value("C_InvoiceLine_ID", null);
+            if (VAB_InvoiceLine_ID <= 0) Set_Value("VAB_InvoiceLine_ID", null);
             else
-                Set_Value("C_InvoiceLine_ID", C_InvoiceLine_ID);
+                Set_Value("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
         }
         /** Get Invoice Line.
         @return Invoice Detail Line */
-        public int GetC_InvoiceLine_ID()
+        public int GetVAB_InvoiceLine_ID()
         {
-            Object ii = Get_Value("C_InvoiceLine_ID");
+            Object ii = Get_Value("VAB_InvoiceLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

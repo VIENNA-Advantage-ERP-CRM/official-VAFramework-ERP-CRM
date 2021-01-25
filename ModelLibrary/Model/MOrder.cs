@@ -1958,7 +1958,7 @@ namespace VAdvantage.Model
         {
             //	TODO get invoiced which are linked on line level
             List<MInvoice> list = new List<MInvoice>();
-            String sql = "SELECT * FROM C_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
+            String sql = "SELECT * FROM VAB_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
             try
             {
@@ -1986,10 +1986,10 @@ namespace VAdvantage.Model
         /*	Get latest Invoice of Order
         * 	@return invoice id or 0
         */
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            int C_Invoice_ID = 0;
-            String sql = "SELECT C_Invoice_ID FROM C_Invoice "
+            int VAB_Invoice_ID = 0;
+            String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice "
                 + "WHERE C_Order_ID=" + GetC_Order_ID() + " AND DocStatus IN ('CO','CL') "
                 + "ORDER BY Created DESC";
             DataTable dt = null;
@@ -2001,16 +2001,16 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    //C_Invoice_ID =Convert.ToInt32(dr[0]);
-                    C_Invoice_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    //VAB_Invoice_ID =Convert.ToInt32(dr[0]);
+                    VAB_Invoice_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                 }
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "getC_Invoice_ID", e);
+                log.Log(Level.SEVERE, "getVAB_Invoice_ID", e);
             }
             finally { dt = null; }
-            return C_Invoice_ID;
+            return VAB_Invoice_ID;
         }
 
         /* 	Get Shipments of Order
@@ -2494,7 +2494,7 @@ namespace VAdvantage.Model
                     //	Propagate Description changes
                     if (Is_ValueChanged("Description") || Is_ValueChanged("POReference"))
                     {
-                        String sql = "UPDATE C_Invoice i"
+                        String sql = "UPDATE VAB_Invoice i"
                             + " SET (Description,POReference)="
                                 + "(SELECT Description, POReference "
                                 + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID) "
@@ -2509,7 +2509,7 @@ namespace VAdvantage.Model
                         || Is_ValueChanged("DateAcct") || Is_ValueChanged("C_Payment_ID")
                         || Is_ValueChanged("VAB_CashJRNLLine_ID"))
                     {
-                        String sql = "UPDATE C_Invoice i "
+                        String sql = "UPDATE VAB_Invoice i "
                             + "SET (PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,VAB_CashJRNLLine_ID)="
                                 + "(SELECT PaymentRule,C_PaymentTerm_ID,DateAcct,C_Payment_ID,VAB_CashJRNLLine_ID "
                                 + "FROM C_Order o WHERE i.C_Order_ID=o.C_Order_ID)"
@@ -3005,7 +3005,7 @@ namespace VAdvantage.Model
                 }	//	for all lines with BOM
 
                 _lines = null;		//	force requery
-                count = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetC_Invoice_ID());
+                count = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAB_Invoice_ID());
                 RenumberLines(10);
             }	//	while count != 0
             return retValue;
@@ -3750,9 +3750,9 @@ namespace VAdvantage.Model
                             Get_Trx().Rollback();
                             return DocActionVariables.STATUS_INVALID;
                         }
-                        //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
-                        //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
-                        Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
+                        //Info.Append(" - @VAB_Invoice_ID@: ").Append(invoice.GetDocumentNo());
+                        //Info.Append(" & @VAB_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
+                        Info.Append(" & @VAB_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
                         _processMsg += Info.ToString();
 
                         String msg = invoice.GetProcessMsg();
@@ -5343,7 +5343,7 @@ namespace VAdvantage.Model
                 SetVAB_CashJRNLLine_ID(invoice.GetVAB_CashJRNLLine_ID());
                 if (!DOCSTATUS_Completed.Equals(status))
                 {
-                    _processMsg = "@C_Invoice_ID@: " + invoice.GetProcessMsg();
+                    _processMsg = "@VAB_Invoice_ID@: " + invoice.GetProcessMsg();
                     return null;
                 }
             }
@@ -5598,7 +5598,7 @@ namespace VAdvantage.Model
                 }   //	for all shipments
 
                 //	Reverse All *Invoices*
-                Info.Append(" - @C_Invoice_ID@:");
+                Info.Append(" - @VAB_Invoice_ID@:");
                 //Info.Append(Msg.GetMsg(GetCtx(), "SalesOrder"));
                 MInvoice[] invoices = GetInvoices(false);   //	get all (line based)
                 for (int i = 0; i < invoices.Length; i++)
@@ -6047,7 +6047,7 @@ namespace VAdvantage.Model
                            INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                            WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')
                          UNION ALL
-                          SELECT COUNT(il.c_orderline_id) AS Result FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_id = il.C_Invoice_id
+                          SELECT COUNT(il.c_orderline_id) AS Result FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_id = il.VAB_Invoice_id
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                           WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));

@@ -217,16 +217,16 @@ namespace VAdvantage.Process
                                AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                          UNION
                          SELECT vaf_client_id , vaf_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
-                                documentno , C_Invoice_id AS Record_Id , issotrx , isreturntrx , '' AS IsInternalUse, 'C_Invoice' AS TableName,
+                                documentno , VAB_Invoice_id AS Record_Id , issotrx , isreturntrx , '' AS IsInternalUse, 'VAB_Invoice' AS TableName,
                                 docstatus, DateAcct AS DateAcct, iscostcalculated , isreversedcostcalculated 
-                         FROM C_Invoice WHERE dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive     = 'Y'
+                         FROM VAB_Invoice WHERE dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive     = 'Y'
                               AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus  IN ('RE') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%')) 
                          UNION 
                          SELECT i.vaf_client_id ,  i.vaf_org_id , i.isactive ,to_char(mi.created, 'DD-MON-YY HH24:MI:SS') as  created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                                 i.updatedby ,  mi.documentno ,  M_MatchInv_Id AS Record_Id ,  i.issotrx ,  i.isreturntrx ,  ''           AS IsInternalUse,  'M_MatchInv' AS TableName,
                                 i.docstatus,i.DateAcct AS DateAcct,  mi.iscostcalculated ,  i.isreversedcostcalculated
-                         FROM M_MatchInv mi INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id INNER JOIN C_Invoice i ON i.c_invoice_id       = il.c_invoice_id
+                         FROM M_MatchInv mi INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id INNER JOIN VAB_Invoice i ON i.VAB_Invoice_id       = il.VAB_Invoice_id
                               WHERE mi.M_Product_ID IN ( " + ((!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID)) ? pc : productID) + @" )
                               AND mi.dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND i.isactive        = 'Y' AND (i.docstatus       IN ('CO' , 'CL') AND mi.iscostcalculated = 'N' )
 
@@ -234,16 +234,16 @@ namespace VAdvantage.Process
                          SELECT i.vaf_client_id ,  i.vaf_org_id , i.isactive ,to_char(mi.created, 'DD-MON-YY HH24:MI:SS') as  created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                                 i.updatedby ,  null AS documentno ,  M_MatchInvCostTrack_Id AS Record_Id ,  i.issotrx ,  i.isreturntrx ,  ''           AS IsInternalUse,  'M_MatchInvCostTrack' AS TableName,
                                 i.docstatus, i.DateAcct AS DateAcct,  mi.iscostcalculated ,  mi.iscostimmediate AS isreversedcostcalculated
-                          FROM M_MatchInvCostTrack mi INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id INNER JOIN C_Invoice i ON i.c_invoice_id       = il.c_invoice_id
+                          FROM M_MatchInvCostTrack mi INNER JOIN VAB_InvoiceLine il ON il.VAB_InvoiceLine_id = mi.VAB_InvoiceLine_id INNER JOIN VAB_Invoice i ON i.VAB_Invoice_id       = il.VAB_Invoice_id
                           WHERE  mi.M_Product_ID IN ( " + ((!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID)) ? pc : productID) + @" )
                            AND mi.updated >= " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND mi.updated < " + GlobalVariable.TO_DATE(minDateRecord.Value.AddDays(1), true) + @"  AND i.isactive        = 'Y' AND (i.docstatus       IN ('RE' , 'VO') )
 
                         UNION
                          SELECT DISTINCT il.vaf_client_id ,il.vaf_org_id ,il.isactive ,to_char(i.created, 'DD-MON-YY HH24:MI:SS') as created ,   i.createdby , TO_CHAR(i.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
-                              i.updatedby , I.DOCUMENTNO , LCA.C_LANDEDCOSTALLOCATION_ID AS RECORD_ID ,   '' AS ISSOTRX , '' AS ISRETURNTRX , '' AS ISINTERNALUSE,
+                              i.updatedby , I.DOCUMENTNO , LCA.VAB_LCOSTDISTRIBUTION_ID AS RECORD_ID ,   '' AS ISSOTRX , '' AS ISRETURNTRX , '' AS ISINTERNALUSE,
                               'LandedCost' as TABLENAME,  I.DOCSTATUS, DATEACCT as DATEACCT , LCA.ISCOSTCALCULATED , 'N' as ISREVERSEDCOSTCALCULATED
-                        FROM C_LANDEDCOSTALLOCATION LCA INNER JOIN C_INVOICELINE IL ON IL.C_INVOICELINE_ID = LCA.C_INVOICELINE_ID
-                        INNER JOIN c_invoice i ON I.C_INVOICE_ID = IL.C_INVOICE_ID
+                        FROM VAB_LCOSTDISTRIBUTION LCA INNER JOIN VAB_INVOICELINE IL ON IL.VAB_INVOICELINE_ID = LCA.VAB_INVOICELINE_ID
+                        INNER JOIN VAB_Invoice i ON I.VAB_INVOICE_ID = IL.VAB_INVOICE_ID
                         WHERE i.dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND il.isactive     = 'Y' AND 
                         LCA.M_PRODUCT_ID IN ( " + ((!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID)) ? pc : productID) + @" ) 
                         AND lca.iscostcalculated = 'N' AND I.DOCSTATUS IN ('CO' , 'CL', 'RE', 'VO') AND I.ISSOTRX = 'N' AND I.ISRETURNTRX = 'N' 
@@ -327,7 +327,7 @@ namespace VAdvantage.Process
                             #region Cost Calculation for SO / PO / CRMA / VRMA
                             try
                             {
-                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "C_Invoice" &&
+                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "VAB_Invoice" &&
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
@@ -336,8 +336,8 @@ namespace VAdvantage.Process
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
-                                        sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT * FROM VAB_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
+                                                     " AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                         if (!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID))
                                         {
                                             sql.Append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) ");
@@ -350,8 +350,8 @@ namespace VAdvantage.Process
                                     }
                                     else
                                     {
-                                        sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT * FROM VAB_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
+                                                     " AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                         if (!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID))
                                         {
                                             sql.Append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) ");
@@ -370,12 +370,12 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
                                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                                 }
-                                                if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
+                                                if (invoiceLine != null && invoiceLine.GetVAB_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
                                                 if (invoiceLine.GetC_OrderLine_ID() > 0)
                                                 {
@@ -391,7 +391,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -407,13 +407,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -432,7 +432,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -448,13 +448,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -493,7 +493,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -509,13 +509,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -550,7 +550,7 @@ namespace VAdvantage.Process
                                                                             if (!inoutLine.Save(Get_Trx()))
                                                                             {
                                                                                 ValueNamePair pp = VLogger.RetrieveError();
-                                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                            " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                                 Get_Trx().Rollback();
                                                                                 continue;
@@ -572,7 +572,7 @@ namespace VAdvantage.Process
                                                                         {
                                                                             conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                         }
-                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     }
                                                                     else
                                                                     {
@@ -588,13 +588,13 @@ namespace VAdvantage.Process
                                                                         if (!invoiceLine.Save(Get_Trx()))
                                                                         {
                                                                             ValueNamePair pp = VLogger.RetrieveError();
-                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                             Get_Trx().Rollback();
                                                                         }
                                                                         else
                                                                         {
-                                                                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                             Get_Trx().Commit();
                                                                         }
                                                                     }
@@ -613,7 +613,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -629,13 +629,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -660,7 +660,7 @@ namespace VAdvantage.Process
                                                                         {
                                                                             conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                         }
-                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     }
                                                                     else
                                                                     {
@@ -683,13 +683,13 @@ namespace VAdvantage.Process
                                                                         if (!invoiceLine.Save(Get_Trx()))
                                                                         {
                                                                             ValueNamePair pp = VLogger.RetrieveError();
-                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                             Get_Trx().Rollback();
                                                                         }
                                                                         else
                                                                         {
-                                                                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                             Get_Trx().Commit();
                                                                         }
                                                                     }
@@ -714,7 +714,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -730,13 +730,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -754,7 +754,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                             }
-                                                            _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                            _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                         }
                                                         else
                                                         {
@@ -770,13 +770,13 @@ namespace VAdvantage.Process
                                                             if (!invoiceLine.Save(Get_Trx()))
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
-                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                            " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
                                                             {
-                                                                _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 Get_Trx().Commit();
                                                             }
                                                         }
@@ -802,7 +802,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -818,13 +818,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -856,7 +856,7 @@ namespace VAdvantage.Process
                                                                         if (!inoutLine.Save(Get_Trx()))
                                                                         {
                                                                             ValueNamePair pp = VLogger.RetrieveError();
-                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                             Get_Trx().Rollback();
                                                                             continue;
@@ -879,7 +879,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -895,13 +895,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -919,7 +919,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -935,13 +935,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -965,7 +965,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -988,13 +988,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -1011,11 +1011,11 @@ namespace VAdvantage.Process
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
-                                        sql.Append("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsReversedCostCalculated = 'N' AND IsActive = 'Y' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT COUNT(*) FROM VAB_InvoiceLine WHERE IsReversedCostCalculated = 'N' AND IsActive = 'Y' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                     }
                                     else
                                     {
-                                        sql.Append("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsCostCalculated = 'N' AND IsActive = 'Y' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT COUNT(*) FROM VAB_InvoiceLine WHERE IsCostCalculated = 'N' AND IsActive = 'Y' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                     }
                                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())) <= 0)
                                     {
@@ -1027,12 +1027,12 @@ namespace VAdvantage.Process
                                         if (!invoice.Save(Get_Trx()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
-                                            _log.Info("Error found for saving C_Invoice for this Record ID = " + invoice.GetC_Invoice_ID() +
+                                            _log.Info("Error found for saving VAB_Invoice for this Record ID = " + invoice.GetVAB_Invoice_ID() +
                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
-                                            _log.Fine("Cost Calculation updated for m_invoice = " + invoice.GetC_Invoice_ID());
+                                            _log.Fine("Cost Calculation updated for m_invoice = " + invoice.GetVAB_Invoice_ID());
                                             Get_Trx().Commit();
                                         }
                                     }
@@ -1046,7 +1046,7 @@ namespace VAdvantage.Process
                             if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "LandedCost")
                             {
                                 landedCostAllocation = new MLandedCostAllocation(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
-                                MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), landedCostAllocation.GetC_InvoiceLine_ID(), Get_Trx());
+                                MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), landedCostAllocation.GetVAB_InvoiceLine_ID(), Get_Trx());
                                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                 MProduct product = MProduct.Get(GetCtx(), landedCostAllocation.GetM_Product_ID());
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), landedCostAllocation.GetVAF_Client_ID(), landedCostAllocation.GetVAF_Org_ID(), product,
@@ -1056,11 +1056,11 @@ namespace VAdvantage.Process
                                     {
                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                     }
-                                    _log.Info("Cost not Calculated for landedCost for this Line ID = " + landedCostAllocation.GetC_InvoiceLine_ID());
+                                    _log.Info("Cost not Calculated for landedCost for this Line ID = " + landedCostAllocation.GetVAB_InvoiceLine_ID());
                                 }
                                 else
                                 {
-                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + landedCostAllocation.GetC_InvoiceLine_ID());
+                                    _log.Fine("Cost Calculation updated for m_invoiceline = " + landedCostAllocation.GetVAB_InvoiceLine_ID());
                                     Get_Trx().Commit();
                                 }
                                 continue;
@@ -1510,7 +1510,7 @@ namespace VAdvantage.Process
                             #region Cost Calculation for SO / PO / CRMA / VRMA
                             try
                             {
-                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "C_Invoice" &&
+                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "VAB_Invoice" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
                                     invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
@@ -1518,8 +1518,8 @@ namespace VAdvantage.Process
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
-                                        sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT * FROM VAB_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'Y' AND IsReversedCostCalculated = 'N' " +
+                                                     " AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                         if (!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID))
                                         {
                                             sql.Append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) ");
@@ -1532,8 +1532,8 @@ namespace VAdvantage.Process
                                     }
                                     else
                                     {
-                                        sql.Append("SELECT * FROM C_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
-                                                     " AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT * FROM VAB_InvoiceLine WHERE IsActive = 'Y' AND iscostcalculated = 'N' " +
+                                                     " AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                         if (!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID))
                                         {
                                             sql.Append(" AND M_Product_ID IN (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) ");
@@ -1552,12 +1552,12 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["C_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
                                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                                 }
-                                                if (invoiceLine != null && invoiceLine.GetC_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
+                                                if (invoiceLine != null && invoiceLine.GetVAB_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
                                                 if (invoiceLine.GetC_OrderLine_ID() > 0)
                                                 {
@@ -1573,7 +1573,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -1589,13 +1589,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -1614,7 +1614,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -1630,13 +1630,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -1669,7 +1669,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -1685,13 +1685,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -1715,7 +1715,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -1731,13 +1731,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -1754,7 +1754,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -1770,13 +1770,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -1801,7 +1801,7 @@ namespace VAdvantage.Process
                                                                         {
                                                                             conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                         }
-                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     }
                                                                     else
                                                                     {
@@ -1817,13 +1817,13 @@ namespace VAdvantage.Process
                                                                         if (!invoiceLine.Save(Get_Trx()))
                                                                         {
                                                                             ValueNamePair pp = VLogger.RetrieveError();
-                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                             Get_Trx().Rollback();
                                                                         }
                                                                         else
                                                                         {
-                                                                            _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                            _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                             Get_Trx().Commit();
                                                                         }
                                                                     }
@@ -1848,7 +1848,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -1864,13 +1864,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -1888,7 +1888,7 @@ namespace VAdvantage.Process
                                                             {
                                                                 conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                             }
-                                                            _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                            _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                         }
                                                         else
                                                         {
@@ -1904,13 +1904,13 @@ namespace VAdvantage.Process
                                                             if (!invoiceLine.Save(Get_Trx()))
                                                             {
                                                                 ValueNamePair pp = VLogger.RetrieveError();
-                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                            " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                 Get_Trx().Rollback();
                                                             }
                                                             else
                                                             {
-                                                                _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 Get_Trx().Commit();
                                                             }
                                                         }
@@ -1936,7 +1936,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -1952,13 +1952,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -1981,7 +1981,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -1997,13 +1997,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -2021,7 +2021,7 @@ namespace VAdvantage.Process
                                                                 {
                                                                     conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                 }
-                                                                _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                _log.Info("Cost not Calculated for Invoice(Customer) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                             }
                                                             else
                                                             {
@@ -2037,13 +2037,13 @@ namespace VAdvantage.Process
                                                                 if (!invoiceLine.Save(Get_Trx()))
                                                                 {
                                                                     ValueNamePair pp = VLogger.RetrieveError();
-                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                    _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                     Get_Trx().Rollback();
                                                                 }
                                                                 else
                                                                 {
-                                                                    _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                     Get_Trx().Commit();
                                                                 }
                                                             }
@@ -2067,7 +2067,7 @@ namespace VAdvantage.Process
                                                                     {
                                                                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                                                                     }
-                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                 }
                                                                 else
                                                                 {
@@ -2083,13 +2083,13 @@ namespace VAdvantage.Process
                                                                     if (!invoiceLine.Save(Get_Trx()))
                                                                     {
                                                                         ValueNamePair pp = VLogger.RetrieveError();
-                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                                                                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                                                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                                                         Get_Trx().Rollback();
                                                                     }
                                                                     else
                                                                     {
-                                                                        _log.Fine("Cost Calculation updated for C_InvoiceLine = " + invoiceLine.GetC_InvoiceLine_ID());
+                                                                        _log.Fine("Cost Calculation updated for VAB_InvoiceLine = " + invoiceLine.GetVAB_InvoiceLine_ID());
                                                                         Get_Trx().Commit();
                                                                     }
                                                                 }
@@ -2106,11 +2106,11 @@ namespace VAdvantage.Process
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                     {
-                                        sql.Append("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsReversedCostCalculated = 'N' AND IsActive = 'Y' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT COUNT(*) FROM VAB_InvoiceLine WHERE IsReversedCostCalculated = 'N' AND IsActive = 'Y' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                     }
                                     else
                                     {
-                                        sql.Append("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsCostCalculated = 'N' AND IsActive = 'Y' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID());
+                                        sql.Append("SELECT COUNT(*) FROM VAB_InvoiceLine WHERE IsCostCalculated = 'N' AND IsActive = 'Y' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID());
                                     }
                                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx())) <= 0)
                                     {
@@ -2122,12 +2122,12 @@ namespace VAdvantage.Process
                                         if (!invoice.Save(Get_Trx()))
                                         {
                                             ValueNamePair pp = VLogger.RetrieveError();
-                                            _log.Info("Error found for saving C_Invoice for this Record ID = " + invoice.GetC_Invoice_ID() +
+                                            _log.Info("Error found for saving VAB_Invoice for this Record ID = " + invoice.GetVAB_Invoice_ID() +
                                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                         }
                                         else
                                         {
-                                            _log.Fine("Cost Calculation updated for C_Invoice = " + invoice.GetC_Invoice_ID());
+                                            _log.Fine("Cost Calculation updated for VAB_Invoice = " + invoice.GetVAB_Invoice_ID());
                                             Get_Trx().Commit();
                                         }
                                     }
@@ -2274,7 +2274,7 @@ namespace VAdvantage.Process
                 catch { }
 
                 sql.Clear();
-                sql.Append("SELECT Min(DateAcct) FROM C_Invoice WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
+                sql.Append("SELECT Min(DateAcct) FROM VAB_Invoice WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
                 tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
                 {
@@ -2336,20 +2336,20 @@ namespace VAdvantage.Process
                                         SELECT M_Inout_ID FROM m_inoutline WHERE  M_Product_ID IN 
                                         (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
 
-                // for C_Invoice / C_InvoiceLine
+                // for VAB_Invoice / VAB_InvoiceLine
                 countRecord = 0;
-                countRecord = DB.ExecuteQuery(@"UPDATE c_invoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , PostCurrentCostPrice = 0 
+                countRecord = DB.ExecuteQuery(@"UPDATE VAB_InvoiceLine SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , PostCurrentCostPrice = 0 
                                                  WHERE M_Product_ID IN 
                                                  (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
                 if (countRecord > 0)
-                    DB.ExecuteQuery(@"UPDATE C_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
-                                       WHERE C_Invoice_ID IN ( 
-                                        SELECT C_Invoice_ID FROM C_Invoiceline WHERE  M_Product_ID IN 
+                    DB.ExecuteQuery(@"UPDATE VAB_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                       WHERE VAB_Invoice_ID IN ( 
+                                        SELECT VAB_Invoice_ID FROM VAB_InvoiceLine WHERE  M_Product_ID IN 
                                         (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
 
                 // For Landed Cost Allocation
                 countRecord = 0;
-                countRecord = DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' 
+                countRecord = DB.ExecuteQuery(@"UPDATE VAB_LCOSTDISTRIBUTION SET  iscostcalculated = 'N' 
                                                  WHERE M_Product_ID IN 
                                                  (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
 
@@ -2455,18 +2455,18 @@ namespace VAdvantage.Process
                                        WHERE M_Inout_ID IN ( 
                                         SELECT M_Inout_ID FROM m_inoutline WHERE  M_Product_ID IN (" + productID + " ) )", null, Get_Trx());
 
-                // for C_Invoice / C_InvoiceLine
+                // for VAB_Invoice / VAB_InvoiceLine
                 countRecord = 0;
-                countRecord = DB.ExecuteQuery(@"UPDATE c_invoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , PostCurrentCostPrice = 0 
+                countRecord = DB.ExecuteQuery(@"UPDATE VAB_InvoiceLine SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , PostCurrentCostPrice = 0 
                                                  WHERE M_Product_ID IN  (" + productID + " ) ", null, Get_Trx());
                 if (countRecord > 0)
-                    DB.ExecuteQuery(@"UPDATE C_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
-                                       WHERE C_Invoice_ID IN ( 
-                                        SELECT C_Invoice_ID FROM C_Invoiceline WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
+                    DB.ExecuteQuery(@"UPDATE VAB_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                       WHERE VAB_Invoice_ID IN ( 
+                                        SELECT VAB_Invoice_ID FROM VAB_InvoiceLine WHERE  M_Product_ID IN  (" + productID + " ) )", null, Get_Trx());
 
                 // For Landed Cost Allocation
                 countRecord = 0;
-                countRecord = DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' 
+                countRecord = DB.ExecuteQuery(@"UPDATE VAB_LCOSTDISTRIBUTION SET  iscostcalculated = 'N' 
                                                  WHERE M_Product_ID IN (" + productID + " ) ", null, Get_Trx());
 
                 // expected landed cost
@@ -2549,12 +2549,12 @@ namespace VAdvantage.Process
                 DB.ExecuteQuery(@"UPDATE m_inoutline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0, PostCurrentCostPrice = 0  WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE M_Inout  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
 
-                // for C_Invoice / C_InvoiceLine
-                DB.ExecuteQuery(@"UPDATE c_invoiceline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N', PostCurrentCostPrice = 0   WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
-                DB.ExecuteQuery(@"UPDATE C_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
+                // for VAB_Invoice / VAB_InvoiceLine
+                DB.ExecuteQuery(@"UPDATE VAB_InvoiceLine SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N', PostCurrentCostPrice = 0   WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE VAB_Invoice  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
 
                 // For Landed Cost Allocation
-                DB.ExecuteQuery(@"UPDATE C_LANDEDCOSTALLOCATION SET  iscostcalculated = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"UPDATE VAB_LCOSTDISTRIBUTION SET  iscostcalculated = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
 
                 // expected landed cost
                 //DB.ExecuteQuery(@"UPDATE VAB_ExpectedCostDis Set IsCostCalculated  = 'N' WHERE vaf_client_ID =  " + GetVAF_Client_ID(), null, Get_Trx());
@@ -3663,8 +3663,8 @@ namespace VAdvantage.Process
         {
             matchInvoice = new MMatchInv(GetCtx(), M_MatchInv_ID, Get_Trx());
             inoutLine = new MInOutLine(GetCtx(), matchInvoice.GetM_InOutLine_ID(), Get_Trx());
-            invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetC_InvoiceLine_ID(), Get_Trx());
-            invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
+            invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
+            invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
             int M_Warehouse_Id = inoutLine.GetM_Warehouse_ID();
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
@@ -3735,7 +3735,7 @@ namespace VAdvantage.Process
                         if (!inoutLine.Save(Get_Trx()))
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                             Get_Trx().Rollback();
                             return;
@@ -3768,8 +3768,8 @@ namespace VAdvantage.Process
                     {
                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                     }
-                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
-                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.MatchInvoice, HeaderId = M_MatchInv_ID, LineId = invoiceLine.GetC_InvoiceLine_ID(), IsReversal = false });
+                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
+                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.MatchInvoice, HeaderId = M_MatchInv_ID, LineId = invoiceLine.GetVAB_InvoiceLine_ID(), IsReversal = false });
                 }
                 else
                 {
@@ -3785,13 +3785,13 @@ namespace VAdvantage.Process
                     if (!invoiceLine.Save(Get_Trx()))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
-                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                         Get_Trx().Rollback();
                     }
                     else
                     {
-                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                         Get_Trx().Commit();
 
                         if (matchInvoice.Get_ColumnIndex("PostCurrentCostPrice") >= 0)
@@ -3806,7 +3806,7 @@ namespace VAdvantage.Process
                         if (!matchInvoice.Save(Get_Trx()))
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + matchInvoice.GetC_InvoiceLine_ID() +
+                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + matchInvoice.GetVAB_InvoiceLine_ID() +
                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                             Get_Trx().Rollback();
                         }
@@ -3835,8 +3835,8 @@ namespace VAdvantage.Process
         {
             matchInvCostReverse = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID, Get_Trx());
             inoutLine = new MInOutLine(GetCtx(), matchInvCostReverse.GetM_InOutLine_ID(), Get_Trx());
-            invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_C_InvoiceLine_ID(), Get_Trx());
-            invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
+            invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
+            invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
@@ -3864,8 +3864,8 @@ namespace VAdvantage.Process
                     {
                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                     }
-                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
-                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.MatchInvoice, HeaderId = M_MatchInvCostTrack_ID, LineId = invoiceLine.GetC_InvoiceLine_ID(), IsReversal = true });
+                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
+                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.MatchInvoice, HeaderId = M_MatchInvCostTrack_ID, LineId = invoiceLine.GetVAB_InvoiceLine_ID(), IsReversal = true });
                 }
                 else
                 {
@@ -3878,13 +3878,13 @@ namespace VAdvantage.Process
                     if (!invoiceLine.Save(Get_Trx()))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
-                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                         Get_Trx().Rollback();
                     }
                     else
                     {
-                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                         Get_Trx().Commit();
 
                         // update the Post current price after Invoice receving on inoutline
@@ -4692,8 +4692,8 @@ namespace VAdvantage.Process
         {
             matchInvoice = new MMatchInv(GetCtx(), M_MatchInv_ID, Get_Trx());
             inoutLine = new MInOutLine(GetCtx(), matchInvoice.GetM_InOutLine_ID(), Get_Trx());
-            invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetC_InvoiceLine_ID(), Get_Trx());
-            invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
+            invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
+            invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
             bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), product.GetM_Product_ID(), Get_Trx());
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
@@ -4724,8 +4724,8 @@ namespace VAdvantage.Process
                         {
                             conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                         }
-                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
-                        ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.CreditMemo, HeaderId = M_MatchInv_ID, LineId = invoiceLine.GetC_InvoiceLine_ID(), IsReversal = false });
+                        _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
+                        ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.CreditMemo, HeaderId = M_MatchInv_ID, LineId = invoiceLine.GetVAB_InvoiceLine_ID(), IsReversal = false });
                     }
                     else
                     {
@@ -4741,13 +4741,13 @@ namespace VAdvantage.Process
                         if (!invoiceLine.Save(Get_Trx()))
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                            _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                        " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                             Get_Trx().Rollback();
                         }
                         else
                         {
-                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                            _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                             Get_Trx().Commit();
 
                             // set is cost calculation true on match invoice
@@ -4762,7 +4762,7 @@ namespace VAdvantage.Process
                             if (!matchInvoice.Save(Get_Trx()))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + matchInvoice.GetC_InvoiceLine_ID() +
+                                _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + matchInvoice.GetVAB_InvoiceLine_ID() +
                                            " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 Get_Trx().Rollback();
                             }
@@ -4790,8 +4790,8 @@ namespace VAdvantage.Process
         {
             matchInvCostReverse = new X_M_MatchInvCostTrack(GetCtx(), M_MatchInvCostTrack_ID, Get_Trx());
             inoutLine = new MInOutLine(GetCtx(), matchInvCostReverse.GetM_InOutLine_ID(), Get_Trx());
-            invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_C_InvoiceLine_ID(), Get_Trx());
-            invoice = new MInvoice(GetCtx(), invoiceLine.GetC_Invoice_ID(), Get_Trx());
+            invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
+            invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
             if (invoiceLine != null && invoiceLine.Get_ID() > 0)
             {
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
@@ -4819,8 +4819,8 @@ namespace VAdvantage.Process
                     {
                         conversionNotFoundInvoice1 += conversionNotFoundInvoice + " , ";
                     }
-                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID());
-                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.CreditMemo, HeaderId = M_MatchInvCostTrack_ID, LineId = invoiceLine.GetC_InvoiceLine_ID(), IsReversal = true });
+                    _log.Info("Cost not Calculated for Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID());
+                    ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.CreditMemo, HeaderId = M_MatchInvCostTrack_ID, LineId = invoiceLine.GetVAB_InvoiceLine_ID(), IsReversal = true });
                 }
                 else
                 {
@@ -4833,13 +4833,13 @@ namespace VAdvantage.Process
                     if (!invoiceLine.Save(Get_Trx()))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
-                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetC_InvoiceLine_ID() +
+                        _log.Info("Error found for saving Invoice(Vendor) for this Line ID = " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                    " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                         Get_Trx().Rollback();
                     }
                     else
                     {
-                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetC_InvoiceLine_ID());
+                        _log.Fine("Cost Calculation updated for m_invoiceline = " + invoiceLine.GetVAB_InvoiceLine_ID());
                         Get_Trx().Commit();
 
                         // set is cost calculation true on match invoice

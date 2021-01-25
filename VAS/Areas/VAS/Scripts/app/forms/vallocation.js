@@ -218,7 +218,7 @@
             "C_Payment_ID ",
             "VAB_CashJRNLLine_ID",
             "VAB_CashJRNL_ID",
-            "C_Invoice_ID ",
+            "VAB_Invoice_ID ",
             "Date",
             "DocumentNo",
             "TrxCurrency",
@@ -237,7 +237,7 @@
             "DiscountAmt",
             "DocBaseType",
             "WriteOffAmount",
-            "C_InvoicePaySchedule_ID",
+            "VAB_sched_InvoicePayment_ID",
             "DateAcct",
             "GL_JOURNALLINE_ID",
             "GL_Journal_ID",
@@ -2187,7 +2187,7 @@
                                 for (var i = 0; i < data.length; i++) {
 
                                     var filterObj = selectedInvoices.filter(function (e) {
-                                        return e.C_InvoicePaySchedule_ID == data[i]["C_InvoicePaySchedule_ID"];
+                                        return e.VAB_sched_InvoicePayment_ID == data[i]["VAB_sched_InvoicePayment_ID"];
                                     });
 
                                     if (filterObj.length == 0) {
@@ -2229,8 +2229,8 @@
             $allocationTo.append("<option value=0></option>");
             $allocationFrom.append('<option value="C">' + VIS.translatedTexts.VAB_CashJRNL_ID + '</option>');
             $allocationTo.append('<option value="C">' + VIS.translatedTexts.VAB_CashJRNL_ID + '</option>');
-            $allocationFrom.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
-            $allocationTo.append('<option value="I">' + VIS.translatedTexts.C_Invoice_ID + '</option>');
+            $allocationFrom.append('<option value="I">' + VIS.translatedTexts.VAB_Invoice_ID + '</option>');
+            $allocationTo.append('<option value="I">' + VIS.translatedTexts.VAB_Invoice_ID + '</option>');
             $allocationFrom.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
             $allocationTo.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
             $allocationFrom.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
@@ -2308,7 +2308,7 @@
 
                 // + '<div class="vis-allocation-leftControls vis-allocation-glinvoiceDiv" style="display: none !important;">'
                 // + '<input  class="vis-allocation-glinvoice"  type="checkbox">'
-                // + '<label>' + VIS.translatedTexts.C_Invoice_ID + '</label>'
+                // + '<label>' + VIS.translatedTexts.VAB_Invoice_ID + '</label>'
                 // + '</div>'
 
                 //end
@@ -2446,7 +2446,7 @@
 
         function createRow4() {
             //
-            $row4.append('<div class="d-flex in-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.C_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 4px;"></span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-invoiceSum"> 0' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="invSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType' + $self.windowNo + '"></div><div class="invBaseType input-group vis-input-wrap" id="invbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
+            $row4.append('<div class="d-flex in-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.VAB_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 4px;"></span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-invoiceSum"> 0' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="invSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType' + $self.windowNo + '"></div><div class="invBaseType input-group vis-input-wrap" id="invbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
             $divInvoice = $row4.find('.vis-allocation-invoice-grid');
             $lblInvoiceSum = $row4.find('.vis-allocate-invoiceSum');
             $invSelectAll = $row4.find('#invoiceselectall');
@@ -3078,7 +3078,7 @@
                             totalselectedinv = selectedInvoices.length;
                             for (var i = 0; i < data.length; i++) {
                                 var filterObj = selectedInvoices.filter(function (e) {
-                                    return e.C_InvoicePaySchedule_ID == data[i]["C_InvoicePaySchedule_ID"];
+                                    return e.VAB_sched_InvoicePayment_ID == data[i]["VAB_sched_InvoicePayment_ID"];
                                 });
 
                                 if (filterObj.length == 0) {
@@ -3836,7 +3836,7 @@
                 }, editable: { type: 'number' }
             });
             if (countVA009 > 0) {
-                columns.push({ field: "C_InvoicePaySchedule_ID", caption: VIS.translatedTexts.C_InvoicePaySchedule_ID, size: '100px', hidden: true });
+                columns.push({ field: "VAB_sched_InvoicePayment_ID", caption: VIS.translatedTexts.VAB_sched_InvoicePayment_ID, size: '100px', hidden: true });
             }
             columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
@@ -5444,7 +5444,7 @@
                             DocBaseType: record.DocBaseType,
                             //Writeoff: record.Writeoff,
                             AppliedAmt: record.AppliedAmt,
-                            //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
+                            //VAB_sched_InvoicePayment_ID: record.VAB_sched_InvoicePayment_ID,
                             //InvoiceScheduleDate: record.InvoiceScheduleDate,
                             VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                             ConversionName: record.ConversionName,
@@ -5563,7 +5563,7 @@
                             DocBaseType: record.DocBaseType,
                             ConvertedAmount: record.ConvertedAmount,
                             AppliedAmt: record.AppliedAmt,
-                            //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
+                            //VAB_sched_InvoicePayment_ID: record.VAB_sched_InvoicePayment_ID,
                             //InvoiceScheduleDate: record.InvoiceScheduleDate,
                             VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                             ConversionName: record.ConversionName,
@@ -5677,7 +5677,7 @@
                         DocBaseType: record.DocBaseType,
                         Writeoff: record.Writeoff,
                         AppliedAmt: record.AppliedAmt,
-                        C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
+                        VAB_sched_InvoicePayment_ID: record.VAB_sched_InvoicePayment_ID,
                         InvoiceScheduleDate: record.InvoiceScheduleDate,
                         VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                         ConversionName: record.ConversionName,
@@ -5718,7 +5718,7 @@
                 {
                     // remove invoice schedule from array when we de-select any schedule from invoice grid.
                     for (var x = 0; x < selectedInvoices.length; x++) {
-                        if (selectedInvoices[x].C_InvoicePaySchedule_ID == $gridInvoice.records[row].C_InvoicePaySchedule_ID) {
+                        if (selectedInvoices[x].VAB_sched_InvoicePayment_ID == $gridInvoice.records[row].VAB_sched_InvoicePayment_ID) {
                             selectedInvoices.splice(x, 1);
                         }
                     }
@@ -5839,7 +5839,7 @@
                         //DocBaseType: record.DocBaseType,
                         ConvertedAmount: record.ConvertedAmount,
                         AppliedAmt: record.AppliedAmt,
-                        //C_InvoicePaySchedule_ID: record.C_InvoicePaySchedule_ID,
+                        //VAB_sched_InvoicePayment_ID: record.VAB_sched_InvoicePayment_ID,
                         //InvoiceScheduleDate: record.InvoiceScheduleDate,
                         VAB_CurrencyType_ID: record.VAB_CurrencyType_ID,
                         ConversionName: record.ConversionName,
@@ -6728,7 +6728,7 @@
                                             // send invoice schedule date if va009 module is updated
                                             Date: row.InvoiceScheduleDate, Docbasetype: row.DocBaseType,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
-                                            c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
+                                            VAB_sched_InvoicePayment_id: row.VAB_sched_InvoicePayment_ID, Org: parseInt($cmbOrg.val())
                                         });
                                     }
                                 }
@@ -6875,7 +6875,7 @@
                                             // send invoice schedule date if va009 module is updated
                                             date: row.InvoiceScheduleDate, docbasetype: row.DocBaseType,
                                             DocumentNo: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
-                                            c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
+                                            VAB_sched_InvoicePayment_id: row.VAB_sched_InvoicePayment_ID, Org: parseInt($cmbOrg.val())
                                         });
                                     }
                                 }
@@ -7031,7 +7031,7 @@
                                             // send invoice schedule date if va009 module is updated
                                             Date: row.InvoiceScheduleDate, Docbasetype: row.DocBaseType, applied: applied, discount: discount, open: open, writeOff: writeOff,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
-                                            c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0
+                                            VAB_sched_InvoicePayment_id: row.VAB_sched_InvoicePayment_ID, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0
                                         });
                                     }
                                 }

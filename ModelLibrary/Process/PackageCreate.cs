@@ -49,7 +49,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _M_Shipper_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_Invoice_ID"))
+                else if (name.Equals("VAB_Invoice_ID"))
                 {
                     _M_InOut_ID = para[i].GetParameterAsInt();
                 }

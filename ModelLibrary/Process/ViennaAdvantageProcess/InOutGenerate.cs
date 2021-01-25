@@ -596,9 +596,9 @@ namespace ViennaAdvantage.Process
                 }
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
-                if (_shipment.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (_shipment.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    _shipment.SetC_IncoTerm_ID(order.GetC_IncoTerm_ID());
+                    _shipment.SetVAB_IncoTerm_ID(order.GetVAB_IncoTerm_ID());
                 }
 
                 if (!_shipment.Save())

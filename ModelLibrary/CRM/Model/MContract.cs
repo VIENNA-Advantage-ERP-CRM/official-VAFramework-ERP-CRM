@@ -1676,7 +1676,7 @@ namespace VAdvantage.Model
         //{
         //    //	TODO get invoiced which are linked on line level
         //    List<MInvoice> list = new List<MInvoice>();
-        //    String sql = "SELECT * FROM C_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
+        //    String sql = "SELECT * FROM VAB_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1704,10 +1704,10 @@ namespace VAdvantage.Model
         /*	Get latest Invoice of Order
         * 	@return invoice id or 0
         */
-        //public int GetC_Invoice_ID()
+        //public int GetVAB_Invoice_ID()
         //{
-        //    int C_Invoice_ID = 0;
-        //    String sql = "SELECT C_Invoice_ID FROM C_Invoice "
+        //    int VAB_Invoice_ID = 0;
+        //    String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice "
         //        + "WHERE C_Order_ID=" + GetC_Order_ID() + " AND DocStatus IN ('CO','CL') "
         //        + "ORDER BY Created DESC";
         //    DataTable dt = null;
@@ -1719,16 +1719,16 @@ namespace VAdvantage.Model
         //        idr.Close();
         //        foreach (DataRow dr in dt.Rows)
         //        {
-        //            //C_Invoice_ID =Convert.ToInt32(dr[0]);
-        //            C_Invoice_ID = Util.GetValueOfInt(dr[0].ToString());
+        //            //VAB_Invoice_ID =Convert.ToInt32(dr[0]);
+        //            VAB_Invoice_ID = Util.GetValueOfInt(dr[0].ToString());
         //        }
         //    }
         //    catch (Exception e)
         //    {
-        //        log.Log(Level.SEVERE, "getC_Invoice_ID", e);
+        //        log.Log(Level.SEVERE, "getVAB_Invoice_ID", e);
         //    }
         //    finally { dt = null; }
-        //    return C_Invoice_ID;
+        //    return VAB_Invoice_ID;
         //}
 
         /* 	Get Shipments of Order
@@ -2252,7 +2252,7 @@ namespace VAdvantage.Model
         //        }	//	for all lines with BOM
 
         //        _lines = null;		//	force requery
-        //        count = DB.GetSQLValue(Get_TrxName(), sql, GetC_Invoice_ID());
+        //        count = DB.GetSQLValue(Get_TrxName(), sql, GetVAB_Invoice_ID());
         //        RenumberLines(10);
         //    }	//	while count != 0
         //    return retValue;
@@ -2730,7 +2730,7 @@ namespace VAdvantage.Model
         //        SetVAB_CashJRNLLine_ID(invoice.GetVAB_CashJRNLLine_ID());
         //        if (!DOCSTATUS_Completed.Equals(status))
         //        {
-        //            _processMsg = "@C_Invoice_ID@: " + invoice.GetProcessMsg();
+        //            _processMsg = "@VAB_Invoice_ID@: " + invoice.GetProcessMsg();
         //            return null;
         //        }
         //    }
@@ -2841,7 +2841,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *Invoices*
-                Info.Append(" - @C_Invoice_ID@:");
+                Info.Append(" - @VAB_Invoice_ID@:");
                 //MInvoice[] invoices = GetInvoices(false);	//	get all (line based)
                 //for (int i = 0; i < invoices.Length; i++)
                 //{

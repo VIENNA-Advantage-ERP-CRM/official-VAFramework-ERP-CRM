@@ -97,27 +97,27 @@ namespace VIS.Models
         /// <summary>
         /// Get Invoice Pay Schedule Amount
         /// </summary>        
-        /// <param name="C_Invoice_ID"></param>
+        /// <param name="VAB_Invoice_ID"></param>
         /// <returns></returns>
         public decimal GetPaySheduleAmount(string fields)
         {
-            string _sql = "SELECT sum(ips.DueAmt)  FROM C_Invoice i INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID=ips.C_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
-                    "AND i.C_Invoice_ID = " + Util.GetValueOfInt(fields) + " AND C_InvoicePaySchedule_ID NOT IN (SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Payment_ID IN " +
-                    "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM C_InvoicePaySchedule))";
+            string _sql = "SELECT sum(ips.DueAmt)  FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment ips ON (i.VAB_Invoice_ID=ips.VAB_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
+                    "AND i.VAB_Invoice_ID = " + Util.GetValueOfInt(fields) + " AND VAB_sched_InvoicePayment_ID NOT IN (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE C_Payment_ID IN " +
+                    "(SELECT NVL(C_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))";
             return Util.GetValueOfDecimal(DB.ExecuteScalar(_sql, null, null));
         }
 
         /// <summary>
         /// Get Invoice Pay Schedule Data
         /// </summary>        
-        /// <param name="C_InvoicePaySchedule_ID"></param>
+        /// <param name="VAB_sched_InvoicePayment_ID"></param>
         /// <returns></returns>
         public Dictionary<string, object> GetPaySheduleData(string fields)
         {
             string[] paramValue = fields.Split(',');
             Dictionary<string, object> retValue = new Dictionary<string, object>();
             DataSet _ds = DB.ExecuteDataset(@"SELECT NVL(ips.DueAmt,0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, ips.DiscountDate , ips.DiscountAmt , ips.DiscountDays2 , ips.Discount2, i.IsReturnTrx 
-                FROM C_InvoicePaySchedule ips INNER JOIN C_Invoice i ON ips.C_Invoice_ID = i.C_Invoice_ID WHERE ips.C_InvoicePaySchedule_ID=" + Util.GetValueOfInt(paramValue[0]), null, null);
+                FROM VAB_sched_InvoicePayment ips INNER JOIN VAB_Invoice i ON ips.VAB_Invoice_ID = i.VAB_Invoice_ID WHERE ips.VAB_sched_InvoicePayment_ID=" + Util.GetValueOfInt(paramValue[0]), null, null);
             try
             {
                 if (_ds.Tables[0].Rows.Count > 0 && _ds != null)
@@ -131,7 +131,7 @@ namespace VIS.Models
                 }
                 
                 retValue["accountDate"] = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT DateAcct FROM VAB_CashJRNL WHERE IsActive = 'Y' AND VAB_CashJRNL_ID = " + Util.GetValueOfInt(paramValue[1])));                
-                retValue["isSoTrx"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsSoTrx FROM C_Invoice WHERE C_Invoice_ID = " + Util.GetValueOfInt(paramValue[2])));
+                retValue["isSoTrx"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsSoTrx FROM VAB_Invoice WHERE VAB_Invoice_ID = " + Util.GetValueOfInt(paramValue[2])));
             }
             catch (Exception e)
             {
@@ -144,13 +144,13 @@ namespace VIS.Models
         /// <summary>
         /// Get Invoice Pay Schedule Due Amount
         /// </summary>        
-        /// <param name="C_InvoicePaySchedule_ID"></param>
+        /// <param name="VAB_sched_InvoicePayment_ID"></param>
         /// <returns></returns>
         public Dictionary<string, object> GetInvSchedDueAmount(string fields)
         {
             Dictionary<string, object> retValue = null;
-            string qry = @"SELECT NVL(DueAmt , 0) AS DueAmt, i.IsReturnTrx FROM C_InvoicePaySchedule ips INNER JOIN C_Invoice i ON ips.C_Invoice_ID = i.C_Invoice_ID"
-                + " INNER JOIN VAB_DocTypes d ON i.VAB_DocTypesTarget_ID = d.VAB_DocTypes_ID WHERE ips.C_InvoicePaySchedule_ID = " + Util.GetValueOfInt(fields);
+            string qry = @"SELECT NVL(DueAmt , 0) AS DueAmt, i.IsReturnTrx FROM VAB_sched_InvoicePayment ips INNER JOIN VAB_Invoice i ON ips.VAB_Invoice_ID = i.VAB_Invoice_ID"
+                + " INNER JOIN VAB_DocTypes d ON i.VAB_DocTypesTarget_ID = d.VAB_DocTypes_ID WHERE ips.VAB_sched_InvoicePayment_ID = " + Util.GetValueOfInt(fields);
             DataSet _ds = DB.ExecuteDataset(qry);
             if (_ds.Tables[0].Rows.Count > 0 && _ds != null)
             {

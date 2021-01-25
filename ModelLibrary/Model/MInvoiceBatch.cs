@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInvoiceBatch
  * Purpose        : Invoice batch line
- * Class Used     : X_C_InvoiceBatch
+ * Class Used     : X_VAB_BatchInvoice
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 
 {
-    public class MInvoiceBatch : X_C_InvoiceBatch
+    public class MInvoiceBatch : X_VAB_BatchInvoice
     {
         /**	The Lines						*/
         private MInvoiceBatchLine[] _lines = null;
@@ -32,14 +32,14 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param C_InvoiceBatch_ID id
+         *	@param VAB_BatchInvoice_ID id
          *	@param trxName trx
          */
-        public MInvoiceBatch(Ctx ctx, int C_InvoiceBatch_ID, Trx trxName) :
-            base(ctx, C_InvoiceBatch_ID, trxName)
+        public MInvoiceBatch(Ctx ctx, int VAB_BatchInvoice_ID, Trx trxName) :
+            base(ctx, VAB_BatchInvoice_ID, trxName)
         {
 
-            if (C_InvoiceBatch_ID == 0)
+            if (VAB_BatchInvoice_ID == 0)
             {
                 //	setDocumentNo (null);
                 //	setVAB_Currency_ID (0);	// @$VAB_Currency_ID@
@@ -73,14 +73,14 @@ namespace VAdvantage.Model
         {
             if (_lines != null && !reload)
                 return _lines;
-            String sql = "SELECT * FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID=@C_InvoiceBatch_ID ORDER BY Line";
+            String sql = "SELECT * FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=@VAB_BatchInvoice_ID ORDER BY Line";
             List<MInvoiceBatchLine> list = new List<MInvoiceBatchLine>();
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@C_InvoiceBatch_ID", GetC_InvoiceBatch_ID());
+                param[0] = new SqlParameter("@VAB_BatchInvoice_ID", GetVAB_BatchInvoice_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
                 dt.Load(idr);
@@ -119,8 +119,8 @@ namespace VAdvantage.Model
                 return;
             String set = "SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE C_InvoiceBatch_ID=" + GetC_InvoiceBatch_ID();
-            int noLine = DataBase.DB.ExecuteQuery("UPDATE C_InvoiceBatchLine " + set, null, Get_TrxName());
+                + "' WHERE VAB_BatchInvoice_ID=" + GetVAB_BatchInvoice_ID();
+            int noLine = DataBase.DB.ExecuteQuery("UPDATE VAB_BatchInvoiceLine " + set, null, Get_TrxName());
             _lines = null;
             log.Fine(processed + " - Lines=" + noLine);
         }	//	setProcessed

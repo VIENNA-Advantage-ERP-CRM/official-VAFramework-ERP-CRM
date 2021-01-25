@@ -18,15 +18,15 @@ namespace VIS.Models
         public Dictionary<String, String> GetInvoiceBatchLine(Ctx ctx,string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_InvoiceBatchLine_ID;
+            int VAB_BatchInvoiceLine_ID;
             //decimal Qty;
             //bool isSOTrx;
             Dictionary<String, String> retDic = new Dictionary<string, string>();
             //Assign parameter value
-            C_InvoiceBatchLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_BatchInvoiceLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
 
-            MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, C_InvoiceBatchLine_ID, null);
+            MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
             //	Need to Increase when different DocType or BP
             retDic["VAB_DocTypes_ID"] = last.GetVAB_DocTypes_ID().ToString();
             retDic["VAB_BusinessPartner_ID"] = last.GetVAB_BusinessPartner_ID().ToString();

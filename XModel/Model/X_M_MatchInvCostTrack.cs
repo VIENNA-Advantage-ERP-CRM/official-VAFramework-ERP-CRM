@@ -60,15 +60,15 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_M_MatchInvCostTrack[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Invoice Line.
-@param C_InvoiceLine_ID Invoice Detail Line */
-        public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+@param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            if (C_InvoiceLine_ID <= 0) Set_Value("C_InvoiceLine_ID", null);
+            if (VAB_InvoiceLine_ID <= 0) Set_Value("VAB_InvoiceLine_ID", null);
             else
-                Set_Value("C_InvoiceLine_ID", C_InvoiceLine_ID);
+                Set_Value("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
         }/** Get Invoice Line.
 @return Invoice Detail Line */
-        public int GetC_InvoiceLine_ID() { Object ii = Get_Value("C_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAB_InvoiceLine_ID() { Object ii = Get_Value("VAB_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
@@ -118,16 +118,16 @@ namespace VAdvantage.Model
         }/** Get Match Invoice.
 @return Match Shipment/Receipt to Invoice */
         public int GetM_MatchInv_ID() { Object ii = Get_Value("M_MatchInv_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Rev_C_InvoiceLine_ID VAF_Control_Ref_ID=1000371 */
-        public static int REV_C_INVOICELINE_ID_VAF_Control_Ref_ID = 1000371;/** Set Reverse Invoice Line.
-@param Rev_C_InvoiceLine_ID Reverse Invoice Line */
-        public void SetRev_C_InvoiceLine_ID(int Rev_C_InvoiceLine_ID)
+        /** Rev_VAB_InvoiceLine_ID VAF_Control_Ref_ID=1000371 */
+        public static int REV_VAB_INVOICELINE_ID_VAF_Control_Ref_ID = 1000371;/** Set Reverse Invoice Line.
+@param Rev_VAB_InvoiceLine_ID Reverse Invoice Line */
+        public void SetRev_VAB_InvoiceLine_ID(int Rev_VAB_InvoiceLine_ID)
         {
-            if (Rev_C_InvoiceLine_ID <= 0) Set_Value("Rev_C_InvoiceLine_ID", null);
+            if (Rev_VAB_InvoiceLine_ID <= 0) Set_Value("Rev_VAB_InvoiceLine_ID", null);
             else
-                Set_Value("Rev_C_InvoiceLine_ID", Rev_C_InvoiceLine_ID);
+                Set_Value("Rev_VAB_InvoiceLine_ID", Rev_VAB_InvoiceLine_ID);
         }/** Get Reverse Invoice Line.
 @return Reverse Invoice Line */
-        public int GetRev_C_InvoiceLine_ID() { Object ii = Get_Value("Rev_C_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetRev_VAB_InvoiceLine_ID() { Object ii = Get_Value("Rev_VAB_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }

@@ -90,7 +90,7 @@ namespace VIS.Models
         {
             List<BusinessPartner> lstBusinessPartner = new List<BusinessPartner>();
             DataSet ds = new DataSet();
-            string sqlBPartner = "select bp.VAB_BusinessPartner_ID, bp.Name from VAB_BusinessPartner bp where exists (SELECT * FROM C_Invoice i WHERE "
+            string sqlBPartner = "select bp.VAB_BusinessPartner_ID, bp.Name from VAB_BusinessPartner bp where exists (SELECT * FROM VAB_Invoice i WHERE "
             + " bp.VAB_BusinessPartner_ID=i.VAB_BusinessPartner_ID AND (i.IsSOTrx='N' OR (i.IsSOTrx='Y' AND i.PaymentRule='D'))AND i.IsPaid <>'Y') and "
             + " bp.VAF_Client_ID IN (0, " + ctx.GetVAF_Client_ID() + ") AND (COALESCE(bp.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + ")) ORDER BY 2";
             ds = DB.ExecuteDataset(sqlBPartner, null, null);
@@ -152,20 +152,20 @@ namespace VIS.Models
         public List<GridRecords> GetGridData(Ctx ctx, int bankAccountId, int VAB_BusinessPartner_ID, DateTime? payDate, string paymentRule, bool chkDue, int VAB_Currency_ID)
         {
             List<GridRecords> lstGridRecords = new List<GridRecords>();
-            string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
+            string m_sql = "SELECT 'false' as SELECTROW, i.VAB_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
             + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
-            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.VAB_Currency_ID, @param2, @param3,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
-            + " i.VAB_Currency_ID, @param5, @param6,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
+            + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID),i.VAB_Currency_ID, @param2, @param3,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
+            + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
+            + " i.VAB_Currency_ID, @param5, @param6,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM VAB_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
             + " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             + " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)"
             + "   WHERE i.IsSOTrx= @param7 AND IsPaid='N' AND "
             + " i.DocStatus IN ('CO','CL') AND i.VAF_Client_ID= @param8 AND i.VAF_Client_ID IN(0," + ctx.GetVAF_Client_ID() + ") AND (COALESCE(i.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + "))";
-            //   string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
+            //   string m_sql = "SELECT 'false' as SELECTROW, i.VAB_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
             //+ " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
-            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
-            //+ " i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
+            //+ " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID),i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
+            //+ " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
+            //+ " i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM VAB_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
             //+ " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             //+ " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)";
             String sql = m_sql;
@@ -228,7 +228,7 @@ namespace VIS.Models
                         lstGridRecords.Add(new GridRecords()
                         {
                             SELECT = Convert.ToString(ds.Tables[0].Rows[i]["SELECTROW"]),
-                            C_INVOICE_ID = Convert.ToString(ds.Tables[0].Rows[i]["C_INVOICE_ID"]),
+                            VAB_INVOICE_ID = Convert.ToString(ds.Tables[0].Rows[i]["VAB_INVOICE_ID"]),
                             DUEDATE = Convert.ToString(ds.Tables[0].Rows[i]["DUEDATE"]),
                             BUSINESSPARTNER = Convert.ToString(ds.Tables[0].Rows[i]["BUSINESSPARTNER"]),
                             DOCUMENTNO = Convert.ToString(ds.Tables[0].Rows[i]["DOCUMENTNO"]),
@@ -267,7 +267,7 @@ namespace VIS.Models
                 if ((Convert.ToBoolean(selectedRecords[i].SELECT)))
                 {
                     Decimal? amt = Util.GetValueOfDecimal(selectedRecords[i].PAYMENTAMOUNT);
-                    Invoice_ID.Add(Util.GetValueOfInt(selectedRecords[i].C_INVOICE_ID));
+                    Invoice_ID.Add(Util.GetValueOfInt(selectedRecords[i].VAB_INVOICE_ID));
                     openAmt.Add(Util.GetValueOfDecimal(selectedRecords[i].AMOUNTDUE));
                     payAmt.Add(Util.GetValueOfDecimal(selectedRecords[i].PAYMENTAMOUNT));
                     rowsSelected++;
@@ -334,7 +334,7 @@ namespace VIS.Models
                         // log.SaveError("PaymentSelectionLineNotSaved", "PaymentSelectionLineNotSaved");
                         return "";
                     }
-                    // log.Fine("C_Invoice_ID=" + Util.GetValueOfInt(Invoice_ID[j]) + ", PayAmt=" + Util.GetValueOfDecimal(payAmt[j]));
+                    // log.Fine("VAB_Invoice_ID=" + Util.GetValueOfInt(Invoice_ID[j]) + ", PayAmt=" + Util.GetValueOfDecimal(payAmt[j]));
                 }
                 else
                 {
@@ -344,7 +344,7 @@ namespace VIS.Models
                         //   log.SaveError("PaymentSelectionLineNotSaved", "PaymentSelectionLineNotSaved");
                         return "";
                     }
-                    // log.Fine("C_Invoice_ID=" + Util.GetValueOfInt(Invoice_ID[j]) + ", PayAmt=" + Util.GetValueOfDecimal(payAmt[j]));
+                    // log.Fine("VAB_Invoice_ID=" + Util.GetValueOfInt(Invoice_ID[j]) + ", PayAmt=" + Util.GetValueOfDecimal(payAmt[j]));
                 }
 
             }
@@ -495,7 +495,7 @@ namespace VIS.Models
     public class GridRecords
     {
         public string SELECT { get; set; }
-        public string C_INVOICE_ID { get; set; }
+        public string VAB_INVOICE_ID { get; set; }
         public string DUEDATE { get; set; }
         public string BUSINESSPARTNER { get; set; }
         public string DOCUMENTNO { get; set; }

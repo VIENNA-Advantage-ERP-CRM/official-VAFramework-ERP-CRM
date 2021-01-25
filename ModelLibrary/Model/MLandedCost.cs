@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_LandedCost
+ * Class Used     : X_VAB_LCost
  * Chronological Development
  * Veena Pandey     16-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MLandedCost : X_C_LandedCost
+    public class MLandedCost : X_VAB_LCost
     {
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MLandedCost).FullName);
@@ -27,14 +27,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_LandedCost_ID">id</param>
+        /// <param name="VAB_LCost_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLandedCost(Ctx ctx, int C_LandedCost_ID, Trx trxName)
-            : base(ctx, C_LandedCost_ID, trxName)
+        public MLandedCost(Ctx ctx, int VAB_LCost_ID, Trx trxName)
+            : base(ctx, VAB_LCost_ID, trxName)
         {
-            if (C_LandedCost_ID == 0)
+            if (VAB_LCost_ID == 0)
             {
-                //	setC_InvoiceLine_ID (0);
+                //	setVAB_InvoiceLine_ID (0);
                 //	setM_CostElement_ID (0);
                 SetLandedCostDistribution(LANDEDCOSTDISTRIBUTION_Quantity);	// Q
             }
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         public static MLandedCost[] GetLandedCosts(MInvoiceLine il)
         {
             List<MLandedCost> list = new List<MLandedCost>();
-            String sql = "SELECT * FROM C_LandedCost WHERE C_InvoiceLine_ID=" + il.GetC_InvoiceLine_ID();
+            String sql = "SELECT * FROM VAB_LCost WHERE VAB_InvoiceLine_ID=" + il.GetVAB_InvoiceLine_ID();
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, il.Get_TrxName());
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
                 if (GetM_Product_ID() == 0 && GetRef_Invoice_ID() == 0 && GetRef_InvoiceLine_ID() == 0)
                 {
                     log.SaveError("Error", Msg.ParseTranslation(GetCtx(),
-                        "@NotFound@ @M_Product_ID@ | @C_Invoice_ID@ | @C_InvoiceLine_ID@"));
+                        "@NotFound@ @M_Product_ID@ | @VAB_Invoice_ID@ | @VAB_InvoiceLine_ID@"));
                     return false;
                 }
             }
@@ -145,53 +145,53 @@ namespace VAdvantage.Model
                 // Saved unique data basd on CostElement / Shipment / ShipmentLine
                 // not to consider Reversed or voided InvoiceLine record
                 sql.Clear();
-                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
                     " AND M_InOut_ID = " + GetM_InOut_ID() + " AND (M_InOutLine_ID = " + GetM_InOutLine_ID() + " OR NVL(M_InOutLine_ID,0) = 0) " +
-                    @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
-                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                    @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
+                   AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
                 if (Get_ColumnIndex("ReversalDoc_ID") > 0)
                 {
                     // during reversal, exclude orignal record
-                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                    sql.Append(" AND VAB_InvoiceLine_ID    <> " + GetReversalDoc_ID());
                 }
                 if (!newRecord)
                 {
                     // during updation, not consider current record
-                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                    sql.Append(" AND VAB_LCost_ID <> " + GetVAB_LCost_ID());
                 }
             }
             else if (GetM_Movement_ID() > 0)
             {
                 // Saved unique data basd on CostElement / Movement / MovementLine
                 sql.Clear();
-                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
                        " AND M_Movement_ID = " + GetM_Movement_ID() + " AND (M_MovementLine_ID = " + GetM_MovementLine_ID() + " OR NVL(M_MovementLine_ID,0) = 0) " +
-                       @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
-                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                       @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
+                   AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
                 if (Get_ColumnIndex("ReversalDoc_ID") > 0)
                 {
-                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                    sql.Append(" AND VAB_InvoiceLine_ID    <> " + GetReversalDoc_ID());
                 }
                 if (!newRecord)
                 {
-                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                    sql.Append(" AND VAB_LCost_ID <> " + GetVAB_LCost_ID());
                 }
             }
             else if (GetRef_Invoice_ID() > 0)
             {
                 // Saved unique data basd on CostElement / Invoice / InvoiceLine
                 sql.Clear();
-                sql.Append("SELECT COUNT(C_LandedCost_ID) FROM C_LandedCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
                        " AND Ref_Invoice_ID = " + GetRef_Invoice_ID() + " AND (Ref_InvoiceLine_ID = " + GetRef_InvoiceLine_ID() + " OR NVL(Ref_InvoiceLine_ID,0) = 0) " +
-                       @" AND NOT EXISTS (SELECT C_InvoiceLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice i ON i.C_Invoice_ID = il.C_Invoice_ID 
-                   AND C_LandedCost.C_Invoiceline_ID = il.C_Invoiceline_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
+                       @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
+                   AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
                 if (Get_ColumnIndex("ReversalDoc_ID") > 0)
                 {
-                    sql.Append(" AND C_Invoiceline_ID    <> " + GetReversalDoc_ID());
+                    sql.Append(" AND VAB_InvoiceLine_ID    <> " + GetReversalDoc_ID());
                 }
                 if (!newRecord)
                 {
-                    sql.Append(" AND C_LandedCost_ID <> " + GetC_LandedCost_ID());
+                    sql.Append(" AND VAB_LCost_ID <> " + GetVAB_LCost_ID());
                 }
             }
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
         /// <returns>error message or ""</returns>
         public String AllocateCosts()
         {
-            MInvoiceLine il = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+            MInvoiceLine il = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
             return il.AllocateLandedCosts();
         }
 

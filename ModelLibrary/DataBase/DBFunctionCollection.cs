@@ -335,10 +335,10 @@ namespace VAdvantage.DataBase
                                               (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
                                                 (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM VAB_CashJRNL c 
                                                  INNER JOIN VAB_CashJRNLLine cl ON c.VAB_CashBook_id = cl.VAB_CashBook_id 
-                                                 INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID 
-                                                 INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
+                                                 INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID 
+                                                 INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                                  WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
-                                                 AND NVL(cl.C_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
                                                  OR NVL(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.VAB_CashBook_id = " + cash_ID +
                                                  @" AND ROWNUM <= 100 )  )
                                                  WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
@@ -349,10 +349,10 @@ namespace VAdvantage.DataBase
                                               (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
                                                 (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM VAB_CashJRNL c 
                                                  INNER JOIN VAB_CashJRNLLine cl ON c.VAB_CashBook_id = cl.VAB_CashBook_id 
-                                                 INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID 
-                                                 INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
+                                                 INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID 
+                                                 INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                                  WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
-                                                 AND NVL(cl.C_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
                                                  OR NVL(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.VAB_CashBook_id = " + cash_ID +
                                                  @") t ORDER BY PaidSchedule LIMIT 100) tb
                                                  WHERE PaidSchedule IS NOT NULL";

@@ -86,7 +86,7 @@ namespace VAdvantage.Process
 
                 #region complete Invoice Record
                 sql.Clear();
-                sql.Append("SELECT * FROM C_Invoice WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY dateacct");
+                sql.Append("SELECT * FROM VAB_Invoice WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY dateacct");
                 dsRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "dateacct");
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dataRow[i]["C_Invoice_ID"]), Get_Trx());
+                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Invoice_ID"]), Get_Trx());
                             invoice.CompleteIt();
                             if (invoice.GetDocAction() == "CL")
                             {
@@ -107,7 +107,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Invoice Record ID = " + invoice.GetC_Invoice_ID() +
+                                    _log.Info("Error found for saving VAB_Invoice Record ID = " + invoice.GetVAB_Invoice_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -117,7 +117,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Invoice not completed for this Record ID = " + invoice.GetC_Invoice_ID());
+                                _log.Info("Invoice not completed for this Record ID = " + invoice.GetVAB_Invoice_ID());
                             }
 
                         }
@@ -185,7 +185,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Invoice Record ID = " + movement.GetM_Movement_ID() +
+                                    _log.Info("Error found for saving VAB_Invoice Record ID = " + movement.GetM_Movement_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else

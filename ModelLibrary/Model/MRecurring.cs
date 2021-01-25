@@ -65,7 +65,7 @@ namespace VAdvantage.Model
             }
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
             {
-                sb.Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());
+                sb.Append(",VAB_Invoice_ID=").Append(GetVAB_Invoice_ID());
             }
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
             {
@@ -121,10 +121,10 @@ namespace VAdvantage.Model
                 }
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
                 {
-                    MInvoice from = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    MInvoice from = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                     MInvoice invoice = MInvoice.CopyFrom(from, dateDoc,
                         from.GetVAB_DocTypes_ID(), false, Get_TrxName(), false);
-                    run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                    run.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                     //Set Invoice Refrence and Description from Orignal to Recurring
                     invoice.Set_Value("InvoiceReference", from.GetDocumentNo() + "_" + (GetRunsMax() - GetRunsRemaining() + 1));
                     invoice.AddDescription(Msg.GetMsg(from.GetCtx(), "RecurringDocument") + from.GetDocumentNo());
@@ -270,9 +270,9 @@ namespace VAdvantage.Model
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_Invoice)
-                && GetC_Invoice_ID() == 0)
+                && GetVAB_Invoice_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Invoice_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Invoice_ID"));
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_GLJournalBatch) //Changes recurring type from GL JOurnal To GL Journal Batch

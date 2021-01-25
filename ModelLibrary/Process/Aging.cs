@@ -107,7 +107,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ", IsListInvoices=" + _IsListInvoices);
             //
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT bp.VAB_BPart_Category_ID, oi.VAB_BusinessPartner_ID,oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID, "
+            sql.Append("SELECT bp.VAB_BPart_Category_ID, oi.VAB_BusinessPartner_ID,oi.VAB_Invoice_ID,oi.VAB_sched_InvoicePayment_ID, "
                 + "oi.VAB_Currency_ID, oi.IsSOTrx, "								//	5..6
                 + "oi.DateInvoiced, oi.NetDays,oi.DueDate,oi.DaysDue, ");		//	7..10
             if (_VAB_Currency_ID == 0 || _VAB_Currency_ID == -1)
@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 sql.Append(" AND bp.VAB_BPart_Category_ID=").Append(_VAB_BPart_Category_ID);
             }
-            sql.Append(" ORDER BY oi.VAB_BusinessPartner_ID, oi.VAB_Currency_ID, oi.C_Invoice_ID");
+            sql.Append(" ORDER BY oi.VAB_BusinessPartner_ID, oi.VAB_Currency_ID, oi.VAB_Invoice_ID");
 
             log.Finest(sql.ToString());
             String finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(
@@ -163,8 +163,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     int VAB_BPart_Category_ID = Utility.Util.GetValueOfInt(idr[0]);// Utility. rs.getInt(1);
                     int VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
-                    int C_Invoice_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[2]) : 0;
-                    int C_InvoicePaySchedule_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[3]) : 0;
+                    int VAB_Invoice_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[2]) : 0;
+                    int VAB_sched_InvoicePayment_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[3]) : 0;
                     int VAB_Currency_ID = Utility.Util.GetValueOfInt(idr[4]);// rs.getInt(5);
                     Boolean IsSOTrx = "Y".Equals(Utility.Util.GetValueOfString(idr[5]));
                     //
@@ -189,8 +189,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || VAF_JInstance_ID != aging.GetVAF_JInstance_ID()
                         || VAB_BusinessPartner_ID != aging.GetVAB_BusinessPartner_ID()
                         || VAB_Currency_ID != aging.GetVAB_Currency_ID()
-                        || C_Invoice_ID != aging.GetC_Invoice_ID()
-                        || C_InvoicePaySchedule_ID != aging.GetC_InvoicePaySchedule_ID())
+                        || VAB_Invoice_ID != aging.GetVAB_Invoice_ID()
+                        || VAB_sched_InvoicePayment_ID != aging.GetVAB_sched_InvoicePayment_ID())
                     {
                         if (aging != null)
                         {
@@ -206,7 +206,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
                         aging = new MAging(GetCtx(), VAF_JInstance_ID, _StatementDate,
                             VAB_BusinessPartner_ID, VAB_Currency_ID,
-                            C_Invoice_ID, C_InvoicePaySchedule_ID,
+                            VAB_Invoice_ID, VAB_sched_InvoicePayment_ID,
                             VAB_BPart_Category_ID, DueDate, IsSOTrx, Get_Trx());
                         if (_VAF_Org_ID > 0)
                         {

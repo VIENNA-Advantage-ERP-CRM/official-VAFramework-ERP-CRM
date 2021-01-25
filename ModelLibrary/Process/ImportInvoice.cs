@@ -651,7 +651,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         noInsert++;
                         lineNo = 10;
                     }
-                    imp.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                    imp.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                     //	New InvoiceLine
                     MInvoiceLine line = new MInvoiceLine(invoice);
                     if (imp.GetLineDescription() != null)
@@ -677,7 +677,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         line.SetTaxAmt(taxAmt);
                     line.Save();
                     //
-                    imp.SetC_InvoiceLine_ID(line.GetC_InvoiceLine_ID());
+                    imp.SetVAB_InvoiceLine_ID(line.GetVAB_InvoiceLine_ID());
                     imp.SetI_IsImported(X_I_Invoice.I_ISIMPORTED_Yes);
                     imp.SetProcessed(true);
                     //
@@ -708,8 +708,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             //
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@C_Invoice_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@C_InvoiceLine_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAB_Invoice_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@VAB_InvoiceLine_ID@: @Inserted@");
             return "";
         }	//	doIt
 

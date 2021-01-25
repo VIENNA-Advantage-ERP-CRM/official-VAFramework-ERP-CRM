@@ -34,7 +34,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	// BPartner Group			
 	private int			_VAB_BPart_Category_ID = 0;
 	//	Invoice					
-	private int			_C_Invoice_ID = 0;
+	private int			_VAB_Invoice_ID = 0;
 	
 	// Max Amt					
 	private Decimal	_MaxInvWriteOffAmt = Env.ZERO;
@@ -82,9 +82,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 _VAB_BPart_Category_ID = para[i].GetParameterAsInt();
             }
-            else if (name.Equals("C_Invoice_ID"))
+            else if (name.Equals("VAB_Invoice_ID"))
             {
-                _C_Invoice_ID = para[i].GetParameterAsInt();
+                _VAB_Invoice_ID = para[i].GetParameterAsInt();
             }
             //
             else if (name.Equals("MaxInvWriteOffAmt"))
@@ -134,15 +134,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	{
 		log.Info("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID 
 			+ ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID
-			+ ", C_Invoice_ID=" + _C_Invoice_ID
+			+ ", VAB_Invoice_ID=" + _VAB_Invoice_ID
 			+ "; APAR=" + _APAR
 			+ ", " + _DateInvoiced_From + " - " + _DateInvoiced_To
 			+ "; CreatePayment=" + _CreatePayment
 			+ ", VAB_Bank_Acct_ID=" + _VAB_Bank_Acct_ID);
 		//
-        if (_VAB_BusinessPartner_ID == 0 && _C_Invoice_ID == 0 && _VAB_BPart_Category_ID == 0)
+        if (_VAB_BusinessPartner_ID == 0 && _VAB_Invoice_ID == 0 && _VAB_BPart_Category_ID == 0)
         {
-            throw new Exception("@FillMandatory@ @C_Invoice_ID@ / @VAB_BusinessPartner_ID@ / ");
+            throw new Exception("@FillMandatory@ @VAB_Invoice_ID@ / @VAB_BusinessPartner_ID@ / ");
         }
 		//
         if (_CreatePayment && _VAB_Bank_Acct_ID == 0)
@@ -151,12 +151,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
 		//
 		StringBuilder sql = new StringBuilder(
-			"SELECT C_Invoice_ID,DocumentNo,DateInvoiced,"
-			+ "VAB_Currency_ID,GrandTotal,invoiceOpen(C_Invoice_ID, 0) AS OpenAmt"
-			+ " FROM C_Invoice WHERE ");
-        if (_C_Invoice_ID != 0)
+			"SELECT VAB_Invoice_ID,DocumentNo,DateInvoiced,"
+			+ "VAB_Currency_ID,GrandTotal,invoiceOpen(VAB_Invoice_ID, 0) AS OpenAmt"
+			+ " FROM VAB_Invoice WHERE ");
+        if (_VAB_Invoice_ID != 0)
         {
-            sql.Append("C_Invoice_ID= ").Append(_C_Invoice_ID);
+            sql.Append("VAB_Invoice_ID= ").Append(_VAB_Invoice_ID);
         }
         else
         {
@@ -166,7 +166,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else
             {
-                sql.Append("EXISTS (SELECT * FROM VAB_BusinessPartner bp WHERE C_Invoice.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND bp.VAB_BPart_Category_ID=")
+                sql.Append("EXISTS (SELECT * FROM VAB_BusinessPartner bp WHERE VAB_Invoice.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND bp.VAB_BPart_Category_ID=")
                                .Append(_VAB_BPart_Category_ID).Append(")");
             }
             //
@@ -236,13 +236,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <summary>
 	/// Write Off	 
 	/// </summary>
-	/// <param name="C_Invoice_ID"></param>
+	/// <param name="VAB_Invoice_ID"></param>
 	/// <param name="DocumentNo"></param>
 	/// <param name="DateInvoiced"></param>
 	/// <param name="VAB_Currency_ID"></param>
 	/// <param name="OpenAmt"></param>
     /// <returns>true if written off</returns>
-	private Boolean writeOff (int C_Invoice_ID, String DocumentNo, DateTime? DateInvoiced, 
+	private Boolean writeOff (int VAB_Invoice_ID, String DocumentNo, DateTime? DateInvoiced, 
 		int VAB_Currency_ID, Decimal OpenAmt)
 	{
 		//	Nothing to do
@@ -257,12 +257,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//
 		if (_IsSimulation)
 		{
-			AddLog(C_Invoice_ID, DateInvoiced, OpenAmt, DocumentNo);
+			AddLog(VAB_Invoice_ID, DateInvoiced, OpenAmt, DocumentNo);
 			return true;
 		}
 		
 		//	Invoice
-		MInvoice invoice = new MInvoice(GetCtx(), C_Invoice_ID, Get_TrxName());
+		MInvoice invoice = new MInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName());
         if (!invoice.IsSOTrx())
         {
             OpenAmt =Decimal.Negate( OpenAmt);
@@ -317,14 +317,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		else
 			aLine = new MAllocationLine (_m_alloc, Env.ZERO, 
 				Env.ZERO, OpenAmt, Env.ZERO);
-		aLine.SetC_Invoice_ID(C_Invoice_ID);
+		aLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
 		if (aLine.Save())
 		{
-			AddLog(C_Invoice_ID, DateInvoiced, OpenAmt, DocumentNo);
+			AddLog(VAB_Invoice_ID, DateInvoiced, OpenAmt, DocumentNo);
 			return true;
 		}
 		//	Error
-		log.Log(Level.SEVERE, "Cannot create allocation line for C_Invoice_ID=" + C_Invoice_ID);
+		log.Log(Level.SEVERE, "Cannot create allocation line for VAB_Invoice_ID=" + VAB_Invoice_ID);
 		return false;
 	}	//	writeOff
 

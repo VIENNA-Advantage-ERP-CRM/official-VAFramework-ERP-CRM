@@ -385,7 +385,7 @@ namespace VAdvantage.Model
             to.SetIsInTransit(false);
             //
             to.SetIsApproved(false);
-            to.SetC_Invoice_ID(0);
+            to.SetVAB_Invoice_ID(0);
             to.SetTrackingNo(null);
             to.SetIsInDispute(false);
             //
@@ -403,11 +403,11 @@ namespace VAdvantage.Model
                     if (peer.GetRef_Order_ID() != 0)
                         to.SetC_Order_ID(peer.GetRef_Order_ID());
                 }
-                if (from.GetC_Invoice_ID() != 0)
+                if (from.GetVAB_Invoice_ID() != 0)
                 {
-                    MInvoice peer = new MInvoice(from.GetCtx(), from.GetC_Invoice_ID(), from.Get_TrxName());
+                    MInvoice peer = new MInvoice(from.GetCtx(), from.GetVAB_Invoice_ID(), from.Get_TrxName());
                     if (peer.GetRef_Invoice_ID() != 0)
-                        to.SetC_Invoice_ID(peer.GetRef_Invoice_ID());
+                        to.SetVAB_Invoice_ID(peer.GetRef_Invoice_ID());
                 }
             }
             else
@@ -686,7 +686,7 @@ namespace VAdvantage.Model
                 string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", fileName);
 
 
-                ReportEngine_N re = ReportEngine_N.Get(GetCtx(), ReportEngine_N.SHIPMENT, GetC_Invoice_ID());
+                ReportEngine_N re = ReportEngine_N.Get(GetCtx(), ReportEngine_N.SHIPMENT, GetVAB_Invoice_ID());
                 if (re == null)
                     return null;
 
@@ -720,7 +720,7 @@ namespace VAdvantage.Model
         public FileInfo CreatePDF(FileInfo file)
         {
 
-            //ReportEngine re = ReportEngine.get(getCtx(), ReportEngine.SHIPMENT, getC_Invoice_ID());
+            //ReportEngine re = ReportEngine.get(getCtx(), ReportEngine.SHIPMENT, getVAB_Invoice_ID());
             //if (re == null)
             //    return null;
             //return re.getPDF(file);
@@ -3025,7 +3025,7 @@ namespace VAdvantage.Model
 
                         // JID_0209: Need to set the correct qty on ‘Matched Receipts/Invoice’. System should set minimum qty of MR and invoice, whichever is lower. on match receipt
 
-                        decimal alreadyMatchedQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM M_MatchInv WHERE C_InvoiceLine_ID = " + iLine.GetC_InvoiceLine_ID(), null, Get_Trx()));
+                        decimal alreadyMatchedQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM M_MatchInv WHERE VAB_InvoiceLine_ID = " + iLine.GetVAB_InvoiceLine_ID(), null, Get_Trx()));
 
                         if ((alreadyMatchedQty + matchQty) > iLine.GetQtyInvoiced())
                         {
@@ -3033,7 +3033,7 @@ namespace VAdvantage.Model
                         }
 
                         MMatchInv[] matches = MMatchInv.Get(GetCtx(),
-                            sLine.GetM_InOutLine_ID(), iLine.GetC_InvoiceLine_ID(), Get_TrxName());
+                            sLine.GetM_InOutLine_ID(), iLine.GetVAB_InvoiceLine_ID(), Get_TrxName());
                         if (matches == null || matches.Length == 0)
                         {
                             MMatchInv inv = new MMatchInv(iLine, GetMovementDate(), matchQty);
@@ -3304,7 +3304,7 @@ namespace VAdvantage.Model
                                             }
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
-                                            MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetC_InvoiceLine_ID(), Get_Trx());
+                                            MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetVAB_InvoiceLine_ID(), Get_Trx());
                                             Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                             if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetM_AttributeSetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
@@ -3319,7 +3319,7 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
-                                                DB.ExecuteQuery("UPDATE C_InvoiceLine SET IsCostImmediate = 'Y' WHERE C_InvoiceLine_ID = " + matchedInvoice[mi].GetC_InvoiceLine_ID(), null, Get_Trx());
+                                                DB.ExecuteQuery("UPDATE VAB_InvoiceLine SET IsCostImmediate = 'Y' WHERE VAB_InvoiceLine_ID = " + matchedInvoice[mi].GetVAB_InvoiceLine_ID(), null, Get_Trx());
 
                                                 if (matchedInvoice[mi].Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                 {
@@ -5207,7 +5207,7 @@ namespace VAdvantage.Model
                 MMatchPO[] mPO = MMatchPO.GetInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
-                    if (mPO[i].GetC_InvoiceLine_ID() == 0)
+                    if (mPO[i].GetVAB_InvoiceLine_ID() == 0)
                         mPO[i].Delete(true);
                     else
                     {
@@ -5500,7 +5500,7 @@ namespace VAdvantage.Model
         /// <returns>True/False</returns>
         private bool linkedDocument(int C_Order_ID)
         {
-            string sql = "SELECT COUNT(C_Order_ID) FROM C_Invoice WHERE C_Order_ID = " + C_Order_ID + "  AND DocStatus NOT IN ('RE','VO')";
+            string sql = "SELECT COUNT(C_Order_ID) FROM VAB_Invoice WHERE C_Order_ID = " + C_Order_ID + "  AND DocStatus NOT IN ('RE','VO')";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             if (_countOrder > 0)
             {
@@ -5509,12 +5509,12 @@ namespace VAdvantage.Model
             return true;
         }
 
-        // checked M_Inout reference is available on C_invoice then not to reverse this M_Inout
+        // checked M_Inout reference is available on VAB_Invoice then not to reverse this M_Inout
         private bool linkedDocumentAgainstInOut(int M_Inout_ID)
         {
             // JID_1310: At the time of void MR need to check if any RMA and Custmer/Vendor RMA has MR refrence. If found need to give message
             string sql = @"SELECT SUM(Result) From (
-                          SELECT COUNT(il.M_InOutLine_ID) AS Result FROM C_Invoice i INNER JOIN C_InvoiceLine il ON i.C_Invoice_ID = il.C_Invoice_ID
+                          SELECT COUNT(il.M_InOutLine_ID) AS Result FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
                           WHERE il.M_InOutLine_ID = (SELECT M_InOutLine_ID FROM M_InOutLine mil WHERE mil.M_InOut_ID = " + M_Inout_ID + @"
                           AND mil.M_InOutLine_ID = il.M_InOutLine_ID) AND il.IsActive = 'Y' AND i.DocStatus NOT IN ('RE' , 'VO')
                           UNION ALL

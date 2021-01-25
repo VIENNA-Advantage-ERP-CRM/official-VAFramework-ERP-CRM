@@ -35,7 +35,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //Include Disputed		
         private bool _IncludeInDispute = false;
         //Match Requirement		
-        private String _MatchRequirementI = X_C_Invoice.MATCHREQUIREMENTI_None;
+        private String _MatchRequirementI = X_VAB_Invoice.MATCHREQUIREMENTI_None;
         //Payment Rule			
         private String _PaymentRule = null;
         //BPartner				
@@ -139,17 +139,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //	psel.getPayDate();
 
-            String sql = "SELECT C_Invoice_ID,"
+            String sql = "SELECT VAB_Invoice_ID,"
                 //	Open
-                + " currencyConvert(invoiceOpen(i.C_Invoice_ID, 0)"
+                + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0)"
                     + ",i.VAB_Currency_ID, " + VAB_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ", i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##1/2 Currency_To,PayDate
                 //	Discount
                 + " currencyConvert(paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ")"	//	##3 PayDate
                     + ",i.VAB_Currency_ID," + VAB_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ",i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##4/5 Currency_To,PayDate
                 + " PaymentRule, IsSOTrx "		//	4..6
-                + "FROM C_Invoice i "
+                + "FROM VAB_Invoice i "
                 + "WHERE";
-            if (_PaymentRule != null && _PaymentRule.Equals(X_C_Invoice.PAYMENTRULE_DirectDebit))
+            if (_PaymentRule != null && _PaymentRule.Equals(X_VAB_Invoice.PAYMENTRULE_DirectDebit))
                 {
                     sql += " IsSOTrx='Y'";
                 }
@@ -161,7 +161,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " AND VAF_Client_ID=" + psel.GetVAF_Client_ID()				//	##7
                 //	Existing Payments - Will reselect Invoice if prepared but not paid 
                 + " AND NOT EXISTS (SELECT * FROM C_PaySelectionLine psl "
-                    + "WHERE i.C_Invoice_ID=psl.C_Invoice_ID AND psl.IsActive='Y'"
+                    + "WHERE i.VAB_Invoice_ID=psl.VAB_Invoice_ID AND psl.IsActive='Y'"
                     + " AND psl.C_PaySelectionCheck_ID IS NOT NULL)";
             count = 7;
             //	Disputed
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     sql += " AND ";
                 }
-                sql += "paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0), VAB_Currency_ID, C_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") > 0";	//	##
+                sql += "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0), VAB_Currency_ID, C_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") > 0";	//	##
                 count += 1;
             }
             //	OnlyDue
@@ -221,24 +221,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 count += 1;
             }
             //	PO Matching Requiremnent
-            if (_MatchRequirementI.Equals(X_C_Invoice.MATCHREQUIREMENTI_PurchaseOrder)
-                || _MatchRequirementI.Equals(X_C_Invoice.MATCHREQUIREMENTI_PurchaseOrderAndReceipt))
+            if (_MatchRequirementI.Equals(X_VAB_Invoice.MATCHREQUIREMENTI_PurchaseOrder)
+                || _MatchRequirementI.Equals(X_VAB_Invoice.MATCHREQUIREMENTI_PurchaseOrderAndReceipt))
             {
                 sql += " AND i._MatchRequirementI NOT IN ('N','R')"
-                    + " AND EXISTS (SELECT * FROM C_InvoiceLine il "
-                    + "WHERE i.C_Invoice_ID=il.C_Invoice_ID"
+                    + " AND EXISTS (SELECT * FROM VAB_InvoiceLine il "
+                    + "WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID"
                     + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM M_MatchPO m "
-                        + "WHERE il.C_InvoiceLine_ID=m.C_InvoiceLine_ID))";
+                        + "WHERE il.VAB_InvoiceLine_ID=m.VAB_InvoiceLine_ID))";
             }
             //	Receipt Matching Requiremnent
-            if (_MatchRequirementI.Equals(X_C_Invoice.MATCHREQUIREMENTI_Receipt)
-                || _MatchRequirementI.Equals(X_C_Invoice.MATCHREQUIREMENTI_PurchaseOrderAndReceipt))
+            if (_MatchRequirementI.Equals(X_VAB_Invoice.MATCHREQUIREMENTI_Receipt)
+                || _MatchRequirementI.Equals(X_VAB_Invoice.MATCHREQUIREMENTI_PurchaseOrderAndReceipt))
             {
                 sql += " AND i._MatchRequirementI NOT IN ('N','P')"
-                    + " AND EXISTS (SELECT * FROM C_InvoiceLine il "
-                    + "WHERE i.C_Invoice_ID=il.C_Invoice_ID"
+                    + " AND EXISTS (SELECT * FROM VAB_InvoiceLine il "
+                    + "WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID"
                     + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM M_MatchInv m "
-                        + "WHERE il.C_InvoiceLine_ID=m.C_InvoiceLine_ID))";
+                        + "WHERE il.VAB_InvoiceLine_ID=m.VAB_InvoiceLine_ID))";
             }
 
             //	Document No
@@ -273,9 +273,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (idr.Read())
                 {
-                    int C_Invoice_ID = Utility.Util.GetValueOfInt(idr[0]);//  rs.getInt(1);
+                    int VAB_Invoice_ID = Utility.Util.GetValueOfInt(idr[0]);//  rs.getInt(1);
                     Decimal PayAmt = Utility.Util.GetValueOfDecimal(idr[1]); //rs.getBigDecimal(2);
-                    if (C_Invoice_ID == 0 || Env.ZERO.CompareTo(PayAmt) == 0)
+                    if (VAB_Invoice_ID == 0 || Env.ZERO.CompareTo(PayAmt) == 0)
                     {
                         continue;
                     }
@@ -285,7 +285,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //
                     lines++;
                     MPaySelectionLine pselLine = new MPaySelectionLine(psel, lines * 10, PaymentRule);
-                    pselLine.SetInvoice(C_Invoice_ID, isSOTrx,
+                    pselLine.SetInvoice(VAB_Invoice_ID, isSOTrx,
                         PayAmt, Decimal.Subtract(PayAmt, DiscountAmt), DiscountAmt);
                     if (!pselLine.Save())
                     {

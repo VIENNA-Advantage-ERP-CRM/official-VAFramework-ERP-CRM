@@ -77,15 +77,15 @@ namespace VAdvantage.Model
         public void SetVAB_AccountBook_ID(int VAB_AccountBook_ID) { if (VAB_AccountBook_ID < 1) throw new ArgumentException("VAB_AccountBook_ID is mandatory."); Set_Value("VAB_AccountBook_ID", VAB_AccountBook_ID); }/** Get Accounting Schema.
 @return Rules for accounting */
         public int GetVAB_AccountBook_ID() { Object ii = Get_Value("VAB_AccountBook_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Line.
-@param C_InvoiceLine_ID Invoice Detail Line */
-        public void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+@param VAB_InvoiceLine_ID Invoice Detail Line */
+        public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            if (C_InvoiceLine_ID <= 0) Set_Value("C_InvoiceLine_ID", null);
+            if (VAB_InvoiceLine_ID <= 0) Set_Value("VAB_InvoiceLine_ID", null);
             else
-                Set_Value("C_InvoiceLine_ID", C_InvoiceLine_ID);
+                Set_Value("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
         }/** Get Invoice Line.
 @return Invoice Detail Line */
-        public int GetC_InvoiceLine_ID() { Object ii = Get_Value("C_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
+        public int GetVAB_InvoiceLine_ID() { Object ii = Get_Value("VAB_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
 @param C_OrderLine_ID Order Line */
         public void SetC_OrderLine_ID(int C_OrderLine_ID)
         {

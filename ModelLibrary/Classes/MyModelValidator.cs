@@ -40,9 +40,9 @@ namespace ViennaAdvantageSvc.Classes
         {
             VAF_Client_ID = ClientId;
             engine.AddDocValidate("C_Order", this);
-            engine.AddDocValidate("C_Invoice", this);
+            engine.AddDocValidate("VAB_Invoice", this);
             engine.AddModelChange(X_C_Order.Table_Name, this);
-            engine.AddModelChange(X_C_Invoice.Table_Name, this);
+            engine.AddModelChange(X_VAB_Invoice.Table_Name, this);
         }
 
         public string Login(int VAF_Org_ID, int VAF_Role_ID, int VAF_UserContact_ID)

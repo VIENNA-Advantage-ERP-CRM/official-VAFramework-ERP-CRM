@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLandedCostAllocation
  * Purpose        : For landed cost allocation
- * Class Used     : X_C_LandedCostAllocation
+ * Class Used     : X_VAB_LCostDistribution
  * Chronological    Development
  * Raghunandan     22-Jun-2009
   ******************************************************/
@@ -25,20 +25,20 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MLandedCostAllocation : X_C_LandedCostAllocation
+    public class MLandedCostAllocation : X_VAB_LCostDistribution
     {
         /**
 	 * 	Get Cost Allocations for invoice Line
 	 *	@param ctx context
-	 *	@param C_InvoiceLine_ID invoice line
+	 *	@param VAB_InvoiceLine_ID invoice line
 	 *	@param trxName trx
 	 *	@return landed cost alloc
 	 */
         public static MLandedCostAllocation[] GetOfInvoiceLine(Ctx ctx,
-            int C_InvoiceLine_ID, Trx trxName)
+            int VAB_InvoiceLine_ID, Trx trxName)
         {
             List<MLandedCostAllocation> list = new List<MLandedCostAllocation>();
-            String sql = "SELECT * FROM C_LandedCostAllocation WHERE C_InvoiceLine_ID= " + C_InvoiceLine_ID;
+            String sql = "SELECT * FROM VAB_LCostDistribution WHERE VAB_InvoiceLine_ID= " + VAB_InvoiceLine_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -76,14 +76,14 @@ namespace VAdvantage.Model
         /***************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param C_LandedCostAllocation_ID id
+         *	@param VAB_LCostDistribution_ID id
          *	@param trxName trx
          */
-        public MLandedCostAllocation(Ctx ctx, int C_LandedCostAllocation_ID, Trx trxName) :
-            base(ctx, C_LandedCostAllocation_ID, trxName)
+        public MLandedCostAllocation(Ctx ctx, int VAB_LCostDistribution_ID, Trx trxName) :
+            base(ctx, VAB_LCostDistribution_ID, trxName)
         {
 
-            if (C_LandedCostAllocation_ID == 0)
+            if (VAB_LCostDistribution_ID == 0)
             {
                 //	setM_CostElement_ID(0);
                 SetAmt(Env.ZERO);
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(parent);
-            SetC_InvoiceLine_ID(parent.GetC_InvoiceLine_ID());
+            SetVAB_InvoiceLine_ID(parent.GetVAB_InvoiceLine_ID());
             SetM_CostElement_ID(M_CostElement_ID);
         }	//	MLandedCostAllocation
 

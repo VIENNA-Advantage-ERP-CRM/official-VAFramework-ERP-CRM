@@ -19,7 +19,7 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    class MIncomeTax:X_C_IncomeTax,DocAction
+    class MIncomeTax:X_VAB_IncomeTax,DocAction
     {
         #region Variables
         /**	Process Message 			*/
@@ -29,10 +29,10 @@ namespace VAdvantage.Model
         private bool _forceCreation = false;
         private MIncomeTaxLines[] _lines = null;
         #endregion
-        public MIncomeTax(Ctx ctx, int C_IncomeTax_ID, Trx trxName)
-            : base(ctx, C_IncomeTax_ID, trxName)
+        public MIncomeTax(Ctx ctx, int VAB_IncomeTax_ID, Trx trxName)
+            : base(ctx, VAB_IncomeTax_ID, trxName)
         {
-            if (C_IncomeTax_ID == 0)
+            if (VAB_IncomeTax_ID == 0)
             {
                 SetDocStatus(DOCSTATUS_Drafted);
                 SetDocAction(DOCACTION_Prepare);
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
         public MIncomeTaxLines[] GetLines(String whereClause)
         {
             List<MIncomeTaxLines> list = new List<MIncomeTaxLines>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_IncomeTaxLines WHERE C_IncomeTax_ID=" + GetC_IncomeTax_ID() + "");
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_IncomeTaxLines WHERE VAB_IncomeTax_ID=" + GetVAB_IncomeTax_ID() + "");
             if (whereClause != null)
                 sql.Append(whereClause);            
             try
@@ -390,7 +390,7 @@ namespace VAdvantage.Model
                 //        MInvoice invoice = CreateInvoice(dt, shipment, tSet);
                 //        if (invoice == null)
                 //            return DocActionVariables.STATUS_INVALID;
-                //        Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
+                //        Info.Append(" - @VAB_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                 //        String msg = invoice.GetProcessMsg();
                 //        if (msg != null && msg.Length > 0)
                 //            Info.Append(" (").Append(msg).Append(")");
@@ -677,7 +677,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *Invoices*
-                Info.Append(" - @C_Invoice_ID@:");
+                Info.Append(" - @VAB_Invoice_ID@:");
                 //MInvoice[] invoices = GetInvoices(false);	//	get all (line based)
                 //for (int i = 0; i < invoices.Length; i++)
                 //{

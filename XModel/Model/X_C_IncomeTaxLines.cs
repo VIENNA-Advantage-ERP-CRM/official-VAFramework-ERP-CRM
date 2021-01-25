@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_IncomeTaxLines
+/** Generated Model for VAB_IncomeTaxLines
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_IncomeTaxLines : PO
+public class X_VAB_IncomeTaxLines : PO
 {
-public X_C_IncomeTaxLines (Context ctx, int C_IncomeTaxLines_ID, Trx trxName) : base (ctx, C_IncomeTaxLines_ID, trxName)
+public X_VAB_IncomeTaxLines (Context ctx, int VAB_IncomeTaxLines_ID, Trx trxName) : base (ctx, VAB_IncomeTaxLines_ID, trxName)
 {
-/** if (C_IncomeTaxLines_ID == 0)
+/** if (VAB_IncomeTaxLines_ID == 0)
 {
-SetC_IncomeTaxLines_ID (0);
-SetC_IncomeTax_ID (0);
+SetVAB_IncomeTaxLines_ID (0);
+SetVAB_IncomeTax_ID (0);
 }
  */
 }
-public X_C_IncomeTaxLines (Ctx ctx, int C_IncomeTaxLines_ID, Trx trxName) : base (ctx, C_IncomeTaxLines_ID, trxName)
+public X_VAB_IncomeTaxLines (Ctx ctx, int VAB_IncomeTaxLines_ID, Trx trxName) : base (ctx, VAB_IncomeTaxLines_ID, trxName)
 {
-/** if (C_IncomeTaxLines_ID == 0)
+/** if (VAB_IncomeTaxLines_ID == 0)
 {
-SetC_IncomeTaxLines_ID (0);
-SetC_IncomeTax_ID (0);
+SetVAB_IncomeTaxLines_ID (0);
+SetVAB_IncomeTax_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetC_IncomeTax_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTaxLines (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_IncomeTaxLines (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_IncomeTaxLines (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTaxLines (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_IncomeTaxLines (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_IncomeTaxLines (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IncomeTaxLines (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_IncomeTaxLines (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_IncomeTaxLines()
+static X_VAB_IncomeTaxLines()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1399542300871L;
 public static int Table_ID;
  // =1000442;
 
-/** TableName=C_IncomeTaxLines */
-public static String Table_Name="C_IncomeTaxLines";
+/** TableName=VAB_IncomeTaxLines */
+public static String Table_Name="VAB_IncomeTaxLines";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,50 +109,50 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_IncomeTaxLines[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_IncomeTaxLines[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Income Tax Lines.
-@param C_IncomeTaxLines_ID Income Tax Lines */
-public void SetC_IncomeTaxLines_ID (int C_IncomeTaxLines_ID)
+@param VAB_IncomeTaxLines_ID Income Tax Lines */
+public void SetVAB_IncomeTaxLines_ID (int VAB_IncomeTaxLines_ID)
 {
-if (C_IncomeTaxLines_ID < 1) throw new ArgumentException ("C_IncomeTaxLines_ID is mandatory.");
-Set_ValueNoCheck ("C_IncomeTaxLines_ID", C_IncomeTaxLines_ID);
+if (VAB_IncomeTaxLines_ID < 1) throw new ArgumentException ("VAB_IncomeTaxLines_ID is mandatory.");
+Set_ValueNoCheck ("VAB_IncomeTaxLines_ID", VAB_IncomeTaxLines_ID);
 }
 /** Get Income Tax Lines.
 @return Income Tax Lines */
-public int GetC_IncomeTaxLines_ID() 
+public int GetVAB_IncomeTaxLines_ID() 
 {
-Object ii = Get_Value("C_IncomeTaxLines_ID");
+Object ii = Get_Value("VAB_IncomeTaxLines_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Income Tax Account.
-@param C_IncomeTax_Acct Income Tax Account */
-public void SetC_IncomeTax_Acct (int C_IncomeTax_Acct)
+@param VAB_IncomeTax_Acct Income Tax Account */
+public void SetVAB_IncomeTax_Acct (int VAB_IncomeTax_Acct)
 {
-Set_Value ("C_IncomeTax_Acct", C_IncomeTax_Acct);
+Set_Value ("VAB_IncomeTax_Acct", VAB_IncomeTax_Acct);
 }
 /** Get Income Tax Account.
 @return Income Tax Account */
-public int GetC_IncomeTax_Acct() 
+public int GetVAB_IncomeTax_Acct() 
 {
-Object ii = Get_Value("C_IncomeTax_Acct");
+Object ii = Get_Value("VAB_IncomeTax_Acct");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Income Tax.
-@param C_IncomeTax_ID Income Tax */
-public void SetC_IncomeTax_ID (int C_IncomeTax_ID)
+@param VAB_IncomeTax_ID Income Tax */
+public void SetVAB_IncomeTax_ID (int VAB_IncomeTax_ID)
 {
-if (C_IncomeTax_ID < 1) throw new ArgumentException ("C_IncomeTax_ID is mandatory.");
-Set_ValueNoCheck ("C_IncomeTax_ID", C_IncomeTax_ID);
+if (VAB_IncomeTax_ID < 1) throw new ArgumentException ("VAB_IncomeTax_ID is mandatory.");
+Set_ValueNoCheck ("VAB_IncomeTax_ID", VAB_IncomeTax_ID);
 }
 /** Get Income Tax.
 @return Income Tax */
-public int GetC_IncomeTax_ID() 
+public int GetVAB_IncomeTax_ID() 
 {
-Object ii = Get_Value("C_IncomeTax_ID");
+Object ii = Get_Value("VAB_IncomeTax_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

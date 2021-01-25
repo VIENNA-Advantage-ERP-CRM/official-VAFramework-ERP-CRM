@@ -41,7 +41,7 @@ namespace VAdvantage.Process
 	private DateTime?	_dateInvoiced_From = null;
 	private DateTime?	_dateInvoiced_To = null;
 	private int			_VAB_BusinessPartner_ID = 0;
-	private int			_C_Invoice_ID = 0;
+	private int			_VAB_Invoice_ID = 0;
 	private String		_DocumentNo_From = null;
 	private String		_DocumentNo_To = null;
 	private Boolean		_IsSOTrx = true;
@@ -77,9 +77,9 @@ namespace VAdvantage.Process
             {
                 _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
             }
-            else if (name.Equals("C_Invoice_ID"))
+            else if (name.Equals("VAB_Invoice_ID"))
             {
-                _C_Invoice_ID = para[i].GetParameterAsInt();
+                _VAB_Invoice_ID = para[i].GetParameterAsInt();
             }
             else if (name.Equals("DocumentNo"))
             {
@@ -121,7 +121,7 @@ namespace VAdvantage.Process
             throw new Exception("@NotFound@: @R_MailText_ID@");
         }
 		log.Info ("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
-			+ ", C_Invoice_ID=" + _C_Invoice_ID
+			+ ", VAB_Invoice_ID=" + _VAB_Invoice_ID
 			+ ", IsSOTrx=" + _IsSOTrx
 			+ ", EmailPDF=" + _EMailPDF + ",R_MailText_ID=" + _R_MailText_ID
 			+ ", DateInvoiced=" + _dateInvoiced_From + "-" + _dateInvoiced_To
@@ -139,7 +139,7 @@ namespace VAdvantage.Process
 		}
 
 		//	Too broad selection
-        if (_VAB_BusinessPartner_ID == 0 && _C_Invoice_ID == 0 && _dateInvoiced_From == null && _dateInvoiced_To == null
+        if (_VAB_BusinessPartner_ID == 0 && _VAB_Invoice_ID == 0 && _dateInvoiced_From == null && _dateInvoiced_To == null
             && _DocumentNo_From == null && _DocumentNo_To == null)
         {
             throw new Exception("@RestrictSelection@");
@@ -149,22 +149,22 @@ namespace VAdvantage.Process
 		
 		//	Get Info
 		StringBuilder sql = new StringBuilder (
-			"SELECT i.C_Invoice_ID,bp.VAF_Language,c.IsMultiLingualDocument,"		//	1..3
+			"SELECT i.VAB_Invoice_ID,bp.VAF_Language,c.IsMultiLingualDocument,"		//	1..3
 			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MInvoice
 			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.VAF_Print_Rpt_Layout_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
 			+ " bpc.VAF_UserContact_ID, i.DocumentNo,"										//	6..7
 			+ " bp.VAB_BusinessPartner_ID "													//	8
-			+ "FROM C_Invoice i"
+			+ "FROM VAB_Invoice i"
 			+ " INNER JOIN VAB_BusinessPartner bp ON (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
 			+ " LEFT OUTER JOIN VAF_UserContact bpc ON (i.VAF_UserContact_ID=bpc.VAF_UserContact_ID)"
 			+ " INNER JOIN VAF_Client c ON (i.VAF_Client_ID=c.VAF_Client_ID)"
 			+ " INNER JOIN VAF_Print_Rpt_Page pf ON (i.VAF_Client_ID=pf.VAF_Client_ID)"
 			+ " INNER JOIN VAB_DocTypes dt ON (i.VAB_DocTypes_ID=dt.VAB_DocTypes_ID)")
 			.Append(" WHERE pf.VAF_Org_ID IN (0,i.VAF_Org_ID) AND ");	//	more them 1 PF
-        if (_C_Invoice_ID != 0)
+        if (_VAB_Invoice_ID != 0)
         {
-            sql.Append("i.C_Invoice_ID=").Append(_C_Invoice_ID);
+            sql.Append("i.VAB_Invoice_ID=").Append(_VAB_Invoice_ID);
         }
         else
         {
@@ -224,12 +224,12 @@ namespace VAdvantage.Process
                 }
             }
         }
-		sql.Append(" ORDER BY i.C_Invoice_ID, pf.VAF_Org_ID DESC");	//	more than 1 PF record
+		sql.Append(" ORDER BY i.VAB_Invoice_ID, pf.VAF_Org_ID DESC");	//	more than 1 PF record
 		log.Finer(sql.ToString());
 
 		MPrintFormat format = null;
 		int old_VAF_Print_Rpt_Layout_ID = -1;
-		int old_C_Invoice_ID = -1;
+		int old_VAB_Invoice_ID = -1;
 		int VAB_BusinessPartner_ID = 0;
 		int count = 0;
 		int errors = 0;
@@ -242,12 +242,12 @@ namespace VAdvantage.Process
 
             while (idr.Read())
             {
-                int C_Invoice_ID = Utility.Util.GetValueOfInt(idr[0]);
-                if (C_Invoice_ID == old_C_Invoice_ID)//Multiple pg Records
+                int VAB_Invoice_ID = Utility.Util.GetValueOfInt(idr[0]);
+                if (VAB_Invoice_ID == old_VAB_Invoice_ID)//Multiple pg Records
                 {
                     continue;
                 }
-                old_C_Invoice_ID = C_Invoice_ID;
+                old_VAB_Invoice_ID = VAB_Invoice_ID;
 
 
                 //	Set Language when enabled
@@ -291,13 +291,13 @@ namespace VAdvantage.Process
 
                 if (_EMailPDF && (to.Get_ID() == 0 || to.GetEMail() == null || to.GetEMail().Length == 0))
                 {
-                    AddLog(C_Invoice_ID, null, null, DocumentNo + " @RequestActionEMailNoTo@");
+                    AddLog(VAB_Invoice_ID, null, null, DocumentNo + " @RequestActionEMailNoTo@");
                     errors++;
                     continue;
                 }
                 if (VAF_Print_Rpt_Layout_ID == 0)
                 {
-                    AddLog(C_Invoice_ID, null, null, DocumentNo + " No Print Format");
+                    AddLog(VAB_Invoice_ID, null, null, DocumentNo + " No Print Format");
                     errors++;
                     continue;
                 }
@@ -311,14 +311,14 @@ namespace VAdvantage.Process
                 format.SetLanguage(language);
                 format.SetTranslationLanguage(language);
                 //    //	query
-                Query query = new Query("C_Invoice_Header_v");
-                query.AddRestriction("C_Invoice_ID", Query.EQUAL, C_Invoice_ID);
+                Query query = new Query("VAB_Invoice_Target_v");
+                query.AddRestriction("VAB_Invoice_ID", Query.EQUAL, VAB_Invoice_ID);
 
                 //	Engine
                 //PrintInfo info = new PrintInfo(
                 //    DocumentNo,
-                //    X_C_Invoice.Table_ID,
-                //    C_Invoice_ID,
+                //    X_VAB_Invoice.Table_ID,
+                //    VAB_Invoice_ID,
                 //    VAB_BusinessPartner_ID);
                 //info.SetCopies(copies);   
                 //ReportEngine re = new ReportEngine(GetCtx(), format, query, info);
@@ -330,14 +330,14 @@ namespace VAdvantage.Process
                     EMail email = client.CreateEMail(to.GetEMail(), to.GetName(), subject, null);
                     if (email == null || !email.IsValid())
                     {
-                        AddLog(C_Invoice_ID, null, null,
+                        AddLog(VAB_Invoice_ID, null, null,
                           DocumentNo + " @RequestActionEMailError@ Invalid EMail: " + to);
                         errors++;
                         continue;
                     }
                     mText.SetUser(to);					//	Context
                     mText.SetBPartner(VAB_BusinessPartner_ID);	//	Context
-                    mText.SetPO(new MInvoice(GetCtx(), C_Invoice_ID, Get_TrxName()));
+                    mText.SetPO(new MInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName()));
                     String message = mText.GetMailText(true);
                     if (mText.IsHtml())
                     {
@@ -353,8 +353,8 @@ namespace VAdvantage.Process
                     FileInfo invoice = null;
                     if (!Ini.IsClient())
                     {
-                        //invoice = new File(MInvoice.GetPDFFileName(documentDir, C_Invoice_ID));
-                        invoice = new FileInfo(MInvoice.GetPDFFileName(documentDir, C_Invoice_ID));
+                        //invoice = new File(MInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
+                        invoice = new FileInfo(MInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
                     }
                     //File attachment = re.getPDF(invoice);
                     //FileInfo attachment = re.GetPDF(invoice);
@@ -368,7 +368,7 @@ namespace VAdvantage.Process
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {
-                        AddLog(C_Invoice_ID, null, null,
+                        AddLog(VAB_Invoice_ID, null, null,
                           DocumentNo + " @RequestActionEMailOK@ - " + to.GetEMail());
                         count++;
                         printed = true;
@@ -376,7 +376,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        AddLog(C_Invoice_ID, null, null,
+                        AddLog(VAB_Invoice_ID, null, null,
                           DocumentNo + " @RequestActionEMailError@ " + msg
                           + " - " + to.GetEMail());
                         errors++;
@@ -391,9 +391,9 @@ namespace VAdvantage.Process
                 //	Print Confirm
                 if (printed)
                 {
-                    StringBuilder sb = new StringBuilder("UPDATE C_Invoice "
-                        + "SET DatePrinted=SysDate, IsPrinted='Y' WHERE C_Invoice_ID=")
-                        .Append(C_Invoice_ID);
+                    StringBuilder sb = new StringBuilder("UPDATE VAB_Invoice "
+                        + "SET DatePrinted=SysDate, IsPrinted='Y' WHERE VAB_Invoice_ID=")
+                        .Append(VAB_Invoice_ID);
                     //int no = DataBase.DB.ExecuteUpdateMultiple(sb.ToString(), Get_TrxName());
                     int no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
                 }

@@ -98,11 +98,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 
 		//	Get Invoices
-		 String  sql1 = "SELECT * FROM C_Invoice i "
+		 String  sql1 = "SELECT * FROM VAB_Invoice i "
 			+ "WHERE TRUNC(i.DateInvoiced,'DD') >=@Param1 AND TRUNC(i.DateInvoiced,'DD') <=@Param2 "
 			+ " AND Processed='Y'"
 			+ " AND NOT EXISTS (SELECT * FROM C_TaxDeclarationLine tdl "
-				+ "WHERE i.C_Invoice_ID=tdl.C_Invoice_ID)";
+				+ "WHERE i.VAB_Invoice_ID=tdl.VAB_Invoice_ID)";
 		//PreparedStatement pstmt = null;
         SqlParameter[] Param1=new SqlParameter[2];
         IDataReader idr=null;
@@ -145,7 +145,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         
         }
 		
-		return "@C_Invoice_ID@ #" + noInvoices 
+		return "@VAB_Invoice_ID@ #" + noInvoices 
 			+ " (" + _noLines + ", " + _noAccts + ")";
 	}	//	doIt
 	
@@ -197,8 +197,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 			//pstmt.setInt (1, MInvoice.Table_ID);
             Param[0]=new SqlParameter("@Param1",MInvoice.Table_ID);
-			//pstmt.setInt (2, invoice.getC_Invoice_ID());
-            Param[1]=new SqlParameter("@Param2",invoice.GetC_Invoice_ID());
+			//pstmt.setInt (2, invoice.getVAB_Invoice_ID());
+            Param[1]=new SqlParameter("@Param2",invoice.GetVAB_Invoice_ID());
 			//ResultSet rs = pstmt.executeQuery ();
             idr=DataBase.DB.ExecuteReader(sql,Param,null);
             dt=new DataTable();

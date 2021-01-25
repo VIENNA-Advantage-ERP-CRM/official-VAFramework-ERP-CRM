@@ -22,11 +22,11 @@ namespace VIS.Models
         public Dictionary<string, string> GetInvoice(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Invoice_ID;
+            int VAB_Invoice_ID;
             //Assign parameter value
-            C_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MInvoice inv = new MInvoice(ctx, C_Invoice_ID, null);
+            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["IsSOTrx"] = inv.IsSOTrx().ToString();
             //Added By amit
@@ -52,17 +52,17 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             //Assign parameter value
             int C_Tax_ID = 0;
-            int C_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || C_Invoice_ID == 0)
+            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
             {
                 return C_Tax_ID;
             }
             DataSet dsLoc = null;
-            MInvoice inv = new MInvoice(ctx, C_Invoice_ID, null);
+            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
             MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
@@ -507,7 +507,7 @@ namespace VIS.Models
             string[] paramValue = param.Split(',');
 
             //Assign parameter value            
-            int C_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             //End Assign parameter value
@@ -522,7 +522,7 @@ namespace VIS.Models
             _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
             retDic["_CountVATAX"] = _CountVATAX.ToString();
 
-            Dictionary<string, string> order = GetInvoice(ctx, C_Invoice_ID.ToString());
+            Dictionary<string, string> order = GetInvoice(ctx, VAB_Invoice_ID.ToString());
             _VAB_BusinessPartner_Id = Util.GetValueOfInt(order["VAB_BusinessPartner_ID"]);
             _c_Bill_Location_Id = Util.GetValueOfInt(order["VAB_BPart_Location_ID"]);
 
@@ -538,7 +538,7 @@ namespace VIS.Models
                 sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
                 {
-                    var paramString = (C_Invoice_ID).ToString() + "," + (M_Product_ID).ToString() + "," + (VAB_Charge_ID).ToString();
+                    var paramString = (VAB_Invoice_ID).ToString() + "," + (M_Product_ID).ToString() + "," + (VAB_Charge_ID).ToString();
 
                     taxId = GetTax(ctx, paramString);
                 }
@@ -576,17 +576,17 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             //Assign parameter value
             int C_Tax_ID = 0;
-            int C_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || C_Invoice_ID == 0)
+            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
             {
                 return C_Tax_ID;
             }
             DataSet dsLoc = null;
-            MInvoice inv = new MInvoice(ctx, C_Invoice_ID, null);
+            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
             MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
@@ -990,31 +990,31 @@ namespace VIS.Models
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //Added 2 new fields to get VA009_PaymentMethod_ID and VA009_PaymentBaseType To Set the corrosponding value on Payment Window..
-                _Sql = "SELECT * FROM (SELECT ips.C_InvoicePaySchedule_ID,"
-                             + " NVL(ips.DueAmt , 0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, i.IsReturnTrx, IPS.VA009_PaymentMethod_ID, PM.VA009_PaymentBaseType FROM C_Invoice i"
-                             + " INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID) "
+                _Sql = "SELECT * FROM (SELECT ips.VAB_sched_InvoicePayment_ID,"
+                             + " NVL(ips.DueAmt , 0) - NVL(ips.va009_paidamntinvce , 0) AS DueAmt, i.IsReturnTrx, IPS.VA009_PaymentMethod_ID, PM.VA009_PaymentBaseType FROM VAB_Invoice i"
+                             + " INNER JOIN VAB_sched_InvoicePayment ips ON (i.VAB_Invoice_ID = ips.VAB_Invoice_ID) "
                              + " INNER JOIN VA009_PAYMENTMETHOD PM  ON (ips.VA009_PaymentMethod_ID = PM.VA009_paymentMethod_ID) WHERE i.IsPayScheduleValid='Y' "
                              + " AND ips.IsValid ='Y' AND ips.isactive ='Y' "
-                             + " AND i.C_Invoice_ID = " + Invoice_ID
-                             + " AND ips.C_InvoicePaySchedule_ID NOT IN"
-                             + "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
-                             + "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "
-                             + " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_id IN"
-                             + "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
+                             + " AND i.VAB_Invoice_ID = " + Invoice_ID
+                             + " AND ips.VAB_sched_InvoicePayment_ID NOT IN"
+                             + "(SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE c_payment_id IN"
+                             + "(SELECT NVL(c_payment_id,0) FROM VAB_sched_InvoicePayment)  union "
+                             + " SELECT NVL(VAB_sched_InvoicePayment_id,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_id IN"
+                             + "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM VAB_sched_InvoicePayment )) "
                              + " ORDER BY ips.duedate ASC) t WHERE rownum=1";
             }
             else
             {
-                _Sql = "SELECT * FROM (SELECT ips.C_InvoicePaySchedule_ID,"
-                                + " ips.DueAmt, i.IsReturnTrx FROM C_Invoice i  INNER JOIN C_InvoicePaySchedule ips "
-                                + " ON (i.C_Invoice_ID = ips.C_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
+                _Sql = "SELECT * FROM (SELECT ips.VAB_sched_InvoicePayment_ID,"
+                                + " ips.DueAmt, i.IsReturnTrx FROM VAB_Invoice i  INNER JOIN VAB_sched_InvoicePayment ips "
+                                + " ON (i.VAB_Invoice_ID = ips.VAB_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
                                 + " AND ips.IsValid = 'Y' AND ips.isactive = 'Y' "
-                            + " AND i.C_Invoice_ID = " + Invoice_ID
-                            + "  AND ips.C_InvoicePaySchedule_ID NOT IN"
-                            + "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
-                            + "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "
-                            + " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_id IN"
-                            + "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
+                            + " AND i.VAB_Invoice_ID = " + Invoice_ID
+                            + "  AND ips.VAB_sched_InvoicePayment_ID NOT IN"
+                            + "(SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE c_payment_id IN"
+                            + "(SELECT NVL(c_payment_id,0) FROM VAB_sched_InvoicePayment)  union "
+                            + " SELECT NVL(VAB_sched_InvoicePayment_id,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_id IN"
+                            + "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM VAB_sched_InvoicePayment )) "
                             + " ORDER BY ips.duedate ASC) t WHERE rownum=1";
             }
             try
@@ -1023,7 +1023,7 @@ namespace VIS.Models
                 if (_ds != null && _ds.Tables[0].Rows.Count > 0)
                 {
                     retValue = new Dictionary<string, object>();
-                    retValue["C_InvoicePaySchedule_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["c_invoicepayschedule_id"]);
+                    retValue["VAB_sched_InvoicePayment_ID"] = Util.GetValueOfInt(_ds.Tables[0].Rows[0]["VAB_sched_InvoicePayment_id"]);
                     retValue["dueAmount"] = Util.GetValueOfDecimal(_ds.Tables[0].Rows[0]["dueamt"]);
                     retValue["IsReturnTrx"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["IsReturnTrx"]);
 
@@ -1054,9 +1054,9 @@ namespace VIS.Models
             DataSet _ds = null;
             string[] paramValue = fields.Split(',');
             Dictionary<string, object> retValue = null;
-            string sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID, VAB_CurrencyType_ID, invoiceOpen(C_Invoice_ID, " + Util.GetValueOfInt(paramValue[3]) + @") as invoiceOpen, IsSOTrx, 
-            paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + paramValue[1] + "," + paramValue[2]
-            + " ) as paymentTermDiscount, VAB_DocTypesTarget_ID,VAB_BPart_Location_ID FROM C_Invoice WHERE C_Invoice_ID=" + Util.GetValueOfInt(paramValue[0]);
+            string sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID, VAB_CurrencyType_ID, invoiceOpen(VAB_Invoice_ID, " + Util.GetValueOfInt(paramValue[3]) + @") as invoiceOpen, IsSOTrx, 
+            paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + paramValue[1] + "," + paramValue[2]
+            + " ) as paymentTermDiscount, VAB_DocTypesTarget_ID,VAB_BPart_Location_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + Util.GetValueOfInt(paramValue[0]);
             try
             {
                 _ds = DB.ExecuteDataset(sql, null, null);
@@ -1098,15 +1098,15 @@ namespace VIS.Models
         {
             DataSet _ds = null;
             string[] paramValue = fields.Split(',');
-            int C_Invoice_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0]);
             int VAB_Bank_Acct_ID = Util.GetValueOfInt(paramValue[1]);
             DateTime? payDate = Util.GetValueOfDateTime(paramValue[2]);
             Dictionary<string, object> retValue = null;
-            string sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.VAB_Currency_ID,"
+            string sql = "SELECT currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0), i.VAB_Currency_ID,"
                 + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID) as OpenAmt,"
             + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced,'" + payDate + "') As DiscountAmt, i.IsSOTrx "
-            + "FROM C_Invoice_v i, VAB_Bank_Acct ba "
-            + "WHERE i.C_Invoice_ID = " + C_Invoice_ID + " AND ba.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID;
+            + "FROM VAB_Invoice_v i, VAB_Bank_Acct ba "
+            + "WHERE i.VAB_Invoice_ID = " + VAB_Invoice_ID + " AND ba.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID;
             try
             {
                 _ds = DB.ExecuteDataset(sql, null, null);
@@ -1143,7 +1143,7 @@ namespace VIS.Models
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
             //int _priceListVersion_Id = Util.GetValueOfInt(paramValue[1].ToString());
-            int _c_invoice_Id = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Invoice_Id = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
             int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
@@ -1173,7 +1173,7 @@ namespace VIS.Models
             if (countEd011 > 0)
             {
                 MOrderLineModel objOrd = new MOrderLineModel();
-                _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + _c_invoice_Id, null, null));
+                _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + _VAB_Invoice_Id, null, null));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
@@ -1340,7 +1340,7 @@ namespace VIS.Models
         /// <returns>get Percision value</returns>
         public int GetPrecision(Ctx ctx, string fields)
         {
-            string sql = "SELECT CC.StdPrecision FROM C_Invoice CI INNER JOIN VAB_Currency CC on CC.VAB_Currency_Id = CI.VAB_Currency_Id where CI.C_Invoice_ID= " + Util.GetValueOfInt(fields);
+            string sql = "SELECT CC.StdPrecision FROM VAB_Invoice CI INNER JOIN VAB_Currency CC on CC.VAB_Currency_Id = CI.VAB_Currency_Id where CI.VAB_Invoice_ID= " + Util.GetValueOfInt(fields);
             int stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return stdPrecision;
 

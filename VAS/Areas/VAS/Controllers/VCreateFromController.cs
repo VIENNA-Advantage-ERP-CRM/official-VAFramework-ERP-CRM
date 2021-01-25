@@ -25,7 +25,7 @@ namespace VIS.Controllers
         /// <param name="IsDrop">Drop Shipment</param>
         /// <param name="IsSOTrx">Sales Transaction</param>
         /// <param name="forInvoices">For Invoice</param>
-        ///  <param name="recordID">C_Invoice_ID</param>
+        ///  <param name="recordID">VAB_Invoice_ID</param>
         /// <returns>List of Orders in Json Format</returns>
         public JsonResult VCreateGetOrders(string displays, string columns, int VAB_BusinessPartner_IDs, bool isReturnTrxs, int OrgIds, bool IsDrop, bool IsSOTrx, bool forInvoices , int recordID)
         {
@@ -76,7 +76,7 @@ namespace VIS.Controllers
                         "  WHERE c_paymentterm.c_paymentterm_ID =o.C_PaymentTerm_ID AND C_PaymentTerm.IsActive = 'Y') AS IsAdvance "
                         + " FROM C_OrderLine l"
                         + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND "
-                        + (forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID")
+                        + (forInvoicees ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID")
                         + " IS NOT NULL)"
                         + " LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)"
                         + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
@@ -177,7 +177,7 @@ namespace VIS.Controllers
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
                + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-            sql.Append(forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+            sql.Append(forInvoicees ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
 
             // Get lines from Order based on the setting taken on Tenant to allow non item Product
             if (!isAllownonItem)
@@ -234,9 +234,9 @@ namespace VIS.Controllers
                   + " FROM C_OrderLine l"
                   + " LEFT OUTER JOIN C_Order o ON (o.C_Order_ID = l.C_Order_ID)"
                   + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
-                  + " LEFT OUTER JOIN C_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
+                  + " LEFT OUTER JOIN VAB_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
 
-                sql.Append(forInvoicees ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+                sql.Append(forInvoicees ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
                 sql.Append(" IS NOT NULL LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
                 if (isBaseLangess != "")
@@ -310,7 +310,7 @@ namespace VIS.Controllers
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
                + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-            sql += (forInvoices ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+            sql += (forInvoices ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
             sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)";
 
             if (isBaseLangs != "")
@@ -379,7 +379,7 @@ namespace VIS.Controllers
                + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = o.C_PaymentTerm_ID)"
                 + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ";
 
-            sql += (forInvoices ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+            sql += (forInvoices ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
             sql += " IS NOT NULL) LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)";
 
             if (isBaseLangs != "")
@@ -487,7 +487,7 @@ namespace VIS.Controllers
                 + " LEFT JOIN C_OrderLine ol ON ol.C_OrderLine_ID = l.c_orderline_id "
                 + " LEFT JOIN c_order o ON o.c_order_id = ol.c_order_id LEFT JOIN c_paymentterm pt ON pt.C_Paymentterm_id = o.c_paymentterm_id "
                 //+ "LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
-                + "LEFT JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
+                + "LEFT JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice I ON I.VAB_INVOICE_ID = il.VAB_INVOICE_ID "
                 + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
                 + "LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
                 + "WHERE l.M_InOut_ID=" + mInOutId; // #1
@@ -535,7 +535,7 @@ namespace VIS.Controllers
                     + " LEFT JOIN C_OrderLine ol ON ol.C_OrderLine_ID = l.c_orderline_id "
                     + " LEFT JOIN c_order o ON o.c_order_id = ol.c_order_id LEFT JOIN c_paymentterm pt ON pt.C_Paymentterm_id = o.c_paymentterm_id "
                     //+ "LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
-                    + "LEFT JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM C_InvoiceLine il INNER JOIN C_Invoice I ON I.C_INVOICE_ID = il.C_INVOICE_ID "
+                    + "LEFT JOIN (SELECT il.QtyInvoiced, il.M_InOutLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice I ON I.VAB_INVOICE_ID = il.VAB_INVOICE_ID "
                     + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) "
                     + "LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
                     + "WHERE l.M_InOut_ID=" + mInOutId; // #1
@@ -626,30 +626,30 @@ namespace VIS.Controllers
             //            + "(l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             //            + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ) as QTYENTER,"	//	2
             //            + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//  3..4
-            //            + " l.M_Product_ID,p.Name as PRODUCT, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+            //            + " l.M_Product_ID,p.Name as PRODUCT, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
             //            + " l.C_OrderLine_ID,"                   					//  9
             //            + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
             //            + " ins.description ";
             //if (isBaseLangss)
             //{
             //    //sql += " " + isBaseLangss + " ";
-            //    sql += "FROM C_UOM uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
+            //    sql += "FROM C_UOM uom INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
             //}
             //else
             //{
-            //    sql += "FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + Env.GetVAF_Language(ctx) + "') ";
+            //    sql += "FROM C_UOM_Trl uom INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + Env.GetVAF_Language(ctx) + "') ";
             //}
 
             //sql += "INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
-            //    + "LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
+            //    + "LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
             //    + "LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
-            //    + "WHERE l.C_Invoice_ID=" + cInvoiceID;
+            //    + "WHERE l.VAB_Invoice_ID=" + cInvoiceID;
             //if (mProductIDs != "")
             //{
             //    sql += " " + mProductIDs + " ";
             //}
             //sql += " GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-            //    + "l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description "
+            //    + "l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description "
             //+ "ORDER BY l.Line";
 
             //return sql;
@@ -677,7 +677,7 @@ namespace VIS.Controllers
                         + " ROUND((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
                         + " (CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QTYENTER,"	//	2
                         + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//  3..4
-                        + " l.M_Product_ID,p.Name as PRODUCT,p.Value as PRODUCTSEARCHKEY, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+                        + " l.M_Product_ID,p.Name as PRODUCT,p.Value as PRODUCTSEARCHKEY, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
                         + " l.C_OrderLine_ID,"                   					//  9
                         + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
                         + " ins.description, "
@@ -712,18 +712,18 @@ namespace VIS.Controllers
                 sql.Append(") ");
             }
 
-            sql.Append(" LEFT JOIN C_Invoice o ON o.C_Invoice_ID = l.C_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
-             + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
+            sql.Append(" LEFT JOIN VAB_Invoice o ON o.VAB_Invoice_ID = l.VAB_Invoice_ID LEFT JOIN C_PaymentTerm pt ON pt.C_PaymentTerm_ID = o.C_PaymentTerm_ID "
+             + " LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
              + " "
              + " LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) "
-             + " WHERE l.C_Invoice_ID=" + cInvoiceID + " AND l.M_Product_ID>0");
+             + " WHERE l.VAB_Invoice_ID=" + cInvoiceID + " AND l.M_Product_ID>0");
 
             if (mProductIDs != "")
             {
                 sql.Append(mProductIDs);
             }
             sql.Append(" GROUP BY l.QtyInvoiced,l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + " l.M_Product_ID,p.Name, p.Value, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
+                + " l.M_Product_ID,p.Name, p.Value, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description, "
                 + " p.IsCostAdjustmentOnLost, "
                 + " L.Qtyinvoiced , o.C_PaymentTerm_ID , pt.Name ");
 
@@ -745,7 +745,7 @@ namespace VIS.Controllers
                   + "round((l.QtyInvoiced-SUM(COALESCE(m.QtyDelivered,0))) * "
                   + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END )," + precision + ") as QTYENTER,"	//	added by bharat
                   + " l.C_UOM_ID  as C_UOM_ID  ,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//	3..4
-                  + " 0 as M_PRODUCT_ID, c.Name as PRODUCT,c.Value as PRODUCTSEARCHKEY, l.C_InvoiceLine_ID,l.Line,"	//	5..6
+                  + " 0 as M_PRODUCT_ID, c.Name as PRODUCT,c.Value as PRODUCTSEARCHKEY, l.VAB_InvoiceLine_ID,l.Line,"	//	5..6
                   + " l.C_OrderLine_ID, l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
                   + " ins.description , "
                   + " 'N' AS Iscostadjustmentonlost, 0 As Miqty, 0 as qtyInv"			//	7..8 //              
@@ -760,16 +760,16 @@ namespace VIS.Controllers
                     sql.Append(isBaseLangss);
                 }
 
-                sql.Append(" LEFT OUTER JOIN C_Invoice i ON (i.C_Invoice_ID = l.C_Invoice_ID)"
+                sql.Append(" LEFT OUTER JOIN VAB_Invoice i ON (i.VAB_Invoice_ID = l.VAB_Invoice_ID)"
                   + " LEFT OUTER JOIN C_PaymentTerm t ON (t.C_PaymentTerm_ID = i.C_PaymentTerm_ID)"
                   + " LEFT OUTER JOIN C_OrderLine m ON(m.C_OrderLine_ID = l.C_OrderLine_ID) AND m.C_OrderLine_ID IS NOT NULL LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
 
 
-                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.C_Invoice_ID=" + cInvoiceID + " AND C.VAB_Charge_ID>0 ");
+                sql.Append(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) WHERE l.VAB_Invoice_ID=" + cInvoiceID + " AND C.VAB_Charge_ID>0 ");
 
                 sql.Append(" GROUP BY l.QtyInvoiced, l.QtyEntered, l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
-                      + "l.M_Product_ID,c.Name, c.Value, l.C_InvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, i.C_PaymentTerm_ID , t.Name");
+                      + "l.M_Product_ID,c.Name, c.Value, l.VAB_InvoiceLine_ID, l.M_AttributeSetInstance_ID, l.Line,l.C_OrderLine_ID, ins.description, i.C_PaymentTerm_ID , t.Name");
 
                 if (isBaseLangss.ToUpper().Contains("C_UOM_TRL"))
                 {

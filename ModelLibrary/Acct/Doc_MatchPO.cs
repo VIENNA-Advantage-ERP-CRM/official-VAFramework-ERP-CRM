@@ -75,7 +75,7 @@ namespace VAdvantage.Acct
             _oLine = new MOrderLine(GetCtx(), _C_OrderLine_ID, GetTrxName());
             //
             _M_InOutLine_ID = matchPO.GetM_InOutLine_ID();
-            //	m_C_InvoiceLine_ID = matchPO.getC_InvoiceLine_ID();
+            //	m_VAB_InvoiceLine_ID = matchPO.getVAB_InvoiceLine_ID();
             //
             _pc = new ProductCost(GetCtx(),
                 GetM_Product_ID(), _M_AttributeSetInstance_ID, GetTrxName());

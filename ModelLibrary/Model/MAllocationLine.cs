@@ -122,12 +122,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAB_BusinessPartner_ID">partner</param>
         /// <param name="C_Order_ID">order</param>
-        /// <param name="C_Invoice_ID">invoice</param>
-        public void SetDocInfo(int VAB_BusinessPartner_ID, int C_Order_ID, int C_Invoice_ID)
+        /// <param name="VAB_Invoice_ID">invoice</param>
+        public void SetDocInfo(int VAB_BusinessPartner_ID, int C_Order_ID, int VAB_Invoice_ID)
         {
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             SetC_Order_ID(C_Order_ID);
-            SetC_Invoice_ID(C_Invoice_ID);
+            SetVAB_Invoice_ID(VAB_Invoice_ID);
         }
 
         /// <summary>
@@ -149,8 +149,8 @@ namespace VAdvantage.Model
         /// <returns>invoice or null</returns>
         public MInvoice GetInvoice()
         {
-            if (_invoice == null && GetC_Invoice_ID() != 0)
-                _invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+            if (_invoice == null && GetVAB_Invoice_ID() != 0)
+                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 
@@ -163,7 +163,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             if (!newRecord
-                && (Is_ValueChanged("VAB_BusinessPartner_ID") || Is_ValueChanged("C_Invoice_ID")))
+                && (Is_ValueChanged("VAB_BusinessPartner_ID") || Is_ValueChanged("VAB_Invoice_ID")))
             {
                 log.Severe("Cannot Change Business Partner or Invoice");
                 return false;
@@ -202,8 +202,8 @@ namespace VAdvantage.Model
                 sb.Append(",C_Payment_ID=").Append(GetC_Payment_ID());
             if (GetVAB_CashJRNLLine_ID() != 0)
                 sb.Append(",VAB_CashJRNLLine_ID=").Append(GetVAB_CashJRNLLine_ID());
-            if (GetC_Invoice_ID() != 0)
-                sb.Append(",C_Invoice_ID=").Append(GetC_Invoice_ID());
+            if (GetVAB_Invoice_ID() != 0)
+                sb.Append(",VAB_Invoice_ID=").Append(GetVAB_Invoice_ID());
             if (GetVAB_BusinessPartner_ID() != 0)
                 sb.Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID());
             sb.Append(", Amount=").Append(GetAmount())
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
         public int ProcessIt(bool reverse)
         {
             log.Fine("Reverse=" + reverse + " - " + ToString());
-            int C_Invoice_ID = GetC_Invoice_ID();
+            int VAB_Invoice_ID = GetVAB_Invoice_ID();
             MInvoicePaySchedule invoiceSchedule = null;
             MPayment payment = null;
             MCashLine cashLine = null;
@@ -286,26 +286,26 @@ namespace VAdvantage.Model
                 {
                     invoice.SetC_Payment_ID(0);
                     log.Fine("C_Payment_ID=" + C_Payment_ID
-                       + " Unlinked from C_Invoice_ID=" + C_Invoice_ID);
+                       + " Unlinked from VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
                 else if (invoice.IsPaid())
                 {
                     invoice.SetC_Payment_ID(C_Payment_ID);
                     log.Fine("C_Payment_ID=" + C_Payment_ID
-                        + " Linked to C_Invoice_ID=" + C_Invoice_ID);
+                        + " Linked to VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
 
                 //	Link to Order
                 String update = "UPDATE C_Order o "
                     + "SET C_Payment_ID="
-                        + (reverse ? "NULL " : "(SELECT C_Payment_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID + ") ")
-                    + "WHERE EXISTS (SELECT * FROM C_Invoice i "
-                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.C_Invoice_ID=" + C_Invoice_ID + ")";
+                        + (reverse ? "NULL " : "(SELECT C_Payment_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID + ") ")
+                    + "WHERE EXISTS (SELECT * FROM VAB_Invoice i "
+                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
                 if (DataBase.DB.ExecuteQuery(update, null, Get_TrxName()) > 0)
                 {
                     log.Fine("C_Payment_ID=" + C_Payment_ID
                         + (reverse ? " UnLinked from" : " Linked to")
-                        + " order of C_Invoice_ID=" + C_Invoice_ID);
+                        + " order of VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
             }
 
@@ -317,7 +317,7 @@ namespace VAdvantage.Model
                 {
                     invoice.SetVAB_CashJRNLLine_ID(0);
                     log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
-                        + " Unlinked from C_Invoice_ID=" + C_Invoice_ID);
+                        + " Unlinked from VAB_Invoice_ID=" + VAB_Invoice_ID);
                     // Set isallocated false on cashline while allocation gets deallocated assigned by Mukesh sir on 27/12/2017
                     //MCashLine cashline = new MCashLine(GetCtx(), GetVAB_CashJRNLLine_ID(), Get_TrxName());
                     //cashline.SetIsAllocated(false);
@@ -327,20 +327,20 @@ namespace VAdvantage.Model
                 {
                     invoice.SetVAB_CashJRNLLine_ID(VAB_CashJRNLLine_ID);
                     log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
-                        + " Linked to C_Invoice_ID=" + C_Invoice_ID);
+                        + " Linked to VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
 
                 //	Link to Order
                 String update = "UPDATE C_Order o "
                     + "SET VAB_CashJRNLLine_ID="
-                        + (reverse ? "NULL " : "(SELECT VAB_CashJRNLLine_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID + ") ")
-                    + "WHERE EXISTS (SELECT * FROM C_Invoice i "
-                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.C_Invoice_ID=" + C_Invoice_ID + ")";
+                        + (reverse ? "NULL " : "(SELECT VAB_CashJRNLLine_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID + ") ")
+                    + "WHERE EXISTS (SELECT * FROM VAB_Invoice i "
+                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
                 if (DataBase.DB.ExecuteQuery(update, null, Get_TrxName()) > 0)
                 {
                     log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
                         + (reverse ? " UnLinked from" : " Linked to")
-                        + " order of C_Invoice_ID=" + C_Invoice_ID);
+                        + " order of VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
             }
 
@@ -421,9 +421,9 @@ namespace VAdvantage.Model
                         decimal payAmt = 0;
                         MDocType doctype = null;
                         MCurrency currency = new MCurrency(GetCtx(), invoice.GetVAB_Currency_ID(), null);
-                        if (GetC_InvoicePaySchedule_ID() != 0 && !invoice.IsPaid())
+                        if (GetVAB_sched_InvoicePayment_ID() != 0 && !invoice.IsPaid())
                         {
-                            invoiceSchedule = new MInvoicePaySchedule(GetCtx(), GetC_InvoicePaySchedule_ID(), Get_TrxName());
+                            invoiceSchedule = new MInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                             invoiceSchedule.SetVA009_IsPaid(false);
                             // when we update schedule paid as False, then update payment method and related fields on schedule as on Invoice Header
                             if (reverse)
@@ -449,7 +449,7 @@ namespace VAdvantage.Model
                                 // convert (payment amount / Amount from View Allocation) to invoice currency amount then subtract Paid invoice amount to calculated amount
                                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
                                 {
-                                    if (payment.GetC_Invoice_ID() != 0)
+                                    if (payment.GetVAB_Invoice_ID() != 0)
                                     {
                                         // when payment created with invoice refernce direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
@@ -474,7 +474,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    if (payment.GetC_Invoice_ID() != 0)
+                                    if (payment.GetVAB_Invoice_ID() != 0)
                                     {
                                         // when we create payment with invoice reference direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
@@ -505,12 +505,12 @@ namespace VAdvantage.Model
                                 {
                                     if (invoiceSchedule.GetVA009_PaidAmntInvce() != 0)
                                     {
-                                        int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
+                                        int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
                                          @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
-                                         @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
-                                                                 AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
-                                         @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
+                                         @" WHERE VAB_sched_InvoicePayment_ID = ( SELECT MIN(VAB_sched_InvoicePayment_ID) FROM VAB_sched_InvoicePayment WHERE IsActive = 'Y'
+                                                                 AND VA009_IsPaid = 'N' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID() +
+                                         @" AND VAB_sched_InvoicePayment_ID <> " + GetVAB_sched_InvoicePayment_ID() + " ) ", null, Get_Trx()));
 
                                         // set paid invoice amount = 0, no > 0 bcz this is not last schedule
                                         if (no > 0)
@@ -564,12 +564,12 @@ namespace VAdvantage.Model
                                 {
                                     if (invoiceSchedule.GetVA009_PaidAmntInvce() != 0)
                                     {
-                                        int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule 
+                                        int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment 
                                                                  SET VA009_PaidAmntInvce =   NVL(VA009_PaidAmntInvce , 0) + " + Decimal.Round(invoiceSchedule.GetVA009_PaidAmntInvce(), currency.GetStdPrecision()) +
                                          @" , VA009_PaidAmnt =  NVL(VA009_PaidAmnt , 0) + " + Decimal.Round(MConversionRate.ConvertBase(GetCtx(), invoiceSchedule.GetVA009_PaidAmntInvce(), invoice.GetVAB_Currency_ID(), invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()), currency.GetStdPrecision()) +
-                                         @" WHERE C_InvoicePaySchedule_ID = ( SELECT MIN(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y'
-                                                                 AND VA009_IsPaid = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID() +
-                                         @" AND C_InvoicePaySchedule_ID <> " + GetC_InvoicePaySchedule_ID() + " ) ", null, Get_Trx()));
+                                         @" WHERE VAB_sched_InvoicePayment_ID = ( SELECT MIN(VAB_sched_InvoicePayment_ID) FROM VAB_sched_InvoicePayment WHERE IsActive = 'Y'
+                                                                 AND VA009_IsPaid = 'N' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID() +
+                                         @" AND VAB_sched_InvoicePayment_ID <> " + GetVAB_sched_InvoicePayment_ID() + " ) ", null, Get_Trx()));
 
                                         // set paid invoice amount = 0, no > 0 bcz this is not last schedule
                                         if (no > 0)

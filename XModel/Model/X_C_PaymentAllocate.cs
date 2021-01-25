@@ -21,7 +21,7 @@ public X_C_PaymentAllocate (Context ctx, int C_PaymentAllocate_ID, Trx trxName) 
 /** if (C_PaymentAllocate_ID == 0)
 {
 SetAmount (0.0);
-SetC_Invoice_ID (0);
+SetVAB_Invoice_ID (0);
 SetC_PaymentAllocate_ID (0);
 SetC_Payment_ID (0);
 SetDiscountAmt (0.0);
@@ -35,7 +35,7 @@ public X_C_PaymentAllocate (Ctx ctx, int C_PaymentAllocate_ID, Trx trxName) : ba
 /** if (C_PaymentAllocate_ID == 0)
 {
 SetAmount (0.0);
-SetC_Invoice_ID (0);
+SetVAB_Invoice_ID (0);
 SetC_PaymentAllocate_ID (0);
 SetC_Payment_ID (0);
 SetDiscountAmt (0.0);
@@ -154,17 +154,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Invoice.
-@param C_Invoice_ID Invoice Identifier */
-public void SetC_Invoice_ID (int C_Invoice_ID)
+@param VAB_Invoice_ID Invoice Identifier */
+public void SetVAB_Invoice_ID (int VAB_Invoice_ID)
 {
-if (C_Invoice_ID < 1) throw new ArgumentException ("C_Invoice_ID is mandatory.");
-Set_Value ("C_Invoice_ID", C_Invoice_ID);
+if (VAB_Invoice_ID < 1) throw new ArgumentException ("VAB_Invoice_ID is mandatory.");
+Set_Value ("VAB_Invoice_ID", VAB_Invoice_ID);
 }
 /** Get Invoice.
 @return Invoice Identifier */
-public int GetC_Invoice_ID() 
+public int GetVAB_Invoice_ID() 
 {
-Object ii = Get_Value("C_Invoice_ID");
+Object ii = Get_Value("VAB_Invoice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -172,7 +172,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Invoice_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
 }
 /** Set Allocate Payment.
 @param C_PaymentAllocate_ID Allocate Payment to Invoices */
@@ -279,18 +279,18 @@ return  Convert.ToDecimal(bd);
 }
 
 /** Set Invoice Payment Schedule.
-@param C_InvoicePaySchedule_ID Invoice Payment Schedule */
-public void SetC_InvoicePaySchedule_ID(int C_InvoicePaySchedule_ID)
+@param VAB_sched_InvoicePayment_ID Invoice Payment Schedule */
+public void SetVAB_sched_InvoicePayment_ID(int VAB_sched_InvoicePayment_ID)
 {
-    if (C_InvoicePaySchedule_ID <= 0) Set_Value("C_InvoicePaySchedule_ID", null);
+    if (VAB_sched_InvoicePayment_ID <= 0) Set_Value("VAB_sched_InvoicePayment_ID", null);
     else
-        Set_Value("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+        Set_Value("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
 }
 /** Get Invoice Payment Schedule.
 @return Invoice Payment Schedule */
-public int GetC_InvoicePaySchedule_ID()
+public int GetVAB_sched_InvoicePayment_ID()
 {
-    Object ii = Get_Value("C_InvoicePaySchedule_ID");
+    Object ii = Get_Value("VAB_sched_InvoicePayment_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

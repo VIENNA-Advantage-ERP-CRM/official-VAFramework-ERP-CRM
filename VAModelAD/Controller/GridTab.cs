@@ -2968,9 +2968,9 @@ namespace VAdvantage.Model
         public String GetTrxInfo()
         {
             //	InvoiceBatch
-            if (_vo.TableName.StartsWith("C_InvoiceBatch"))
+            if (_vo.TableName.StartsWith("VAB_BatchInvoice"))
             {
-                int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_InvoiceBatch_ID");
+                int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "VAB_BatchInvoice_ID");
                 log.Fine(_vo.TableName + " - " + Record_ID);
                 MessageFormat mf = null;
                 try
@@ -2995,8 +2995,8 @@ namespace VAdvantage.Model
                 bool filled = false;
                 //    //
                 String sql = "SELECT COUNT(*), NVL(SUM(LineNetAmt),0), NVL(SUM(LineTotalAmt),0) "
-                    + "FROM C_InvoiceBatchLine "
-                    + "WHERE C_InvoiceBatch_ID=" + Record_ID + " AND IsActive='Y'";
+                    + "FROM VAB_BatchInvoiceLine "
+                    + "WHERE VAB_BatchInvoice_ID=" + Record_ID + " AND IsActive='Y'";
                 //    //
                 IDataReader dr = null;
                 try
@@ -3036,7 +3036,7 @@ namespace VAdvantage.Model
             }
 
             ////	Order || Invoice
-            else if (_vo.TableName.StartsWith("C_Order") || _vo.TableName.StartsWith("C_Invoice"))
+            else if (_vo.TableName.StartsWith("C_Order") || _vo.TableName.StartsWith("VAB_Invoice"))
             {
                 int Record_ID;
                 bool isOrder = _vo.TableName.StartsWith("C_Order");
@@ -3053,11 +3053,11 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_Invoice_ID");
-                    sql.Append("FROM C_Invoice o"
+                    Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "VAB_Invoice_ID");
+                    sql.Append("FROM VAB_Invoice o"
                         + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
-                        + " INNER JOIN C_InvoiceLine l ON (o.C_Invoice_ID=l.C_Invoice_ID) "
-                        + "WHERE o.C_Invoice_ID= " + Record_ID);
+                        + " INNER JOIN VAB_InvoiceLine l ON (o.VAB_Invoice_ID=l.VAB_Invoice_ID) "
+                        + "WHERE o.VAB_Invoice_ID= " + Record_ID);
                 }
                 sql.Append(" GROUP BY o.VAB_Currency_ID, c.ISO_Code, o.TotalLines, o.GrandTotal, o.DateAcct, o.VAF_Client_ID, o.VAF_Org_ID");
 

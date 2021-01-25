@@ -392,7 +392,7 @@ namespace VAdvantage.Model
                 //        MInvoice invoice = CreateInvoice(dt, shipment, tSet);
                 //        if (invoice == null)
                 //            return DocActionVariables.STATUS_INVALID;
-                //        Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
+                //        Info.Append(" - @VAB_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                 //        String msg = invoice.GetProcessMsg();
                 //        if (msg != null && msg.Length > 0)
                 //            Info.Append(" (").Append(msg).Append(")");
@@ -727,7 +727,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *Invoices*
-                Info.Append(" - @C_Invoice_ID@:");
+                Info.Append(" - @VAB_Invoice_ID@:");
                 //MInvoice[] invoices = GetInvoices(false);	//	get all (line based)
                 //for (int i = 0; i < invoices.Length; i++)
                 //{

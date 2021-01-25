@@ -107,12 +107,12 @@ namespace VAdvantage.Process
                     {
                         sql.Append("SELECT h.VAB_Currency_ID, (l.LineNetAmt*al.Amount/h.GrandTotal) AS Amt,"
                             + " (l.QtyInvoiced*al.Amount/h.GrandTotal) AS Qty,"
-                            + " NULL, l.C_InvoiceLine_ID, p.DocumentNo||'_'||h.DocumentNo,"
+                            + " NULL, l.VAB_InvoiceLine_ID, p.DocumentNo||'_'||h.DocumentNo,"
                             + " COALESCE(prd.Value,l.Description), h.DateInvoiced "
                             + "FROM C_Payment p"
                             + " INNER JOIN VAB_DocAllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
-                            + " INNER JOIN C_Invoice h ON (al.C_Invoice_ID = h.C_Invoice_ID)"
-                            + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
+                            + " INNER JOIN VAB_Invoice h ON (al.VAB_Invoice_ID = h.VAB_Invoice_ID)"
+                            + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID) "
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
@@ -127,8 +127,8 @@ namespace VAdvantage.Process
                             + " NULL, NULL, NULL, NULL, MAX(h.DateInvoiced) "
                             + "FROM C_Payment p"
                             + " INNER JOIN VAB_DocAllocationLine al ON (p.C_Payment_ID=al.C_Payment_ID)"
-                            + " INNER JOIN C_Invoice h ON (al.C_Invoice_ID = h.C_Invoice_ID)"
-                            + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
+                            + " INNER JOIN VAB_Invoice h ON (al.VAB_Invoice_ID = h.VAB_Invoice_ID)"
+                            + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND p.VAF_Client_ID = @clientid"
@@ -171,10 +171,10 @@ namespace VAdvantage.Process
                     if (m_com.IsListDetails())
                     {
                         sql.Append("SELECT h.VAB_Currency_ID, l.LineNetAmt, l.QtyInvoiced, "
-                            + "NULL, l.C_InvoiceLine_ID, h.DocumentNo,"
+                            + "NULL, l.VAB_InvoiceLine_ID, h.DocumentNo,"
                             + " COALESCE(prd.Value,l.Description),h.DateInvoiced "
-                            + "FROM C_Invoice h"
-                            + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID)"
+                            + "FROM VAB_Invoice h"
+                            + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID)"
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
@@ -186,9 +186,9 @@ namespace VAdvantage.Process
                     {
                         sql.Append("SELECT h.VAB_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyInvoiced) AS Qty, "
-                            + "NULL, l.C_InvoiceLine_ID, NULL, NULL, MAX(h.DateInvoiced) "
-                            + "FROM C_Invoice h"
-                            + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
+                            + "NULL, l.VAB_InvoiceLine_ID, NULL, NULL, MAX(h.DateInvoiced) "
+                            + "FROM VAB_Invoice h"
+                            + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
@@ -266,7 +266,7 @@ namespace VAdvantage.Process
                     sql.Append(" GROUP BY h.VAB_Currency_ID,l.C_OrderLine_ID");
                 }
                 else
-                    sql.Append(" GROUP BY h.VAB_Currency_ID,l.C_InvoiceLine_ID");
+                    sql.Append(" GROUP BY h.VAB_Currency_ID,l.VAB_InvoiceLine_ID");
 
                 //
                 log.Fine("Line=" + lines[i].GetLine() + " - " + sql);
@@ -388,7 +388,7 @@ namespace VAdvantage.Process
                     MCommissionDetail cd = new MCommissionDetail(comAmt,
                         Utility.Util.GetValueOfInt(dr[0]), Utility.Util.GetValueOfDecimal(dr[1]), Utility.Util.GetValueOfDecimal(dr[2]));
 
-                    //	C_OrderLine_ID, C_InvoiceLine_ID,
+                    //	C_OrderLine_ID, VAB_InvoiceLine_ID,
                     cd.SetLineIDs(Utility.Util.GetValueOfInt(dr[3]), Utility.Util.GetValueOfInt(dr[4]));
 
                     if (Utility.Util.GetValueOfInt(dr[3]) > 0)

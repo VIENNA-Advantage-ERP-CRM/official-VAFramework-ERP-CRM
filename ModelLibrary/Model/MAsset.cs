@@ -413,7 +413,7 @@ namespace VAdvantage.Model
             else
                 SetQty((Decimal)units);
             SetM_InOutLine_ID(invoiceline.GetM_InOutLine_ID());
-            Set_Value("C_InvoiceLine_ID", invoiceline.GetC_InvoiceLine_ID());
+            Set_Value("VAB_InvoiceLine_ID", invoiceline.GetVAB_InvoiceLine_ID());
 
             //	Activate
             MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetVAA_AssetGroup_ID());

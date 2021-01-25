@@ -47,7 +47,7 @@ namespace VAdvantage.Model
             {
                 //	setVAB_AccountBook_ID (0);
                 //	setVAB_Currency_ID (0);
-                //	setC_InvoiceLine_ID (0);
+                //	setVAB_InvoiceLine_ID (0);
                 //	setC_RevenueRecognition_ID (0);
                 //	setC_RevenueRecognition_Plan_ID (0);
                 //	setP_Revenue_Acct (0);
@@ -97,8 +97,8 @@ namespace VAdvantage.Model
                     /**	Get InvoiveQty
                     SELECT	QtyInvoiced, M_Product_ID 
                       INTO	v_Qty, v_M_Product_ID
-                    FROM	C_InvoiceLine 
-                    WHERE 	C_InvoiceLine_ID=:new.C_InvoiceLine_ID;
+                    FROM	VAB_InvoiceLine 
+                    WHERE 	VAB_InvoiceLine_ID=:new.VAB_InvoiceLine_ID;
                     --	Insert
                     VAF_Record_Seq_Next ('C_ServiceLevel', :new.VAF_Client_ID, v_NextNo);
                     INSERT INTO C_ServiceLevel
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
             SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             SetVAB_Currency_ID(ToCurrency);
-            SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
+            SetVAB_InvoiceLine_ID(invoiceLine.GetVAB_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
             bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
@@ -156,9 +156,9 @@ namespace VAdvantage.Model
             string sql = "SELECT * FROM C_RevenueRecognition_Plan pl";
             if (InvoiceLine_ID > 0)
             {
-                sql += @" INNER  JOIN c_invoiceline invl ON invl.c_invoiceline_id = pl.c_invoiceline_id 
+                sql += @" INNER  JOIN VAB_InvoiceLine invl ON invl.VAB_InvoiceLine_id = pl.VAB_InvoiceLine_id 
                             WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() +
-                        " AND invl.c_invoiceLine_id=" + InvoiceLine_ID + " AND invl.vaf_org_id=" + OrgId;
+                        " AND invl.VAB_InvoiceLine_id=" + InvoiceLine_ID + " AND invl.vaf_org_id=" + OrgId;
             }
             else
             {

@@ -160,7 +160,7 @@ namespace VAdvantage.Process
             /// MTable rather than static constructor of mclass. Askes By Mukesh Sir, Amit Date=04/08/2017
 
             String docBaseType = null;
-            if (VAF_TableView_ID == MTable.Get_Table_ID("C_Invoice"))
+            if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_Invoice"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APINVOICE
                     + "','" + MDocBaseType.DOCBASETYPE_APCREDITMEMO
@@ -233,7 +233,7 @@ namespace VAdvantage.Process
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHPO + "'";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_IncomeTax"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_IncomeTax"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INCOMETAX + "'";
             }

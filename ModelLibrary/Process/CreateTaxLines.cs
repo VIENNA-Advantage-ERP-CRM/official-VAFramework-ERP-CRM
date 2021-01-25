@@ -21,10 +21,10 @@ namespace VAdvantage.Process
         MIncomeTaxLines tLine = null;
         protected override string DoIt()
         {
-            DB.ExecuteQuery("DELETE FROM C_IncomeTaxLines WHERE C_IncomeTax_ID=" + GetRecord_ID());
+            DB.ExecuteQuery("DELETE FROM VAB_IncomeTaxLines WHERE VAB_IncomeTax_ID=" + GetRecord_ID());
             tax = new MIncomeTax(GetCtx(), GetRecord_ID(), Get_Trx());
-            //qry = "SELECT ct.Rate,ta.T_Due_Acct,ev.value,ev.name FROM C_IncomeTax tx INNER JOIN C_Tax ct ON (tx.C_Tax_ID=ct.C_Tax_ID) INNER JOIN C_Tax_Acct ta ON (tx.C_Tax_ID = ta.C_Tax_ID) inner join c_validCombination ac on(ta.T_Due_Acct=ac.c_validCombination_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.C_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
-            qry = "SELECT ct.Rate,ta.IncomeSummary_Acct,ev.value,ev.name FROM C_IncomeTax tx INNER JOIN C_Tax ct ON (tx.C_Tax_ID=ct.C_Tax_ID) INNER JOIN VAB_AccountBook_GL ta ON (tx.VAF_Client_ID = ta.VAF_Client_ID) inner join c_validCombination ac on(ta.IncomeSummary_Acct=ac.c_validCombination_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.C_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
+            //qry = "SELECT ct.Rate,ta.T_Due_Acct,ev.value,ev.name FROM VAB_IncomeTax tx INNER JOIN C_Tax ct ON (tx.C_Tax_ID=ct.C_Tax_ID) INNER JOIN C_Tax_Acct ta ON (tx.C_Tax_ID = ta.C_Tax_ID) inner join c_validCombination ac on(ta.T_Due_Acct=ac.c_validCombination_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.VAB_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
+            qry = "SELECT ct.Rate,ta.IncomeSummary_Acct,ev.value,ev.name FROM VAB_IncomeTax tx INNER JOIN C_Tax ct ON (tx.C_Tax_ID=ct.C_Tax_ID) INNER JOIN VAB_AccountBook_GL ta ON (tx.VAF_Client_ID = ta.VAF_Client_ID) inner join c_validCombination ac on(ta.IncomeSummary_Acct=ac.c_validCombination_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.VAB_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
             ds=DB.ExecuteDataset(qry,null,Get_Trx());
             if(ds !=null)
             {
@@ -36,9 +36,9 @@ namespace VAdvantage.Process
                     tLine = new MIncomeTaxLines(GetCtx(), 0, Get_Trx());
                     tLine.SetVAF_Client_ID(GetVAF_Client_ID());
                     tLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-                    tLine.SetC_IncomeTax_ID(GetRecord_ID());
+                    tLine.SetVAB_IncomeTax_ID(GetRecord_ID());
                     tLine.SetC_Tax_ID(tax.GetC_Tax_ID());
-                    tLine.SetC_IncomeTax_Acct(acct_Comb);
+                    tLine.SetVAB_IncomeTax_Acct(acct_Comb);
                     tLine.SetC_ProfitAndLoss_ID(tax.GetC_ProfitAndLoss_ID());
                     tLine.SetIncomeTaxAmount(taxAmount);
                     tLine.SetLedgerCode(Util.GetValueOfString(ds.Tables[0].Rows[0]["value"]));

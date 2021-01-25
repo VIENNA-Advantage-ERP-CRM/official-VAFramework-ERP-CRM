@@ -52,14 +52,14 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public JsonResult SaveShipment(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string m_locator_id, string M_inout_id, string Container_ID)
+        public JsonResult SaveShipment(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string VAB_Invoice_ID, string m_locator_id, string M_inout_id, string Container_ID)
         {
             var value = false;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveShipmentData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(m_locator_id), Convert.ToInt32(M_inout_id), Util.GetValueOfInt(Container_ID));
+                value = obj.SaveShipmentData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(VAB_Invoice_ID), Convert.ToInt32(m_locator_id), Convert.ToInt32(M_inout_id), Util.GetValueOfInt(Container_ID));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -69,14 +69,14 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string C_Invoice_ID, string M_inout_id)
+        public JsonResult SaveInvoice(List<Dictionary<string, string>> model, string selectedItems, string C_Order_ID, string VAB_Invoice_ID, string M_inout_id)
         {
             var value = false;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(C_Invoice_ID), Convert.ToInt32(M_inout_id));
+                value = obj.SaveInvoiceData(ctx, model, selectedItems, Convert.ToInt32(C_Order_ID), Convert.ToInt32(VAB_Invoice_ID), Convert.ToInt32(M_inout_id));
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -677,20 +677,20 @@ namespace VIS.Controllers
                 int recid = 0;
 
                 //
-                int C_InvoicePaymentTerm_ID = 0; // invoice header payment term
+                int VAB_InvoicePaymentTerm_ID = 0; // invoice header payment term
                 bool IsInvoicePTAdvance = false; // payment term binded on Invoice is advance or not
 
                 // get invoice header payment tern and is advance or not
-                if (keyColumnName == "C_Invoice_ID")
+                if (keyColumnName == "VAB_Invoice_ID")
                 {
                     DataSet ds = DB.ExecuteDataset(@"SELECT c_paymentterm.c_paymentterm_ID,
                                     SUM(  CASE WHEN c_paymentterm.VA009_Advance!= COALESCE(C_PaySchedule.VA009_Advance,'N') THEN 1 ELSE 0 END) AS IsAdvance
                                     FROM c_paymentterm LEFT JOIN C_PaySchedule ON ( c_paymentterm.c_paymentterm_ID = C_PaySchedule.c_paymentterm_ID AND C_PaySchedule.IsActive ='Y' )
-                                    WHERE c_paymentterm.c_paymentterm_ID = (SELECT c_paymentterm_ID FROM C_Invoice WHERE C_Invoice_ID = " + recordID + @" )
+                                    WHERE c_paymentterm.c_paymentterm_ID = (SELECT c_paymentterm_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + recordID + @" )
                                     GROUP BY c_paymentterm.c_paymentterm_ID ");
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        C_InvoicePaymentTerm_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
+                        VAB_InvoicePaymentTerm_ID = Convert.ToInt32(ds.Tables[0].Rows[0]["c_paymentterm_ID"]);
                         IsInvoicePTAdvance = Convert.ToInt32(ds.Tables[0].Rows[0]["IsAdvance"]) > 0 ? true : false;
                     }
                 }
@@ -725,9 +725,9 @@ namespace VIS.Controllers
                         }
                     }
                     // 
-                    if (keyColumnName == "C_Invoice_ID")
+                    if (keyColumnName == "VAB_Invoice_ID")
                     {
-                        item.C_InvoicePaymentTerm_ID = C_InvoicePaymentTerm_ID;
+                        item.VAB_InvoicePaymentTerm_ID = VAB_InvoicePaymentTerm_ID;
                         item.IsInvoicePTAdvance = IsInvoicePTAdvance;
                     }
 
@@ -764,13 +764,13 @@ namespace VIS.Controllers
                                 }
                             }
                         }
-                        else if (keyColumnName == "C_Invoice_ID")
+                        else if (keyColumnName == "VAB_Invoice_ID")
                         {
                             recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
 
                             if (recordid > 0)
                             {
-                                qry = "SELECT SUM(QtyEntered) FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
+                                qry = "SELECT SUM(QtyEntered) FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + recordID + " AND C_OrderLine_ID = " + recordid;
                                 rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                                 if (rec > 0)
                                 {
@@ -781,7 +781,7 @@ namespace VIS.Controllers
                             }
                             else
                             {
-                                qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
+                                qry = "SELECT QtyEntered FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                     " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                                 rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                                 if (rec > 0)
@@ -795,12 +795,12 @@ namespace VIS.Controllers
                         item.Select = select;
                         item.C_Order_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
                         item.M_InOut_ID = null;
-                        item.C_Invoice_ID = null;
+                        item.VAB_Invoice_ID = null;
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = 0;
-                        item.C_Invoice_ID_K = 0;
+                        item.VAB_Invoice_ID_K = 0;
                     }
-                    else if (tableName == "C_InvoiceLine")
+                    else if (tableName == "VAB_InvoiceLine")
                     {
                         recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         if (recordid > 0)
@@ -829,17 +829,17 @@ namespace VIS.Controllers
                         item.Select = select;
                         item.C_Order_ID = null;
                         item.M_InOut_ID = null;
-                        item.C_Invoice_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
+                        item.VAB_Invoice_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = 0;
-                        item.C_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_invoiceline_id"]);
+                        item.VAB_Invoice_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["VAB_InvoiceLine_id"]);
                     }
                     else
                     {
                         recordid = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
                         if (recordid > 0)
                         {
-                            qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_InOutLine_ID = " + recordid;
+                            qry = "SELECT QtyEntered FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + recordID + " AND M_InOutLine_ID = " + recordid;
                             rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                             if (rec > 0)
                             {
@@ -850,7 +850,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            qry = "SELECT QtyEntered FROM C_InvoiceLine WHERE C_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
+                            qry = "SELECT QtyEntered FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + recordID + " AND M_Product_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_product_id"]) +
                                 " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                             rec = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                             if (rec > 0)
@@ -863,10 +863,10 @@ namespace VIS.Controllers
                         item.Select = select;
                         item.C_Order_ID = null;
                         item.M_InOut_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["line"]);
-                        item.C_Invoice_ID = null;
+                        item.VAB_Invoice_ID = null;
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
-                        item.C_Invoice_ID_K = 0;
+                        item.VAB_Invoice_ID_K = 0;
                     }
 
                     item.QuantityPending = item.QuantityEntered;
@@ -957,7 +957,7 @@ namespace VIS.Controllers
 
 
 
-        public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_Locator_ID, int M_InOut_ID, int Container_ID)
+        public bool SaveShipmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int VAB_Invoice_ID, int M_Locator_ID, int M_InOut_ID, int Container_ID)
         {
             // chck pallet Functionality applicable or not
             bool isContainerApplicable = MTransaction.ProductContainerApplicable(ctx);
@@ -969,9 +969,9 @@ namespace VIS.Controllers
             }
 
             MInvoice _invoice = null;
-            if (C_Invoice_ID > 0)
+            if (VAB_Invoice_ID > 0)
             {
-                _invoice = new MInvoice(ctx, C_Invoice_ID, null);
+                _invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
             }
 
 
@@ -1001,7 +1001,7 @@ namespace VIS.Controllers
                 int C_UOM_ID = 0;
                 int M_Product_ID = 0;
                 int C_OrderLine_ID = 0;
-                int C_InvoiceLine_ID = 0;
+                int VAB_InvoiceLine_ID = 0;
                 int M_AttributeSetInstance_ID = 0;
                 int M_InoutLine_ID = 0;
                 string SqlIOL = "";
@@ -1046,8 +1046,8 @@ namespace VIS.Controllers
                     }
                     if (model[i]["C_Order_ID_K"] != "")
                         C_OrderLine_ID = Convert.ToInt32((model[i]["C_Order_ID_K"]));       //  4-OrderLine
-                    if (model[i]["C_Invoice_ID_K"] != "")
-                        C_InvoiceLine_ID = Convert.ToInt32((model[i]["C_Invoice_ID_K"]));   //  6-InvoiceLine
+                    if (model[i]["VAB_Invoice_ID_K"] != "")
+                        VAB_InvoiceLine_ID = Convert.ToInt32((model[i]["VAB_Invoice_ID_K"]));   //  6-InvoiceLine
 
                     if (model[i].Keys.Contains("M_AttributeSetInstance_ID"))
                     {
@@ -1089,10 +1089,10 @@ namespace VIS.Controllers
 
                         }
                     }
-                    if (C_InvoiceLine_ID > 0)
+                    if (VAB_InvoiceLine_ID > 0)
                     {
-                        //M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_InoutLine_ID FROM C_InvoiceLine WHERE C_InvoiceLine_ID=" + C_InvoiceLine_ID));
-                        SqlIOL = "SELECT M_INoutLine_ID FROM C_InvoiceLine WHERE C_InvoiceLine_ID = " + C_InvoiceLine_ID + " AND M_Product_ID = " + M_Product_ID;
+                        //M_InoutLine_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_InoutLine_ID FROM VAB_InvoiceLine WHERE VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID));
+                        SqlIOL = "SELECT M_INoutLine_ID FROM VAB_InvoiceLine WHERE VAB_InvoiceLine_ID = " + VAB_InvoiceLine_ID + " AND M_Product_ID = " + M_Product_ID;
                         //if (M_AttributeSetInstance_ID > 0)
                         //{ 
                         SqlIOL += " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_AttributeSetInstance_ID;
@@ -1160,8 +1160,8 @@ namespace VIS.Controllers
                 }
                 if (model[i]["C_Order_ID_K"] != "")
                     C_OrderLine_ID = Convert.ToInt32((model[i]["C_Order_ID_K"]));       //  4-OrderLine
-                if (model[i]["C_Invoice_ID_K"] != "")
-                    C_InvoiceLine_ID = Convert.ToInt32((model[i]["C_Invoice_ID_K"]));   //  6-InvoiceLine
+                if (model[i]["VAB_Invoice_ID_K"] != "")
+                    VAB_InvoiceLine_ID = Convert.ToInt32((model[i]["VAB_Invoice_ID_K"]));   //  6-InvoiceLine
 
                 if (model[i].Keys.Contains("M_AttributeSetInstance_ID"))
                 {
@@ -1170,11 +1170,11 @@ namespace VIS.Controllers
                 }
 
                 MInvoiceLine il = null;
-                if (C_InvoiceLine_ID != 0)
+                if (VAB_InvoiceLine_ID != 0)
                 {
-                    il = new MInvoiceLine(ctx, C_InvoiceLine_ID, null);
+                    il = new MInvoiceLine(ctx, VAB_InvoiceLine_ID, null);
                 }
-                bool isInvoiced = (C_InvoiceLine_ID != 0);
+                bool isInvoiced = (VAB_InvoiceLine_ID != 0);
                 //	Precision of Qty UOM
                 int precision = 2;
                 if (M_Product_ID != 0)
@@ -1465,18 +1465,18 @@ namespace VIS.Controllers
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-                if (inout.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (inout.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    inout.SetC_IncoTerm_ID(_order.GetC_IncoTerm_ID());
+                    inout.SetVAB_IncoTerm_ID(_order.GetVAB_IncoTerm_ID());
                 }
             }
-            if (_invoice != null && _invoice.GetC_Invoice_ID() != 0)
+            if (_invoice != null && _invoice.GetVAB_Invoice_ID() != 0)
             {
                 if (inout.GetC_Order_ID() == 0)
                 {
                     inout.SetC_Order_ID(_invoice.GetC_Order_ID());
                 }
-                inout.SetC_Invoice_ID(_invoice.GetC_Invoice_ID());
+                inout.SetVAB_Invoice_ID(_invoice.GetVAB_Invoice_ID());
                 inout.SetDateOrdered(_invoice.GetDateOrdered());
                 inout.SetVAF_OrgTrx_ID(_invoice.GetVAF_OrgTrx_ID());
                 inout.SetC_Project_ID(_invoice.GetC_Project_ID());
@@ -1489,9 +1489,9 @@ namespace VIS.Controllers
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-                if (inout.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (inout.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    inout.SetC_IncoTerm_ID(_invoice.GetC_IncoTerm_ID());
+                    inout.SetVAB_IncoTerm_ID(_invoice.GetVAB_IncoTerm_ID());
                 }
             }
             inout.Save();
@@ -1500,7 +1500,7 @@ namespace VIS.Controllers
 
 
 
-        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
+        public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int VAB_Invoice_ID, int M_InOut_ID)
         {
             MOrder _order = null;
             if (C_Order_ID > 0)
@@ -1509,9 +1509,9 @@ namespace VIS.Controllers
             }
 
             MInvoice _invoice = null;
-            if (C_Invoice_ID > 0)
+            if (VAB_Invoice_ID > 0)
             {
-                _invoice = new MInvoice(ctx, C_Invoice_ID, null);
+                _invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
             }
 
 
@@ -1524,9 +1524,9 @@ namespace VIS.Controllers
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-                if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (_invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    _invoice.SetC_IncoTerm_ID(_inout.GetC_IncoTerm_ID());
+                    _invoice.SetVAB_IncoTerm_ID(_inout.GetVAB_IncoTerm_ID());
                 }
                 _invoice.Save();
                 //end
@@ -1538,16 +1538,16 @@ namespace VIS.Controllers
 
                 // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-                if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                if (_invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                 {
-                    _invoice.SetC_IncoTerm_ID(_order.GetC_IncoTerm_ID());
+                    _invoice.SetVAB_IncoTerm_ID(_order.GetVAB_IncoTerm_ID());
                 }
                 _invoice.Save();
             }
             if (_inout != null && _inout.GetM_InOut_ID() != 0
-                && _inout.GetC_Invoice_ID() == 0)	//	only first time
+                && _inout.GetVAB_Invoice_ID() == 0)	//	only first time
             {
-                _inout.SetC_Invoice_ID(C_Invoice_ID);
+                _inout.SetVAB_Invoice_ID(VAB_Invoice_ID);
                 _inout.Save();
             }
             //DateTime? AmortStartDate = null;
@@ -1939,9 +1939,9 @@ namespace VIS.Controllers
 
                         // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-                        if (_invoice.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                        if (_invoice.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
                         {
-                            _invoice.SetC_IncoTerm_ID(_order.GetC_IncoTerm_ID());
+                            _invoice.SetVAB_IncoTerm_ID(_order.GetVAB_IncoTerm_ID());
                         }
                         _invoice.Save();
                     }
@@ -2061,18 +2061,18 @@ namespace VIS.Controllers
             public string M_Product_ID { get; set; }
             public string C_Order_ID { get; set; }
             public string M_InOut_ID { get; set; }
-            public string C_Invoice_ID { get; set; }
+            public string VAB_Invoice_ID { get; set; }
             public int C_UOM_ID_K { get; set; }
             public int M_Product_ID_K { get; set; }
             public int M_AttributeSetInstance_ID { get; set; }
             public int C_Order_ID_K { get; set; }
             public int M_InOut_ID_K { get; set; }
-            public int C_Invoice_ID_K { get; set; }
+            public int VAB_Invoice_ID_K { get; set; }
             public string IsDropShip { get; set; } // Arpit Rai
             public int C_PaymentTerm_ID { get; set; }
             public string PaymentTermName { get; set; }
             public bool IsAdvance { get; set; }
-            public int C_InvoicePaymentTerm_ID { get; set; }
+            public int VAB_InvoicePaymentTerm_ID { get; set; }
             public bool IsInvoicePTAdvance { get; set; }
             public string M_Product_SearchKey { get; set; }
         }
@@ -2133,7 +2133,7 @@ namespace VIS.Controllers
             //statusBar += no.ToString();
 
             //	Prepare Process
-            int VAF_Job_ID = 134;  // HARDCODED    C_InvoiceCreate
+            int VAF_Job_ID = 134;  // HARDCODED    VAB_InvoiceCreate
             MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0);
             if (!instance.Save())
             {
@@ -2412,7 +2412,7 @@ namespace VIS.Controllers
                     {
                         //	Update Invoice Line
                         MInvoiceLine iLine = new MInvoiceLine(ctx, Line_ID, trx);
-                        MInvoice inv = new MInvoice(ctx, iLine.GetC_Invoice_ID(), trx);
+                        MInvoice inv = new MInvoice(ctx, iLine.GetVAB_Invoice_ID(), trx);
                         iLine.SetM_InOutLine_ID(M_InOutLine_ID);
                         if (sLine.GetC_OrderLine_ID() != 0)
                             iLine.SetC_OrderLine_ID(sLine.GetC_OrderLine_ID());
@@ -2466,7 +2466,7 @@ namespace VIS.Controllers
                             {
                                 MMatchPO matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
                                 matchPO.Set_ValueNoCheck("VAB_BusinessPartner_ID", inv.GetVAB_BusinessPartner_ID());
-                                matchPO.SetC_InvoiceLine_ID(iLine);
+                                matchPO.SetVAB_InvoiceLine_ID(iLine);
                                 matchPO.SetM_InOutLine_ID(M_InOutLine_ID);
                                 if (!matchPO.Save())
                                 {
@@ -3102,13 +3102,13 @@ namespace VIS.Controllers
                     obc.M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]);
                     obc.M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
                     obc.M_InOut_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InOut_ID"]);
-                    obc.C_Invoice_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID"]);
+                    obc.VAB_Invoice_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_ID"]);
                     obc.C_UOM_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID_K"]);
                     obc.M_Product_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID_K"]);
                     obc.M_AttributeSetInstance_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID_K"]);
                     obc.C_Order_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID_K"]);
                     obc.M_InOut_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InOut_ID_K"]);
-                    obc.C_Invoice_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Invoice_ID_K"]);
+                    obc.VAB_Invoice_ID_K = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_ID_K"]);
                     obj.Add(obc);
                 }
             }
@@ -3426,13 +3426,13 @@ namespace VIS.Controllers
         public int M_Product_ID { get; set; }
         public int M_AttributeSetInstance_ID { get; set; }
         public int M_InOut_ID { get; set; }
-        public int C_Invoice_ID { get; set; }
+        public int VAB_Invoice_ID { get; set; }
         public int C_UOM_ID_K { get; set; }
         public int M_Product_ID_K { get; set; }
         public int M_AttributeSetInstance_ID_K { get; set; }
         public int C_Order_ID_K { get; set; }
         public int M_InOut_ID_K { get; set; }
-        public int C_Invoice_ID_K { get; set; }
+        public int VAB_Invoice_ID_K { get; set; }
 
     }
 

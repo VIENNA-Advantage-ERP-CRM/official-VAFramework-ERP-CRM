@@ -520,9 +520,9 @@ namespace VAdvantage.Process
 
             // Added by Bharat on 29 Jan 2018 to set Inco Term from Order
 
-            if (po.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+            if (po.Get_ColumnIndex("VAB_IncoTerm_ID") > 0)
             {
-                po.SetC_IncoTerm_ID(so.GetC_IncoTerm_ID());
+                po.SetVAB_IncoTerm_ID(so.GetVAB_IncoTerm_ID());
             }
             //	References
             po.SetVAB_BillingCode_ID(so.GetVAB_BillingCode_ID());

@@ -162,7 +162,7 @@ namespace VAdvantage.Model
                         }
 
                         foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
-                        foreignCost.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                        foreignCost.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), invoiceLine.GetQtyInvoiced()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), invoiceLine.GetLineNetAmt()));
                         if (foreignCost.GetCumulatedQty() != 0)
@@ -177,7 +177,7 @@ namespace VAdvantage.Model
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
                             _log.Severe("Error occured during updating M_Cost_ForeignCurrency. Error name : " + pp.GetName() +
-                                " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetC_InvoiceLine_ID() +
+                                " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                 " , AND vaf_client_ID : " + invoiceLine.GetVAF_Client_ID());
                             return false;
                         }
@@ -187,8 +187,8 @@ namespace VAdvantage.Model
                             if (!invoiceLine.Save(trx))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Severe("Error occured during updating Is Foreign Cost On C_invoice. Error name : " + pp.GetName() +
-                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetC_InvoiceLine_ID() +
+                                _log.Severe("Error occured during updating Is Foreign Cost On VAB_Invoice. Error name : " + pp.GetName() +
+                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                     " , AND vaf_client_ID : " + invoiceLine.GetVAF_Client_ID());
                                 return false;
                             }
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
                             if (!inoutLine.Save(trx))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Severe("Error occured during updating Is Foreign Cost On C_invoice. Error name : " + pp.GetName() +
+                                _log.Severe("Error occured during updating Is Foreign Cost On VAB_Invoice. Error name : " + pp.GetName() +
                                     " AND Error Value : " + pp.GetValue() + " , For Material Receipt : " + inoutLine.GetM_InOutLine_ID() +
                                     " , AND vaf_client_ID : " + inoutLine.GetVAF_Client_ID());
                                 return false;
@@ -324,7 +324,7 @@ namespace VAdvantage.Model
                 if (invoiceLine.IsFutureCostCalculated())
                     return true;
 
-                invoice = new MInvoice(ctx, invoiceLine.GetC_Invoice_ID(), trx);
+                invoice = new MInvoice(ctx, invoiceLine.GetVAB_Invoice_ID(), trx);
 
                 if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
                 {
@@ -370,7 +370,7 @@ namespace VAdvantage.Model
                             }
 
                             foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, invoice.GetVAB_BusinessPartner_ID(), invoice.GetVAB_Currency_ID());
-                            foreignCost.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                            foreignCost.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(invoiceLine.GetPriceActual(), matchQty)));
                             if (foreignCost.GetCumulatedQty() != 0)
@@ -385,7 +385,7 @@ namespace VAdvantage.Model
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 _log.Severe("Error occured during updating M_Cost_ForeignCurrency. Error name : " + pp.GetName() +
-                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetC_InvoiceLine_ID() +
+                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + invoiceLine.GetVAB_InvoiceLine_ID() +
                                     " , AND vaf_client_ID : " + invoiceLine.GetVAF_Client_ID());
                                 return false;
                             }

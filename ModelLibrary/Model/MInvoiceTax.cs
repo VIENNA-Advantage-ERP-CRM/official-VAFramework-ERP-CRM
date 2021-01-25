@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInvoiceTax
  * Purpose        : Invoice tex calculation
- * Class Used     : X_C_InvoiceTax
+ * Class Used     : X_VAB_Tax_Invoice
  * Chronological    Development
  * Raghunandan     22-Jun-2009
   ******************************************************/
@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoiceTax : X_C_InvoiceTax
+    public class MInvoiceTax : X_VAB_Tax_Invoice
     {
         /**
 	     * 	Get Tax Line for Invoice Line
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             MInvoiceTax retValue = null;
             try
             {
-                if (line == null || line.GetC_Invoice_ID() == 0 || line.IsDescription())
+                if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
                     return null;
                 int C_Tax_ID = line.GetC_Tax_ID();
                 if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
                     return null;
                 }
 
-                String sql = "SELECT * FROM C_InvoiceTax WHERE C_Invoice_ID=" + line.GetC_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
                 try
                 {
                     DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -69,8 +69,8 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
-                    + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
+                    + line.GetVAB_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
                 {
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
                 retValue = new MInvoiceTax(line.GetCtx(), 0, trxName);
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
-                retValue.SetC_Invoice_ID(line.GetC_Invoice_ID());
+                retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
                 retValue.SetC_Tax_ID(line.GetC_Tax_ID());
                 retValue.SetPrecision(precision);
                 // Change here to set tax Inclusive or not based on the pricelist set on Invoice
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
             MInvoiceTax retValue = null;
             try
             {
-                if (line == null || line.GetC_Invoice_ID() == 0 || line.IsDescription())
+                if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
                     return null;
                 int C_Tax_ID = line.GetC_Tax_ID();
                 if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
                     return null;
                 }
 
-                String sql = "SELECT * FROM C_InvoiceTax WHERE C_Invoice_ID=" + line.GetC_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
                 try
                 {
                     DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -153,8 +153,8 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " 
-                    + line.GetC_Invoice_ID() + ")", null, trxName)) == "Y";
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
+                    + line.GetVAB_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
                 {
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
                 retValue = new MInvoiceTax(line.GetCtx(), 0, trxName);
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
-                retValue.SetC_Invoice_ID(line.GetC_Invoice_ID());
+                retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
                 retValue.SetC_Tax_ID(C_Tax_ID);
                 retValue.SetPrecision(precision);
                 retValue.SetIsTaxIncluded(isTaxIncluded);
@@ -265,9 +265,9 @@ namespace VAdvantage.Model
             MTax tax = GetTax();
             // Calculate Tax on TaxAble Amount
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID "
-                + "FROM C_InvoiceLine il"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
-                + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
+                + "FROM VAB_InvoiceLine il"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
+                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
             int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
@@ -360,10 +360,10 @@ namespace VAdvantage.Model
             bool documentLevel = surTax.IsDocumentLevel();
             //
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID, tax.SurchargeType "
-                + "FROM C_InvoiceLine il"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                + "FROM VAB_InvoiceLine il"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                 + " INNER JOIN C_Tax tax ON il.C_Tax_ID=tax.C_Tax_ID "
-                + "WHERE il.C_Invoice_ID=" + GetC_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
+                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
             IDataReader idr = null;
             int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
@@ -462,7 +462,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MInvoiceTax[");
-            sb.Append("C_Invoice_ID=").Append(GetC_Invoice_ID())
+            sb.Append("VAB_Invoice_ID=").Append(GetVAB_Invoice_ID())
                 .Append(",C_Tax_ID=").Append(GetC_Tax_ID())
                 .Append(", Base=").Append(GetTaxBaseAmt()).Append(",Tax=").Append(GetTaxAmt())
                 .Append("]");

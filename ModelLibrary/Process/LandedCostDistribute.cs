@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class LandedCostDistribute : ProcessEngine.SvrProcess
     {
         //Parameter		
-        private int _C_LandedCost_ID = 0;
+        private int _VAB_LCost_ID = 0;
         //LC					
         private MLandedCost _lc = null;
 
@@ -39,7 +39,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         protected override void Prepare()
         {
-            _C_LandedCost_ID = GetRecord_ID();
+            _VAB_LCost_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -48,11 +48,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            _lc = new MLandedCost(GetCtx(), _C_LandedCost_ID, Get_TrxName());
+            _lc = new MLandedCost(GetCtx(), _VAB_LCost_ID, Get_TrxName());
             log.Info(_lc.ToString());
             if (_lc.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@: @C_LandedCost_ID@ - " + _C_LandedCost_ID);
+                throw new Exception("@NotFound@: @VAB_LCost_ID@ - " + _VAB_LCost_ID);
             }
 
             String error = _lc.AllocateCosts();

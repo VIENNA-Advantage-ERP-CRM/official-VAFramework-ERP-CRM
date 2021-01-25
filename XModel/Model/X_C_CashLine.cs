@@ -241,18 +241,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Invoice.
-        @param C_Invoice_ID Invoice Identifier */
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        @param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            if (C_Invoice_ID <= 0) Set_ValueNoCheck("C_Invoice_ID", null);
+            if (VAB_Invoice_ID <= 0) Set_ValueNoCheck("VAB_Invoice_ID", null);
             else
-                Set_ValueNoCheck("C_Invoice_ID", C_Invoice_ID);
+                Set_ValueNoCheck("VAB_Invoice_ID", VAB_Invoice_ID);
         }
         /** Get Invoice.
         @return Invoice Identifier */
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            Object ii = Get_Value("C_Invoice_ID");
+            Object ii = Get_Value("VAB_Invoice_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -592,18 +592,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Invoice Payment Schedule.
-@param C_InvoicePaySchedule_ID Invoice Payment Schedule */
-        public void SetC_InvoicePaySchedule_ID(int C_InvoicePaySchedule_ID)
+@param VAB_sched_InvoicePayment_ID Invoice Payment Schedule */
+        public void SetVAB_sched_InvoicePayment_ID(int VAB_sched_InvoicePayment_ID)
         {
-            if (C_InvoicePaySchedule_ID <= 0) Set_Value("C_InvoicePaySchedule_ID", null);
+            if (VAB_sched_InvoicePayment_ID <= 0) Set_Value("VAB_sched_InvoicePayment_ID", null);
             else
-                Set_Value("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+                Set_Value("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
         }
         /** Get Invoice Payment Schedule.
         @return Invoice Payment Schedule */
-        public int GetC_InvoicePaySchedule_ID()
+        public int GetVAB_sched_InvoicePayment_ID()
         {
-            Object ii = Get_Value("C_InvoicePaySchedule_ID");
+            Object ii = Get_Value("VAB_sched_InvoicePayment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

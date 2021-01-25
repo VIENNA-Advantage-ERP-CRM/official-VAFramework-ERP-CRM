@@ -354,14 +354,14 @@ namespace VAdvantage.Model
             {
                 MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
                 SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
-                if (payment.GetC_Invoice_ID() != 0)
+                if (payment.GetVAB_Invoice_ID() != 0)
                 {
-                    SetC_Invoice_ID(payment.GetC_Invoice_ID());
+                    SetVAB_Invoice_ID(payment.GetVAB_Invoice_ID());
                 }
             }
-            if (GetC_Invoice_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
+            if (GetVAB_Invoice_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
-                MInvoice invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
             //	Calculate Charge = Statement - trx - Interest  

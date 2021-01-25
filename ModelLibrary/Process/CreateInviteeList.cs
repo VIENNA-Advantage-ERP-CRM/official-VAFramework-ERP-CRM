@@ -68,12 +68,12 @@ namespace ViennaAdvantageServer.Process
             try
             {
 
-                query = "Delete From C_InviteeList  where VAB_Promotion_id=" + GetRecord_ID();
+                query = "Delete From VAB_InviteeList  where VAB_Promotion_id=" + GetRecord_ID();
                 int value = DB.ExecuteQuery(query);
 
                 while (MainDr.Read())
                 {
-                    query = "Delete From C_InviteeList where   ";
+                    query = "Delete From VAB_InviteeList where   ";
 
                     int id = Util.GetValueOfInt(MainDr[0]);
                     VAdvantage.Model.X_VAB_PromotionTargetList MCapTarget = new VAdvantage.Model.X_VAB_PromotionTargetList(GetCtx(), id, null);
@@ -102,7 +102,7 @@ namespace ViennaAdvantageServer.Process
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
-                            string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
                             object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
                             if (Util.GetValueOfInt(Leadid) == 0)
                             {
@@ -120,7 +120,7 @@ namespace ViennaAdvantageServer.Process
                                 else if (lead.GetContactName() != null)
                                 {
 
-                                    VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
+                                    VAdvantage.Model.X_VAB_InviteeList Invt = new VAdvantage.Model.X_VAB_InviteeList(GetCtx(), 0, Get_Trx());
                                     //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
                                     Invt.SetVAB_Promotion_ID(GetRecord_ID());
 
@@ -142,11 +142,11 @@ namespace ViennaAdvantageServer.Process
                                         Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
                                     }
 
-                                    string ID = Invt.GetC_InviteeList_ID().ToString();
+                                    string ID = Invt.GetVAB_InviteeList_ID().ToString();
                                     string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
                                     string urlFinal = "";
                                     urlFinal = url + "?" + encrypt;
-                                    sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
+                                    sql = "update VAB_InviteeList set url = '" + urlFinal + "' where VAB_InviteeList_id = " + Invt.GetVAB_InviteeList_ID();
                                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
 
                                     //Random rand = new Random();
@@ -154,10 +154,10 @@ namespace ViennaAdvantageServer.Process
                                     //for (int i = 0; i < 9; i++)
                                     //    s = String.Concat(s, rand.Next(10).ToString());
                                     //string urlFinal = "";
-                                    //// urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    //// urlFinal = url + "?" + Invt.GetVAB_InviteeList_ID().ToString();
                                     //urlFinal = url + "?" + s;
                                     ////string urlFinal = "";
-                                    ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    ////urlFinal = url + "?" + Invt.GetVAB_InviteeList_ID().ToString();
                                     //Invt.SetURL(urlFinal);
                                     //if (!Invt.Save(Get_Trx()))
                                     //{
@@ -197,7 +197,7 @@ namespace ViennaAdvantageServer.Process
                         while (dr.Read())
                         {
 
-                            string sql = "Select C_InviteeList_id from C_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
                             object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
                             if (Util.GetValueOfInt(Leadid) == 0)
                             {
@@ -216,7 +216,7 @@ namespace ViennaAdvantageServer.Process
                                 else if (lead.GetContactName() != null)
                                 {
 
-                                    VAdvantage.Model.X_C_InviteeList Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
+                                    VAdvantage.Model.X_VAB_InviteeList Invt = new VAdvantage.Model.X_VAB_InviteeList(GetCtx(), 0, Get_Trx());
                                     //Invt.SetC_TargetList_ID(Util.GetValueOfInt(dr[0]));
                                     Invt.SetVAB_Promotion_ID(GetRecord_ID());
                                     Invt.SetName(lead.GetContactName());
@@ -237,11 +237,11 @@ namespace ViennaAdvantageServer.Process
                                         Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
                                     }
 
-                                    string ID = Invt.GetC_InviteeList_ID().ToString();
+                                    string ID = Invt.GetVAB_InviteeList_ID().ToString();
                                     string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
                                     string urlFinal = "";
                                     urlFinal = url + "?" + encrypt;
-                                    sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
+                                    sql = "update VAB_InviteeList set url = '" + urlFinal + "' where VAB_InviteeList_id = " + Invt.GetVAB_InviteeList_ID();
                                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
 
 
@@ -252,7 +252,7 @@ namespace ViennaAdvantageServer.Process
                                     //string urlFinal = "";
                                     //urlFinal = url + "?" + s;
                                     ////string urlFinal = "";
-                                    ////urlFinal = url + "?" + Invt.GetC_InviteeList_ID().ToString();
+                                    ////urlFinal = url + "?" + Invt.GetVAB_InviteeList_ID().ToString();
                                     //Invt.SetURL(urlFinal);
                                     //if (!Invt.Save(Get_Trx()))
                                     //{
@@ -291,18 +291,18 @@ namespace ViennaAdvantageServer.Process
             VAdvantage.Model.X_VAB_BusinessPartner bp = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), bpid, Get_Trx());
             String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id=" + bpid;
             int AD_Id = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_Trx()));
-            string sql = "Select C_InviteeList_id from C_InviteeList where VAF_UserContact_id=" + AD_Id + " and VAB_Promotion_id=" + GetRecord_ID();
+            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where VAF_UserContact_id=" + AD_Id + " and VAB_Promotion_id=" + GetRecord_ID();
             object id = DB.ExecuteScalar(sql, null, Get_Trx());
-            VAdvantage.Model.X_C_InviteeList Invt;
+            VAdvantage.Model.X_VAB_InviteeList Invt;
             if (Util.GetValueOfInt(id) != 0)
             {
 
-                Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), Util.GetValueOfInt(id), Get_Trx());
+                Invt = new VAdvantage.Model.X_VAB_InviteeList(GetCtx(), Util.GetValueOfInt(id), Get_Trx());
 
             }
             else
             {
-                Invt = new VAdvantage.Model.X_C_InviteeList(GetCtx(), 0, Get_Trx());
+                Invt = new VAdvantage.Model.X_VAB_InviteeList(GetCtx(), 0, Get_Trx());
                 Invt.SetVAF_UserContact_ID(AD_Id);
             }
             // code added by Anuj 22/12/2015
@@ -330,11 +330,11 @@ namespace ViennaAdvantageServer.Process
                 Msg.GetMsg(GetCtx(), "InviteeCteationNotDone");
             }
 
-            string ID = Invt.GetC_InviteeList_ID().ToString();
+            string ID = Invt.GetVAB_InviteeList_ID().ToString();
             string encrypt = FormsAuthentication.HashPasswordForStoringInConfigFile(ID, "SHA1");
             string urlFinal = "";
             urlFinal = url + "?" + encrypt;
-            sql = "update c_inviteelist set url = '" + urlFinal + "' where c_inviteelist_id = " + Invt.GetC_InviteeList_ID();
+            sql = "update VAB_InviteeList set url = '" + urlFinal + "' where VAB_InviteeList_id = " + Invt.GetVAB_InviteeList_ID();
             int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_Trx()));
 
 

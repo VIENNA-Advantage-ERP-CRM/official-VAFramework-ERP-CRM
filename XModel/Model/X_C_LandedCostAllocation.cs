@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_LandedCostAllocation
+/** Generated Model for VAB_LCostDistribution
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_LandedCostAllocation : PO
+public class X_VAB_LCostDistribution : PO
 {
-public X_C_LandedCostAllocation (Context ctx, int C_LandedCostAllocation_ID, Trx trxName) : base (ctx, C_LandedCostAllocation_ID, trxName)
+public X_VAB_LCostDistribution (Context ctx, int VAB_LCostDistribution_ID, Trx trxName) : base (ctx, VAB_LCostDistribution_ID, trxName)
 {
-/** if (C_LandedCostAllocation_ID == 0)
+/** if (VAB_LCostDistribution_ID == 0)
 {
 SetAmt (0.0);
 SetBase (0.0);
-SetC_InvoiceLine_ID (0);
-SetC_LandedCostAllocation_ID (0);
+SetVAB_InvoiceLine_ID (0);
+SetVAB_LCostDistribution_ID (0);
 SetM_CostElement_ID (0);
 SetM_Product_ID (0);
 SetQty (0.0);
 }
  */
 }
-public X_C_LandedCostAllocation (Ctx ctx, int C_LandedCostAllocation_ID, Trx trxName) : base (ctx, C_LandedCostAllocation_ID, trxName)
+public X_VAB_LCostDistribution (Ctx ctx, int VAB_LCostDistribution_ID, Trx trxName) : base (ctx, VAB_LCostDistribution_ID, trxName)
 {
-/** if (C_LandedCostAllocation_ID == 0)
+/** if (VAB_LCostDistribution_ID == 0)
 {
 SetAmt (0.0);
 SetBase (0.0);
-SetC_InvoiceLine_ID (0);
-SetC_LandedCostAllocation_ID (0);
+SetVAB_InvoiceLine_ID (0);
+SetVAB_LCostDistribution_ID (0);
 SetM_CostElement_ID (0);
 SetM_Product_ID (0);
 SetQty (0.0);
@@ -49,7 +49,7 @@ SetQty (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LandedCostAllocation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_LCostDistribution (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_LandedCostAllocation (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LandedCostAllocation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_LCostDistribution (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_LandedCostAllocation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LandedCostAllocation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_LCostDistribution (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_LandedCostAllocation()
+static X_VAB_LCostDistribution()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389056166L;
 public static int Table_ID;
  // =760;
 
-/** TableName=C_LandedCostAllocation */
-public static String Table_Name="C_LandedCostAllocation";
+/** TableName=VAB_LCostDistribution */
+public static String Table_Name="VAB_LCostDistribution";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_LandedCostAllocation[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_LCostDistribution[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Amount.
@@ -153,17 +153,17 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Invoice Line.
-@param C_InvoiceLine_ID Invoice Detail Line */
-public void SetC_InvoiceLine_ID (int C_InvoiceLine_ID)
+@param VAB_InvoiceLine_ID Invoice Detail Line */
+public void SetVAB_InvoiceLine_ID (int VAB_InvoiceLine_ID)
 {
-if (C_InvoiceLine_ID < 1) throw new ArgumentException ("C_InvoiceLine_ID is mandatory.");
-Set_ValueNoCheck ("C_InvoiceLine_ID", C_InvoiceLine_ID);
+if (VAB_InvoiceLine_ID < 1) throw new ArgumentException ("VAB_InvoiceLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_InvoiceLine_ID", VAB_InvoiceLine_ID);
 }
 /** Get Invoice Line.
 @return Invoice Detail Line */
-public int GetC_InvoiceLine_ID() 
+public int GetVAB_InvoiceLine_ID() 
 {
-Object ii = Get_Value("C_InvoiceLine_ID");
+Object ii = Get_Value("VAB_InvoiceLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -171,20 +171,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_InvoiceLine_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_InvoiceLine_ID().ToString());
 }
 /** Set Landed Cost Allocation.
-@param C_LandedCostAllocation_ID Allocation for Land Costs */
-public void SetC_LandedCostAllocation_ID (int C_LandedCostAllocation_ID)
+@param VAB_LCostDistribution_ID Allocation for Land Costs */
+public void SetVAB_LCostDistribution_ID (int VAB_LCostDistribution_ID)
 {
-if (C_LandedCostAllocation_ID < 1) throw new ArgumentException ("C_LandedCostAllocation_ID is mandatory.");
-Set_ValueNoCheck ("C_LandedCostAllocation_ID", C_LandedCostAllocation_ID);
+if (VAB_LCostDistribution_ID < 1) throw new ArgumentException ("VAB_LCostDistribution_ID is mandatory.");
+Set_ValueNoCheck ("VAB_LCostDistribution_ID", VAB_LCostDistribution_ID);
 }
 /** Get Landed Cost Allocation.
 @return Allocation for Land Costs */
-public int GetC_LandedCostAllocation_ID() 
+public int GetVAB_LCostDistribution_ID() 
 {
-Object ii = Get_Value("C_LandedCostAllocation_ID");
+Object ii = Get_Value("VAB_LCostDistribution_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -250,18 +250,18 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Landed Cost.
-@param C_LandedCost_ID Landed cost to be allocated to material receipts */
-public void SetC_LandedCost_ID(int C_LandedCost_ID)
+@param VAB_LCost_ID Landed cost to be allocated to material receipts */
+public void SetVAB_LCost_ID(int VAB_LCost_ID)
 {
-    if (C_LandedCost_ID <= 0) 
-        Set_Value("C_LandedCost_ID", null);
+    if (VAB_LCost_ID <= 0) 
+        Set_Value("VAB_LCost_ID", null);
     else
-        Set_Value("C_LandedCost_ID", C_LandedCost_ID);
+        Set_Value("VAB_LCost_ID", VAB_LCost_ID);
 }/** Get Landed Cost.
 @return Landed cost to be allocated to material receipts */
-public int GetC_LandedCost_ID() 
+public int GetVAB_LCost_ID() 
 { 
-    Object ii = Get_Value("C_LandedCost_ID"); 
+    Object ii = Get_Value("VAB_LCost_ID"); 
     if (ii == null) 
         return 0; 
     return Convert.ToInt32(ii); 

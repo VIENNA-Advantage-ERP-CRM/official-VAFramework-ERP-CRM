@@ -149,15 +149,15 @@ namespace VAdvantage.Model
 
         /*************************************************************************
          * 	Apply Payment Term to Invoice -
-         *	@param C_Invoice_ID invoice
+         *	@param VAB_Invoice_ID invoice
          *	@return true if payment schedule is valid
          */
-        public bool Apply(int C_Invoice_ID)
+        public bool Apply(int VAB_Invoice_ID)
         {
-            MInvoice invoice = new MInvoice(GetCtx(), C_Invoice_ID, Get_Trx());
+            MInvoice invoice = new MInvoice(GetCtx(), VAB_Invoice_ID, Get_Trx());
             if (invoice == null || invoice.Get_ID() == 0)
             {
-                log.Log(Level.SEVERE, "apply - Not valid C_Invoice_ID=" + C_Invoice_ID);
+                log.Log(Level.SEVERE, "apply - Not valid VAB_Invoice_ID=" + VAB_Invoice_ID);
                 return false;
             }
             return Apply(invoice);
@@ -195,8 +195,8 @@ namespace VAdvantage.Model
         /// <returns>bool, true-false</returns>
         private bool ApplyNoSchedule(MInvoice invoice)
         {
-            UpdateOrderSchedule(invoice.GetRef_C_Invoice_ID() > 0 ? invoice.GetRef_C_Invoice_ID() : invoice.GetC_Invoice_ID(), invoice.Get_Trx());
-            DeleteInvoicePaySchedule(invoice.GetC_Invoice_ID(), invoice.Get_Trx());
+            UpdateOrderSchedule(invoice.GetRef_VAB_Invoice_ID() > 0 ? invoice.GetRef_VAB_Invoice_ID() : invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
+            DeleteInvoicePaySchedule(invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
             StringBuilder _sql = new StringBuilder();
             MInvoicePaySchedule schedule = null;
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
@@ -214,10 +214,10 @@ namespace VAdvantage.Model
                     // is used to get record from invoice line which is created against orderline
                     String sql = @"SELECT o.C_Order_ID , NVL(SUM(NVL(il.LineTotalAmt , 0) " +
                                     (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? " - NVL(il.withholdingamt , 0)" : "") + @") , 0) AS LineTotalAmt 
-                                    FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
+                                    FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
                                     INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
                                     INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
-                                    WHERE i.C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " GROUP BY o.C_Order_ID ";
+                                    WHERE i.VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID() + " GROUP BY o.C_Order_ID ";
                     DataSet _dsInvoice = DB.ExecuteDataset(sql, null, Get_Trx());
                     if (_dsInvoice != null && _dsInvoice.Tables.Count > 0 && _dsInvoice.Tables[0].Rows.Count > 0)
                     {
@@ -256,8 +256,8 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        // Ref_C_Invoice_ID > 0 its means reverse record, then subtract due amt else add due amt
-                                        if (invoice.GetRef_C_Invoice_ID() <= 0)
+                                        // Ref_VAB_Invoice_ID > 0 its means reverse record, then subtract due amt else add due amt
+                                        if (invoice.GetRef_VAB_Invoice_ID() <= 0)
                                         {
                                             DB.ExecuteQuery("UPDATE VA009_OrderPaySchedule SET VA009_AllocatedAmt = NVL(VA009_AllocatedAmt, 0) + "
                                                 + Util.GetValueOfDecimal(schedule.GetDueAmt()) +
@@ -394,10 +394,10 @@ namespace VAdvantage.Model
                             // is used to get record from invoice line which is created against orderline
                             String sql = @"SELECT o.C_Order_ID , NVL(SUM(NVL(il.LineTotalAmt , 0) "
                                     + (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 ? " - NVL(il.withholdingamt , 0)" : "") + @") , 0) AS LineTotalAmt 
-                                    FROM C_Invoice i INNER JOIN C_Invoiceline il ON i.C_Invoice_ID = il.C_Invoice_ID
+                                    FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
                                     INNER JOIN C_Orderline ol ON ol.C_Orderline_ID = il.C_Orderline_ID
                                     INNER JOIN C_Order o ON o.C_Order_ID = ol.C_Order_ID
-                                    WHERE i.C_Invoice_ID = " + invoice.GetC_Invoice_ID() + " GROUP BY o.C_Order_ID ";
+                                    WHERE i.VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID() + " GROUP BY o.C_Order_ID ";
                             DataSet _dsInvoice = DB.ExecuteDataset(sql, null, Get_Trx());
                             if (_dsInvoice != null && _dsInvoice.Tables.Count > 0 && _dsInvoice.Tables[0].Rows.Count > 0)
                             {
@@ -439,8 +439,8 @@ namespace VAdvantage.Model
                                             }
                                             else
                                             {
-                                                // Ref_C_Invoice_ID > 0 its means reverse record, then not to update VA009_AllocatedAmt from here 
-                                                if (invoice.GetRef_C_Invoice_ID() <= 0)
+                                                // Ref_VAB_Invoice_ID > 0 its means reverse record, then not to update VA009_AllocatedAmt from here 
+                                                if (invoice.GetRef_VAB_Invoice_ID() <= 0)
                                                 {
                                                     int no = DB.ExecuteQuery("UPDATE VA009_OrderPaySchedule SET VA009_AllocatedAmt = NVL(VA009_AllocatedAmt, 0) + "
                                                            + Util.GetValueOfDecimal(schedule.GetDueAmt()) +
@@ -811,7 +811,7 @@ namespace VAdvantage.Model
             schedule.SetVA009_ExecutionStatus("A");
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
-            schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            schedule.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
 
             MOrder order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
@@ -896,7 +896,7 @@ namespace VAdvantage.Model
         private DateTime? GetDueDate(MInvoice invoice)
         {
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
-            String _sql = "SELECT PAYMENTTERMDUEDATE (C_PaymentTerm_ID, DateInvoiced) AS DueDate FROM C_Invoice WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID();
+            String _sql = "SELECT PAYMENTTERMDUEDATE (C_PaymentTerm_ID, DateInvoiced) AS DueDate FROM VAB_Invoice WHERE VAB_Invoice_ID=" + invoice.GetVAB_Invoice_ID();
             DateTime? _dueDate = Util.GetValueOfDateTime(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
             if (_dueDate == Util.GetValueOfDateTime("1/1/0001 12:00:00 AM"))
                 _dueDate = DateTime.Now;
@@ -911,7 +911,7 @@ namespace VAdvantage.Model
         private bool ApplySchedule(MInvoice invoice)
         {
             //	Create Schedule
-            DeleteInvoicePaySchedule(invoice.GetC_Invoice_ID(), invoice.Get_Trx());
+            DeleteInvoicePaySchedule(invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
             Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                 && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
@@ -1009,28 +1009,28 @@ namespace VAdvantage.Model
         /// <summary>
         /// Delete existing Invoice Payment Schedule
         /// </summary>
-        /// <param name="C_Invoice_ID">Invoice ID</param>
+        /// <param name="VAB_Invoice_ID">Invoice ID</param>
         /// <param name="trxName">trxName</param>
-        private void DeleteInvoicePaySchedule(int C_Invoice_ID, Trx trxName)
+        private void DeleteInvoicePaySchedule(int VAB_Invoice_ID, Trx trxName)
         {
-            String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + C_Invoice_ID;
+            String sql = "DELETE FROM VAB_sched_InvoicePayment WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);
-            log.Fine("C_Invoice_ID=" + C_Invoice_ID + " - #" + no);
+            log.Fine("VAB_Invoice_ID=" + VAB_Invoice_ID + " - #" + no);
         }
 
         /// <summary>
         /// Is used to update VA009_AllocatedAmt as (VA009_AllocatedAmt - DueAmt) On Order schedule
         /// </summary>
-        /// <param name="C_Invoice_ID">Invoice ID reference</param>
+        /// <param name="VAB_Invoice_ID">Invoice ID reference</param>
         /// <param name="trxName">transaction</param>
-        private void UpdateOrderSchedule(int C_Invoice_ID, Trx trxName)
+        private void UpdateOrderSchedule(int VAB_Invoice_ID, Trx trxName)
         {
             int no = DB.ExecuteQuery(@"UPDATE VA009_OrderPaySchedule osch SET VA009_AllocatedAmt = (NVL(VA009_AllocatedAmt , 0) -
-                             (SELECT SUM(NVL((DueAmt) , 0)) FROM C_InvoicePaySchedule isch
-                             WHERE isch.VA009_OrderPaySchedule_ID = osch.VA009_OrderPaySchedule_ID and isch.C_Invoice_ID = " + C_Invoice_ID + @" ))
-                             WHERE osch.VA009_OrderPaySchedule_ID IN (SELECT VA009_OrderPaySchedule_ID FROM C_InvoicePaySchedule WHERE C_Invoice_ID = " + C_Invoice_ID + @"
+                             (SELECT SUM(NVL((DueAmt) , 0)) FROM VAB_sched_InvoicePayment isch
+                             WHERE isch.VA009_OrderPaySchedule_ID = osch.VA009_OrderPaySchedule_ID and isch.VAB_Invoice_ID = " + VAB_Invoice_ID + @" ))
+                             WHERE osch.VA009_OrderPaySchedule_ID IN (SELECT VA009_OrderPaySchedule_ID FROM VAB_sched_InvoicePayment WHERE VAB_Invoice_ID = " + VAB_Invoice_ID + @"
                              AND VA009_OrderPaySchedule_ID > 0 )", null, trxName);
-            log.Fine("Updated VA009_AllocatedAmt on Order Schedule record against C_Invoice_ID=" + C_Invoice_ID + " - #" + no);
+            log.Fine("Updated VA009_AllocatedAmt on Order Schedule record against VAB_Invoice_ID=" + VAB_Invoice_ID + " - #" + no);
         }
 
         /// <summary>
@@ -1114,7 +1114,7 @@ namespace VAdvantage.Model
                 string sql = @" SELECT SUM(COUNT) FROM (
                               SELECT COUNT(*) AS COUNT FROM C_Order  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM C_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
                               SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
                               @" UNION ALL 
@@ -1162,7 +1162,7 @@ namespace VAdvantage.Model
             schedule.SetVA009_ExecutionStatus("A");
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
-            schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            schedule.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
 
             //MOrder _Order = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
@@ -1235,10 +1235,10 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA052_"))
             {
                 int _bPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA052_INVOICESCHEDULE.VAB_BusinessPartner_id
-                    FROM C_INVOICELINE
+                    FROM VAB_INVOICELINE
                     INNER JOIN VA052_INVOICESCHEDULE
-                    ON VA052_InvoiceSchedule.VA052_InvoiceSchedule_id=C_INVOICELINE.VA052_InvoiceSchedule_id WHERE C_INVOICELINE.C_Invoice_ID="
-                    + invoice.GetC_Invoice_ID(), null, Get_Trx()));
+                    ON VA052_InvoiceSchedule.VA052_InvoiceSchedule_id=VAB_INVOICELINE.VA052_InvoiceSchedule_id WHERE VAB_INVOICELINE.VAB_Invoice_ID="
+                    + invoice.GetVAB_Invoice_ID(), null, Get_Trx()));
                 if (_bPartner_ID > 0)
                 {
                     schedule.SetVAB_BusinessPartner_ID(_bPartner_ID);
@@ -1281,7 +1281,7 @@ namespace VAdvantage.Model
             int BaseCurrency = 0;
             //            StringBuilder _sqlBsCrrncy = new StringBuilder();
             //            _sqlBsCrrncy.Append(@"SELECT UNIQUE asch.VAB_Currency_ID FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id
-            //                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN c_invoice i ON c.vaf_client_id    = i.vaf_client_id
+            //                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN VAB_Invoice i ON c.vaf_client_id    = i.vaf_client_id
             //                                 WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
             //            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
             BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetVAB_Currency_ID();
@@ -1308,7 +1308,7 @@ namespace VAdvantage.Model
             schedule.SetVAF_Client_ID(Util.GetValueOfInt(_ds["VAF_Client_ID"]));
             schedule.SetVAF_Org_ID(Util.GetValueOfInt(_ds["VAF_Org_ID"]));
             schedule.SetVA009_OrderPaySchedule_ID(Util.GetValueOfInt(_ds["VA009_OrderPaySchedule_ID"]));
-            schedule.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+            schedule.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
             schedule.SetC_PaymentTerm_ID(Util.GetValueOfInt(_ds["C_PaymentTerm_ID"]));
             schedule.SetC_PaySchedule_ID(Util.GetValueOfInt(_ds["C_PaySchedule_ID"]));

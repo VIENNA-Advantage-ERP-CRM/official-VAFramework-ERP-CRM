@@ -302,9 +302,9 @@ namespace VAdvantage.Process
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MDunningRunLine line = lines[i];
-                    if (line.GetC_Invoice_ID() != 0 && line.IsActive())
+                    if (line.GetVAB_Invoice_ID() != 0 && line.IsActive())
                     {
-                        MInvoice invoice = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_TrxName());
+                        MInvoice invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                         invoice.SetInvoiceCollectionType(level.GetInvoiceCollectionType());
                         invoice.Save();
                     }

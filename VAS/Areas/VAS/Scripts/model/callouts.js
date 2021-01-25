@@ -88,15 +88,15 @@
         /** After Receipt = R */
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
-        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
+        var XVAB_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
-        var XC_INVOICERULE_AfterDelivery = "D";
+        var XVAB_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
-        var XC_INVOICERULE_Immediate = "I";
+        var XVAB_INVOICERULE_Immediate = "I";
         /** After Order delivered = O */
-        var XC_INVOICERULE_AfterOrderDelivered = "O";
+        var XVAB_INVOICERULE_AfterOrderDelivered = "O";
         /** Customer Schedule after Delivery = S */
-        var XC_INVOICERULE_CustomerScheduleAfterDelivery = "S";
+        var XVAB_INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
 
 
@@ -219,9 +219,9 @@
                     if ((DocSubTypeSO == DocSubTypeSO_POS)
                         || (DocSubTypeSO == DocSubTypeSO_Prepay)
                         || (DocSubTypeSO == DocSubTypeSO_OnCredit))
-                        mTab.setValue("InvoiceRule", XC_INVOICERULE_Immediate);
+                        mTab.setValue("InvoiceRule", XVAB_INVOICERULE_Immediate);
                     else
-                        mTab.setValue("InvoiceRule", XC_INVOICERULE_AfterDelivery);
+                        mTab.setValue("InvoiceRule", XVAB_INVOICERULE_AfterDelivery);
 
                     //	Payment Rule - POS Order
                     if (DocSubTypeSO == DocSubTypeSO_POS)
@@ -551,8 +551,8 @@
                 }
 
                 // Added by Bharat on 07 Feb 2018 to set Inco Term from Order
-                if (mTab.getField("C_IncoTerm_ID") != null) {
-                    mTab.setValue("C_IncoTerm_ID", Util.getValueOfInt(dr["C_IncoTerm_ID"]));
+                if (mTab.getField("VAB_IncoTerm_ID") != null) {
+                    mTab.setValue("VAB_IncoTerm_ID", Util.getValueOfInt(dr["VAB_IncoTerm_ID"]));
                 }
 
             }
@@ -621,15 +621,15 @@
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
         /** InvoiceRule VAF_Control_Ref_ID=150 */
-        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
+        var XVAB_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
-        var XC_INVOICERULE_AfterDelivery = "D";
+        var XVAB_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
-        var XC_INVOICERULE_Immediate = "I";
+        var XVAB_INVOICERULE_Immediate = "I";
         /** After Order delivered = O */
-        var XC_INVOICERULE_AfterOrderDelivered = "O";
+        var XVAB_INVOICERULE_AfterOrderDelivered = "O";
         /** Customer Schedule after Delivery = S */
-        var XC_INVOICERULE_CustomerScheduleAfterDelivery = "S";
+        var XVAB_INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
         /** PaymentRule VAF_Control_Ref_ID=195 */
         var XC_PAYMENTRULE_VAF_Control_Ref_ID = 195;
@@ -883,7 +883,7 @@
 
                 //	Defaults, if not Walkin Receipt or Walkin Invoice
                 var OrderType = ctx.getContext("OrderType");
-                mTab.setValue("InvoiceRule", XC_INVOICERULE_AfterDelivery);
+                mTab.setValue("InvoiceRule", XVAB_INVOICERULE_AfterDelivery);
                 mTab.setValue("DeliveryRule", XC_DELIVERYRULE_Availability);
                 if (_CountVA009) {
                     if (PaymentBasetype != "W" && PaymentBasetype != null) {
@@ -905,7 +905,7 @@
                     mTab.setValue("PaymentRule", XC_PAYMENTRULE_OnCredit);
 
                 if (OrderType == DocSubTypeSO_Prepay) {
-                    mTab.setValue("InvoiceRule", XC_INVOICERULE_Immediate);
+                    mTab.setValue("InvoiceRule", XVAB_INVOICERULE_Immediate);
                     mTab.setValue("DeliveryRule", XC_DELIVERYRULE_AfterReceipt);
                 }
                 else if (OrderType == DocSubTypeSO_POS)	//  for POS
@@ -1153,7 +1153,7 @@
 
             ////	Defaults, if not Walkin Receipt or Walkin Invoice
             //var OrderType = ctx.getContext("OrderType");
-            //mTab.setValue("InvoiceRule", XC_INVOICERULE_AfterDelivery);
+            //mTab.setValue("InvoiceRule", XVAB_INVOICERULE_AfterDelivery);
             //mTab.setValue("DeliveryRule", XC_DELIVERYRULE_Availability);
             //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //if (_CountVA009 > 0) {                    
@@ -1169,7 +1169,7 @@
             //    mTab.setValue("PaymentRule", XC_PAYMENTRULE_OnCredit);
 
             //if (OrderType == DocSubTypeSO_Prepay) {
-            //    mTab.setValue("InvoiceRule", XC_INVOICERULE_Immediate);
+            //    mTab.setValue("InvoiceRule", XVAB_INVOICERULE_Immediate);
             //    mTab.setValue("DeliveryRule", XC_DELIVERYRULE_AfterReceipt);
             //}
             //else if (OrderType == DocSubTypeSO_POS)	//  for POS
@@ -1378,15 +1378,15 @@
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
 
-        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
+        var XVAB_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
-        var XC_INVOICERULE_AfterDelivery = "D";
+        var XVAB_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
-        var XC_INVOICERULE_Immediate = "I";
+        var XVAB_INVOICERULE_Immediate = "I";
         /** After Order delivered = O */
-        var XC_INVOICERULE_AfterOrderDelivered = "O";
+        var XVAB_INVOICERULE_AfterOrderDelivered = "O";
         /** Customer Schedule after Delivery = S */
-        var XC_INVOICERULE_CustomerScheduleAfterDelivery = "S";
+        var XVAB_INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
 
 
@@ -1522,11 +1522,11 @@
 
                 //	Defaults, if not Walkin Receipt or Walkin Invoice
                 var OrderType = ctx.getContext("OrderType");
-                mTab.setValue("InvoiceRule", XC_INVOICERULE_AfterDelivery);
+                mTab.setValue("InvoiceRule", XVAB_INVOICERULE_AfterDelivery);
                 mTab.setValue("PaymentRule", XC_PAYMENTRULE_OnCredit);
                 if (OrderType == DocSubTypeSO_Prepay) {
 
-                    mTab.setValue("InvoiceRule", XC_INVOICERULE_Immediate);
+                    mTab.setValue("InvoiceRule", XVAB_INVOICERULE_Immediate);
                 }
                 else if (OrderType == DocSubTypeSO_POS)	//  for POS 
                 {
@@ -4155,7 +4155,7 @@
             if (mTab.getTableName().startsWith("C_Order")) {
                 variable = "QtyOrdered";
             }
-            else if (mTab.getTableName().startsWith("C_Invoice")) {
+            else if (mTab.getTableName().startsWith("VAB_Invoice")) {
                 variable = "QtyInvoiced";
             }
             if (Qty != null) {
@@ -4193,11 +4193,11 @@
         }
         if (value == null || value.toString() == "") {
             /*Clear references and amounts when we clear invoice*/
-            if (mField.getColumnName() == "C_Invoice_ID") {
+            if (mField.getColumnName() == "VAB_Invoice_ID") {
                 this.setCalloutActive(true);
                 mTab.setValue("VAB_BusinessPartner_ID", null);
                 mTab.setValue("VAB_BPart_Location_ID", null);
-                mTab.setValue("C_InvoicePaySchedule_ID", null);
+                mTab.setValue("VAB_sched_InvoicePayment_ID", null);
                 ctx.setContext(windowNo, "InvTotalAmt", "");
 
                 // JID_0780: Open cash journal line and select the invoice now on clearing the invoice system was giving error message.
@@ -4213,29 +4213,29 @@
         }
         this.setCalloutActive(true);
 
-        var C_Invoice_ID = Util.getValueOfInt(value);
+        var VAB_Invoice_ID = Util.getValueOfInt(value);
 
         //------14-11-2014-------
         var dueAmount = 0;
-        var C_InvoicePaySchedule_ID = 0;
+        var VAB_sched_InvoicePayment_ID = 0;
         var _chk = 0;
-        //var _sqlAmt = "SELECT * FROM   (SELECT ips.C_InvoicePaySchedule_ID, "
-        //+ " ips.DueAmt  FROM C_Invoice i  INNER JOIN C_InvoicePaySchedule ips "
-        //+ " ON (i.C_Invoice_ID        =ips.C_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
+        //var _sqlAmt = "SELECT * FROM   (SELECT ips.VAB_sched_InvoicePayment_ID, "
+        //+ " ips.DueAmt  FROM VAB_Invoice i  INNER JOIN VAB_sched_InvoicePayment ips "
+        //+ " ON (i.VAB_Invoice_ID        =ips.VAB_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
         //+ " AND ips.IsValid           ='Y'  AND ips.isactive          ='Y' "
-        //+ " AND i.C_Invoice_ID    = " + C_Invoice_ID
-        //+ "  AND ips.C_InvoicePaySchedule_ID NOT IN"
-        //+ "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
-        //+ "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule)  union "
-        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE VAB_CashJRNLLine_id IN"
-        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
+        //+ " AND i.VAB_Invoice_ID    = " + VAB_Invoice_ID
+        //+ "  AND ips.VAB_sched_InvoicePayment_ID NOT IN"
+        //+ "(SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE c_payment_id IN"
+        //+ "(SELECT NVL(c_payment_id,0) FROM VAB_sched_InvoicePayment)  union "
+        //+ " SELECT NVL(VAB_sched_InvoicePayment_id,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_id IN"
+        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM VAB_sched_InvoicePayment )) "
         //+ " ORDER BY ips.duedate ASC  ) WHERE rownum=1";
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", C_Invoice_ID.toString());
+            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
             if (drAmt != null) {
-                C_InvoicePaySchedule_ID = Util.getValueOfInt(drAmt["C_InvoicePaySchedule_ID"]);
-                mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+                VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
+                mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
                 dueAmount = Util.getValueOfDecimal(drAmt["dueAmount"]);
                 _chk = 1;
             }
@@ -4245,11 +4245,11 @@
             if (drAmt != null) {
                 drAmt = null;
             }
-            this.log.log(Level.SEVERE, "CalloutCashJournal.Invoice -" + C_Invoice_ID, err.message);
+            this.log.log(Level.SEVERE, "CalloutCashJournal.Invoice -" + VAB_Invoice_ID, err.message);
             return err.toString();
         }
         //-------------
-        if (C_Invoice_ID == null || C_Invoice_ID == 0) {
+        if (VAB_Invoice_ID == null || VAB_Invoice_ID == 0) {
             mTab.setValue("VAB_Currency_ID", null);
             // commented by Arpit
             /*
@@ -4272,16 +4272,16 @@
         //DateTime ts = new DateTime(ctx.getContextAsTime(windowNo, "DateAcct")); // from
         // VAB_CashJRNL
         var tsDate = "TO_DATE( '" + (Number(ts.getMonth()) + 1) + "-" + ts.getDate() + "-" + ts.getFullYear() + "', 'MM-DD-YYYY')";// GlobalVariable.TO_DATE(Util.GetValueOfDateTime(srchCtrls[i].Ctrl.getValue()), true);
-        var paramString = C_Invoice_ID.toString() + "," + tsDate.toString() + "," + C_InvoicePaySchedule_ID.toString();
-        //var sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID, invoiceOpen(C_Invoice_ID, 0) as invoiceOpen, IsSOTrx, paymentTermDiscount(invoiceOpen(C_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + tsDate
-        //    + " ) as paymentTermDiscount,VAB_DocTypesTarget_ID FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
+        var paramString = VAB_Invoice_ID.toString() + "," + tsDate.toString() + "," + VAB_sched_InvoicePayment_ID.toString();
+        //var sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID, invoiceOpen(VAB_Invoice_ID, 0) as invoiceOpen, IsSOTrx, paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced, " + tsDate
+        //    + " ) as paymentTermDiscount,VAB_DocTypesTarget_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
         var data = null;
         try {
             data = VIS.dataContext.getJSONRecord("MInvoice/GetInvoiceDetails", paramString);
 
             //idr = CalloutDB.executeCalloutReader(sql, null, null);
             //pstmt.setTimestamp(1, ts);
-            //pstmt.setInt(2, C_Invoice_ID.intValue());
+            //pstmt.setInt(2, VAB_Invoice_ID.intValue());
             //ResultSet rs = pstmt.executeQuery();
             if (data != null) {
 
@@ -4366,12 +4366,12 @@
         }
         this.setCalloutActive(true);
         if (value == null || value.toString() == "") {
-            if (Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) > 0) {
-                //var sql = "SELECT sum(ips.DueAmt)  FROM C_Invoice i INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID=ips.C_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
-                //   "AND i.C_Invoice_ID = " + Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) + " AND C_InvoicePaySchedule_ID NOT IN (SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE C_Payment_ID IN " +
-                //  "(SELECT NVL(C_Payment_ID,0) FROM C_InvoicePaySchedule) UNION SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM C_InvoicePaySchedule))";
+            if (Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")) > 0) {
+                //var sql = "SELECT sum(ips.DueAmt)  FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment ips ON (i.VAB_Invoice_ID=ips.VAB_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
+                //   "AND i.VAB_Invoice_ID = " + Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")) + " AND VAB_sched_InvoicePayment_ID NOT IN (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE C_Payment_ID IN " +
+                //  "(SELECT NVL(C_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))";
                 //var Amount = Util.getValueOfDecimal(CalloutDB.executeCalloutScalar(sql, null, null));
-                var Amount = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MCashBook/GetPaySheduleAmt", mTab.getValue("C_Invoice_ID").toString()));
+                var Amount = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MCashBook/GetPaySheduleAmt", mTab.getValue("VAB_Invoice_ID").toString()));
                 ctx.setContext(windowNo, "InvTotalAmt", Amount.toString());
                 mTab.setValue("Amount", Amount);
                 this.setCalloutActive(false);
@@ -4388,8 +4388,8 @@
         var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA009_");
         if (DataPrefix["VA009_"]) {
             ctx.setContext("InvTotalAmt", "");
-            var C_InvoicePaySchedule_ID = Util.getValueOfInt(value);
-            if (C_InvoicePaySchedule_ID == null || C_InvoicePaySchedule_ID == 0) {
+            var VAB_sched_InvoicePayment_ID = Util.getValueOfInt(value);
+            if (VAB_sched_InvoicePayment_ID == null || VAB_sched_InvoicePayment_ID == 0) {
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
@@ -4404,8 +4404,8 @@
                 this.setCalloutActive(false);
                 return "";
             }
-            //var qry = "SELECT DueAmt , DiscountDate , DiscountAmt , DiscountDays2 , Discount2  FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID=" + C_InvoicePaySchedule_ID;
-            var paramString = C_InvoicePaySchedule_ID.toString() + "," + mTab.getValue("VAB_CashJRNL_ID") + "," + mTab.getValue("C_Invoice_ID");
+            //var qry = "SELECT DueAmt , DiscountDate , DiscountAmt , DiscountDays2 , Discount2  FROM VAB_sched_InvoicePayment WHERE VAB_sched_InvoicePayment_ID=" + VAB_sched_InvoicePayment_ID;
+            var paramString = VAB_sched_InvoicePayment_ID.toString() + "," + mTab.getValue("VAB_CashJRNL_ID") + "," + mTab.getValue("VAB_Invoice_ID");
             var data = VIS.dataContext.getJSONRecord("MCashBook/GetPaySheduleData", paramString);
             if (data != null) {
                 if (mTab.getTableName() == "C_Payment") {
@@ -4426,7 +4426,7 @@
                     mTab.setValue("OverUnderAmt", 0);
                     //qry = "SELECT DateAcct FROM VAB_CashJRNL WHERE IsActive = 'Y' AND VAB_CashJRNL_ID = " + mTab.getValue("VAB_CashJRNL_ID");
                     var accountDate = Util.getValueOfDate(data["accountDate"]);
-                    //qry = "SELECT IsSoTrx FROM C_Invoice WHERE C_Invoice_ID = " + mTab.getValue("C_Invoice_ID");
+                    //qry = "SELECT IsSoTrx FROM VAB_Invoice WHERE VAB_Invoice_ID = " + mTab.getValue("VAB_Invoice_ID");
                     var isSoTrx = Util.getValueOfString(data["isSoTrx"]);
                     if (Util.getValueOfDate(data["DiscountDate"]) >= accountDate) {
                         if (isSoTrx == "N") {
@@ -4453,8 +4453,8 @@
             }
         }
         else {
-            var C_InvoicePaySchedule_ID = Util.getValueOfInt(value);
-            if (C_InvoicePaySchedule_ID == null || C_InvoicePaySchedule_ID == 0) {
+            var VAB_sched_InvoicePayment_ID = Util.getValueOfInt(value);
+            if (VAB_sched_InvoicePayment_ID == null || VAB_sched_InvoicePayment_ID == 0) {
                 ctx.setContext(windowNo, "InvTotalAmt", null);
                 if (mTab.getTableName() == "C_Payment") {
                     mTab.setValue("PayAmt", null);              // For Payment window
@@ -4466,8 +4466,8 @@
                 this.setCalloutActive(false);
                 return "";
             }
-            //var result = "SELECT DueAmt FROM C_InvoicePaySchedule WHERE C_InvoicePaySchedule_ID=" + C_InvoicePaySchedule_ID;
-            var dr = VIS.dataContext.getJSONRecord("MCashBook/GetInvSchedDueAmt", C_InvoicePaySchedule_ID.toString());
+            //var result = "SELECT DueAmt FROM VAB_sched_InvoicePayment WHERE VAB_sched_InvoicePayment_ID=" + VAB_sched_InvoicePayment_ID;
+            var dr = VIS.dataContext.getJSONRecord("MCashBook/GetInvSchedDueAmt", VAB_sched_InvoicePayment_ID.toString());
             //var Amt = Util.getValueOfDecimal(result);
             if (dr != null) {
                 var Amt = dr["DueAmt"];
@@ -4862,7 +4862,7 @@
     CalloutCashJournal.prototype.GetBeginBal = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (value == null || value == "") {
             // JID_1321: "On change of cash journal org system through error message ""[TypeError: Cannot read property 'setReadOnly' of null]"          
-            //mTab.getField("C_Invoice_ID").setReadOnly(false);
+            //mTab.getField("VAB_Invoice_ID").setReadOnly(false);
             return "";
         }
         if (this.isCalloutActive()) {
@@ -5496,7 +5496,7 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("VAB_BusinessPartner_ID", 0);
-            mTab.setValue("C_Invoice_ID", 0);
+            mTab.setValue("VAB_Invoice_ID", 0);
             return "";
         }
         var C_Payment_ID = value;
@@ -5506,7 +5506,7 @@
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("ChargeAmt", 0);
             mTab.setValue("VAB_BusinessPartner_ID", 0);
-            mTab.setValue("C_Invoice_ID", 0);
+            mTab.setValue("VAB_Invoice_ID", 0);
             return "";
         }
         //
@@ -12314,16 +12314,16 @@
         }
         try {
             var C_PaymentTerm_ID = value;
-            var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID", false);
+            var VAB_Invoice_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID", false);
             var get_ID;
             var apply;
             if (C_PaymentTerm_ID == null || C_PaymentTerm_ID == 0
-                || C_Invoice_ID == 0)	//	not saved yet
+                || VAB_Invoice_ID == 0)	//	not saved yet
             {
                 return "";
             }
             //
-            var paramString = C_PaymentTerm_ID.toString().concat(",", C_Invoice_ID.toString());
+            var paramString = C_PaymentTerm_ID.toString().concat(",", VAB_Invoice_ID.toString());
 
             var dr = VIS.dataContext.getJSONRecord("MPaymentTerm/GetPaymentTerm", paramString);
 
@@ -12392,7 +12392,7 @@
             /***** Amit ****/
             sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-            var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", mTab.getValue("C_Invoice_ID").toString());
+            var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", mTab.getValue("VAB_Invoice_ID").toString());
 
             var purchasingUom = 0;
             if (countEd011 > 0) {
@@ -12621,12 +12621,12 @@
             //                Sql = "";
             //                if (ds2.getTables()[0].getRows().length > 0) {
             //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMSOURCE")) == "A") {
-            //                        Sql = "SELECT DATEINVOICED FROM C_Invoice WHERE C_Invoice_ID=" + mTab.getValue("C_Invoice_ID");
+            //                        Sql = "SELECT DATEINVOICED FROM VAB_Invoice WHERE VAB_Invoice_ID=" + mTab.getValue("VAB_Invoice_ID");
             //                        StartDate = Util.getValueOfDate(VIS.DB.executeScalar(Sql));
             //                        Sql = "";
             //                    }
             //                    if (VIS.Utility.Util.getValueOfString(ds2.getTables()[0].getRows()[0].getCell("VA038_TERMSOURCE")) == "T") {
-            //                        Sql = "SELECT DATEINVOICED FROM C_Invoice WHERE C_Invoice_ID=" + mTab.getValue("C_Invoice_ID");
+            //                        Sql = "SELECT DATEINVOICED FROM VAB_Invoice WHERE VAB_Invoice_ID=" + mTab.getValue("VAB_Invoice_ID");
             //                        StartDate = Util.getValueOfDate(VIS.DB.executeScalar(Sql));
             //                        Sql = "";
             //                    }
@@ -12857,7 +12857,7 @@
 
             //JID_1744 The precision should be as per Currenct Precision
             //JID_1744 The precision should be as per Currenct Precision
-            var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("C_Invoice_ID").toString());
+            var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("VAB_Invoice_ID").toString());
 
             dr = VIS.DB.executeReader(sql, null, null);
             if (dr.read()) {
@@ -12921,7 +12921,7 @@
             var taxRule = "";
             var sql = "";
             // JID_1449: Tax is not working in case of charge on invoice line
-            var params = Util.getValueOfString(mTab.getValue("C_Invoice_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_Product_ID")) +
+            var params = Util.getValueOfString(mTab.getValue("VAB_Invoice_ID")).concat(",", Util.getValueOfString(mTab.getValue("M_Product_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
@@ -12930,7 +12930,7 @@
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
-            //paramString = mTab.getValue("C_Invoice_ID").toString();
+            //paramString = mTab.getValue("VAB_Invoice_ID").toString();
             //var invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
 
             //sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + Util.getValueOfInt(invoice["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
@@ -12945,7 +12945,7 @@
                 //var taxid = 0;
                 //sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
                 //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
-                //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
+                //    paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("M_Product_ID")).toString() +
                 //        "," + Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")).toString();
                 //    taxid = VIS.dataContext.getJSONRecord("MInvoice/GetTax", paramString);
                 //}
@@ -13124,7 +13124,7 @@
                 var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
 
                 if (orderline_ID == 0) {
-                    paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
+                    paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("VAB_Invoice_ID")).toString() +
                         "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                         "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                         "," + QtyEntered.toString());
@@ -13142,7 +13142,7 @@
                 }
 
                 // Get Price List From SO/PO Header
-                //paramString = (mTab.getValue("C_Invoice_ID")).toString();
+                //paramString = (mTab.getValue("VAB_Invoice_ID")).toString();
                 //var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
 
                 ////Get PriceListversion based on Pricelist
@@ -13308,7 +13308,7 @@
 
                 countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
 
-                var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
+                var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("VAB_Invoice_ID")).toString());
 
                 //Get PriceListversion based on Pricelist
                 var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", invoiceRecord["M_PriceList_ID"].toString());
@@ -13347,7 +13347,7 @@
                         PriceEntered = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
                     }
                     else {
-                        paramString = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
+                        paramString = M_Product_ID.toString().concat(",", (mTab.getValue("VAB_Invoice_ID")).toString() +
                             "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                             "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                             "," + QtyEntered.toString());
@@ -13361,7 +13361,7 @@
                         }
 
                         //Start Amit Uom Conversion
-                        //paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString();
+                        //paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
                         //var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
 
                         ////Get PriceListversion based on Pricelist
@@ -13570,11 +13570,11 @@
             var enforce = ctx.isSOTrx() && epl != null && epl == "Y";
             // change by amit 15-10-2015
             if (epl == "") {
-                var paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString();
-                var C_Invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
-                var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + C_Invoice["M_PriceList_ID"];
+                var paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
+                var VAB_Invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+                var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + VAB_Invoice["M_PriceList_ID"];
                 epl = VIS.DB.executeScalar(sql);
-                enforce = (C_Invoice["IsSOTrx"] && epl != null && epl == "Y");
+                enforce = (VAB_Invoice["IsSOTrx"] && epl != null && epl == "Y");
                 sql = "SELECT OverwritePriceLimit FROM VAF_Role WHERE IsActive = 'Y' AND VAF_Role_ID = " + ctx.getContext("#VAF_Role_ID");
                 OverwritePriceLimit = Util.getValueOfBoolean(VIS.DB.executeScalar(sql));
             }
@@ -13749,7 +13749,7 @@
                 var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID", false);
                 var bpartner = VIS.dataContext.getJSONRecord("MBPartner/GetBPartner", VAB_BusinessPartner_ID.toString());
 
-                paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("C_Invoice_ID")).toString() +
+                paramStr = M_Product_ID.toString().concat(",", (mTab.getValue("VAB_Invoice_ID")).toString() +
                     "," + Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")) +
                     "," + C_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                     "," + QtyEntered.toString());
@@ -13849,7 +13849,7 @@
                 //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
                 //if (countEd011 > 0) {
                 //    //Get priceList From SO/PO
-                //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString();
+                //    paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
                 //    var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
 
                 //    //Get PriceListversion based on Pricelist
@@ -14395,17 +14395,17 @@
     CalloutInvoiceBatch.prototype.SetDocumentNo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //	Get last line
         //  
-        var C_InvoiceBatch_ID = ctx.getContextAsInt(windowNo, "C_InvoiceBatch_ID");
-        var sql = "SELECT COALESCE(MAX(C_InvoiceBatchLine_ID),0) FROM C_InvoiceBatchLine WHERE C_InvoiceBatch_ID=" + C_InvoiceBatch_ID;
+        var VAB_BatchInvoice_ID = ctx.getContextAsInt(windowNo, "VAB_BatchInvoice_ID");
+        var sql = "SELECT COALESCE(MAX(VAB_BatchInvoiceLine_ID),0) FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=" + VAB_BatchInvoice_ID;
 
-        // var C_InvoiceBatchLine_ID = VIS.DB.getSQLValue(null, sql, C_InvoiceBatch_ID);
-        var C_InvoiceBatchLine_ID = VIS.DB.executeScalar(sql);
-        if (C_InvoiceBatchLine_ID == 0) {
+        // var VAB_BatchInvoiceLine_ID = VIS.DB.getSQLValue(null, sql, VAB_BatchInvoice_ID);
+        var VAB_BatchInvoiceLine_ID = VIS.DB.executeScalar(sql);
+        if (VAB_BatchInvoiceLine_ID == 0) {
             return;
         }
 
 
-        var paramString = C_InvoiceBatchLine_ID.toString();
+        var paramString = VAB_BatchInvoiceLine_ID.toString();
 
         //Get product price information
         var dr = null;
@@ -14415,8 +14415,8 @@
 
 
 
-        //MInvoiceBatchLine last = new MInvoiceBatchLine(Env.GetCtx(), C_InvoiceBatchLine_ID, null);
-        //MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, C_InvoiceBatchLine_ID, null);
+        //MInvoiceBatchLine last = new MInvoiceBatchLine(Env.GetCtx(), VAB_BatchInvoiceLine_ID, null);
+        //MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
         //	Need to Increase when different DocType or BP
         var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
         var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
@@ -15923,12 +15923,12 @@
             return "";
         }
         //	get invoice info
-        var ii = Util.getValueOfInt(mTab.getValue("C_Invoice_ID"));
+        var ii = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID"));
         if (ii == null) {
             return "";
         }
-        var C_Invoice_ID = ii;// ii.intValue();
-        if (C_Invoice_ID == 0) {
+        var VAB_Invoice_ID = ii;// ii.intValue();
+        if (VAB_Invoice_ID == 0) {
             return "";
         }
         //
@@ -15953,7 +15953,7 @@
 
     /// <summary>
     /// Payment Selection Line - Invoice.
-    /// - called from C_PaySelectionLine.C_Invoice_ID
+    /// - called from C_PaySelectionLine.VAB_Invoice_ID
     /// - update PayAmt & DifferenceAmt
     /// </summary>
     /// <param name="ctx">context</param>
@@ -15968,8 +15968,8 @@
             return "";
         }
         //	get value
-        var C_Invoice_ID = Util.getValueOfInt(value);
-        if (C_Invoice_ID == 0) {
+        var VAB_Invoice_ID = Util.getValueOfInt(value);
+        if (VAB_Invoice_ID == 0) {
             return "";
         }
         var VAB_Bank_Acct_ID = ctx.getContextAsInt(windowNo, "VAB_Bank_Acct_ID");
@@ -15983,17 +15983,17 @@
 
         var DiscountAmt = VIS.Env.ZERO;
         var isSOTrx = false;//            Boolean.FALSE;
-        var sql = "SELECT currencyConvert(invoiceOpen(i.C_Invoice_ID, 0), i.VAB_Currency_ID,"
+        var sql = "SELECT currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0), i.VAB_Currency_ID,"
             + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID) as OpenAmt,"
             + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced,'" + PayDate + "') As DiscountAmt, i.IsSOTrx "
-            + "FROM C_Invoice_v i, VAB_Bank_Acct ba "
-            + "WHERE i.C_Invoice_ID=@Param2 AND ba.VAB_Bank_Acct_ID=@Param3";	//	#1..2
+            + "FROM VAB_Invoice_v i, VAB_Bank_Acct ba "
+            + "WHERE i.VAB_Invoice_ID=@Param2 AND ba.VAB_Bank_Acct_ID=@Param3";	//	#1..2
         var Param = [];
         //SqlParameter[] Param = new SqlParameter[3];
         var idr = null;
         try {
             //Param[0] = new VIS.DB.SqlParam("@Param1", PayDate);  //Temporary Commented By Sarab
-            Param[0] = new VIS.DB.SqlParam("@Param2", C_Invoice_ID);
+            Param[0] = new VIS.DB.SqlParam("@Param2", VAB_Invoice_ID);
             Param[1] = new VIS.DB.SqlParam("@Param3", VAB_Bank_Acct_ID);
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
@@ -16011,7 +16011,7 @@
             this.log.log(Level.SEVERE, sql, err);
         }
 
-        this.log.fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + C_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
+        this.log.fine(" - OpenAmt=" + OpenAmt + " (Invoice=" + VAB_Invoice_ID + ",BankAcct=" + VAB_Bank_Acct_ID + ")");
         mTab.setValue("OpenAmt", OpenAmt);
         mTab.setValue("PayAmt", (OpenAmt - DiscountAmt));
         mTab.setValue("DiscountAmt", DiscountAmt);
@@ -17064,8 +17064,8 @@
                 mTab.setValue("User2_ID", Util.getValueOfInt(dr["User2_ID"]));
 
                 // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
-                if (mTab.getField("C_IncoTerm_ID") != null) {
-                    mTab.setValue("C_IncoTerm_ID", Util.getValueOfInt(dr["C_IncoTerm_ID"]));
+                if (mTab.getField("VAB_IncoTerm_ID") != null) {
+                    mTab.setValue("VAB_IncoTerm_ID", Util.getValueOfInt(dr["VAB_IncoTerm_ID"]));
                 }
 
                 var isReturnTrx = mTab.getValue("IsReturnTrx");
@@ -17807,7 +17807,7 @@
     /// Payment_Invoice.
     /// when Invoice selected
     /// - set InvoiceAmt = invoiceOpen
-    /// - DiscountAmt = C_Invoice_Discount (ID, DateTrx)
+    /// - DiscountAmt = VAB_Invoice_Discount (ID, DateTrx)
     /// - Amount = invoiceOpen (ID) - Discount
     /// - WriteOffAmt,OverUnderAmt = 0
     /// </summary>
@@ -17822,9 +17822,9 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_Invoice_ID = Util.getValueOfInt(value);
+        var VAB_Invoice_ID = Util.getValueOfInt(value);
         if (this.isCalloutActive()		//	assuming it is resetting value
-            || C_Invoice_ID == null || C_Invoice_ID == 0) {
+            || VAB_Invoice_ID == null || VAB_Invoice_ID == 0) {
             return "";
         }
 
@@ -17840,7 +17840,7 @@
 
 
         // MPayment payment = new MPayment(ctx, C_Payment_ID, null);
-        if (payment["VAB_Charge_ID"] != 0 || payment["C_Invoice_ID"] != 0
+        if (payment["VAB_Charge_ID"] != 0 || payment["VAB_Invoice_ID"] != 0
             || payment["C_Order_ID"] != 0)
             return VIS.Msg.getMsg("PaymentIsAllocated");
 
@@ -17850,10 +17850,10 @@
         mTab.setValue("WriteOffAmt", VIS.Env.ZERO);
         mTab.setValue("OverUnderAmt", VIS.Env.ZERO);
 
-        var C_InvoicePaySchedule_ID = 0;
-        if (ctx.getContextAsInt(windowNo, "C_Invoice_ID") == C_Invoice_ID
-            && ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID") != 0) {
-            C_InvoicePaySchedule_ID = ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID");
+        var VAB_sched_InvoicePayment_ID = 0;
+        if (ctx.getContextAsInt(windowNo, "VAB_Invoice_ID") == VAB_Invoice_ID
+            && ctx.getContextAsInt(windowNo, "VAB_sched_InvoicePayment_ID") != 0) {
+            VAB_sched_InvoicePayment_ID = ctx.getContextAsInt(windowNo, "VAB_sched_InvoicePayment_ID");
         }
 
         var dueAmount = 0;
@@ -17863,22 +17863,22 @@
 
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", C_Invoice_ID);
+            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID);
             if (drAmt != null) {
-                C_InvoicePaySchedule_ID = Util.getValueOfInt(drAmt["C_InvoicePaySchedule_ID"]);
+                VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
                 dueAmount = Util.getValueOfDecimal(drAmt["dueAmount"]);
                 IsReturnTrx = drAmt["IsReturnTrx"];
                 if ("Y" == IsReturnTrx) {
                     dueAmount = (dueAmount) * (-1);
                 }
-                mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+                mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
                 mTab.setValue("Amount", dueAmount);
                 _chk = 1;
             }
         }
         catch (err) {
             this.setCalloutActive(false);
-            this.log.log(Level.SEVERE, "PaymentAllocate.Invoice -" + C_Invoice_ID, err.message);
+            this.log.log(Level.SEVERE, "PaymentAllocate.Invoice -" + VAB_Invoice_ID, err.message);
             return err.toString();
         }
         // Bharat
@@ -17890,10 +17890,10 @@
         }
 
         //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		//	1..2
-        //    + " invoiceOpen(C_Invoice_ID, " + C_InvoicePaySchedule_ID + ") as invoiceOpen ,"					//	3		#1
-        //    + " invoiceDiscount(C_Invoice_ID," + VIS.DB.to_date(ts, true) + "," + C_InvoicePaySchedule_ID + ") as invoiceDiscount , IsSOTrx "	//	4..5	#2/3
-        //    + "FROM C_Invoice WHERE C_Invoice_ID=" + C_Invoice_ID;
-        var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
+        //    + " invoiceOpen(VAB_Invoice_ID, " + VAB_sched_InvoicePayment_ID + ") as invoiceOpen ,"					//	3		#1
+        //    + " invoiceDiscount(VAB_Invoice_ID," + VIS.DB.to_date(ts, true) + "," + VAB_sched_InvoicePayment_ID + ") as invoiceDiscount , IsSOTrx "	//	4..5	#2/3
+        //    + "FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
+        var paramString = VAB_Invoice_ID.toString() + "," + VAB_sched_InvoicePayment_ID.toString() + "," + ts.toString();
         var dr = null;
         try {
             dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
@@ -17912,7 +17912,7 @@
                 }
                 mTab.setValue("DiscountAmt", discountAmt);
                 //  reset as dependent fields get reset
-                ctx.setContext(windowNo, "C_Invoice_ID", C_Invoice_ID.toString());
+                ctx.setContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID.toString());
             }
             //var idr = null;
             //try {            
@@ -17930,8 +17930,8 @@
             //        mTab.setValue("Amount", invoiceOpen - discountAmt);
             //        mTab.setValue("DiscountAmt", discountAmt);
             //        //  reset as dependent fields get reset
-            //        ctx.setContext(windowNo, "C_Invoice_ID", C_Invoice_ID.toString());
-            //        mTab.setValue("C_Invoice_ID", C_Invoice_ID);
+            //        ctx.setContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID.toString());
+            //        mTab.setValue("VAB_Invoice_ID", VAB_Invoice_ID);
             //    }
             //    idr.close();
         }
@@ -17976,16 +17976,16 @@
             return "";
         }
         //	No Invoice
-        var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
-        if (C_Invoice_ID == 0) {
+        var VAB_Invoice_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
+        if (VAB_Invoice_ID == 0) {
             return "";
         }
         this.setCalloutActive(true);
         //	Get Info from Tab
         // Added by Bharat on 23 June 2017
-        var C_InvoicePaySchedule_ID = 0;
-        if (mTab.getValue("C_InvoicePaySchedule_ID") != null) {
-            C_InvoicePaySchedule_ID = mTab.getValue("C_InvoicePaySchedule_ID");
+        var VAB_sched_InvoicePayment_ID = 0;
+        if (mTab.getValue("VAB_sched_InvoicePayment_ID") != null) {
+            VAB_sched_InvoicePayment_ID = mTab.getValue("VAB_sched_InvoicePayment_ID");
         }
         var invoiceOpenAmt = VIS.Env.ZERO;
         var IsReturnTrx = "N";
@@ -18005,7 +18005,7 @@
         if (ts == null) {
             ts = new Date();
         }
-        var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
+        var paramString = VAB_Invoice_ID.toString() + "," + VAB_sched_InvoicePayment_ID.toString() + "," + ts.toString();
         var dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
         if (dr != null) {
             VAB_Currency_Invoice_ID = Util.getValueOfInt(dr["VAB_Currency_ID"]);
@@ -18151,7 +18151,7 @@
     /// when Invoice selected
     /// - set VAB_Currency_ID 
     /// - VAB_BusinessPartner_ID
-    /// - DiscountAmt = C_Invoice_Discount (ID, DateTrx)
+    /// - DiscountAmt = VAB_Invoice_Discount (ID, DateTrx)
     /// - PayAmt = invoiceOpen (ID) - Discount
     /// - WriteOffAmt = 0
     /// </summary>
@@ -18166,10 +18166,10 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var C_Invoice_ID = Util.getValueOfInt(value.toString());//(int)value;
+        var VAB_Invoice_ID = Util.getValueOfInt(value.toString());//(int)value;
         if (this.isCalloutActive()		//	assuming it is resetting value
-            || C_Invoice_ID == null
-            || C_Invoice_ID == 0) {
+            || VAB_Invoice_ID == null
+            || VAB_Invoice_ID == 0) {
             return "";
         }
         this.setCalloutActive(true);
@@ -18182,7 +18182,7 @@
         mTab.setValue("IsOverUnderPayment", false);//Boolean.FALSE);
         mTab.setValue("OverUnderAmt", VIS.Env.ZERO);
 
-        var C_InvoicePaySchedule_ID = 0;
+        var VAB_sched_InvoicePayment_ID = 0;
         var IsReturnTrx = "";
         //Added by Bharat
         var invoiceDiscrepancy = false;
@@ -18197,15 +18197,15 @@
 
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", C_Invoice_ID.toString());
+            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
             if (drAmt != null) {
-                C_InvoicePaySchedule_ID = Util.getValueOfInt(drAmt["C_InvoicePaySchedule_ID"]);
+                VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
                 dueAmount = Util.getValueOfDecimal(drAmt["dueAmount"]);
                 IsReturnTrx = Util.getValueOfString(drAmt["IsReturnTrx"]);
                 if ("Y" == IsReturnTrx) {
                     dueAmount = (dueAmount) * (-1);
                 }
-                mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+                mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
                 mTab.setValue("PayAmt", dueAmount);
                 mTab.setValue("PaymentAmount", dueAmount);
                 _chk = 1;
@@ -18221,29 +18221,29 @@
         }
         catch (err) {
             this.setCalloutActive(false);
-            this.log.log(Level.SEVERE, "CalloutPayment.Invoice -" + C_Invoice_ID, err.message);
+            this.log.log(Level.SEVERE, "CalloutPayment.Invoice -" + VAB_Invoice_ID, err.message);
             return err.toString();
         }
         // Bharat
 
-        //var _sqlAmt = "SELECT * FROM   (SELECT ips.C_InvoicePaySchedule_ID, "
-        //+ " ips.DueAmt  FROM C_Invoice i  INNER JOIN C_InvoicePaySchedule ips "
-        //+ " ON (i.C_Invoice_ID        =ips.C_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
+        //var _sqlAmt = "SELECT * FROM   (SELECT ips.VAB_sched_InvoicePayment_ID, "
+        //+ " ips.DueAmt  FROM VAB_Invoice i  INNER JOIN VAB_sched_InvoicePayment ips "
+        //+ " ON (i.VAB_Invoice_ID        =ips.VAB_Invoice_ID)  WHERE i.IsPayScheduleValid='Y' "
         //+ " AND ips.IsValid           ='Y'  AND ips.isactive          ='Y' "
-        //+ " AND i.C_Invoice_ID    = " + C_Invoice_ID
-        //+ "  AND ips.C_InvoicePaySchedule_ID NOT IN"
-        //+ "(SELECT NVL(C_InvoicePaySchedule_ID,0) FROM C_InvoicePaySchedule WHERE c_payment_id IN"
-        //+ "(SELECT NVL(c_payment_id,0) FROM C_InvoicePaySchedule) union "
-        //+ " SELECT NVL(C_InvoicePaySchedule_id,0) FROM C_InvoicePaySchedule  WHERE VAB_CashJRNLLine_id IN"
-        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM C_InvoicePaySchedule )) "
+        //+ " AND i.VAB_Invoice_ID    = " + VAB_Invoice_ID
+        //+ "  AND ips.VAB_sched_InvoicePayment_ID NOT IN"
+        //+ "(SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE c_payment_id IN"
+        //+ "(SELECT NVL(c_payment_id,0) FROM VAB_sched_InvoicePayment) union "
+        //+ " SELECT NVL(VAB_sched_InvoicePayment_id,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_id IN"
+        //+ "(SELECT NVL(VAB_CashJRNLLine_id,0) FROM VAB_sched_InvoicePayment )) "
         //+ " ORDER BY ips.duedate ASC  ) WHERE rownum=1";
         //var drAmt = null;
         //try {
         //    drAmt = VIS.DB.executeReader(_sqlAmt, null, null);
         //    if (drAmt.read()) {
-        //        C_InvoicePaySchedule_ID = Util.getValueOfInt(drAmt.get("c_invoicepayschedule_id"));
+        //        VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt.get("VAB_sched_InvoicePayment_id"));
         //        dueAmount = Util.getValueOfDecimal(drAmt.get("dueamt"));
-        //        mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+        //        mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
         //        mTab.setValue("PayAmt", dueAmount);
         //        _chk = 1;
         //    }
@@ -18316,9 +18316,9 @@
         //-----End change by mohit-------------------------------------
 
 
-        if (ctx.getContextAsInt(windowNo, "C_Invoice_ID") == C_Invoice_ID
-            && ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID") != 0) {
-            C_InvoicePaySchedule_ID = ctx.getContextAsInt(windowNo, "C_InvoicePaySchedule_ID");
+        if (ctx.getContextAsInt(windowNo, "VAB_Invoice_ID") == VAB_Invoice_ID
+            && ctx.getContextAsInt(windowNo, "VAB_sched_InvoicePayment_ID") != 0) {
+            VAB_sched_InvoicePayment_ID = ctx.getContextAsInt(windowNo, "VAB_sched_InvoicePayment_ID");
         }
 
         //  Payment Date
@@ -18335,7 +18335,7 @@
         //
         // Added by Bharat on 02 June 2017 to remove client side queries
 
-        var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
+        var paramString = VAB_Invoice_ID.toString() + "," + VAB_sched_InvoicePayment_ID.toString() + "," + ts.toString();
         var dr = null;
         try {
             dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
@@ -18361,10 +18361,10 @@
                     mTab.setValue("PayAmt", (invoiceOpen - discountAmt));
                     mTab.setValue("PaymentAmount", (invoiceOpen - discountAmt));
                 }
-                mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);//Pratap
+                mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);//Pratap
                 mTab.setValue("DiscountAmt", discountAmt);
                 //  reset as dependent fields get reset
-                ctx.setContext(windowNo, "C_Invoice_ID", C_Invoice_ID.toString());
+                ctx.setContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID.toString());
 
                 //Added by Bharat to Set Discrepancy from Invoice
                 invoiceDiscrepancy = Util.getValueOfString(dr["IsInDispute"]) == "Y";
@@ -18382,18 +18382,18 @@
         }
 
         //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,VAB_BPart_Location_Id,"		//	1..2
-        //    + " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen ,"					//	3		#1
-        //    + " invoiceDiscount(C_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx, IsInDispute "	//	4..5	#2/3
-        //    + "FROM C_Invoice WHERE C_Invoice_ID=@param4";			//			#4
+        //    + " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen ,"					//	3		#1
+        //    + " invoiceDiscount(VAB_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx, IsInDispute "	//	4..5	#2/3
+        //    + "FROM VAB_Invoice WHERE VAB_Invoice_ID=@param4";			//			#4
         //var dr = null;
         ////SqlParameter[] param = new SqlParameter[4];
         //var param = [];
         //try {
-        //    param[0] = new VIS.DB.SqlParam("@param1", C_InvoicePaySchedule_ID);
+        //    param[0] = new VIS.DB.SqlParam("@param1", VAB_sched_InvoicePayment_ID);
         //    param[1] = new VIS.DB.SqlParam("@param2", ts);
         //    param[1].setIsDate(true);
-        //    param[2] = new VIS.DB.SqlParam("@param3", C_InvoicePaySchedule_ID);
-        //    param[3] = new VIS.DB.SqlParam("@param4", C_Invoice_ID);
+        //    param[2] = new VIS.DB.SqlParam("@param3", VAB_sched_InvoicePayment_ID);
+        //    param[3] = new VIS.DB.SqlParam("@param4", VAB_Invoice_ID);
         //    dr = VIS.DB.executeReader(sql, param, null);
 
         //    if (dr.read()) {
@@ -18415,11 +18415,11 @@
         //        {
         //            mTab.setValue("PayAmt", (invoiceOpen - discountAmt));
         //        }
-        //        mTab.setValue("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);//Pratap
+        //        mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);//Pratap
         //        mTab.setValue("DiscountAmt", discountAmt);
         //        //  reset as dependent fields get reset
-        //        ctx.setContext(windowNo, "C_Invoice_ID", C_Invoice_ID.toString());
-        //        // mTab.setValue("C_Invoice_ID", C_Invoice_ID);
+        //        ctx.setContext(windowNo, "VAB_Invoice_ID", VAB_Invoice_ID.toString());
+        //        // mTab.setValue("VAB_Invoice_ID", VAB_Invoice_ID);
         //        //Added by Bharat to Set Discrepancy from Invoice
         //        invoiceDiscrepancy = dr.getString("isindispute") == "Y";
         //        if (payDiscrepancy) {
@@ -18452,7 +18452,7 @@
     /// when Waiting Payment Order selected
     /// - set VAB_Currency_ID
     /// - VAB_BusinessPartner_ID
-    /// - DiscountAmt = C_Invoice_Discount (ID, DateTrx)
+    /// - DiscountAmt = VAB_Invoice_Discount (ID, DateTrx)
     /// - PayAmt = invoiceOpen (ID) - Discount
     /// - WriteOffAmt = 0
     /// </summary>
@@ -18474,7 +18474,7 @@
             return "";
         }
         this.setCalloutActive(true);
-        mTab.setValue("C_Invoice_ID", null);
+        mTab.setValue("VAB_Invoice_ID", null);
         mTab.setValue("VAB_Charge_ID", null);
         mTab.setValue("IsPrepayment", true);// Boolean.TRUE);
         //
@@ -18556,7 +18556,7 @@
                 return "";
             }
             this.setCalloutActive(true);
-            mTab.setValue("C_Invoice_ID", null);
+            mTab.setValue("VAB_Invoice_ID", null);
             mTab.setValue("C_Order_ID", null);
             //	 mTab.setValue("C_Project_ID", null);
             mTab.setValue("IsPrepayment", false);// Boolean.FALSE);
@@ -18583,10 +18583,10 @@
     CalloutPayment.prototype.DocType = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
 
-        var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+        var VAB_Invoice_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
         var C_Order_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
         var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
-        this.log.fine("Payment_DocType - C_Invoice_ID=" + C_Invoice_ID + ", VAB_DocTypes_ID=" + VAB_DocTypes_ID);
+        this.log.fine("Payment_DocType - VAB_Invoice_ID=" + VAB_Invoice_ID + ", VAB_DocTypes_ID=" + VAB_DocTypes_ID);
         var paramString = VAB_DocTypes_ID.toString();
 
         var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", paramString);
@@ -18601,11 +18601,11 @@
             mTab.setValue("IsReceipt", isSOTrx ? "Y" : "N");
         }
         //	Invoice//	Invoice
-        if (C_Invoice_ID != 0) {
+        if (VAB_Invoice_ID != 0) {
 
-            paramString = C_Invoice_ID.toString();
+            paramString = VAB_Invoice_ID.toString();
             var inv = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
-            //  MInvoice inv = new MInvoice(ctx, C_Invoice_ID, null);
+            //  MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
             if (dt != null) {
                 if (Util.getValueOfBoolean(inv["IsSOTrx"]) != isSOTrx) {
                     return VIS.Msg.getMsg("DocTypeInvInconsistent");
@@ -18617,7 +18617,7 @@
             // Edited by Vivek assigned by Mukesh sir on 05/10/2017
             paramString = C_Order_ID.toString();
             var Ord = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
-            //  MInvoice inv = new MInvoice(ctx, C_Invoice_ID, null);
+            //  MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
             if (dt != null) {
                 if (Util.getValueOfBoolean(Ord["IsSOTrx"]) != isSOTrx) {
                     return VIS.Msg.getMsg("DocTypeOrdInconsistent");
@@ -18674,9 +18674,9 @@
         var sql = "SELECT LTRIM(MAX(SYS_CONNECT_BY_PATH( ConvertPrice, ',')),',') amounts FROM " +
             "(SELECT ConvertPrice, ROW_NUMBER () OVER (ORDER BY ConvertPrice ) RN, COUNT (*) OVER () CNT FROM " +
             "(SELECT iso_code || ':' || SUM(OpenAmt) AS ConvertPrice " +
-            "FROM (SELECT c.iso_code,  invoiceOpen (i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)*MultiplierAP AS OpenAmt  FROM C_Invoice_V i " +
+            "FROM (SELECT c.iso_code,  invoiceOpen (i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)*MultiplierAP AS OpenAmt  FROM VAB_Invoice_v i " +
             "LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=i.VAB_Currency_ID " +
-            "LEFT JOIN C_InvoicePaySchedule IPS ON IPS.c_invoice_ID = i.c_invoice_ID " +
+            "LEFT JOIN VAB_sched_InvoicePayment IPS ON IPS.VAB_Invoice_ID = i.VAB_Invoice_ID " +
             "WHERE i.docstatus IN ('CO','CL') " +
             "AND i.IsActive ='Y' " +
             "AND i.ispaid ='N' " +
@@ -18825,11 +18825,11 @@
         {
             return "";
         }
-        var C_Invoice_ID = ctx.getContextAsInt(windowNo, "C_Invoice_ID");
+        var VAB_Invoice_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
         //	New Payment
         if (ctx.getContextAsInt(windowNo, "C_Payment_ID") == 0
             && ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID") == 0
-            && C_Invoice_ID == 0) {
+            && VAB_Invoice_ID == 0) {
             return "";
         }
         var cur = mTab.getValue("VAB_Currency_ID");
@@ -18837,16 +18837,16 @@
             return "";
         }
         // added by Bharat as discussed with Vivek
-        if (C_Invoice_ID != 0) {
+        if (VAB_Invoice_ID != 0) {
             this.setCalloutActive(true);
 
             //	Changed Column
             var colName = mField.getColumnName();
 
-            var C_InvoicePaySchedule_ID = 0;
-            if (ctx.getContextAsInt(windowNo, "C_Invoice_ID") == C_Invoice_ID
-                && mTab.getValue("C_InvoicePaySchedule_ID") != null) {
-                C_InvoicePaySchedule_ID = mTab.getValue("C_InvoicePaySchedule_ID");
+            var VAB_sched_InvoicePayment_ID = 0;
+            if (ctx.getContextAsInt(windowNo, "VAB_Invoice_ID") == VAB_Invoice_ID
+                && mTab.getValue("VAB_sched_InvoicePayment_ID") != null) {
+                VAB_sched_InvoicePayment_ID = mTab.getValue("VAB_sched_InvoicePayment_ID");
             }
             //	Get Open Amount & Invoice Currency
             var invoiceOpenAmt = VIS.Env.ZERO;
@@ -18854,7 +18854,7 @@
             var VAB_Currency_Invoice_ID = 0, conversionType_Invioce_ID = 0;
             var IsReturnTrx = "N";
             var checkPrecision = true;
-            if (C_Invoice_ID != 0) {
+            if (VAB_Invoice_ID != 0) {
                 var ts = mTab.getValue("DateTrx");
                 if (ts == null) {
                     //ts = DateTime.Now.Date; //new DateTime(CommonFunctions.CurrentTimeMillis());
@@ -18862,7 +18862,7 @@
                 }
 
                 // Added by Bharat on 18 May 2017 to remove client side queries
-                var paramString = C_Invoice_ID.toString() + "," + C_InvoicePaySchedule_ID.toString() + "," + ts.toString();
+                var paramString = VAB_Invoice_ID.toString() + "," + VAB_sched_InvoicePayment_ID.toString() + "," + ts.toString();
                 var dr = VIS.dataContext.getJSONRecord("MPayment/GetInvoiceData", paramString);
                 if (dr != null) {
                     VAB_Currency_Invoice_ID = Util.getValueOfInt(dr["VAB_Currency_ID"]);
@@ -18875,18 +18875,18 @@
                     IsReturnTrx = dr["IsReturnTrx"];
                 }
                 //var sql = "SELECT VAB_BusinessPartner_ID,VAB_Currency_ID,"		//	1..2
-                //    + " invoiceOpen(C_Invoice_ID, @param1) as invoiceOpen,"					//	3		#1
-                //    + " invoiceDiscount(C_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx "	//	4..5	#2/3
-                //    + "FROM C_Invoice WHERE C_Invoice_ID=@param4";			//			#4
+                //    + " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen,"					//	3		#1
+                //    + " invoiceDiscount(VAB_Invoice_ID,@param2,@param3) as invoiceDiscount, IsSOTrx "	//	4..5	#2/3
+                //    + "FROM VAB_Invoice WHERE VAB_Invoice_ID=@param4";			//			#4
                 //var dr = null;
                 ////SqlParameter[] param = new SqlParameter[4];
                 //var param = [];
                 //try {
-                //    param[0] = new CalloutDB.SqlParam("@param1", C_InvoicePaySchedule_ID);
+                //    param[0] = new CalloutDB.SqlParam("@param1", VAB_sched_InvoicePayment_ID);
                 //    param[1] = new CalloutDB.SqlParam("@param2", ts);
                 //    param[1].setIsDate(true);
-                //    param[2] = new CalloutDB.SqlParam("@param3", C_InvoicePaySchedule_ID);
-                //    param[3] = new CalloutDB.SqlParam("@param4", C_Invoice_ID);
+                //    param[2] = new CalloutDB.SqlParam("@param3", VAB_sched_InvoicePayment_ID);
+                //    param[3] = new CalloutDB.SqlParam("@param4", VAB_Invoice_ID);
                 //    dr = CalloutDB.executeCalloutReader(sql, param, null);
 
                 //    if (dr.read()) {
@@ -18910,7 +18910,7 @@
             }	//	get Invoice Info
 
             this.log.fine("Open=" + invoiceOpenAmt + " Discount= " + discountAmt
-                + ", C_Invoice_ID=" + C_Invoice_ID
+                + ", VAB_Invoice_ID=" + VAB_Invoice_ID
                 + ", VAB_Currency_ID=" + VAB_Currency_Invoice_ID);
 
             //	Get Info from Tab
@@ -19054,7 +19054,7 @@
             }
 
             //	No Invoice - Set Discount, Witeoff, Under/Over to 0
-            else if (C_Invoice_ID == 0) {
+            else if (VAB_Invoice_ID == 0) {
                 if (VIS.Env.ZERO != discountAmt) {
                     mTab.setValue("DiscountAmt", VIS.Env.ZERO);
                 }
@@ -19155,7 +19155,7 @@
                 // for independent BP / Charge / order id > 0 while order schedule id not defined
                 if ((Util.getValueOfInt(mTab.getValue("C_Order_ID")) > 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0) ||
                     (Util.getValueOfInt(mTab.getValue("C_Order_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0 &&
-                        Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_InvoicePaySchedule_ID")) == 0)) {
+                        Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VAB_sched_InvoicePayment_ID")) == 0)) {
                     mTab.setValue("PayAmt", Util.getValueOfDecimal(mTab.getValue("PaymentAmount")));
                 }
                 this.setCalloutActive(false);
@@ -22219,7 +22219,7 @@
                     incoTerm = VIS.dataContext.getJSONRecord("MOrder/GetIncoTerm", paramString);
                 }
             }
-            else if (mTab.getTableName().startsWith("C_Invoice")) {
+            else if (mTab.getTableName().startsWith("VAB_Invoice")) {
                 if (isSOTrx && Util.getValueOfInt(mTab.getValue("C_Order_ID")) > 0) {
                     paramString = isSOTrx + "," + mTab.getTableName() + ",C_Order_ID," + Util.getValueOfInt(mTab.getValue("C_Order_ID")).toString();
                     incoTerm = VIS.dataContext.getJSONRecord("MOrder/GetIncoTerm", paramString);
@@ -22242,8 +22242,8 @@
                     paramString = isSOTrx + "," + mTab.getTableName() + ",C_Order_ID," + Util.getValueOfInt(mTab.getValue("C_Order_ID")).toString();
                     incoTerm = VIS.dataContext.getJSONRecord("MOrder/GetIncoTerm", paramString);
                 }
-                else if (!isSOTrx && Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) > 0) {
-                    paramString = isSOTrx + "," + mTab.getTableName() + ",C_Invoice_ID," + Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString();
+                else if (!isSOTrx && Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")) > 0) {
+                    paramString = isSOTrx + "," + mTab.getTableName() + ",VAB_Invoice_ID," + Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
                     incoTerm = VIS.dataContext.getJSONRecord("MOrder/GetIncoTerm", paramString);
                 }
             }
@@ -22302,7 +22302,7 @@
                 mTab.setValue("M_Warehouse_ID", result["M_Warehouse_ID"]);
                 mTab.setValue("PriorityRule", result["PriorityRule"]);
                 mTab.setValue("M_PriceList_ID", result["M_PriceList_ID"]);
-                mTab.setValue("C_IncoTerm_ID", result["C_IncoTerm_ID"]);
+                mTab.setValue("VAB_IncoTerm_ID", result["VAB_IncoTerm_ID"]);
                 mTab.setValue("VAB_Currency_ID", result["VAB_Currency_ID"]);
                 mTab.setValue("VAB_CurrencyType_ID", result["VAB_CurrencyType_ID"]);
                 mTab.setValue("SalesRep_ID", result["SalesRep_ID"]);

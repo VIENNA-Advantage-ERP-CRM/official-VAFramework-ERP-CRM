@@ -133,7 +133,7 @@
                 }
                 //var VAB_Bank_Acct_ID = $self.cmbBankAccount.getControl().find('option:selected').val();
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                 var M_Product_ID = $self.vProduct.getValue();
                 var deliveryDate = $self.deliveryDate.getValue();
@@ -147,8 +147,8 @@
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
                     }
                 }
-                else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                else if (VAB_Invoice_ID != null) {
+                    VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, 1);
                 }
                 else if (M_InOut_ID != null) {
                     VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
@@ -215,7 +215,7 @@
                 if ($(this).css("opacity") == "1") {
                     $self.setBusy(true);
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                     var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
@@ -238,8 +238,8 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
-                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                    else if (VAB_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, 1);
                     }
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, 1);
@@ -263,7 +263,7 @@
                     //displayData(true, parseInt(this.cmbPage.val()) - 1);
                     $self.setBusy(true);
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                     var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
@@ -286,8 +286,8 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) - 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
-                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                    else if (VAB_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) - 1);
@@ -311,7 +311,7 @@
                     //displayData(true, parseInt(this.cmbPage.val()) + 1);
                     $self.setBusy(true);
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                     var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
@@ -334,8 +334,8 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.val()) + 1);
                         }
                     }
-                    else if (C_Invoice_ID != null) {
-                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                    else if (VAB_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.val()) + 1);
@@ -359,7 +359,7 @@
                     //displayData(true, parseInt(this.cmbPage.find("Option:last").val()));
                     $self.setBusy(true);
                     var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                    var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                    var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                     var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                     var VAB_Bank_Acct_ID = null;
                     if ($self.cmbBankAccount != null) {
@@ -382,8 +382,8 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, parseInt($self.cmbPage.find("Option:last").val()));
                         }
                     }
-                    else if (C_Invoice_ID != null) {
-                        VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                    else if (VAB_Invoice_ID != null) {
+                        VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     else if (M_InOut_ID != null) {
                         VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
@@ -406,7 +406,7 @@
                 //displayData(true, this.cmbPage.val());
                 $self.setBusy(true);
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                 var VAB_Bank_Acct_ID = null;
                 if ($self.cmbBankAccount != null) {
@@ -429,8 +429,8 @@
                         $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, $self.cmbPage.val());
                     }
                 }
-                else if (C_Invoice_ID != null) {
-                    VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, $self.cmbPage.val());
+                else if (VAB_Invoice_ID != null) {
+                    VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, $self.cmbPage.val());
                 }
                 else if (M_InOut_ID != null) {
                     VIS.VCreateFromInvoice.prototype.loadShipments(M_InOut_ID, M_Product_ID, $self.cmbPage.val());
@@ -498,7 +498,7 @@
         // Change By Mohit 30/06/2016
         this.MergeItemsForSave = function () {
             var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-            var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+            var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
             var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
             if ($self.editedItems.length > 0) {
                 for (var items in $self.editedItems) {
@@ -508,8 +508,8 @@
                         if (C_Order_ID != null) {
                             return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.editedItems[items]["C_Order_ID_K"]
                         }
-                        else if (C_Invoice_ID != null) {
-                            return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.editedItems[items]["C_Invoice_ID_K"]
+                        else if (VAB_Invoice_ID != null) {
+                            return n.M_Product_ID_K == selectprd && n.VAB_Invoice_ID_K == $self.editedItems[items]["VAB_Invoice_ID_K"]
                         }
                         else if (M_InOut_ID != null) {
                             return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.editedItems[items]["M_InOut_ID_K"]
@@ -592,7 +592,7 @@
         {
             retValue = new VIS.VCreateFromStatement(mTab);
         }
-        else if (VAF_TableView_ID == 318)        //  C_Invoice
+        else if (VAF_TableView_ID == 318)        //  VAB_Invoice
         {
             retValue = new VIS.VCreateFromInvoice(mTab);
         }
@@ -617,7 +617,7 @@
 
     VCreateFrom.prototype.initBPartner = function (forInvoice) {
         //  load BPartner
-        var VAF_Column_ID = 3499;        //  C_Invoice.VAB_BusinessPartner_ID
+        var VAF_Column_ID = 3499;        //  VAB_Invoice.VAB_BusinessPartner_ID
         var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, VAF_Column_ID, VIS.DisplayType.Search);
 
         this.vBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
@@ -665,7 +665,7 @@
 
         var column = "m.M_InOutLine_ID";
         if (forInvoice) {
-            column = "m.C_InvoiceLine_ID";
+            column = "m.VAB_InvoiceLine_ID";
         }
 
 
@@ -674,7 +674,7 @@
         var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsDropShip"));
         var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
         //JID_0976
-        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "C_Invoice_ID", true);
+        var recordId = VIS.context.getWindowContextAsInt(this.windowNo, "VAB_Invoice_ID", true);
         //var pairs = [];
         $.ajax({
             url: VIS.Application.contextUrl + "VCreateFrom/VCreateGetOrders",
@@ -1329,7 +1329,7 @@
             }
             $self.setBusy(true);
             var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-            var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+            var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
             var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
 
             var selection = null;
@@ -1362,11 +1362,11 @@
                         }
                     }
                 }
-                else if ($self.dGrid != null && C_Invoice_ID != null) {
+                else if ($self.dGrid != null && VAB_Invoice_ID != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
-                            return n.M_Product_ID_K == $self.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.get(selection[item])["C_Invoice_ID_K"]
+                            return n.M_Product_ID_K == $self.dGrid.get(selection[item])["M_Product_ID_K"] && n.VAB_Invoice_ID_K == $self.dGrid.get(selection[item])["VAB_Invoice_ID_K"]
                         });
                         if (obj.length > 0) {
 
@@ -1457,7 +1457,7 @@
             var output = false;
             $self.setBusy(true);
             var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-            var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+            var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
             var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
 
             var selection = null;
@@ -1489,11 +1489,11 @@
                         }
                     }
                 }
-                else if ($self.dGrid != null && C_Invoice_ID != null) {
+                else if ($self.dGrid != null && VAB_Invoice_ID != null) {
                     //var selection = $self.dGrid.getSelection();
                     for (item in selection) {
                         var obj = $.grep($self.multiValues, function (n, i) {
-                            return n.M_Product_ID_K == $self.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.get(selection[item])["C_Invoice_ID_K"]
+                            return n.M_Product_ID_K == $self.dGrid.get(selection[item])["M_Product_ID_K"] && n.VAB_Invoice_ID_K == $self.dGrid.get(selection[item])["VAB_Invoice_ID_K"]
                         });
                         if (obj.length > 0) {
 
@@ -1581,11 +1581,11 @@
                 $self.isApplied = true;
                 VIS.ADialog.info("VIS_SuccessFullyInserted", null, null, null);
                 var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
                 var M_Product_ID = $self.vProduct.getValue();
                 var deliveryDate = $self.deliveryDate.getValue();
-                if (C_Order_ID > 0 || C_Invoice_ID > 0) {
+                if (C_Order_ID > 0 || VAB_Invoice_ID > 0) {
                     if ($self.locatorField != null) {
                         //for shipment haveing locator filed
                         //$self.loadOrder(C_Order_ID, false);
@@ -1595,9 +1595,9 @@
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, false, 1);
 
                         }
-                        if (C_Invoice_ID > 0) {
+                        if (VAB_Invoice_ID > 0) {
                             $self.multiValues = [];
-                            VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                            VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, 1);
                         }
                         $self.dGrid.selectNone();
                         $self.editedItems = [];
@@ -1610,9 +1610,9 @@
                             $self.multiValues = [];
                             $self.loadOrders(C_Order_ID, M_Product_ID, deliveryDate, true, 1);
                         }
-                        if (C_Invoice_ID > 0) {
+                        if (VAB_Invoice_ID > 0) {
                             $self.multiValues = [];
-                            VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                            VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, 1);
                         }
                         $self.dGrid.selectNone();
                         $self.editedItems = [];
@@ -1892,7 +1892,7 @@
                     $self.dGrid.destroy();
                     $self.dGrid = null;
                 }
-                var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+                var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
                 var M_Product_ID = $self.vProduct.getValue();
                 //  set Order and Shipment to Null
                 $self.cmbOrder.getControl().prop('selectedIndex', -1);
@@ -1907,7 +1907,7 @@
                 //$self.AuthCode.setVisible = false;
                 $self.lblDeliveryDate.setVisible(false);
                 $self.deliveryDate.setVisible(false);
-                VIS.VCreateFromShipment.prototype.loadInvoices(C_Invoice_ID, M_Product_ID, 1);
+                VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, M_Product_ID, 1);
                 //$self.setBusy(false);
             });
         }
@@ -2029,8 +2029,8 @@
         if ($self.mTab.keyColumnName == "M_InOut_ID") {
             $self.record_ID = $self.mTab.getValue("M_InOut_ID");
         }
-        else if ($self.mTab.keyColumnName == "C_Invoice_ID") {
-            $self.record_ID = $self.mTab.getValue("C_Invoice_ID");
+        else if ($self.mTab.keyColumnName == "VAB_Invoice_ID") {
+            $self.record_ID = $self.mTab.getValue("VAB_Invoice_ID");
         }
         if ($self.relatedToOrg.getValue()) {
             var isBaseLanges = "";
@@ -2183,8 +2183,8 @@
     //    if ($self.mTab.keyColumnName == "M_InOut_ID") {
     //        $self.record_ID = $self.mTab.getValue("M_InOut_ID");
     //    }
-    //    else if ($self.mTab.keyColumnName == "C_Invoice_ID") {
-    //        $self.record_ID = $self.mTab.getValue("C_Invoice_ID");
+    //    else if ($self.mTab.keyColumnName == "VAB_Invoice_ID") {
+    //        $self.record_ID = $self.mTab.getValue("VAB_Invoice_ID");
     //    }
     //    // Enable this check
     //    // if (window.DTD001) {
@@ -2202,7 +2202,7 @@
     //          + " FROM C_OrderLine l"
     //           + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-    //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+    //        sql = sql.concat(forInvoice ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
     //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
@@ -2242,7 +2242,7 @@
     //           + " FROM C_OrderLine l"
     //            + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-    //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+    //        sql = sql.concat(forInvoice ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
     //        //sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
     //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)");
 
@@ -2279,9 +2279,9 @@
     //          + " ins.description , "
     //          + " l.C_OrderLine_ID as C_ORDERLINE_ID,l.Line  as LINE,'false' as SELECTROW  "								//	7..8
     //          + " FROM C_OrderLine l"
-    //           + " LEFT OUTER JOIN C_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
+    //           + " LEFT OUTER JOIN VAB_INVOICELINE M ON(L.C_OrderLine_ID=M.C_OrderLine_ID) AND ");
 
-    //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+    //        sql = sql.concat(forInvoice ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
     //        sql = sql.concat(" IS NOT NULL").concat(" LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
@@ -2362,16 +2362,16 @@
     //    //            }
     //    //        }
     //    //    }
-    //    //    else if ($self.mTab.keyColumnName == "C_Invoice_ID") {
+    //    //    else if ($self.mTab.keyColumnName == "VAB_Invoice_ID") {
     //    //        if (dr.getInt("c_orderline_id") > 0) {
-    //    //            sql = "SELECT Count(*) FROM C_InvoiceLine WHERE C_Invoice_ID = " + $self.mTab.getValue("C_Invoice_ID") + " AND C_OrderLine_ID = " + dr.getInt("c_orderline_id");
+    //    //            sql = "SELECT Count(*) FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + $self.mTab.getValue("VAB_Invoice_ID") + " AND C_OrderLine_ID = " + dr.getInt("c_orderline_id");
     //    //            rec = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql));
     //    //            if (rec > 0) {
     //    //                select = true;
     //    //            }
     //    //        }
     //    //        else {
-    //    //            sql = "SELECT Count(*) FROM C_InvoiceLine WHERE C_Invoice_ID = " + $self.mTab.getValue("C_Invoice_ID") + " AND M_Product_ID = " + dr.getInt("m_product_id") + " AND M_AttributeSetInstance_ID = " + dr.getInt("m_attributesetinstance_id");
+    //    //            sql = "SELECT Count(*) FROM VAB_InvoiceLine WHERE VAB_Invoice_ID = " + $self.mTab.getValue("VAB_Invoice_ID") + " AND M_Product_ID = " + dr.getInt("m_product_id") + " AND M_AttributeSetInstance_ID = " + dr.getInt("m_attributesetinstance_id");
     //    //            rec = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(sql));
     //    //            if (rec > 0) {
     //    //                select = true;
@@ -2386,14 +2386,14 @@
     //    //    line['M_AttributeSetInstance_ID'] = dr.getString("description");        //  5-Ship -Key
     //    //    line['C_Order_ID'] = dr.getString("line");      //  4-OrderLine
     //    //    line['M_InOut_ID'] = null;        //  5-Ship
-    //    //    line['C_Invoice_ID'] = null;        //  6-Invoice
+    //    //    line['VAB_Invoice_ID'] = null;        //  6-Invoice
     //    //    // line['Att'] = dr.getString("description");
     //    //    line['C_UOM_ID_K'] = dr.getString("c_uom_id");    //  2-UOM -Key
     //    //    line['M_Product_ID_K'] = dr.getString("m_product_id");      //  3-Product -Key
     //    //    line['M_AttributeSetInstance_ID_K'] = dr.getString("m_attributesetinstance_id");        //  5-Ship -Key
     //    //    line['C_Order_ID_K'] = dr.getString("c_orderline_id");      //  4-OrderLine -Key
     //    //    line['M_InOut_ID_K'] = null;        //  5-Ship -Key
-    //    //    line['C_Invoice_ID_K'] = null;        //  6-Invoice -Key
+    //    //    line['VAB_Invoice_ID_K'] = null;        //  6-Invoice -Key
     //    //    line['recid'] = count;
     //    //    count++;
     //    //    data.push(line);
@@ -2462,17 +2462,17 @@
                             line['M_AttributeSetInstance_ID'] = res[i]["m_attributesetinstance_id"];
                             line['C_Order_ID'] = res[i]["c_order_id"];
                             line['M_InOut_ID'] = null;
-                            line['C_Invoice_ID'] = null;
+                            line['VAB_Invoice_ID'] = null;
                             line['C_UOM_ID_K'] = res[i]["c_uom_id_k"];
                             line['M_Product_ID_K'] = res[i]["m_product_id_k"];
                             line['M_AttributeSetInstance_ID_K'] = res[i]["m_attributesetinstance_id_k"];
                             line['C_Order_ID_K'] = res[i]["c_order_id_k"];
                             line['M_InOut_ID_K'] = null;
-                            line['C_Invoice_ID_K'] = null;
+                            line['VAB_Invoice_ID_K'] = null;
                             line['C_PaymentTerm_ID'] = res[i]["C_PaymentTerm_ID"];
                             line['PaymentTermName'] = res[i]["PaymentTermName"];
                             line['IsAdvance'] = res[i]["IsAdvance"];
-                            line['C_InvoicePaymentTerm_ID'] = res[i]["C_InvoicePaymentTerm_ID"];
+                            line['VAB_InvoicePaymentTerm_ID'] = res[i]["VAB_InvoicePaymentTerm_ID"];
                             line['IsInvoicePTAdvance'] = res[i]["IsInvoicePTAdvance"];
                             line['recid'] = count;
                             data.push(line);
@@ -2524,17 +2524,17 @@
                             line['M_AttributeSetInstance_ID'] = res[i]["m_attributesetinstance_id"];
                             line['C_Order_ID'] = res[i]["c_order_id"];
                             line['M_InOut_ID'] = null;
-                            line['C_Invoice_ID'] = null;
+                            line['VAB_Invoice_ID'] = null;
                             line['C_UOM_ID_K'] = res[i]["c_uom_id_k"];
                             line['M_Product_ID_K'] = res[i]["m_product_id_k"];
                             line['M_AttributeSetInstance_ID_K'] = res[i]["m_attributesetinstance_id_k"];
                             line['C_Order_ID_K'] = res[i]["c_order_id_k"];
                             line['M_InOut_ID_K'] = null;
-                            line['C_Invoice_ID_K'] = null;
+                            line['VAB_Invoice_ID_K'] = null;
                             line['C_PaymentTerm_ID'] = res[i]["C_PaymentTerm_ID"];
                             line['PaymentTermName'] = res[i]["PaymentTermName"];
                             line['IsAdvance'] = res[i]["IsAdvance"];
-                            line['C_InvoicePaymentTerm_ID'] = res[i]["C_InvoicePaymentTerm_ID"];
+                            line['VAB_InvoicePaymentTerm_ID'] = res[i]["VAB_InvoicePaymentTerm_ID"];
                             line['IsInvoicePTAdvance'] = res[i]["IsInvoicePTAdvance"];
                             line['recid'] = count;
                             data.push(line);
@@ -2584,7 +2584,7 @@
     //          + " FROM C_OrderLine l"
     //           + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-    //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+    //        sql = sql.concat(forInvoice ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
     //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
@@ -2616,7 +2616,7 @@
     //           + " FROM C_OrderLine l"
     //            + " LEFT OUTER JOIN M_MatchPO m ON (l.C_OrderLine_ID=m.C_OrderLine_ID AND ");
 
-    //        sql = sql.concat(forInvoice ? "m.C_InvoiceLine_ID" : "m.M_InOutLine_ID");
+    //        sql = sql.concat(forInvoice ? "m.VAB_InvoiceLine_ID" : "m.M_InOutLine_ID");
     //        sql = sql.concat(" IS NOT NULL)").concat(" LEFT OUTER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID)" + " LEFT OUTER JOIN VAB_Charge c ON (l.VAB_Charge_ID=c.VAB_Charge_ID)");
 
     //        if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
@@ -2654,12 +2654,12 @@
     //            //line['M_Product_ID'] = dr.getString(5);      //  3-Product
     //            //line['C_Order_ID'] = dr.getString(7);;      //  4-OrderLine
     //            //line['M_InOut_ID'] = null;        //  5-Ship
-    //            //line['C_Invoice_ID'] = null;        //  6-Invoice
+    //            //line['VAB_Invoice_ID'] = null;        //  6-Invoice
     //            //line['C_UOM_ID_K'] = dr.getString(2);    //  2-UOM -Key
     //            //line['M_Product_ID_K'] = dr.getInt(4);      //  3-Product -Key
     //            //line['C_Order_ID_K'] = dr.getInt(6);;      //  4-OrderLine -Key
     //            //line['M_InOut_ID_K'] = null;        //  5-Ship -Key
-    //            //line['C_Invoice_ID_K'] = null;        //  6-Invoice -Key
+    //            //line['VAB_Invoice_ID_K'] = null;        //  6-Invoice -Key
 
     //            line['Quantity'] = dr.getString("quantity");  //  1-Qty
     //            line['QuantityEntered'] = dr.getString("qtyenter");  //  2-Qty
@@ -2668,14 +2668,14 @@
     //            line['M_AttributeSetInstance_ID'] = dr.getString("description");        //  5-Ship -Key
     //            line['C_Order_ID'] = dr.getString("line");      //  4-OrderLine
     //            line['M_InOut_ID'] = null;        //  5-Ship
-    //            line['C_Invoice_ID'] = null;        //  6-Invoice
+    //            line['VAB_Invoice_ID'] = null;        //  6-Invoice
     //            // line['Att'] = dr.getString("description");
     //            line['C_UOM_ID_K'] = dr.getString("c_uom_id");    //  2-UOM -Key
     //            line['M_Product_ID_K'] = dr.getString("m_product_id");      //  3-Product -Key
     //            line['M_AttributeSetInstance_ID_K'] = dr.getString("m_attributesetinstance_id");        //  5-Ship -Key
     //            line['C_Order_ID_K'] = dr.getString("c_orderline_id");      //  4-OrderLine -Key
     //            line['M_InOut_ID_K'] = null;        //  5-Ship -Key
-    //            line['C_Invoice_ID_K'] = null;        //  6-Invoice -Key
+    //            line['VAB_Invoice_ID_K'] = null;        //  6-Invoice -Key
 
     //            line['recid'] = count;
     //            count++;
@@ -2752,19 +2752,19 @@
             this.arrListColumns.push({ field: "PaymentTermName", caption: VIS.Msg.getMsg("PaymentTermName"), sortable: false, size: '150px', hidden: false });
             this.arrListColumns.push({ field: "IsAdvance", caption: VIS.Msg.getMsg("IsAdvance"), sortable: false, size: '150px', hidden: true });
             //Issue JID_0564: invoice header payment term detail
-            this.arrListColumns.push({ field: "C_InvoicePaymentTerm_ID", caption: VIS.Msg.getMsg("C_InvoicePaymentTerm_ID"), sortable: false, size: '150px', hidden: true });
+            this.arrListColumns.push({ field: "VAB_InvoicePaymentTerm_ID", caption: VIS.Msg.getMsg("VAB_InvoicePaymentTerm_ID"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "IsInvoicePTAdvance", caption: VIS.Msg.getMsg("IsInvoicePTAdvance"), sortable: false, size: '150px', hidden: true });
 
             this.arrListColumns.push({ field: "C_Order_ID", caption: VIS.Msg.getMsg("OrderLine"), sortable: false, size: '150px', hidden: false });
             this.arrListColumns.push({ field: "M_InOut_ID", caption: VIS.Msg.getMsg("Shipment/Receipt"), sortable: false, size: '150px', hidden: false });
-            this.arrListColumns.push({ field: "C_Invoice_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: false, size: '150px', hidden: false });
+            this.arrListColumns.push({ field: "VAB_Invoice_ID", caption: VIS.Msg.getMsg("Invoice"), sortable: false, size: '150px', hidden: false });
             //this.arrListColumns.push({ field: "Att", caption: "Att", "type": "button", "value": "Att", sortable: true, size: '150px', hidden: false }),
             // Hidden -- > true
             this.arrListColumns.push({ field: "C_UOM_ID_K", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "M_Product_ID_K", caption: VIS.Msg.getMsg("ProductName"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "C_Order_ID_K", caption: VIS.Msg.getMsg("Order"), sortable: false, size: '150px', hidden: true });
             this.arrListColumns.push({ field: "M_InOut_ID_K", caption: VIS.Msg.getMsg("Shipment/Receipt"), sortable: false, size: '150px', hidden: true });
-            this.arrListColumns.push({ field: "C_Invoice_ID_K", caption: VIS.Msg.getMsg("Invoice"), sortable: false, size: '150px', hidden: true });
+            this.arrListColumns.push({ field: "VAB_Invoice_ID_K", caption: VIS.Msg.getMsg("Invoice"), sortable: false, size: '150px', hidden: true });
         }
 
         w2utils.encodeTags(data);
@@ -2819,7 +2819,7 @@
         });
         this.dGrid.selectNone();
         var C_Order_ID = $self.cmbOrder.getControl().find('option:selected').val();
-        var C_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
+        var VAB_Invoice_ID = $self.cmbInvoice.getControl().find('option:selected').val();
         var M_InOut_ID = $self.cmbShipment.getControl().find('option:selected').val();
 
         for (itm in $self.multiValues) {
@@ -2831,8 +2831,8 @@
                     if (C_Order_ID != null) {
                         return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Order_ID_K == $self.dGrid.records[item]["C_Order_ID_K"]
                     }
-                    else if (C_Invoice_ID != null) {
-                        return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.records[item]["C_Invoice_ID_K"]
+                    else if (VAB_Invoice_ID != null) {
+                        return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.VAB_Invoice_ID_K == $self.dGrid.records[item]["VAB_Invoice_ID_K"]
                     }
                     else if (M_InOut_ID != null) {
                         return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.M_InOut_ID_K == $self.dGrid.records[item]["M_InOut_ID_K"]
@@ -2855,10 +2855,10 @@
                 $($("#grid_" + $self.dGrid.name + "_rec_" + (i + 1)).find("input[type=checkbox]")[1]).prop("checked", data[i].Select);
 
                 // Issue No : JID_0564 
-                if (($self.dGrid.records[i]["C_InvoicePaymentTerm_ID"] == $self.dGrid.records[i]["C_PaymentTerm_ID"]) || $self.dGrid.records[i]["C_InvoicePaymentTerm_ID"] == 0) {
+                if (($self.dGrid.records[i]["VAB_InvoicePaymentTerm_ID"] == $self.dGrid.records[i]["C_PaymentTerm_ID"]) || $self.dGrid.records[i]["VAB_InvoicePaymentTerm_ID"] == 0) {
                     // not to disable record when payment term is same or for M_Inout table
                 }
-                else if (!($self.dGrid.records[i]["C_InvoicePaymentTerm_ID"] != $self.dGrid.records[i]["C_PaymentTerm_ID"]
+                else if (!($self.dGrid.records[i]["VAB_InvoicePaymentTerm_ID"] != $self.dGrid.records[i]["C_PaymentTerm_ID"]
                     && $self.dGrid.records[i]["IsAdvance"] == false && $self.dGrid.records[i]["IsInvoicePTAdvance"] == false)) {
                     // except payment term not matched and not advance
                     $("#grid_" + $self.dGrid.name + "_rec_" + (i + 1) + ' ' + ' input').attr('disabled', true);
@@ -2896,13 +2896,13 @@
                     }
                 }
                 $self.dGrid.records[e.index]["QuantityEntered"] = _val.toFixed(4);
-                if (C_Order_ID > 0 || C_Invoice_ID > 0) {
+                if (C_Order_ID > 0 || VAB_Invoice_ID > 0) {
                     AddEditedLine("QuantityEntered", e.index, _val.toFixed(4));
                 }
             }
             else if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
                 $self.dGrid.records[e.index]["M_AttributeSetInstance_ID"] = e.value_new;
-                if (C_Order_ID > 0 || C_Invoice_ID > 0) {
+                if (C_Order_ID > 0 || VAB_Invoice_ID > 0) {
                     AddEditedLine("M_AttributeSetInstance_ID", e.index, e.value_new);
                 }
             }
@@ -2925,8 +2925,8 @@
                 if (C_Order_ID != null) {
                     return n.M_Product_ID_K == selectprd && n.C_Order_ID_K == $self.dGrid.records[index]["C_Order_ID_K"]
                 }
-                else if (C_Invoice_ID != null) {
-                    return n.M_Product_ID_K == selectprd && n.C_Invoice_ID_K == $self.dGrid.records[index]["C_Invoice_ID_K"]
+                else if (VAB_Invoice_ID != null) {
+                    return n.M_Product_ID_K == selectprd && n.VAB_Invoice_ID_K == $self.dGrid.records[index]["VAB_Invoice_ID_K"]
                 }
                 else if (M_InOut_ID != null) {
                     return n.M_Product_ID_K == selectprd && n.M_InOut_ID_K == $self.dGrid.records[index]["M_InOut_ID_K"]
@@ -3133,8 +3133,8 @@
                             if (C_Order_ID != null) {
                                 return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Order_ID_K == $self.dGrid.records[item]["C_Order_ID_K"]
                             }
-                            else if (C_Invoice_ID != null) {
-                                return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.C_Invoice_ID_K == $self.dGrid.records[item]["C_Invoice_ID_K"]
+                            else if (VAB_Invoice_ID != null) {
+                                return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.VAB_Invoice_ID_K == $self.dGrid.records[item]["VAB_Invoice_ID_K"]
                             }
                             else if (M_InOut_ID != null) {
                                 return n.M_Product_ID_K == $self.dGrid.records[item]["M_Product_ID_K"] && n.M_InOut_ID_K == $self.dGrid.records[item]["M_InOut_ID_K"]
@@ -3159,8 +3159,8 @@
                     if (C_Order_ID != null) {
                         return n.M_Product_ID_K == unselectprd && n.C_Order_ID_K == w2ui[e.target].records[e.index]["C_Order_ID_K"]
                     }
-                    else if (C_Invoice_ID != null) {
-                        return n.M_Product_ID_K == unselectprd && n.C_Invoice_ID_K == w2ui[e.target].records[e.index]["C_Invoice_ID_K"]
+                    else if (VAB_Invoice_ID != null) {
+                        return n.M_Product_ID_K == unselectprd && n.VAB_Invoice_ID_K == w2ui[e.target].records[e.index]["VAB_Invoice_ID_K"]
                     }
                     else if (M_InOut_ID != null) {
                         return n.M_Product_ID_K == unselectprd && n.M_InOut_ID_K == w2ui[e.target].records[e.index]["M_InOut_ID_K"]

@@ -114,25 +114,25 @@
         //            VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getVAF_Language(ctx))).concat("|| ' - ' ||")
         //            .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
 
-        //    //var sql = ("SELECT i.C_Invoice_ID,").concat(display).concat(
-        //    //        " FROM C_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
+        //    //var sql = ("SELECT i.VAB_Invoice_ID,").concat(display).concat(
+        //    //        " FROM VAB_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
         //    //                + "WHERE i.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND i.IsSOTrx='N' "
         //    //                + "AND d.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' "
         //    //                + "AND i.DocStatus IN ('CL','CO')"
-        //    //                + " AND i.C_Invoice_ID IN " + "(SELECT il.C_Invoice_ID FROM C_InvoiceLine il"
-        //    //                + " LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
-        //    //                + "GROUP BY il.C_Invoice_ID,mi.C_InvoiceLine_ID,il.QtyInvoiced "
-        //    //                + "HAVING (il.QtyInvoiced<>SUM(mi.Qty) AND mi.C_InvoiceLine_ID IS NOT NULL)"
-        //    //                + " OR mi.C_InvoiceLine_ID IS NULL) " + "ORDER BY i.DateInvoiced");
+        //    //                + " AND i.VAB_Invoice_ID IN " + "(SELECT il.VAB_Invoice_ID FROM VAB_InvoiceLine il"
+        //    //                + " LEFT OUTER JOIN M_MatchInv mi ON (il.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
+        //    //                + "GROUP BY il.VAB_Invoice_ID,mi.VAB_InvoiceLine_ID,il.QtyInvoiced "
+        //    //                + "HAVING (il.QtyInvoiced<>SUM(mi.Qty) AND mi.VAB_InvoiceLine_ID IS NOT NULL)"
+        //    //                + " OR mi.VAB_InvoiceLine_ID IS NULL) " + "ORDER BY i.DateInvoiced");
 
-        //    var sql = ("SELECT i.C_Invoice_ID,").concat(display).concat(
-        //        " FROM C_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
+        //    var sql = ("SELECT i.VAB_Invoice_ID,").concat(display).concat(
+        //        " FROM VAB_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
         //        + "WHERE i.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND i.IsSOTrx='N' "
         //        + "AND d.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND i.DocStatus IN ('CL','CO')"
-        //        + " AND i.C_Invoice_ID IN "
-        //        + "(SELECT C_Invoice_ID FROM (SELECT il.C_Invoice_ID,il.C_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM C_InvoiceLine il "
-        //        + "LEFT OUTER JOIN M_MatchInv mi ON (il.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) WHERE (il.QtyInvoiced <> nvl(mi.Qty,0) "
-        //        + "AND mi.C_InvoiceLine_ID IS NOT NULL) OR mi.C_InvoiceLine_ID IS NULL ) GROUP BY C_Invoice_ID,C_InvoiceLine_ID,QtyInvoiced "
+        //        + " AND i.VAB_Invoice_ID IN "
+        //        + "(SELECT VAB_Invoice_ID FROM (SELECT il.VAB_Invoice_ID,il.VAB_InvoiceLine_ID,il.QtyInvoiced,mi.Qty FROM VAB_InvoiceLine il "
+        //        + "LEFT OUTER JOIN M_MatchInv mi ON (il.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) WHERE (il.QtyInvoiced <> nvl(mi.Qty,0) "
+        //        + "AND mi.VAB_InvoiceLine_ID IS NOT NULL) OR mi.VAB_InvoiceLine_ID IS NULL ) GROUP BY VAB_Invoice_ID,VAB_InvoiceLine_ID,QtyInvoiced "
         //        + "HAVING QtyInvoiced > SUM(nvl(Qty,0))) ORDER BY i.DateInvoiced");
 
         //    var dr = null;
@@ -221,20 +221,20 @@
 
         //	Get Shipment
         var M_InOut_ID = this.$super.mTab.getValue("M_InOut_ID");
-        var C_Invoice_ID = this.$super.cmbInvoice.getControl().find('option:selected').val();
+        var VAB_Invoice_ID = this.$super.cmbInvoice.getControl().find('option:selected').val();
         var C_Order_ID = this.$super.cmbOrder.getControl().find('option:selected').val();
 
-        return this.saveData(model, "", C_Order_ID, C_Invoice_ID, M_Locator_ID, M_InOut_ID, Container_ID, fromApply);
+        return this.saveData(model, "", C_Order_ID, VAB_Invoice_ID, M_Locator_ID, M_InOut_ID, Container_ID, fromApply);
     }
 
     // Added by Bharat for new search filters
-    VCreateFromShipment.prototype.loadInvoices = function (C_Invoice_ID, M_Product_ID, pNo) {
-        var data = this.getInvoicesData(VIS.Env.getCtx(), C_Invoice_ID, M_Product_ID, pNo);
+    VCreateFromShipment.prototype.loadInvoices = function (VAB_Invoice_ID, M_Product_ID, pNo) {
+        var data = this.getInvoicesData(VIS.Env.getCtx(), VAB_Invoice_ID, M_Product_ID, pNo);
         //this.$super.loadGrid(data);
     }
 
 
-    VCreateFromShipment.prototype.getInvoicesData = function (ctx, C_Invoice_ID, M_Product_ID, pNo) {
+    VCreateFromShipment.prototype.getInvoicesData = function (ctx, VAB_Invoice_ID, M_Product_ID, pNo) {
         var data = [];
         var self = this;
         this.$super.record_ID = $self.mTab.getValue("M_InOut_ID");
@@ -242,7 +242,7 @@
             var selection = self.$super.dGrid.getSelection();
             for (item in selection) {
                 var obj = $.grep(self.$super.multiValues, function (n, i) {
-                    return n.M_Product_ID_K == self.$super.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == self.$super.dGrid.get(selection[item])["C_Invoice_ID_K"]
+                    return n.M_Product_ID_K == self.$super.dGrid.get(selection[item])["M_Product_ID_K"] && n.VAB_Invoice_ID_K == self.$super.dGrid.get(selection[item])["VAB_Invoice_ID_K"]
                 });
                 if (obj.length > 0) {
 
@@ -257,10 +257,10 @@
         var mProductID = "";
         if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
 
-            isBaseLangs = "FROM C_UOM uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
+            isBaseLangs = "FROM C_UOM uom INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
         }
         else {
-            isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='"
+            isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='"
                + VIS.Env.getVAF_Language(ctx) + "') ";
         }
         if (M_Product_ID != null) {
@@ -277,12 +277,12 @@
             type: "POST",
             data: {
                 keyColumnName: self.$super.mTab.keyColumnName,
-                tableName: "C_InvoiceLine",
+                tableName: "VAB_InvoiceLine",
                 recordID: self.$super.record_ID,
                 pageNo: pNo,
 
                 isBaseLangss: isBaseLangs,
-                cInvoiceID: C_Invoice_ID,
+                cInvoiceID: VAB_Invoice_ID,
                 mProductIDs: mProductID
             },
             error: function (e) {
@@ -311,7 +311,7 @@
     }
 
 
-    //VCreateFromShipment.prototype.getInvoicesData = function (ctx, C_Invoice_ID, M_Product_ID, pNo) {
+    //VCreateFromShipment.prototype.getInvoicesData = function (ctx, VAB_Invoice_ID, M_Product_ID, pNo) {
     //    var data = [];
     //    var self = this;
     //    this.$super.record_ID = $self.mTab.getValue("M_InOut_ID");
@@ -319,7 +319,7 @@
     //        var selection = self.$super.dGrid.getSelection();
     //        for (item in selection) {
     //            var obj = $.grep(self.$super.multiValues, function (n, i) {
-    //                return n.M_Product_ID_K == self.$super.dGrid.get(selection[item])["M_Product_ID_K"] && n.C_Invoice_ID_K == self.$super.dGrid.get(selection[item])["C_Invoice_ID_K"]
+    //                return n.M_Product_ID_K == self.$super.dGrid.get(selection[item])["M_Product_ID_K"] && n.VAB_Invoice_ID_K == self.$super.dGrid.get(selection[item])["VAB_Invoice_ID_K"]
     //            });
     //            if (obj.length > 0) {
 
@@ -336,29 +336,29 @@
     //        + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
     //        + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
     //        + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name) as UOM,"			//  3..4
-    //        + " l.M_Product_ID,p.Name as PRODUCT, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+    //        + " l.M_Product_ID,p.Name as PRODUCT, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
     //        + " l.C_OrderLine_ID,"                   					//  9
     //        + " l.M_AttributeSetInstance_ID AS M_ATTRIBUTESETINSTANCE_ID,"
     //        + " ins.description ");
     //    if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
 
-    //        sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
+    //        sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
     //    }
     //    else {
     //        sql = sql.concat("FROM C_UOM_Trl uom ")
-    //           .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
+    //           .concat("INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
     //           .concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
     //    }
     //    sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
-    //        .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")
+    //        .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) ")
     //        .concat("LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ")
-    //        .concat("WHERE l.C_Invoice_ID=" + C_Invoice_ID); 									//  #1
+    //        .concat("WHERE l.VAB_Invoice_ID=" + VAB_Invoice_ID); 									//  #1
     //    if (M_Product_ID != null) {
     //        sql = sql.concat(" AND l.M_Product_ID = " + M_Product_ID);
     //    }
     //    sql = sql.concat(" GROUP BY l.QtyInvoiced,l.QtyEntered,"
     //    + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-    //        + "l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description "
+    //        + "l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID,l.M_AttributeSetInstance_ID,ins.description "
     //    + "ORDER BY l.Line");
 
     //    if (!pNo) {
@@ -372,7 +372,7 @@
     //        data: {
     //            sql: sql,
     //            keyColumnName: self.$super.mTab.keyColumnName,
-    //            tableName: "C_InvoiceLine",
+    //            tableName: "VAB_InvoiceLine",
     //            recordID: self.$super.record_ID,
     //            pageNo: pNo
     //        },
@@ -428,14 +428,14 @@
     //    //        line['M_AttributeSetInstance_ID'] = dr.getString("description");
     //    //        line['C_Order_ID'] = ".";      //  4-Order
     //    //        line['M_InOut_ID'] = null;        //  5-Ship
-    //    //        line['C_Invoice_ID'] = dr.getString(7);        //  6-Invoice
+    //    //        line['VAB_Invoice_ID'] = dr.getString(7);        //  6-Invoice
 
     //    //        line['C_UOM_ID_K'] = dr.getString(2);    //  2-UOM -Key
     //    //        line['M_Product_ID_K'] = dr.getInt(4);      //  3-Product -Key
     //    //        line['M_AttributeSetInstance_ID_K'] = dr.getString("m_attributesetinstance_id");
     //    //        line['C_Order_ID_K'] = dr.getInt(8);;      //  4-OrderLine -Key
     //    //        line['M_InOut_ID_K'] = null;        //  5-Ship -Key
-    //    //        line['C_Invoice_ID_K'] = dr.getInt(6);        //  6-Invoice -Key
+    //    //        line['VAB_Invoice_ID_K'] = dr.getInt(6);        //  6-Invoice -Key
 
     //    //        line['recid'] = count;
     //    //        count++;
@@ -450,12 +450,12 @@
     //}
     // end 
 
-    VCreateFromShipment.prototype.loadInvoice = function (C_Invoice_ID) {
-        var data = this.getInvoiceData(VIS.Env.getCtx(), C_Invoice_ID);
+    VCreateFromShipment.prototype.loadInvoice = function (VAB_Invoice_ID) {
+        var data = this.getInvoiceData(VIS.Env.getCtx(), VAB_Invoice_ID);
         this.$super.loadGrid(data);
     }
 
-    VCreateFromShipment.prototype.getInvoiceData = function (ctx, C_Invoice_ID) {
+    VCreateFromShipment.prototype.getInvoiceData = function (ctx, VAB_Invoice_ID) {
         var data = [];
         var sql = ("SELECT "	//	Entered UOM
             //+ "l.QtyInvoiced-SUM(NVL(mi.Qty,0)),round(l.QtyEntered/l.QtyInvoiced,6),"
@@ -464,24 +464,24 @@
             + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
-            + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,"      //  5..8
+            + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
             + " l.C_OrderLine_ID ");                   					//  9
 
         if (VIS.Env.isBaseLanguage(ctx, "C_UOM")) {
 
-            sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
+            sql = sql.concat("FROM C_UOM uom ").concat("INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ");
         }
         else {
             sql = sql.concat("FROM C_UOM_Trl uom ")
-               .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
+               .concat("INNER JOIN VAB_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
                .concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
         }
         sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
-           .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")
-           .concat("WHERE l.C_Invoice_ID=" + C_Invoice_ID 									//  #1
+           .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) ")
+           .concat("WHERE l.VAB_Invoice_ID=" + VAB_Invoice_ID 									//  #1
             + " GROUP BY l.QtyInvoiced,l.QtyEntered,"
             + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + "l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID "
+                + "l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.C_OrderLine_ID "
             + "ORDER BY l.Line");
 
         var dr = null;
@@ -502,13 +502,13 @@
                 line['M_Product_ID'] = dr.getString(5); //  3-Product
                 line['C_Order_ID'] = ".";      //  4-Order
                 line['M_InOut_ID'] = null;        //  5-Ship
-                line['C_Invoice_ID'] = dr.getString(7);        //  6-Invoice
+                line['VAB_Invoice_ID'] = dr.getString(7);        //  6-Invoice
 
                 line['C_UOM_ID_K'] = dr.getString(2);    //  2-UOM -Key
                 line['M_Product_ID_K'] = dr.getInt(4);      //  3-Product -Key
                 line['C_Order_ID_K'] = dr.getInt(8);;      //  4-OrderLine -Key
                 line['M_InOut_ID_K'] = null;        //  5-Ship -Key
-                line['C_Invoice_ID_K'] = dr.getInt(6);        //  6-Invoice -Key
+                line['VAB_Invoice_ID_K'] = dr.getInt(6);        //  6-Invoice -Key
 
                 line['recid'] = count;
                 count++;
@@ -522,7 +522,7 @@
         return data;
     }
 
-    VCreateFromShipment.prototype.saveData = function (model, selectedItems, C_Order_ID, C_Invoice_ID, m_locator_id, M_inout_id, Container_ID, fromApply) {
+    VCreateFromShipment.prototype.saveData = function (model, selectedItems, C_Order_ID, VAB_Invoice_ID, m_locator_id, M_inout_id, Container_ID, fromApply) {
         var obj = this;
         console.log(m_locator_id);
         $.ajax({
@@ -533,7 +533,7 @@
                 model: model,
                 selectedItems: selectedItems,
                 C_Order_ID: C_Order_ID,
-                C_Invoice_ID: C_Invoice_ID,
+                VAB_Invoice_ID: VAB_Invoice_ID,
                 M_Locator_ID: m_locator_id,
                 M_InOut_ID: M_inout_id,
                 Container_ID: Container_ID

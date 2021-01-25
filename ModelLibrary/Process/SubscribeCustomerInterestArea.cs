@@ -62,7 +62,7 @@ namespace VAdvantage.Process
                 customer.SetFax(loc.GetFax());
 
                 VAdvantage.Model.X_VAF_UserContact us = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), UserId, Get_TrxName());
-                customer.SetC_Job_ID(us.GetC_Job_ID());
+                customer.SetVAB_Position_ID(us.GetVAB_Position_ID());
                 customer.SetSubscribeDate(DateTime.Today);
                 query = "Select Email from VAF_UserContact where VAF_UserContact_id= " + UserId;
                 String mail = Util.GetValueOfString(DB.ExecuteScalar(query));

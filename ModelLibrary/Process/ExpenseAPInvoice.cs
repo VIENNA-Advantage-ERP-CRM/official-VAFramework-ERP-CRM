@@ -102,7 +102,7 @@ namespace VAdvantage.Process
             // chanegs done by Bharat on 12 September 2018 to handle the case if invoice is created with an expense for the selected Business Partner
             sql.Append(" AND EXISTS (SELECT * FROM S_TimeExpenseLine el "
                 + "WHERE e.S_TimeExpense_ID=el.S_TimeExpense_ID"
-                + " AND el.C_InvoiceLine_ID IS NULL"
+                + " AND el.VAB_InvoiceLine_ID IS NULL"
                 + " AND el.ConvertedAmt<>0) "
                 + "ORDER BY e.VAB_BusinessPartner_ID, e.S_TimeExpense_ID");
 
@@ -338,7 +338,7 @@ namespace VAdvantage.Process
                             MTimeExpenseLine line = tel[i];
 
                             //	Already Invoiced or nothing to be reimbursed
-                            if (line.GetC_InvoiceLine_ID() != 0
+                            if (line.GetVAB_InvoiceLine_ID() != 0
                                 || Env.ZERO.CompareTo(line.GetQtyReimbursed()) == 0
                                 || Env.ZERO.CompareTo(line.GetPriceReimbursed()) == 0)
                             {
@@ -399,7 +399,7 @@ namespace VAdvantage.Process
                                 //new Exception("Cannot save Invoice Line");
                             }
                             //	Update TEL
-                            line.SetC_InvoiceLine_ID(il.GetC_InvoiceLine_ID());
+                            line.SetVAB_InvoiceLine_ID(il.GetVAB_InvoiceLine_ID());
                             line.SetIsInvoiced(true);
                             line.Save();
                         }   //	for all expense lines

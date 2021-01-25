@@ -110,9 +110,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         {
                             ibs.SetC_Payment_ID(info.GetC_Payment_ID());
                         }
-                        if (info.GetC_Invoice_ID() > 0)
+                        if (info.GetVAB_Invoice_ID() > 0)
                         {
-                            ibs.SetC_Invoice_ID(info.GetC_Invoice_ID());
+                            ibs.SetVAB_Invoice_ID(info.GetVAB_Invoice_ID());
                         }
                         if (info.GetVAB_BusinessPartner_ID() > 0)
                         {
@@ -152,9 +152,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         {
                             bsl.SetC_Payment_ID(info.GetC_Payment_ID());
                         }
-                        if (info.GetC_Invoice_ID() > 0)
+                        if (info.GetVAB_Invoice_ID() > 0)
                         {
-                            bsl.SetC_Invoice_ID(info.GetC_Invoice_ID());
+                            bsl.SetVAB_Invoice_ID(info.GetVAB_Invoice_ID());
                         }
                         if (info.GetVAB_BusinessPartner_ID() > 0)
                         {

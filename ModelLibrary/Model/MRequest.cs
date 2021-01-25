@@ -884,7 +884,7 @@ namespace VAdvantage.Model
          */
         public FileInfo CreatePDF(FileInfo file)
         {
-            //	ReportEngine re = ReportEngine.Get (GetCtx(), ReportEngine.INVOICE, GetC_Invoice_ID());
+            //	ReportEngine re = ReportEngine.Get (GetCtx(), ReportEngine.INVOICE, GetVAB_Invoice_ID());
             //	if (re == null)
             return null;
             //	return re.GetPDF(file);
@@ -1037,7 +1037,7 @@ namespace VAdvantage.Model
             CheckChange(ra, "C_Project_ID");
             CheckChange(ra, "VAA_Asset_ID");
             CheckChange(ra, "C_Order_ID");
-            CheckChange(ra, "C_Invoice_ID");
+            CheckChange(ra, "VAB_Invoice_ID");
             CheckChange(ra, "M_Product_ID");
             CheckChange(ra, "C_Payment_ID");
             CheckChange(ra, "M_InOut_ID");
@@ -1369,7 +1369,7 @@ namespace VAdvantage.Model
                 CheckChange(ra, "C_Project_ID");
                 CheckChange(ra, "VAA_Asset_ID");
                 CheckChange(ra, "C_Order_ID");
-                CheckChange(ra, "C_Invoice_ID");
+                CheckChange(ra, "VAB_Invoice_ID");
                 CheckChange(ra, "M_Product_ID");
                 CheckChange(ra, "C_Payment_ID");
                 CheckChange(ra, "M_InOut_ID");

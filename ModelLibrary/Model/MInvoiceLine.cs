@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MMatchPO
- * Purpose        : Used for invoice window's 2nd tab with C_InvoiceLine table
- * Class Used     : X_C_InvoiceLine
+ * Purpose        : Used for invoice window's 2nd tab with VAB_InvoiceLine table
+ * Class Used     : X_VAB_InvoiceLine
  * Chronological    Development
  * Raghunandan     08-Jun-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoiceLine : X_C_InvoiceLine
+    public class MInvoiceLine : X_VAB_InvoiceLine
     {
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MInvoiceLine).FullName);
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             MInvoiceLine retValue = null;
             try
             {
-                String sql = "SELECT * FROM C_InvoiceLine WHERE M_InOutLine_ID=" + sLine.GetM_InOutLine_ID();
+                String sql = "SELECT * FROM VAB_InvoiceLine WHERE M_InOutLine_ID=" + sLine.GetM_InOutLine_ID();
                 DataSet ds = new DataSet();
                 try
                 {
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
                         retValue = new MInvoiceLine(sLine.GetCtx(), dr, sLine.Get_TrxName());
                         if (dr.HasErrors)
                         {
-                            _log.Warning("More than one C_InvoiceLine of " + sLine);
+                            _log.Warning("More than one VAB_InvoiceLine of " + sLine);
                         }
                     }
                     ds = null;
@@ -104,15 +104,15 @@ namespace VAdvantage.Model
         /***
         * 	Invoice Line Constructor
         * 	@param ctx context
-        * 	@param C_InvoiceLine_ID invoice line or 0
+        * 	@param VAB_InvoiceLine_ID invoice line or 0
         * 	@param trxName transaction name
         */
-        public MInvoiceLine(Ctx ctx, int C_InvoiceLine_ID, Trx trxName) :
-            base(ctx, C_InvoiceLine_ID, trxName)
+        public MInvoiceLine(Ctx ctx, int VAB_InvoiceLine_ID, Trx trxName) :
+            base(ctx, VAB_InvoiceLine_ID, trxName)
         {
             try
             {
-                if (C_InvoiceLine_ID == 0)
+                if (VAB_InvoiceLine_ID == 0)
                 {
                     SetIsDescription(false);
                     SetIsPrinted(true);
@@ -147,7 +147,7 @@ namespace VAdvantage.Model
                 if (invoice.Get_ID() == 0)
                     throw new ArgumentException("Header not saved");
                 SetClientOrg(invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
-                SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                 SetInvoice(invoice);
             }
             catch (Exception ex)
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
             {
                 if (_parent == null)
                 {
-                    _parent = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    _parent = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 }
             }
             catch (Exception ex)
@@ -603,7 +603,7 @@ namespace VAdvantage.Model
                 //if (_IsSOTrx)
                 //{
                 DataSet dsLoc = null;
-                MInvoice inv = new MInvoice(Env.GetCtx(), Util.GetValueOfInt(Get_Value("C_Invoice_ID")), Get_TrxName());
+                MInvoice inv = new MInvoice(Env.GetCtx(), Util.GetValueOfInt(Get_Value("VAB_Invoice_ID")), Get_TrxName());
                 // Table ID Fixed for OrgInfo Table
                 string taxrule = string.Empty;
                 int _CountED002 = (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )")));
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("ED007_"))
             {
                 #region Set Discount Values
-                MInvoice invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(GetC_Invoice_ID()), null);
+                MInvoice invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(GetVAB_Invoice_ID()), null);
                 MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetM_Product_ID()), null);
                 MBPartner bPartner = new MBPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
                 MDiscountSchema discountSchema = new MDiscountSchema(GetCtx(), bPartner.GetM_DiscountSchema_ID(), null);
@@ -3077,10 +3077,10 @@ namespace VAdvantage.Model
             if (_name == null)
             {
                 String sql = "SELECT COALESCE (p.Name, c.Name) "
-                    + "FROM C_InvoiceLine il"
+                    + "FROM VAB_InvoiceLine il"
                     + " LEFT OUTER JOIN M_Product p ON (il.M_Product_ID=p.M_Product_ID)"
                     + " LEFT OUTER JOIN VAB_Charge C ON (il.VAB_Charge_ID=c.VAB_Charge_ID) "
-                    + "WHERE C_InvoiceLine_ID=" + GetC_InvoiceLine_ID();
+                    + "WHERE VAB_InvoiceLine_ID=" + GetVAB_InvoiceLine_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -3141,8 +3141,8 @@ namespace VAdvantage.Model
                 }
 
                 String sql = "SELECT c.StdPrecision "
-                    + "FROM VAB_Currency c INNER JOIN C_Invoice x ON (x.VAB_Currency_ID=c.VAB_Currency_ID) "
-                    + "WHERE x.C_Invoice_ID=" + GetC_Invoice_ID();
+                    + "FROM VAB_Currency c INNER JOIN VAB_Invoice x ON (x.VAB_Currency_ID=c.VAB_Currency_ID) "
+                    + "WHERE x.VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                 int i = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (i < 0)
                 {
@@ -3169,8 +3169,8 @@ namespace VAdvantage.Model
             if (_M_PriceList_ID == 0)
             {
                 _M_PriceList_ID = DataBase.DB.GetSQLValue(Get_TrxName(),
-                    "SELECT M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID=@param1",
-                    GetC_Invoice_ID());
+                    "SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=@param1",
+                    GetVAB_Invoice_ID());
             }
             MPriceList pl = MPriceList.Get(GetCtx(), _M_PriceList_ID, Get_TrxName());
             // }
@@ -3204,7 +3204,7 @@ namespace VAdvantage.Model
                     request.SetSummary(summary);
                     request.SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
                     request.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
-                    request.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                    request.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                     request.SetC_Order_ID(invoice.GetC_Order_ID());
                     request.SetVAB_BillingCode_ID(invoice.GetVAB_BillingCode_ID());
                     request.SetVAB_Promotion_ID(invoice.GetVAB_Promotion_ID());
@@ -3346,7 +3346,7 @@ namespace VAdvantage.Model
                         SetM_Product_ID(0);
                 }
 
-                MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
 
 
 
@@ -3367,8 +3367,8 @@ namespace VAdvantage.Model
                     }
                     else if (isAdvance && GetC_OrderLine_ID() > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_InvoiceLine_ID) FROM C_InvoiceLine WHERE NVL(C_OrderLine_ID, 0) = 0
-                        AND C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx())) > 0)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VAB_InvoiceLine_ID) FROM VAB_InvoiceLine WHERE NVL(C_OrderLine_ID, 0) = 0
+                        AND VAB_Invoice_ID = " + GetVAB_Invoice_ID(), null, Get_Trx())) > 0)
                         {
                             log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_CantSaveManualLine"));
                             return false;
@@ -3472,9 +3472,9 @@ namespace VAdvantage.Model
                         {
                             MInOutLine il = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
                             decimal receivedQty = il.GetQtyEntered();
-                            string invQry = @"SELECT SUM(COALESCE(li.QtyEntered,0)) as QtyEntered FROM M_InOutLine ml INNER JOIN C_InvoiceLine li 
-                            ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID WHERE ci.DocStatus NOT IN ('VO', 'RE') 
-                            AND ml.M_InOutLine_ID = " + GetM_InOutLine_ID() + " AND li.C_InvoiceLine_ID != " + Get_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
+                            string invQry = @"SELECT SUM(COALESCE(li.QtyEntered,0)) as QtyEntered FROM M_InOutLine ml INNER JOIN VAB_InvoiceLine li 
+                            ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID WHERE ci.DocStatus NOT IN ('VO', 'RE') 
+                            AND ml.M_InOutLine_ID = " + GetM_InOutLine_ID() + " AND li.VAB_InvoiceLine_ID != " + Get_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
                             decimal qtyInv = Util.GetValueOfDecimal(DB.ExecuteScalar(invQry, null, Get_TrxName()));
                             if (receivedQty < qtyInv + QtyEntered)
                             {
@@ -3529,7 +3529,7 @@ namespace VAdvantage.Model
                     if (Env.HasModulePrefix("ED011_", out iInfo))
                     {
                         //decimal convertedprice = 0;
-                        //MInvoice invoice1 = new MInvoice(GetCtx(), Util.GetValueOfInt(GetC_Invoice_ID()), null);
+                        //MInvoice invoice1 = new MInvoice(GetCtx(), Util.GetValueOfInt(GetVAB_Invoice_ID()), null);
                         //MBPartner bPartner = new MBPartner(GetCtx(), invoice1.GetVAB_BusinessPartner_ID(), null);
 
                         //string qry = "SELECT M_PriceList_Version_ID FROM m_pricelist_version WHERE IsActive = 'Y' AND m_pricelist_id = " + inv.GetM_PriceList_ID() + @" AND VALIDFROM <= sysdate order by validfrom desc";
@@ -3698,8 +3698,8 @@ namespace VAdvantage.Model
                 //	Get Line No
                 if (GetLine() == 0)
                 {
-                    String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM C_InvoiceLine WHERE C_Invoice_ID=@param1";
-                    int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetC_Invoice_ID());
+                    String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=@param1";
+                    int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAB_Invoice_ID());
                     SetLine(ii);
                 }
                 //	UOM
@@ -3880,26 +3880,26 @@ namespace VAdvantage.Model
                 }
 
                 //Added by Bharat to set Discrepancy Amount
-                MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 MDocType doc = new MDocType(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
                 if (!inv.IsSOTrx() && !doc.IsReturnTrx())
                 {
                     if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)
                     {
                         String sql = "SELECT SUM(NVL(DiscrepancyAmt,0))"
-                                + " FROM C_InvoiceLine WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                                + " FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                         decimal desAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
                         if (desAmt > 0)
                         {
-                            sql = "UPDATE C_Invoice o"
+                            sql = "UPDATE VAB_Invoice o"
                                 + " SET IsInDispute = 'Y', DiscrepancyAmt ="
-                                    + desAmt + " WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                                    + desAmt + " WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                         }
                         else
                         {
-                            sql = "UPDATE C_Invoice o"
+                            sql = "UPDATE VAB_Invoice o"
                                 + " SET IsInDispute = 'N', DiscrepancyAmt ="
-                                    + desAmt + " WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                                    + desAmt + " WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                         }
                         int no = DB.ExecuteQuery(sql, null, Get_Trx());
                         log.Fine("Lines -> #" + no);
@@ -3934,26 +3934,26 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
             //Added by Bharat to set Discrepancy Amount
-            MInvoice inv = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+            MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             MDocType doc = new MDocType(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
             if (!inv.IsSOTrx() && !doc.IsReturnTrx())
             {
                 if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)
                 {
                     String sql = "SELECT SUM(NVL(DiscrepancyAmt,0))"
-                            + " FROM C_InvoiceLine WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                            + " FROM VAB_InvoiceLine WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                     decimal desAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
                     if (desAmt > 0)
                     {
-                        sql = "UPDATE C_Invoice o"
+                        sql = "UPDATE VAB_Invoice o"
                             + " SET IsInDispute = 'Y', DiscrepancyAmt ="
-                                + desAmt + " WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                                + desAmt + " WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                     }
                     else
                     {
-                        sql = "UPDATE C_Invoice o"
+                        sql = "UPDATE VAB_Invoice o"
                             + " SET IsInDispute = 'N', DiscrepancyAmt ="
-                                + desAmt + " WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                                + desAmt + " WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
                     }
                     int no = DB.ExecuteQuery(sql, null, Get_Trx());
                     log.Fine("Lines -> #" + no);
@@ -3993,7 +3993,7 @@ namespace VAdvantage.Model
                 MTax taxRate = tax.GetTax();
                 if (taxRate.IsSummary())
                 {
-                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                     if (!CalculateChildTax(invoice, tax, taxRate, Get_TrxName()))
                     {
                         return false;
@@ -4016,13 +4016,13 @@ namespace VAdvantage.Model
             }
 
             //	Update Invoice Header
-            String sql = "UPDATE C_Invoice i"
+            String sql = "UPDATE VAB_Invoice i"
                 + " SET TotalLines="
-                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID) "
+                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM VAB_InvoiceLine il WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID) "
                     + (resetAmtDim ? ", AmtDimSubTotal = null " : "")       // reset Amount Dimension if Sub Total Amount is different
                     + (resetTotalAmtDim ? ", AmtDimGrandTotal = null " : "")     // reset Amount Dimension if Grand Total Amount is different
-                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM C_InvoiceLine il WHERE i.C_Invoice_ID=il.C_Invoice_ID))" : "")
-                + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? ", WithholdingAmt = ((SELECT COALESCE(SUM(WithholdingAmt),0) FROM VAB_InvoiceLine il WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID))" : "")
+                + "WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
@@ -4030,16 +4030,16 @@ namespace VAdvantage.Model
             }
 
             if (IsTaxIncluded())
-                sql = "UPDATE C_Invoice i "
+                sql = "UPDATE VAB_Invoice i "
                     + "SET GrandTotal=TotalLines "
                     + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
-                    + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                    + "WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
             else
-                sql = "UPDATE C_Invoice i "
+                sql = "UPDATE VAB_Invoice i "
                     + "SET GrandTotal=TotalLines+"
-                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
-                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
-                        + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                        + "(SELECT COALESCE(SUM(TaxAmt),0) FROM VAB_Tax_Invoice it WHERE i.VAB_Invoice_ID=it.VAB_Invoice_ID) "
+                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM VAB_Tax_Invoice it WHERE i.VAB_Invoice_ID=it.VAB_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
+                        + "WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
@@ -4050,7 +4050,7 @@ namespace VAdvantage.Model
                 // calculate withholdng on header 
                 if (invoice == null)
                 {
-                    invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_TrxName());
+                    invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 }
                 if (invoice.GetC_Withholding_ID() > 0)
                 {
@@ -4077,13 +4077,13 @@ namespace VAdvantage.Model
         {
             String sql = @"SELECT DISTINCT COALESCE(SUM(
                           CASE WHEN IsHoldPayment!= 'N' THEN 1 ELSE 0 END) , 0) AS IsHoldPayment
-                        FROM C_InvoiceLine INNER JOIN C_OrderLine ON C_InvoiceLine.C_OrderLine_ID=C_OrderLine.C_OrderLine_ID
+                        FROM VAB_InvoiceLine INNER JOIN C_OrderLine ON VAB_InvoiceLine.C_OrderLine_ID=C_OrderLine.C_OrderLine_ID
                         INNER JOIN C_Order ON C_OrderLine.C_Order_ID = C_Order.C_Order_ID
-                        WHERE C_InvoiceLine.C_Invoice_ID =  " + GetC_Invoice_ID();
+                        WHERE VAB_InvoiceLine.VAB_Invoice_ID =  " + GetVAB_Invoice_ID();
             int no = DataBase.DB.GetSQLValue(Get_Trx(), sql, null);
             if (no > 0)
             {
-                no = DB.ExecuteQuery("UPDATE C_Invoice SET IsHoldPayment = 'Y' WHERE C_Invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx());
+                no = DB.ExecuteQuery("UPDATE VAB_Invoice SET IsHoldPayment = 'Y' WHERE VAB_Invoice_ID = " + GetVAB_Invoice_ID(), null, Get_Trx());
                 log.Fine("Hold Payment Updated as TRUE -> #" + no);
                 if (no <= 0)
                     return false;
@@ -4160,7 +4160,7 @@ namespace VAdvantage.Model
                             withholdingAmt = GetTaxAmt();
                         }
 
-                        _log.Info("Invoice withholding detail, Invoice ID = " + GetC_Invoice_ID() + " , Amount on distribute = " + withholdingAmt +
+                        _log.Info("Invoice withholding detail, Invoice ID = " + GetVAB_Invoice_ID() + " , Amount on distribute = " + withholdingAmt +
                          " , Invoice Withhold Percentage " + Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["InvPercentage"]));
 
                         // derive formula
@@ -4210,7 +4210,7 @@ namespace VAdvantage.Model
 
                 // check child tax record is avialable or not 
                 // if not then create new record
-                String sql = "SELECT * FROM C_InvoiceTax WHERE C_Invoice_ID=" + invoice.GetC_Invoice_ID() + " AND C_Tax_ID=" + cTax.GetC_Tax_ID();
+                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + invoice.GetVAB_Invoice_ID() + " AND C_Tax_ID=" + cTax.GetC_Tax_ID();
                 try
                 {
                     DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -4237,7 +4237,7 @@ namespace VAdvantage.Model
                 {
                     newITax = new MInvoiceTax(GetCtx(), 0, Get_TrxName());
                     newITax.SetClientOrg(this);
-                    newITax.SetC_Invoice_ID(GetC_Invoice_ID());
+                    newITax.SetVAB_Invoice_ID(GetVAB_Invoice_ID());
                     newITax.SetC_Tax_ID(cTax.GetC_Tax_ID());
                 }
 
@@ -4290,14 +4290,14 @@ namespace VAdvantage.Model
                     return "";
                 }
 
-                //int nos = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_LandedCost WHERE  LandedCostDistribution = 'C' AND C_InvoiceLine_ID = " + GetC_InvoiceLine_ID(), null, Get_Trx()));
+                //int nos = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_LCost WHERE  LandedCostDistribution = 'C' AND VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID(), null, Get_Trx()));
                 //if (nos > 0)
                 //{
                 //    return "";
                 //}
 
-                String sql = "DELETE FROM C_LandedCostAllocation WHERE C_InvoiceLine_ID="
-                    + GetC_InvoiceLine_ID();
+                String sql = "DELETE FROM VAB_LCostDistribution WHERE VAB_InvoiceLine_ID="
+                    + GetVAB_InvoiceLine_ID();
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 0)
                 {
@@ -4344,16 +4344,16 @@ namespace VAdvantage.Model
                                                 THEN ROUND((il.taxbaseamt + il.surchargeamt) / il.qtyinvoiced, 4)
                                                 ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
                                               END) AS LineNetAmt , io.M_Warehouse_ID
-                            FROM C_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.C_Invoiceline_ID = Il.C_Invoiceline_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
+                            FROM VAB_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.VAB_InvoiceLine_ID = Il.VAB_InvoiceLine_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
                             INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID 
                             INNER JOIN c_tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID 
                             LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID 
-                            WHERE il.C_Invoice_ID = " + lc.GetRef_Invoice_ID());
+                            WHERE il.VAB_Invoice_ID = " + lc.GetRef_Invoice_ID());
 
                             //	Single Invoice Line
                             if (lc.GetRef_InvoiceLine_ID() != 0)
                             {
-                                qry.Append(" AND il.C_Invoiceline_ID = " + lc.GetRef_InvoiceLine_ID());
+                                qry.Append(" AND il.VAB_InvoiceLine_ID = " + lc.GetRef_InvoiceLine_ID());
                             }
 
                             if (lc.GetM_Product_ID() > 0)
@@ -4384,7 +4384,7 @@ namespace VAdvantage.Model
                                 if (dr.Count == 0)
                                 {
                                     ds.Dispose();
-                                    return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@C_Invoice_ID@";
+                                    return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@VAB_Invoice_ID@";
                                 }
 
                                 // if Total of Base values is 0
@@ -4422,9 +4422,9 @@ namespace VAdvantage.Model
                                     lca.SetQty(Util.GetValueOfDecimal(dr[i]["Qty"]));
 
                                     // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                                    if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                                    if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                                     {
-                                        lca.SetC_LandedCost_ID(lc.Get_ID());
+                                        lca.SetVAB_LCost_ID(lc.Get_ID());
                                     }
                                     if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                                     {
@@ -4453,7 +4453,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 // if No Matching Lines (with Product)
-                                return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@C_Invoice_ID@";
+                                return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@VAB_Invoice_ID@";
                             }
                         }
 
@@ -4520,9 +4520,9 @@ namespace VAdvantage.Model
                             lca.SetQty(iol.GetMovementQty());
 
                             // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                            if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                            if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                             {
-                                lca.SetC_LandedCost_ID(lc.Get_ID());
+                                lca.SetVAB_LCost_ID(lc.Get_ID());
                             }
                             if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                             {
@@ -4645,9 +4645,9 @@ namespace VAdvantage.Model
                                 lca.SetQty(iol.GetMovementQty());
 
                                 // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                                if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                                if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                                 {
-                                    lca.SetC_LandedCost_ID(lc.Get_ID());
+                                    lca.SetVAB_LCost_ID(lc.Get_ID());
                                 }
                                 if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                                 {
@@ -4713,9 +4713,9 @@ namespace VAdvantage.Model
                             lca.SetQty(iol.GetMovementQty());
 
                             // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                            if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                            if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                             {
-                                lca.SetC_LandedCost_ID(lc.Get_ID());
+                                lca.SetVAB_LCost_ID(lc.Get_ID());
                             }
                             if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                             {
@@ -4820,9 +4820,9 @@ namespace VAdvantage.Model
                                 lca.SetQty(iol.GetMovementQty());
 
                                 // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                                if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                                if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                                 {
-                                    lca.SetC_LandedCost_ID(lc.Get_ID());
+                                    lca.SetVAB_LCost_ID(lc.Get_ID());
                                 }
                                 if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                                 {
@@ -4977,16 +4977,16 @@ namespace VAdvantage.Model
                                         THEN ROUND((il.taxbaseamt + il.surchargeamt) / il.qtyinvoiced, 4)
                                         ELSE ROUND(il.taxbaseamt  / il.qtyinvoiced, 4)
                                       END) AS LineNetAmt , io.M_Warehouse_ID
-                            FROM C_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.C_Invoiceline_ID = Il.C_Invoiceline_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
+                            FROM VAB_InvoiceLine il INNER JOIN M_Matchinv mi ON Mi.VAB_InvoiceLine_ID = Il.VAB_InvoiceLine_ID INNER JOIN M_InoutLine iol ON iol.M_InoutLine_ID = mi.M_InoutLine_ID
                             INNER JOIN M_InOut io ON io.M_InOut_ID = iol.M_InOut_ID INNER JOIN M_Warehouse wh ON wh.M_Warehouse_ID = io.M_Warehouse_ID 
                             INNER JOIN C_Tax C_Tax ON C_Tax.C_Tax_ID = il.C_Tax_ID
                             LEFT JOIN C_Tax C_SurChargeTax ON C_Tax.Surcharge_Tax_ID = C_SurChargeTax.C_Tax_ID 
-                            WHERE il.C_Invoice_ID = " + lc.GetRef_Invoice_ID());
+                            WHERE il.VAB_Invoice_ID = " + lc.GetRef_Invoice_ID());
 
                         //	Single Invoice Line
                         if (lc.GetRef_InvoiceLine_ID() != 0)
                         {
-                            qry.Append(" AND il.C_Invoiceline_ID = " + lc.GetRef_InvoiceLine_ID());
+                            qry.Append(" AND il.VAB_InvoiceLine_ID = " + lc.GetRef_InvoiceLine_ID());
                         }
 
                         if (lc.GetM_Product_ID() > 0)
@@ -5020,7 +5020,7 @@ namespace VAdvantage.Model
                     // if No Matching Lines (with Product)
                     if (dr.Count == 0)
                     {
-                        return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@C_Invoice_ID@";
+                        return Msg.GetMsg(GetCtx(), "NoMatchProduct") + "@VAB_Invoice_ID@";
                     }
 
                     // if Total of Base values is 0
@@ -5055,9 +5055,9 @@ namespace VAdvantage.Model
                         lca.SetQty(Util.GetValueOfDecimal(dr[i]["Qty"]));
 
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                        if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                        if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                         {
-                            lca.SetC_LandedCost_ID(lcs[0].Get_ID());
+                            lca.SetVAB_LCost_ID(lcs[0].Get_ID());
                         }
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
@@ -5183,9 +5183,9 @@ namespace VAdvantage.Model
                         lca.SetQty(inl.GetMovementQty());
 
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                        if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                        if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                         {
-                            lca.SetC_LandedCost_ID(lcs[i].Get_ID());
+                            lca.SetVAB_LCost_ID(lcs[i].Get_ID());
                         }
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
@@ -5324,9 +5324,9 @@ namespace VAdvantage.Model
                         lca.SetBase(base1);
 
                         // Set Landed Cost Id and Warehouse ID on Landed Cost Allocation
-                        if (lca.Get_ColumnIndex("C_LandedCost_ID") > 0)
+                        if (lca.Get_ColumnIndex("VAB_LCost_ID") > 0)
                         {
-                            lca.SetC_LandedCost_ID(lcs[i].Get_ID());
+                            lca.SetVAB_LCost_ID(lcs[i].Get_ID());
                         }
                         if (lca.Get_ColumnIndex("M_Warehouse_ID") > 0)
                         {
@@ -5440,7 +5440,7 @@ namespace VAdvantage.Model
             try
             {
                 MLandedCostAllocation[] allocations = MLandedCostAllocation.GetOfInvoiceLine(
-                    GetCtx(), GetC_InvoiceLine_ID(), Get_TrxName());
+                    GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
                 MLandedCostAllocation largestAmtAllocation = null;
                 Decimal allocationAmt = Env.ZERO;
                 for (int i = 0; i < allocations.Length; i++)
@@ -5458,7 +5458,7 @@ namespace VAdvantage.Model
                     largestAmtAllocation.SetAmt(Decimal.Add(largestAmtAllocation.GetAmt(), difference));
                     largestAmtAllocation.Save();
                     log.Config("Difference=" + difference
-                        + ", C_LandedCostAllocation_ID=" + largestAmtAllocation.GetC_LandedCostAllocation_ID()
+                        + ", VAB_LCostDistribution_ID=" + largestAmtAllocation.GetVAB_LCostDistribution_ID()
                         + ", Amt" + largestAmtAllocation.GetAmt());
                 }
             }

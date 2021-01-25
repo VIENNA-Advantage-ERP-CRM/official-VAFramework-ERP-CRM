@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_IndustryCode
+/** Generated Model for VAB_Industrykey
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_IndustryCode : PO
+public class X_VAB_Industrykey : PO
 {
-public X_C_IndustryCode (Context ctx, int C_IndustryCode_ID, Trx trxName) : base (ctx, C_IndustryCode_ID, trxName)
+public X_VAB_Industrykey (Context ctx, int VAB_Industrykey_ID, Trx trxName) : base (ctx, VAB_Industrykey_ID, trxName)
 {
-/** if (C_IndustryCode_ID == 0)
+/** if (VAB_Industrykey_ID == 0)
 {
-SetC_IndustryCode_ID (0);
+SetVAB_Industrykey_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_IndustryCode (Ctx ctx, int C_IndustryCode_ID, Trx trxName) : base (ctx, C_IndustryCode_ID, trxName)
+public X_VAB_Industrykey (Ctx ctx, int VAB_Industrykey_ID, Trx trxName) : base (ctx, VAB_Industrykey_ID, trxName)
 {
-/** if (C_IndustryCode_ID == 0)
+/** if (VAB_Industrykey_ID == 0)
 {
-SetC_IndustryCode_ID (0);
+SetVAB_Industrykey_ID (0);
 SetName (null);
 SetValue (null);
 }
@@ -41,7 +41,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IndustryCode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Industrykey (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_IndustryCode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IndustryCode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Industrykey (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_IndustryCode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_IndustryCode (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Industrykey (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_IndustryCode()
+static X_VAB_Industrykey()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389055414L;
 public static int Table_ID;
  // =913;
 
-/** TableName=C_IndustryCode */
-public static String Table_Name="C_IndustryCode";
+/** TableName=VAB_Industrykey */
+public static String Table_Name="VAB_Industrykey";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_IndustryCode[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Industrykey[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Industry Code.
-@param C_IndustryCode_ID Business Partner Industry Classification */
-public void SetC_IndustryCode_ID (int C_IndustryCode_ID)
+@param VAB_Industrykey_ID Business Partner Industry Classification */
+public void SetVAB_Industrykey_ID (int VAB_Industrykey_ID)
 {
-if (C_IndustryCode_ID < 1) throw new ArgumentException ("C_IndustryCode_ID is mandatory.");
-Set_ValueNoCheck ("C_IndustryCode_ID", C_IndustryCode_ID);
+if (VAB_Industrykey_ID < 1) throw new ArgumentException ("VAB_Industrykey_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Industrykey_ID", VAB_Industrykey_ID);
 }
 /** Get Industry Code.
 @return Business Partner Industry Classification */
-public int GetC_IndustryCode_ID() 
+public int GetVAB_Industrykey_ID() 
 {
-Object ii = Get_Value("C_IndustryCode_ID");
+Object ii = Get_Value("VAB_Industrykey_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

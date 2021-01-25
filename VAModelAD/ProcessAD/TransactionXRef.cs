@@ -67,7 +67,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	protected override String DoIt() 
 	{
 		log.Info("M_InOut_ID=" + _Search_InOut_ID + ", C_Order_ID=" + _Search_Order_ID
-			+ ", C_Invoice_ID=" + _Search_Invoice_ID);
+			+ ", VAB_Invoice_ID=" + _Search_Invoice_ID);
 		//
         if (_Search_InOut_ID != 0)
         {
@@ -94,8 +94,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 "SELECT NVL(ma.M_AttributeSetInstance_ID,iol.M_AttributeSetInstance_ID) "
                 + "FROM M_InOutLine iol"
                 + " LEFT OUTER JOIN M_InOutLineMA ma ON (iol.M_InOutLine_ID=ma.M_InOutLine_ID) "
-                + " INNER JOIN C_InvoiceLine il ON (iol.M_InOutLine_ID=il.M_InOutLine_ID) "
-                + "WHERE il.C_Invoice_ID=" + _Search_Invoice_ID
+                + " INNER JOIN VAB_InvoiceLine il ON (iol.M_InOutLine_ID=il.M_InOutLine_ID) "
+                + "WHERE il.VAB_Invoice_ID=" + _Search_Invoice_ID
                 );
         }
         else

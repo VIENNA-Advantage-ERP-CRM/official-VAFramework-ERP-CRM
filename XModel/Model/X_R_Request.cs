@@ -266,37 +266,37 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_InvoiceRequest_ID VAF_Control_Ref_ID=336 */
-public static int C_INVOICEREQUEST_ID_VAF_Control_Ref_ID=336;
+/** VAB_InvoiceRequest_ID VAF_Control_Ref_ID=336 */
+public static int VAB_INVOICEREQUEST_ID_VAF_Control_Ref_ID=336;
 /** Set Request Invoice.
-@param C_InvoiceRequest_ID The generated invoice for this request */
-public void SetC_InvoiceRequest_ID (int C_InvoiceRequest_ID)
+@param VAB_InvoiceRequest_ID The generated invoice for this request */
+public void SetVAB_InvoiceRequest_ID (int VAB_InvoiceRequest_ID)
 {
-if (C_InvoiceRequest_ID <= 0) Set_ValueNoCheck ("C_InvoiceRequest_ID", null);
+if (VAB_InvoiceRequest_ID <= 0) Set_ValueNoCheck ("VAB_InvoiceRequest_ID", null);
 else
-Set_ValueNoCheck ("C_InvoiceRequest_ID", C_InvoiceRequest_ID);
+Set_ValueNoCheck ("VAB_InvoiceRequest_ID", VAB_InvoiceRequest_ID);
 }
 /** Get Request Invoice.
 @return The generated invoice for this request */
-public int GetC_InvoiceRequest_ID() 
+public int GetVAB_InvoiceRequest_ID() 
 {
-Object ii = Get_Value("C_InvoiceRequest_ID");
+Object ii = Get_Value("VAB_InvoiceRequest_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Invoice.
-@param C_Invoice_ID Invoice Identifier */
-public void SetC_Invoice_ID (int C_Invoice_ID)
+@param VAB_Invoice_ID Invoice Identifier */
+public void SetVAB_Invoice_ID (int VAB_Invoice_ID)
 {
-if (C_Invoice_ID <= 0) Set_Value ("C_Invoice_ID", null);
+if (VAB_Invoice_ID <= 0) Set_Value ("VAB_Invoice_ID", null);
 else
-Set_Value ("C_Invoice_ID", C_Invoice_ID);
+Set_Value ("VAB_Invoice_ID", VAB_Invoice_ID);
 }
 /** Get Invoice.
 @return Invoice Identifier */
-public int GetC_Invoice_ID() 
+public int GetVAB_Invoice_ID() 
 {
-Object ii = Get_Value("C_Invoice_ID");
+Object ii = Get_Value("VAB_Invoice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

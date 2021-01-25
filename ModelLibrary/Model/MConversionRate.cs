@@ -550,7 +550,7 @@ namespace VAdvantage.Model
                     }
                 }
 
-                sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*)  FROM VAB_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
@@ -694,7 +694,7 @@ namespace VAdvantage.Model
         {
             // Cannot delete record if transaction occured agianst this currency and currenct to
             string sql;
-            sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*)  FROM VAB_Invoice i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +

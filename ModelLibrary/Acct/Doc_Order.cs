@@ -464,22 +464,22 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="doc">document</param>
         /// <param name="maxQty">Qty invoiced/matched</param>
-        /// <param name="C_InvoiceLine_ID">invoice line</param>
+        /// <param name="VAB_InvoiceLine_ID">invoice line</param>
         /// <returns>commitments (order lines)</returns>
-        protected static DocLine[] GetCommitments(Doc doc, Decimal maxQty, int C_InvoiceLine_ID)
+        protected static DocLine[] GetCommitments(Doc doc, Decimal maxQty, int VAB_InvoiceLine_ID)
         {
             int precision = -1;
             //
             List<DocLine> list = new List<DocLine>();
             String sql = "SELECT * FROM C_OrderLine ol "
                 + "WHERE EXISTS "
-                    + "(SELECT * FROM C_InvoiceLine il "
+                    + "(SELECT * FROM VAB_InvoiceLine il "
                     + "WHERE il.C_OrderLine_ID=ol.C_OrderLine_ID"
-                    + " AND il.C_InvoiceLine_ID=" + C_InvoiceLine_ID + ")"
+                    + " AND il.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")"
                 + " OR EXISTS "
                     + "(SELECT * FROM M_MatchPO po "
                     + "WHERE po.C_OrderLine_ID=ol.C_OrderLine_ID"
-                    + " AND po.C_InvoiceLine_ID=" + C_InvoiceLine_ID + ")";
+                    + " AND po.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")";
             IDataReader idr = null;
             try
             {
@@ -565,14 +565,14 @@ namespace VAdvantage.Acct
         /// <param name="as1">accounting schema</param>
         /// <param name="doc">doc</param>
         /// <param name="Qty">qty invoiced/matched</param>
-        /// <param name="C_InvoiceLine_ID">line</param>
+        /// <param name="VAB_InvoiceLine_ID">line</param>
         /// <param name="multiplier">1 for accrual</param>
         /// <returns>Fact</returns>
         public static Fact GetCommitmentRelease(MAcctSchema as1, Doc doc,
-            Decimal Qty, int C_InvoiceLine_ID, Decimal multiplier)
+            Decimal Qty, int VAB_InvoiceLine_ID, Decimal multiplier)
         {
             Fact fact = new Fact(doc, as1, Fact.POST_Commitment);
-            DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, C_InvoiceLine_ID);
+            DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
             Decimal total = Env.ZERO;
             int VAB_Currency_ID = -1;
             for (int i = 0; i < commitments.Length; i++)

@@ -102,7 +102,7 @@
         var isProcess = false;
         //Match Options  
         var _matchOptions = [];
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Invoice_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAB_Invoice_ID", false));
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Order_ID", false));
 
@@ -963,20 +963,20 @@
         //    if (display == MATCH_INVOICE) {
         //        _dateColumn = "hdr.DateInvoiced";
         //        _qtyColumn = "lin.QtyInvoiced";
-        //        _sql = _sql.concat("SELECT hdr.C_Invoice_ID,hdr.DocumentNo, hdr.DateInvoiced, bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.C_InvoiceLine_ID, p.Name as Product,lin.M_Product_ID,"
+        //        _sql = _sql.concat("SELECT hdr.VAB_Invoice_ID,hdr.DocumentNo, hdr.DateInvoiced, bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAB_InvoiceLine_ID, p.Name as Product,lin.M_Product_ID,"
         //            + " lin.QtyInvoiced,SUM(NVL(mi.Qty,0)) as match "
-        //            + "FROM C_Invoice hdr"
+        //            + "FROM VAB_Invoice hdr"
         //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
-        //            + " INNER JOIN C_InvoiceLine lin ON (hdr.C_Invoice_ID=lin.C_Invoice_ID)"
+        //            + " INNER JOIN VAB_InvoiceLine lin ON (hdr.VAB_Invoice_ID=lin.VAB_Invoice_ID)"
         //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
         //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID and dt.DocBaseType in ('API','APC') AND dt.IsReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
-        //            .concat(" FULL JOIN M_MatchInv mi ON (lin.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) "
+        //            .concat(" FULL JOIN M_MatchInv mi ON (lin.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
         //            + "WHERE hdr.DocStatus IN ('CO','CL')");
 
-        //        _groupBy = " GROUP BY hdr.C_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.C_InvoiceLine_ID,p.Name,lin.M_Product_ID,lin.QtyInvoiced "
+        //        _groupBy = " GROUP BY hdr.VAB_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAB_InvoiceLine_ID,p.Name,lin.M_Product_ID,lin.QtyInvoiced "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyInvoiced")
         //            + "<>SUM(NVL(mi.Qty,0))";
@@ -995,7 +995,7 @@
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
         //            .concat(" FULL JOIN M_MatchPO mo ON (lin.C_OrderLine_ID=mo.C_OrderLine_ID) "
         //            + "WHERE mo.")
-        //            .concat(matchToType == MATCH_SHIPMENT ? "M_InOutLine_ID" : "C_InvoiceLine_ID")
+        //            .concat(matchToType == MATCH_SHIPMENT ? "M_InOutLine_ID" : "VAB_InvoiceLine_ID")
         //            .concat(matched ? " IS NOT NULL" : " IS NULL"
         //            + " AND hdr.DocStatus IN ('CO','CL')");
 

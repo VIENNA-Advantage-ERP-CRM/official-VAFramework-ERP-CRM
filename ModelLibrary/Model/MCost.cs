@@ -764,8 +764,8 @@ namespace VAdvantage.Model
             Decimal? retValue = null;
             String sql = "SELECT currencyConvert(il.PriceActual, i.VAB_Currency_ID," + VAB_Currency_ID + ", i.DateAcct, i.VAB_CurrencyType_ID, il.VAF_Client_ID, il.VAF_Org_ID) "
                 // ,il.PriceActual, il.QtyInvoiced, i.DateInvoiced, il.Line
-                + "FROM C_InvoiceLine il "
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                + "FROM VAB_InvoiceLine il "
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                 + "WHERE il.M_Product_ID=" + product.GetM_Product_ID()
                 + " AND i.IsSOTrx='N'";
             if (VAF_Org_ID != 0)
@@ -1207,8 +1207,8 @@ namespace VAdvantage.Model
                 + " i.VAB_Currency_ID, i.DateAcct, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID, t.M_Transaction_ID "
                 + "FROM M_Transaction t"
                 + " INNER JOIN M_MatchInv mi ON (t.M_InOutLine_ID=mi.M_InOutLine_ID)"
-                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID)"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                 + "WHERE t.M_Product_ID=" + product.GetM_Product_ID();
             if (VAF_Org_ID != 0)
                 sql += " AND t.VAF_Org_ID=" + VAF_Org_ID;
@@ -1394,8 +1394,8 @@ namespace VAdvantage.Model
                 + " i.VAB_Currency_ID, i.DateAcct, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID, t.M_Transaction_ID "
                 + "FROM M_Transaction t"
                 + " INNER JOIN M_MatchInv mi ON (t.M_InOutLine_ID=mi.M_InOutLine_ID)"
-                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID)"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                 + "WHERE t.M_Product_ID=" + product.GetM_Product_ID();
             if (VAF_Org_ID != 0)
                 sql += " AND t.VAF_Org_ID=" + VAF_Org_ID;
@@ -1535,8 +1535,8 @@ namespace VAdvantage.Model
                 + " i.VAB_Currency_ID, i.DateAcct, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID, t.M_Transaction_ID "
                 + "FROM M_Transaction t"
                 + " INNER JOIN M_MatchInv mi ON (t.M_InOutLine_ID=mi.M_InOutLine_ID)"
-                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID)"
-                + " INNER JOIN C_Invoice i ON (il.C_Invoice_ID=i.C_Invoice_ID) "
+                + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID)"
+                + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                 + "WHERE t.M_Product_ID=" + product.GetM_Product_ID();
             if (VAF_Org_ID != 0)
                 sql += " AND t.VAF_Org_ID=" + VAF_Org_ID;

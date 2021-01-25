@@ -108,7 +108,7 @@ namespace VAdvantage.Model
             : this(iLine.GetCtx(), 0, iLine.Get_Trx())
         {
             SetClientOrg(iLine);
-            SetC_InvoiceLine_ID(iLine);
+            SetVAB_InvoiceLine_ID(iLine);
             if (iLine.GetC_OrderLine_ID() != 0)
                 SetC_OrderLine_ID(iLine.GetC_OrderLine_ID());
             if (dateTrx != null)
@@ -151,11 +151,11 @@ namespace VAdvantage.Model
                         {
                             dr = ds.Tables[0].Rows[i];
                             MMatchPO po2 = new MMatchPO(ctx, dr, null);
-                            if (po1.GetM_InOutLine_ID() != 0 && po1.GetC_InvoiceLine_ID() == 0
-                                && po2.GetM_InOutLine_ID() == 0 && po2.GetC_InvoiceLine_ID() != 0)
+                            if (po1.GetM_InOutLine_ID() != 0 && po1.GetVAB_InvoiceLine_ID() == 0
+                                && po2.GetM_InOutLine_ID() == 0 && po2.GetVAB_InvoiceLine_ID() != 0)
                             {
-                                String s1 = "UPDATE M_MatchPO SET C_InvoiceLine_ID="
-                                    + po2.GetC_InvoiceLine_ID()
+                                String s1 = "UPDATE M_MatchPO SET VAB_InvoiceLine_ID="
+                                    + po2.GetVAB_InvoiceLine_ID()
                                     + " WHERE M_MatchPO_ID=" + po1.GetM_MatchPO_ID();
                                 int no1 = ExecuteQuery.ExecuteNonQuery(s1);
                                 if (no1 != 1)
@@ -236,10 +236,10 @@ namespace VAdvantage.Model
                     {
                         if (iLine != null)
                         {
-                            if (mpo.GetC_InvoiceLine_ID() == 0
-                                || mpo.GetC_InvoiceLine_ID() == iLine.GetC_InvoiceLine_ID())
+                            if (mpo.GetVAB_InvoiceLine_ID() == 0
+                                || mpo.GetVAB_InvoiceLine_ID() == iLine.GetVAB_InvoiceLine_ID())
                             {
-                                mpo.SetC_InvoiceLine_ID(iLine);
+                                mpo.SetVAB_InvoiceLine_ID(iLine);
                                 if (iLine.GetM_AttributeSetInstance_ID() != 0)
                                 {
                                     if (mpo.GetM_AttributeSetInstance_ID() == 0)
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
                 {
                     retValue = new MMatchPO(sLine, dateTrx, qty);
                     if (iLine != null)
-                        retValue.SetC_InvoiceLine_ID(iLine);
+                        retValue.SetVAB_InvoiceLine_ID(iLine);
                 }
                 else if (iLine != null)
                 {
@@ -337,15 +337,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="C_OrderLine_ID">order</param>
-        /// <param name="C_InvoiceLine_ID">invoice</param>
+        /// <param name="VAB_InvoiceLine_ID">invoice</param>
         /// <param name="trxName">transaction</param>
         /// <returns>array of matches</returns>
-        public static MMatchPO[] Get(Ctx ctx, int C_OrderLine_ID, int C_InvoiceLine_ID, Trx trxName)
+        public static MMatchPO[] Get(Ctx ctx, int C_OrderLine_ID, int VAB_InvoiceLine_ID, Trx trxName)
         {
-            if (C_OrderLine_ID == 0 || C_InvoiceLine_ID == 0)
+            if (C_OrderLine_ID == 0 || VAB_InvoiceLine_ID == 0)
                 return new MMatchPO[] { };
             //
-            String sql = "SELECT * FROM M_MatchPO WHERE C_OrderLine_ID=" + C_OrderLine_ID + " AND C_InvoiceLine_ID=" + C_InvoiceLine_ID;
+            String sql = "SELECT * FROM M_MatchPO WHERE C_OrderLine_ID=" + C_OrderLine_ID + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID;
             List<MMatchPO> list = new List<MMatchPO>();
             try
             {
@@ -407,17 +407,17 @@ namespace VAdvantage.Model
         /// Get PO Matches of Invoice
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Invoice_ID">invoice</param>
+        /// <param name="VAB_Invoice_ID">invoice</param>
         /// <param name="trxName">transaction</param>
         /// <returns>array of matches</returns>
-        public static MMatchPO[] GetInvoice(Ctx ctx, int C_Invoice_ID, Trx trxName)
+        public static MMatchPO[] GetInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName)
         {
-            if (C_Invoice_ID == 0)
+            if (VAB_Invoice_ID == 0)
                 return new MMatchPO[] { };
             //
             String sql = "SELECT * FROM M_MatchPO mi"
-                + " INNER JOIN C_InvoiceLine il ON (mi.C_InvoiceLine_ID=il.C_InvoiceLine_ID) "
-                + "WHERE il.C_Invoice_ID=" + C_Invoice_ID;
+                + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID) "
+                + "WHERE il.VAB_Invoice_ID=" + VAB_Invoice_ID;
             List<MMatchPO> list = new List<MMatchPO>();
             try
             {
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
                         origOrderLine.Save();
                     }
                 }
-                if (GetC_InvoiceLine_ID() != 0)
+                if (GetVAB_InvoiceLine_ID() != 0)
                     orderLine.SetQtyInvoiced(Decimal.Subtract(orderLine.GetQtyInvoiced(), GetQty()));
                 return orderLine.Save(Get_Trx());
             }
@@ -516,9 +516,9 @@ namespace VAdvantage.Model
                 }
                 if (_isInvoiceLineChange)
                 {
-                    if (GetC_InvoiceLine_ID() != 0)						//	first time
+                    if (GetVAB_InvoiceLine_ID() != 0)						//	first time
                         orderLine.SetQtyInvoiced(Decimal.Add(orderLine.GetQtyInvoiced(), GetQty()));
-                    else //	if (getC_InvoiceLine_ID() == 0)				//	set to 0
+                    else //	if (getVAB_InvoiceLine_ID() == 0)				//	set to 0
                         orderLine.SetQtyInvoiced(Decimal.Subtract(orderLine.GetQtyInvoiced(), GetQty()));
                     orderLine.SetDateInvoiced(GetDateTrx());	//	overwrite=last
                 }
@@ -604,7 +604,7 @@ namespace VAdvantage.Model
             if (GetC_OrderLine_ID() == 0)
             {
                 MInvoiceLine il = null;
-                if (GetC_InvoiceLine_ID() != 0)
+                if (GetVAB_InvoiceLine_ID() != 0)
                 {
                     il = GetInvoiceLine();
                     if (il.GetC_OrderLine_ID() != 0)
@@ -627,9 +627,9 @@ namespace VAdvantage.Model
 
             //	Price Match Approval
             if (GetC_OrderLine_ID() != 0
-                && GetC_InvoiceLine_ID() != 0
+                && GetVAB_InvoiceLine_ID() != 0
                 && (newRecord ||
-                    Is_ValueChanged("C_OrderLine_ID") || Is_ValueChanged("C_InvoiceLine_ID")))
+                    Is_ValueChanged("C_OrderLine_ID") || Is_ValueChanged("VAB_InvoiceLine_ID")))
             {
                 Decimal poPrice = GetOrderLine().GetPriceActual();
                 Decimal invPrice = GetInvoiceLine().GetPriceActual();
@@ -671,8 +671,8 @@ namespace VAdvantage.Model
         /// <returns>invoice line or null</returns>
         public MInvoiceLine GetInvoiceLine()
         {
-            if (_iLine == null && GetC_InvoiceLine_ID() != 0)
-                _iLine = new MInvoiceLine(GetCtx(), GetC_InvoiceLine_ID(), Get_Trx());
+            if (_iLine == null && GetVAB_InvoiceLine_ID() != 0)
+                _iLine = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
             return _iLine;
         }
 
@@ -687,10 +687,10 @@ namespace VAdvantage.Model
             DateTime? shipDate = null;
 
             String sql = "SELECT i.DateAcct "
-                + "FROM C_InvoiceLine il"
-                + " INNER JOIN C_Invoice i ON (i.C_Invoice_ID=il.C_Invoice_ID) "
-                + "WHERE C_InvoiceLine_ID=" + GetC_InvoiceLine_ID();
-            if (GetC_InvoiceLine_ID() != 0)
+                + "FROM VAB_InvoiceLine il"
+                + " INNER JOIN VAB_Invoice i ON (i.VAB_Invoice_ID=il.VAB_Invoice_ID) "
+                + "WHERE VAB_InvoiceLine_ID=" + GetVAB_InvoiceLine_ID();
+            if (GetVAB_InvoiceLine_ID() != 0)
             {
                 IDataReader dr = null;
                 try
@@ -770,30 +770,30 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Set C_InvoiceLine_ID
+        /// Set VAB_InvoiceLine_ID
         /// </summary>
-        /// <param name="C_InvoiceLine_ID">id</param>
-        public new void SetC_InvoiceLine_ID(int C_InvoiceLine_ID)
+        /// <param name="VAB_InvoiceLine_ID">id</param>
+        public new void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
-            int old = GetC_InvoiceLine_ID();
-            if (old != C_InvoiceLine_ID)
+            int old = GetVAB_InvoiceLine_ID();
+            if (old != VAB_InvoiceLine_ID)
             {
-                base.SetC_InvoiceLine_ID(C_InvoiceLine_ID);
+                base.SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
                 _isInvoiceLineChange = true;
             }
         }
 
         /// <summary>
-        /// Set C_InvoiceLine_ID
+        /// Set VAB_InvoiceLine_ID
         /// </summary>
         /// <param name="line">line</param>
-        public void SetC_InvoiceLine_ID(MInvoiceLine line)
+        public void SetVAB_InvoiceLine_ID(MInvoiceLine line)
         {
             _iLine = line;
             if (line == null)
-                SetC_InvoiceLine_ID(0);
+                SetVAB_InvoiceLine_ID(0);
             else
-                SetC_InvoiceLine_ID(line.GetC_InvoiceLine_ID());
+                SetVAB_InvoiceLine_ID(line.GetVAB_InvoiceLine_ID());
         }
 
         /// <summary>
@@ -834,7 +834,7 @@ namespace VAdvantage.Model
                 .Append(",Qty=").Append(GetQty())
                 .Append(",C_OrderLine_ID=").Append(GetC_OrderLine_ID())
                 .Append(",M_InOutLine_ID=").Append(GetM_InOutLine_ID())
-                .Append(",C_InvoiceLine_ID=").Append(GetC_InvoiceLine_ID())
+                .Append(",VAB_InvoiceLine_ID=").Append(GetVAB_InvoiceLine_ID())
                 .Append("]");
             return sb.ToString();
         }

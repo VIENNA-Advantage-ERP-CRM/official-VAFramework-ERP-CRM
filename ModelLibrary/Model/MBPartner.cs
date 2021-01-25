@@ -687,12 +687,12 @@ namespace VAdvantage.Model
             String sql = "SELECT "
                 //	SO Credit Used	= SO Invoices
                 + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.VAB_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
-                    + " FROM C_Invoice_v i "
+                    + " FROM VAB_Invoice_v i "
                     + " WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND i.IsSOTrx='Y' AND i.DocStatus IN('CO','CL')),0) "
                 //					- All SO Allocations
                 + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND a.IsActive='Y'"
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')),0) "
@@ -709,24 +709,24 @@ namespace VAdvantage.Model
                     + " AND cl.VSS_PaymentType ='R' AND c.DocStatus IN('CO','CL') AND cl.VAB_Charge_ID IS NULL)"
                 //											- All Receipt Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL"
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')) "
                 //                                          - All Cash Receipt Allocatioons
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0)"
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID)"
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID)"
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND A.IsActive ='Y' AND a.VAB_CashJRNLLine_ID IS NOT NULL AND i.isSoTrx ='Y' AND h.DocStatus IN('CO','CL')), "
 
                 //	Balance			= All Invoices
                 + "COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal*MultiplierAP,i.VAB_Currency_ID,i.DateOrdered, i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
-                    + " FROM C_Invoice_v i "
+                    + " FROM VAB_Invoice_v i "
                     + " WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND i.DocStatus IN('CO','CL')),0) "
                 //					- All Allocations
                 + "-COALESCE((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND a.IsActive='Y' AND h.DocStatus IN('CO','CL')),0) "
                 //					- Unallocated Receipts	= (All Receipts
@@ -742,13 +742,13 @@ namespace VAdvantage.Model
                     + " AND c.DocStatus IN('CO','CL') AND cl.VAB_Charge_ID IS NULL)"
                 //											- All Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
                 //											- All Cash Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
-                    + " FROM VAB_DocAllocationLine a INNER JOIN C_Invoice i ON (a.C_Invoice_ID=i.C_Invoice_ID) "
+                    + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND a.IsActive='Y' AND a.VAB_CashJRNLLine_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
@@ -807,7 +807,7 @@ namespace VAdvantage.Model
             String sql = "SELECT "
                 + "COALESCE ((SELECT SUM(CURRENCYBASEWITHCONVERSIONTYPE(i.GrandTotal,i.VAB_Currency_ID,i.DateOrdered,"
                 + " i.VAF_Client_ID,i.VAF_Org_ID, i.VAB_CurrencyType_ID)) "
-                    + " FROM C_Invoice_v i WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND i.IsSOTrx='Y'"
+                    + " FROM VAB_Invoice_v i WHERE i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND i.IsSOTrx='Y'"
             + " AND i.DocStatus IN('CO','CL')),0) FROM VAB_BusinessPartner bp "
                 + " WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataTable dt = null;
@@ -1123,19 +1123,19 @@ namespace VAdvantage.Model
                 {
                     if (newRecord)
                     {
-                        X_C_Job job = new X_C_Job(GetCtx(), GetC_Job_ID(), null);
+                        X_VAB_Position job = new X_VAB_Position(GetCtx(), GetVAB_Position_ID(), null);
                         if (Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) > 0)
                         {
-                            string sql = "SELECT SUM(VAHRUAE_ApprovedVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='CO' and vac.C_Job_ID = " + GetC_Job_ID() +
+                            string sql = "SELECT SUM(VAHRUAE_ApprovedVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='CO' and vac.VAB_Position_ID = " + GetVAB_Position_ID() +
                          " AND VAF_Client_ID = " + GetVAF_Client_ID();
                             int ApprVac = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                            sql = "SELECT SUM(VAHRUAE_ApprovableVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='IP' and vac.C_Job_ID=" + GetC_Job_ID() +
+                            sql = "SELECT SUM(VAHRUAE_ApprovableVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='IP' and vac.VAB_Position_ID=" + GetVAB_Position_ID() +
                                   " AND VAF_Client_ID = " + GetVAF_Client_ID();
                             int InApprVac = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                             if ((Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) - (ApprVac + InApprVac)) <= 0)
                             {
-                                SetC_Job_ID(0);
+                                SetVAB_Position_ID(0);
                                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "VAHRUAE_NoFreeSeat"));
                                 return false;
                             }
@@ -1148,16 +1148,16 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        if (Is_ValueChanged("C_Job_ID"))
+                        if (Is_ValueChanged("VAB_Position_ID"))
                         {
-                            X_C_Job job1 = new X_C_Job(GetCtx(), GetC_Job_ID(), null);
+                            X_VAB_Position job1 = new X_VAB_Position(GetCtx(), GetVAB_Position_ID(), null);
                             if (Util.GetValueOfInt(job1.Get_Value("VAHRUAE_FreeSeats")) > 0)
                             {
-                                string sql = "SELECT SUM(VAHRUAE_ApprovedVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='CO' and vac.C_Job_ID = " + GetC_Job_ID() +
+                                string sql = "SELECT SUM(VAHRUAE_ApprovedVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='CO' and vac.VAB_Position_ID = " + GetVAB_Position_ID() +
                          " AND VAF_Client_ID = " + GetVAF_Client_ID();
                                 int ApprVac = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                                sql = "SELECT SUM(VAHRUAE_ApprovableVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='IP' and vac.C_Job_ID=" + GetC_Job_ID() +
+                                sql = "SELECT SUM(VAHRUAE_ApprovableVacancy) FROM VAHRUAE_Vacancy vac WHERE vac.DocStatus='IP' and vac.VAB_Position_ID=" + GetVAB_Position_ID() +
                                       " AND VAF_Client_ID = " + GetVAF_Client_ID();
                                 int InApprVac = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                                 if ((Util.GetValueOfInt(job1.Get_Value("VAHRUAE_FreeSeats")) - (ApprVac + InApprVac)) <= 0)
@@ -1171,7 +1171,7 @@ namespace VAdvantage.Model
                                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "VAHRUAE_NoFreeSeat"));
                                 return false;
                             }
-                            X_C_Job job = new X_C_Job(GetCtx(), Util.GetValueOfInt(Get_ValueOld("C_Job_ID")), null);
+                            X_VAB_Position job = new X_VAB_Position(GetCtx(), Util.GetValueOfInt(Get_ValueOld("VAB_Position_ID")), null);
                             job.Set_Value("VAHRUAE_FreeSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) + 1);
                             job.Set_Value("VAHRUAE_FilledSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FilledSeats")) - 1);
                             job.Save();
@@ -1401,16 +1401,16 @@ namespace VAdvantage.Model
                     // change done by mohit to handle the free seats and filled seats on creation and deletion of employee from employee master window.- asked by ravikant.- 22/01/2018
                     if (newRecord)
                     {
-                        X_C_Job job = new X_C_Job(GetCtx(), GetC_Job_ID(), null);
+                        X_VAB_Position job = new X_VAB_Position(GetCtx(), GetVAB_Position_ID(), null);
                         job.Set_Value("VAHRUAE_FreeSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) - 1);
                         job.Set_Value("VAHRUAE_FilledSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FilledSeats")) + 1);
                         job.Save();
                     }
                     else
                     {
-                        if (Is_ValueChanged("C_Job_ID"))
+                        if (Is_ValueChanged("VAB_Position_ID"))
                         {
-                            X_C_Job job = new X_C_Job(GetCtx(), GetC_Job_ID(), null);
+                            X_VAB_Position job = new X_VAB_Position(GetCtx(), GetVAB_Position_ID(), null);
                             job.Set_Value("VAHRUAE_FreeSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) - 1);
                             job.Set_Value("VAHRUAE_FilledSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FilledSeats")) + 1);
                             job.Save();
@@ -1551,7 +1551,7 @@ namespace VAdvantage.Model
         {
             if (success)
             {
-                X_C_Job job = new X_C_Job(GetCtx(), GetC_Job_ID(), null);
+                X_VAB_Position job = new X_VAB_Position(GetCtx(), GetVAB_Position_ID(), null);
                 job.Set_Value("VAHRUAE_FreeSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FreeSeats")) + 1);
                 job.Set_Value("VAHRUAE_FilledSeats", Util.GetValueOfInt(job.Get_Value("VAHRUAE_FilledSeats")) - 1);
                 job.Save();

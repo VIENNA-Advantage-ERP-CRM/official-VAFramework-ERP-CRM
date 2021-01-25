@@ -96,26 +96,26 @@ namespace VAdvantage.Model
         }/** Get Cash Journal Line.
 @return Cash Journal Line */
         public int GetVAB_CashJRNLLine_ID() { Object ii = Get_Value("VAB_CashJRNLLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice Payment Schedule.
-@param C_InvoicePaySchedule_ID Invoice Payment Schedule */
-        public void SetC_InvoicePaySchedule_ID(int C_InvoicePaySchedule_ID)
+@param VAB_sched_InvoicePayment_ID Invoice Payment Schedule */
+        public void SetVAB_sched_InvoicePayment_ID(int VAB_sched_InvoicePayment_ID)
         {
-            if (C_InvoicePaySchedule_ID <= 0) Set_Value("C_InvoicePaySchedule_ID", null);
+            if (VAB_sched_InvoicePayment_ID <= 0) Set_Value("VAB_sched_InvoicePayment_ID", null);
             else
-                Set_Value("C_InvoicePaySchedule_ID", C_InvoicePaySchedule_ID);
+                Set_Value("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
         }/** Get Invoice Payment Schedule.
 @return Invoice Payment Schedule */
-        public int GetC_InvoicePaySchedule_ID() { Object ii = Get_Value("C_InvoicePaySchedule_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice.
-@param C_Invoice_ID Invoice Identifier */
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        public int GetVAB_sched_InvoicePayment_ID() { Object ii = Get_Value("VAB_sched_InvoicePayment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Invoice.
+@param VAB_Invoice_ID Invoice Identifier */
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            if (C_Invoice_ID <= 0) Set_ValueNoCheck("C_Invoice_ID", null);
+            if (VAB_Invoice_ID <= 0) Set_ValueNoCheck("VAB_Invoice_ID", null);
             else
-                Set_ValueNoCheck("C_Invoice_ID", C_Invoice_ID);
+                Set_ValueNoCheck("VAB_Invoice_ID", VAB_Invoice_ID);
         }/** Get Invoice.
 @return Invoice Identifier */
-        public int GetC_Invoice_ID() { Object ii = Get_Value("C_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
+        public int GetVAB_Invoice_ID() { Object ii = Get_Value("VAB_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetC_Invoice_ID().ToString()); }/** Set Order.
+        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString()); }/** Set Order.
 @param C_Order_ID Sales Order */
         public void SetC_Order_ID(int C_Order_ID)
         {
@@ -180,17 +180,17 @@ namespace VAdvantage.Model
         public void SetOverUnderAmt(Decimal? OverUnderAmt) { Set_Value("OverUnderAmt", (Decimal?)OverUnderAmt); }/** Get Over/Under Payment.
 @return Over-Payment (unallocated) or Under-Payment (partial payment) Amount */
         public Decimal GetOverUnderAmt() { Object bd = Get_Value("OverUnderAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** Ref_C_Invoice_ID VAF_Control_Ref_ID=336 */
-        public static int REF_C_INVOICE_ID_VAF_Control_Ref_ID = 336;/** Set Invoice Ref.
-@param Ref_C_Invoice_ID Invoice Ref */
-        public void SetRef_C_Invoice_ID(int Ref_C_Invoice_ID)
+        /** Ref_VAB_Invoice_ID VAF_Control_Ref_ID=336 */
+        public static int REF_VAB_INVOICE_ID_VAF_Control_Ref_ID = 336;/** Set Invoice Ref.
+@param Ref_VAB_Invoice_ID Invoice Ref */
+        public void SetRef_VAB_Invoice_ID(int Ref_VAB_Invoice_ID)
         {
-            if (Ref_C_Invoice_ID <= 0) Set_Value("Ref_C_Invoice_ID", null);
+            if (Ref_VAB_Invoice_ID <= 0) Set_Value("Ref_VAB_Invoice_ID", null);
             else
-                Set_Value("Ref_C_Invoice_ID", Ref_C_Invoice_ID);
+                Set_Value("Ref_VAB_Invoice_ID", Ref_VAB_Invoice_ID);
         }/** Get Invoice Ref.
 @return Invoice Ref */
-        public int GetRef_C_Invoice_ID() { Object ii = Get_Value("Ref_C_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetRef_VAB_Invoice_ID() { Object ii = Get_Value("Ref_VAB_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** Ref_CashLine_ID VAF_Control_Ref_ID=1000602 */
         public static int REF_CASHLINE_ID_VAF_Control_Ref_ID = 1000602;/** Set Ref Cash Journal.
 @param Ref_CashLine_ID Ref Cash Journal */

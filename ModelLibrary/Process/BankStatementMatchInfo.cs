@@ -33,7 +33,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         #region
         private int _VAB_BusinessPartner_ID = 0;
         private int _C_Payment_ID = 0;
-        private int _C_Invoice_ID = 0;
+        private int _VAB_Invoice_ID = 0;
         #endregion
 
         /// <summary>
@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>true if something could be matched</returns>
         public bool IsMatched()
         {
-            return _VAB_BusinessPartner_ID > 0 || _C_Payment_ID > 0 || _C_Invoice_ID > 0;
+            return _VAB_BusinessPartner_ID > 0 || _C_Payment_ID > 0 || _VAB_Invoice_ID > 0;
         }
 
         /// <summary>
@@ -93,19 +93,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Get matched Invoice
         /// </summary>
         /// <returns>invoice</returns>
-        public int GetC_Invoice_ID()
+        public int GetVAB_Invoice_ID()
         {
-            return _C_Invoice_ID;
+            return _VAB_Invoice_ID;
         }
 
         /// <summary>
         /// Set matched Invoice
         /// </summary>
-        /// <param name="C_Invoice_ID">invoice</param>
+        /// <param name="VAB_Invoice_ID">invoice</param>
 
-        public void SetC_Invoice_ID(int C_Invoice_ID)
+        public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
-            _C_Invoice_ID = C_Invoice_ID;
+            _VAB_Invoice_ID = VAB_Invoice_ID;
         }
     }
 }

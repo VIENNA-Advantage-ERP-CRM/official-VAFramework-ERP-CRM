@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         /// <returns>file if success</returns>
         public FileInfo CreatePDF(FileInfo file)
         {
-            //	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getC_Invoice_ID());
+            //	ReportEngine re = ReportEngine.get (getCtx(), ReportEngine.INVOICE, getVAB_Invoice_ID());
             //	if (re == null)
             return null;
             //	return re.getPDF(file);
@@ -558,14 +558,14 @@ namespace VAdvantage.Model
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetC_InvoicePaySchedule_ID(), Get_TrxName());
+                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus("R");
                         //inp.Save(Get_TrxName());
 
                         // update execution status as received on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
-                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
                         }
                     }
                 }
@@ -697,14 +697,14 @@ namespace VAdvantage.Model
                         payment.SetVA009_ExecutionStatus(status);
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetC_InvoicePaySchedule_ID(), Get_TrxName());
+                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus(status);
                         //inp.Save(Get_TrxName());
 
                         // update execution status as set on Payment on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
-                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE C_InvoicePaySchedule
+                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment
                                                                           SET VA009_ExecutionStatus = '" + payment.GetVA009_ExecutionStatus() + @"'  
                                                                           WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
                         }

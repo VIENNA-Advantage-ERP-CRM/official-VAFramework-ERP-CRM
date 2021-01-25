@@ -47,11 +47,11 @@ namespace VAdvantage.Process
                 _log.Info("Foreign Cost Calculation start at : " + DateTime.Now);
 
                 // Calculate Foreign Cost for Average Invoice
-                sql = @"SELECT i.c_invoice_id ,  il.c_invoiceline_id 
-                        FROM c_invoice i INNER JOIN c_invoiceline il ON i.c_invoice_id = il.c_invoice_id
+                sql = @"SELECT i.VAB_Invoice_id ,  il.VAB_InvoiceLine_id 
+                        FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_id = il.VAB_Invoice_id
                         WHERE il.isactive = 'Y' AND il.isfuturecostcalculated = 'N' AND i.isfuturecostcalculated  = 'N'
                          AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.m_inoutline_ID , 0) <> 0
-                        ORDER BY i.c_invoice_id ASC";
+                        ORDER BY i.VAB_Invoice_id ASC";
                 ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -60,8 +60,8 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_invoice_id"]), Get_Trx());
-                            invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_invoiceline_id"]), Get_Trx());
+                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_id"]), Get_Trx());
+                            invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_InvoiceLine_id"]), Get_Trx());
                             if (!MCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, invoiceLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();
@@ -72,9 +72,9 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_InvoiceLine WHERE IsFutureCostCalculated = 'N' AND C_Invoice_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx())) <= 0)
+                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_InvoiceLine WHERE IsFutureCostCalculated = 'N' AND VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID(), null, Get_Trx())) <= 0)
                                 {
-                                    int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE C_Invoice Set IsFutureCostCalculated = 'Y' WHERE C_Invoice_ID = " + invoice.GetC_Invoice_ID(), null, Get_Trx()));
+                                    int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VAB_Invoice Set IsFutureCostCalculated = 'Y' WHERE VAB_Invoice_ID = " + invoice.GetVAB_Invoice_ID(), null, Get_Trx()));
                                 }
                                 Get_Trx().Commit();
                             }

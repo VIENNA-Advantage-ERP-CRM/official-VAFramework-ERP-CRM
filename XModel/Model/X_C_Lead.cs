@@ -343,34 +343,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Industry Code.
-@param C_IndustryCode_ID Business Partner Industry Classification */
-public void SetC_IndustryCode_ID (int C_IndustryCode_ID)
+@param VAB_Industrykey_ID Business Partner Industry Classification */
+public void SetVAB_Industrykey_ID (int VAB_Industrykey_ID)
 {
-if (C_IndustryCode_ID <= 0) Set_Value ("C_IndustryCode_ID", null);
+if (VAB_Industrykey_ID <= 0) Set_Value ("VAB_Industrykey_ID", null);
 else
-Set_Value ("C_IndustryCode_ID", C_IndustryCode_ID);
+Set_Value ("VAB_Industrykey_ID", VAB_Industrykey_ID);
 }
 /** Get Industry Code.
 @return Business Partner Industry Classification */
-public int GetC_IndustryCode_ID() 
+public int GetVAB_Industrykey_ID() 
 {
-Object ii = Get_Value("C_IndustryCode_ID");
+Object ii = Get_Value("VAB_Industrykey_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Position.
-@param C_Job_ID Job Position */
-public void SetC_Job_ID (int C_Job_ID)
+@param VAB_Position_ID Job Position */
+public void SetVAB_Position_ID (int VAB_Position_ID)
 {
-if (C_Job_ID <= 0) Set_Value ("C_Job_ID", null);
+if (VAB_Position_ID <= 0) Set_Value ("VAB_Position_ID", null);
 else
-Set_Value ("C_Job_ID", C_Job_ID);
+Set_Value ("VAB_Position_ID", VAB_Position_ID);
 }
 /** Get Position.
 @return Job Position */
-public int GetC_Job_ID() 
+public int GetVAB_Position_ID() 
 {
-Object ii = Get_Value("C_Job_ID");
+Object ii = Get_Value("VAB_Position_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

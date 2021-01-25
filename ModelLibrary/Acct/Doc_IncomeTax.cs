@@ -63,7 +63,7 @@ namespace ModelLibrary.Acct
                 //docLine.SetAmount(line.GetIncomeTaxAmount());           
 
                 // set primary key value 
-                docLine.SetPrimaryKeyValue(line.GetC_IncomeTaxLines_ID());
+                docLine.SetPrimaryKeyValue(line.GetVAB_IncomeTaxLines_ID());
                 // set GL journal line table ID
                 docLine.SetLineTable_ID(line.Get_Table_ID());
                 //
@@ -128,7 +128,7 @@ namespace ModelLibrary.Acct
                     }
 
                     //	Account
-                    MAccount expense = MAccount.Get(GetCtx(), line.GetC_IncomeTax_Acct());
+                    MAccount expense = MAccount.Get(GetCtx(), line.GetVAB_IncomeTax_Acct());
                     fact.CreateLine(dline, expense, GetVAB_Currency_ID(), amount);
                 }
 

@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_JobAssignment
+/** Generated Model for VAB_PositionAssignment
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_JobAssignment : PO
+public class X_VAB_PositionAssignment : PO
 {
-public X_C_JobAssignment (Context ctx, int C_JobAssignment_ID, Trx trxName) : base (ctx, C_JobAssignment_ID, trxName)
+public X_VAB_PositionAssignment (Context ctx, int VAB_PositionAssignment_ID, Trx trxName) : base (ctx, VAB_PositionAssignment_ID, trxName)
 {
-/** if (C_JobAssignment_ID == 0)
+/** if (VAB_PositionAssignment_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_JobAssignment_ID (0);
-SetC_Job_ID (0);
+SetVAB_PositionAssignment_ID (0);
+SetVAB_Position_ID (0);
 SetJobAssignmentType (null);	// P
 SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_C_JobAssignment (Ctx ctx, int C_JobAssignment_ID, Trx trxName) : base (ctx, C_JobAssignment_ID, trxName)
+public X_VAB_PositionAssignment (Ctx ctx, int VAB_PositionAssignment_ID, Trx trxName) : base (ctx, VAB_PositionAssignment_ID, trxName)
 {
-/** if (C_JobAssignment_ID == 0)
+/** if (VAB_PositionAssignment_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_JobAssignment_ID (0);
-SetC_Job_ID (0);
+SetVAB_PositionAssignment_ID (0);
+SetVAB_Position_ID (0);
 SetJobAssignmentType (null);	// P
 SetValidFrom (DateTime.Now);
 }
@@ -45,7 +45,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PositionAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_JobAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PositionAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_JobAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_JobAssignment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PositionAssignment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_JobAssignment()
+static X_VAB_PositionAssignment()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389055915L;
 public static int Table_ID;
  // =791;
 
-/** TableName=C_JobAssignment */
-public static String Table_Name="C_JobAssignment";
+/** TableName=VAB_PositionAssignment */
+public static String Table_Name="VAB_PositionAssignment";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_JobAssignment[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PositionAssignment[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -134,32 +134,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Position Assignment.
-@param C_JobAssignment_ID Assignemt of Employee (User) to Job Position */
-public void SetC_JobAssignment_ID (int C_JobAssignment_ID)
+@param VAB_PositionAssignment_ID Assignemt of Employee (User) to Job Position */
+public void SetVAB_PositionAssignment_ID (int VAB_PositionAssignment_ID)
 {
-if (C_JobAssignment_ID < 1) throw new ArgumentException ("C_JobAssignment_ID is mandatory.");
-Set_ValueNoCheck ("C_JobAssignment_ID", C_JobAssignment_ID);
+if (VAB_PositionAssignment_ID < 1) throw new ArgumentException ("VAB_PositionAssignment_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PositionAssignment_ID", VAB_PositionAssignment_ID);
 }
 /** Get Position Assignment.
 @return Assignemt of Employee (User) to Job Position */
-public int GetC_JobAssignment_ID() 
+public int GetVAB_PositionAssignment_ID() 
 {
-Object ii = Get_Value("C_JobAssignment_ID");
+Object ii = Get_Value("VAB_PositionAssignment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Position.
-@param C_Job_ID Job Position */
-public void SetC_Job_ID (int C_Job_ID)
+@param VAB_Position_ID Job Position */
+public void SetVAB_Position_ID (int VAB_Position_ID)
 {
-if (C_Job_ID < 1) throw new ArgumentException ("C_Job_ID is mandatory.");
-Set_ValueNoCheck ("C_Job_ID", C_Job_ID);
+if (VAB_Position_ID < 1) throw new ArgumentException ("VAB_Position_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Position_ID", VAB_Position_ID);
 }
 /** Get Position.
 @return Job Position */
-public int GetC_Job_ID() 
+public int GetVAB_Position_ID() 
 {
-Object ii = Get_Value("C_Job_ID");
+Object ii = Get_Value("VAB_Position_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -167,7 +167,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Job_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Position_ID().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */
