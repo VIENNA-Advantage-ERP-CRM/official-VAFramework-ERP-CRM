@@ -1112,6 +1112,23 @@ namespace VAdvantage.Model
                     return false;
                 }
                 SetBPGroup(grp);	//	setDefaults
+                // Set Search Key from Serial No defined on Business Partner Group
+                if (grp.Get_ColumnIndex("M_SerNoCtl_ID") > 0)
+                {
+                    string name = "";
+                    MSerNoCtl ctl = new MSerNoCtl(GetCtx(), grp.GetM_SerNoCtl_ID(), Get_TrxName());
+
+                    // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                    if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                    {
+                        name = ctl.CreateDefiniteSerNo(this);
+                    }
+                    else
+                    {
+                        name = ctl.CreateSerNo();
+                    }
+                    SetValue(name);
+                }
             }
 
             //when we select payment method then need to update  payment rule accordingly
